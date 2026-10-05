@@ -5609,10 +5609,7 @@ namespace DS4Windows
 
             try
             {
-                using (StreamWriter sw = new StreamWriter(path, false))
-                {
-                    sw.Write(testStr);
-                }
+                ProfilePersistence.Save(path, testStr);
             }
             catch (UnauthorizedAccessException)
             {
