@@ -16,13 +16,17 @@ public sealed class DualSenseManualDisconnectTests
 {
     private const BindingFlags PrivateInstance = BindingFlags.Instance | BindingFlags.NonPublic;
 
+    public enum DisconnectSource { ControllerList, Tray, SpecialAction }
+
     [DataTestMethod]
-    [DataRow(false)]
-    [DataRow(true)]
-    public void ManualDisconnectRemovesOnlyItsRowWithoutWaitingForHidReadFailure(bool fromTray)
+    [DataRow(DisconnectSource.ControllerList)]
+    [DataRow(DisconnectSource.Tray)]
+    [DataRow(DisconnectSource.SpecialAction)]
+    public void RequestedDisconnectRemovesOnlyItsRowWithoutWaitingForHidReadFailure(DisconnectSource source)
     {
         OnSta(() =>
         {
+            Assert.IsNull(Application.Current, "The fixture must not dispatch settings saves through a live app.");
             var model = new ControllerListViewModel(new ProfileList());
             var device = Device();
             var other = Device();
@@ -60,8 +64,13 @@ public sealed class DualSenseManualDisconnectTests
                 outputOwner = Worker(device, "physicalOutputThread");
                 lifecycleOwner = Worker(device, "physicalLifecycleThread");
 
-                if (fromTray)
+                if (source == DisconnectSource.Tray)
                     ClickTrayDisconnect(device);
+                else if (source == DisconnectSource.SpecialAction)
+                {
+                    device.queueEvent(() => RunSpecialAction(device, 2));
+                    InvokeDevice(device, "DrainQueuedInputEvents");
+                }
                 else
                 {
                     model.ControllerDict[2].RequestDisconnect();
@@ -71,7 +80,7 @@ public sealed class DualSenseManualDisconnectTests
                 Assert.IsTrue(radioReached.Wait(5000), "Manual Disconnect did not reach the radio boundary.");
                 Assert.IsTrue(lifecycleOwner.Join(5000), "Disconnect lifecycle did not finish.");
                 Assert.AreEqual(true, requestedRemoval,
-                    "Manual Disconnect must remove the row even if the HID failure arrives after lifecycle retirement.");
+                    "Requested Disconnect must remove the row even if the HID failure arrives after lifecycle retirement.");
                 Assert.AreEqual(1, radioCalls);
                 Assert.AreEqual(1, finalizations);
                 Assert.AreEqual(1, removalCalls);
@@ -119,6 +128,72 @@ public sealed class DualSenseManualDisconnectTests
         var device = new DualSenseDevice(hid, "Synthetic manual disconnect") { Synced = true };
         typeof(DS4Device).GetField("conType", PrivateInstance)!.SetValue(device, ConnectionType.BT);
         return device;
+    }
+
+    [DataTestMethod]
+    [DataRow(ConnectionType.BT, true, false, true, true)]
+    [DataRow(ConnectionType.BT, true, true, true, false)]
+    [DataRow(ConnectionType.BT, false, false, true, false)]
+    [DataRow(ConnectionType.USB, true, false, true, false)]
+    [DataRow(ConnectionType.BT, true, false, false, false)]
+    public void SpecialActionPreservesConnectionAndChargingGuards(
+        ConnectionType connection, bool synced, bool charging, bool optionsPressed, bool expected)
+    {
+        var device = new NoHidDevice(connection, synced, charging);
+        RunSpecialAction(device, 2, optionsPressed);
+        Assert.AreEqual(expected ? 1 : 0, device.DisconnectCalls);
+        if (expected) Assert.IsTrue(device.RequestedRemoval);
+    }
+
+    private static void RunSpecialAction(DS4Device device, int slot, bool optionsPressed = true)
+    {
+        // Exercise the real action dispatcher with isolated in-memory profiles.
+        // The selected action contains no awaits, file writes or native input.
+        var storeField = typeof(Global).GetField("m_Config", BindingFlags.Static | BindingFlags.NonPublic)!;
+        BackingStore previousStore = Global.store;
+        var previousActions = Mapping.actionDone;
+        try
+        {
+            storeField.SetValue(null, new BackingStore());
+            Mapping.actionDone = new();
+            var action = new SpecialAction("Synthetic disconnect", "PS/Options", "DisconnectBT", "0");
+            Global.GetActions().Add(action);
+            Global.store.profileActions[slot].Add(action.name);
+            Global.CalculateProfileActionDicts(slot);
+            var control = (ControlService)RuntimeHelpers.GetUninitializedObject(typeof(ControlService));
+            control.DS4Controllers = new DS4Device[Global.MAX_DS4_CONTROLLER_COUNT];
+            control.DS4Controllers[slot] = device;
+            var state = new DS4State { PS = true, Options = optionsPressed };
+            var exposed = new DS4StateExposed(state);
+            var fields = new DS4StateFieldMapping();
+            fields.PopulateFieldMapping(state, exposed, null);
+            typeof(Mapping).GetMethod("MapCustomAction", BindingFlags.Static | BindingFlags.NonPublic)!
+                .Invoke(null, new object[] { slot, state, new DS4State(), exposed, null,
+                    control, fields, new DS4StateFieldMapping() });
+        }
+        finally
+        {
+            Mapping.actionDone = previousActions;
+            storeField.SetValue(null, previousStore);
+        }
+    }
+
+    private sealed class NoHidDevice : DS4Device
+    {
+        internal int DisconnectCalls;
+        internal bool RequestedRemoval;
+        internal NoHidDevice(ConnectionType connection, bool synced, bool charging)
+            : base("Synthetic action disconnect", InputDeviceType.DualSense, connection)
+        {
+            Synced = synced;
+            this.charging = charging;
+        }
+        public override bool DisconnectBT(bool callRemoval = false)
+        {
+            DisconnectCalls++;
+            RequestedRemoval = callRemoval;
+            return true;
+        }
     }
 
     private static void ClickTrayDisconnect(DS4Device device)
