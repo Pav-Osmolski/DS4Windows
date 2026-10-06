@@ -85,8 +85,7 @@ namespace DS4Windows.DS4Control
                     }
                 }
 
-                var serializer = new XmlSerializer(typeof(ProfileDTO),
-                    ProfileDTO.GetAttributeOverrides());
+                var serializer = ProfileDTO.Serializer;
                 using var reader = new StringReader(xml);
                 var candidate = serializer.Deserialize(reader) as ProfileDTO;
                 if (candidate == null)

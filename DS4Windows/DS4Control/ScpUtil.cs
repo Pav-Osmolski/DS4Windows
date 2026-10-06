@@ -5574,8 +5574,7 @@ namespace DS4Windows
             string path = Path.Combine(Global.appdatapath, "Profiles",
                 $"{proName}{Global.XML_EXTENSION}");
             string testStr = string.Empty;
-            XmlSerializer serializer = new XmlSerializer(typeof(ProfileDTO),
-                ProfileDTO.GetAttributeOverrides());
+            XmlSerializer serializer = ProfileDTO.Serializer;
             using (Utf8StringWriter strWriter = new Utf8StringWriter())
             {
                 using XmlWriter xmlWriter = XmlWriter.Create(strWriter,
