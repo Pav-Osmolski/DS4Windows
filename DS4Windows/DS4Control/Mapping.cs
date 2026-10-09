@@ -5302,7 +5302,7 @@ namespace DS4Windows
                                     //bool exclusive = /*tempBool =*/ d.isExclusive();
                                     if (deviceConn == ConnectionType.BT)
                                     {
-                                        d.DisconnectBT();
+                                        d.DisconnectBT(callRemoval: true);
                                         ReleaseActionKeys(action, device);
                                         return;
                                     }
