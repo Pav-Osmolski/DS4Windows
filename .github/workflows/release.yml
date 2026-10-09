@@ -188,6 +188,11 @@ jobs:
     - name: Post-Build script X64
       shell: pwsh
       run: python .\utils\post-build.py .\bin\x64\Release\output . $env:VERSION
+    - name: Verify packaged translations from different launch directories
+      shell: pwsh
+      run: |
+        dotnet build .\utils\SatelliteResourceProbe\SatelliteResourceProbe.csproj -c Release
+        .\utils\SatelliteResourceProbe\Run-Probe.ps1 -SourceBuild ".\bin\x64\Release\DS4Windows"
     - name: Build standard installer X64
       shell: pwsh
       env:

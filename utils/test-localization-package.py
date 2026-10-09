@@ -127,7 +127,7 @@ class LocalizationPackageTests(unittest.TestCase):
                          "extras/XBOX-ONE-PERSONA-NOTICE.md"}.issubset(
                              VALIDATOR.REQUIRED_PUBLISH_FILES))
 
-    def test_actual_composition_preserves_standard_satellites_and_manifests(self):
+    def test_actual_composition_moves_satellites_to_lang_and_updates_manifests(self):
         with tempfile.TemporaryDirectory(prefix="ds4w-localization-package-") as temporary:
             root = Path(temporary)
             publish = root / "x64" / "Release" / "output"
@@ -172,19 +172,23 @@ class LocalizationPackageTests(unittest.TestCase):
                 str(publish), str(REPOSITORY), "issue60-regression",
             ], cwd=root, check=True, capture_output=True, text=True)
             package = publish.parent / "DS4Windows"
-            self.assertFalse((package / "Lang").exists())
+            self.assertTrue((package / "Lang").is_dir())
+            self.assertFalse((package / "de").exists())
+            self.assertFalse((package / "pt-BR").exists())
             self.assertEqual(deps_text, (package / "DS4Windows.deps.json").read_text(encoding="utf-8"))
             VALIDATOR.validate_localization_package(package)
             owned = set((package / ".ds4windows-managed-files.txt").read_text(encoding="utf-8").splitlines())
             for relative in fixture_paths:
-                self.assertEqual(contents[relative], (package / relative).read_bytes())
-                self.assertIn(relative, owned)
+                packaged_relative = "Lang/" + relative if relative in SATELLITES else relative
+                self.assertEqual(contents[relative], (package / packaged_relative).read_bytes())
+                self.assertIn(packaged_relative, owned)
 
             archive = publish.parent / "DS4Windows_issue60-regression_x64.zip"
             with zipfile.ZipFile(archive) as packaged:
                 for relative in fixture_paths:
-                    self.assertIn("DS4Windows/" + relative, packaged.namelist())
-                    self.assertEqual(contents[relative], packaged.read("DS4Windows/" + relative))
+                    packaged_relative = "Lang/" + relative if relative in SATELLITES else relative
+                    self.assertIn("DS4Windows/" + packaged_relative, packaged.namelist())
+                    self.assertEqual(contents[relative], packaged.read("DS4Windows/" + packaged_relative))
                 broker = packaged.read("DS4Windows/extras/VIIPER-0.1.9-rc4.6.6-x64.exe")
                 self.assertEqual(broker, packaged.read("DS4Windows/viiper.exe"))
                 broker_hash = hashlib.sha256(broker).hexdigest()
@@ -223,15 +227,16 @@ class LocalizationPackageTests(unittest.TestCase):
                 for entry in ET.parse(wix).getroot().iter("{http://wixtoolset.org/schemas/v4/wxs}File")
             }
             for relative in fixture_paths:
-                self.assertIn(relative, paths)
-                self.assertIn(relative, sources)
+                packaged_relative = "Lang/" + relative if relative in SATELLITES else relative
+                self.assertIn(packaged_relative, paths)
+                self.assertIn(packaged_relative, sources)
             for relative in PORTABLE_ONLY:
                 self.assertNotIn(relative, paths)
                 self.assertNotIn(relative, sources)
 
             # Validation examines real published paths, not only source text.
-            (package / SATELLITES[0]).unlink()
-            with self.assertRaisesRegex(SystemExit, "Missing standard-layout satellite"):
+            (package / "Lang" / SATELLITES[0]).unlink()
+            with self.assertRaisesRegex(SystemExit, "Missing Lang satellite"):
                 VALIDATOR.validate_localization_package(package)
 
     def assert_rejected_publish_preserves_existing_output(self, collision, *, directory=False, reparse=False):

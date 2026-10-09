@@ -110,10 +110,20 @@ viiper_hash_path.write_text(
     newline="\n",
 )
 
-# Keep the SDK's <culture>/*.resources.dll layout and generated deps.json.
-# .NET resolves these satellites relative to the application, regardless of
-# the launch directory. Moving them into Lang required CWD-relative probing,
-# which silently lost translations for logon tasks and outside-directory starts.
+# Keep culture names and satellite identities intact beneath Lang. The managed
+# resolver uses AppContext.BaseDirectory, never the current working directory.
+# Move complete satellite directories so dependency translations travel too.
+satellite_directories = sorted({path.parent for path in target_dir.glob("*/*.resources.dll")})
+for directory in satellite_directories:
+    if not re.fullmatch(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*", directory.name):
+        raise SystemExit(f"Invalid satellite culture directory: {directory.name}")
+    destination = target_dir / "Lang" / directory.name
+    if destination.exists():
+        raise SystemExit(f"Satellite destination already exists: {destination}")
+for directory in satellite_directories:
+    destination = target_dir / "Lang" / directory.name
+    destination.parent.mkdir(exist_ok=True)
+    directory.rename(destination)
 
 # Preserve the exact GitHub release channel in both portable and managed
 # packages. The numeric Windows file version cannot distinguish an RC from a

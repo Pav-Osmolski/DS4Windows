@@ -49,9 +49,6 @@ Copy-Item -LiteralPath (Join-Path $probeBuild 'SatelliteResourceProbe.dll') -Des
 Copy-Item -LiteralPath (Join-Path $probeBuild 'SatelliteResourceProbe.runtimeconfig.json') -Destination $packageRoot
 $runtimeConfigPath = Join-Path $packageRoot 'SatelliteResourceProbe.runtimeconfig.json'
 $runtimeConfig = Get-Content -LiteralPath $runtimeConfigPath -Raw | ConvertFrom-Json -AsHashtable
-if (-not $StandardLayout) {
-    $runtimeConfig.runtimeOptions.additionalProbingPaths = @('./Lang/')
-}
 $runtimeConfig | ConvertTo-Json -Depth 32 | Set-Content -LiteralPath $runtimeConfigPath -Encoding utf8
 $probeDeps | ConvertTo-Json -Depth 32 | Set-Content -LiteralPath (Join-Path $packageRoot 'SatelliteResourceProbe.deps.json') -Encoding utf8
 
@@ -63,7 +60,7 @@ foreach ($startDirectory in @($packageRoot, $outsideRoot)) {
         $probeExit = $LASTEXITCODE
         $probeOutput
         $result = $probeOutput | ConvertFrom-Json
-        $shouldLocalize = $StandardLayout -or $startDirectory -eq $packageRoot
+        $shouldLocalize = $true
         if ($result.Localized -ne $shouldLocalize -or
             ($null -ne $result.SchedulerSatellite) -ne $shouldLocalize -or
             -not $result.UnrelatedRejected -or
