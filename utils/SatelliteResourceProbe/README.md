@@ -11,12 +11,14 @@ dotnet build utils/SatelliteResourceProbe/SatelliteResourceProbe.csproj -c Relea
 python utils/test-localization-package.py
 ```
 
-The first run reconstructs the old `Lang/<culture>` package using the actual
-published dependency/resource identities, and verifies that launching outside
-the package loses German translations. The second keeps the standard
-`<culture>` folders and verifies both launch directories succeed without
-additional probing. Each child also checks parent-culture fallback, neutral
-fallback for an unavailable language, and rejection of an unrelated assembly.
+The first run reconstructs the packaged `Lang/<culture>` layout using actual
+dependency/resource identities. It initializes the application's resource
+resolver without starting its UI or controller services and verifies German
+translations from both the package directory and an unrelated directory.
+The second run verifies the standard `<culture>` layout used by developer
+builds. Neither layout requires additional probing paths. Each child also
+checks parent-culture fallback, neutral fallback for an unavailable language,
+dependency translations, and rejection of an unrelated assembly.
 The fixture copies are retained under `artifacts/issue60-*` for inspection.
 
 The Python regression separately runs the real `post-build.py` and WiX file
