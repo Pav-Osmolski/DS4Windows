@@ -9,10 +9,10 @@ Profiles that follow the game you're playing.
 
 **Free and open source.**
 
-[**Download**](https://github.com/hbashton/DS4Windows/releases) · [Getting started](docs/getting-started.md) · [Community](https://www.reddit.com/r/DS4Windows/)
+[**Download**](https://github.com/Pav-Osmolski/DS4Windows/releases) · [Getting started](docs/getting-started.md) · [Community](https://www.reddit.com/r/DS4Windows/)
 
-[![Releases](https://img.shields.io/github/v/release/hbashton/DS4Windows?include_prereleases&logo=github&label=release)](https://github.com/hbashton/DS4Windows/releases)
-[![Main build](https://github.com/hbashton/DS4Windows/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/hbashton/DS4Windows/actions/workflows/ci-build.yml?query=branch%3Amain)
+[![Releases](https://img.shields.io/github/v/release/Pav-Osmolski/DS4Windows?include_prereleases&logo=github&label=release)](https://github.com/Pav-Osmolski/DS4Windows/releases)
+[![Main build](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml?query=branch%3Amain)
 
 <img src="docs/images/tour/overview.png" width="1000" alt="DS4Windows overview with a connected controller, profile selection, and quick controls">
 
@@ -21,6 +21,28 @@ Profiles that follow the game you're playing.
 DS4Windows brings controller remapping, native game feedback, and per-game
 settings together. Use the controller you enjoy, choose the controller your
 game expects, and make the controls your own.
+
+## About this fork
+
+This repository continues development from
+[hbashton/DS4Windows](https://github.com/hbashton/DS4Windows). Download this
+fork's builds and report issues using the links above and below.
+
+The current release is [**VIIPERRC4.6.7**](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/VIIPERRC4.6.7),
+an **unsigned release candidate** for Windows x64. It includes:
+
+- A fix for USB/IP driver verification timeouts at startup, reported in
+  upstream issues [#118](https://github.com/hbashton/DS4Windows/issues/118) and
+  [#126](https://github.com/hbashton/DS4Windows/issues/126).
+- Accurate Windows version logging, including Windows 11 display versions
+  and full build revisions.
+- Translation folders grouped under `Lang`.
+- Working profile editor navigation icons and sharper system tray icons.
+
+The release passed 7,155 automated tests, with 12 skipped and zero failures,
+plus translation and installer lifecycle checks. The fixes were also tested
+successfully on the affected hardware. See the release notes for downloads,
+source archives, checksums, and build provenance.
 
 ## Keep the detail. Lose the cable.
 
@@ -84,7 +106,7 @@ inputs and feedback still depend on the controller in your hands.
 
 ## Get playing
 
-1. Download the newest **release candidate** from [Releases](https://github.com/hbashton/DS4Windows/releases).
+1. Download the newest **release candidate** from [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
    Choose the **x64 Setup EXE** for the easiest installation.
 2. Follow setup. The matching VIIPER backend and USB/IP driver are bundled;
    select **HidHide** to help prevent double input. Restart if prompted.
@@ -102,6 +124,18 @@ release notes for known limitations and signing status.
 Prefer portable? Download `DS4Windows_VIIPER_x64.zip` and extract the **entire**
 package. See [setup, updates, and troubleshooting](docs/getting-started.md) for
 driver requirements and keeping your profiles.
+
+Keep the `Lang` folder with the application. To update this fork, download
+from its Releases page: RC4.6.7's in-app update checks still use upstream
+releases.
+
+## Related projects
+
+- [VIIPER](https://github.com/Pav-Osmolski/VIIPER) provides the virtual-controller
+  backend required by this fork. Use the matching version bundled with
+  DS4Windows; RC4.6.7 keeps the existing VIIPER and USB/IP packages.
+- [DS4Updater](https://github.com/Pav-Osmolski/DS4Updater) is the separate app
+  updater project. It is optional when installing or updating manually.
 
 ## Take a closer look
 
@@ -124,12 +158,11 @@ driver requirements and keeping your profiles.
 
 ## Join in
 
-[Report a bug](https://github.com/hbashton/DS4Windows/issues) ·
+[Report a bug](https://github.com/Pav-Osmolski/DS4Windows/issues) ·
 [Share your setup](https://www.reddit.com/r/DS4Windows/) ·
-[Contribute](contributing.md) ·
-[Support development](https://www.paypal.com/paypalme/hbashton)
+[Contribute](contributing.md)
 
-This hbashton fork builds on the work of Jays2Kings, Ryochan7, Schmaldeo, and
+This fork continues the work of [hbashton](https://github.com/hbashton/DS4Windows), Jays2Kings, Ryochan7, Schmaldeo, and
 the DS4Windows community, with thanks to VIIPER, HidHide, usbip-win2, and the
 wider controller-research community.
 

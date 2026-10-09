@@ -16,9 +16,11 @@ The Visual C++ runtime remains a separate system prerequisite.
 
 ## Install
 
-Download only from [this repository's Releases page](https://github.com/hbashton/DS4Windows/releases).
+Download only from [this repository's Releases page](https://github.com/Pav-Osmolski/DS4Windows/releases).
 Current DS4Windows 5 builds are release candidates; check the notes for
 limitations and signing status.
+The current release, [VIIPERRC4.6.7](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/VIIPERRC4.6.7),
+is unsigned.
 
 ### Recommended: all-in-one installer
 
@@ -36,6 +38,7 @@ avoid independently upgrading or downgrading USB/IP for this installation.
 
 1. Extract **all** of `DS4Windows_VIIPER_x64.zip` into a permanent, writable folder.
    Do not launch from inside the ZIP or copy only `DS4Windows.exe`.
+   Keep the `Lang` folder with the application; it contains the translations.
 2. Run `DS4Windows.exe` from that folder. On a new PC, complete driver setup
    when prompted; portable does not mean driver-free.
 3. DS4Windows starts its bundled VIIPER when needed. A verified matching
@@ -92,8 +95,9 @@ updating, especially when moving between versions or installation types.
 Settings may be in `%APPDATA%\DS4Windows` **or beside the application**, depending
 on your configuration. Check both before removing an old portable folder.
 Follow the release's update instructions when a matching backend update is
-required. In-app update checks use this fork's releases; stable builds do not
-automatically install prereleases.
+required. In RC4.6.7, in-app update checks still use hbashton's upstream
+releases. Download updates for this fork manually from
+[Pav-Osmolski/DS4Windows Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
 ## If something isn't working
 
@@ -108,7 +112,7 @@ automatically install prereleases.
 - **Game Bar navigation:** enable Game Bar compatibility and run DS4Windows
   elevated. This feature requires Xbox Game Bar to be installed.
 
-Still stuck? [Open an issue](https://github.com/hbashton/DS4Windows/issues) with
+Still stuck? [Open an issue](https://github.com/Pav-Osmolski/DS4Windows/issues) with
 your DS4Windows version, physical controller, USB/Bluetooth connection,
 emulated controller, and steps to reproduce. Attach the relevant log from your
 DS4Windows settings folder's `Logs` directory; check it for personal information
