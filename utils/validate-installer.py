@@ -908,7 +908,7 @@ def main() -> int:
 
 
 def validate_localization_package(publish_root: Path) -> None:
-    """Keep both application and dependency satellites in .NET's standard layout."""
+    """Keep application and dependency satellites together under Lang."""
     runtime = json.loads(
         (publish_root / "DS4Windows.runtimeconfig.json").read_text(encoding="utf-8-sig")
     )
@@ -932,8 +932,8 @@ def validate_localization_package(publish_root: Path) -> None:
                     raise SystemExit("Invalid satellite locale: " + repr(culture))
                 if PurePosixPath(asset).name != expected_name:
                     raise SystemExit("Unexpected satellite assembly: " + asset)
-                if not (publish_root / culture / expected_name).is_file():
-                    raise SystemExit("Missing standard-layout satellite: " + culture + "/" + expected_name)
+                if not (publish_root / "Lang" / culture / expected_name).is_file():
+                    raise SystemExit("Missing Lang satellite: " + culture + "/" + expected_name)
                 validated.add(owner)
     if validated != {"DS4Windows", "TaskScheduler"}:
         raise SystemExit("Package dependency metadata omits application or TaskScheduler satellites.")

@@ -69,6 +69,20 @@ jobs:
         if ($dispatch -and -not $unsignedRc) {
           throw 'Draft dispatch is limited to named RC prereleases; other releases retain the signed published-event path.'
         }
+        if ($dispatch) {
+          # Saving a new draft does not create its Git tag. Materialize only
+          # a missing tag, from the explicitly selected dispatch branch.
+          $refs = @(gh api "repos/$env:GITHUB_REPOSITORY/git/matching-refs/tags/$tag" | ConvertFrom-Json)
+          $exact = @($refs | Where-Object { $_.ref -ceq "refs/tags/$tag" })
+          if ($exact.Count -eq 0) {
+            $target = gh api "repos/$env:GITHUB_REPOSITORY/commits/$($release.target_commitish)" | ConvertFrom-Json
+            if ($target.sha -cne $env:GITHUB_SHA) {
+              throw 'A new draft tag must target the same commit as the selected workflow branch.'
+            }
+            gh api --method POST "repos/$env:GITHUB_REPOSITORY/git/refs" `
+              -f "ref=refs/tags/$tag" -f "sha=$($target.sha)"
+          }
+        }
         "tag=$tag" >> $env:GITHUB_OUTPUT
         "release_id=$($release.id)" >> $env:GITHUB_OUTPUT
         "unsigned_rc=$($unsignedRc.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
@@ -174,6 +188,11 @@ jobs:
     - name: Post-Build script X64
       shell: pwsh
       run: python .\utils\post-build.py .\bin\x64\Release\output . $env:VERSION
+    - name: Verify packaged translations from different launch directories
+      shell: pwsh
+      run: |
+        dotnet build .\utils\SatelliteResourceProbe\SatelliteResourceProbe.csproj -c Release
+        .\utils\SatelliteResourceProbe\Run-Probe.ps1 -SourceBuild ".\bin\x64\Release\DS4Windows"
     - name: Build standard installer X64
       shell: pwsh
       env:

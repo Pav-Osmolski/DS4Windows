@@ -8,6 +8,8 @@ using System.Text.Json;
 // construct App/ControlService, or initialize controller access.
 Assembly application = AssemblyLoadContext.Default.LoadFromAssemblyPath(
     Path.Combine(AppContext.BaseDirectory, "DS4Windows.dll"));
+application.GetType("DS4Windows.SatelliteResourceLoader", throwOnError: true)!
+    .GetMethod("Initialize", BindingFlags.Static | BindingFlags.NonPublic)!.Invoke(null, null);
 var resources = new ResourceManager("DS4WinWPF.Translations.Strings", application);
 string? neutral = resources.GetString("Browse", CultureInfo.InvariantCulture);
 string? german = resources.GetString("Browse", CultureInfo.GetCultureInfo("de"));

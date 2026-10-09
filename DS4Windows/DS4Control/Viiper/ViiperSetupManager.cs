@@ -2611,7 +2611,7 @@ namespace DS4Windows
                 }
 
                 return (true,
-                    "The loaded usbip-win2 0.9.7.7 driver files match the " +
+                    "The registered usbip-win2 0.9.7.7 driver files match the " +
                     "verified signed package.");
             }
             catch (Exception ex)
@@ -2622,33 +2622,31 @@ namespace DS4Windows
             }
         }
 
-        private static bool TryGetSystemDriverSha256(string serviceName,
-            out string sha256, out string error)
+        private static string ReadSystemDriverImagePath(string serviceName)
+        {
+            // Win32_SystemDriver depends on WMI provider startup. At logon its
+            // two-second enumeration timeout can expire even for intact drivers.
+            // Read the same registered ImagePath directly; do not fall back to a
+            // guessed filename, cached hash, or the bundled copy.
+            using RegistryKey service = Registry.LocalMachine.OpenSubKey(
+                @"SYSTEM\CurrentControlSet\Services\" + serviceName);
+            if (service == null) return null;
+            return service.GetValue("ImagePath", string.Empty,
+                RegistryValueOptions.DoNotExpandEnvironmentNames) as string
+                ?? string.Empty;
+        }
+
+        internal static bool TryGetSystemDriverSha256(string serviceName,
+            out string sha256, out string error,
+            Func<string, string> readImagePath = null)
         {
             sha256 = null;
             error = null;
-            string pathName = null;
-            int matches = 0;
+            string pathName = (readImagePath ?? ReadSystemDriverImagePath)(serviceName);
 
-            using ManagementObjectSearcher searcher = new(
-                "SELECT PathName FROM Win32_SystemDriver " +
-                $"WHERE Name='{serviceName}'");
-            searcher.Options = CreateDependencyQueryOptions();
-            using ManagementObjectCollection drivers = searcher.Get();
-            foreach (ManagementObject driver in drivers)
+            if (pathName == null)
             {
-                using (driver)
-                {
-                    matches++;
-                    pathName = driver["PathName"] as string;
-                }
-            }
-
-            if (matches != 1)
-            {
-                error = matches == 0
-                    ? $"the {serviceName} service is missing"
-                    : $"multiple {serviceName} services were returned";
+                error = $"the {serviceName} service is missing";
                 return false;
             }
 
@@ -2656,7 +2654,7 @@ namespace DS4Windows
             if (string.IsNullOrWhiteSpace(driverPath) ||
                 !File.Exists(driverPath))
             {
-                error = $"the active {serviceName} driver file is missing";
+                error = $"the registered {serviceName} driver file is missing";
                 return false;
             }
 
@@ -2666,7 +2664,7 @@ namespace DS4Windows
             return true;
         }
 
-        private static string ResolveSystemDriverPath(string pathName)
+        internal static string ResolveSystemDriverPath(string pathName)
         {
             if (string.IsNullOrWhiteSpace(pathName))
             {

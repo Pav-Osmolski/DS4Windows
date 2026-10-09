@@ -111,6 +111,12 @@ jobs:
       - name: Package ${{ matrix.platform }}
         run: python .\utils\post-build.py .\bin\${{ matrix.platform }}\Release\output . ${{ env.VERSION }}
 
+      - name: Verify packaged translations from different launch directories
+        shell: pwsh
+        run: |
+          dotnet build .\utils\SatelliteResourceProbe\SatelliteResourceProbe.csproj -c Release
+          .\utils\SatelliteResourceProbe\Run-Probe.ps1 -SourceBuild ".\bin\${{ matrix.platform }}\Release\DS4Windows"
+
       - name: Build standard installer
         shell: pwsh
         run: |
