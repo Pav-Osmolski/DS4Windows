@@ -20,9 +20,10 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <local:ImageLocationPaths x:Key="ImgLocPaths" />
+        <local:TrayIconConverter x:Key="TrayIconConverter" />
     </Window.Resources>
     <DockPanel>
-        <tb:TaskbarIcon x:Name="notifyIcon" IconSource="{Binding IconSource,Mode=OneWay}" ToolTipText="{Binding TooltipText,Mode=OneWay}" MenuActivation="RightClick" TrayRightMouseUp="NotifyIcon_TrayRightMouseUp" TrayMiddleMouseDown="NotifyIcon_TrayMiddleMouseDown" TrayMouseDoubleClick="NotifyIcon_TrayMouseDoubleClick">
+        <tb:TaskbarIcon x:Name="notifyIcon" Icon="{Binding IconSource,Mode=OneWay,Converter={StaticResource TrayIconConverter}}" ToolTipText="{Binding TooltipText,Mode=OneWay}" MenuActivation="RightClick" TrayRightMouseUp="NotifyIcon_TrayRightMouseUp" TrayMiddleMouseDown="NotifyIcon_TrayMiddleMouseDown" TrayMouseDoubleClick="NotifyIcon_TrayMouseDoubleClick">
             <!--<tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Open" />

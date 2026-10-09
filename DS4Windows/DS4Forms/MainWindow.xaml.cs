@@ -197,6 +197,7 @@ namespace DS4WinWPF.DS4Forms
 
             // Need to define before calling TaskbarIcon.ForceCreate
             notifyIcon.DataContext = trayIconVM;
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged += TrayDisplaySettingsChanged;
             notifyIcon.CustomName = Global.exelocation;
             notifyIcon.ContextMenu = trayIconVM.ContextMenu;
 
@@ -1925,6 +1926,7 @@ Suspend support not enabled.", true);
 
         private void MainDS4Window_Closed(object sender, EventArgs e)
         {
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= TrayDisplaySettingsChanged;
             logAutoScroller?.Dispose();
             DisposePowerLifecycle();
             CancelBoundedHotplugRecovery();
@@ -1939,11 +1941,28 @@ Suspend support not enabled.", true);
             if (notifyIcon != null)
             {
                 trayIconVM?.Dispose();
+                notifyIcon.Icon = null;
                 notifyIcon.Dispose();
                 notifyIcon = null;
             }
 
             Application.Current.Shutdown();
+        }
+
+        private void TrayDisplaySettingsChanged(object sender, EventArgs e)
+        {
+            if (Dispatcher.HasShutdownStarted) return;
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (notifyIcon == null || Volatile.Read(ref shutdownRequested) != 0) return;
+                notifyIcon.GetBindingExpression(H.NotifyIcon.TaskbarIcon.IconProperty)?.UpdateTarget();
+            }));
+        }
+
+        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        {
+            base.OnDpiChanged(oldDpi, newDpi);
+            TrayDisplaySettingsChanged(this, EventArgs.Empty);
         }
 
         protected override void OnSourceInitialized(EventArgs e)
