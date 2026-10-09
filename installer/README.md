@@ -22,9 +22,9 @@ portable repair stays in the portable folder.
 ```powershell
 .\installer\build-installer.ps1 `
   -PublishRoot .\bin\x64\Release\output `
-  -ProductVersion 5.0.12.0 `
-  -BundleVersion 5.0.12.0 `
-  -DisplayVersion VIIPERRC4.6.6 `
+  -ProductVersion 5.0.13.0 `
+  -BundleVersion 5.0.13.0 `
+  -DisplayVersion VIIPERRC4.6.8 `
   -SkipApplicationPublish
 ```
 

@@ -17,6 +17,8 @@ public sealed class PortableUpdaterBootstrapTests
     [DataRow("v2.0.3")]
     [DataRow("v2.0.5")]
     [DataRow("v2.0.6")]
+    [DataRow("v2.0.7")]
+    [DataRow("v2.0.8")]
     public void OldUnsafeUpdaterIsNeverAccepted(string tag)
     {
         using var json = Release(tag);
@@ -34,7 +36,7 @@ public sealed class PortableUpdaterBootstrapTests
     }
 
     [DataTestMethod]
-    [DataRow("v2.0.8")]
+    [DataRow("v2.0.10")]
     [DataRow("v2.1.0")]
     [DataRow("v3.0.0")]
     public void FutureVerifiedUpdaterVersionsRemainEligible(string tag)
@@ -49,6 +51,7 @@ public sealed class PortableUpdaterBootstrapTests
     [DataRow("prerelease")]
     [DataRow("digest")]
     [DataRow("host")]
+    [DataRow("upstream")]
     [DataRow("wrongtag")]
     [DataRow("size")]
     [DataRow("duplicate")]
@@ -200,7 +203,7 @@ public sealed class PortableUpdaterBootstrapTests
             {
                 bool metadata = ++fixture.RequestCount == 1;
                 string tag = "v" + fixture.imageVersion;
-                string url = $"https://github.com/hbashton/DS4Updater/releases/download/{tag}/DS4Updater.exe";
+                string url = $"https://github.com/Pav-Osmolski/DS4Updater/releases/download/{tag}/DS4Updater.exe";
                 HttpContent content;
                 if (metadata)
                     content = new StringContent(JsonSerializer.Serialize(new
@@ -233,13 +236,14 @@ public sealed class PortableUpdaterBootstrapTests
         }
     }
 
-    private static JsonDocument Release(string tag = "v2.0.7", string fault = null)
+    private static JsonDocument Release(string tag = "v2.0.9", string fault = null)
     {
         var asset = new
         {
             name = "DS4Updater.exe",
             browser_download_url = fault == "host" ? "https://example.com/DS4Updater.exe" :
-                $"https://github.com/hbashton/DS4Updater/releases/download/{(fault == "wrongtag" ? "v2.0.4" : tag)}/DS4Updater.exe",
+                fault == "upstream" ? $"https://github.com/hbashton/DS4Updater/releases/download/{tag}/DS4Updater.exe" :
+                $"https://github.com/Pav-Osmolski/DS4Updater/releases/download/{(fault == "wrongtag" ? "v2.0.4" : tag)}/DS4Updater.exe",
             size = fault == "size" ? -1L : 72L,
             digest = fault == "digest" ? null : "sha256:" + new string('a', 64)
         };

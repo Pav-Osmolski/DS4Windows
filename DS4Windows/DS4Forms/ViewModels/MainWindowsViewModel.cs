@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -1130,7 +1130,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         private string DownloadUpstreamUpdaterVersion()
         {
-            Uri url = new Uri("https://api.github.com/repos/hbashton/DS4Updater/releases/latest");
+            Uri url = new Uri("https://api.github.com/repos/Pav-Osmolski/DS4Updater/releases/latest");
 
             Task<System.Net.Http.HttpResponseMessage> requestTask = App.requestClient.GetAsync(url.ToString());
             requestTask.Wait();
@@ -1192,7 +1192,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 (!string.IsNullOrEmpty(upstreamVersion) && FileVersionInfo.GetVersionInfo(destPath).FileVersion.CompareTo(upstreamVersion) != 0))
             {
                 launch = false;
-                Uri url2 = new Uri($"https://github.com/hbashton/DS4Updater/releases/download/v{upstreamVersion}/{updaterExe}");
+                Uri url2 = new Uri($"https://github.com/Pav-Osmolski/DS4Updater/releases/download/v{upstreamVersion}/{updaterExe}");
                 string filename = Path.Combine(Path.GetTempPath(), "DS4Updater.exe");
                 using (var downloadStream = new FileStream(filename, FileMode.Create))
                 {
@@ -1224,7 +1224,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public void DownloadUpstreamVersionInfo()
         {
             if (PortableLabContext.IsActive) return;
-            Uri url = new Uri("https://api.github.com/repos/hbashton/DS4Windows/releases/latest");
+            Uri url = new Uri("https://api.github.com/repos/Pav-Osmolski/DS4Windows/releases/latest");
             string filename = Global.appdatapath + "\\version.txt";
             bool success = false;
             using (StreamWriter streamWriter = new(filename, false))

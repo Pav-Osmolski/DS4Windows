@@ -16,7 +16,7 @@ internal sealed record ManagedUpdaterTicket(string InstallRoot, PortableUpdaterT
 // copy into the running installation. The installer owns elevation and repair.
 internal static class ManagedUpdaterBootstrap
 {
-    internal static readonly Version MinimumVersion = new(2, 0, 8, 0);
+    internal static readonly Version MinimumVersion = new(2, 0, 9, 0);
 
     internal static string FindManagedRoot(string directory)
     {
