@@ -176,8 +176,9 @@ public class PortableBrokerIntegrationTests
         StringAssert.Contains(managedStart, "HasSafeRuntimePrerequisites(GetFreshDependencyStatus())");
         Assert.IsFalse(setup.Contains("usbipDriverIntegrityStatus.Value", StringComparison.Ordinal));
         Assert.IsFalse(setup.Contains("citrixUsbMonitorStatus.Value", StringComparison.Ordinal));
-        Assert.AreEqual(2, setup.Split("searcher.Options = CreateDependencyQueryOptions();").Length - 1);
-        Assert.AreEqual(2, setup.Split("using ManagementObjectCollection drivers = searcher.Get();").Length - 1);
+        Assert.AreEqual(1, setup.Split("searcher.Options = CreateDependencyQueryOptions();").Length - 1,
+            "Only the Citrix runtime safety query still depends on WMI.");
+        Assert.AreEqual(1, setup.Split("using ManagementObjectCollection drivers = searcher.Get();").Length - 1);
     }
 
     [DataTestMethod]
