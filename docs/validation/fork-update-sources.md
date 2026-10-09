@@ -17,3 +17,12 @@ unchanged and still check upstream. Users need to install the first build
 containing this change manually; subsequent update checks target this fork.
 
 This change does not alter the pinned VIIPER backend or USB/IP packages.
+
+## RC versioning
+
+Each new DS4Windows RC release must increment the numeric assembly, file,
+and installer product/bundle version, even though its public tag uses the
+VIIPERRC label. RC4.6.8 uses 5.0.13.0, after RC4.6.7's 5.0.12.0.
+Keep the project package/informational versions, installer defaults, build
+receipt, and setup filename in agreement. The next setup is
+`DS4Windows_5.0.13.0_Setup_x64.exe`.
