@@ -263,7 +263,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="NavGlyph"
                                        Text="{TemplateBinding Tag}"
-                                       FontFamily="Segoe Fluent Icons"
+                                       FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                        Foreground="{DynamicResource MutedForegroundColor}"
                                        FontSize="14"
                                        Width="28" TextAlignment="Center"
@@ -322,7 +322,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock x:Name="EditorNavGlyph" Text="{TemplateBinding Tag}"
-                                       FontFamily="Segoe Fluent Icons"
+                                       FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                        Foreground="{DynamicResource MutedForegroundColor}"
                                        FontSize="13" Width="28" TextAlignment="Center"
                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -623,19 +623,20 @@
                                              SelectedIndex="{Binding ProfileEditorNavigationIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                              ItemContainerStyle="{StaticResource BridgeEditorNavigationListItemStyle}"
                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                        <ListBoxItem Content="Back to Profiles" Tag="&#x2190;" ToolTip="Cancel editing and return to the profile list" />
-                                        <ListBoxItem Content="Button Mapping" Tag="&#x25A3;" ToolTip="Buttons, sticks, touch gestures, and shortcuts" />
-                                        <ListBoxItem Content="Special Actions" Tag="&#x2726;" ToolTip="Macros, launches, shifts, and multi-actions" />
-                                        <ListBoxItem Content="Controller Readings" Tag="&#x223F;" ToolTip="Live inputs and calibration" />
-                                        <ListBoxItem Content="Axis Config" Tag="&#x2194;" ToolTip="Sticks, triggers, dead zones, and curves" />
-                                        <ListBoxItem Content="Lightbar" Tag="&#x25C9;" ToolTip="Color, battery, flash, and charging" />
-                                        <ListBoxItem Content="Touchpad" Tag="&#x25A1;" ToolTip="Mouse, gestures, passthrough, and positioning" />
-                                        <ListBoxItem Content="Gyro" Tag="&#x25CE;" ToolTip="Motion aiming, steering, and swipes" />
+                                        <!-- Use private-use icon glyphs supported by both Segoe icon fonts. -->
+                                        <ListBoxItem Content="Back to Profiles" Tag="&#xE72B;" ToolTip="Cancel editing and return to the profile list" />
+                                        <ListBoxItem Content="Button Mapping" Tag="&#xE765;" ToolTip="Buttons, sticks, touch gestures, and shortcuts" />
+                                        <ListBoxItem Content="Special Actions" Tag="&#xE945;" ToolTip="Macros, launches, shifts, and multi-actions" />
+                                        <ListBoxItem Content="Controller Readings" Tag="&#xE9D9;" ToolTip="Live inputs and calibration" />
+                                        <ListBoxItem Content="Axis Config" Tag="&#xE9E9;" ToolTip="Sticks, triggers, dead zones, and curves" />
+                                        <ListBoxItem Content="Lightbar" Tag="&#xE793;" ToolTip="Color, battery, flash, and charging" />
+                                        <ListBoxItem Content="Touchpad" Tag="&#xEFA5;" ToolTip="Mouse, gestures, passthrough, and positioning" />
+                                        <ListBoxItem Content="Gyro" Tag="&#xE7AD;" ToolTip="Motion aiming, steering, and swipes" />
                                         <ListBoxItem Content="Audio Haptics" Tag="&#xE767;" ToolTip="Turn system or app audio into advanced haptics" />
                                         <ListBoxItem Content="Trigger Lab" Tag="TriggerPair" ToolTip="Build persistent adaptive-trigger effects" />
                                         <ListBoxItem Content="Nintendo Options" Tag="&#xE7FC;" ToolTip="HD rumble, motion, optical mouse, and calibration" />
-                                        <ListBoxItem Content="Advanced" Tag="&#x2699;" ToolTip="Output, rumble, latency, and compatibility" />
-                                        <ListBoxItem Content="Log" Tag="&#x2261;" ToolTip="Service events without leaving the editor" />
+                                        <ListBoxItem Content="Advanced" Tag="&#xE713;" ToolTip="Output, rumble, latency, and compatibility" />
+                                        <ListBoxItem Content="Log" Tag="&#xE9F9;" ToolTip="Service events without leaving the editor" />
                                     </ListBox>
                                 </Grid>
                             </Border>
