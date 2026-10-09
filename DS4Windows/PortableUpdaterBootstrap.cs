@@ -22,12 +22,11 @@ internal sealed record PortableUpdaterTicket(string Root, string FilePath,
 /// </summary>
 internal static class PortableUpdaterBootstrap
 {
-    // 2.0.7 preserves custom apphost names transactionally and knows the
-    // target-version boundary for custom-only package ownership. Newer
-    // verified releases remain eligible; this is not an exact-version pin.
-    internal static readonly Version MinimumVersion = new(2, 0, 7, 0);
+    // 2.0.9 targets this fork and preserves the existing safe update protocols.
+    // Earlier workers still resolve DS4Windows packages from upstream.
+    internal static readonly Version MinimumVersion = new(2, 0, 9, 0);
     internal const long MaximumUpdaterBytes = 128L * 1024 * 1024;
-    internal const string ReleaseApi = "https://api.github.com/repos/hbashton/DS4Updater/releases/latest";
+    internal const string ReleaseApi = "https://api.github.com/repos/Pav-Osmolski/DS4Updater/releases/latest";
 
     internal static async Task<PortableUpdaterTicket> PrepareAsync(HttpClient client,
         string directory, CancellationToken cancellationToken = default)
@@ -109,7 +108,7 @@ internal static class PortableUpdaterBootstrap
         Version version = NormalizeVersion(parsed);
         if (version < (minimumVersion ?? MinimumVersion))
             throw new InvalidOperationException($"This update requires DS4Updater {(minimumVersion ?? MinimumVersion).ToString(3)} or newer. Download the latest compatible updater or complete installer/package.");
-        string expectedUrl = $"https://github.com/hbashton/DS4Updater/releases/download/{tag}/DS4Updater.exe";
+        string expectedUrl = $"https://github.com/Pav-Osmolski/DS4Updater/releases/download/{tag}/DS4Updater.exe";
         if (!release.TryGetProperty("assets", out var assets) || assets.ValueKind != JsonValueKind.Array)
             throw new InvalidDataException("The updater release contains no download assets.");
         var matching = assets.EnumerateArray().Where(item => item.TryGetProperty("name", out var name) &&

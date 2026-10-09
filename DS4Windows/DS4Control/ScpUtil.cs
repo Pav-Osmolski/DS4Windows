@@ -4008,8 +4008,8 @@ namespace DS4Windows
 
     public class Changelog
     {
-        public const string GITHUB_RELEASES_API_URI = "https://api.github.com/repos/hbashton/DS4Windows/releases";
-        public const string GITHUB_LATEST_RELEASE_API_URI = "https://api.github.com/repos/hbashton/DS4Windows/releases/latest";
+        public const string GITHUB_RELEASES_API_URI = "https://api.github.com/repos/Pav-Osmolski/DS4Windows/releases";
+        public const string GITHUB_LATEST_RELEASE_API_URI = "https://api.github.com/repos/Pav-Osmolski/DS4Windows/releases/latest";
 
         private static bool? _newerVersionAvailable = null;
         private static Version _latestVersion;

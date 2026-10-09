@@ -366,7 +366,7 @@ namespace DS4WinWPF.DS4Forms
                         if (mainWinVM.LastUpdaterFailure == null && !string.IsNullOrEmpty(newUpdaterVersion))
                         {
                             Util.StartProcessHelper(
-                                $"https://github.com/hbashton/DS4Updater/releases/tag/v{newUpdaterVersion}");
+                                $"https://github.com/Pav-Osmolski/DS4Updater/releases/tag/v{newUpdaterVersion}");
                         }
                     });
                 }
@@ -432,7 +432,7 @@ namespace DS4WinWPF.DS4Forms
                             MessageBox.Show(mainWinVM.LastUpdaterFailure ?? Properties.Resources.PleaseDownloadUpdater);
                             if (mainWinVM.LastUpdaterFailure == null && !string.IsNullOrEmpty(newUpdaterVersion))
                             {
-                                Util.StartProcessHelper($"https://github.com/hbashton/DS4Updater/releases/tag/v{newUpdaterVersion}");
+                                Util.StartProcessHelper($"https://github.com/Pav-Osmolski/DS4Updater/releases/tag/v{newUpdaterVersion}");
                             }
                         });
                     }
