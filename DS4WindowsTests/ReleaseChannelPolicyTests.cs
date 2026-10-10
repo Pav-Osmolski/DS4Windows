@@ -34,6 +34,19 @@ namespace DS4WindowsTests
                 selected, "5.0.0.0", true, installedReleaseTag: null));
         }
 
+        [DataTestMethod]
+        [DataRow("VIIPERRC4.6.7", "5.0.12.0")]
+        [DataRow("VIIPERRC4.6.8", "5.0.13.0")]
+        public void OldForkRcBuildCanMoveToNumericLatestRelease(string installedTag, string installedVersion)
+        {
+            GithubRelease selected = ReleaseChannelPolicy.SelectPreferredRelease(
+                Releases(Stable("5.0.14", "2026-10-10T00:00:00Z"),
+                    Prerelease(installedTag, "2026-10-09T00:00:00Z")), true);
+            Assert.AreEqual("5.0.14", selected.TagName);
+            Assert.IsTrue(ReleaseChannelPolicy.ShouldUpdate(selected, installedVersion, true, installedTag));
+            Assert.IsFalse(ReleaseChannelPolicy.ShouldUpdate(selected, "5.0.14.0", false, "5.0.14"));
+        }
+
         [TestMethod]
         public void NewerStableReleaseWinsForPrereleaseBuild()
         {

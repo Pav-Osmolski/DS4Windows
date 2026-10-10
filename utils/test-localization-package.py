@@ -441,7 +441,7 @@ class ReleaseWorkflowValidationTests(unittest.TestCase):
     def test_release_identity_cannot_bypass_the_verified_job(self):
         self.assert_policy_mutations_rejected([
             ('RELEASE_TAG: ${{ needs.identity.outputs.tag }}', 'RELEASE_TAG: ${{ github.event.release.tag_name }}'),
-            ('UNSIGNED_RC_RELEASE: ${{ needs.identity.outputs.unsigned_rc }}', 'UNSIGNED_RC_RELEASE: true'),
+            ('UNSIGNED_RELEASE: ${{ needs.identity.outputs.unsigned_release }}', 'UNSIGNED_RELEASE: true'),
             ('$release.tag_name -cne $tag -or $release.id -le 0', '$false'),
             ('$dispatch -and -not $release.draft', '$false'),
             ('gh api --paginate --slurp', 'gh api'),
@@ -454,13 +454,13 @@ class ReleaseWorkflowValidationTests(unittest.TestCase):
         self.assert_policy_mutations_rejected([
             ("$unsignedRc = $isPrerelease -ceq 'true' -and", '$unsignedRc = $true -and'),
             ("$tag -cmatch '^VIIPERRC[0-9]+(\\.[0-9]+){0,3}\\z'", "$tag -match '^VIIPER'"),
-            ('if ($dispatch -and -not $unsignedRc)', 'if ($false)'),
-            ("RequireSigning = $env:UNSIGNED_RC_RELEASE -ne 'true'", 'RequireSigning = $false'),
+            ('if ($dispatch -and -not $numericStable)', 'if ($false)'),
+            ("RequireSigning = $env:UNSIGNED_RELEASE -ne 'true'", 'RequireSigning = $false'),
         ])
 
     def test_signed_releases_keep_all_certificate_gates(self):
         self.assert_policy_mutations_rejected([
-            ("if: env.UNSIGNED_RC_RELEASE != 'true'", 'if: false'),
+            ("if: env.UNSIGNED_RELEASE != 'true'", 'if: false'),
             ('DS4W_SIGN_CERT_PASSWORD: ${{ secrets.DS4W_SIGN_CERT_PASSWORD }}', 'DS4W_SIGN_CERT_PASSWORD: ignored'),
             ("'^[0-9A-Fa-f]{40}$'", "'.*'"),
             ('$signature.Status -ne "Valid"', '$false'),

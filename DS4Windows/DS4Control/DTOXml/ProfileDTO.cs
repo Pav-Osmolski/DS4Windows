@@ -3976,6 +3976,17 @@ namespace DS4WinWPF.DS4Control.DTOXml
             //OutputContDevice +Done
         }
 
+        // The framework only caches XmlSerializer(Type) and XmlSerializer(Type, string).
+        // Constructing one with XmlAttributeOverrides generates and loads a new dynamic
+        // assembly every time (~100 ms with first use) and that assembly never unloads.
+        // Serialize/Deserialize are thread-safe, so one shared instance is used instead.
+        private static readonly Lazy<XmlSerializer> serializer =
+            new Lazy<XmlSerializer>(
+                () => new XmlSerializer(typeof(ProfileDTO), GetAttributeOverrides()),
+                System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+
+        internal static XmlSerializer Serializer => serializer.Value;
+
         public static XmlAttributeOverrides GetAttributeOverrides()
         {
             XmlAttributeOverrides xmlOverrides = new XmlAttributeOverrides();

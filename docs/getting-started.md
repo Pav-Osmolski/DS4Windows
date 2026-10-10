@@ -17,10 +17,9 @@ The Visual C++ runtime remains a separate system prerequisite.
 ## Install
 
 Download only from [this repository's Releases page](https://github.com/Pav-Osmolski/DS4Windows/releases).
-Current DS4Windows 5 builds are release candidates; check the notes for
-limitations and signing status.
-The current release, [VIIPERRC4.6.7](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/VIIPERRC4.6.7),
-is unsigned.
+Starting with **5.0.14**, new releases use numeric versions and are marked
+**Latest**. Check the release notes for limitations and signing status;
+this fork currently publishes unsigned builds.
 
 ### Recommended: all-in-one installer
 
@@ -36,7 +35,7 @@ avoid independently upgrading or downgrading USB/IP for this installation.
 
 ### Portable ZIP
 
-1. Extract **all** of `DS4Windows_VIIPER_x64.zip` into a permanent, writable folder.
+1. Extract **all** of the release's `DS4Windows_<version>_x64.zip` (older RCs use `DS4Windows_VIIPER_x64.zip`) into a permanent, writable folder.
    Do not launch from inside the ZIP or copy only `DS4Windows.exe`.
    Keep the `Lang` folder with the application; it contains the translations.
 2. Run `DS4Windows.exe` from that folder. On a new PC, complete driver setup

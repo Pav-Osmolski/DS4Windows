@@ -13340,7 +13340,8 @@ namespace DS4Windows
             if (state.L3) buttons |= 0x4000;
             if (state.R3) buttons |= 0x8000;
             if (state.PS) buttons |= 0x0001;
-            if (state.OutputTouchButton || state.TouchButton) buttons |= 0x0002;
+            // The mapper owns click passthrough; TouchButton is the physical observation.
+            if (state.OutputTouchButton) buttons |= 0x0002;
             return buttons;
         }
 
@@ -13360,7 +13361,8 @@ namespace DS4Windows
             if (state.L3) buttons |= 0x00004000;
             if (state.R3) buttons |= 0x00008000;
             if (state.PS) buttons |= 0x00010000;
-            if (state.OutputTouchButton || state.TouchButton) buttons |= 0x00020000;
+            // The mapper owns click passthrough; TouchButton is the physical observation.
+            if (state.OutputTouchButton) buttons |= 0x00020000;
             if (state.Mute) buttons |= 0x00040000;
             if (state.FnL) buttons |= 0x00100000;
             if (state.FnR) buttons |= 0x00200000;
