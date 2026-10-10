@@ -1,33 +1,35 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Report a reproducible DS4Windows problem
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Problem
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Describe the observed behaviour and what you expected instead.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+## Reproduction
 
-**Screenshots and Logs**
-If applicable, add screenshots to help explain your problem. Also, please add the most
-log file (ds4windows_log.txt) from the Logs folder in your DS4Windows config folder.
+1. Starting configuration:
+2. Steps:
+3. Result:
 
-**Desktop (please complete the following information):**
- - Controller Make and Model: Sony DS4 v.2 (CUH-ZCT2U)
- - OS: [e.g. Windows 10 Pro Build 2004]
- - DS4Windows Version [e.g. 3.0.3]
+## Environment
 
-**Additional context**
-Add any other context about the problem here.
+- DS4Windows version:
+- Windows edition and full build:
+- Controller make/model:
+- Physical connection (USB/Bluetooth):
+- Virtual output type:
+- Installed or portable:
+- Other controller software / Steam Input:
+- VIIPER or updater version, if relevant:
+
+## Diagnostics
+
+Attach the relevant exported app log or installer diagnostics, and screenshots
+if they help. Review files for personal data and credentials before attaching.
+See [Troubleshooting](https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/troubleshooting.md).
+List workarounds and whether the issue reproduces with a default profile.

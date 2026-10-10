@@ -1,25 +1,22 @@
-## Bundle Translations
+# Translations and packaging
 
-### Edit Project File Post-Build
+[Documentation index](../../docs/README.md) · [Development](../../docs/development.md)
 
-Open the DS4WindowsWPF.csproj file. Navigate to the Post-Build section.
-Add two `:` characters before the `GOTO END` statement to comment the line out.
-Build the program in Visual Studio or directly with MSBuild. The dedicated Lang folder
-will be created with the compiled translation assemblies
+Edit `DS4Windows/Translations/Strings.<culture>.resx` for UI translations;
+`Strings.resx` supplies neutral English text. Use the existing resource keys and
+preserve format placeholders. Check the translated text in the corresponding UI.
 
-#### Add new Translations in project file
+Developer builds can use the standard `<culture>` satellite layout. Release
+packaging uses `utils/post-build.py` to collect resource assemblies into
+`Lang/<culture>` alongside DS4Windows. Keep this entire folder in installer and
+portable distributions, including dependency resources such as TaskScheduler's.
 
-Edit the `langs` variable in the Post-Build step with the .NET culture code for a
-locale.
+The app's resource resolver handles the packaged layout, parent-culture fallback
+and neutral fallback. The former post-build GOTO edits and dependency-file
+injection instructions are obsolete; do not patch `DS4Windows.deps.json` to make
+translations load.
 
-### Add Lang folder loading
-
-.NET normally expects translation assemblies to be bundled in folders
-for each locale directly next to the running executable. Since DS4Windows
-uses a Lang subfolder, an extra step must be performed to make sure .NET will
-find the compiled assemblies.
-
-A Python 3 (3.10) script is included in the solution `utils` folder (`inject_deps_path.py`).
-It accepts the path to the relevant `DS4Windows.deps.json` file as a cmd argument. The script
-will add necessary path variable for the project entry to include an extra include path
-for the .NET Runtime.
+Run the [satellite resource probe](../../utils/SatelliteResourceProbe/README.md)
+and packaging regression checks when changing translation loading or layout.
+They check actual UI and dependency resources from both the package directory
+and an unrelated working directory.

@@ -1,5 +1,8 @@
 # USB/IP driver verification timeout: issues #118 and #126
 
+> **Historical record.** This preserves the source, tests and limitations recorded at the time; it is not current setup guidance. See the [documentation index](../README.md).
+
+
 ## Finding
 
 `EvaluateUsbipDriverIntegrity` previously found the two installed driver files
