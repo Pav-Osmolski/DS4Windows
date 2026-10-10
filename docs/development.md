@@ -58,5 +58,5 @@ older evidence to make a newer result look like it was tested historically.
 ## Documentation changes
 
 Keep README concise, user instructions in `docs`, and release history in
-CHANGELOG.md. Update links after moves, keep old entry points as redirects where
-useful, and preserve third-party notices and contributor attribution.
+CHANGELOG.md. Update links after moves and remove redundant pointer files.
+Preserve substantive historical records, third-party notices and contributor attribution.

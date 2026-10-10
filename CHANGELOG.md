@@ -628,7 +628,7 @@ this candidate most needs to earn its release status.
 #### Evidence behind this assessment
 
 This assessment covers `VIIPERRC4.3` through the RC4.5 source preparation,
-including the [RC4.4 feature set](docs/RELEASE_CANDIDATE_4_4.md). Detailed records:
+including the [RC4.4 feature set](CHANGELOG.md#inherited-release-candidate-4-4). Detailed records:
 
 - [Current controller fixes, repeated full-suite results and remaining acceptance](docs/validation/2026-09-08-controller-followup-rollup.md)
 - [Reported-bug fixes](docs/validation/2026-09-08-github-reported-bugs.md) and [startup/setup/tray follow-up](docs/validation/2026-09-08-reported-issues-follow-up.md)

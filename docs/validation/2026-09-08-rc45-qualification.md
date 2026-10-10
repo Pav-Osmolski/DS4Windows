@@ -152,5 +152,5 @@ The live portable b93 session was not replaced for packaging. No actual MSI
 transaction or new controller/game acceptance is claimed on this host in this
 release-preparation pass. Bluetooth headset audio remains unsupported; the
 native-driver backend and sub-millisecond end-to-end latency are not shipping
-claims. See the [RC4.5 assessment](../RELEASE_CANDIDATE_4_5.md) for the full
+claims. See the [RC4.5 assessment](../../CHANGELOG.md#inherited-release-candidate-4-5) for the full
 feature scope, demonstrated hardware evidence and focused tester scenarios.

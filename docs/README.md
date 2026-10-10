@@ -27,6 +27,6 @@ contracts and dated validation records are intended for contributors.
 - [Technical reference](reference.md): runtime contracts and diagnostic tools.
 - [Validation archive](validation/README.md): dated tests and investigations.
 
-Release history belongs in [CHANGELOG.md](../CHANGELOG.md). Older release-note
-URLs remain as pointers to that history. A dated investigation describes its
+Release history belongs in [CHANGELOG.md](../CHANGELOG.md). Keep one canonical
+page per topic, and link directly to it. A dated investigation describes its
 recorded source and hardware; it does not establish the status of a newer build.
