@@ -1,4 +1,7 @@
-﻿# Concept
+# Concept
+
+> **Historical record.** This preserves the source, tests and limitations recorded at the time; it is not current setup guidance. See the [documentation index](../../docs/README.md).
+
 Stick drift is an issue most controllers will suffer from at some point in their life, therefore a tool that would
 recalibrate it would be very helpful.
 
@@ -66,4 +69,4 @@ performing a lookup rather than calculating the value in real time might be a go
 flicking it in a few different directions and letting it recenter itself
 - The drift values in both axes should be calculated and then saved to a config file
 - Appropriate translations should be performed **before any other input manipulation (any settings in the `Axis Config`
-tab, like deadzone, sensitivity, etc.)**  
+tab, like deadzone, sensitivity, etc.)**

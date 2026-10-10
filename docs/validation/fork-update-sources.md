@@ -1,5 +1,8 @@
 # Update sources for this fork
 
+> **Historical record.** This preserves the source, tests and limitations recorded at the time; it is not current setup guidance. See the [documentation index](../README.md).
+
+
 DS4Windows now discovers releases and changelogs from
 `Pav-Osmolski/DS4Windows`, and prepares updater downloads from
 `Pav-Osmolski/DS4Updater`. Both portable and installed update handoffs require

@@ -1,6 +1,6 @@
 # Frontend modernization
 
-This branch keeps the DS4Windows runtime and WPF binding layer intact while adopting
+The frontend keeps the DS4Windows runtime and WPF binding layer intact while adopting
 clear navigation, consistent spacing, descriptive cards, and progressive disclosure.
 
 ## Why the frontend remains WPF
@@ -33,7 +33,7 @@ Nothing in the existing UI has been removed. The main shell exposes:
 The profile editor keeps the interactive controller mapping canvas and makes the dense
 settings rail explicit:
 
-- **Controls**: complete button, stick, trigger, touch, gyro, keyboard, mouse, macro, and
+- **Button Mapping**: complete button, stick, trigger, touch, gyro, keyboard, mouse, macro, and
   unbound mapping support.
 - **Special Actions**: create, edit, remove, enable, and export action definitions.
 - **Controller Readings**: live input, dead-zone, and drift inspection.
@@ -61,13 +61,17 @@ settings rail explicit:
 6. New features are isolated behind profile-backed services instead of being coupled to
    visual controls.
 
-## Follow-up feature seams
+## Implemented feature services
 
-- **Audio Haptics** should be implemented behind a dedicated service and profile settings
-  model. The existing NAudio dependency and DualSense speaker/microphone paths can be reused,
-  but audio capture must not be coupled to a page's lifetime.
-- **Adaptive-trigger profile library** should wrap the existing trigger-effect primitives and
-  persist named presets independently of controller profiles before a preset UI is added.
-- **Controller artwork** should use project-owned, device-specific assets for DualShock 4,
-  DualSense, DualSense Edge, Switch, Joy-Con, and supported legacy devices. The shell must not
-  assume that every connected controller is a DualSense.
+Audio Haptics and Trigger Lab now have profile editor pages and dedicated
+service/control implementations. Controller artwork also has project-owned
+device-specific implementations. The original proposals for these features
+must not be treated as outstanding roadmap tasks.
+
+- `DS4Windows/DS4Control/AudioHapticsService.cs`
+- `DS4Windows/DS4Forms/AudioHapticsControl.xaml`
+- `DS4Windows/DS4Forms/TriggerLabControl.xaml`
+- `DS4Windows/DS4Forms/ControllerArtwork.cs`
+
+See the [user guide](user-guide.md) for the current profile navigation and
+[roadmap](roadmap.md) for maintenance priorities.

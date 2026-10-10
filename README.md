@@ -4,7 +4,7 @@
 
 Controller remapping, advanced feedback, and per-game profiles for Windows.
 
-[**Download**](https://github.com/Pav-Osmolski/DS4Windows/releases) · [Getting started](docs/getting-started.md) · [Changelog](CHANGELOG.md) · [Community](https://www.reddit.com/r/DS4Windows/)
+[**Download**](https://github.com/Pav-Osmolski/DS4Windows/releases) · [Documentation](docs/README.md) · [Changelog](CHANGELOG.md) · [Community](https://www.reddit.com/r/DS4Windows/)
 
 [![Releases](https://img.shields.io/github/v/release/Pav-Osmolski/DS4Windows?logo=github&label=release)](https://github.com/Pav-Osmolski/DS4Windows/releases)
 [![Main build](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml?query=branch%3Amain)
@@ -36,8 +36,8 @@ controller, connection, and game.
 
 **Requirements:** Windows 10 or 11 x64 and the [Visual C++ x64 runtime](https://aka.ms/vs/17/release/vc_redist.x64.exe). The .NET runtime is included.
 
-For portable use, extract the entire `DS4Windows_VIIPER_x64.zip`, keeping the
-`Lang` folder with the app. See [Getting started](docs/getting-started.md) for
+For portable use, extract the entire `DS4Windows_<version>_x64.zip`, keeping the
+`Lang` folder with the app. See [Documentation](docs/README.md) for
 setup, update instructions, and troubleshooting. Read the release notes for
 signing status and known limitations.
 

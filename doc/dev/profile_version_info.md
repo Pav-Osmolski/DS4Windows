@@ -1,4 +1,11 @@
-## Profile Version Info
+# Profile schema history
+
+[Documentation index](../../docs/README.md)
+
+This reference preserves early profile-format changes; it is not the app release
+changelog or an exhaustive description of the current profile fields. Inspect
+`DS4Windows/DS4Control/DTOXml/ProfileDTO.cs` and round-trip tests for the current schema.
+App/file versions and profile `config_version` are separate values.
 
 This document will present some of the distinctive (mostly backwards incompatible)
 changes that justify incrementing the version number for the profile schema.
