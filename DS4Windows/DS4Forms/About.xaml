@@ -9,7 +9,7 @@
         Title="{lex:LocExtension HotkeysAbout}" Height="450" Width="800"
         Style="{DynamicResource WindowStyle}">
     <DockPanel>
-        <Label x:Name="headerLb" Content="DS4Windows - hbashton Build (Version " DockPanel.Dock="Top" HorizontalAlignment="Center" />
+        <Label x:Name="headerLb" Content="DS4Windows - Pav-Osmolski Build (Version " DockPanel.Dock="Top" HorizontalAlignment="Center" />
 
         <TabControl>
             <TabItem Header="Hotkeys">
@@ -714,6 +714,7 @@ Public License instead of this License.  But first, please read
                         <StackPanel Orientation="Horizontal">
                             <!-- <TextBlock><Hyperlink x:Name="siteLink" Click="SiteLink_Click" Foreground="{DynamicResource AccentColor}">Site</Hyperlink></TextBlock> -->
                             <TextBlock Margin="20,0,0,0"><Hyperlink x:Name="sourceLink" Click="SourceLink_Click" Foreground="{DynamicResource AccentColor}">Source</Hyperlink></TextBlock>
+                            <TextBlock Margin="20,0,0,0"><Hyperlink Click="HbashtonLink_Click" Foreground="{DynamicResource AccentColor}">hbashton (upstream)</Hyperlink></TextBlock>
                             <TextBlock Margin="20,0,0,0"><Hyperlink Click="Ryochan7Link_Click" Foreground="{DynamicResource AccentColor}">Ryochan7</Hyperlink></TextBlock>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">

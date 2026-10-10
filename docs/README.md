@@ -11,6 +11,7 @@ contracts and dated validation records are intended for contributors.
 | [User guide](user-guide.md) | Controllers, profile editing, auto profiles, output slots, settings and logs |
 | [Troubleshooting](troubleshooting.md) | Detection, double input, backend startup, feedback and updates |
 | [Swipe profiles](swipe-profiles.md) | Restrict two-finger profile switching |
+| [Moonlight / Sunshine](moonlight-support.md) | Accept supported streamed virtual controllers |
 | [Flick stick](flick-stick-calibration.md) | Calibration and troubleshooting |
 | [Mouse clicks](troubleshooting-mouse-clicks.md) | Diagnosing simultaneous mouse-button mappings |
 | [DSX game mods](DSX-game-mod-support.md) | Optional mod integration and its limits |
@@ -23,7 +24,7 @@ contracts and dated validation records are intended for contributors.
 - [Roadmap](roadmap.md): priorities and proposals, rather than a completed-task list.
 - [Release process](release-process.md): numeric versions, draft builds and Latest publication.
 - [Installer](../installer/README.md) and [installer validation](INSTALLER_VALIDATION_STRATEGY.md).
-- [Translations](../doc/dev/bundle_translations.md) and [profile schema reference](../doc/dev/profile_version_info.md).
+- [Translations](dev/translations.md) and [profile schema reference](dev/profile-schema-reference.md).
 - [Technical reference](reference.md): runtime contracts and diagnostic tools.
 - [Validation archive](validation/README.md): dated tests and investigations.
 

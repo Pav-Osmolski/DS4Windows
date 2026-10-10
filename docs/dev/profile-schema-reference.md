@@ -1,6 +1,6 @@
 # Profile schema history
 
-[Documentation index](../../docs/README.md)
+[Documentation index](../README.md)
 
 This reference preserves early profile-format changes; it is not the app release
 changelog or an exhaustive description of the current profile fields. Inspect

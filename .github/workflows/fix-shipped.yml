@@ -2,7 +2,7 @@ name: 'Fix shipped with Release'
 
 on:
   issues:
-    types: [labeled, unlabeled, reopened]
+    types: [labeled]
 
 permissions:
   issues: write
@@ -16,8 +16,6 @@ jobs:
           github-token: ${{ github.token }}
           support-label: 'fix-shipped'
           issue-comment: >
-            This issues' topic has been resolved and an update has been published. 
-            Please check out the Releases page for a new version.
+            A fix for this report has been published. Download the current version from https://github.com/Pav-Osmolski/DS4Windows/releases. If the issue still reproduces, reopen the report with the app version, controller details and relevant log.
           close-issue: true
           lock-issue: false
-          issue-lock-reason: 'off-topic'
