@@ -50,36 +50,36 @@ public sealed class ReleaseSigningPolicyTests
         StringAssert.Contains(source, "$env:EVENT_RELEASE_ID");
         StringAssert.Contains(source, "$release.prerelease.ToString().ToLowerInvariant() -cne $env:EVENT_PRERELEASE");
         StringAssert.Contains(source, "$isPrerelease = $release.prerelease.ToString().ToLowerInvariant()");
-        StringAssert.Contains(source, "UNSIGNED_RC_RELEASE: ${{ needs.identity.outputs.unsigned_rc }}");
+        StringAssert.Contains(source, "UNSIGNED_RELEASE: ${{ needs.identity.outputs.unsigned_release }}");
         Assert.IsFalse(source.Contains("github.event.release.body", StringComparison.Ordinal));
     }
 
     [TestMethod]
-    public void DraftDispatchRejectsStableAndUnknownReleaseTypesBeforeExposingOutputs()
+    public void DraftDispatchRequiresNumericForkReleaseBeforeExposingOutputs()
     {
         string source = Workflow();
-        int gate = source.IndexOf("if ($dispatch -and -not $unsignedRc)", StringComparison.Ordinal);
+        int gate = source.IndexOf("if ($dispatch -and -not $numericStable)", StringComparison.Ordinal);
         int output = source.IndexOf("\"tag=$tag\" >> $env:GITHUB_OUTPUT", StringComparison.Ordinal);
         Assert.IsTrue(gate >= 0 && gate < output);
-        StringAssert.Contains(source[gate..output], "throw 'Draft dispatch is limited to named RC prereleases;");
+        StringAssert.Contains(source[gate..output], "throw 'New draft builds require a numeric non-prerelease tag of 5.0.14 or newer in this fork.");
         StringAssert.Contains(source, "if ($dispatch -and -not $release.draft)");
-        StringAssert.Contains(source, "RequireSigning = $env:UNSIGNED_RC_RELEASE -ne 'true'");
+        StringAssert.Contains(source, "RequireSigning = $env:UNSIGNED_RELEASE -ne 'true'");
     }
 
     [TestMethod]
-    public void StableAndUnknownPrereleasesRetainCertificateIdentityAndInstallerSigningGates()
+    public void OtherReleaseTypesRetainCertificateIdentityAndInstallerSigningGates()
     {
         string source = Workflow();
         string signing = Between(source, "    - name: Sign and verify release binaries", "    - name: Post-Build script X64");
-        StringAssert.Contains(signing, "if: env.UNSIGNED_RC_RELEASE != 'true'");
+        StringAssert.Contains(signing, "if: env.UNSIGNED_RELEASE != 'true'");
         foreach (string secret in new[] { "DS4W_SIGN_CERT_BASE64", "DS4W_SIGN_CERT_PASSWORD", "DS4W_SIGN_EXPECTED_THUMBPRINT" })
             StringAssert.Contains(signing, "${{ secrets." + secret + " }}");
         StringAssert.Contains(signing, "'^[0-9A-Fa-f]{40}$'");
         StringAssert.Contains(signing, "$signature.Status -ne \"Valid\"");
         StringAssert.Contains(signing, "$signature.SignerCertificate.Thumbprint -ne $approvedThumbprint");
         StringAssert.Contains(signing, "-not $signature.TimeStamperCertificate");
-        StringAssert.Contains(source, "RequireSigning = $env:UNSIGNED_RC_RELEASE -ne 'true'");
-        StringAssert.Contains(source, "env.UNSIGNED_RC_RELEASE != 'true' && secrets.DS4W_SIGN_CERT_PASSWORD || ''");
+        StringAssert.Contains(source, "RequireSigning = $env:UNSIGNED_RELEASE -ne 'true'");
+        StringAssert.Contains(source, "env.UNSIGNED_RELEASE != 'true' && secrets.DS4W_SIGN_CERT_PASSWORD || ''");
         StringAssert.Contains(source, "Unsigned named release candidate; not a signed stable release.");
     }
 
@@ -109,11 +109,11 @@ public sealed class ReleaseSigningPolicyTests
     }
 
     [TestMethod]
-    public void PublishedRcVerifiesSuccessfulDraftRunAndActualBytesWithoutRebuild()
+    public void PublishedReleaseVerifiesSuccessfulDraftRunAndActualBytesWithoutRebuild()
     {
         string source = Workflow();
         StringAssert.Contains(source, "if: needs.identity.outputs.verify_existing != 'true'");
-        string verify = source[source.IndexOf("  verify_published_rc:", StringComparison.Ordinal)..];
+        string verify = source[source.IndexOf("  verify_published_release:", StringComparison.Ordinal)..];
         StringAssert.Contains(verify, "if: needs.identity.outputs.verify_existing == 'true'");
         StringAssert.Contains(verify, "$receipt.sourceCommit -cne $tagCommit");
         StringAssert.Contains(verify, "$run.event -cne 'workflow_dispatch'");
@@ -124,6 +124,43 @@ public sealed class ReleaseSigningPolicyTests
         StringAssert.Contains(verify, "Hash -cne $asset.sha256");
         Assert.IsFalse(verify.Contains("dotnet publish", StringComparison.Ordinal));
         Assert.IsFalse(verify.Contains("gh release upload", StringComparison.Ordinal));
+    }
+
+    [DataTestMethod]
+    [DataRow("false", "5.0.14", true)]
+    [DataRow("false", "5.0.15", true)]
+    [DataRow("false", "6.0.0", true)]
+    [DataRow("true", "5.0.14", false)]
+    [DataRow("false", "5.0.13", false)]
+    [DataRow("false", "5.0.14.0", false)]
+    [DataRow("false", "v5.0.14", false)]
+    [DataRow("false", "05.0.14", false)]
+    [DataRow("false", "5.0.14-rc1", false)]
+    [DataRow("false", "5.0.14\n", false)]
+    public void NumericLatestPolicyUsesCanonicalVersionsAndNormalReleaseFlag(string flag, string tag, bool expected)
+    {
+        string source = Workflow();
+        string numeric = source[source.IndexOf("$numericStable =", StringComparison.Ordinal)..];
+        Match pattern = Regex.Match(numeric, @"\$tag -cmatch '(?<pattern>[^']+)'");
+        Assert.IsTrue(pattern.Success);
+        bool accepted = flag == "false" && Regex.IsMatch(tag, pattern.Groups["pattern"].Value) &&
+            Version.TryParse(tag, out Version version) && version >= new Version(5, 0, 14);
+        Assert.AreEqual(expected, accepted);
+        StringAssert.Contains(numeric, "$env:GITHUB_REPOSITORY -ceq 'Pav-Osmolski/DS4Windows'");
+        StringAssert.Contains(numeric, "$isPrerelease -ceq 'false'");
+    }
+
+    [TestMethod]
+    public void NumericReleasesKeepUpdaterReceiptCompatibilityAndSelectLatestAfterVerification()
+    {
+        string source = Workflow();
+        StringAssert.Contains(source, "schema = 1;");
+        StringAssert.Contains(source, "BINARY_VERSION=\"$BINARY_VERSION.0\"");
+        StringAssert.Contains(source, "if ($tagged.sha -cne $env:GITHUB_SHA)");
+        int verify = source.IndexOf("Hash -cne $asset.sha256", StringComparison.Ordinal);
+        int latest = source.IndexOf("-F prerelease=false -f make_latest=true", StringComparison.Ordinal);
+        Assert.IsTrue(verify >= 0 && latest > verify);
+        StringAssert.Contains(source, "$latest.id)\" -cne $env:RELEASE_ID -or $latest.prerelease -or $latest.draft");
     }
 
     private static string Between(string source, string start, string end)

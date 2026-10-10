@@ -141,7 +141,7 @@ def validate_release_workflow(release_workflow: str) -> None:
     # Validate the actual signing step, not identical text in another job.
     signing = between("    - name: Sign and verify release binaries", "    - name: Post-Build script X64")
     require(signing, [
-        "if: env.UNSIGNED_RC_RELEASE != 'true'",
+        "if: env.UNSIGNED_RELEASE != 'true'",
         'DS4W_SIGN_CERT_BASE64: ${{ secrets.DS4W_SIGN_CERT_BASE64 }}',
         'DS4W_SIGN_CERT_PASSWORD: ${{ secrets.DS4W_SIGN_CERT_PASSWORD }}',
         'DS4W_SIGN_EXPECTED_THUMBPRINT: ${{ secrets.DS4W_SIGN_EXPECTED_THUMBPRINT }}',
@@ -156,7 +156,7 @@ def validate_release_workflow(release_workflow: str) -> None:
         "Public release signing material or approved signer identity is missing.",
         '$firstPartyBinaries = @(".\\bin\\x64\\Release\\output\\DS4Windows.exe")',
         "First-party release signing failed for $path.",
-        "RequireSigning = $env:UNSIGNED_RC_RELEASE -ne 'true'",
+        "RequireSigning = $env:UNSIGNED_RELEASE -ne 'true'",
         '$signature.SignerCertificate.Thumbprint -ne $approvedThumbprint',
         '-not $signature.TimeStamperCertificate',
         'if: always()',
@@ -183,23 +183,29 @@ def validate_release_workflow(release_workflow: str) -> None:
         '$release.prerelease.ToString().ToLowerInvariant() -cne $env:EVENT_PRERELEASE',
         '$isPrerelease = $release.prerelease.ToString().ToLowerInvariant()',
         "$unsignedRc = $isPrerelease -ceq 'true' -and\n          $tag -cmatch '^VIIPERRC[0-9]+(\\.[0-9]+){0,3}\\z'",
-        "if ($dispatch -and -not $unsignedRc) {\n          throw 'Draft dispatch is limited to named RC prereleases;",
-        '"unsigned_rc=$($unsignedRc.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT',
-        '"verify_existing=$(((-not $dispatch) -and $unsignedRc).ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT',
+        "if ($dispatch -and -not $numericStable) {\n          throw 'New draft builds require a numeric non-prerelease tag of 5.0.14 or newer in this fork.",
+        '"unsigned_release=$($unsignedRelease.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT',
+        '"verify_existing=$(((-not $dispatch) -and $unsignedRelease).ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT',
         'Unsigned named release candidate; not a signed stable release.',
     ])
-    if identity.index('if ($dispatch -and -not $unsignedRc)') > identity.index('"tag=$tag" >> $env:GITHUB_OUTPUT'):
+    require(identity, [
+        "$numericStable = $env:GITHUB_REPOSITORY -ceq 'Pav-Osmolski/DS4Windows' -and",
+        "$isPrerelease -ceq 'false' -and",
+        "([version]$tag) -ge ([version]'5.0.14')",
+        '$unsignedRelease = $unsignedRc -or $numericStable',
+    ])
+    if identity.index('if ($dispatch -and -not $numericStable)') > identity.index('"tag=$tag" >> $env:GITHUB_OUTPUT'):
         raise SystemExit("Release identity must be verified before publishing job outputs.")
     require(between("  release:", "    - name: Setup .NET"), [
         'needs: identity',
         "if: needs.identity.outputs.verify_existing != 'true'",
-        'UNSIGNED_RC_RELEASE: ${{ needs.identity.outputs.unsigned_rc }}',
+        'UNSIGNED_RELEASE: ${{ needs.identity.outputs.unsigned_release }}',
         'ref: ${{ needs.identity.outputs.tag }}',
     ])
     require(between("    - name: Build standard installer X64", "    - name: Name release asset"), [
-        "RequireSigning = $env:UNSIGNED_RC_RELEASE -ne 'true'",
-        "env.UNSIGNED_RC_RELEASE != 'true' && secrets.DS4W_SIGN_CERT_PASSWORD || ''",
-        "env.UNSIGNED_RC_RELEASE != 'true' && secrets.DS4W_SIGN_EXPECTED_THUMBPRINT || ''",
+        "RequireSigning = $env:UNSIGNED_RELEASE -ne 'true'",
+        "env.UNSIGNED_RELEASE != 'true' && secrets.DS4W_SIGN_CERT_PASSWORD || ''",
+        "env.UNSIGNED_RELEASE != 'true' && secrets.DS4W_SIGN_EXPECTED_THUMBPRINT || ''",
     ])
     require(between("    - name: Prepare verified release records", "    - name: Verify and publish exact release assets"), [
         'if ($sourceCommit -cne $tagCommit)',
@@ -225,7 +231,7 @@ def validate_release_workflow(release_workflow: str) -> None:
         'Hash -cne $expected[$name]', 'Hash -cne $env:RELEASE_RECEIPT_SHA256', 'Hash -cne $record.sha256'
     )):
         raise SystemExit("Release asset hashes must be verified before upload.")
-    verification = between("  verify_published_rc:", None)
+    verification = between("  verify_published_release:", None)
     require(verification, [
         "if: needs.identity.outputs.verify_existing == 'true'",
         '$receipt.sourceCommit -cne $tagCommit',

@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Existing named VIIPERRC prerelease draft to build without publishing
+        description: Existing numeric release draft to build without publishing (for example 5.0.14)
         required: true
         type: string
 
@@ -20,7 +20,7 @@ jobs:
     outputs:
       tag: ${{ steps.release.outputs.tag }}
       release_id: ${{ steps.release.outputs.release_id }}
-      unsigned_rc: ${{ steps.release.outputs.unsigned_rc }}
+      unsigned_release: ${{ steps.release.outputs.unsigned_release }}
       verify_existing: ${{ steps.release.outputs.verify_existing }}
     steps:
     - name: Verify release identity and signing policy
@@ -66,8 +66,13 @@ jobs:
         $isPrerelease = $release.prerelease.ToString().ToLowerInvariant()
         $unsignedRc = $isPrerelease -ceq 'true' -and
           $tag -cmatch '^VIIPERRC[0-9]+(\.[0-9]+){0,3}\z'
-        if ($dispatch -and -not $unsignedRc) {
-          throw 'Draft dispatch is limited to named RC prereleases; other releases retain the signed published-event path.'
+        $numericStable = $env:GITHUB_REPOSITORY -ceq 'Pav-Osmolski/DS4Windows' -and
+          $isPrerelease -ceq 'false' -and
+          $tag -cmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\z' -and
+          ([version]$tag) -ge ([version]'5.0.14')
+        $unsignedRelease = $unsignedRc -or $numericStable
+        if ($dispatch -and -not $numericStable) {
+          throw 'New draft builds require a numeric non-prerelease tag of 5.0.14 or newer in this fork.'
         }
         if ($dispatch) {
           # Saving a new draft does not create its Git tag. Materialize only
@@ -82,14 +87,21 @@ jobs:
             gh api --method POST "repos/$env:GITHUB_REPOSITORY/git/refs" `
               -f "ref=refs/tags/$tag" -f "sha=$($target.sha)"
           }
+          $tagged = gh api "repos/$env:GITHUB_REPOSITORY/commits/$tag" | ConvertFrom-Json
+          if ($tagged.sha -cne $env:GITHUB_SHA) {
+            throw 'Draft builds require the tag and selected workflow commit to match.'
+          }
         }
         "tag=$tag" >> $env:GITHUB_OUTPUT
         "release_id=$($release.id)" >> $env:GITHUB_OUTPUT
-        "unsigned_rc=$($unsignedRc.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
-        "verify_existing=$(((-not $dispatch) -and $unsignedRc).ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+        "unsigned_release=$($unsignedRelease.ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+        "verify_existing=$(((-not $dispatch) -and $unsignedRelease).ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
         if ($unsignedRc) {
           Write-Warning 'Unsigned named release candidate; not a signed stable release.'
           'Unsigned named release candidate; Authenticode signing intentionally omitted.' >> $env:GITHUB_STEP_SUMMARY
+        } elseif ($numericStable) {
+          Write-Warning 'Unsigned numeric release; no Authenticode signature is claimed.'
+          'Unsigned numeric release; exact source and asset integrity checks remain mandatory.' >> $env:GITHUB_STEP_SUMMARY
         } else {
           Write-Host 'Approved certificate, identity and timestamp gates remain mandatory.'
         }
@@ -99,10 +111,10 @@ jobs:
     runs-on: windows-2022
     env:
       RELEASE_TAG: ${{ needs.identity.outputs.tag }}
-      UNSIGNED_RC_RELEASE: ${{ needs.identity.outputs.unsigned_rc }}
+      UNSIGNED_RELEASE: ${{ needs.identity.outputs.unsigned_release }}
       RELEASE_ID: ${{ needs.identity.outputs.release_id }}
-    # Release publication follows independently checked CI. Named RC prereleases
-    # may be unsigned; stable and all other releases still require signing.
+    # Build and test a draft before publication. This fork permits unsigned
+    # numeric Latest releases; other release types retain signing gates.
     steps:
     - uses: actions/checkout@v4
       with:
@@ -129,6 +141,9 @@ jobs:
         PROJECT_VERSION=$(python -c "import xml.etree.ElementTree as ET; print(ET.parse('DS4Windows/DS4WinWPF.csproj').find('.//Version').text)")
         if [[ "$VERSION" =~ ^[0-9]+(\.[0-9]+){1,3}(-.*)?$ ]]; then
           BINARY_VERSION=${VERSION%%-*}
+          if [[ "$BINARY_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            BINARY_VERSION="$BINARY_VERSION.0"
+          fi
           PACKAGE_VERSION=$VERSION
         else
           BINARY_VERSION=$PROJECT_ASSEMBLY_VERSION
@@ -150,7 +165,7 @@ jobs:
           "-p:InformationalVersion=$env:VERSION" `
           -o .\bin\x64\Release\output
     - name: Sign and verify release binaries
-      if: env.UNSIGNED_RC_RELEASE != 'true'
+      if: env.UNSIGNED_RELEASE != 'true'
       shell: pwsh
       env:
         DS4W_SIGN_CERT_BASE64: ${{ secrets.DS4W_SIGN_CERT_BASE64 }}
@@ -196,8 +211,8 @@ jobs:
     - name: Build standard installer X64
       shell: pwsh
       env:
-        DS4W_SIGN_CERT_PASSWORD: ${{ env.UNSIGNED_RC_RELEASE != 'true' && secrets.DS4W_SIGN_CERT_PASSWORD || '' }}
-        DS4W_SIGN_EXPECTED_THUMBPRINT: ${{ env.UNSIGNED_RC_RELEASE != 'true' && secrets.DS4W_SIGN_EXPECTED_THUMBPRINT || '' }}
+        DS4W_SIGN_CERT_PASSWORD: ${{ env.UNSIGNED_RELEASE != 'true' && secrets.DS4W_SIGN_CERT_PASSWORD || '' }}
+        DS4W_SIGN_EXPECTED_THUMBPRINT: ${{ env.UNSIGNED_RELEASE != 'true' && secrets.DS4W_SIGN_EXPECTED_THUMBPRINT || '' }}
       run: |
         $parameters = @{
           PublishRoot = ".\bin\x64\Release\DS4Windows"
@@ -206,7 +221,7 @@ jobs:
           DisplayVersion = $env:VERSION
           OutputDirectory = ".\bin\x64\Release\installer"
           SkipApplicationPublish = $true
-          RequireSigning = $env:UNSIGNED_RC_RELEASE -ne 'true'
+          RequireSigning = $env:UNSIGNED_RELEASE -ne 'true'
         }
         .\installer\build-installer.ps1 @parameters
     - name: Name release asset
@@ -286,7 +301,7 @@ jobs:
         $noticeNames = @('VIIPER-0.1.9-rc4.6.6-LICENSES.txt', 'VIIPER-0.1.9-rc4.6.6-PROVENANCE.txt',
           'VIIPER-0.1.9-rc4.6.6-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md', 'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')
         foreach ($name in $noticeNames) { Copy-Item -LiteralPath (Join-Path $publish "extras\$name") -Destination $records }
-        $signing = if ($env:UNSIGNED_RC_RELEASE -ceq 'true') { 'Unsigned named release candidate' } else { 'Required Authenticode signing verified' }
+        $signing = if ($env:UNSIGNED_RELEASE -ceq 'true') { 'Unsigned release (no Authenticode signature)' } else { 'Required Authenticode signing verified' }
         @("DS4Windows release: $env:RELEASE_TAG", "DS4Windows source commit: $sourceCommit",
           "VIIPER source commit: $brokerCommit", "VIIPER binary SHA-256: $brokerHash",
           "Signing: $signing", "GitHub Actions run: $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID") |
@@ -300,7 +315,8 @@ jobs:
         $receipt = @{
           schema = 1; repository = $env:GITHUB_REPOSITORY; tag = $env:RELEASE_TAG
           sourceCommit = $sourceCommit; releaseId = $env:RELEASE_ID; runId = $env:GITHUB_RUN_ID
-          unsignedRc = ($env:UNSIGNED_RC_RELEASE -ceq 'true'); binaryVersion = $env:BINARY_VERSION
+          unsignedRc = ($env:RELEASE_TAG -cmatch '^VIIPERRC'); unsignedRelease = ($env:UNSIGNED_RELEASE -ceq 'true')
+          prerelease = ($env:RELEASE_TAG -cmatch '^VIIPERRC'); binaryVersion = $env:BINARY_VERSION
           brokerSourceName = $brokerSourceName; brokerCommit = $brokerCommit
           assets = @($assets | ForEach-Object { @{ name = [IO.Path]::GetFileName($_); sha256 = (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash } })
         }
@@ -363,12 +379,12 @@ jobs:
         if (Test-Path -LiteralPath $certificatePath -PathType Leaf) {
           Remove-Item -LiteralPath $certificatePath -Force
         }
-  verify_published_rc:
+  verify_published_release:
     needs: identity
     if: needs.identity.outputs.verify_existing == 'true'
     runs-on: windows-2022
     steps:
-    - name: Verify published RC bytes from the successful draft build
+    - name: Verify published release bytes from the successful draft build
       shell: pwsh
       env:
         GITHUB_TOKEN: ${{ github.TOKEN }}
@@ -378,7 +394,7 @@ jobs:
         $ErrorActionPreference = 'Stop'
         $PSNativeCommandUseErrorActionPreference = $true
         $release = gh api "repos/$env:GITHUB_REPOSITORY/releases/tags/$env:RELEASE_TAG" | ConvertFrom-Json
-        $records = Join-Path $env:RUNNER_TEMP 'verify-published-rc'
+        $records = Join-Path $env:RUNNER_TEMP 'verify-published-release'
         New-Item -ItemType Directory -Path $records | Out-Null
         $receiptAsset = @($release.assets | Where-Object { $_.name -ceq 'RELEASE-BUILD.json' })
         if ($receiptAsset.Count -ne 1 -or $receiptAsset[0].uploader.login -cne 'github-actions[bot]') {
@@ -389,7 +405,8 @@ jobs:
         $tagCommit = (gh api "repos/$env:GITHUB_REPOSITORY/commits/$env:RELEASE_TAG" --jq '.sha').Trim()
         if ($receipt.schema -ne 1 -or $receipt.repository -cne $env:GITHUB_REPOSITORY -or
             $receipt.tag -cne $env:RELEASE_TAG -or "$($receipt.releaseId)" -cne $env:RELEASE_ID -or
-            $receipt.sourceCommit -cne $tagCommit -or $receipt.unsignedRc -ne $true -or
+            $receipt.sourceCommit -cne $tagCommit -or
+            (-not $receipt.unsignedRc -and ($receipt.unsignedRelease -ne $true -or $receipt.prerelease -ne $false)) -or
             $receipt.brokerSourceName -cnotmatch '^[0-9A-Za-z][0-9A-Za-z._-]+-SOURCE\.zip\z' -or
             "$($receipt.runId)" -cnotmatch '^[0-9]+\z') { throw 'RC receipt identity mismatch.' }
         $run = gh api "repos/$env:GITHUB_REPOSITORY/actions/runs/$($receipt.runId)" | ConvertFrom-Json
@@ -407,10 +424,21 @@ jobs:
             throw "Published RC asset hash mismatch: $($asset.name)"
           }
         }
-        foreach ($required in @('DS4Windows_VIIPER_x64.zip', "DS4Windows_$($receipt.binaryVersion)_Setup_x64.exe",
+        $portableName = if ($receipt.unsignedRc) { 'DS4Windows_VIIPER_x64.zip' } else { "DS4Windows_$($env:RELEASE_TAG)_x64.zip" }
+        if (-not $receipt.unsignedRc -and ($release.prerelease -or $receipt.binaryVersion -cne "$($env:RELEASE_TAG).0")) {
+          throw 'Numeric release channel or Windows version mismatch.'
+        }
+        foreach ($required in @($portableName, "DS4Windows_$($receipt.binaryVersion)_Setup_x64.exe",
           "DS4Windows-$($env:RELEASE_TAG)-SOURCE.zip", $receipt.brokerSourceName, 'SHA256SUMS.txt', 'SOURCE-REVISIONS.txt',
           'VIIPER-0.1.9-rc4.6.6-LICENSES.txt', 'VIIPER-0.1.9-rc4.6.6-PROVENANCE.txt',
           'VIIPER-0.1.9-rc4.6.6-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md', 'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')) {
           if (-not $seen.Contains($required)) { throw "Incomplete RC receipt: $required" }
         }
-        Write-Host 'Published unsigned RC matches its successful draft build; no assets rebuilt or overwritten.'
+        Write-Host 'Published release matches its successful draft build; no assets rebuilt or overwritten.'
+        if (-not $receipt.unsignedRc) {
+          gh api --method PATCH "repos/$env:GITHUB_REPOSITORY/releases/$env:RELEASE_ID" -F prerelease=false -f make_latest=true
+          $latest = gh api "repos/$env:GITHUB_REPOSITORY/releases/latest" | ConvertFrom-Json
+          if ("$($latest.id)" -cne $env:RELEASE_ID -or $latest.prerelease -or $latest.draft) {
+            throw 'Published numeric release was not selected as Latest.'
+          }
+        }

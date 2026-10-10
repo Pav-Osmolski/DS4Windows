@@ -22,9 +22,9 @@ portable repair stays in the portable folder.
 ```powershell
 .\installer\build-installer.ps1 `
   -PublishRoot .\bin\x64\Release\output `
-  -ProductVersion 5.0.13.0 `
-  -BundleVersion 5.0.13.0 `
-  -DisplayVersion VIIPERRC4.6.8 `
+  -ProductVersion 5.0.14.0 `
+  -BundleVersion 5.0.14.0 `
+  -DisplayVersion 5.0.14 `
   -SkipApplicationPublish
 ```
 
@@ -53,7 +53,7 @@ log directory's `task-backups` folder.
 Set `DS4W_SIGN_CERT_PATH` plus `DS4W_SIGN_CERT_PASSWORD`, or use
 `DS4W_SIGN_CERT_THUMBPRINT` for a protected certificate-store identity. Set
 `DS4W_SIGN_EXPECTED_THUMBPRINT` to the independently approved signer and,
-optionally, set `DS4W_SIGN_TIMESTAMP_URL`. Stable and other signed release
+optionally, set `DS4W_SIGN_TIMESTAMP_URL`. Signed release
 builds pass `-RequireSigning`; they fail closed unless the first-party DS4Windows
 application, setup hosts, MSI, and final EXE have that valid timestamped
 signature. The bundled upstream VIIPER executable remains byte-identical and
@@ -61,12 +61,13 @@ unsigned; its fixed SHA-256 and complete source/build provenance are validated
 instead. Signed GitHub release jobs require the `DS4W_SIGN_CERT_BASE64`,
 `DS4W_SIGN_CERT_PASSWORD`, and `DS4W_SIGN_EXPECTED_THUMBPRINT` secrets.
 
-The user-authorized exception is an actual GitHub prerelease with an exact
-named `VIIPERRC` ordinal tag. Its draft-first workflow explicitly records an
-unsigned build, retains the other integrity gates, and verifies those same
-assets after publication without rebuilding them. Numeric prereleases,
-unknown tags and stable releases cannot use that exception. See the
-[publication policy](../docs/validation/2026-09-09-release-publication-policy.md).
+This fork uses numeric release tags starting at `5.0.14`, published as
+Latest with the prerelease flag cleared. These releases remain unsigned;
+the workflow records that status explicitly and retains exact source,
+package hash, pinned dependency and installer validation. Build the draft
+first, test it, then publish the same bytes. See the
+[current release process](../docs/release-process.md). Historical named RC
+receipts remain verifiable. Other release types still require signing.
 
 Signed Burn bundles use WiX's required two-part flow: detach and sign the
 cached engine, reattach that engine to the original bundle, then sign the

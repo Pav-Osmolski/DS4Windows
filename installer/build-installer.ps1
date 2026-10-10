@@ -2,8 +2,8 @@
 param(
     [Parameter(Mandatory = $true)]
     [string]$PublishRoot,
-    [string]$ProductVersion = "5.0.13.0",
-    [string]$DisplayVersion = "VIIPERRC4.6.8",
+    [string]$ProductVersion = "5.0.14.0",
+    [string]$DisplayVersion = "5.0.14",
     [string]$BundleVersion,
     [string]$OutputDirectory,
     [switch]$SkipApplicationPublish,

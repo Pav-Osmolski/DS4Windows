@@ -34,6 +34,10 @@ jobs:
         # the release gate. Hardware-dependent tests retain explicit opt-in gates.
         run: dotnet test .\DS4WindowsTests\DS4WindowsTests.csproj -c Release -p:Platform=x64 --verbosity normal
 
+      - name: Test numeric release identity and legacy publication policy
+        shell: pwsh
+        run: .\utils\test-release-identity.ps1
+
       - name: Test renamed executable setup process guards
         shell: powershell
         run: .\utils\test-renamed-executable-setup.ps1
