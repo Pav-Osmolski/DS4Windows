@@ -299,16 +299,18 @@ namespace DS4Windows
                 {
                     ControlService.StartupDiag($"OutputSlotManager.DeferredRemoval found slot={slot + 1} type={outputDevice.GetDeviceType()}");
                     //int slot = revDeviceDict[outputDevice];
-                    outputDevices[slot] = null;
-                    deviceDict.Remove(slot);
-                    revDeviceDict.Remove(outputDevice);
-
                     ControlService.StartupDiag($"OutputSlotManager.RemoveFeedbacks begin slot={slot + 1}");
                     outputDevice.RemoveFeedbacks();
                     ControlService.StartupDiag($"OutputSlotManager.RemoveFeedbacks end slot={slot + 1}");
                     ControlService.StartupDiag($"OutputSlotManager.Disconnect begin slot={slot + 1}");
                     outputDevice.Disconnect();
                     ControlService.StartupDiag($"OutputSlotManager.Disconnect end slot={slot + 1}");
+
+                    // Failed teardown must retain the exact registration so
+                    // this slot cannot be reused and removal can be retried.
+                    outputDevices[slot] = null;
+                    deviceDict.Remove(slot);
+                    revDeviceDict.Remove(outputDevice);
 
                     if (inIdx != -1)
                     {
@@ -549,8 +551,8 @@ namespace DS4Windows
                 !revDeviceDict.TryGetValue(output, out int slot) ||
                 !IsExactAttachedSlotNoLock(outputSlots[slot], output) || outputSlots[slot].InputIndex != index)
                 throw new InvalidOperationException("The retained output no longer has its exact reservation.");
-            // Unlike legacy deferred removal, keep the exact manager record
-            // until Disconnect succeeds. A failure remains retryable at Stop.
+            // Keep the exact manager record until Disconnect succeeds.
+            // A failure remains retryable at Stop.
             output.RemoveFeedbacks();
             output.Disconnect();
             outputDevices[slot] = null;
@@ -587,9 +589,11 @@ namespace DS4Windows
                 {
                     if (device.OutputDevice != null)
                     {
-                        outputDevices[slotIdx] = null;
                         device.OutputDevice.Disconnect();
 
+                        outputDevices[slotIdx] = null;
+                        deviceDict.Remove(slotIdx);
+                        revDeviceDict.Remove(device.OutputDevice);
                         device.DetachDevice();
                         SlotUnassigned?.Invoke(this, slotIdx, outputSlots[slotIdx]);
                         //if (!immediate)
