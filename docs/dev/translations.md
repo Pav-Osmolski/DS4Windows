@@ -1,6 +1,6 @@
 # Translations and packaging
 
-[Documentation index](../../docs/README.md) · [Development](../../docs/development.md)
+[Documentation index](../README.md) · [Development](../development.md)
 
 Edit `DS4Windows/Translations/Strings.<culture>.resx` for UI translations;
 `Strings.resx` supplies neutral English text. Use the existing resource keys and

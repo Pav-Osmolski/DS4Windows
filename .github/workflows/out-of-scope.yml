@@ -2,7 +2,7 @@ name: 'Out-of-scope Issue'
 
 on:
   issues:
-    types: [labeled, unlabeled, reopened]
+    types: [labeled]
 
 permissions:
   issues: write
@@ -16,8 +16,6 @@ jobs:
           github-token: ${{ github.token }}
           support-label: 'out-of-scope'
           issue-comment: >
-            :wave: @{issue-author}, unfortunately this topic is out of scope 
-            of the projects' overall goals and will not be worked on.
+            This report has been marked out of scope for this repository and closed. The conversation remains unlocked; please explain if the scope or controller behaviour was misunderstood.
           close-issue: true
-          lock-issue: true
-          issue-lock-reason: 'off-topic'
+          lock-issue: false

@@ -32,7 +32,7 @@ The final argument is the package version; choose the intended version for your
 build. The script requires the complete offline payload, adds the portable
 backend and marker, and places satellite assemblies under `Lang/<culture>`.
 Do not distribute a partial build directory or manually repack selected files.
-See [Translations](../doc/dev/bundle_translations.md) for resource-loading checks.
+See [Translations](dev/translations.md) for resource-loading checks.
 
 Installer authoring and validation are documented in [installer/README.md](../installer/README.md).
 Official releases use the [release process](release-process.md), not a local

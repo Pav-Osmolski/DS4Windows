@@ -3,6 +3,15 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Changed
+
+- Consolidated the remaining `doc` pages under `docs`, refreshed Moonlight / Sunshine instructions, and moved the DSX diagnostic script into `utils`.
+- Removed the obsolete upstream batch installer and unused root screenshots.
+- Updated About and Moonlight help links for this fork, while retaining upstream credits.
+- Issue labels still close duplicate, out-of-scope and shipped-fix reports, but no longer lock conversations or automatically close reopened reports.
+
 ## [5.0.14](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.14) — 2026-10-10
 
 ### Fixed

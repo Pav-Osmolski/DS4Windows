@@ -1,6 +1,6 @@
 # Concept
 
-> **Historical record.** This preserves the source, tests and limitations recorded at the time; it is not current setup guidance. See the [documentation index](../../docs/README.md).
+> **Historical record.** This preserves the source, tests and limitations recorded at the time; it is not current setup guidance. See the [documentation index](../README.md).
 
 Stick drift is an issue most controllers will suffer from at some point in their life, therefore a tool that would
 recalibrate it would be very helpful.

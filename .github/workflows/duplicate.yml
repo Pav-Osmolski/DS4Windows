@@ -2,7 +2,7 @@ name: 'Duplicate Issue'
 
 on:
   issues:
-    types: [labeled, unlabeled, reopened]
+    types: [labeled]
 
 permissions:
   issues: write
@@ -16,9 +16,6 @@ jobs:
           github-token: ${{ github.token }}
           support-label: 'duplicate'
           issue-comment: >
-            :wave: @{issue-author}, one or more issues for this topic already exist, 
-            please follow those instead of opening another one. Use the search function 
-            to find issues related to your troubles. Thank you!
+            This report has been marked as a duplicate. Please link the existing report so readers can follow it and add relevant reproduction details there. This conversation remains unlocked.
           close-issue: true
-          lock-issue: true
-          issue-lock-reason: 'off-topic'
+          lock-issue: false
