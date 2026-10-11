@@ -1025,8 +1025,8 @@
             <TabItem x:Name="logTab" Header="{lex:Loc Log}" Tag="&#xE9D9;">
                 <DockPanel>
                     <DockPanel Height="20" DockPanel.Dock="Bottom" Margin="4,8">
-                        <Button x:Name="exportLogBtn" Content="{lex:Loc Export}" HorizontalAlignment="Left" Padding="20,1" Click="ExportLogBtn_Click" />
-                        <Button x:Name="clearLogBtn" Content="{lex:Loc Clear}" DockPanel.Dock="Right" Padding="20,1" Margin="100,0,0,0" Click="ClearLogBtn_Click" />
+                        <Button x:Name="exportLogBtn" Content="{lex:Loc Export}" HorizontalAlignment="Left" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ExportLogBtn_Click" />
+                        <Button x:Name="clearLogBtn" Content="{lex:Loc Clear}" DockPanel.Dock="Right" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="100,0,0,0" Click="ClearLogBtn_Click" />
                         <TextBlock Text="Latest 1,000 entries" VerticalAlignment="Center" Margin="16,0"
                                    Foreground="{DynamicResource MutedForegroundColor}"
                                    ToolTip="Older saved entries are available in the Logs folder." />

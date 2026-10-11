@@ -7,6 +7,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Fixed
 
+- Log USB/IP installed/required versions, driver running states, runtime readiness and package verification. Include the HidHide driver version when detected and report VIIPER readiness from the actual prerequisite check.
+- Give the Log tab's Export and Clear buttons the same padding and minimum height as other secondary buttons.
 - Align the Swipe Touchpad To Switch Profiles checkbox and label with the surrounding Settings options.
 - Remove inner dropdown item borders in both themes and let menu rows fill the available width. Keep selection and keyboard highlights, disabled states, and scrolling for longer lists.
 
