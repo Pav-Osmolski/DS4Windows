@@ -21,12 +21,44 @@ namespace DS4Windows
                     key.GetValue("ImagePath", null, RegistryValueOptions.DoNotExpandEnvironmentNames) as string);
                 version = !string.IsNullOrEmpty(path) && File.Exists(path)
                     ? FileVersionInfo.GetVersionInfo(path).FileVersion : null;
+                if (!string.IsNullOrWhiteSpace(version))
+                    version = "file version " + version;
+                else if (!string.IsNullOrEmpty(path) && File.Exists(path))
+                {
+                    // usbip-win2's SYS projects have no VERSIONINFO resource.
+                    // Read only the INF beside the registered driver image,
+                    // not an unrelated/staged package or the app version.
+                    string inf = Path.ChangeExtension(path, ".inf");
+                    string packageVersion = File.Exists(inf) ? ReadInfVersion(File.ReadLines(inf)) : null;
+                    if (packageVersion != null) version = "package version " + packageVersion + " (INF)";
+                }
             }
             catch (Exception error)
             {
                 return "version/status unavailable (" + error.Message + ")";
             }
-            return $"version {(string.IsNullOrWhiteSpace(version) ? "unknown" : version)}; {ReadState(serviceName)}";
+            return $"{(string.IsNullOrWhiteSpace(version) ? "version metadata unavailable" : version)}; {ReadState(serviceName)}";
+        }
+
+        internal static string ReadInfVersion(System.Collections.Generic.IEnumerable<string> lines)
+        {
+            bool inVersion = false;
+            foreach (string raw in lines)
+            {
+                string line = raw.Split(';')[0].Trim();
+                if (line.StartsWith("[", StringComparison.Ordinal))
+                {
+                    inVersion = line.Equals("[Version]", StringComparison.OrdinalIgnoreCase);
+                    continue;
+                }
+                int equals = line.IndexOf('=');
+                if (!inVersion || equals < 0 ||
+                    !line.Substring(0, equals).Trim().Equals("DriverVer", StringComparison.OrdinalIgnoreCase)) continue;
+                string[] parts = line.Substring(equals + 1).Split(',');
+                if (parts.Length == 2 && Version.TryParse(parts[1].Trim(), out var version) && version.Revision >= 0)
+                    return version.ToString();
+            }
+            return null;
         }
 
         private static string ReadState(string serviceName)

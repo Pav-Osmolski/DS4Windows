@@ -1024,13 +1024,22 @@
             </TabItem>
             <TabItem x:Name="logTab" Header="{lex:Loc Log}" Tag="&#xE9D9;">
                 <DockPanel>
-                    <DockPanel Height="20" DockPanel.Dock="Bottom" Margin="4,8">
-                        <Button x:Name="exportLogBtn" Content="{lex:Loc Export}" HorizontalAlignment="Left" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ExportLogBtn_Click" />
-                        <Button x:Name="clearLogBtn" Content="{lex:Loc Clear}" DockPanel.Dock="Right" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="100,0,0,0" Click="ClearLogBtn_Click" />
-                        <TextBlock Text="Latest 1,000 entries" VerticalAlignment="Center" Margin="16,0"
+                    <Grid x:Name="logFooter" DockPanel.Dock="Bottom" Margin="4,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="copyLogBtn" Content="Copy Text" Margin="0,0,8,0"
+                                Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="CopyLogBtn_Click"
+                                ToolTip="Copy the latest log entries as plain text for pasting into GitHub." />
+                        <Button x:Name="exportLogBtn" Grid.Column="1" Content="{lex:Loc Export}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ExportLogBtn_Click" />
+                        <Button x:Name="clearLogBtn" Grid.Column="3" Content="{lex:Loc Clear}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearLogBtn_Click" />
+                        <TextBlock Grid.Column="2" Text="Latest 1,000 entries" VerticalAlignment="Center" Margin="16,0"
                                    Foreground="{DynamicResource MutedForegroundColor}"
                                    ToolTip="Older saved entries are available in the Logs folder." />
-                    </DockPanel>
+                    </Grid>
                     <ListView x:Name="logListView" DockPanel.Dock="Top" ItemsSource="{Binding LogItems}" MouseDoubleClick="LogListView_MouseDoubleClick" Margin="0"
                               ScrollViewer.CanContentScroll="True" VirtualizingPanel.IsVirtualizing="True"
                               VirtualizingPanel.VirtualizationMode="Recycling">
