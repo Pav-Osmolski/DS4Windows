@@ -5,7 +5,10 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-No changes recorded yet.
+### Fixed
+
+- Align the Swipe Touchpad To Switch Profiles checkbox and label with the surrounding Settings options.
+- Remove inner dropdown item borders in both themes and let menu rows fill the available width. Keep selection and keyboard highlights, disabled states, and scrolling for longer lists.
 
 ## [5.0.16](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.16) — 2026-10-11
 
