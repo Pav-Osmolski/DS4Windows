@@ -625,7 +625,7 @@
                         <GroupBox x:Name="runAsGroupBox" Header="{lex:Loc RunAs}" BorderThickness="2" Visibility="{Binding ShowRunStartPanel}"
                               IsEnabled="{Binding CanChangeStartupMode}"
                               Margin="{StaticResource spaceMargin}">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,4">
                                 <StackPanel>
                                     <RadioButton Content="{lex:Loc Program}" GroupName="RunAsOpt" Margin="{StaticResource spaceMargin}" IsChecked="{Binding RunStartProg}" />
                                     <RadioButton Content="{lex:Loc Task}" GroupName="RunAsOpt" Margin="{StaticResource spaceMargin}"
@@ -644,7 +644,8 @@
                             </ComboBox>
                         </StackPanel>
                         <CheckBox Content="{lex:Loc ProfileSwitchNotification}" IsChecked="{Binding ProfileChangedNotification}"
-                                  Visibility="{Binding IsProfileChangedCheckVisible}" Margin="4,0,0,10"/>
+                                  Visibility="{Binding IsProfileChangedCheckVisible}" Margin="{StaticResource spaceMargin}"
+                                  Style="{DynamicResource BridgeLabeledCheckBoxStyle}" />
                         <CheckBox Content="{lex:Loc DisconnectFromBtWhenStopping}" Margin="{StaticResource spaceMargin}"
                               IsChecked="{Binding DisconnectBTStop}"
                               ToolTip="Disconnect Bluetooth controllers when the DS4Windows service is stopped."

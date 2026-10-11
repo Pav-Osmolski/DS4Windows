@@ -13,8 +13,11 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Align the profile-switch notification checkbox with the other Settings checkboxes.
 - Apply the same padded button style to Device Options and Config Swipe Profiles, allowing translated Device Options labels to fit.
 
+- Match the notification checkbox text gap and bottom spacing to other Settings items, separate Run As options from the group heading, and vertically center the Auto Profiles window-title placeholder.
+
 ### Changed
 
+- Replace the sidebar letter badge with the maintainer-provided DS4Windows PNG icon.
 - Prepare app version **5.0.16** and installer version **5.0.16.0** for the next release.
 
 ## [5.0.15](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.15) — 2026-10-11

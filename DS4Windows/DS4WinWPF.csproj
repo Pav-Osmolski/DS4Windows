@@ -394,6 +394,7 @@
 
 	<ItemGroup>
 
+		<Resource Include="Resources\DS4Windows-sidebar.png" />
 		<Resource Include="Resources\DS4 Config_white.png" />
 		<Resource Include="Resources\newprofile_white.png" />
 		<Resource Include="Resources\copy_white.png" />
