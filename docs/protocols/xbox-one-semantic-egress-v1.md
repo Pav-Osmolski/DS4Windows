@@ -176,8 +176,10 @@ captured creation token and revalidate before lifecycle transitions. Duplicate
 streams cannot displace the existing feedback consumer, and deferred startup
 cannot acquire a replacement at the same numeric address.
 
-The pinned usbip-win2 0.9.7.7 native attach IOCTL returns the assigned positive
-hub port but has no attach-time ownership-serial field. Activation therefore
+The original usbip-win2 0.9.7.7 native attach IOCTL returns the assigned positive
+hub port but has no attach-time ownership-serial field. The current 0.9.8.1
+layout adds that field, but its released serial-override feature is broken;
+VIIPER leaves it empty. See the [upgrade guide](../usbip-upgrade.md). Activation therefore
 accepts that exact ABI shape and additionally requires the exact public alias
 in the activation receipt. DS4Windows binds a conditional local port lease to
 the captured lifetime. It never uses that numeric port to detach an Xbox
