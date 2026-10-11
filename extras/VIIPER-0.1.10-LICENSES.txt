@@ -3,7 +3,7 @@
 # github.com/Alia5/VIIPER
 
 * Name: github.com/Alia5/VIIPER
-* Version: v0.1.9-rc4.6.6
+* Version: v0.1.10
 * License: [GPL-3.0](https://github.com/Alia5/VIIPER/blob/HEAD/LICENSE.txt)
 
 VIIPER - Virtual Input over IP EmulatoR
@@ -1035,7 +1035,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 * Name: gopkg.in/yaml.v3
 * Version: v3.0.1
-* License: [MIT](https://github.com/go-yaml/yaml/blob/v3.0.1/LICENSE)
+* License: [MIT](Unknown)
 
 
 

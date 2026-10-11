@@ -10,7 +10,7 @@ package pins. A Desktop executable location alone is **not** isolation.
 Use a dedicated ordinary directory under Desktop, containing the complete
 source-built DS4Windows publish and the exact separately source-built
 `viiper.exe`. No installation, task registration, or Program Files replacement
-is required. The user must already have supported, verified usbip-win2 0.9.7.7.
+is required. The user must already have supported, verified usbip-win2 0.9.8.1.
 
 ```text
 Desktop/<dedicated lab>/

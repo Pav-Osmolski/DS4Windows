@@ -52,7 +52,7 @@ namespace DS4WindowsTests
                     ControllerOverviewAudioTests.ValidateRenderedOverview(overview, resultsDirectory, renderedFiles);
 
                     var repairPrompt = new ViiperSetupPrompt(
-                        "usbip-win2 0.9.7.8 must be replaced with supported 0.9.7.7",
+                        "usbip-win2 0.9.7.8 must be replaced with supported 0.9.8.1",
                         null, verifiedUpdateRequired: true,
                         usbipReplacementRequired: true,
                         mandatoryRepairRequired: true);
