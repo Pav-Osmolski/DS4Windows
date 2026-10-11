@@ -157,6 +157,10 @@
                                                Background="{DynamicResource BorderColor}" />
 
                                     <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
@@ -165,28 +169,26 @@
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <StackPanel>
-                                            <TextBlock Text="ACTIVE PROFILE" FontSize="10" FontWeight="Bold"
+                                        <TextBlock Text="ACTIVE PROFILE" FontSize="10" FontWeight="Bold"
                                                        Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,5" />
-                                            <ComboBox x:Name="selectProfCombo" Style="{StaticResource BridgeProfileComboBoxStyle}"
+                                        <ComboBox Grid.Row="1" VerticalAlignment="Center" x:Name="selectProfCombo" Style="{StaticResource BridgeProfileComboBoxStyle}"
                                                       HorizontalAlignment="Left"
                                                       ItemsSource="{Binding ProfileListCol}" SelectedIndex="{Binding SelectedIndex}"
                                                       Tag="{Binding DevIndex, Mode=OneTime}"
                                                       Visibility="{Binding PrimaryDevice, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                       SelectionChanged="SelectProfCombo_SelectionChanged" KeyDown="SelectProfCombo_KeyDown">
-                                                <ComboBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding Name,Mode=OneWay,FallbackValue=''}"
-                                                                   TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}" />
-                                                    </DataTemplate>
-                                                </ComboBox.ItemTemplate>
-                                            </ComboBox>
-                                        </StackPanel>
-                                        <CheckBox Grid.Column="1" Content="{lex:Loc LinkProfileId}" IsChecked="{Binding LinkedProfile}"
-                                                  IsEnabled="{Binding CanLinkProfile}" Margin="12,20,12,0" VerticalAlignment="Center"
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name,Mode=OneWay,FallbackValue=''}"
+                                                               TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <CheckBox Grid.Row="1" Grid.Column="1" Content="{lex:Loc LinkProfileId}" IsChecked="{Binding LinkedProfile}"
+                                                  IsEnabled="{Binding CanLinkProfile}" Margin="12,0,12,0" VerticalAlignment="Center"
                                                   ToolTip="Use the same profile whenever this physical controller reconnects." />
-                                        <xctk:SplitButton Grid.Column="2" x:Name="ProfEditSBtn" Content="{lex:Loc Edit}"
-                                                          MinWidth="84" Height="34" Margin="0,18,10,0"
+                                        <xctk:SplitButton Grid.Row="1" Grid.Column="2" x:Name="ProfEditSBtn" Content="{lex:Loc Edit}"
+                                                          MinWidth="84" Height="34" Margin="0,0,10,0"
                                                           Visibility="{Binding PrimaryDevice, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                           Tag="{Binding DevIndex, Mode=OneTime}" Click="ProfEditSBtn_Click" VerticalAlignment="Center">
                                             <xctk:SplitButton.DropDownContent>
@@ -194,32 +196,26 @@
                                                         Tag="{Binding DevIndex, Mode=OneTime}" Click="NewProfBtn_Click" />
                                             </xctk:SplitButton.DropDownContent>
                                         </xctk:SplitButton>
-                                        <StackPanel Grid.Column="3" Margin="0,0,10,0"
-                                                    Visibility="{Binding SupportsSwitch2StandaloneHoldMode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <TextBlock Text="JOY-CON HOLD" FontSize="10" FontWeight="Bold"
+                                        <TextBlock Grid.Column="3" Visibility="{Binding SupportsSwitch2StandaloneHoldMode, Converter={StaticResource BooleanToVisibilityConverter}}" Text="JOY-CON HOLD" FontSize="10" FontWeight="Bold"
                                                        Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,5" />
-                                            <Button Width="116" Height="34"
+                                        <Button Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" Margin="0,0,10,0"
+                                                    Visibility="{Binding SupportsSwitch2StandaloneHoldMode, Converter={StaticResource BooleanToVisibilityConverter}}" Width="116" Height="34"
                                                     Content="{Binding Switch2StandaloneHoldModeText, Mode=OneWay}"
                                                     Click="Switch2JoyConHoldModeBtn_Click"
                                                     ToolTip="{Binding Switch2StandaloneHoldModeToolTip}" />
-                                        </StackPanel>
-                                        <StackPanel Grid.Column="4" Margin="0,0,10,0"
-                                                    Visibility="{Binding SupportsSwitch2Identification, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <TextBlock Text="IDENTIFY" FontSize="10" FontWeight="Bold"
+                                        <TextBlock Grid.Column="4" Visibility="{Binding SupportsSwitch2Identification, Converter={StaticResource BooleanToVisibilityConverter}}" Text="IDENTIFY" FontSize="10" FontWeight="Bold"
                                                        Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,5" />
-                                            <Button Width="92" Height="34"
+                                        <Button Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" Margin="0,0,10,0"
+                                                    Visibility="{Binding SupportsSwitch2Identification, Converter={StaticResource BooleanToVisibilityConverter}}" Width="92" Height="34"
                                                     Content="Ping"
                                                     Click="Switch2IdentifyBtn_Click"
                                                     ToolTip="Vibrate this controller so you can tell which one it is." />
-                                        </StackPanel>
-                                        <StackPanel Grid.Column="5" HorizontalAlignment="Right">
-                                            <TextBlock Text="LIGHTBAR" FontSize="10" FontWeight="Bold"
+                                        <TextBlock Grid.Column="5" Text="LIGHTBAR" FontSize="10" FontWeight="Bold"
                                                        Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,5" />
-                                            <Button x:Name="LightColorBtn" Width="116" Height="34"
+                                        <Button Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" x:Name="LightColorBtn" Width="116" Height="34"
                                                     Background="{Binding LightColor, Mode=OneWay}" BorderBrush="{DynamicResource BorderColor}"
                                                     Tag="{Binding DevIndex, Mode=OneTime}" Click="LightColorBtn_Click"
                                                     ToolTip="Choose a temporary lightbar color" />
-                                        </StackPanel>
                                     </Grid>
                                 </Grid>
                             </DataTemplate>
@@ -441,8 +437,7 @@
                                                            Foreground="{DynamicResource MutedForegroundColor}"
                                                            HorizontalAlignment="Center" VerticalAlignment="Center" />
                                                 <TextBox x:Name="profilesSearchTextBox" Grid.Column="1"
-                                                         BorderThickness="0" Background="Transparent"
-                                                         Padding="2,8" VerticalContentAlignment="Center"
+                                                         Style="{DynamicResource BridgeSearchTextBoxStyle}"
                                                          TextChanged="ProfilesSearchTextBox_TextChanged"
                                                          ToolTip="Search profiles by name" />
                                                 <Button x:Name="clearProfilesSearchBtn" Grid.Column="2" Content="&#xE711;"
@@ -615,7 +610,7 @@
                                   ToolTip="{lex:Loc Resources:TwoFingerSwipe}" Click="SwipeTouchCk_Click"
                                   Style="{StaticResource BridgeDescribedCheckBoxStyle}" />
                             <Button x:Name="configSwipeProfilesBtn" Content="Config Swipe Profiles" Margin="12,0,0,0"
-                                  Padding="8,2" Click="ConfigSwipeProfilesBtn_Click"
+                                  Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ConfigSwipeProfilesBtn_Click"
                                   ToolTip="Choose which profiles the two-finger swipe is allowed to switch between" />
                         </StackPanel>
                         <CheckBox x:Name="runAtStartCk" Content="{lex:Loc RunAtStartup}" Margin="{StaticResource spaceMargin}"
@@ -630,7 +625,7 @@
                         <GroupBox x:Name="runAsGroupBox" Header="{lex:Loc RunAs}" BorderThickness="2" Visibility="{Binding ShowRunStartPanel}"
                               IsEnabled="{Binding CanChangeStartupMode}"
                               Margin="{StaticResource spaceMargin}">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,4">
                                 <StackPanel>
                                     <RadioButton Content="{lex:Loc Program}" GroupName="RunAsOpt" Margin="{StaticResource spaceMargin}" IsChecked="{Binding RunStartProg}" />
                                     <RadioButton Content="{lex:Loc Task}" GroupName="RunAsOpt" Margin="{StaticResource spaceMargin}"
@@ -649,7 +644,8 @@
                             </ComboBox>
                         </StackPanel>
                         <CheckBox Content="{lex:Loc ProfileSwitchNotification}" IsChecked="{Binding ProfileChangedNotification}"
-                                  Visibility="{Binding IsProfileChangedCheckVisible}" Margin="16 0 0 10"/>
+                                  Visibility="{Binding IsProfileChangedCheckVisible}" Margin="{StaticResource spaceMargin}"
+                                  Style="{DynamicResource BridgeLabeledCheckBoxStyle}" />
                         <CheckBox Content="{lex:Loc DisconnectFromBtWhenStopping}" Margin="{StaticResource spaceMargin}"
                               IsChecked="{Binding DisconnectBTStop}"
                               ToolTip="Disconnect Bluetooth controllers when the DS4Windows service is stopped."
@@ -1013,9 +1009,10 @@
                         </GroupBox>
 
                         <Button x:Name="deviceOptionSettingsBtn"
+                                Style="{DynamicResource BridgeSecondaryButtonStyle}"
                                 HorizontalAlignment="Center"
                                 Margin="{StaticResource spaceMargin}"
-                                MaxWidth="140"
+                                MinWidth="140"
                                 Content="{lex:Loc DeviceOptions}"
                                 Click="DeviceOptionSettingsBtn_Click" />
                                 </StackPanel>

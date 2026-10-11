@@ -161,6 +161,26 @@
         </Setter>
     </Style>
 
+    <Style x:Key="BridgeSearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+        <Setter Property="MinHeight" Value="34" />
+        <Setter Property="Padding" Value="4,8" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColor}" />
+    </Style>
+
+    <Style x:Key="BridgeLabeledCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource CheckBoxStyle}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Margin="3,0,0,0" FontWeight="SemiBold"
+                               Foreground="{DynamicResource ForegroundColor}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="BridgeDescribedCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource CheckBoxStyle}">
         <Setter Property="Margin" Value="4,2,4,13" />
         <Setter Property="ContentTemplate">
@@ -450,11 +470,9 @@
                                     </Grid.RowDefinitions>
 
                                     <StackPanel Orientation="Horizontal" Margin="4,0,0,20">
-                                        <Border Width="30" Height="30" CornerRadius="5"
-                                                Background="{DynamicResource AccentColor}" Margin="0,0,10,0">
-                                            <TextBlock Text="D" Foreground="White" FontSize="17" FontWeight="Bold"
-                                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
+                                        <Image Width="30" Height="30" Margin="0,0,10,0"
+                                               Source="/DS4Windows;component/Resources/DS4Windows-sidebar.png"
+                                               Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
                                         <StackPanel VerticalAlignment="Center">
                                             <TextBlock Text="DS4Windows" FontSize="17" FontWeight="SemiBold"
                                                        Foreground="{DynamicResource ForegroundColor}" />
