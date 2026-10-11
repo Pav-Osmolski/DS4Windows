@@ -70,15 +70,16 @@ required_offline_files = (
     "coreclr.dll",
     "hostfxr.dll",
     "extras/install-viiper-backend.ps1",
-    "extras/VIIPER-0.1.9-rc4.6.6-x64.exe",
-    "extras/VIIPER-0.1.9-rc4.6.6-LICENSES.txt",
-    "extras/VIIPER-0.1.9-rc4.6.6-PROVENANCE.txt",
-    "extras/VIIPER-0.1.9-rc4.6.6-BUILD-NOTES.txt",
+    "extras/VIIPER-0.1.10-x64.exe",
+    "extras/VIIPER-0.1.10-LICENSES.txt",
+    "extras/VIIPER-0.1.10-PROVENANCE.txt",
+    "extras/VIIPER-0.1.10-BUILD-NOTES.txt",
+    "extras/VIIPER-0.1.10-SOURCE.zip",
     "extras/LICENSE.txt",
     "extras/VIIPER-SYSTRAY-NOTICE.md",
     "extras/VIIPER-SYSTRAY-LICENSE.txt",
     "extras/VIIPER-WDL-NOTICE.txt",
-    "extras/USBip-0.9.7.7-x64.exe",
+    "extras/USBip-0.9.8.1-x64.exe",
     "extras/HidHide_1.5.230_x64.exe",
     "extras/FakerInput_0.1.0_x64.msi",
 )
@@ -97,7 +98,7 @@ if missing_offline_files:
 # Bind setup to the exact VIIPER executable copied by this publish. This
 # sidecar is regenerated for every artifact, so no hand-maintained hash can
 # drift when the bundled executable changes.
-viiper_name = "VIIPER-0.1.9-rc4.6.6-x64.exe"
+viiper_name = "VIIPER-0.1.10-x64.exe"
 viiper_path = target_dir / "extras" / viiper_name
 viiper_hasher = hashlib.sha256()
 with viiper_path.open("rb") as viiper_stream:

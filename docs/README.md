@@ -10,6 +10,7 @@ contracts and dated validation records are intended for contributors.
 | [Getting started](getting-started.md) | Requirements, installation, portable setup, updates and profiles |
 | [User guide](user-guide.md) | Controllers, profile editing, auto profiles, output slots, settings and logs |
 | [Troubleshooting](troubleshooting.md) | Detection, double input, backend startup, feedback and updates |
+| [USB/IP upgrade](usbip-upgrade.md) | Matching 0.9.8.1 components, restart requirements and low-latency imports |
 | [Swipe profiles](swipe-profiles.md) | Restrict two-finger profile switching |
 | [Moonlight / Sunshine](moonlight-support.md) | Accept supported streamed virtual controllers |
 | [Flick stick](flick-stick-calibration.md) | Calibration and troubleshooting |

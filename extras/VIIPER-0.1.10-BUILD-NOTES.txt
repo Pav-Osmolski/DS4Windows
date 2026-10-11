@@ -1,0 +1,38 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.10
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: c563712ab2506cdaf3e91328873026bc50a6313d
+Toolchain: Go 1.27.0 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: c563712
+Embedded build date: 2026-10-11T09:07:08Z
+Embedded VCS revision: c563712ab2506cdaf3e91328873026bc50a6313d
+Embedded VCS time: 2026-10-11T09:03:43Z
+Embedded VCS modified: false
+PE file version: 0.1.10.0
+PE product version: 0.1.10
+Binary: VIIPER-0.1.10-x64.exe
+Binary SHA-256: D604A28A19FD2B44ECF91E3849ECC9FE10FF7C4B243733EF9FB49A172BE25F91
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.10-LICENSES.txt
+License notice SHA-256: 4B6E8EF4434ACD06C77E895E2D94494D6DE587174EF41A94ADF809DE79BC2B00
+
+Status: Unsigned numeric release build; retained as a draft pending combined hardware testing.
+Source archive: VIIPER-0.1.10-SOURCE.zip
+Source archive SHA-256: 07059BCA8611F7D5E4FB0123C6866F44D4AD2505923F8F415A3DDCF897192596
+Source archive layout: git archive --format=zip --prefix=VIIPER-0.1.10-SOURCE/ of the tagged commit; ZIP comment and every archived Git blob independently verified.
+Tagged build: https://github.com/Pav-Osmolski/VIIPER/actions/runs/38127053028
+Release archive: viiper-windows-amd64.zip
+Release archive SHA-256: C0194808900168492AB72B0AA0E2F60C36C0C3CE85862E3769399EA7270BCE74
+Build receipt: BUILD-INFO.json in the tagged archive
+Build receipt SHA-256: F23AB4F2C6C4741E5707E4A9717C9C1C17E3610171607372043D843BA00678DC
+Binary size: 9446912 bytes
+Resource tool: github.com/josephspurrier/goversioninfo/cmd/goversioninfo v1.7.0
+Build flags: -tags release -trimpath; CGO_ENABLED=0; clean Go VCS stamping independently checked.
+Artifact identity: Binary and all five license notices copied byte-for-byte from the tagged Windows Actions archive. Build receipt run 38127053028, attempt 1.
+Source verification: All 698 archived files match the tagged Git blobs byte-for-byte. Test SDL gitlink is not embedded; the tagged tree and .gitmodules retain its identity.
+Behavior: usbip-win2 0.9.8.1 native attach and exact-location retry cancellation layouts, low-latency receive mode and exact export ownership. Serial overrides remain empty because of the documented upstream release bug.
+Validation: Default and release-tag Go tests pass locally and on Windows/Linux CI; independent MSVC layout probe matches the upstream headers. Physical controller and game validation remains required.
+Notices: Complete GPL-3.0, modified Apache-2.0 systray and WDL notices accompany this payload. Existing controller emulation and feedback contracts remain in effect.
+Upstream credit: The executable retains inherited hbashton/VIIPER help text; this source and build originate from Pav-Osmolski/VIIPER at the recorded commit.

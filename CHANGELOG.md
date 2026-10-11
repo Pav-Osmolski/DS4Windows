@@ -11,6 +11,9 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Changed
 
+- Upgrade the bundled USB/IP stack to usbip-win2 **0.9.8.1** and VIIPER **0.1.10**, with the new native request layouts and low-latency controller imports.
+- Verify the matching USB/IP library as well as its executable and drivers; accept the new port-list format without weakening import ownership checks.
+- Advance the next release to **5.0.15**, with app and installer version **5.0.15.0**. See the [USB/IP upgrade guide](docs/usbip-upgrade.md) for required restarts and the upstream serial-override limitation.
 - Consolidated the remaining `doc` pages under `docs`, refreshed Moonlight / Sunshine instructions, and moved the DSX diagnostic script into `utils`.
 - Removed the obsolete upstream batch installer and unused root screenshots.
 - Updated About and Moonlight help links for this fork, while retaining upstream credits.

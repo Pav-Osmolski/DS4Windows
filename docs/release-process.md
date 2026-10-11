@@ -6,10 +6,10 @@ pre-release** cleared. The former `VIIPERRC4.x.x` names are historical.
 
 For each release, advance all of these together:
 
-- Release tag, package and informational version: `5.0.14`.
-- Assembly, file, MSI product and installer bundle version: `5.0.14.0`.
-- Installer: `DS4Windows_5.0.14.0_Setup_x64.exe`.
-- Portable package: `DS4Windows_5.0.14_x64.zip`.
+- Release tag, package and informational version: `5.0.15`.
+- Assembly, file, MSI product and installer bundle version: `5.0.15.0`.
+- Installer: `DS4Windows_5.0.15.0_Setup_x64.exe`.
+- Portable package: `DS4Windows_5.0.15_x64.zip`.
 
 Every subsequent release increments the numeric version. Keep change lists
 and upgrade notes in [CHANGELOG.md](../CHANGELOG.md); the README stays concise.
@@ -17,7 +17,7 @@ and upgrade notes in [CHANGELOG.md](../CHANGELOG.md); the README stays concise.
 1. Merge reviewed changes and wait for the `main` CI tests, package checks and
    installer lifecycle/upgrade checks to pass.
 2. Create a draft targeting that exact `main` commit. Use a three-part numeric
-   tag such as `5.0.14`, clear the prerelease flag, and link the release body to
+   tag such as `5.0.15`, clear the prerelease flag, and link the release body to
    the tagged `CHANGELOG.md`.
 3. Run **.NET Release** from that same commit/branch, entering the draft tag.
    The workflow creates a missing tag only when the draft target matches the
@@ -39,3 +39,8 @@ The receipt remains schema 1 for compatibility with DS4Updater 2.0.9.
 Historical named RC receipts remain verifiable. Numeric releases carry a
 four-part Windows version and a three-part release marker, so existing fork
 builds can move from the RC channel to a newer normal release.
+
+The matching VIIPER corresponding-source ZIP is bundled offline and copied
+byte-for-byte into release records. The workflow checks its pinned hash and
+the public VIIPER tag commit; the backend draft can remain unpublished during
+combined hardware testing. See the [USB/IP upgrade guide](usbip-upgrade.md).

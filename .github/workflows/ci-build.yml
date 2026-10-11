@@ -54,6 +54,10 @@ jobs:
         shell: powershell
         run: .\utils\test-startup-task-backup.ps1 -BackendScript .\extras\install-viiper-backend.ps1
 
+      - name: Test USB/IP upgrade reboot boundary and import ownership
+        shell: powershell
+        run: .\utils\test-viiper-reboot-boundary.ps1 -BackendScript .\extras\install-viiper-backend.ps1
+
       - name: Test current setup failure diagnostics
         shell: powershell
         run: .\utils\test-infrastructure-failure-summary.ps1

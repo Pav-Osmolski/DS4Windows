@@ -2,7 +2,7 @@
 
 `build-installer.ps1` composes the standard x64 distribution as a WiX 5 Burn
 bundle with a custom WPF interface. It contains the managed DS4Windows MSI,
-the release's hash-pinned VIIPER backend, USB-IP 0.9.7.7, and optional
+the release's hash-pinned VIIPER backend, USB-IP 0.9.8.1, and optional
 HidHide/FakerInput packages.
 The VIIPER payload is accompanied by its generated dependency-license notice
 and a validated provenance record containing the exact source commit and

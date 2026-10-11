@@ -141,6 +141,12 @@ does not serialize another process or native background retries.
 
 ## Why native retirement validation is still gated
 
+The audit below records the original 0.9.7.7 baseline. For the current 0.9.8.1
+ABI and matching package, see the [upgrade guide](../usbip-upgrade.md) and
+[VIIPER's exact-removal contract](https://github.com/Pav-Osmolski/VIIPER/blob/v0.1.10/docs/api/xboxone-exact-removal.md).
+The new layouts do not make a numeric port ownership proof or remove the need
+for physical retirement testing.
+
 The independent audit of usbip-win2 0.9.7.7, source commit
 `7c219953101cc5d0ec9a0bcb3eb87259cf72bedd`, found:
 

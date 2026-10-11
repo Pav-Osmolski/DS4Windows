@@ -61,16 +61,16 @@ ZIP-based updater copies them there; they cannot change its broker ownership.
 
 ## Pinned runtime contract
 
-- VIIPER must match the SHA-256 of the bundled 0.1.5-rc4.6 executable.
-- `usbip.exe` must report version 0.9.7.7 and match the pinned executable
-  SHA-256.
+- VIIPER must match the SHA-256 of the bundled 0.1.10 executable.
+- `usbip.exe` must report version 0.9.8.1 and match the pinned executable
+  SHA-256. The sibling `libusbip.dll` must match its independently pinned hash.
 - The active `usbip2_ude` and `usbip2_filter` driver files must match the two
   pinned signed-driver SHA-256 values.
 - `usbip.exe port` must exit successfully without any known ABI/structure
   mismatch diagnostic.
 - The VIIPER API must answer its local readiness probe.
 - The machine readiness marker must be
-  `VIIPER-0.1.5-rc4.6+USBIP-0.9.7.7 / Ready` in the 64-bit registry view.
+  `VIIPER-0.1.10+USBIP-0.9.8.1 / Ready` in the 64-bit registry view.
 
 DS4Windows repeats these identity and ABI checks at startup. Missing or
 mismatched prerequisites open an offline repair prompt; suppressing a location
@@ -78,18 +78,18 @@ recommendation never suppresses a verification failure. The main UI remains
 available in degraded mode for Settings and diagnostics, while virtual output
 continues to fail closed until a fresh readiness check passes.
 
-## USB-IP 0.9.7.8 downgrade
+## USB-IP 0.9.7.7 to 0.9.8.1 upgrade
 
-The downgrade is intentionally split across boots:
+The driver replacement is intentionally split across boots:
 
-1. Verify the exact 0.9.7.8 uninstall record, quiesce DS4Windows/VIIPER, detach
-   imports, remove 0.9.7.8, and persist the source/target versions plus the
+1. Verify the exact old-version uninstall record, quiesce DS4Windows/VIIPER,
+   detach only verified owned imports, remove the old driver, and persist the source/target versions plus the
    current boot identity.
-2. Leave 0.9.7.7 uninstalled in that boot, disable the two verified startup
+2. Leave 0.9.8.1 uninstalled in that boot, disable the two verified startup
    tasks, and return 3010.
 3. After reboot, prove the boot identity changed and the old root device,
    running services, and DriverStore packages are gone.
-4. Install the bundled 0.9.7.7 package, validate executable and driver hashes,
+4. Install the bundled 0.9.8.1 package, validate executable, library and driver hashes,
    validate ABI and VIIPER API, enable the owned startup tasks, then atomically
    publish Ready.
 
@@ -97,6 +97,9 @@ The release gate runs a no-driver-mutation simulation of same-boot rejection,
 next-boot continuation, failed-uninstaller rollback, and task suspension. The
 test deliberately avoids installing a known-incompatible kernel driver on the
 build host.
+
+See the [USB/IP upgrade guide](usbip-upgrade.md) for matching component versions,
+the new native layouts, low-latency reception and the serial-override limitation.
 
 ## Release gates
 
