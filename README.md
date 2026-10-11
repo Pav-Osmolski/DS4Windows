@@ -9,6 +9,8 @@ Controller remapping, advanced feedback, and per-game profiles for Windows.
 [![Releases](https://img.shields.io/github/v/release/Pav-Osmolski/DS4Windows?logo=github&label=release)](https://github.com/Pav-Osmolski/DS4Windows/releases)
 [![Main build](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml?query=branch%3Amain)
 
+![DS4Windows VIIPER](docs/images/promo/DS4Windows.webp)
+
 <img src="docs/images/tour/overview.png" width="1000" alt="DS4Windows overview with a connected controller and profile controls">
 
 </div>
