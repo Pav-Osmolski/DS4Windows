@@ -9,13 +9,15 @@ permissions:
 
 jobs:
   action:
+    if: ${{ github.event.label.name == 'fix-shipped' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: dessant/support-requests@v2
+      - uses: dessant/support-requests@04320880d61b7fcaac4216e60522cb569478a63d # v5.0.2
         with:
           github-token: ${{ github.token }}
           support-label: 'fix-shipped'
           issue-comment: >
             A fix for this report has been published. Download the current version from https://github.com/Pav-Osmolski/DS4Windows/releases. If the issue still reproduces, reopen the report with the app version, controller details and relevant log.
+          issue-close-reason: 'completed'
           close-issue: true
           lock-issue: false

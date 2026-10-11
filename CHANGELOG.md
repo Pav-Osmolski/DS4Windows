@@ -5,6 +5,10 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+### Fixed
+
+- Issue automation ignores unrelated labels before starting a job, and uses a current action compatible with longer GitHub tokens. Shipped fixes close as completed; duplicate/out-of-scope reports close as not planned.
+
 ### Changed
 
 - Consolidated the remaining `doc` pages under `docs`, refreshed Moonlight / Sunshine instructions, and moved the DSX diagnostic script into `utils`.
