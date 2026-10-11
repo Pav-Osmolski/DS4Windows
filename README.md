@@ -8,6 +8,7 @@ Controller remapping, advanced feedback, and per-game profiles for Windows.
 
 [![Releases](https://img.shields.io/github/v/release/Pav-Osmolski/DS4Windows?logo=github&label=release)](https://github.com/Pav-Osmolski/DS4Windows/releases)
 [![Main build](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml?query=branch%3Amain)
+[![Required USB/IP: usbip-win2 0.9.8.1](https://img.shields.io/badge/USB%2FIP_required-0.9.8.1-blue)](https://github.com/vadimgrn/usbip-win2/releases/tag/v.0.9.8.1)
 
 ![DS4Windows VIIPER](docs/images/promo/DS4Windows.webp)
 
