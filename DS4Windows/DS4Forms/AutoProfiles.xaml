@@ -333,8 +333,7 @@
                                Foreground="{DynamicResource MutedForegroundColor}"
                                HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <TextBox x:Name="autoProfilesSearchTextBox" Grid.Column="1"
-                             BorderThickness="0" Background="Transparent"
-                             Padding="2,8" VerticalContentAlignment="Center"
+                             Style="{DynamicResource BridgeSearchTextBoxStyle}"
                              TextChanged="AutoProfilesSearchTextBox_TextChanged"
                              ToolTip="Search by profile, window title, executable, or path" />
                     <Button x:Name="clearAutoProfilesSearchBtn" Grid.Column="2" Content="&#xE711;"

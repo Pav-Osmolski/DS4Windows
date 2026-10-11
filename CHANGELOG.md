@@ -5,7 +5,17 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-No changes recorded yet.
+### Fixed
+
+- Align the controller card's lightbar colour control with its Edit button using a shared layout row.
+- Give Profiles and Auto Profiles search fields consistent height and padding; make typing cursors readable in both themes, including other text inputs and dark-theme numeric fields.
+- Keep compact dropdowns at a consistent minimum height, including an empty Controller 1 selection in Auto Profiles.
+- Align the profile-switch notification checkbox with the other Settings checkboxes.
+- Apply the same padded button style to Device Options and Config Swipe Profiles, allowing translated Device Options labels to fit.
+
+### Changed
+
+- Prepare app version **5.0.16** and installer version **5.0.16.0** for the next release.
 
 ## [5.0.15](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.15) — 2026-10-11
 
