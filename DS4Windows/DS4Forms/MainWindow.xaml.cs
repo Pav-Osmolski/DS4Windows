@@ -1777,6 +1777,19 @@ Suspend support not enabled.", true);
             }
         }
 
+        private void CopyLogBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Clipboard.SetDataObject(LogWriter.Format(logvm.Snapshot()), true);
+            }
+            catch (ExternalException)
+            {
+                MessageBox.Show(this, "The clipboard is currently unavailable. Please try Copy Text again.",
+                    "Copy Log", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
         private void ExportLogBtn_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog();

@@ -5,7 +5,18 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-No changes recorded yet.
+### Fixed
+
+- Let the Log footer size to its buttons so they remain fully visible, and center the entry count beside them.
+- Read USB/IP driver-package versions from the installed INF files when the SYS files have no version resource.
+- Log USB/IP installed/required versions, driver running states, runtime readiness and package verification. Include the HidHide driver version when detected and report VIIPER readiness from the actual prerequisite check.
+- Give the Log tab's Export and Clear buttons the same padding and minimum height as other secondary buttons.
+
+### Added
+
+- Copy Text in the Log tab copies the latest entries with timestamps as plain text, using the same format as Export.
+- Align the Swipe Touchpad To Switch Profiles checkbox and label with the surrounding Settings options.
+- Remove inner dropdown item borders in both themes and let menu rows fill the available width. Keep selection and keyboard highlights, disabled states, and scrolling for longer lists.
 
 ## [5.0.16](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.16) — 2026-10-11
 
