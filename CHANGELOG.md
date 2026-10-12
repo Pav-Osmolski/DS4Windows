@@ -3,7 +3,9 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## Unreleased
+## [5.0.18](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.18) — 2026-10-12
+
+### Added
 
 - Search all Settings sections, remember the last section and show language/executable restart reminders.
 - Report installed/portable deployment mode in the startup log.
