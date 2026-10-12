@@ -12,6 +12,14 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Retain failed Overview changes as snapshots tied to their original profiles. Offer explicit retry or discard instead of announcing success or automatically retrying a locked file. Refuse stale retries after a profile has been edited or deleted.
 - Report Rename collisions and file errors without closing the rename dialog or changing the selected name. Preserve file contents and update active controller selections only after a successful rename.
 
+### Maintenance
+
+- Align Windows management dependencies in the application and installer helpers to System.Management 10.0.12. Keep the existing .NET 8 target and driver-detection behaviour.
+- Remove the application's redundant direct System.Memory package reference; use the implementation provided by the .NET runtime.
+- Update MSTest framework/adapter to 4.5.1 and Microsoft.NET.Test.Sdk to 18.10.1. Preserve exact exception assertions, test case coverage and existing hardware opt-in skips.
+- Repair standalone USB hardware-verifier build dependencies and run its 75 existing unit tests in CI.
+- Configure weekly Dependabot proposals for the application's C# projects, installer helpers, tests, tools and GitHub Actions. Add a maintenance guide covering package review priorities and manual coordination of WiX tooling and bundled drivers. Updates remain subject to review and CI; automatic merging is not enabled.
+
 ## [5.0.18](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.18) — 2026-10-12
 
 ### Added

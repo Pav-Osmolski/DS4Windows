@@ -6,6 +6,21 @@ Audited the remote branches in the three Pav-Osmolski forks after publishing DS4
 
 39 remaining branches have exactly the same tip as the corresponding upstream hbashton branch. These are inherited copies, not newly created work in this fork. Automatic deletion after PR merges is now enabled in all three repositories. No further branch cleanup is scheduled; the maintainer will review the remaining branches later.
 
+## Dependency refresh follow-up — 2026-10-12
+
+The four inherited DS4Windows dependency proposals below are superseded by
+current-fork changes: [#15](https://github.com/Pav-Osmolski/DS4Windows/pull/15)
+aligns System.Management, [#16](https://github.com/Pav-Osmolski/DS4Windows/pull/16)
+removes the redundant direct System.Memory reference, and
+[#17](https://github.com/Pav-Osmolski/DS4Windows/pull/17) replaces both overlapping
+MSTest proposals. [#14](https://github.com/Pav-Osmolski/DS4Windows/pull/14)
+configures fresh fork-specific NuGet and Actions proposals.
+
+Keep the old dependency branch pointers as historical references pending the
+maintainer's deferred cleanup decision. No inherited branch or release tag was
+deleted during this refresh. The counts and classifications below remain the
+original 2026-10-11 audit snapshot, not a fresh count of today's branches.
+
 ## How to interpret the recommendations
 
 - **Fully merged:** the entire branch tip is an ancestor of the default branch. Its branch pointer is redundant; deleting it does not remove commits from main or release tags.
