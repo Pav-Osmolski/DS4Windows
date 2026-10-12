@@ -137,8 +137,22 @@ public sealed class StrictAllocationMeasurementScopeTests
         var runtime = new FakeRuntime();
         using (var scope = StrictAllocationMeasurementScope.Begin(runtime))
         {
-            Task.Run(() => Assert.ThrowsExactly<InvalidOperationException>(() => scope.Dispose()))
-                .GetAwaiter().GetResult();
+            // A synchronous wait may inline a thread-pool task under the new
+            // runner. This test must exercise a genuinely different thread.
+            Exception failure = null;
+            int ownerThread = Environment.CurrentManagedThreadId;
+            var worker = new Thread(() =>
+            {
+                try
+                {
+                    Assert.AreNotEqual(ownerThread, Environment.CurrentManagedThreadId);
+                    Assert.ThrowsExactly<InvalidOperationException>(() => scope.Dispose());
+                }
+                catch (Exception ex) { failure = ex; }
+            }) { IsBackground = true };
+            worker.Start();
+            Assert.IsTrue(worker.Join(TimeSpan.FromSeconds(5)), "Wrong-thread worker did not complete.");
+            if (failure != null) System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(failure).Throw();
             Assert.IsTrue(runtime.IsActive);
             Assert.AreEqual(0, runtime.EndCalls);
         }
