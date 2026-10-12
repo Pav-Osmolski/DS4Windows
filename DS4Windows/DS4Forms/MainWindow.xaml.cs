@@ -1385,6 +1385,17 @@ Suspend support not enabled.", true);
             logvm.Clear();
         }
 
+        private void SettingsCategory_Checked(object sender, RoutedEventArgs e)
+        {
+            // General is selected during XAML loading, before the viewer exists.
+            settingsScrollViewer?.ScrollToTop();
+        }
+
+        private void OpenSettingsLog_Click(object sender, RoutedEventArgs e)
+        {
+            mainTabCon.SelectedItem = logTab;
+        }
+
         private void MainTabCon_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Nested controller/profile selectors bubble this event too.
@@ -2684,10 +2695,11 @@ Suspend support not enabled.", true);
 
             ViiperPrerequisiteStatus status = ViiperSetupManager.GetStatus(tryStartServer: false);
             viiperStatusText.ToolTip = status.StartupPreferenceReadError;
-            viiperStatusText.Text = $"{status.DisplayText}. " +
-                $"VIIPER helper: {(status.ViiperInstalled ? "installed" : "missing")}; " +
-                $"usbip-win2: {(status.UsbipInstalled ? "installed" : "missing")}; " +
-                $"server: {(status.ServerRunning ? "running" : "not running")}.";
+            viiperStatusText.Text = $"{status.DisplayText}.\n" +
+                $"USB/IP: {status.UsbipVersion ?? "not detected"} · " +
+                $"Server: {(status.ServerRunning ? "running" : "not running")}.";
+            viiperStatusText.SetResourceReference(TextBlock.ForegroundProperty,
+                status.Ready ? "SuccessColor" : "DangerColor");
         }
 
         private sealed class Switch2AssociationListItem

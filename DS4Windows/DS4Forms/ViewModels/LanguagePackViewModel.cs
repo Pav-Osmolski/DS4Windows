@@ -32,7 +32,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
     public class LanguagePackViewModel
     {
         private List<LangPackItem> langPackList;
-        private const string invariantCultureTextValue = "No (English UI)";
+        private const string invariantCultureTextValue = "English (default)";
 
         private int selectedIndex;
 
