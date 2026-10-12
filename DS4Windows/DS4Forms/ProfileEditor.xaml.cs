@@ -2342,9 +2342,7 @@ namespace DS4WinWPF.DS4Forms
         private void KeepSizeBtn_Click(object sender, RoutedEventArgs e)
         {
             keepsize = true;
-            ImageSourceConverter c = new ImageSourceConverter();
-            sizeImage.Source =
-                c.ConvertFromString($"{Global.ASSEMBLY_RESOURCE_PREFIX}component/Resources/checked.png") as ImageSource;
+            sizeImage.Data = Geometry.Parse("M 2,9 L 7,14 L 16,3");
         }
 
         public void Close()

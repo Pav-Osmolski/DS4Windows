@@ -72,6 +72,14 @@ Back up your settings before deleting profiles or importing replacements.
 | Nintendo Options | Configure supported rumble, motion, calibration and Joy-Con 2 optical-mouse features |
 | Advanced | Use Output, Feedback, Audio, Input and Connection categories to configure output, rumble, controller audio, mouse mappings, latency and compatibility options. Hardware-specific controls follow the selected physical controller. |
 
+Axis Config separates **Left stick**, **Right stick**, **Triggers** and **Motion
+axes**. Stick pages group dead zones, response shaping, outer-stick actions and
+calibration, with optional delta acceleration and flick-stick settings. Lightbar
+groups profile colors, battery alerts, charging and rainbow brightness. Touchpad
+and Gyro keep their output-mode selectors, with focused cards for the selected
+mode, activation, smoothing and calibration. Changing sections preserves unsaved
+edits; use **Apply** or **Save** to write them as usual.
+
 ![Profile editor with a DualShock 4 layout](images/profile-editor-current.png)
 
 The controller diagram follows the selected controller layout; this example

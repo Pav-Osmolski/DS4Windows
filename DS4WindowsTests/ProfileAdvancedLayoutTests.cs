@@ -69,7 +69,7 @@ public sealed class ProfileAdvancedLayoutTests
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
-    private static Grid Load(string theme)
+    internal static Grid Load(string theme, string page = "Advanced")
     {
         // Render the actual layout without a window, controller discovery,
         // change handlers or writes to saved profiles. Reveal all conditional
@@ -77,9 +77,18 @@ public sealed class ProfileAdvancedLayoutTests
         System.Reflection.Assembly.Load("DotNetProjects.Wpf.Extended.Toolkit");
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-        XElement advanced = XDocument.Load(SourcePath()).Descendants(wpf + "TabItem")
-            .Single(e => (string)e.Attribute("Header") == "Advanced");
-        var markup = new XElement(advanced.Element(wpf + "Grid"));
+        XDocument source = XDocument.Load(SourcePath());
+        XElement selected = source.Descendants(wpf + "TabItem")
+            .Single(e => (string)e.Attribute("Header") == (page == "Advanced" ? "Advanced" : "{lex:Loc " + page + "}"));
+        XElement content = selected.Elements().First(e => e.Name.LocalName != "TabItem.Resources");
+        var markup = content.Name == wpf + "Grid" ? new XElement(content) : new XElement(wpf + "Grid", new XElement(content));
+        // Render the actual shared axial layout without its controller wiring.
+        foreach (XElement axial in markup.Descendants().Where(e => e.Name.LocalName == "AxialStickUserControl").ToArray())
+        {
+            XElement axialGrid = new XElement(XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "AxialStickUserControl.xaml")).Root.Element(wpf + "Grid"));
+            axialGrid.SetAttributeValue(x + "Name", (string)axial.Attribute(x + "Name"));
+            axial.ReplaceWith(axialGrid);
+        }
         markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
         markup.SetAttributeValue(XNamespace.Xmlns + "xctk", "http://schemas.xceed.com/wpf/xaml/toolkit");
         var strings = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "..", "Translations", "Strings.resx"))
@@ -87,13 +96,13 @@ public sealed class ProfileAdvancedLayoutTests
         foreach (XElement element in markup.DescendantsAndSelf())
         foreach (XAttribute attribute in element.Attributes().ToArray())
         {
-            if (attribute.Name.LocalName is "Click" or "SelectionChanged" || attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
+            if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged" || attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
             else if (attribute.Value.StartsWith("{lex:Loc "))
             {
                 string key = attribute.Value[9..^1];
                 attribute.Value = strings.TryGetValue(key, out string value) ? value : key;
             }
-            else if (attribute.Value.StartsWith("{Binding") && attribute.Value != "{Binding}" && !attribute.Value.Contains("ElementName=profileAdvanced"))
+            else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis"))
             {
                 if (attribute.Name.LocalName == "Text" && attribute.Value.Contains("ControllerAudioHeader")) attribute.Value = "Controller audio";
                 else attribute.Remove();
@@ -104,12 +113,21 @@ public sealed class ProfileAdvancedLayoutTests
             new XElement(wpf + "ResourceDictionary", new XAttribute("Source", $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))));
         XElement existingResources = markup.Element(wpf + "Grid.Resources");
         XElement[] existingEntries = existingResources?.Elements().Select(e => new XElement(e)).ToArray() ?? [];
+        XElement modeStyle = source.Root.Element(wpf + "UserControl.Resources").Elements().Single(e => (string)e.Attribute(x + "Key") == "ProfileModeTabControlStyle");
         existingResources?.Remove();
         markup.AddFirst(new XElement(wpf + "Grid.Resources", new XElement(wpf + "ResourceDictionary",
             new XElement(wpf + "ResourceDictionary.MergedDictionaries", bridge),
             new XElement(wpf + "BooleanToVisibilityConverter", new XAttribute(x + "Key", "BooleanToVisibilityConverter")),
             new XElement(wpf + "Thickness", new XAttribute(x + "Key", "spaceMargin"), "0,0,0,8"),
-            new XElement("{http://schemas.xceed.com/wpf/xaml/toolkit}InverseBoolConverter", new XAttribute(x + "Key", "InverseBoolConverter")), existingEntries)));
+            new XElement("{http://schemas.xceed.com/wpf/xaml/toolkit}InverseBoolConverter", new XAttribute(x + "Key", "InverseBoolConverter")),
+            new XElement(modeStyle), existingEntries,
+            selected.Element(wpf + "TabItem.Resources")?.Elements().Where(e => (string)e.Attribute(x + "Key") != "spaceMargin").Select(e => new XElement(e)))));
+        string artifactDirectory = Environment.GetEnvironmentVariable("DS4W_PROFILE_LAYOUT_ARTIFACTS");
+        if (!string.IsNullOrEmpty(artifactDirectory))
+        {
+            Directory.CreateDirectory(artifactDirectory);
+            File.WriteAllText(Path.Combine(artifactDirectory, $"{page}-{theme}-markup.xaml"), markup.ToString());
+        }
         var root = (Grid)XamlReader.Parse(markup.ToString());
         root.Background = (Brush)root.FindResource("SurfaceBackgroundColor");
         return root;

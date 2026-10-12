@@ -186,8 +186,9 @@ public class FlickStickCalibrationLayoutTests
     public void AxisTriggerTuningKeepsItsNormalRowsAndLeavesAdaptiveEffectsInTriggerLab()
     {
         XDocument document = XDocument.Load(FormPath("ProfileEditor.xaml"));
-        XElement triggers = document.Descendants(Wpf + "GroupBox").Single(element =>
-            (string)element.Attribute("Header") == "L2 & R2").Element(Wpf + "Grid");
+        XElement triggers = document.Descendants(Wpf + "Grid").Single(element =>
+            element.Elements().Any(control => (string)control.Attribute("Value") == "{Binding L2DeadZone}") &&
+            element.Elements().Any(control => (string)control.Attribute("Value") == "{Binding R2DeadZone}"));
         Assert.AreEqual(8, triggers.Element(Wpf + "Grid.RowDefinitions").Elements().Count());
         Assert.IsTrue(triggers.Elements().Attributes("Grid.Row").All(attribute => int.Parse(attribute.Value) < 8));
         string markup = document.ToString();
