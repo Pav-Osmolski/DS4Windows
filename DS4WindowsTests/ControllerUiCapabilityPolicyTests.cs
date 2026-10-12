@@ -80,7 +80,7 @@ namespace DS4WindowsTests
                 isDualSenseEdge: false));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(InputDeviceType.Switch2Pro, ConnectionType.USB, 0x057E, 0x2069, true)]
         [DataRow(InputDeviceType.Switch2Pro, ConnectionType.BT, 0x057E, 0x2069, true)]
         [DataRow(InputDeviceType.SwitchPro, ConnectionType.USB, 0x057E, 0x2069, true)]
@@ -283,7 +283,7 @@ namespace DS4WindowsTests
             Assert.IsFalse(cross.IsControllerMapListOnly);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)OutContType.ViiperXboxOne)]
         [DataRow((int)OutContType.ViiperDualSense)]
         public void ProRearLabelsKeepCanonicalKeysAcrossVirtualOutputs(int output)
@@ -303,7 +303,7 @@ namespace DS4WindowsTests
             Assert.AreEqual("Bottom Right Paddle", edge.ControlMap[DS4Controls.BRP].ControlName);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)InputDeviceType.DS4, (int)ConnectionType.BT,
             0x054C, 0x09CC, true)]
         [DataRow((int)InputDeviceType.DS4, (int)ConnectionType.USB,
@@ -355,7 +355,7 @@ namespace DS4WindowsTests
             Assert.IsFalse(bluetoothDualShock4.ShowLegacyMicrophoneRouting);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)InputDeviceType.DS4, (int)ConnectionType.BT,
             0x054C, 0x09CC, (int)OutContType.ViiperDS4, true,
             (int)ControllerMicrophoneUiStatus.Ready, true)]

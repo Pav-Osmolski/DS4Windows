@@ -9,7 +9,7 @@ public sealed class Switch2GyroActivationOrientationTests
 {
     private delegate bool IsActive(GyroOutMode mode, out int tuningIndex);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(GyroOutMode.Mouse, true, true)]
     [DataRow(GyroOutMode.Mouse, true, false)]
     [DataRow(GyroOutMode.Mouse, false, true)]
@@ -131,7 +131,7 @@ public sealed class Switch2GyroActivationOrientationTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(GyroOutMode.Controls)]
     [DataRow(GyroOutMode.Mouse)]
     [DataRow(GyroOutMode.MouseJoystick)]

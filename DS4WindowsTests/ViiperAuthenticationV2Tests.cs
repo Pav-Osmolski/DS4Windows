@@ -30,7 +30,7 @@ public sealed class ViiperAuthenticationV2Tests
                 Enumerable.Repeat((byte)0x5a, 32).ToArray()));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     public void BothDirectionsMatchIndependentVectors(int roleNumber)
@@ -52,7 +52,7 @@ public sealed class ViiperAuthenticationV2Tests
         CollectionAssert.AreEqual(Payload().Concat(Payload()).ToArray(), actual);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)] // Client counter gap.
     [DataRow(2)] // Reflected server output.
     public void InvalidDirectionOrSequenceFaultsBothHalves(int vector)
@@ -60,10 +60,10 @@ public sealed class ViiperAuthenticationV2Tests
         using MemoryStream wire = new(Convert.FromHexString(Records[vector] + Records[0]));
         using ViiperEncryptedStream stream = new(wire, Key(), ViiperConnectionRole.Server);
         byte[] output = Enumerable.Repeat((byte)0x55, 8).ToArray();
-        Assert.ThrowsException<InvalidDataException>(() => stream.Read(output));
+        Assert.ThrowsExactly<InvalidDataException>(() => stream.Read(output));
         CollectionAssert.AreEqual(Enumerable.Repeat((byte)0x55, 8).ToArray(), output);
-        Assert.ThrowsException<IOException>(() => stream.Read(output));
-        Assert.ThrowsException<IOException>(() => stream.Write(output));
+        Assert.ThrowsExactly<IOException>(() => stream.Read(output));
+        Assert.ThrowsExactly<IOException>(() => stream.Write(output));
     }
 
     [TestMethod]
@@ -74,13 +74,13 @@ public sealed class ViiperAuthenticationV2Tests
         using MemoryStream wire = new(record.Concat(Convert.FromHexString(Records[0])).ToArray());
         using ViiperEncryptedStream stream = new(wire, Key(), ViiperConnectionRole.Server);
         byte[] output = Enumerable.Repeat((byte)0x55, 8).ToArray();
-        Assert.ThrowsException<AuthenticationTagMismatchException>(() => stream.Read(output));
+        Assert.ThrowsExactly<AuthenticationTagMismatchException>(() => stream.Read(output));
         CollectionAssert.AreEqual(Enumerable.Repeat((byte)0x55, 8).ToArray(), output);
-        Assert.ThrowsException<IOException>(() => stream.Read(output));
+        Assert.ThrowsExactly<IOException>(() => stream.Read(output));
         Assert.AreEqual(0UL, GetCounter(stream, "receiveCounter"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(3)]
     [DataRow(4)]
@@ -89,19 +89,19 @@ public sealed class ViiperAuthenticationV2Tests
     {
         using MemoryStream wire = new(Convert.FromHexString(Records[0]).Take(length).ToArray());
         using ViiperEncryptedStream stream = new(wire, Key(), ViiperConnectionRole.Server);
-        Assert.ThrowsException<EndOfStreamException>(() => stream.Read(new byte[8]));
-        Assert.ThrowsException<IOException>(() => stream.Read(new byte[8]));
+        Assert.ThrowsExactly<EndOfStreamException>(() => stream.Read(new byte[8]));
+        Assert.ThrowsExactly<IOException>(() => stream.Read(new byte[8]));
     }
 
     [TestMethod]
     public void CounterExhaustionAndInvalidRoleAreRejected()
     {
         using MemoryStream wire = new();
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => new ViiperEncryptedStream(wire, Key(), 0));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new ViiperEncryptedStream(wire, Key(), 0));
         using ViiperEncryptedStream stream = new(wire, Key(), ViiperConnectionRole.Client);
         typeof(ViiperEncryptedStream).GetField("sendCounter", BindingFlags.Instance | BindingFlags.NonPublic)!
             .SetValue(stream, ulong.MaxValue);
-        Assert.ThrowsException<IOException>(() => stream.Write(new byte[1]));
+        Assert.ThrowsExactly<IOException>(() => stream.Write(new byte[1]));
         Assert.AreEqual(0L, wire.Length);
     }
 
@@ -114,7 +114,7 @@ public sealed class ViiperAuthenticationV2Tests
         Assert.AreEqual(0, stream.Read(Array.Empty<byte>()));
         Assert.AreEqual(0L, wire.Length);
         Assert.AreEqual(0UL, GetCounter(stream, "sendCounter"));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => stream.Write(new byte[2 * 1024 * 1024]));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => stream.Write(new byte[2 * 1024 * 1024]));
     }
 
     [TestMethod]

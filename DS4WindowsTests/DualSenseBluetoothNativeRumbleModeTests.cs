@@ -10,7 +10,7 @@ namespace DS4Windows.Tests;
 [DoNotParallelize]
 public class DualSenseBluetoothNativeRumbleModeTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -49,7 +49,7 @@ public class DualSenseBluetoothNativeRumbleModeTests
             "A continuous mode on media must not manufacture new native command identities.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ActualHelperSdlLedUpdateRetainsModeWithoutRepeatingLedOrTriggerStrobes(bool improved)
@@ -75,7 +75,7 @@ public class DualSenseBluetoothNativeRumbleModeTests
         Assert.AreEqual(1, fixture.DrainNativeAcknowledgements().Length);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ActualHelperNativeZeroModeIsAuthoritativeIncludingLedOnlyPacket(bool ledOnly)
@@ -94,7 +94,7 @@ public class DualSenseBluetoothNativeRumbleModeTests
         Assert.AreEqual(2, fixture.DrainNativeAcknowledgements().Length);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ActualHelperUnownedLocalTriggerOrLedDoesNotChangeAcceptedNativeMode(bool led)

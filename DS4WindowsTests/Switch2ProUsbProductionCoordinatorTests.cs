@@ -49,7 +49,7 @@ public sealed class Switch2ProUsbProductionCoordinatorTests
     [TestMethod]
     public void NonpositiveScanIntervalIsRejected()
     {
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2ProUsbProductionCoordinator(
                 new FakeDiscovery(Candidate()), new RejectingOpener(),
                 new Switch2RuntimeRegistrationService(

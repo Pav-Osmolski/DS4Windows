@@ -11,7 +11,7 @@ public sealed class JoyConRetainedXboxFeedbackTests
         DeviceGeneration = 5, TransportGeneration = 6, OwnershipEpoch = 7, TimeToLiveMicroseconds = 250_000
     };
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     [DataRow(3)]
@@ -36,7 +36,7 @@ public sealed class JoyConRetainedXboxFeedbackTests
         Assert.AreEqual(frame.TimeToLiveMicroseconds, rebound.TimeToLiveMicroseconds);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("source")]
     [DataRow("device")]
     [DataRow("transport")]
@@ -60,7 +60,7 @@ public sealed class JoyConRetainedXboxFeedbackTests
             failure == "sequence" ? 10UL : 0, ulong.MaxValue, 50, 60, 70, out _, out _));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void HandoffConsumesButNeverReplaysQueuedRumble(bool paused)

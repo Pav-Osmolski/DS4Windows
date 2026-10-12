@@ -34,9 +34,9 @@ public sealed class DS4StateFieldMappingAxisTests
         Assert.AreEqual((byte)0, state.LY);
         Assert.AreEqual((byte)0, state.RX);
         Assert.AreEqual((byte)0, state.RY);
-        Assert.ThrowsException<IndexOutOfRangeException>(() =>
+        Assert.ThrowsExactly<IndexOutOfRangeException>(() =>
             _ = mapping.axisdirs[-1]);
-        Assert.ThrowsException<IndexOutOfRangeException>(() =>
+        Assert.ThrowsExactly<IndexOutOfRangeException>(() =>
             mapping.axisdirs[mapping.axisdirs.Length] = 128);
     }
 

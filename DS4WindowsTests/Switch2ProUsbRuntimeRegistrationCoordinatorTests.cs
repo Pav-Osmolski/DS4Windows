@@ -721,7 +721,7 @@ public partial class Switch2ProUsbRuntimeOwnerTests
             NativeReadFailure, Volatile.Read(ref attentionKind));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ProUsbNativeReadStatus.DeviceRemoved)]
     [DataRow(Switch2ProUsbNativeReadStatus.Failed)]
     [DataRow(Switch2ProUsbNativeReadStatus.Cancelled)]

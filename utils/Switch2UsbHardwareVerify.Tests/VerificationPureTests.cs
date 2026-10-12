@@ -72,12 +72,12 @@ public sealed class VerificationPureTests
     {
         var gate = new OutputLeaseGate();
         Assert.IsFalse(gate.CanBeginHaptics);
-        Assert.ThrowsException<HardwareVerificationException>(
+        Assert.ThrowsExactly<HardwareVerificationException>(
             gate.RequireBoth);
 
         gate.RegisterCommandLease();
         Assert.IsFalse(gate.CanBeginHaptics);
-        Assert.ThrowsException<HardwareVerificationException>(
+        Assert.ThrowsExactly<HardwareVerificationException>(
             gate.RequireBoth);
 
         gate.RegisterHidLease();
@@ -265,7 +265,7 @@ public sealed class VerificationPureTests
         foreach (DeviceInterfaceToken changedHid in changedHidTokens)
         {
             HardwareVerificationException failure =
-                Assert.ThrowsException<HardwareVerificationException>(() =>
+                Assert.ThrowsExactly<HardwareVerificationException>(() =>
                     TargetSessionIdentityValidator.RequireSame(expected,
                         expected with { Hid = changedHid }));
             Assert.AreEqual(VerificationFailureCode.HidIdentityChanged,
@@ -283,7 +283,7 @@ public sealed class VerificationPureTests
         foreach (DeviceInterfaceToken changedWinUsb in changedWinUsbTokens)
         {
             HardwareVerificationException failure =
-                Assert.ThrowsException<HardwareVerificationException>(() =>
+                Assert.ThrowsExactly<HardwareVerificationException>(() =>
                     TargetSessionIdentityValidator.RequireSame(expected,
                         expected with { WinUsb = changedWinUsb }));
             Assert.AreEqual(VerificationFailureCode.WinUsbIdentityChanged,
@@ -297,7 +297,7 @@ public sealed class VerificationPureTests
         SetupEnumerationGate.RequireClassSet(true,
             VerificationFailureCode.WinUsbInterfaceClassSetOpenFailed);
         HardwareVerificationException openFailure =
-            Assert.ThrowsException<HardwareVerificationException>(() =>
+            Assert.ThrowsExactly<HardwareVerificationException>(() =>
                 SetupEnumerationGate.RequireClassSet(false,
                     VerificationFailureCode
                         .WinUsbInterfaceClassSetOpenFailed));
@@ -311,7 +311,7 @@ public sealed class VerificationPureTests
             SetupEnumerationGate.ErrorNoMoreItems,
             VerificationFailureCode.WinUsbInterfaceIterationFailed));
         HardwareVerificationException iterationFailure =
-            Assert.ThrowsException<HardwareVerificationException>(() =>
+            Assert.ThrowsExactly<HardwareVerificationException>(() =>
                 SetupEnumerationGate.IsComplete(false, 5,
                     VerificationFailureCode
                         .WinUsbInterfaceIterationFailed));
@@ -325,14 +325,14 @@ public sealed class VerificationPureTests
         Assert.IsFalse(WindowsTargetDiscovery.IsPotentialHidTarget(
             @"HID\UNRELATED\TEST_ONLY", null));
         HardwareVerificationException missing =
-            Assert.ThrowsException<HardwareVerificationException>(() =>
+            Assert.ThrowsExactly<HardwareVerificationException>(() =>
                 WindowsTargetDiscovery.IsPotentialHidTarget(
                     @"USB\VID_057E&PID_2069&MI_00\TEST_ONLY", null));
         Assert.AreEqual(
             VerificationFailureCode.DeviceRegistryPropertyReadFailed,
             missing.Code);
         HardwareVerificationException inconsistent =
-            Assert.ThrowsException<HardwareVerificationException>(() =>
+            Assert.ThrowsExactly<HardwareVerificationException>(() =>
                 WindowsTargetDiscovery.IsPotentialHidTarget(
                     @"USB\VID_057E&PID_2069&MI_00\TEST_ONLY",
                     @"USB\VID_1234&PID_5678&MI_00"));
@@ -359,7 +359,7 @@ public sealed class VerificationPureTests
         }
 
         HardwareVerificationException failure =
-            Assert.ThrowsException<HardwareVerificationException>(() =>
+            Assert.ThrowsExactly<HardwareVerificationException>(() =>
                 WindowsTargetDiscovery.IsPotentialHidTarget(
                     @"USB\VID_057E&PID_2069&MI_00\SECOND", null));
         Assert.AreEqual(1, admitted);
@@ -551,7 +551,7 @@ public sealed class VerificationPureTests
         cancellation.Cancel();
 
         HardwareVerificationException failure =
-            await Assert.ThrowsExceptionAsync<HardwareVerificationException>(
+            await Assert.ThrowsExactlyAsync<HardwareVerificationException>(
                 () => attempt.WriteReportAsync(report, cancellation.Token));
         Assert.AreEqual(VerificationFailureCode.Cancelled, failure.Code);
         Assert.IsTrue(attempt.IsFaulted);
@@ -690,7 +690,7 @@ public sealed class VerificationPureTests
         try
         {
             HardwareVerificationException failure =
-                await Assert.ThrowsExceptionAsync<HardwareVerificationException>(
+                await Assert.ThrowsExactlyAsync<HardwareVerificationException>(
                     () => InputCaptureDeadline.RunAsync(async _ =>
                     {
                         while (!releaseCapture.Task.IsCompleted)
@@ -744,7 +744,7 @@ public sealed class VerificationPureTests
     {
         using var userCancellation = new CancellationTokenSource(30);
         HardwareVerificationException failure =
-            await Assert.ThrowsExceptionAsync<HardwareVerificationException>(
+            await Assert.ThrowsExactlyAsync<HardwareVerificationException>(
                 () => InputCaptureDeadline.RunAsync<int>(async token =>
                 {
                     await Task.Delay(Timeout.InfiniteTimeSpan, token);
@@ -765,7 +765,7 @@ public sealed class VerificationPureTests
         try
         {
             HardwareVerificationException failure =
-                await Assert.ThrowsExceptionAsync<HardwareVerificationException>(
+                await Assert.ThrowsExactlyAsync<HardwareVerificationException>(
                     () => HapticPhaseDeadline.RunAsync(
                         _ => releaseWrite.Task,
                         () =>
@@ -800,7 +800,7 @@ public sealed class VerificationPureTests
         try
         {
             HardwareVerificationException failure =
-                await Assert.ThrowsExceptionAsync<HardwareVerificationException>(
+                await Assert.ThrowsExactlyAsync<HardwareVerificationException>(
                     () => CommandOperationDeadline.RunAsync(
                         _ => releaseOperation.Task,
                         () =>
@@ -856,7 +856,7 @@ public sealed class VerificationPureTests
 
             await operationStarted.Task.WaitAsync(TimeSpan.FromSeconds(1));
             HardwareVerificationException failure =
-                await Assert.ThrowsExceptionAsync<HardwareVerificationException>(
+                await Assert.ThrowsExactlyAsync<HardwareVerificationException>(
                     () => run.WaitAsync(TimeSpan.FromSeconds(1)));
             Assert.AreEqual(
                 VerificationFailureCode.CommandOperationTimedOut,
@@ -911,7 +911,7 @@ public sealed class VerificationPureTests
 
             await operationStarted.Task.WaitAsync(TimeSpan.FromSeconds(1));
             HardwareVerificationException failure =
-                await Assert.ThrowsExceptionAsync<HardwareVerificationException>(
+                await Assert.ThrowsExactlyAsync<HardwareVerificationException>(
                     () => run.WaitAsync(TimeSpan.FromSeconds(1)));
             Assert.AreEqual(
                 VerificationFailureCode.CommandOperationTimedOut,
@@ -1358,7 +1358,7 @@ public sealed class VerificationPureTests
         Assert.IsTrue(destinationCleanup.CommandChannelReopened);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, true, "HapticMutationSafetyGateClosed")]
     [DataRow(false, false, "CleanupIncomplete")]
     [DataRow(true, false, "CleanupIncomplete")]

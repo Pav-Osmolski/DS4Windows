@@ -10,7 +10,7 @@ public sealed class FlickStickCalibrationTurnTests
     private const byte Left = 1;
     private const byte Right = 2;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(125)]
     [DataRow(250)]
     [DataRow(500)]
@@ -49,7 +49,7 @@ public sealed class FlickStickCalibrationTurnTests
         Assert.IsFalse(h.Turn.Active);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1.0, 360)]
     [DataRow(5.3, 1908)]
     [DataRow(5.31, 1912)]
@@ -61,7 +61,7 @@ public sealed class FlickStickCalibrationTurnTests
         Assert.AreEqual(expected, counts);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0.0)]
     [DataRow(-1.0)]
     [DataRow(0.001)] // Positive, but insufficient to produce one mouse count.
@@ -175,7 +175,7 @@ public sealed class FlickStickCalibrationTurnTests
         Assert.AreEqual(5508, total);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("reset")]
     [DataRow("owner")]
     [DataRow("handler")]
@@ -202,7 +202,7 @@ public sealed class FlickStickCalibrationTurnTests
         Assert.AreEqual(191, h.Frame(1_440_000));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("unavailable")]
     [DataRow("null owner")]
     [DataRow("null handler")]
@@ -253,7 +253,7 @@ public sealed class FlickStickCalibrationTurnTests
         Assert.IsFalse(h.Turn.Active);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void LongGapOrClockRollbackCancelsAndRequiresANewPress(bool rollback)

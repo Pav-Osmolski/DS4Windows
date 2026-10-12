@@ -5,7 +5,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class Switch2DualJoyConGyroModeTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2DualGyroActivationMode.Hold)]
     [DataRow(Switch2DualGyroActivationMode.Toggle)]
     public void MultipleButtonsAndIrUseOneSameSideOrGate(
@@ -34,7 +34,7 @@ public sealed class Switch2DualJoyConGyroModeTests
             Resolve(ref state, configuration).DominantSide);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2DualGyroMode.SwitchDominantSide)]
     [DataRow(Switch2DualGyroMode.SwitchGyroSide)]
     [DataRow(Switch2DualGyroMode.SingleSideToggle)]
@@ -271,7 +271,7 @@ public sealed class Switch2DualJoyConGyroModeTests
         Assert.AreEqual(0L, allocated);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2DualGyroMode.SwitchDominantSide, Switch2DualGyroActivationMode.Hold, true)]
     [DataRow(Switch2DualGyroMode.SwitchDominantSide, Switch2DualGyroActivationMode.Hold, false)]
     [DataRow(Switch2DualGyroMode.SwitchDominantSide, Switch2DualGyroActivationMode.Toggle, true)]

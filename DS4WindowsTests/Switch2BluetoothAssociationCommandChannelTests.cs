@@ -105,10 +105,10 @@ public class Switch2BluetoothAssociationCommandChannelTests
     [TestMethod]
     public void CharacteristicRolesFailClosed()
     {
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2BluetoothAssociationCommandChannel(
                 FakeCharacteristic.Response(), FakeCharacteristic.Response()));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2BluetoothAssociationCommandChannel(
                 FakeCharacteristic.Command(), FakeCharacteristic.Command()));
     }

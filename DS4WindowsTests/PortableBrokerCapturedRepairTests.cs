@@ -65,7 +65,7 @@ public class PortableBrokerCapturedRepairTests
         Assert.AreEqual("foreign image must not be replaced", File.ReadAllText(foreignImage));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("newcomer")]
     [DataRow("pid-reused")]
     [DataRow("path-changed")]
@@ -76,12 +76,12 @@ public class PortableBrokerCapturedRepairTests
         if (change == "newcomer") host.Peers.Add(new(3, 103, localImage));
         if (change == "pid-reused") host.Peers[0] = host.Peers[0] with { StartTimeUtcTicks = 999 };
         if (change == "path-changed") host.Peers[0] = host.Peers[0] with { ExecutablePath = localImage };
-        Assert.ThrowsException<PortableBrokerStartupException>(() =>
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() =>
             PortableBrokerProcessHost.StopCapturedForRepair(captured, processHost: host));
         Assert.AreEqual(0, host.Stopped.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("name")]
     [DataRow("unknown")]
     [DataRow("relative")]
@@ -93,8 +93,8 @@ public class PortableBrokerCapturedRepairTests
             invalid == "unknown" ? null : invalid == "relative" ? "viiper.exe" : foreignImage;
         host.Peers.Add(new(2, invalid == "time" ? 0 : 102, path));
         if (invalid == "duplicate") host.Peers.Add(host.Peers[0]);
-        Assert.ThrowsException<PortableBrokerStartupException>(() => PortableBrokerProcessHost.CaptureForRepair(host));
-        Assert.ThrowsException<PortableBrokerStartupException>(() =>
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => PortableBrokerProcessHost.CaptureForRepair(host));
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() =>
             PortableBrokerProcessHost.StopCapturedForRepair(host.Peers.ToArray(), processHost: host));
         Assert.AreEqual(0, host.Stopped.Count);
     }
@@ -117,7 +117,7 @@ public class PortableBrokerCapturedRepairTests
         host.Peers.Add(old);
         IReadOnlyList<PortableBrokerProcessIdentity> captured = PortableBrokerProcessHost.CaptureForRepair(host);
         host.AfterStop = () => host.Peers.Add(newcomer);
-        Assert.ThrowsException<PortableBrokerStartupException>(() =>
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() =>
             PortableBrokerProcessHost.StopCapturedForRepair(captured, processHost: host));
         Assert.AreEqual(old, host.Stopped.Single());
         Assert.AreEqual(newcomer, host.Peers.Single());
@@ -129,7 +129,7 @@ public class PortableBrokerCapturedRepairTests
         host.Peers.Add(new(2, 102, foreignImage));
         IReadOnlyList<PortableBrokerProcessIdentity> captured = PortableBrokerProcessHost.CaptureForRepair(host);
         host.StopFailure = true;
-        Assert.ThrowsException<IOException>(() => PortableBrokerProcessHost.StopCapturedForRepair(captured, processHost: host));
+        Assert.ThrowsExactly<IOException>(() => PortableBrokerProcessHost.StopCapturedForRepair(captured, processHost: host));
         Assert.AreEqual(0, host.Stopped.Count);
         Assert.AreEqual(1, host.Peers.Count);
     }
@@ -178,7 +178,7 @@ public class PortableBrokerCapturedRepairTests
         File.WriteAllText(localImage, "older local release");
         File.WriteAllText(payload, "wrong release");
         host.Peers.Add(new(2, 102, foreignImage));
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() =>
             Prepare(PortableBrokerProcessHost.CaptureForRepair(host)));
         Assert.AreEqual(0, host.Stopped.Count);
         Assert.AreEqual("older local release", File.ReadAllText(localImage));
@@ -190,7 +190,7 @@ public class PortableBrokerCapturedRepairTests
         File.WriteAllText(localImage, "older local release");
         host.Peers.Add(new(2, 102, foreignImage));
         IReadOnlyList<PortableBrokerProcessIdentity> captured = PortableBrokerProcessHost.CaptureForRepair(host);
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Prepare(captured, async (directory, token) =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Prepare(captured, async (directory, token) =>
         {
             host.Peers.Add(new(3, 103, localImage));
             return await Acquire(directory, token);

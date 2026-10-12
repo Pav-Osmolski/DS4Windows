@@ -69,7 +69,7 @@ public sealed class DSXUdpListenerTests
         AssertNoResponse(client);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("{\"type\":1,\"parameters\":[0,1,8,10]}")]
     [DataRow("{\"type\":1,\"parameters\":[0,1,12,16,0,101,255,255,0,0,0]}")]
     [DataRow("{\"type\":4,\"parameters\":[0,1,100]}")]

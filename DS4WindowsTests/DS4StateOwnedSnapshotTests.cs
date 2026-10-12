@@ -95,7 +95,7 @@ public sealed class DS4StateOwnedSnapshotTests
         Assert.IsTrue(snapshot.State.Cross);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -232,7 +232,7 @@ public sealed class DS4StateOwnedSnapshotTests
         var snapshot = new DS4StateOwnedSnapshot();
         var source = new DS4State { Motion = Motion(10), Cross = true };
         snapshot.Capture(source);
-        Assert.ThrowsException<ArgumentNullException>(() => snapshot.Capture(null));
+        Assert.ThrowsExactly<ArgumentNullException>(() => snapshot.Capture(null));
         Assert.IsTrue(snapshot.State.Cross);
         AssertMotion(source.Motion, snapshot.State.Motion);
     }

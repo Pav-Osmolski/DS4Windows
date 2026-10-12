@@ -82,13 +82,13 @@ public sealed class XboxOneAuthorizedPersonaConfigurationTests
             XboxOneAuthorizedPersonaConfiguration.ParseExplicit(
                 ValidJson(), "test-bundle");
 
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             XboxOneAuthorizedCreateRequestV1.CreateForFeedbackTarget(
                 configuration, 0, 1));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             XboxOneAuthorizedCreateRequestV1.CreateForFeedbackTarget(
                 configuration, 1, 0));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             XboxOneAuthorizedCreateRequestV1.CreateForFeedbackTarget(
                 configuration, 1, 1, 0));
 
@@ -127,7 +127,7 @@ public sealed class XboxOneAuthorizedPersonaConfigurationTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PerRegistrationUsbSerialRequiresExplicitDeploymentPermission(bool enabled)
@@ -185,9 +185,9 @@ public sealed class XboxOneAuthorizedPersonaConfigurationTests
         var exhausted = new XboxOneRetainedImportIdentitySource(ulong.MaxValue - 1);
         Assert.AreEqual(ulong.MaxValue - 1, exhausted.Next());
         Assert.AreEqual(ulong.MaxValue, exhausted.Next());
-        Assert.ThrowsException<IOException>(() => exhausted.Next());
-        Assert.ThrowsException<IOException>(() => exhausted.Next());
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<IOException>(() => exhausted.Next());
+        Assert.ThrowsExactly<IOException>(() => exhausted.Next());
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new XboxOneRetainedImportIdentitySource(0));
     }
 
@@ -252,9 +252,9 @@ public sealed class XboxOneAuthorizedPersonaConfigurationTests
         var exhausted = new XboxOnePrimaryDeviceIdentitySource(uint.MaxValue - 1);
         Assert.AreEqual(0x0000fffbfffffffeUL, exhausted.Next());
         Assert.AreEqual(0x0000fffbffffffffUL, exhausted.Next());
-        Assert.ThrowsException<IOException>(() => exhausted.Next());
-        Assert.ThrowsException<IOException>(() => exhausted.Next());
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<IOException>(() => exhausted.Next());
+        Assert.ThrowsExactly<IOException>(() => exhausted.Next());
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new XboxOnePrimaryDeviceIdentitySource(0));
     }
 
@@ -264,13 +264,13 @@ public sealed class XboxOneAuthorizedPersonaConfigurationTests
         string denied = ValidJson().Replace(
             "\"identityAuthorizationGranted\":true",
             "\"identityAuthorizationGranted\":false");
-        Assert.ThrowsException<IOException>(() =>
+        Assert.ThrowsExactly<IOException>(() =>
             XboxOneAuthorizedPersonaConfiguration.ParseExplicit(denied,
                 "denied"));
 
         string unknown = ValidJson().Replace("\"version\":1",
             "\"version\":1,\"unexpected\":1");
-        Assert.ThrowsException<JsonException>(() =>
+        Assert.ThrowsExactly<JsonException>(() =>
             XboxOneAuthorizedPersonaConfiguration.ParseExplicit(unknown,
                 "unknown"));
     }
@@ -281,7 +281,7 @@ public sealed class XboxOneAuthorizedPersonaConfigurationTests
         string mismatched = ValidJson().Replace(
             "0000fffb010203040000000000000000",
             "0000fffb010203050000000000000000");
-        Assert.ThrowsException<IOException>(() =>
+        Assert.ThrowsExactly<IOException>(() =>
             XboxOneAuthorizedPersonaConfiguration.ParseExplicit(mismatched,
                 "mismatch"));
     }

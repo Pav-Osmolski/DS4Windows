@@ -41,7 +41,7 @@ public sealed class SharedFeedbackBacklogAuditTests
         Assert.AreEqual(0L, buffer.OrderedControlEnqueued);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)ControllerFeedbackSource.Xbox360VirtualDevice)]
     [DataRow((int)ControllerFeedbackSource.XboxOneVirtualDevice)]
     [DataRow((int)ControllerFeedbackSource.XboxSeriesVirtualDevice)]
@@ -81,7 +81,7 @@ public sealed class SharedFeedbackBacklogAuditTests
             pump.PumpOnce(11_002, sink, out _));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)ControllerFeedbackSource.Xbox360VirtualDevice)]
     [DataRow((int)ControllerFeedbackSource.XboxOneVirtualDevice)]
     [DataRow((int)ControllerFeedbackSource.XboxSeriesVirtualDevice)]
@@ -173,7 +173,7 @@ public sealed class SharedFeedbackBacklogAuditTests
         Assert.AreEqual(0, faults);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, false)]
     [DataRow(false, false, true)]
     [DataRow(false, true, false)]

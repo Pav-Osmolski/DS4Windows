@@ -8,7 +8,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public class ShiftExtrasRuntimeTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, false)]
     [DataRow(true, false, false)]
     [DataRow(true, true, false)]

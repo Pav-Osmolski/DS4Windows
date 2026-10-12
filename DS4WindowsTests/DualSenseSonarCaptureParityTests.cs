@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class DualSenseSonarCaptureParityTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("SteelSeries Sonar - Gaming", "", @"{1}.ROOT\MEDIA\0000", true)]
     [DataRow("SteelSeries Sonar - Chat", @"ROOT\MEDIA\0000", "", true)]
     [DataRow("SteelSeries Sonar - Media", "", @"USB\VID_1038&PID_12E0", false)]
@@ -51,7 +51,7 @@ public class DualSenseSonarCaptureParityTests
         Assert.AreSame(standard, selected);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void SelectedBackendFailureDoesNotSilentlyChangeAudioRoute(bool sonar)
@@ -60,7 +60,7 @@ public class DualSenseSonarCaptureParityTests
         int unselectedCalls = 0;
         Func<IWaveIn> selected = () => throw failure;
         Func<IWaveIn> unselected = () => { unselectedCalls++; return new Capture("unselected"); };
-        Exception actual = Assert.ThrowsException<InvalidOperationException>(() =>
+        Exception actual = Assert.ThrowsExactly<InvalidOperationException>(() =>
             ControllerEndpointLoopbackCaptureFactory.Create(
                 sonar ? DualShock4EndpointCaptureBackend.SoftwareRouterPollingLoopback
                     : DualShock4EndpointCaptureBackend.StandardLoopback,

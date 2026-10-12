@@ -607,9 +607,9 @@ public sealed class Switch2BluetoothDiscoveryBoundaryTests
     [TestMethod]
     public void InvalidRegistryInputsFailClosed()
     {
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2BluetoothCandidateRegistry(0));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2BluetoothCandidateRegistry(
                 Switch2BluetoothCandidateRegistry.MaximumCapacity + 1));
 

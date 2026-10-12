@@ -5,7 +5,7 @@ namespace DS4WindowsTests
     [TestClass]
     public class HotplugRecoveryPolicyTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(HotplugRecoveryPolicy.DeviceArrival, false, true)]
         [DataRow(HotplugRecoveryPolicy.DeviceArrival, true, true)]
         [DataRow(HotplugRecoveryPolicy.DeviceRemoveComplete, false, true)]
@@ -21,7 +21,7 @@ namespace DS4WindowsTests
                     hasManagedController));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true, false, 0, true)]
         [DataRow(true, false, 2, true)]
         [DataRow(true, false, 3, false)]

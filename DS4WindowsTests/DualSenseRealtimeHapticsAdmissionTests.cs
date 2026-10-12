@@ -19,7 +19,7 @@ public class DualSenseRealtimeHapticsAdmissionTests
         CollectionAssert.AreEqual(frame[154..218], fixture.ReadOnePhysicalHaptics());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void WaitingOldMediaCannotAdoptReplacementOutputGeneration(bool replacePacer)
@@ -63,7 +63,7 @@ public class DualSenseRealtimeHapticsAdmissionTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void BothPcmIngressFormatsPreserveStereoAndTheExplicitZeroTail(bool converted)
@@ -163,7 +163,7 @@ public class DualSenseRealtimeHapticsAdmissionTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void WarmedAtomicPcmPublicationAllocatesNoManagedMemory(bool positiveControl)
@@ -196,7 +196,7 @@ public class DualSenseRealtimeHapticsAdmissionTests
         CollectionAssert.AreEqual(frame[154..218], physicalReport[78..142]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void AtomicPcmFramesReachThePhysicalRingInOrderDuringTemplateContention(

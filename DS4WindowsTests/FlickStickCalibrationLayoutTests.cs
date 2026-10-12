@@ -19,7 +19,7 @@ public class FlickStickCalibrationLayoutTests
 
     public TestContext TestContext { get; set; }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DefaultTheme", 360, 96)]
     [DataRow("DefaultTheme", 360, 144)]
     [DataRow("DefaultTheme", 640, 96)]
@@ -105,7 +105,7 @@ public class FlickStickCalibrationLayoutTests
             TestContext.AddResultFile(renderedPath);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, 0)]
     [DataRow(true, 1)]
     [DataRow(true, 2)]

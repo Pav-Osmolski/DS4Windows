@@ -101,7 +101,7 @@ namespace DS4WindowsTests
                 (DS4Device)RuntimeHelpers.GetUninitializedObject(typeof(DS4Device)), 1, table));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void ActiveOrWrongGenerationQuarantineCannotBecomeTerminalCleanupStatus(bool generationMatches)
@@ -214,7 +214,7 @@ namespace DS4WindowsTests
             StringAssert.Contains(creating.Detail, "Creating");
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(ControllerRuntimeLaneState.Starting, ControllerRuntimeLaneState.NotRequired,
             ControllerRuntimeLaneState.NotRequired, "Arming haptics")]
         [DataRow(ControllerRuntimeLaneState.Ready, ControllerRuntimeLaneState.Starting,
@@ -257,7 +257,7 @@ namespace DS4WindowsTests
             Assert.IsFalse(status.IsReady);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false)]
         [DataRow(true)]
         public void Switch2PhysicalReportUnblocksConnectingWithoutBypassingVirtualReadiness(bool bluetooth)

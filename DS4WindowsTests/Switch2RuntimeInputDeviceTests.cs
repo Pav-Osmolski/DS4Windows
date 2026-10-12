@@ -13,7 +13,7 @@ public class Switch2RuntimeInputDeviceTests
     private const Switch2GattProperty InputProperties =
         Switch2GattProperty.Read | Switch2GattProperty.Notify;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void OutputTransitionIsScopedAndNeverReplaysPreTransitionSnapshot(bool throws)
@@ -44,7 +44,7 @@ public class Switch2RuntimeInputDeviceTests
     {
         var device = CreateProDevice(90_012, 90_013);
         device.StartUpdate();
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             device.RunVirtualOutputTransition(() => { }));
         bool rejectedFromReport = false;
         device.Report += (_, _) =>
@@ -487,7 +487,7 @@ public class Switch2RuntimeInputDeviceTests
         })
         {
             NotSupportedException exception =
-                Assert.ThrowsException<NotSupportedException>(() =>
+                Assert.ThrowsExactly<NotSupportedException>(() =>
                     InputDeviceFactory.CreateDevice(runtimeType, null,
                         "must reject"));
             StringAssert.Contains(exception.Message, "runtime-owned");
@@ -1158,7 +1158,7 @@ public class Switch2RuntimeInputDeviceTests
         Assert.IsFalse(pro.TryPublishPro(default));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
     public void StandaloneRuntimeAcceptsEitherProfileOrientationWithoutRebind(
@@ -1408,7 +1408,7 @@ public class Switch2RuntimeInputDeviceTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     [DoNotParallelize]
@@ -1897,10 +1897,10 @@ public class Switch2RuntimeInputDeviceTests
         Assert.IsNotNull(reportEvent);
         Assert.AreEqual(typeof(DS4Device.ReportHandler<EventArgs>),
             reportEvent.EventHandlerType);
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2RuntimeReportEventArgs(
                 Switch2RuntimeReportKind.Regular, 0));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2RuntimeReportEventArgs(
                 (Switch2RuntimeReportKind)byte.MaxValue, 1));
 

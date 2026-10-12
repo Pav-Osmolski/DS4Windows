@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2BatteryStatusTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(2500, Switch2BatteryBand.Low,
         Switch2BatteryStatus.LowCompatibilityPercentage)]
     [DataRow(3125, Switch2BatteryBand.Low,
@@ -36,7 +36,7 @@ public class Switch2BatteryStatusTests
             status.CompatibilityPercentage);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2499)]
     [DataRow(5001)]

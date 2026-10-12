@@ -200,7 +200,7 @@ public partial class Switch2BluetoothLabProbeTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, "")]
     [DataRow(1048577, "")]
     [DataRow(1, "{")]

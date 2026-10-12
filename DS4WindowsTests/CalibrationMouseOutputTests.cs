@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class CalibrationMouseOutputTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, 0, 0, 0, false)]
     [DataRow(7, 9, 20, 0, false)]
     [DataRow(32767, -32767, 0, 0, false)]
@@ -31,7 +31,7 @@ public class CalibrationMouseOutputTests
             Assert.IsTrue(component is >= -32767 and <= 32767);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(-32768, 0)]
     [DataRow(32768, 0)]
     [DataRow(0, -32768)]
@@ -40,10 +40,10 @@ public class CalibrationMouseOutputTests
     [DataRow(0, int.MaxValue)]
     public void RejectsOutOfRangeBeforePresentingMovement(int x, int y)
     {
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new CalibrationMouseReports(0, 0, x, y));
         var handler = new RecordingHandler();
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             handler.MoveRelativeMouseCalibration(x, y));
         Assert.AreEqual(0, handler.ImmediateCalls);
     }

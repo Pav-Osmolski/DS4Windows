@@ -23,7 +23,7 @@ namespace DS4WindowsTests
             CollectionAssert.AreEqual(expected, entries);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("\0")]
         [DataRow("\0\0")]
         [DataRow("\0\0unused")]
@@ -41,7 +41,7 @@ namespace DS4WindowsTests
             CollectionAssert.AreEqual(new[] { "first", "second" }, entries);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("")]
         [DataRow("unterminated")]
         [DataRow("first\0")]
@@ -80,7 +80,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(0, entries.Count);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(-2)]
         [DataRow(0)]
         [DataRow(1)]
@@ -102,7 +102,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(0, entries.Count);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false, 4)]
         [DataRow(true, -2)]
         [DataRow(true, 0)]

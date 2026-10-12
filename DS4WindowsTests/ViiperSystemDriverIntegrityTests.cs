@@ -38,7 +38,7 @@ public class ViiperSystemDriverIntegrityTests
         finally { File.Delete(path); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(null, "service is missing")]
     [DataRow("", "driver file is missing")]
     [DataRow("\"", "driver file is missing")]
@@ -63,12 +63,12 @@ public class ViiperSystemDriverIntegrityTests
     [TestMethod]
     public void UnreadableRegistrationPropagatesToIntegrityFailureHandler()
     {
-        Assert.ThrowsException<UnauthorizedAccessException>(() =>
+        Assert.ThrowsExactly<UnauthorizedAccessException>(() =>
             ViiperSetupManager.TryGetSystemDriverSha256("usbip2_ude", out _, out _,
                 _ => throw new UnauthorizedAccessException("Denied")));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(@"\SystemRoot\System32\drivers\usbip2_ude.sys")]
     [DataRow(@"System32\drivers\usbip2_ude.sys")]
     [DataRow(@"%SystemRoot%\System32\drivers\usbip2_ude.sys")]

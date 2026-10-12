@@ -15,7 +15,7 @@ public sealed class SonyFeedbackBacklogAuditTests
 {
     private const BindingFlags Fields = BindingFlags.Instance | BindingFlags.NonPublic;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]

@@ -26,7 +26,7 @@ public sealed class DS4DevicesRemovalIdentityTests
         Assert.AreEqual(1L, CloseEpoch(device.HidDevice));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void DelayedSamePathRemovalPreservesReplacementAndItsSharedOrDistinctHandle(

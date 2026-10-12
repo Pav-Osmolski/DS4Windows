@@ -27,7 +27,7 @@ public class DualSenseReusedSpeakerSessionTests
             true, prime - 1, true, latePresented, 0), "V5's existing reservoir is unchanged.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(7489L, false)]
     [DataRow(12521L, false)]
     [DataRow(7489L, true)]

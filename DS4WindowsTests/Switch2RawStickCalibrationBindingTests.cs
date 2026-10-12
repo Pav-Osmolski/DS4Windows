@@ -10,7 +10,7 @@ public sealed class Switch2RawStickCalibrationBindingTests
 {
     internal static readonly Switch2StickCalibration Calibration = new(2100, 2000, 1600, 1450, 1800, 1550);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void ProOverridePreservesFactoryEvidenceRawBytesAndSharedAxisPrecision(bool usb)
@@ -45,7 +45,7 @@ public sealed class Switch2RawStickCalibrationBindingTests
         Assert.AreEqual((short)20, profile.LeftX.SignedValue);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left, Switch2JoyConProfileMode.StandaloneHorizontalLeft)]
     [DataRow(Switch2ControllerModel.JoyCon2Left, Switch2JoyConProfileMode.StandaloneVerticalLeft)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, Switch2JoyConProfileMode.StandaloneHorizontalRight)]
@@ -68,7 +68,7 @@ public sealed class Switch2RawStickCalibrationBindingTests
         Assert.AreEqual(horizontal ? isLeft ? short.MinValue : short.MaxValue : (short)0, y.SignedValue);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2)]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]

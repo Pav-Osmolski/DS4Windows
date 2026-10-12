@@ -81,7 +81,7 @@ public sealed class Switch2ProfileSectionLayoutTests
             dualSense.Descendants(Wpf + "ComboBox").Select(node => (string)node.Attribute("SelectedValue")).ToArray());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("Switch2XboxImpulseStrength")]
     [DataRow("Switch2RumbleDelayMilliseconds")]
     [DataRow("Switch2XboxImpulseDynamicFrequency")]
@@ -169,7 +169,7 @@ public sealed class Switch2ProfileSectionLayoutTests
         Assert.AreEqual("Open Windows Sound settings", (string)button.Attribute("Content"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("Switch2XboxImpulseStrength", "switch2FeedbackCard")]
     [DataRow("Switch2DualSenseAudioHapticsEnabled", "switch2FeedbackCard")]
     [DataRow("Switch2RumbleDelayMilliseconds", "switch2FeedbackCard")]

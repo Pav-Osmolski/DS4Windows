@@ -11,10 +11,10 @@ public sealed class LegacyJoyConLinkCoordinatorTests
     {
         var f = new Fixture();
         Assert.AreSame(f.Left, f.Coordinator.Register(f.Left.Device, f.Left.Slot));
-        Assert.ThrowsException<InvalidOperationException>(() => f.Coordinator.Register(f.Left.Device, 7));
-        Assert.ThrowsException<InvalidOperationException>(() => f.Coordinator.Register(new FakeDevice(InputDeviceType.JoyConL), f.Left.Slot));
-        Assert.ThrowsException<ArgumentException>(() => f.Coordinator.Register(new FakeDevice(InputDeviceType.DualSense), 7));
-        Assert.ThrowsException<ArgumentException>(() => f.Coordinator.Register(new FakeDevice(InputDeviceType.JoyConL), -1));
+        Assert.ThrowsExactly<InvalidOperationException>(() => f.Coordinator.Register(f.Left.Device, 7));
+        Assert.ThrowsExactly<InvalidOperationException>(() => f.Coordinator.Register(new FakeDevice(InputDeviceType.JoyConL), f.Left.Slot));
+        Assert.ThrowsExactly<ArgumentException>(() => f.Coordinator.Register(new FakeDevice(InputDeviceType.DualSense), 7));
+        Assert.ThrowsExactly<ArgumentException>(() => f.Coordinator.Register(new FakeDevice(InputDeviceType.JoyConL), -1));
         CollectionAssert.AreEqual(new[] { f.Left, f.Right }, f.Coordinator.GetStandaloneConnections());
     }
 
@@ -63,7 +63,7 @@ public sealed class LegacyJoyConLinkCoordinatorTests
         Assert.AreEqual(500, f.LastState.State.Motion.gyroYawFull);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     [DataRow(3)]
@@ -74,7 +74,7 @@ public sealed class LegacyJoyConLinkCoordinatorTests
         var rightGroup = f.Right.Group;
         f.FailFactoryAt = f.FactoryCalls + offset;
         int prepared = 0;
-        Assert.ThrowsException<InvalidOperationException>(() => f.Coordinator.TryLink(f.Left, f.Right,
+        Assert.ThrowsExactly<InvalidOperationException>(() => f.Coordinator.TryLink(f.Left, f.Right,
             (_, _) => prepared++, out _));
         Assert.AreEqual(0, prepared, "No output pad may be retired before every fresh projection is reserved.");
         Assert.AreSame(leftGroup, f.Left.Group);
@@ -93,7 +93,7 @@ public sealed class LegacyJoyConLinkCoordinatorTests
         var f = new Fixture();
         var beforeLeft = f.Left.Group;
         var beforeRight = f.Right.Group;
-        Assert.ThrowsException<IOException>(() => f.Coordinator.TryLink(f.Left, f.Right,
+        Assert.ThrowsExactly<IOException>(() => f.Coordinator.TryLink(f.Left, f.Right,
             (_, _) => throw new IOException("output retirement failed"), out _));
         Assert.AreSame(beforeLeft, f.Left.Group);
         Assert.AreSame(beforeRight, f.Right.Group);
@@ -162,7 +162,7 @@ public sealed class LegacyJoyConLinkCoordinatorTests
     {
         var f = new Fixture();
         f.Coordinator.TryLink(f.Left, f.Right, (_, _) => { }, out var joined);
-        Assert.ThrowsException<IOException>(() => f.Coordinator.TryUnlink(joined,
+        Assert.ThrowsExactly<IOException>(() => f.Coordinator.TryUnlink(joined,
             _ => throw new IOException("secondary output could not be restored")));
         Assert.IsTrue(joined.Active);
         Assert.AreSame(joined, f.Left.Group);
@@ -172,7 +172,7 @@ public sealed class LegacyJoyConLinkCoordinatorTests
         Assert.AreSame(f.Left, f.LastOwner);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void RemovingEitherHalfImmediatelyInvalidatesItAndPromotesAFreshSurvivorWithoutFactoryWork(bool removeOwner)
@@ -329,7 +329,7 @@ public sealed class LegacyJoyConLinkCoordinatorTests
         Assert.AreEqual(1u, f.Left.Group.Previous.State.PacketCounter);
         projection.Reject = false;
         f.OnPublish = () => throw new IOException("publisher failure");
-        Assert.ThrowsException<IOException>(() => f.Coordinator.TryPublish(f.Left, raw, 30, 1000));
+        Assert.ThrowsExactly<IOException>(() => f.Coordinator.TryPublish(f.Left, raw, 30, 1000));
         Assert.AreEqual(1u, f.Left.Group.Previous.State.PacketCounter);
         f.OnPublish = null;
         Assert.IsTrue(f.Coordinator.TryPublish(f.Left, raw, 40, 1000));

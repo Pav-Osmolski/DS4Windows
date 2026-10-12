@@ -33,7 +33,7 @@ public sealed class JoyConArtworkTests
         });
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(InputDeviceType.Switch2JoyConLeft, false, 1)]
     [DataRow(InputDeviceType.Switch2JoyConLeft, true, 3)]
     [DataRow(InputDeviceType.Switch2JoyConRight, false, 2)]
@@ -52,7 +52,7 @@ public sealed class JoyConArtworkTests
             Assert.AreEqual(sideways, icon.Width > icon.Height);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
     public void ConnectedControllerOverrideWinsOverProfileArtwork(Switch2ControllerModel model)
@@ -259,7 +259,7 @@ public sealed class JoyConArtworkTests
         if (failure != null) System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(InputDeviceType.Switch2JoyConLeft, true, false)]
     [DataRow(InputDeviceType.Switch2JoyConRight, false, true)]
     [DataRow(InputDeviceType.Switch2JoyConJoined, false, false)]
@@ -299,7 +299,7 @@ public sealed class JoyConArtworkTests
         Assert.IsTrue(bounds.Contains(JoyConArtwork.RightStick));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(InputDeviceType.Switch2Pro, false)]
     [DataRow(InputDeviceType.Switch2JoyConLeft, true)]
     [DataRow(InputDeviceType.Switch2JoyConRight, true)]

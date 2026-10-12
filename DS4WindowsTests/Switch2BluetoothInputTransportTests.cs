@@ -14,7 +14,7 @@ public sealed class Switch2BluetoothInputTransportTests
     private static readonly byte[] SessionKey = Enumerable.Range(0, 32)
         .Select(value => (byte)(value + 1)).ToArray();
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2)]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
@@ -52,7 +52,7 @@ public sealed class Switch2BluetoothInputTransportTests
         finally { owner.Stop(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2)]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]

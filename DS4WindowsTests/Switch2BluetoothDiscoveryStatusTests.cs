@@ -20,7 +20,7 @@ public sealed class Switch2BluetoothDiscoveryStatusTests
         Assert.AreEqual(default(Switch2BluetoothAssociationStep),
             Switch2BluetoothWindowsAssociationResult.Reconnected().LastCompletedStep);
     }
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)Switch2BluetoothDiscoveryState.Stopped, "is stopped")]
     [DataRow((int)Switch2BluetoothDiscoveryState.Starting, "Starting Bluetooth")]
     [DataRow((int)Switch2BluetoothDiscoveryState.Scanning, "discovery is active")]
@@ -42,7 +42,7 @@ public sealed class Switch2BluetoothDiscoveryStatusTests
                 "An unavailable scan must not be presented as an empty active scan.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, "No new controllers found yet")]
     [DataRow(1, "1 controller available")]
     [DataRow(2, "2 controllers available")]
@@ -89,7 +89,7 @@ public sealed class Switch2BluetoothDiscoveryStatusTests
         Assert.AreEqual(Switch2BluetoothDiscoveryState.Stopped, startup.Snapshot.State);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)Switch2BluetoothDiscoveryState.Stopping)]
     [DataRow((int)Switch2BluetoothDiscoveryState.Stopped)]
     [DataRow((int)Switch2BluetoothDiscoveryState.CleanupFailed)]

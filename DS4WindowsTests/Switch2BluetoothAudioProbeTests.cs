@@ -18,7 +18,7 @@ public class Switch2BluetoothAudioProbeTests
     public void InvalidOrBroadcastWakeTargetsAreRejected()
     {
         foreach (ulong address in new[] { 0UL, 0xffffffffffffUL, 0x1000000000000UL, ulong.MaxValue })
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => ProbeProtocol.BuildWakeManufacturerValue(address));
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => ProbeProtocol.BuildWakeManufacturerValue(address));
     }
 
     [TestMethod]

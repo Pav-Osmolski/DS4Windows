@@ -65,7 +65,7 @@ public class FlickStickCalibrationMappingTests
         Mapping.deviceState[Slot] = previousDeviceState;
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void CanonicalMapperProducesOneExactTurnWithoutVirtualButtonLeak(bool shifted)
@@ -83,7 +83,7 @@ public class FlickStickCalibrationMappingTests
         Assert.IsTrue(handler.Moves.All(move => move.X is >= 0 and <= 32767));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void AxisConfiguredButtonUsesItsStickCalibrationAndConsumesOnlyItsNormalOutput(bool right)
@@ -123,7 +123,7 @@ public class FlickStickCalibrationMappingTests
         Assert.AreEqual(1908, handler.Moves.Sum(move => move.X));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(StickMode.Controls)]
     [DataRow(StickMode.None)]
     public void InactiveAxisModeDoesNotConsumeOrTurn(StickMode mode)
@@ -136,7 +136,7 @@ public class FlickStickCalibrationMappingTests
         Assert.AreEqual(0, handler.Moves.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(DS4Controls.None)]
     [DataRow(DS4Controls.GyroXNeg)]
     [DataRow(DS4Controls.SwipeRight)]
@@ -151,7 +151,7 @@ public class FlickStickCalibrationMappingTests
         Assert.AreEqual(0, handler.Moves.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void AxisModeOrSourceChangeCancelsWithoutStartingOnAnAlreadyHeldButton(bool changeMode)
@@ -200,7 +200,7 @@ public class FlickStickCalibrationMappingTests
         Assert.AreEqual(1908, handler.Moves.Sum(move => move.X));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(DS4Controls.L2, TwoStageTriggerMode.Disabled)]
     [DataRow(DS4Controls.L2FullPull, TwoStageTriggerMode.Disabled)]
     [DataRow(DS4Controls.R2, TwoStageTriggerMode.Disabled)]
@@ -263,7 +263,7 @@ public class FlickStickCalibrationMappingTests
         Assert.AreEqual(1908, handler.Moves.Sum(move => move.X));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void TerminalNeutralCancelsButRegularNoMotionReportDoesNot(bool terminal)
@@ -291,7 +291,7 @@ public class FlickStickCalibrationMappingTests
         Assert.AreEqual(0, handler.Moves.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("removed", false)]
     [DataRow("removing", false)]
     [DataRow("unsynced", false)]

@@ -7,7 +7,7 @@ namespace DS4WindowsTests
     [TestClass]
     public class ViiperUsbipPortManagerTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("", true)]
         [DataRow("DS4W0123456789A", true)]
         [DataRow("foreign", false)]
@@ -31,7 +31,7 @@ namespace DS4WindowsTests
             Assert.IsFalse(ViiperUsbipPortManager.IsDs4WindowsOwnedLocalPort(ports[0], "17-5"));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("localhost:3241/1-1", false)]
         [DataRow("127.0.0.1:3241/1-1", false)]
         [DataRow("[::1]:3241/1-1", false)]
@@ -52,7 +52,7 @@ namespace DS4WindowsTests
             }
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("")]
         [DataRow("Port 62: device in use\n -> usbip://remote.example:3241/1-1")]
         [DataRow("Port 63: device in use\n -> usbip://not a valid location")]
@@ -91,7 +91,7 @@ namespace DS4WindowsTests
             }
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false, 0, 0, 10)]
         [DataRow(true, 0, 0, 1)]
         [DataRow(false, 1, 0, 1)]
@@ -104,7 +104,7 @@ namespace DS4WindowsTests
                 recoveryCompleted, legacyPorts, xboxOnePorts));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(1)]
         [DataRow(10)]
         public void RecoveryWaitsOnlyForRequiredCleanSnapshots(int required)
@@ -124,7 +124,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(required - 1, waits);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(1)]
         [DataRow(10)]
         public void RecoveryRechecksAfterDetachAndNeverDetachesProtectedImports(int required)
@@ -153,7 +153,7 @@ namespace DS4WindowsTests
             int queries = 0, waits = 0;
             var stale = new ViiperUsbipPortManager.UsbipPortBlock(5,
                 " -> usbip://localhost:3241/1-5");
-            Assert.ThrowsException<IOException>(() =>
+            Assert.ThrowsExactly<IOException>(() =>
                 ViiperUsbipPortManager.ReconcileStaleLocalViiperPorts(1,
                     new HashSet<int>(), () => { queries++; return new[] { stale }; },
                     _ => { }, _ => waits++));
@@ -164,7 +164,7 @@ namespace DS4WindowsTests
         [TestMethod]
         public void RecoveryDoesNotTreatAFailedQueryAsAnEmptySnapshot()
         {
-            Assert.ThrowsException<IOException>(() =>
+            Assert.ThrowsExactly<IOException>(() =>
                 ViiperUsbipPortManager.ReconcileStaleLocalViiperPorts(1,
                     new HashSet<int>(), () => throw new IOException("Synthetic query failure"),
                     _ => Assert.Fail("No snapshot authorized a detach."),
@@ -264,7 +264,7 @@ namespace DS4WindowsTests
                 IsDs4WindowsOwnedLocalPort(ports[1], "8-4"));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("localhost")]
         [DataRow("127.0.0.1")]
         [DataRow("[::1]")]
@@ -297,7 +297,7 @@ namespace DS4WindowsTests
                 IsDs4WindowsOwnedLocalPort(remoteDs4w, "1-1"));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("DS4W0123456789A", true)]
         [DataRow("DS4Wabcdef12345", true)]
         [DataRow("ds4W0123456789A", false)]
@@ -312,7 +312,7 @@ namespace DS4WindowsTests
                 ViiperUsbipPortManager.IsDs4WindowsOwnershipSerial(serial));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(1, "DS4W0123456789A", true)]
         [DataRow(255, "DS4WABCDEF01234", true)]
         [DataRow(0, "DS4W0123456789A", false)]

@@ -16,31 +16,31 @@ public class Switch2ProUsbOwnedHdRumbleTransportBridgeTests
     [TestMethod]
     public void ConstructorRequiresExactImmutableLeaseAndFixedBound()
     {
-        Assert.ThrowsException<ArgumentNullException>(() =>
+        Assert.ThrowsExactly<ArgumentNullException>(() =>
             new Switch2ProUsbOwnedHdRumbleTransportBridge(null,
                 DeviceGeneration, TransportGeneration, WaitMilliseconds));
 
         ScriptedLease lease = new();
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2ProUsbOwnedHdRumbleTransportBridge(lease, 0,
                 TransportGeneration, WaitMilliseconds));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2ProUsbOwnedHdRumbleTransportBridge(lease,
                 DeviceGeneration, 0, WaitMilliseconds));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2ProUsbOwnedHdRumbleTransportBridge(lease,
                 DeviceGeneration, TransportGeneration, 0));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2ProUsbOwnedHdRumbleTransportBridge(lease,
                 DeviceGeneration, TransportGeneration, 101));
 
         lease.Authenticated = false;
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2ProUsbOwnedHdRumbleTransportBridge(lease,
                 DeviceGeneration, TransportGeneration, WaitMilliseconds));
         lease.Authenticated = true;
         lease.ThrowAuthentication = true;
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2ProUsbOwnedHdRumbleTransportBridge(lease,
                 DeviceGeneration, TransportGeneration, WaitMilliseconds));
     }

@@ -39,7 +39,7 @@ public class HidHideConfigurationGuardTests
         Assert.AreEqual(0, fixture.OpenHandles);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("open")]
     [DataRow("inverse")]
     [DataRow("applications")]
@@ -57,7 +57,7 @@ public class HidHideConfigurationGuardTests
         Assert.AreEqual(0, fixture.OpenHandles);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, 0xD800)]
     [DataRow(false, 0xDC00)]
     [DataRow(true, 0xD800)]
@@ -78,7 +78,7 @@ public class HidHideConfigurationGuardTests
         CollectionAssert.Contains(device ? fixture.Devices : fixture.Applications, unusualPath);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NonRoundTrippableTextAddedAfterConfirmationPreventsBackupAndWrite(bool device)
@@ -92,7 +92,7 @@ public class HidHideConfigurationGuardTests
         Assert.AreEqual(0, fixture.OpenHandles);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(5)]
     [DataRow(1920)]
     [DataRow(87)]
@@ -139,7 +139,7 @@ public class HidHideConfigurationGuardTests
         Assert.IsTrue(fixture.Guard.Inspect().CanOpen);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("applications")]
     [DataRow("order")]
     [DataRow("case")]
@@ -165,7 +165,7 @@ public class HidHideConfigurationGuardTests
         Assert.AreEqual(0, fixture.OpenHandles);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedOrEmptyBackupNeverMutates(bool empty)
@@ -177,7 +177,7 @@ public class HidHideConfigurationGuardTests
         Assert.AreEqual(0, fixture.OpenHandles);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     [DataRow(5)]
@@ -205,7 +205,7 @@ public class HidHideConfigurationGuardTests
         Assert.AreEqual(0, fixture.OpenHandles);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PostWriteFailureRetainsBackupWithoutRollbackOrRetry(bool unreadable)
@@ -240,9 +240,9 @@ public class HidHideConfigurationGuardTests
         var audit = fixture.Guard.Inspect();
         fixture.Applications.Clear();
         Assert.AreEqual(4, audit.Snapshot.Applications.Count);
-        Assert.ThrowsException<NotSupportedException>(() =>
+        Assert.ThrowsExactly<NotSupportedException>(() =>
             ((IList<string>)audit.Snapshot.Applications)[0] = "replacement");
-        Assert.ThrowsException<NotSupportedException>(() =>
+        Assert.ThrowsExactly<NotSupportedException>(() =>
             ((IList<string>)audit.Aliases)[0] = "replacement");
     }
 
@@ -269,7 +269,7 @@ public class HidHideConfigurationGuardTests
         finally { if (Directory.Exists(root)) Directory.Delete(root, recursive: true); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void DirectBackupRejectsNonRoundTrippableTextBeforeCreatingFiles(bool device)
@@ -277,7 +277,7 @@ public class HidHideConfigurationGuardTests
         string root = Path.Combine(Path.GetTempPath(), "ds4-hidhide-invalid-backup-" + Guid.NewGuid().ToString("N"));
         var snapshot = new HidHideConfigurationSnapshot(new[] { device ? Real : Missing + '\uD800' },
             new[] { device ? "device-\uDC00" : "user-device" }, false, true);
-        Assert.ThrowsException<IOException>(() => HidHideConfigurationGuard.WriteBackup(root, snapshot));
+        Assert.ThrowsExactly<IOException>(() => HidHideConfigurationGuard.WriteBackup(root, snapshot));
         Assert.IsFalse(Directory.Exists(root));
     }
 

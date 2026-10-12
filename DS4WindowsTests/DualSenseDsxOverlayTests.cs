@@ -41,7 +41,7 @@ public class DualSenseDsxOverlayTests
         Assert.AreEqual((byte)202, mailbox.ReadLatest().DsxNativeState.Color.Value.blue);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -134,7 +134,7 @@ public class DualSenseDsxOverlayTests
         Assert.AreEqual(expected, mailbox.ReadLatest());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -183,7 +183,7 @@ public class DualSenseDsxOverlayTests
             mailbox.ReadLatest().ForLocalTriggerReport().LeftTrigger);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)] // USB 0x02 report
     [DataRow(2)] // Bluetooth 0x31 report
     public void NativeShadowAccumulatesOnlyValidFieldsAndOwnsItsBytes(int offset)
@@ -279,7 +279,7 @@ public class DualSenseDsxOverlayTests
         Assert.AreEqual(0, DualSenseDsxOverlay.Released(default, original));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)] // Canonical USB 0x02
     [DataRow(2)] // Canonical Bluetooth 0x31
     [DataRow(13)] // Production Bluetooth V5 0x36 combined carrier
@@ -308,7 +308,7 @@ public class DualSenseDsxOverlayTests
             "Overlay composition must leave the opposite trigger, rumble, audio, header, and carrier bytes intact.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, false)]
     [DataRow(2, false)]
     [DataRow(13, false)]
@@ -335,7 +335,7 @@ public class DualSenseDsxOverlayTests
             "A held overlay or unacknowledged reset must not turn an unrelated native/media packet into a trigger command.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, true)]
     [DataRow(1, false)]
     [DataRow(2, true)]
@@ -362,7 +362,7 @@ public class DualSenseDsxOverlayTests
             "Replacing a native effect must not restart the opposite trigger's held effect.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     [DataRow(13)]
@@ -417,7 +417,7 @@ public class DualSenseDsxOverlayTests
         Assert.AreEqual(0, snapshot.DsxOverlay.Fields);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, true)]
     [DataRow(1, false)]
     [DataRow(2, true)]
@@ -445,7 +445,7 @@ public class DualSenseDsxOverlayTests
         Assert.AreEqual((byte)0, report[offset + 1]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     [DataRow(13)]
@@ -543,7 +543,7 @@ public class DualSenseDsxOverlayTests
         Assert.AreEqual(0, mailbox.ReadLatest().DsxReleaseFields);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     [DataRow(13)]
@@ -569,7 +569,7 @@ public class DualSenseDsxOverlayTests
         Assert.AreSame(successor, mailbox.ReadLatest().DsxOverlay.Owner);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, false, false, false, 0)]
     [DataRow(true, true, true, false, 1)]
     [DataRow(false, false, true, false, 0)]
@@ -626,7 +626,7 @@ public class DualSenseDsxOverlayTests
             "After the native barrier, refresh only the released fields; never replay stale A or unrelated newer local fields.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void OrderedReleaseCannotRestartOrReplaceANewerDsxEffect(bool successorSession)
@@ -657,7 +657,7 @@ public class DualSenseDsxOverlayTests
         Assert.AreEqual(Effect(0x25, 55), mailbox.ReadLatest().DsxOverlay.Left.Value);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void OrderedReleaseCannotOverwriteALateTriggerLabOwner(bool left)
@@ -685,7 +685,7 @@ public class DualSenseDsxOverlayTests
         Assert.AreEqual(before[14], staleReset[14], "Trigger release cannot mutate unrelated visual/audio flags.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)] // New DSX visual owner.
     [DataRow(1)] // Latest native visual owner.
     [DataRow(2)] // Latest profile visual/mic override.
@@ -721,7 +721,7 @@ public class DualSenseDsxOverlayTests
         CollectionAssert.AreEqual(expected, report);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x0C, 1, 0x04)]
     [DataRow(0x0C, 2, 0x08)]
     [DataRow(0x0C, 3, 0x00)]
@@ -737,7 +737,7 @@ public class DualSenseDsxOverlayTests
             "A completed native restoration must not be overwritten or repeated by the following local-trigger lane.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, true)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -763,7 +763,7 @@ public class DualSenseDsxOverlayTests
             "The boundary skips a currently owned side; its still-current local generation must not be acknowledged without publication.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("tl_effect", 0)]
     [DataRow("tl_effect", 1)]
     [DataRow("tl_presence", 0)]

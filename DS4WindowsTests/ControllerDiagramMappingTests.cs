@@ -43,7 +43,7 @@ public sealed class ControllerDiagramMappingTests
             "private void ConfigureDualSenseDiagram()"), "switch2CConBtn.Visibility = Visibility.Collapsed");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(3, DS4Controls.PS, "Capture")]
     [DataRow(1, DS4Controls.Capture, "Capture")]
     [DataRow(4, DS4Controls.PS, "Home")]
@@ -104,7 +104,7 @@ public sealed class ControllerDiagramMappingTests
             "private void ConfigureDualSenseDiagram()"), "controllerDiagramControlNames.Clear()");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(DS4Controls.Switch2C)]
     [DataRow(DS4Controls.Capture)]
     [DataRow(DS4Controls.TouchLeft)]

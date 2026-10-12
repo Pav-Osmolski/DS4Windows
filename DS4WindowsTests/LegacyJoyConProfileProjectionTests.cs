@@ -47,7 +47,7 @@ public sealed class LegacyJoyConProfileProjectionTests
         Assert.AreNotSame(right.Motion, output.Motion);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void SidewaysUsesRailShouldersRotatesStickAndPreservesOuterButtonAliases(bool leftSide)
@@ -101,7 +101,7 @@ public sealed class LegacyJoyConProfileProjectionTests
         Assert.AreEqual(1.0, output.Motion.accelYG, 0.0001);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2DualGyroActivationMode.Hold)]
     [DataRow(Switch2DualGyroActivationMode.Toggle)]
     public void EachPhysicalPauseButtonAffectsItsOwnHand(Switch2DualGyroActivationMode activation)
@@ -230,7 +230,7 @@ public sealed class LegacyJoyConProfileProjectionTests
         Assert.AreEqual(previous + 20_000, output.totalMicroSec);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]

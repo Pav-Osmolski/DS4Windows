@@ -32,7 +32,7 @@ public class DualSenseBluetoothNativeCadenceTests
             "One native command per media frame accumulates ten commands per 1.6 seconds at only 100 Hz.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, 0, 5_000L, true)]
     [DataRow(true, false, 0, 5_000L, false)]
     [DataRow(true, false, 0, 10_000L, true)]
@@ -81,7 +81,7 @@ public class DualSenseBluetoothNativeCadenceTests
         Assert.IsTrue(due, "Already-due media has priority even when new control work is signaled.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, 0, false)]
     [DataRow(0, 0, false)]
     [DataRow(0, 2, true)]
@@ -105,7 +105,7 @@ public class DualSenseBluetoothNativeCadenceTests
         Assert.AreEqual(eligible, arguments[0] != null);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(200, 9, 6, true)]
     [DataRow(200, 10, 10, true)]
     [DataRow(200, 12, 10, true)]
@@ -197,7 +197,7 @@ public class DualSenseBluetoothNativeCadenceTests
         Assert.AreEqual((32, 0, 0, 0L), fixture.NativeOwnershipSnapshot());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(100, 320)]
     [DataRow(200, 120)]
     public void ActualHelperPacedNativeSourceDoesNotAccumulateAMediaRateBacklog(int sourceHz, int commands)

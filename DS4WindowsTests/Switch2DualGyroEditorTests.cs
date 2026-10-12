@@ -14,7 +14,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class Switch2DualGyroEditorTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, 0)]
     [DataRow(0, 1)]
     [DataRow(1, 0)]

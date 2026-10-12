@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class Switch2RumbleMaintenancePacingTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(12)]
     [DataRow(15)]
     public void PreWriteContentionRecoversAfterOneMillisecondNotAnotherFullPeriod(int interval)
@@ -23,7 +23,7 @@ public sealed class Switch2RumbleMaintenancePacingTests
         finally { worker.Stop(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(12)]
     [DataRow(15)]
     public void PersistentContentionBacksOffAfterThreeFastRetries(int interval)
@@ -42,7 +42,7 @@ public sealed class Switch2RumbleMaintenancePacingTests
         finally { worker.Stop(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(12)]
     [DataRow(15)]
     public void AttemptedOrUncertainWriteRetainsFullRetryDelayAfterCompletion(int interval)
@@ -116,7 +116,7 @@ public sealed class Switch2RumbleMaintenancePacingTests
         Assert.AreEqual(2, writer.Calls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(12)]
     [DataRow(15)]
     public void PhysicalSustainUsesLastSuccessfulWriteStartAndNeverCatchesUp(int interval)
@@ -144,7 +144,7 @@ public sealed class Switch2RumbleMaintenancePacingTests
         Assert.AreEqual(clock + (ulong)interval * 1000, sink.NextMaintenanceDueMicroseconds);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(12)]
     [DataRow(15)]
     public void FastContentionRecoveryCannotRepeatAnotherPublishersNewWriteEarly(int interval)
@@ -179,7 +179,7 @@ public sealed class Switch2RumbleMaintenancePacingTests
         finally { worker.Stop(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedOrBackwardClockRecoversAfterAConservativeFullInterval(bool backward)
@@ -224,7 +224,7 @@ public sealed class Switch2RumbleMaintenancePacingTests
         Assert.AreEqual(3, writer.Calls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(12)]
     [DataRow(15)]
     public void NewRichPcmAndImpulseUpdatesAndStopBypassTheSustainFloor(int interval)

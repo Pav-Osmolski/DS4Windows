@@ -7,7 +7,7 @@ namespace DS4Windows.Tests
     [TestClass]
     public class ViiperSetupManagerTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(null, true)]
         [DataRow("ViiperProcessConflict", false)]
         [DataRow("ViiperPackageCurrent", false)]
@@ -32,7 +32,7 @@ namespace DS4Windows.Tests
             Assert.IsFalse(ViiperRecovery.IsManagedRecoveryReady(null, target));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(null, true)]
         [DataRow("UsbipInstalled", false)]
         [DataRow("UsbipExecutableSafe", false)]
@@ -87,7 +87,7 @@ namespace DS4Windows.Tests
                 StringComparison.Ordinal));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(@"Lang\ar\DS4Windows.resources.dll", true)]
         [DataRow(@"lang\ja\ds4windows.resources.dll", true)]
         [DataRow(@"Lang\cs\Microsoft.VisualBasic.Forms.resources.dll", true)]
@@ -137,7 +137,7 @@ namespace DS4Windows.Tests
                 1, "Port 00: <Port in Use>"));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("error: ABI mismatch, unexpected size of the input structure")]
         [DataRow("ABI MISMATCH")]
         [DataRow("unexpected size of output structure")]
@@ -182,7 +182,7 @@ namespace DS4Windows.Tests
                 "An older same-version VIIPER binary must not survive a DS4Windows update.");
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true)]
         [DataRow(false)]
         public void FailedRunningBrokerProbeIsNotReportedAsMissingServerOrTaskRepair(
@@ -407,7 +407,7 @@ namespace DS4Windows.Tests
             StringAssert.Contains(status.DisplayText, "unsafe");
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false, null, null, false)]
         [DataRow(true, "Stopped", 4, false)]
         [DataRow(true, "Running", 4, true)]

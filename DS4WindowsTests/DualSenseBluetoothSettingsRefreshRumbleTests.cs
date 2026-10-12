@@ -14,7 +14,7 @@ public class DualSenseBluetoothSettingsRefreshRumbleTests
     private const BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
     private const string CapturedRefresh = "020C570000000000000000050000000000000000000005000000000000000000000000000000000000000000040000FF";
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ActualHelperProtectedRefreshPreservesAcceptedMotorTupleAndSingleTriggerLedUpdate(bool improved)
@@ -54,7 +54,7 @@ public class DualSenseBluetoothSettingsRefreshRumbleTests
         foreach (byte[] report in fixture.Native.Reports) AssertTuple(report, Zero(), "no accepted ON");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, 0, 43)]
     [DataRow(2, 0, 43)]
     [DataRow(2, 4, 0)]
@@ -69,7 +69,7 @@ public class DualSenseBluetoothSettingsRefreshRumbleTests
         AssertTuple(fixture.Native.Reports.Last(), Zero(), "inactive/unsupported tuple must not be protected");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -99,7 +99,7 @@ public class DualSenseBluetoothSettingsRefreshRumbleTests
     public void ActualHelperRejectsUnknownPolicyBeforeNativeAdmission()
     {
         using var fixture = new Fixture();
-        var error = Assert.ThrowsException<TargetInvocationException>(() =>
+        var error = Assert.ThrowsExactly<TargetInvocationException>(() =>
             fixture.ReceiveNativeCommand(Refresh(), (Policy)2));
         Assert.IsInstanceOfType(error.InnerException, typeof(InvalidDataException));
         Assert.AreEqual(0, fixture.NativeOwnershipSnapshot().Admissions);
@@ -112,13 +112,13 @@ public class DualSenseBluetoothSettingsRefreshRumbleTests
         using var fixture = new Fixture();
         object host = Host(fixture);
         byte[] oldPayload = new byte[DualSenseBluetoothAudioPacer.GameStateAndTemplatePayloadLength - 1];
-        var error = Assert.ThrowsException<TargetInvocationException>(() =>
+        var error = Assert.ThrowsExactly<TargetInvocationException>(() =>
             host.GetType().GetMethod("ReceiveGameStateAndTemplate", Private)!.Invoke(host, new object[] { oldPayload, oldPayload.Length }));
         Assert.IsInstanceOfType(error.InnerException, typeof(InvalidDataException));
         Assert.AreEqual(0, fixture.NativeOwnershipSnapshot().Admissions);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ActualHelperFreshPcmIncludingAuthoredZeroTakesOverProtectedRumbleOnThatCarrier(bool authoredZero)
@@ -242,7 +242,7 @@ public class DualSenseBluetoothSettingsRefreshRumbleTests
         AssertMedia(fixture, new[] { pcm }, 0);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]

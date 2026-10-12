@@ -10,7 +10,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class DS4DeviceAdministrativeReadCancellationTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, ConnectionType.USB)]
     [DataRow(false, ConnectionType.BT)]
     [DataRow(true, ConnectionType.USB)]
@@ -55,7 +55,7 @@ public sealed class DS4DeviceAdministrativeReadCancellationTests
             HidDevice.ReadStatus.ReadError, 995), "A new input lifetime must not inherit cancellation authority.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void Unexpected995AndNon995ErrorsRemainFailures(bool dualSense)
@@ -69,7 +69,7 @@ public sealed class DS4DeviceAdministrativeReadCancellationTests
             HidDevice.ReadStatus.ReadError, 995));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PrepareAbortSkipsCancellationOfAnActuallyRunningInputWorker(bool dualSense)
@@ -110,7 +110,7 @@ public sealed class DS4DeviceAdministrativeReadCancellationTests
             HidDevice.ReadStatus.ReadError, 995));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PublicStopCalledByItsInputWorkerDoesNotJoinItself(bool dualSense)
@@ -149,7 +149,7 @@ public sealed class DS4DeviceAdministrativeReadCancellationTests
         finally { Console.SetOut(previous); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(typeof(DS4Device))]
     [DataRow(typeof(DualSenseDevice))]
     public void ProductionStartOverrideCallsSharedLifetimeReset(Type type)

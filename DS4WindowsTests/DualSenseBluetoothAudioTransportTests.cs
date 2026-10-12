@@ -776,7 +776,7 @@ namespace DS4WindowsTests
                 report.Skip(79).Take(200).ToArray());
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false)]
         [DataRow(true)]
         public void CompactAudioReportsUseReferenceHeaderForEachMicrophoneMode(
@@ -1789,7 +1789,7 @@ namespace DS4WindowsTests
             }
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0, false, false)]
         [DataRow(8, false, false)]
         [DataRow(0, true, false)]
@@ -2748,7 +2748,7 @@ namespace DS4WindowsTests
             SetFieldValue(BluetoothAudioPacerField, device, null);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false)]
         [DataRow(true)]
         public void ExplicitLocalTriggerAfterNativeOutputReachesPacerWithoutReplayingOtherGameFields(bool speakerClock)
@@ -2925,7 +2925,7 @@ namespace DS4WindowsTests
                 "The rejected re-arm initialized a new combined transport.");
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true, true, false, true)]
         [DataRow(true, false, false, true)]
         [DataRow(false, false, true, false)]
@@ -3041,7 +3041,7 @@ namespace DS4WindowsTests
             Assert.AreEqual((byte)0, report[19]);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false, (byte)0xFE)]
         [DataRow(true, (byte)0xFF)]
         public void CombinedControlReportMatchesKnownGoodVdsLayout(

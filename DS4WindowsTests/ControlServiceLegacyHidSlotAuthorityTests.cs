@@ -35,7 +35,7 @@ public sealed class ControlServiceLegacyHidSlotAuthorityTests
         finally { device.ReadWaitEv.Dispose(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RetirementPresentationWaitsForProfileActionAndQuarantinesPartialFailure(bool throws)

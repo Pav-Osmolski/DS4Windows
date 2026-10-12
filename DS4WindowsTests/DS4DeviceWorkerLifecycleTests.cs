@@ -496,31 +496,31 @@ public sealed class DS4DeviceWorkerLifecycleTests
     [TestMethod]
     public void ResultShapeRejectsFalseCertainty()
     {
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             DS4DeviceWorkerLifecycleResult.Reject(
                 DS4DeviceWorkerLifecycleOperation.Stop,
                 DS4DeviceWorkerLifecycleFailureKind.StopTimedOut));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             DS4DeviceWorkerLifecycleResult.Uncertain(
                 DS4DeviceWorkerLifecycleOperation.Start,
                 DS4DeviceWorkerLifecycleFailureKind.StartRejected));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             DS4DeviceWorkerLifecycleResult.Uncertain(
                 DS4DeviceWorkerLifecycleOperation.Stop,
                 DS4DeviceWorkerLifecycleFailureKind.PartialStart));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             DS4DeviceWorkerLifecycleResult.Uncertain(
                 DS4DeviceWorkerLifecycleOperation.Start,
                 DS4DeviceWorkerLifecycleFailureKind.StopTimedOut));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             DS4DeviceWorkerLifecycleResult.Reject(
                 DS4DeviceWorkerLifecycleOperation.Stop,
                 DS4DeviceWorkerLifecycleFailureKind.GenerationExhausted));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             DS4DeviceWorkerLifecycleResult.Reject(
                 DS4DeviceWorkerLifecycleOperation.Start,
                 DS4DeviceWorkerLifecycleFailureKind.StaleCredential));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             DS4DeviceWorkerLifecycleResult.Reject(
                 DS4DeviceWorkerLifecycleOperation.Start,
                 DS4DeviceWorkerLifecycleFailureKind.ConcurrentInterference));

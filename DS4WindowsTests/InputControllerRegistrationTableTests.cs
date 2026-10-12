@@ -723,7 +723,7 @@ public class InputControllerRegistrationTableTests
         Assert.IsFalse(TypeReferences(typeof(DS4Devices), tableType));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RetirementAndCloseWaitForAnAlreadyAdmittedAction(bool close)
@@ -753,7 +753,7 @@ public class InputControllerRegistrationTableTests
         CompleteRetirement(table, claim, fixture.Device);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PausedActionReleasesBeforeConcurrentPendingTerminalEvenOnException(bool throws)
@@ -795,7 +795,7 @@ public class InputControllerRegistrationTableTests
             }
         });
         if (throws)
-            Assert.ThrowsException<InvalidOperationException>(Run);
+            Assert.ThrowsExactly<InvalidOperationException>(Run);
         else
             Run();
         Assert.IsTrue(acknowledged, "The terminal must be admitted after the action's finally.");

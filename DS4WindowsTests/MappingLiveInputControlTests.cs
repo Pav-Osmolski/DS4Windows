@@ -8,7 +8,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class MappingLiveInputControlTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, false, false)]
     [DataRow(false, true, true, false)]
     [DataRow(true, false, true, false)]

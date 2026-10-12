@@ -77,7 +77,7 @@ public sealed class Switch2ProductionInputMatrixTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DynamicData(nameof(Routes), DynamicDataSourceType.Method)]
     public void DecodedRegisteredButtonsAndTerminalNeutralEncodeForEveryTarget(int source, ViiperVirtualDeviceType target)
     {
@@ -128,7 +128,7 @@ public sealed class Switch2ProductionInputMatrixTests
         foreach (var item in extras) yield return new object[] { item.Source, item.Control, item.Left, item.Right };
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DynamicData(nameof(Routes), DynamicDataSourceType.Method)]
     public void RawStickPrecisionOrientationAndUnusedAxesSurviveMapping(int source, ViiperVirtualDeviceType target)
     {
@@ -191,7 +191,7 @@ public sealed class Switch2ProductionInputMatrixTests
 
     private static int Round(double value) => (int)Math.Round(value, MidpointRounding.AwayFromZero);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(2)]
     [DataRow(3)]
     [DataRow(4)]
@@ -213,7 +213,7 @@ public sealed class Switch2ProductionInputMatrixTests
         Assert.AreEqual(0, fixture.SystemInputCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DynamicData(nameof(ExtraRoutes), DynamicDataSourceType.Method)]
     public void ExtraButtonBindingDoesNotLeakUnmappedNativeButton(int source, DS4Controls control, uint left, uint right)
     {

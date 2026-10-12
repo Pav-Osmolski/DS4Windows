@@ -9,7 +9,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class LegacyJoyConDualSenseFeedbackTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void CapturedControlCannotRenewStaleCompactRumbleOnEitherOriginalActuator(bool silentPcm)
@@ -25,7 +25,7 @@ public sealed class LegacyJoyConDualSenseFeedbackTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x03, 0x00)]
     [DataRow(0x02, 0x00)]
     [DataRow(0x00, 0x04)]
@@ -46,7 +46,7 @@ public sealed class LegacyJoyConDualSenseFeedbackTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x03, 0x00)]
     [DataRow(0x02, 0x00)]
     [DataRow(0x00, 0x04)]
@@ -69,7 +69,7 @@ public sealed class LegacyJoyConDualSenseFeedbackTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NewStreamOrLogicalPairCannotInheritCachedCompatibilitySelection(bool newPair)

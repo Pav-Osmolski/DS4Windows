@@ -8,7 +8,7 @@ public sealed class Switch2PcmCorrelationTests
 {
     public TestContext TestContext { get; set; }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ShortPeakIsNotReducedToSliceAverage(bool combined)
@@ -51,7 +51,7 @@ public sealed class Switch2PcmCorrelationTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]

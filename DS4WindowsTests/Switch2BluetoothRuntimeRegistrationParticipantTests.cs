@@ -351,7 +351,7 @@ public sealed class Switch2BluetoothRuntimeRegistrationParticipantTests
         Assert.IsTrue(table.TryRollback(rollback, out _));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void ThrowingOrMalformedAdoptionIsUncertainAndNeverOwned(bool throws)

@@ -13,7 +13,7 @@ public class ViiperManagedRepairTests
     private static readonly byte[] Previous = { 9, 8, 7, 6 };
     private static string Hash => Convert.ToHexString(SHA256.HashData(Release));
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task VerifiedBrokerIsReplacedOrCreatedWithoutTouchingOtherFiles(bool existing)
@@ -58,7 +58,7 @@ public class ViiperManagedRepairTests
         await ViiperManagedRepair.RepairCoreAsync(fixture.Payload, target, Hash, true, _ => { });
         CollectionAssert.AreEqual(Release, File.ReadAllBytes(target));
         string absent = Path.Combine(fixture.Root, "absent-install", "VIIPER", "viiper.exe");
-        await Assert.ThrowsExceptionAsync<System.ComponentModel.Win32Exception>(() =>
+        await Assert.ThrowsExactlyAsync<System.ComponentModel.Win32Exception>(() =>
             ViiperManagedRepair.RepairCoreAsync(fixture.Payload, absent, Hash, true, _ => Assert.Fail()));
         Assert.IsFalse(Directory.Exists(Path.Combine(fixture.Root, "absent-install")));
     }
@@ -67,7 +67,7 @@ public class ViiperManagedRepairTests
     public async Task NonAdministratorIsRejectedBeforeMutationOrProcessStop()
     {
         using var fixture = new Fixture();
-        await Assert.ThrowsExceptionAsync<UnauthorizedAccessException>(() =>
+        await Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
             ViiperManagedRepair.RepairCoreAsync(fixture.Payload, fixture.Target, Hash, false, _ => Assert.Fail()));
         fixture.AssertOriginalDirectory();
     }
@@ -78,7 +78,7 @@ public class ViiperManagedRepairTests
         using var fixture = new Fixture();
         File.WriteAllBytes(fixture.Target, Previous);
         File.WriteAllText(fixture.Payload, "untrusted bytes");
-        await Assert.ThrowsExceptionAsync<InvalidDataException>(() => fixture.Repair(_ => Assert.Fail()));
+        await Assert.ThrowsExactlyAsync<InvalidDataException>(() => fixture.Repair(_ => Assert.Fail()));
         CollectionAssert.AreEqual(Previous, File.ReadAllBytes(fixture.Target));
         fixture.AssertNoTemporaryFiles();
         Assert.IsFalse(File.Exists(Path.Combine(fixture.Directory, ".viiper-managed-repair.lock")));
@@ -90,7 +90,7 @@ public class ViiperManagedRepairTests
         using var fixture = new Fixture();
         using var cancel = new CancellationTokenSource();
         cancel.Cancel();
-        await Assert.ThrowsExceptionAsync<OperationCanceledException>(() => fixture.Repair(_ => Assert.Fail(), cancel.Token));
+        await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => fixture.Repair(_ => Assert.Fail(), cancel.Token));
         fixture.AssertOriginalDirectory();
     }
 
@@ -101,7 +101,7 @@ public class ViiperManagedRepairTests
         File.WriteAllBytes(fixture.Target, Previous);
         using var cancel = new CancellationTokenSource();
         int stops = 0;
-        await Assert.ThrowsExceptionAsync<OperationCanceledException>(() => fixture.Repair(_ =>
+        await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => fixture.Repair(_ =>
         { stops++; cancel.Cancel(); }, cancel.Token, new Committer { Forbid = true }));
         Assert.AreEqual(1, stops);
         CollectionAssert.AreEqual(Previous, File.ReadAllBytes(fixture.Target));
@@ -113,7 +113,7 @@ public class ViiperManagedRepairTests
     {
         using var fixture = new Fixture();
         File.WriteAllBytes(fixture.Target, Previous);
-        await Assert.ThrowsExceptionAsync<IOException>(() => fixture.Repair(_ => throw new IOException("changed process identity")));
+        await Assert.ThrowsExactlyAsync<IOException>(() => fixture.Repair(_ => throw new IOException("changed process identity")));
         CollectionAssert.AreEqual(Previous, File.ReadAllBytes(fixture.Target));
         fixture.AssertNoTemporaryFiles();
     }
@@ -123,12 +123,12 @@ public class ViiperManagedRepairTests
     {
         using var fixture = new Fixture();
         File.WriteAllBytes(fixture.Target, Previous);
-        await Assert.ThrowsExceptionAsync<IOException>(() => fixture.Repair(_ => File.WriteAllText(fixture.Target, "new owner")));
+        await Assert.ThrowsExactlyAsync<IOException>(() => fixture.Repair(_ => File.WriteAllText(fixture.Target, "new owner")));
         Assert.AreEqual("new owner", File.ReadAllText(fixture.Target));
         fixture.AssertNoTemporaryFiles();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task CommitFailureBeforeOrAfterAtomicReplacementRestoresOriginal(bool after)
@@ -136,7 +136,7 @@ public class ViiperManagedRepairTests
         using var fixture = new Fixture();
         File.WriteAllBytes(fixture.Target, Previous);
         var files = new Committer { FailFirst = true, FailAfter = after };
-        await Assert.ThrowsExceptionAsync<IOException>(() => fixture.Repair(_ => { }, files: files));
+        await Assert.ThrowsExactlyAsync<IOException>(() => fixture.Repair(_ => { }, files: files));
         CollectionAssert.AreEqual(Previous, File.ReadAllBytes(fixture.Target));
         fixture.AssertNoTemporaryFiles();
         fixture.AssertUnrelatedUntouched();
@@ -146,7 +146,7 @@ public class ViiperManagedRepairTests
     public async Task FailedNewFileCommitRollsBackOnlyItsOwnExpectedImage()
     {
         using var fixture = new Fixture();
-        await Assert.ThrowsExceptionAsync<IOException>(() => fixture.Repair(_ => { },
+        await Assert.ThrowsExactlyAsync<IOException>(() => fixture.Repair(_ => { },
             files: new Committer { FailFirst = true, FailAfter = true }));
         Assert.IsFalse(File.Exists(fixture.Target));
         fixture.AssertNoTemporaryFiles();
@@ -157,7 +157,7 @@ public class ViiperManagedRepairTests
     {
         using var fixture = new Fixture();
         File.WriteAllBytes(fixture.Target, Previous);
-        await Assert.ThrowsExceptionAsync<IOException>(() => fixture.Repair(_ => { }, files:
+        await Assert.ThrowsExactlyAsync<IOException>(() => fixture.Repair(_ => { }, files:
             new Committer { FailFirst = true, FailAfter = true, AlterDestination = true }));
         Assert.AreEqual("unexpected replacement", File.ReadAllText(fixture.Target));
         string[] backups = System.IO.Directory.GetFiles(fixture.Directory, "*.bak");
@@ -172,7 +172,7 @@ public class ViiperManagedRepairTests
         using var fixture = new Fixture();
         File.WriteAllBytes(fixture.Target, Previous);
         using var pin = File.Open(fixture.Target, FileMode.Open, FileAccess.Read, FileShare.Read);
-        await Assert.ThrowsExceptionAsync<IOException>(() => fixture.Repair(_ => { }));
+        await Assert.ThrowsExactlyAsync<IOException>(() => fixture.Repair(_ => { }));
         CollectionAssert.AreEqual(Previous, File.ReadAllBytes(fixture.Target));
         fixture.AssertNoTemporaryFiles();
     }
@@ -183,7 +183,7 @@ public class ViiperManagedRepairTests
         using var fixture = new Fixture();
         using var pin = File.Open(Path.Combine(fixture.Directory, ".viiper-managed-repair.lock"),
             FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
-        await Assert.ThrowsExceptionAsync<IOException>(() => fixture.Repair(_ => Assert.Fail()));
+        await Assert.ThrowsExactlyAsync<IOException>(() => fixture.Repair(_ => Assert.Fail()));
         Assert.IsFalse(File.Exists(fixture.Target));
         fixture.AssertNoTemporaryFiles();
     }
@@ -232,7 +232,7 @@ public class ViiperManagedRepairTests
         fixture.AssertNoTemporaryFiles();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("newcomer")]
     [DataRow("reused-pid")]
     [DataRow("changed-image")]
@@ -251,7 +251,7 @@ public class ViiperManagedRepairTests
             _ => new[] { original with { ExecutablePath = null } }
         };
         var host = new FakeProcessHost(current);
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() =>
             ViiperManagedRepair.RepairCapturedCoreAsync(fixture.Payload, fixture.Target, Hash, true, captured, processHost: host));
         Assert.AreEqual(0, host.Stopped.Count);
         CollectionAssert.AreEqual(Previous, File.ReadAllBytes(fixture.Target));
@@ -279,7 +279,7 @@ public class ViiperManagedRepairTests
         {
             AfterStop = peers => peers.Add(new(501, 5001, Path.Combine(fixture.Root, "new", "viiper.exe")))
         };
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() =>
             ViiperManagedRepair.RepairCapturedCoreAsync(fixture.Payload, fixture.Target, Hash, true, captured, processHost: host));
         CollectionAssert.AreEqual(new[] { 500 }, host.Stopped.ToArray());
         CollectionAssert.AreEqual(Previous, File.ReadAllBytes(fixture.Target));
@@ -295,12 +295,12 @@ public class ViiperManagedRepairTests
         PortableBrokerProcessIdentity[] decoded = ViiperManagedRepair.DecodeSnapshot(encoded);
         Assert.AreEqual(new PortableBrokerProcessIdentity(600, 6000, @"C:\Other folder\viiper.exe"), decoded.Single());
         Assert.AreEqual(0, ViiperManagedRepair.DecodeSnapshot(ViiperManagedRepair.EncodeSnapshot(Array.Empty<PortableBrokerProcessIdentity>())).Length);
-        Assert.ThrowsException<InvalidDataException>(() => ViiperManagedRepair.EncodeSnapshot(new[] { decoded[0], decoded[0] }));
-        Assert.ThrowsException<InvalidDataException>(() => ViiperManagedRepair.EncodeSnapshot(Enumerable.Repeat(decoded[0], 257).ToArray()));
-        Assert.ThrowsException<InvalidDataException>(() => ViiperManagedRepair.DecodeSnapshot(new string('A', 30_000)));
+        Assert.ThrowsExactly<InvalidDataException>(() => ViiperManagedRepair.EncodeSnapshot(new[] { decoded[0], decoded[0] }));
+        Assert.ThrowsExactly<InvalidDataException>(() => ViiperManagedRepair.EncodeSnapshot(Enumerable.Repeat(decoded[0], 257).ToArray()));
+        Assert.ThrowsExactly<InvalidDataException>(() => ViiperManagedRepair.DecodeSnapshot(new string('A', 30_000)));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("{}")]
     [DataRow("[null]")]
     [DataRow("[{\"ProcessId\":1}]")]
@@ -312,7 +312,7 @@ public class ViiperManagedRepairTests
     [DataRow("[{\"ProcessId\":1,\"StartTimeUtcTicks\":1,\"ExecutablePath\":\"C:\\\\x\\\\viiper.exe\",\"Other\":true}]")]
     public void MalformedCrossElevationIdentityCannotBecomeStopAuthority(string json)
     {
-        Assert.ThrowsException<InvalidDataException>(() => ViiperManagedRepair.DecodeSnapshot(Convert.ToBase64String(Encoding.UTF8.GetBytes(json))));
+        Assert.ThrowsExactly<InvalidDataException>(() => ViiperManagedRepair.DecodeSnapshot(Convert.ToBase64String(Encoding.UTF8.GetBytes(json))));
     }
 
     private sealed class FakeProcessHost(IEnumerable<PortableBrokerProcessIdentity> initial) : IPortableBrokerProcessHost

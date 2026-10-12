@@ -9,7 +9,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class LegacyJoyConTerminalNeutralTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -87,7 +87,7 @@ public sealed class LegacyJoyConTerminalNeutralTests
         owner.Group = new LegacyJoyConGroup(owner, null, 0, new Projection());
         var native = new RecordingPad();
         var companion = new RecordingPad();
-        Assert.ThrowsException<InvalidOperationException>(() => LegacyJoyConTerminalNeutral.TryRelease(
+        Assert.ThrowsExactly<InvalidOperationException>(() => LegacyJoyConTerminalNeutral.TryRelease(
             owner, owner.Group, new DS4Device[] { device }, native, companion,
             () => throw new InvalidOperationException("Injected mapper failure")));
         Assert.AreEqual(1, native.Resets);
@@ -106,7 +106,7 @@ public sealed class LegacyJoyConTerminalNeutralTests
         Assert.IsFalse(right.Paused);
         var newLeft = links.Register(new FakeDevice(InputDeviceType.JoyConL), 0);
         links.TryLink(right, newLeft, (_, _) => { }, out _);
-        Assert.ThrowsException<InvalidOperationException>(() => links.Remove(newLeft.Device,
+        Assert.ThrowsExactly<InvalidOperationException>(() => links.Remove(newLeft.Device,
             _ => throw new InvalidOperationException("Injected neutral callback failure")));
         Assert.IsFalse(right.Paused);
         Assert.IsTrue(right.Group.Active);

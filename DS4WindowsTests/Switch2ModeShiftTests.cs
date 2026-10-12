@@ -11,7 +11,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class Switch2ModeShiftTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, Switch2IrActivationThreshold.Balanced, 4_999, 1_499)]
     [DataRow(true, Switch2IrActivationThreshold.Balanced, 4_999, 1_499)]
     [DataRow(false, Switch2IrActivationThreshold.Relaxed, 9_999, 2_999)]
@@ -67,7 +67,7 @@ public sealed class Switch2ModeShiftTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]

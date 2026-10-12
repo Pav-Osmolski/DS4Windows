@@ -205,7 +205,7 @@ public sealed class TemporaryProfileIntentTests
         fixture.WaitIdle();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NonAutomaticProfileActionsRetainTheirExistingUnloadPolicy(bool explicitUnload)

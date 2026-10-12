@@ -11,7 +11,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class Ds3FeedbackBacklogAuditTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ConnectionType.USB)]
     [DataRow(ConnectionType.BT)]
     public void FloodReachesTheNewestMotorStateOnTheNextComposition(ConnectionType transport)
@@ -26,7 +26,7 @@ public sealed class Ds3FeedbackBacklogAuditTests
         Assert.AreEqual((byte)191, report[8], "No old motor-state FIFO must drain first.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ConnectionType.USB)]
     [DataRow(ConnectionType.BT)]
     public void FinalZeroSupersedesAFloodWithoutReplayingOldStates(ConnectionType transport)
@@ -46,7 +46,7 @@ public sealed class Ds3FeedbackBacklogAuditTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ConnectionType.USB)]
     [DataRow(ConnectionType.BT)]
     public void UnconsumedShortPulseIsCoalescedToItsFinalStop(ConnectionType transport)
@@ -64,7 +64,7 @@ public sealed class Ds3FeedbackBacklogAuditTests
         // already preserves commands it never presented to the writer.
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ConnectionType.USB)]
     [DataRow(ConnectionType.BT)]
     public void FailedFinalNeutralIsRetriedWithoutANewRumblePublication(ConnectionType transport)
@@ -89,7 +89,7 @@ public sealed class Ds3FeedbackBacklogAuditTests
         Assert.AreEqual(3, writes.Count, "Once accepted, an unchanged stop must not be replayed.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ConnectionType.USB)]
     [DataRow(ConnectionType.BT)]
     public void NewestStopSupersedesAnUnacceptedActiveState(ConnectionType transport)

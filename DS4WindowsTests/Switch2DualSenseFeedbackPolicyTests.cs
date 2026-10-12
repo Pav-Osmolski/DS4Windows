@@ -14,7 +14,7 @@ public sealed class Switch2DualSenseFeedbackPolicyTests
 {
     private const int HapticsOffset = 76;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void CapturedHadesControlCannotRenewStaleCompactMotor(bool withSilentPcm)
@@ -38,7 +38,7 @@ public sealed class Switch2DualSenseFeedbackPolicyTests
         finally { Assert.IsTrue(session.TryRetire()); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x03, 0x00)]
     [DataRow(0x02, 0x00)]
     [DataRow(0x02, 0x04)]
@@ -102,7 +102,7 @@ public sealed class Switch2DualSenseFeedbackPolicyTests
         Assert.AreEqual(Switch2HdRumbleFeedbackFidelity.DualSenseAdaptiveTriggerApproximation, fidelity);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x03, 0x00)]
     [DataRow(0x02, 0x00)]
     [DataRow(0x02, 0x04)]
@@ -184,7 +184,7 @@ public sealed class Switch2DualSenseFeedbackPolicyTests
             false, false, 100, false, 10, 0, 7, streamGeneration: 11,
             freshNativeOutput: fresh);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -322,7 +322,7 @@ public sealed class Switch2DualSenseFeedbackPolicyTests
         finally { Assert.IsTrue(session.TryRetire()); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NewerSameSessionNeutralEvenFailedDeliveryRevokesCachedRefresh(bool failure)
@@ -344,7 +344,7 @@ public sealed class Switch2DualSenseFeedbackPolicyTests
         Assert.IsTrue(session.TryRetire());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(9_999)]
     public void FailedClockRetainsOnlyCleanupAuthorityForImmediateDisable(int delay)
@@ -395,7 +395,7 @@ public sealed class Switch2DualSenseFeedbackPolicyTests
         Assert.IsTrue(session.TryRetire());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedAdmittedSourceRetainsCleanupButNeverReplay(bool changePolicy)
@@ -422,7 +422,7 @@ public sealed class Switch2DualSenseFeedbackPolicyTests
         Assert.IsTrue(session.TryRetire());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedAdmittedRefreshRetainsNewCleanupAuthorityForMasterDisable(bool disableMaster)
@@ -607,7 +607,7 @@ public sealed class Switch2DualSenseFeedbackPolicyTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FreshDelayedPolicyOrStreamSupersedesOlderQueuedGeneration(bool streamChange)

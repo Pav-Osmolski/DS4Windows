@@ -79,7 +79,7 @@ public sealed class ViiperTouchpadClickTests
         Mapping.r2TwoStageMappingData = previousRightStages;
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -89,7 +89,7 @@ public sealed class ViiperTouchpadClickTests
         AssertWireClick(new DS4State { TouchButton = physical, OutputTouchButton = mapped }, mapped);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(TouchpadOutMode.Controls, false)]
     [DataRow(TouchpadOutMode.Controls, true)]
     [DataRow(TouchpadOutMode.Mouse, false)]
@@ -111,7 +111,7 @@ public sealed class ViiperTouchpadClickTests
         AssertWireClick(Map(source), mode == TouchpadOutMode.Passthru || clickPassthrough);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(DS4Controls.TouchLeft, false)]
     [DataRow(DS4Controls.TouchLeft, true)]
     [DataRow(DS4Controls.TouchRight, false)]

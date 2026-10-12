@@ -599,7 +599,7 @@ namespace DS4WindowsTests
                 SelectMeasuredTransportAsyncReportFrameCount(1, flushTail: true));
             Assert.AreEqual(12, DualShock4AudioTransportSettings.
                 MeasuredTransportAsyncEncodedFrameQueueLimit);
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 DualShock4AudioTransportSettings.
                     SelectMeasuredTransportAsyncReportFrameCount(-1));
         }
@@ -620,7 +620,7 @@ namespace DS4WindowsTests
                 CanSubmitMeasuredTransportAsync(8));
             Assert.IsFalse(DualShock4AudioTransportSettings.
                 CanSubmitMeasuredTransportAsync(32));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 DualShock4AudioTransportSettings.CanSubmitMeasuredTransportAsync(-1));
         }
 
@@ -1059,7 +1059,7 @@ namespace DS4WindowsTests
                 CanSubmitFifoBufferedPrime(3));
             Assert.IsFalse(DualShock4AudioTransportSettings.
                 CanSubmitFifoBufferedPrime(4));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 DualShock4AudioTransportSettings.
                     CanSubmitFifoBufferedPrime(-1));
             Assert.IsFalse(DualShock4AudioTransportSettings.
@@ -1201,7 +1201,7 @@ namespace DS4WindowsTests
                 CanSubmitCreditBuffered(14));
             Assert.IsFalse(DualShock4AudioTransportSettings.
                 CanSubmitCreditBuffered(32));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 DualShock4AudioTransportSettings.
                     CanSubmitCreditBuffered(-1));
             Assert.IsFalse(DualShock4AudioTransportSettings.
@@ -1555,7 +1555,7 @@ namespace DS4WindowsTests
                 ReadUInt32(report, report.Length - sizeof(uint)));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(1, 0x12)]
         [DataRow(2, 0x14)]
         [DataRow(4, 0x17)]
@@ -2593,7 +2593,7 @@ namespace DS4WindowsTests
         {
             var queue = new DualShock4AudioSlotWorkQueue();
             var ownerGate = new object();
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 queue.EnqueueWhileHolding(ownerGate, () => { }));
             Task admitted;
             lock (ownerGate)
@@ -2956,7 +2956,7 @@ namespace DS4WindowsTests
                 "Unity ASRC must be bit-exact regardless of callback boundaries.");
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0.998)]
         [DataRow(1.002)]
         public void DualShock4FractionalDriftHasBoundedCountAndContinuity(

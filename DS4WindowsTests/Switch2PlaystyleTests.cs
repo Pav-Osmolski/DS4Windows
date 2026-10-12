@@ -29,7 +29,7 @@ public sealed class Switch2PlaystyleTests
         Assert.AreEqual(X360Controls.B, settings.GetSwitch2ModeShiftAction(vm.ModeShiftScope).Action.actionBtn);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, Mapping.SWITCH2_MODE_SHIFT_TRIGGER)]
     [DataRow(1, 1)]
     [DataRow(Mapping.SWITCH2_MODE_SHIFT_TRIGGER, Mapping.SWITCH2_MODE_SHIFT_TRIGGER)]
@@ -82,7 +82,7 @@ public sealed class Switch2PlaystyleTests
         });
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, GyroOutMode.Controls, 0.0, true)]
     [DataRow(false, GyroOutMode.Mouse, 1.0, true)]
     [DataRow(false, GyroOutMode.Controls, 1.0, false)]

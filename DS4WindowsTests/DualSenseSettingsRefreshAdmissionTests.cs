@@ -100,7 +100,7 @@ public sealed class DualSenseSettingsRefreshAdmissionTests
         Assert.AreEqual(Policy.Authoritative, Get<Policy>(device, "pendingBluetoothNativeGameRumblePolicy"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, false, false)]
     [DataRow(false, true, false)]
     [DataRow(false, false, true)]
@@ -139,7 +139,7 @@ public sealed class DualSenseSettingsRefreshAdmissionTests
             BindingFlags.Static | BindingFlags.NonPublic)!.GetRawConstantValue());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((byte)2)]
     [DataRow((byte)255)]
     public void UnknownParentPolicyFailsBeforeAllocatingNativeCredit(byte policy)

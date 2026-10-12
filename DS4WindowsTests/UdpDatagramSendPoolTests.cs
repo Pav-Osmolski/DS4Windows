@@ -191,7 +191,7 @@ public sealed class UdpDatagramSendPoolTests
         Assert.AreEqual(3, pool.DisposedEntryCount);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void StopRacingAnAdmittedBackendCannotDisposeItsArgsEarly(bool asynchronous)
@@ -315,9 +315,9 @@ public sealed class UdpDatagramSendPoolTests
         Assert.AreEqual(0, calls);
         Assert.IsTrue(pool.TrySend(new byte[2], Destination()));
         Assert.AreEqual(1, calls);
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => new UdpDatagramSendPool(0, 1, _ => false));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => new UdpDatagramSendPool(1, 0, _ => false));
-        Assert.ThrowsException<ArgumentNullException>(() => new UdpDatagramSendPool(1, 1, null));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new UdpDatagramSendPool(0, 1, _ => false));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new UdpDatagramSendPool(1, 0, _ => false));
+        Assert.ThrowsExactly<ArgumentNullException>(() => new UdpDatagramSendPool(1, 1, null));
     }
 
     [TestMethod]

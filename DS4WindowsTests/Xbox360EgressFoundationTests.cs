@@ -148,15 +148,15 @@ namespace DS4WindowsTests
         [TestMethod]
         public void StateRejectsReservedButtonsAndNonExactWireStorage()
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 State(buttons: 0x00000800));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 State(buttons: 0x00010000));
 
             Xbox360EgressState neutral = Xbox360EgressState.Neutral;
-            Assert.ThrowsException<ArgumentException>(() =>
+            Assert.ThrowsExactly<ArgumentException>(() =>
                 neutral.BuildInto(new byte[19]));
-            Assert.ThrowsException<ArgumentException>(() =>
+            Assert.ThrowsExactly<ArgumentException>(() =>
                 neutral.BuildInto(new byte[21]));
         }
 
@@ -385,7 +385,7 @@ namespace DS4WindowsTests
             Commit(scheduler, fresh, 41);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((byte)OrderedEgressCompletion.Commit)]
         [DataRow((byte)OrderedEgressCompletion.Defer)]
         public void PreFaultActiveClaimCannotDisplaceOrRetryPastNeutral(
@@ -677,7 +677,7 @@ namespace DS4WindowsTests
         {
             Assert.AreEqual(OrderedEgressAgePolicy.CompatibilityNoAgeLimit,
                 new Xbox360EgressScheduler(0).OrderedAgePolicy);
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 new Xbox360EgressScheduler(-1));
 
             Xbox360EgressScheduler scheduler = NewScheduler();

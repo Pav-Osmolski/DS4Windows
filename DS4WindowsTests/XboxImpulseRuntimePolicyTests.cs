@@ -8,7 +8,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class XboxImpulseRuntimePolicyTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -148,7 +148,7 @@ public sealed class XboxImpulseRuntimePolicyTests
 
     // Real production callback and cold profile wake, but unopened test HID
     // objects, cached identities, a manual clock, and no physical workers.
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x0CE6, ConnectionType.USB)]
     [DataRow(0x0CE6, ConnectionType.BT)]
     [DataRow(0x0DF2, ConnectionType.USB)]

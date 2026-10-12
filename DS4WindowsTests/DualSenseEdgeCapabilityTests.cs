@@ -9,7 +9,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class DualSenseEdgeCapabilityTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, 0x0113u, true)]
     [DataRow(true, 0x0200u, true)]
     [DataRow(true, 0x0217u, true)]
@@ -27,7 +27,7 @@ public class DualSenseEdgeCapabilityTests
                 DualSenseDevice.DeviceSubType.DualSense, firmware));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, 0x0113u, true)]
     [DataRow(true, 0x0217u, true)]
     [DataRow(false, 0x0223u, false)]

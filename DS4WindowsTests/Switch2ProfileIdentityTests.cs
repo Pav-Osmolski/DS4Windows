@@ -13,7 +13,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class Switch2ProfileIdentityTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(InputDeviceType.Switch2Pro, Switch2Transport.Usb, "S2-USB-PRO-")]
     [DataRow(InputDeviceType.Switch2Pro, Switch2Transport.BluetoothLe, "S2-BT-PRO-")]
     [DataRow(InputDeviceType.Switch2JoyConLeft, Switch2Transport.BluetoothLe, "S2-BT-L-")]
@@ -177,7 +177,7 @@ public sealed class Switch2ProfileIdentityTests
         Assert.IsNull(new LegacyIdentityDevice(DS4Device.BLANK_SERIAL).ProfileLinkId);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(InputDeviceType.Switch2JoyConJoined, null, false)]
     [DataRow(InputDeviceType.Switch2JoyConJoined, "Retained game", true)]
     [DataRow(InputDeviceType.Switch2JoyConJoined, "Different game", false)]

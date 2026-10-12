@@ -48,7 +48,7 @@ public class PortableStartupFallbackTests
         Assert.IsFalse(Directory.Exists(Path.Combine(root, "portable-data")));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("")]
     [DataRow("not a portable package")]
     public void InvalidMarkerCannotThrowAgainInsideStartupFailureHandling(string marker)

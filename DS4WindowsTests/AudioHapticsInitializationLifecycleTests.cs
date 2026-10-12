@@ -18,7 +18,7 @@ namespace DS4Windows.Tests;
 [DoNotParallelize]
 public sealed class AudioHapticsInitializationLifecycleTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void CaptureFailureBeforeStartClearsPublishedOwnerEvenWhenCleanupAlsoFails(bool cleanupThrows)
@@ -27,7 +27,7 @@ public sealed class AudioHapticsInitializationLifecycleTests
         f.Deliver(f.Capture);
         if (cleanupThrows) MakeCaptureDisposalFail(f.Capture);
         var original = new InvalidOperationException("endpoint vanished before StartRecording");
-        var invocation = Assert.ThrowsException<TargetInvocationException>(() =>
+        var invocation = Assert.ThrowsExactly<TargetInvocationException>(() =>
             f.Invoke("InitializeCapture", (Action)(() => throw original)));
         Assert.AreSame(original, invocation.InnerException,
             "A cleanup failure must not replace the actual initialization error.");
@@ -121,7 +121,7 @@ public sealed class AudioHapticsInitializationLifecycleTests
         Assert.AreSame(f.Capture, f.Get<object>("processCapture"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void TerminalFaultNeutralizesUncertainFirstBluetoothWriteButDoesNotTouchUnownedFeedback(bool attempted)
@@ -147,7 +147,7 @@ public sealed class AudioHapticsInitializationLifecycleTests
             // between local side effect and returned admission result.
             typeof(DualSenseDevice).GetField("physicalOutputStateMailbox",
                 BindingFlags.NonPublic | BindingFlags.Instance).SetValue(device, null);
-            Assert.ThrowsException<TargetInvocationException>(() =>
+            Assert.ThrowsExactly<TargetInvocationException>(() =>
                 f.Invoke("PublishStandaloneSonyFrame", true, 71));
             Assert.IsFalse(f.Get<bool>("standaloneHapticsActive"));
             Assert.IsTrue(f.Get<bool>("standaloneMayOwnBluetoothHaptics"));
@@ -160,7 +160,7 @@ public sealed class AudioHapticsInitializationLifecycleTests
             "An uncertain neutral keeps its reservation; a runtime that never published must not claim native feedback.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void TerminalOutputStopClearsUsbQueueWithoutMutatingTheInFlightFrame(bool writerFault)

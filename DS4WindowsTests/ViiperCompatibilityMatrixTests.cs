@@ -18,7 +18,7 @@ namespace DS4WindowsTests
             ViiperVirtualDeviceType.Switch2Pro,
         };
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(InputDeviceType.DS4)]
         [DataRow(InputDeviceType.DualSense)]
         [DataRow(InputDeviceType.SwitchPro)]
@@ -87,7 +87,7 @@ namespace DS4WindowsTests
             }
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(ViiperVirtualDeviceType.Xbox360, 20)]
         [DataRow(ViiperVirtualDeviceType.XboxOne, 24)]
         [DataRow(ViiperVirtualDeviceType.DualShock4, 31)]

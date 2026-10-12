@@ -17,7 +17,7 @@ public sealed class Switch2GyroActivationTests
         out int active, out int first, out ulong mask);
     private delegate bool IsActive(GyroOutMode mode, out int tuningIndex);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(GyroOutMode.Mouse, false, 32)]
     [DataRow(GyroOutMode.Mouse, true, 32)]
     [DataRow(GyroOutMode.MouseJoystick, false, 32)]
@@ -85,7 +85,7 @@ public sealed class Switch2GyroActivationTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(30)]
     [DataRow(31)]
     [DataRow(32)]
@@ -186,7 +186,7 @@ public sealed class Switch2GyroActivationTests
         Assert.AreEqual(0L, allocated);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]

@@ -65,7 +65,7 @@ public sealed class Switch2ProUsbOwnedFeedbackActivationLifetimeTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void UsbMaintenanceDoesNotStretchAStreamedSampleAfterItsProducerGoesQuiet(bool nativeSwitch2)
@@ -152,7 +152,7 @@ public sealed class Switch2ProUsbOwnedFeedbackActivationLifetimeTests
             composition.Feedback.TryNeutralizeAndQuiesce(composition.Authority, 100).Outcome);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void HeldUsbMaintenanceCannotMakeInputDrainOrQuiescenceWaitForItsWrite(bool withSession)
@@ -264,7 +264,7 @@ public sealed class Switch2ProUsbOwnedFeedbackActivationLifetimeTests
             composition.Feedback.TryNeutralizeAndQuiesce(composition.Authority, 100).Outcome);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ExpiredXboxFeedbackWithNewTuningConsumesOrderingWithoutActuation(bool previouslyActuated)
@@ -294,7 +294,7 @@ public sealed class Switch2ProUsbOwnedFeedbackActivationLifetimeTests
         finally { _ = session.TryRetire(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, 0)]
     [DataRow(true, 150)]
     [DataRow(false, 0)]
@@ -450,7 +450,7 @@ public sealed class Switch2ProUsbOwnedFeedbackActivationLifetimeTests
         finally { _ = session.TryRetire(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void LiveXboxPolicyDisablesOwnedUsbEffectWithoutBrokerSuccessor(bool disableAll)
@@ -479,7 +479,7 @@ public sealed class Switch2ProUsbOwnedFeedbackActivationLifetimeTests
     private static readonly Guid ContainerB =
         Guid.Parse("20A66A52-574E-4AF0-B484-8D82939DD511");
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(250, false)]
     [DataRow(9_999, false)]
     [DataRow(9_999, true)]
@@ -1634,7 +1634,7 @@ public sealed class Switch2ProUsbOwnedFeedbackActivationLifetimeTests
                 composition.Authority, 100).Outcome);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]

@@ -201,7 +201,7 @@ public sealed class OutputSlotAtomicBindingTests
         Assert.IsTrue(fixture.Manager.IsExactBoundOutput(fixture.Output, 1));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedReleaseKeepsPreviousBindingUnavailableForAdoption(bool failFeedbackWithdrawal)
@@ -215,7 +215,7 @@ public sealed class OutputSlotAtomicBindingTests
             fixture.Output.OnReset = () => throw new InvalidOperationException("Synthetic reset failure");
         try
         {
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 fixture.Manager.TryReleaseBoundOutput(fixture.Output, fixture.BoundOutputs, 0));
             Assert.AreSame(fixture.Output, fixture.BoundOutputs[0]);
             Assert.AreEqual("First", fixture.Candidate.InputDisplayString);

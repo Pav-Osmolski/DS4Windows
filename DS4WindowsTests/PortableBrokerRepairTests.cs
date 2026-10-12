@@ -53,7 +53,7 @@ public class PortableBrokerRepairTests
     private void AssertCleanStage() => Assert.AreEqual(0,
         Directory.EnumerateFiles(root, ".viiper-repair-*").Count());
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task MissingOrMismatchedBrokerIsRepairedInTheExistingFolderOnly(bool missing)
@@ -104,13 +104,13 @@ public class PortableBrokerRepairTests
     public async Task InvalidPayloadCannotReplaceOldImageAndLeaseIsReleased()
     {
         File.WriteAllText(payload, "wrong release");
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair());
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair());
         Assert.AreEqual("previous image", File.ReadAllText(destination));
         Assert.AreEqual(1, disposals);
         AssertCleanStage();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("missing")]
     [DataRow("invalid")]
     [DataRow("managed")]
@@ -118,7 +118,7 @@ public class PortableBrokerRepairTests
     {
         if (mode == "missing") File.Delete(Path.Combine(root, PortableBrokerContext.MarkerFileName));
         if (mode == "invalid") File.WriteAllText(Path.Combine(root, PortableBrokerContext.MarkerFileName), "not a package");
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair(
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair(
             managed: () => mode == "managed" ? new[] { root } : Array.Empty<string>()));
         Assert.AreEqual(0, acquisitions);
         Assert.AreEqual(0, host.Snapshots);
@@ -154,7 +154,7 @@ public class PortableBrokerRepairTests
         Assert.AreEqual(0, Directory.EnumerateFiles(longRoot, ".viiper-repair-*").Count());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("same-image")]
     [DataRow("unknown-image")]
     [DataRow("unknown-start")]
@@ -164,7 +164,7 @@ public class PortableBrokerRepairTests
         host.Peers.Add(new(41, mode == "unknown-start" ? 0 : 42,
             mode == "unknown-image" ? null : destination));
         host.SnapshotFailure = mode == "snapshot-failure";
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair());
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair());
         Assert.AreEqual(0, acquisitions);
         Assert.AreEqual(0, host.Stopped.Count);
         Assert.AreEqual("previous image", File.ReadAllText(destination));
@@ -185,7 +185,7 @@ public class PortableBrokerRepairTests
     {
         string previousDigest = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(destination)));
         using PortableBrokerContext context = PortableBrokerContext.Create(root, previousDigest, host, () => Array.Empty<string>());
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair());
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair());
         Assert.AreEqual(0, acquisitions);
         Assert.IsTrue(context.IsVerifiedBackend(destination));
         Assert.AreEqual("previous image", File.ReadAllText(destination));
@@ -196,7 +196,7 @@ public class PortableBrokerRepairTests
     [TestMethod]
     public async Task AFileChangedWhileAcquiringPayloadIsNotOverwritten()
     {
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair(async token =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair(async token =>
         {
             File.WriteAllText(destination, "someone else's replacement");
             return await Acquire(token);
@@ -209,7 +209,7 @@ public class PortableBrokerRepairTests
     [TestMethod]
     public async Task BrokerStartingWhilePayloadIsAcquiredBlocksCommit()
     {
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair(async token =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair(async token =>
         {
             host.Peers.Add(new(51, 52, destination));
             return await Acquire(token);
@@ -223,13 +223,13 @@ public class PortableBrokerRepairTests
     public async Task CancellationAndProviderFailuresLeaveOriginalAndReleaseTheMutex()
     {
         using var cancellation = new CancellationTokenSource();
-        await Assert.ThrowsExceptionAsync<OperationCanceledException>(() => Repair(token =>
+        await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => Repair(token =>
         {
             cancellation.Cancel();
             token.ThrowIfCancellationRequested();
             return Acquire(token);
         }, cancellation.Token));
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair(_ =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair(_ =>
             throw new IOException("injected offline failure")));
         Assert.AreEqual("previous image", File.ReadAllText(destination));
         Assert.IsTrue((await Repair()).Changed);
@@ -269,7 +269,7 @@ public class PortableBrokerRepairTests
         using var cancellation = new CancellationTokenSource();
         Task<PortableBrokerRepairResult> second = Repair(token: cancellation.Token);
         cancellation.Cancel();
-        await Assert.ThrowsExceptionAsync<TaskCanceledException>(() => second);
+        await Assert.ThrowsExactlyAsync<TaskCanceledException>(() => second);
         release.SetResult(true);
         await first.WaitAsync(TimeSpan.FromSeconds(5));
         Assert.AreEqual(1, acquisitions);
@@ -280,8 +280,8 @@ public class PortableBrokerRepairTests
     {
         await Repair(async token =>
         {
-            Assert.ThrowsException<IOException>(() => Directory.Move(root, root + "-moved"));
-            Assert.ThrowsException<IOException>(() => File.WriteAllText(
+            Assert.ThrowsExactly<IOException>(() => Directory.Move(root, root + "-moved"));
+            Assert.ThrowsExactly<IOException>(() => File.WriteAllText(
                 Path.Combine(root, PortableBrokerContext.MarkerFileName), "changed"));
             return await Acquire(token);
         });
@@ -289,13 +289,13 @@ public class PortableBrokerRepairTests
         Assert.IsFalse(Directory.Exists(root + "-moved"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task ReplacementFailureBeforeOrAfterAtomicSwapPreservesOriginal(bool afterSwap)
     {
         var files = new ThrowingCommitter { ThrowAfter = afterSwap };
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair(committer: files));
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair(committer: files));
         Assert.AreEqual("previous image", File.ReadAllText(destination));
         Assert.AreEqual(1, disposals);
         AssertCleanStage();
@@ -305,7 +305,7 @@ public class PortableBrokerRepairTests
     public async Task FailedMissingImageCommitRollsBackToMissing()
     {
         File.Delete(destination);
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair(
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair(
             committer: new ThrowingCommitter { ThrowAfter = true }));
         Assert.IsFalse(File.Exists(destination));
         AssertCleanStage();
@@ -314,7 +314,7 @@ public class PortableBrokerRepairTests
     [TestMethod]
     public async Task BlockedRollbackPreservesTheOriginalBackupForRecovery()
     {
-        PortableBrokerStartupException error = await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair(
+        PortableBrokerStartupException error = await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair(
             committer: new ThrowingCommitter { ThrowAfter = true, FailRollback = true }));
         StringAssert.Contains(error.Message, "rollback");
         string backup = Directory.EnumerateFiles(root, ".viiper-repair-*.bak").Single();
@@ -326,7 +326,7 @@ public class PortableBrokerRepairTests
     [TestMethod]
     public async Task DestinationMustPassPathInspectionBeforeAnyPayloadAcquisition()
     {
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() => Repair(inspect: path =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() => Repair(inspect: path =>
         {
             if (path == destination) throw new IOException("injected reparse point");
         }));

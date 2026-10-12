@@ -40,7 +40,7 @@ public sealed class Switch2RumbleMaintenanceTests
         finally { runtime.StopUpdate(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -209,7 +209,7 @@ public sealed class Switch2RumbleMaintenanceTests
         Assert.IsFalse(lifetime.RequiresRumbleMaintenance);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void BluetoothInputDrainAndRetirementNeverWaitForMaintenancePhysicalWrite(bool withVirtualSession)
@@ -250,7 +250,7 @@ public sealed class Switch2RumbleMaintenanceTests
         Assert.IsTrue(lifetime.TryStopAndRetire(3));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -392,7 +392,7 @@ public sealed class Switch2RumbleMaintenanceTests
         Assert.AreEqual(0L, allocated);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void HeldHeavyOrLightRumbleIsRePresentedWithoutChangingItsLease(bool heavy)
@@ -410,7 +410,7 @@ public sealed class Switch2RumbleMaintenanceTests
         Assert.AreEqual(2, writer.Calls, "Ordinary duplicate delivery remains idempotent.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NativeHeldGroupsKeepTheirExactThreeFramesAndIndependentSides(bool preview)
@@ -430,7 +430,7 @@ public sealed class Switch2RumbleMaintenanceTests
         Assert.AreEqual(first, writer.Last, "Native groups must not become the lossy canonical marker on refresh.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -535,7 +535,7 @@ public sealed class Switch2RumbleMaintenanceTests
         Assert.IsFalse(sink.NeedsSustainedRefresh);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void AdaptiveOverlayCannotMakeFinitePcmRepeatWhilePureAdaptiveStillSustains(bool withPcm)

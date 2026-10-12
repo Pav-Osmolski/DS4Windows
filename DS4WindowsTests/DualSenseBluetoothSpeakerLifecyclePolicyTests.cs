@@ -290,7 +290,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(106_773, slower);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(8, true, false)]
         [DataRow(8, false, true)]
         [DataRow(0, false, false)]
@@ -449,7 +449,7 @@ namespace DS4WindowsTests
             }
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false, true, false)]
         [DataRow(true, false, false)]
         [DataRow(true, true, true)]
@@ -560,7 +560,7 @@ namespace DS4WindowsTests
             }
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false, false, false, false)]
         [DataRow(true, false, false, true)]
         [DataRow(false, true, false, true)]

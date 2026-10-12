@@ -66,7 +66,7 @@ public class ProfileMutationBoundaryTests
         }, 5000), "Rejected ordinary requests must also drain before restoring fixture globals.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void QueuedReloadRetriesBusyActionAdmissionWithoutRetainingTheReportPause(bool superseded)
@@ -120,7 +120,7 @@ public class ProfileMutationBoundaryTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("guard")]
     [DataRow("revision")]
     [DataRow("source")]
@@ -382,7 +382,7 @@ public class ProfileMutationBoundaryTests
         Assert.IsTrue(Await(fixture.LoadNamed()).Applied);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("../Candidate")]
     [DataRow("..\\Candidate")]
     [DataRow("Candidate.")]
@@ -445,7 +445,7 @@ public class ProfileMutationBoundaryTests
         Assert.IsFalse(fixture.Table.GetSnapshot()[Slot].ActionActive);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedNamedPreparationDoesNotClaimRevisionOrChangeName(bool missing)
@@ -462,7 +462,7 @@ public class ProfileMutationBoundaryTests
         Assert.AreEqual(77, (int)fixture.Store.rumble[Slot]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NamedWorkerRechecksContextAndDoesNotOverrideTemporaryProfile(bool temporary)
@@ -619,7 +619,7 @@ public class ProfileMutationBoundaryTests
         Assert.IsTrue(PreparedProfileLoad.TryPrepare(fixture.Path, Slot, out var prepared, out _, out _));
         prepared.ApplyTo(new BackingStore());
         bool changed = true;
-        Assert.ThrowsException<InvalidOperationException>(() => fixture.Store.ApplyPreparedProfileNew(
+        Assert.ThrowsExactly<InvalidOperationException>(() => fixture.Store.ApplyPreparedProfileNew(
             prepared, false, fixture.Service, out changed));
         Assert.IsFalse(changed);
         Assert.AreEqual(77, (int)fixture.Store.rumble[Slot]);
@@ -764,7 +764,7 @@ public class ProfileMutationBoundaryTests
         Assert.AreEqual(77, (int)fixture.Store.rumble[Slot]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void AutoLoadRechecksSourceAndRevisionInsidePause(bool replaceSource)
@@ -816,7 +816,7 @@ public class ProfileMutationBoundaryTests
     {
         using var source = new FakeSource { UseBasePause = true };
         source.ReadWaitEv.Set();
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             source.TryHaltReportingRunAction(() =>
             {
                 Assert.IsFalse(source.FireReport);
@@ -828,7 +828,7 @@ public class ProfileMutationBoundaryTests
         Assert.IsFalse(source.FireReport, "Preserve an already-paused caller's state.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void DirectLoadWaitsForTheSameMutationBoundaryAsWorkerAndUi(bool temporary)
@@ -862,7 +862,7 @@ public class ProfileMutationBoundaryTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void SupersededDirectLoadDoesNotReachMissingFileReset(bool temporary)

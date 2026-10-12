@@ -11,7 +11,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
     private static readonly byte[] LocalHost =
         { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66 };
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -171,7 +171,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
             Switch2ControlServiceSlotHostResult.Success(Switch2ControlServiceSlotHostOperation.Remove);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task DefiniteDisconnectDrainsLocallyWithoutNewCccdWrites(bool duplex)
@@ -199,7 +199,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
         Assert.IsTrue(await adapter.EndScanAsync(1));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task RealDuplexLeaseAndRuntimeDrainDisconnectWithoutQuarantine(
@@ -272,7 +272,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
         Assert.IsTrue(await adapter.EndScanAsync(1));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task DisconnectProofDoesNotHideDisposeOrCallbackDrainFailure(bool callbackFailure)
@@ -1410,7 +1410,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
             device.Service.Characteristic.DisableCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -1567,7 +1567,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, true)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -1629,7 +1629,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
         Assert.IsTrue(device.Service.Disposed);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task TransientServiceDiscoveryRetriesBeforeRememberedInputOrDuplex(bool duplex)

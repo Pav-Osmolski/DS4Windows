@@ -86,7 +86,7 @@ public sealed class SpecialActionTriggerCatalogTests
         });
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("Macro", "65/65", "")]
     [DataRow("MultiAction", "65/65,66/66,67/67", "")]
     [DataRow("Profile", "Target", "Cross/AutomaticUntrigger")]
@@ -235,7 +235,7 @@ public sealed class SpecialActionTriggerCatalogTests
             "Keeping an unknown condition must not weaken a chord to just its recognized buttons.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DarkTheme", 720, 96, false)]
     [DataRow("DarkTheme", 1000, 144, true)]
     [DataRow("DefaultTheme", 720, 96, true)]

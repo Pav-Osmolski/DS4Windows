@@ -49,7 +49,7 @@ public sealed class Switch2AudioHapticsOutputTests
         finally { Assert.IsTrue(pump.TryStopAndRetire(1_000_000, sink, 5)); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void WarmCompositionAndActualWriterAdmissionHaveAnExactAllocationGate(bool positiveControl)
@@ -102,7 +102,7 @@ public sealed class Switch2AudioHapticsOutputTests
         Assert.AreEqual(ControllerFeedbackPublicationOrigin.TestPreview, f.LastDelivery.Origin);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(AudioHapticsMode.Mix)]
     [DataRow(AudioHapticsMode.Replace)]
     public void XboxFeedbackAndAudioUseExplicitMixOrReplaceWithoutChangingNativeState(AudioHapticsMode mode)
@@ -154,7 +154,7 @@ public sealed class Switch2AudioHapticsOutputTests
         Assert.IsFalse(f.Sink.TryDeliver(forged), "A new epoch still requires the current owner's Stop.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(AudioHapticsMode.Mix)]
     [DataRow(AudioHapticsMode.Replace)]
     public void FreshNativePcmDuringAudioIsConsumedOnceAndNotReplayedOnWithdrawal(AudioHapticsMode mode)
@@ -207,7 +207,7 @@ public sealed class Switch2AudioHapticsOutputTests
             f.Writer.Last.TimestampMicroseconds + f.Writer.Last.TimeToLiveMicroseconds);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2)]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]

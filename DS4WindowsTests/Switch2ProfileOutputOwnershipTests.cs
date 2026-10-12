@@ -67,7 +67,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
         var handoff = fixture.Service.BeginJoyConOutputHandoff(fixture.Token);
         fixture.RetireAndRemove();
         fixture.Initial.ThrowOnDisconnect = true;
-        Assert.ThrowsException<IOException>(handoff.Dispose);
+        Assert.ThrowsExactly<IOException>(handoff.Dispose);
         Assert.AreEqual(1, fixture.Manager.NumAttachedDevices);
         Assert.AreSame(fixture.Initial, fixture.Manager.GetOutSlotDevice(fixture.Initial).OutputDevice);
         Assert.IsNull(fixture.Manager.FindExistUnboundSlotType(fixture.Initial.Type));
@@ -83,13 +83,13 @@ public sealed class Switch2ProfileOutputOwnershipTests
         using var fixture = new Fixture();
         fixture.Attach();
         var handoff = fixture.Service.BeginJoyConOutputHandoff(fixture.Token);
-        Assert.ThrowsException<InvalidOperationException>(() => fixture.Service.BeginJoyConOutputHandoff(fixture.Token));
+        Assert.ThrowsExactly<InvalidOperationException>(() => fixture.Service.BeginJoyConOutputHandoff(fixture.Token));
         handoff.Dispose();
         fixture.RetireAndRemove();
         Assert.AreEqual(1, fixture.Initial.DisconnectCount);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -141,7 +141,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
             if (slot.CurrentInputBound == DS4WinWPF.DS4Control.OutSlotDevice.InputBound.Bound)
                 throw new IOException("Synthetic observer failure after binding publication.");
         };
-        Assert.ThrowsException<IOException>(() =>
+        Assert.ThrowsExactly<IOException>(() =>
             fixture.Service.PluginOutDev(0, fixture.Device, fixture.Replacement.Type));
         Assert.AreSame(fixture.Replacement, fixture.Service.outputDevices[0]);
         var attempts = (ControllerVirtualOutputAttempt[])typeof(ControlService)
@@ -204,7 +204,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
         Assert.AreEqual(0, fixture.Replacement.DisconnectCount);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void AdmittedProfileTransitionCompletesWhenRetirementBegins(bool duringDetach)
@@ -238,7 +238,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
         using var fixture = new Fixture();
         fixture.Attach();
         fixture.BeginRetire();
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             fixture.Service.UnplugOutDev(0, fixture.Device));
         Assert.AreEqual(0, fixture.Initial.DisconnectCount);
         fixture.RetireAndRemove();
@@ -250,7 +250,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
         using var fixture = new Fixture();
         fixture.Attach();
         fixture.Service.outputDevices[0] = fixture.Replacement;
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             fixture.Service.UnplugOutDev(0, fixture.Device));
         Assert.AreEqual(0, fixture.Initial.DisconnectCount);
         Assert.AreEqual(0, fixture.Replacement.DisconnectCount);
@@ -260,9 +260,9 @@ public sealed class Switch2ProfileOutputOwnershipTests
         fixture.Service.DS4Controllers[0] = successor;
         try
         {
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 fixture.Service.UnplugOutDev(0, fixture.Device));
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 fixture.Service.PluginOutDev(0, successor, OutContType.ViiperXboxOne));
             Assert.AreSame(successor, fixture.Service.DS4Controllers[0]);
             Assert.AreSame(fixture.Initial, fixture.Service.outputDevices[0]);
@@ -275,7 +275,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
         fixture.RetireAndRemove();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void UnprovenDetachCannotBecomeCleanBecauseLegacyArrayWasCleared(bool disconnectThrows)
@@ -285,7 +285,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
         if (disconnectThrows)
         {
             fixture.Initial.ThrowOnDisconnect = true;
-            Assert.ThrowsException<IOException>(() =>
+            Assert.ThrowsExactly<IOException>(() =>
                 fixture.Service.UnplugOutDev(0, fixture.Device, force: true));
             Assert.IsNull(fixture.Service.outputDevices[0]);
             fixture.Initial.ThrowOnDisconnect = false;
@@ -293,7 +293,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
         else
         {
             fixture.Manager.GetOutSlotDevice(fixture.Initial).InputIndex = 7;
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 fixture.Service.UnplugOutDev(0, fixture.Device, force: true));
             Assert.AreSame(fixture.Initial, fixture.Service.outputDevices[0]);
             Assert.AreEqual(0, fixture.Initial.DisconnectCount);
@@ -396,7 +396,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
                 InputControllerOwnershipKind.Switch2Runtime, false, false, new FakeOwner(successor), out var registration, out _));
             Assert.IsTrue(Table.TryReserveAndBind(registration, out var successorToken, out _, out _));
             handoff.PrepareSuccessor(successor);
-            Assert.ThrowsException<InvalidOperationException>(() => handoff.PrepareSuccessor(successor));
+            Assert.ThrowsExactly<InvalidOperationException>(() => handoff.PrepareSuccessor(successor));
             var stageType = typeof(ControlService).GetNestedType("Switch2ControlServiceProfileStage", BindingFlags.NonPublic);
             var stage = (ISwitch2ControlServiceReversibleProfileStage)Activator.CreateInstance(stageType,
                 BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { Service }, null);

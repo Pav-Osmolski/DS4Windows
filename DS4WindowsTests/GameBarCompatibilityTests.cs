@@ -7,7 +7,7 @@ namespace DS4WindowsTests
     [TestClass]
     public class GameBarCompatibilityTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(OutContType.ViiperDualSense)]
         [DataRow(OutContType.ViiperDualSenseEdge)]
         [DataRow(OutContType.ViiperDS4)]
@@ -17,7 +17,7 @@ namespace DS4WindowsTests
                 enabled: true, outputType, dInputOnly: false));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(OutContType.None)]
         [DataRow(OutContType.X360)]
         [DataRow(OutContType.DS4)]
@@ -38,7 +38,7 @@ namespace DS4WindowsTests
                 enabled: true, OutContType.ViiperDualSense, dInputOnly: true));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(OutContType.ViiperX360)]
         [DataRow(OutContType.ViiperSwitch2Pro)]
         [DataRow(OutContType.None)]
@@ -71,7 +71,7 @@ namespace DS4WindowsTests
                     requestedDInputOnly: false));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true, true)]
         [DataRow(false, false)]
         public void BluetoothInputTimeoutPreservesOnlyPresentPhysicalInterface(
@@ -95,7 +95,7 @@ namespace DS4WindowsTests
                 gameBarVisible: false, now, prewarmUntilTicks: 999));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("GameBar")]
         [DataRow("XboxGameBar")]
         [DataRow("GameBarFTServer")]
@@ -111,7 +111,7 @@ namespace DS4WindowsTests
                 IsExcludedNativeGameOwner(processName));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("GameBarPresenceWriter")]
         [DataRow("SpotifyXboxGamebarWebView")]
         public void NativeOwnerFilterExcludesAuxiliaryGameBarHosts(
@@ -125,7 +125,7 @@ namespace DS4WindowsTests
                 IsExcludedNativeGameOwner(processName));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true, false, false, false, true)]
         [DataRow(true, false, true, false, true)]
         [DataRow(true, true, false, false, true)]

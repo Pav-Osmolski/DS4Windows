@@ -8,7 +8,7 @@ namespace DS4WindowsTests
     [TestClass]
     public class DualSenseRawInputStatusTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0, 64, false)]
         [DataRow(0, 64, true)]
         [DataRow(1, 78, false)]

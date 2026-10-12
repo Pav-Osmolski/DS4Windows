@@ -15,7 +15,7 @@ public sealed class XboxOneRejectedInputTeardownTests
 {
     private const BindingFlags PrivateInstance = BindingFlags.Instance | BindingFlags.NonPublic;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task ExactFeedbackEofRevokesReadinessWithoutBreakingTeardownOwnership(bool intentionalStop)
@@ -50,7 +50,7 @@ public sealed class XboxOneRejectedInputTeardownTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, false, false)]
     [DataRow(true, false, false, false)]
     [DataRow(false, true, false, false)]
@@ -172,7 +172,7 @@ public sealed class XboxOneRejectedInputTeardownTests
             Assert.IsTrue(connectedDuringRemoval, "Do not pre-clear connected before terminal feedback delivery.");
             Assert.IsTrue(inputStoppedDuringRemoval);
             byte[] anotherInput = new byte[XboxOneEgressState.WireSize];
-            XboxOneSemanticInputRejectedException rejected = Assert.ThrowsException<XboxOneSemanticInputRejectedException>(
+            XboxOneSemanticInputRejectedException rejected = Assert.ThrowsExactly<XboxOneSemanticInputRejectedException>(
                 () => broker.WriteXboxOneInputAndWaitForAck(anotherInput, anotherInput.Length));
             Assert.AreEqual(3ul, rejected.Revision);
             Invoke(output, "EnsureStateWriterAlive");
@@ -254,19 +254,19 @@ public sealed class XboxOneRejectedInputTeardownTests
         Task<ViiperFrameWriteTiming> write = Task.Run(() => broker.WriteXboxOneInputAndWaitForAck(input, input.Length));
         AssertHeader(await ReadExactlyAsync(remote, 16 + input.Length), 0x02, 2, input.Length);
         broker.AcceptXboxOneInputAck(2, 0);
-        XboxOneSemanticInputRejectedException rejection = await Assert.ThrowsExceptionAsync<XboxOneSemanticInputRejectedException>(
+        XboxOneSemanticInputRejectedException rejection = await Assert.ThrowsExactlyAsync<XboxOneSemanticInputRejectedException>(
             async () => await write.WaitAsync(TimeSpan.FromSeconds(2)));
         Assert.AreEqual(2ul, rejection.Revision);
         Assert.IsFalse(broker.IsTransportClosed);
         Assert.IsTrue(broker.IsXboxOneInputRejected);
-        Assert.ThrowsException<XboxOneSemanticInputRejectedException>(() => broker.WriteXboxOneInputAndWaitForAck(input, input.Length));
+        Assert.ThrowsExactly<XboxOneSemanticInputRejectedException>(() => broker.WriteXboxOneInputAndWaitForAck(input, input.Length));
         broker.AcknowledgeXboxOneFeedback(17, true);
         byte[] ack = await ReadExactlyAsync(remote, 17);
         AssertHeader(ack, 0x03, 17, 1);
         Assert.AreEqual((byte)1, ack[16], "No successor semantic-input bytes may precede the canonical ACK.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(3ul, (byte)0)]
     [DataRow(2ul, (byte)2)]
     public async Task WrongCorrelationOrStatusStillClosesTransport(ulong correlation, byte status)
@@ -277,8 +277,8 @@ public sealed class XboxOneRejectedInputTeardownTests
         byte[] input = new byte[XboxOneEgressState.WireSize];
         Task<ViiperFrameWriteTiming> write = Task.Run(() => broker.WriteXboxOneInputAndWaitForAck(input, input.Length));
         await ReadExactlyAsync(pair.Server.GetStream(), 16 + input.Length);
-        Assert.ThrowsException<IOException>(() => broker.AcceptXboxOneInputAck(correlation, status));
-        await Assert.ThrowsExceptionAsync<IOException>(async () => await write.WaitAsync(TimeSpan.FromSeconds(2)));
+        Assert.ThrowsExactly<IOException>(() => broker.AcceptXboxOneInputAck(correlation, status));
+        await Assert.ThrowsExactlyAsync<IOException>(async () => await write.WaitAsync(TimeSpan.FromSeconds(2)));
         Assert.IsTrue(broker.IsTransportClosed);
         Assert.IsFalse(broker.IsXboxOneInputRejected, "Malformed ACK is not a drain-capable explicit rejection.");
     }
@@ -292,7 +292,7 @@ public sealed class XboxOneRejectedInputTeardownTests
         byte[] input = new byte[XboxOneEgressState.WireSize];
         Task<ViiperFrameWriteTiming> write = Task.Run(() => broker.WriteXboxOneInputAndWaitForAck(input, input.Length));
         await ReadExactlyAsync(pair.Server.GetStream(), 16 + input.Length);
-        await Assert.ThrowsExceptionAsync<IOException>(async () => await write.WaitAsync(TimeSpan.FromSeconds(2)));
+        await Assert.ThrowsExactlyAsync<IOException>(async () => await write.WaitAsync(TimeSpan.FromSeconds(2)));
         Assert.IsTrue(broker.IsTransportClosed);
         Assert.IsFalse(broker.IsXboxOneInputRejected);
     }
@@ -307,7 +307,7 @@ public sealed class XboxOneRejectedInputTeardownTests
         Task<ViiperFrameWriteTiming> write = Task.Run(() => broker.WriteXboxOneInputAndWaitForAck(input, input.Length));
         await ReadExactlyAsync(pair.Server.GetStream(), 16 + input.Length);
         broker.CloseTransport();
-        await Assert.ThrowsExceptionAsync<IOException>(async () => await write.WaitAsync(TimeSpan.FromSeconds(2)));
+        await Assert.ThrowsExactlyAsync<IOException>(async () => await write.WaitAsync(TimeSpan.FromSeconds(2)));
         Assert.IsTrue(broker.IsTransportClosed);
         Assert.IsFalse(broker.IsXboxOneInputRejected);
     }
@@ -323,7 +323,7 @@ public sealed class XboxOneRejectedInputTeardownTests
         await ReadExactlyAsync(pair.Server.GetStream(), 16 + input.Length);
         broker.AcceptXboxOneInputAck(2, 1);
         await write.WaitAsync(TimeSpan.FromSeconds(2));
-        Assert.ThrowsException<IOException>(() => broker.AcceptXboxOneInputAck(2, 0));
+        Assert.ThrowsExactly<IOException>(() => broker.AcceptXboxOneInputAck(2, 0));
         Assert.IsTrue(broker.IsTransportClosed);
         Assert.IsFalse(broker.IsXboxOneInputRejected);
     }

@@ -60,14 +60,14 @@ public class ViiperProcessRepairTests
         CollectionAssert.AreEqual(new[] { 10, 20 }, host.Stopped.ToArray());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, 5)]
     [DataRow(false, 87)]
     public async Task AdministratorDenialOrNonPermissionFailureDoesNotLaunchAnotherHelper(bool administrator, int code)
     {
         var captured = new[] { Other };
         var host = new Host(captured) { DeniedPid = Other.ProcessId, ErrorCode = code };
-        var error = await Assert.ThrowsExceptionAsync<Win32Exception>(() =>
+        var error = await Assert.ThrowsExactlyAsync<Win32Exception>(() =>
             ViiperProcessRepair.StopCoreAsync(captured, null, administrator, host,
                 (_, _) => throw new AssertFailedException("Unexpected elevation.")));
         Assert.AreEqual(code, error.NativeErrorCode);
@@ -80,7 +80,7 @@ public class ViiperProcessRepairTests
         var captured = new[] { Other };
         var host = new Host(captured) { DeniedPid = Other.ProcessId };
         host.OnDenied = () => host.Peers.Add(Own);
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() =>
             ViiperProcessRepair.StopCoreAsync(captured, null, false, host,
                 (_, _) => throw new AssertFailedException("A changed snapshot must not be elevated.")));
         Assert.AreEqual(0, host.Stopped.Count);
@@ -92,7 +92,7 @@ public class ViiperProcessRepairTests
         var captured = new[] { Other };
         var host = new Host(captured) { DeniedPid = Other.ProcessId };
         host.OnDenied = () => host.Peers[0] = Other with { StartTimeUtcTicks = Other.StartTimeUtcTicks + 1 };
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() =>
             ViiperProcessRepair.StopCoreAsync(captured, null, false, host,
                 (_, _) => throw new AssertFailedException("Reused PID is not authorized.")));
         Assert.AreEqual(0, host.Stopped.Count);
@@ -103,7 +103,7 @@ public class ViiperProcessRepairTests
     {
         var captured = new[] { Other };
         var host = new Host(captured) { DeniedPid = Other.ProcessId };
-        await Assert.ThrowsExceptionAsync<IOException>(() =>
+        await Assert.ThrowsExactlyAsync<IOException>(() =>
             ViiperProcessRepair.StopCoreAsync(captured, null, false, host, (_, _) => Task.CompletedTask));
         CollectionAssert.AreEqual(captured, host.Peers.ToArray());
     }
@@ -113,7 +113,7 @@ public class ViiperProcessRepairTests
     {
         var captured = new[] { Other };
         var host = new Host(captured) { DeniedPid = Other.ProcessId };
-        await Assert.ThrowsExceptionAsync<IOException>(() =>
+        await Assert.ThrowsExactlyAsync<IOException>(() =>
             ViiperProcessRepair.StopCoreAsync(captured, null, false, host,
                 (_, _) => throw new IOException("simulated UAC cancellation")));
         Assert.AreEqual(0, host.Stopped.Count);
@@ -124,7 +124,7 @@ public class ViiperProcessRepairTests
     {
         var captured = new[] { Other };
         var host = new Host(captured) { DeniedPid = Other.ProcessId };
-        await Assert.ThrowsExceptionAsync<PortableBrokerStartupException>(() =>
+        await Assert.ThrowsExactlyAsync<PortableBrokerStartupException>(() =>
             ViiperProcessRepair.StopCoreAsync(captured, null, false, host, (_, _) =>
             {
                 host.Peers.Clear();
@@ -146,7 +146,7 @@ public class ViiperProcessRepairTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("")]
     [DataRow("relative/viiper.exe")]
     [DataRow(@"C:\Other\not-viiper.exe")]
@@ -154,7 +154,7 @@ public class ViiperProcessRepairTests
     public async Task InvalidPreservedPathIsRejectedBeforeProcessInspection(string path)
     {
         var host = new Host(new[] { Own });
-        await Assert.ThrowsExceptionAsync<ArgumentException>(() =>
+        await Assert.ThrowsExactlyAsync<ArgumentException>(() =>
             ViiperProcessRepair.StopCoreAsync(new[] { Own }, path, false, host,
                 (_, _) => throw new AssertFailedException()));
         Assert.AreEqual(0, host.Snapshots);

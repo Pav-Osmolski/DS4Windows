@@ -23,7 +23,7 @@ namespace DS4WindowsTests
     [TestClass]
     public class TriggerFullPullTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0, false)]
         [DataRow(249, false)]
         [DataRow(250, true)]
