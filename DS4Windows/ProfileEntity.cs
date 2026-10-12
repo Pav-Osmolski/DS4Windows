@@ -58,7 +58,10 @@ namespace DS4WinWPF
 
         public bool SaveProfile(int deviceNum, string newName = null)
         {
-            string targetName = newName ?? name;
+            string targetName;
+            try { targetName = DS4Windows.ProfileName.Normalize(newName ?? name,
+                existingIdentity: newName == null || newName == name); }
+            catch (ArgumentException) { return false; }
             if (string.IsNullOrWhiteSpace(targetName) ||
                 !DS4Windows.Global.SaveProfile(deviceNum, targetName, name))
                 return false;

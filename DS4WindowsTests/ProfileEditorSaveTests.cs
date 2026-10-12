@@ -42,6 +42,29 @@ public sealed class ProfileEditorSaveTests
     }
 
     [TestMethod]
+    public void NewProfileXmlSuffixPublishesTheActualStoredName()
+    {
+        var editor = CreateEditor(null);
+        string publishedName = null;
+        editor.CreatedProfile += (_, name) => publishedName = name;
+        Assert.IsTrue(editor.SaveProfileChanges("Candidate.xml"));
+        Assert.IsTrue(File.Exists(ProfilePath("Candidate")));
+        Assert.AreEqual("Candidate", publishedName, "Created event must identify the stored profile basename.");
+        Assert.AreEqual("Candidate", Global.ProfilePath[0]);
+    }
+
+    [TestMethod]
+    public void RenamedProfileXmlSuffixKeepsEntityAndSelectionConsistent()
+    {
+        WriteProfile("Original", Original);
+        var entity = new ProfileEntity { Name = "Original" };
+        Assert.IsTrue(CreateEditor(entity).SaveProfileChanges("Renamed.xml"));
+        Assert.IsTrue(File.Exists(ProfilePath("Renamed")));
+        Assert.AreEqual("Renamed", entity.Name, "Entity must identify the stored profile basename.");
+        Assert.AreEqual("Renamed", Global.ProfilePath[0]);
+    }
+
+    [TestMethod]
     public void LockedSaveReportsFailureWithoutSavedEventsAndCanBeRetried()
     {
         string original = WriteProfile("Original", Original);
@@ -163,6 +186,39 @@ public sealed class ProfileEditorSaveTests
         Assert.AreEqual(1, created);
         Assert.AreEqual("New", Global.ProfilePath[0]);
         Assert.AreEqual("New", Global.OlderProfilePath[0]);
+    }
+
+    [TestMethod]
+    public void ExistingBasenameEndingInXmlIsNotRedirectedToAnotherProfile()
+    {
+        string exact = WriteProfile("Existing.xml", Original);
+        string other = WriteProfile("Existing", "other profile");
+        var entity = new ProfileEntity { Name = "Existing.xml" };
+        Assert.IsTrue(CreateEditor(entity).SaveProfileChanges("Existing.xml"));
+        AssertSavedXml(exact);
+        Assert.AreEqual("other profile", File.ReadAllText(other));
+        Assert.AreEqual("Existing.xml", Global.ProfilePath[0]);
+    }
+
+    [DataTestMethod]
+    [DataRow("Candidate.XML", "Candidate")]
+    [DataRow("Dotted.name", "Dotted.name")]
+    public void UserEnteredSuffixIsNormalizedWithoutRemovingOtherDots(string input, string expected)
+    {
+        Assert.IsTrue(CreateEditor(null).SaveProfileChanges(input));
+        AssertSavedXml(ProfilePath(expected));
+        Assert.AreEqual(expected, Global.ProfilePath[0]);
+    }
+
+    [DataTestMethod]
+    [DataRow(".xml")]
+    [DataRow(" ")]
+    [DataRow("Invalid/Name")]
+    public void InvalidNameDoesNotPublishOrWrite(string input)
+    {
+        Assert.IsFalse(CreateEditor(null).SaveProfileChanges(input));
+        Assert.AreEqual("Original", Global.ProfilePath[0]);
+        Assert.AreEqual(0, Directory.GetFiles(Path.Combine(directory, "Profiles")).Length);
     }
 
     private string ProfilePath(string name) => Path.Combine(directory, "Profiles", name + ".xml");

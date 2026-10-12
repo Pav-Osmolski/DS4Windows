@@ -5574,12 +5574,17 @@ namespace DS4Windows
             string originalName = null, bool overwrite = true)
         {
             bool saved = true;
-            if (proName.EndsWith(Global.XML_EXTENSION))
+            try
             {
-                proName = proName.Remove(proName.LastIndexOf(Global.XML_EXTENSION));
+                proName = ProfileName.Normalize(proName, existingIdentity: true);
+                if (!string.IsNullOrWhiteSpace(originalName))
+                    originalName = ProfileName.Normalize(originalName, existingIdentity: true);
             }
-            if (originalName?.EndsWith(Global.XML_EXTENSION) == true)
-                originalName = originalName.Remove(originalName.LastIndexOf(Global.XML_EXTENSION));
+            catch (ArgumentException ex)
+            {
+                AppLogger.LogToGui("Profile save failed: " + ex.Message, false);
+                return false;
+            }
 
             string path = Path.Combine(Global.appdatapath, "Profiles",
                 $"{proName}{Global.XML_EXTENSION}");
