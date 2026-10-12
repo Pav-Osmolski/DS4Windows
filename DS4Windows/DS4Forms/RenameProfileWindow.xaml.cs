@@ -27,6 +27,7 @@ namespace DS4WinWPF.DS4Forms
     public partial class RenameProfileWindow : Window
     {
         private RenameProfileViewModel renameProfileVM;
+        private ProfileEntity profile;
         public RenameProfileViewModel RenameProfileVM
         {
             get => renameProfileVM;
@@ -45,9 +46,10 @@ namespace DS4WinWPF.DS4Forms
         /// it to ViewModel
         /// </summary>
         /// <param name="profileName">name of current profile</param>
-        public void ChangeProfileName(string profileName)
+        public void ChangeProfileName(ProfileEntity entity)
         {
-            renameProfileVM.ProfileName = profileName;
+            profile = entity;
+            renameProfileVM.ProfileName = entity.Name;
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
@@ -57,29 +59,14 @@ namespace DS4WinWPF.DS4Forms
 
         private void ConfirmBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(renameProfileVM.ProfileName))
+            if (profile == null) return;
+            if (!profile.RenameProfile(renameProfileVM.ProfileName, out string error))
             {
-                bool validChars = renameProfileVM.ProfileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1;
-                if (validChars)
-                {
-                    bool existingFile = renameProfileVM.ProfileFileExists();
-                    if (existingFile)
-                    {
-                        e.Handled = true;
-                        MessageBox.Show("Profile with name already exists. Please try again.");
-                    }
-                    else
-                    {
-                        DialogResult = true;
-                        Close();
-                    }
-                }
-                else
-                {
-                    e.Handled = true;
-                    MessageBox.Show("Invalid characters used in filename. Please change text.");
-                }
+                e.Handled = true;
+                MessageBox.Show(this, error, "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
+            DialogResult = true;
         }
 
         private void Window_Closed(object sender, System.EventArgs e)

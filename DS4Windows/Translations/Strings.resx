@@ -1490,4 +1490,7 @@ Please click OK to confirm that you have read the message. Press Cancel to be re
   <data name="InverseMotors" xml:space="preserve">
     <value>Inverse motors</value>
   </data>
+  <data name="RetryUnsavedProfileChanges" xml:space="preserve"><value>Retry unsaved changes</value></data>
+  <data name="UnsavedProfileChangesNotice" xml:space="preserve"><value>Some profile changes could not be saved. Check file permissions and free space, then retry. See Log for details. Unsaved changes are not retained after closing DS4Windows. Discard pending saves cancels retries without reverting live settings.</value></data>
+  <data name="DiscardPendingProfileSaves" xml:space="preserve"><value>Discard pending saves</value></data>
 </root>

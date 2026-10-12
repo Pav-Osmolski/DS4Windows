@@ -35,6 +35,23 @@ DualSense when the game supports that controller's features. Restart the game
 after changing output type if it does not detect the new virtual controller.
 
 You can rename, duplicate, import and export profiles from the Profiles page.
+
+If saving fails, the editor stays open and the last valid profile file is kept.
+Check Log for the file error, resolve permissions or free space, and retry.
+A rename collision leaves both existing profiles unchanged; the Rename dialog
+stays open so you can choose another name. If a save-based rename cannot remove
+the original file, both complete copies are kept; check Log before removing any
+copy yourself.
+
+Overview quick settings apply live but still need a successful profile save.
+If a write fails, Overview shows **Retry unsaved changes** and **Discard pending
+saves**. Retry writes the captured changes to their original profile, even if
+you have selected another profile. It refuses to overwrite a profile that has
+since been edited or deleted. Discard cancels the pending saves without reverting
+live settings. Pending saves are held only for this app session; resolve them
+before closing DS4Windows. Before editing or renaming a profile with pending
+Overview saves, retry or discard those saves first.
+
 Back up your settings before deleting profiles or importing replacements.
 
 ### Edit a profile

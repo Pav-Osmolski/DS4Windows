@@ -47,11 +47,20 @@
         </StackPanel>
         <TabControl x:Name="mainTabCon" DockPanel.Dock="Top" SelectionChanged="MainTabCon_SelectionChanged" Style="{StaticResource BridgeMainTabControlStyle}">
             <TabItem x:Name="overviewTab" Header="Overview" Tag="&#xE80F;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}">
+                <DockPanel>
+                    <Border x:Name="overviewSaveFailurePanel" DockPanel.Dock="Top" Visibility="Collapsed" Margin="24,12,24,0" Padding="16" BorderThickness="1" BorderBrush="{DynamicResource BorderColor}">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="{lex:Loc DiscardPendingProfileSaves}" Click="DiscardOverviewProfileSaves_Click" Margin="16,0,0,0" Style="{StaticResource BridgeSecondaryButtonStyle}" />
+                            <Button DockPanel.Dock="Right" Content="{lex:Loc RetryUnsavedProfileChanges}" Click="RetryOverviewProfileSaves_Click" Margin="16,0,0,0" Style="{StaticResource BridgeSecondaryButtonStyle}" />
+                            <TextBlock Text="{lex:Loc UnsavedProfileChangesNotice}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                        </DockPanel>
+                    </Border>
                 <local:ControllerOverviewControl x:Name="controllerOverviewControl"
                                                  EditProfileRequested="ControllerOverview_EditProfileRequested"
                                                  ControllerDetailsRequested="ControllerOverview_ControllerDetailsRequested"
                                                  LightbarRequested="ControllerOverview_LightbarRequested"
                                                  DisconnectRequested="ControllerOverview_DisconnectRequested" />
+                </DockPanel>
             </TabItem>
 
             <TabItem x:Name="controllersTab" Header="{lex:Loc Controllers}" Tag="&#xE7FC;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}">
