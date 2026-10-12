@@ -47,13 +47,13 @@
                 </Grid>
 
                 <WrapPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Button x:Name="presetBtn" Content="Select Preset" Margin="0,3,0,3" Click="PresetBtn_Click" />
+                    <Button x:Name="presetBtn" Style="{DynamicResource BridgeSecondaryButtonStyle}" Content="Select Preset" Margin="0,3,0,3" Click="PresetBtn_Click" />
                     <Button x:Name="applyBtn" Content="{lex:Loc Apply}" Margin="8,3,0,3" Click="ApplyBtn_Click" IsEnabled="False" Style="{StaticResource BridgeSecondaryButtonStyle}" />
                     <Button x:Name="cancelBtn" Content="{lex:Loc Cancel}" Margin="8,3,0,3" Click="CancelBtn_Click" Style="{StaticResource BridgeSecondaryButtonStyle}" />
                     <Button x:Name="saveBtn" Content="{lex:Loc SaveProfile}" Margin="8,3,0,3" Click="SaveBtn_Click" Style="{StaticResource BridgePrimaryButtonStyle}" />
-                    <Button x:Name="keepSizeBtn" Margin="8,3,0,3" Click="KeepSizeBtn_Click" ToolTip="Keep this window size after closing">
+                    <Button x:Name="keepSizeBtn" Style="{DynamicResource BridgeSecondaryButtonStyle}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="8,3,0,3" Click="KeepSizeBtn_Click" ToolTip="Keep this window size after closing">
                         <StackPanel Orientation="Horizontal" Margin="0">
-                            <Image x:Name="sizeImage" Source="{Binding Source={StaticResource resourcesPaths}, Path=SizePNG}" Width="18" Height="18"/>
+                            <Image x:Name="sizeImage" Source="{Binding Source={StaticResource resourcesPaths}, Path=SizePNG}" Width="18" Height="18" VerticalAlignment="Center"/>
                             <TextBlock x:Name="sizeMsg" Text="Keep size" Margin="4,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
@@ -2643,7 +2643,7 @@
                             </Border>
                             <Border Style="{StaticResource Switch2SettingsCardStyle}" Visibility="{Binding ShowSwitch2JoyConControls, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <StackPanel>
-                                    <DockPanel LastChildFill="True" Margin="4,0,0,0" MaxWidth="760">
+                                    <DockPanel LastChildFill="True" Margin="26,0,0,0" HorizontalAlignment="Left" MaxWidth="760">
                                         <Image Source="{x:Static local:Switch2FeatureArtwork.Pair}" Width="104" Height="64" Stretch="Uniform" Margin="0,0,18,0" DockPanel.Dock="Left" />
                                         <StackPanel VerticalAlignment="Center">
                                             <TextBlock Text="Dual Joy-Con aiming" FontSize="17" FontWeight="SemiBold" TextWrapping="Wrap" />
@@ -3044,518 +3044,472 @@
             </TabItem>
 
             <TabItem Header="Advanced" Tag="Output device, rumble, audio, latency, compatibility, and custom hooks">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <GroupBox Header="{lex:Loc VirtualControllerSettings}" MinHeight="50" Margin="4,4,4,0" Padding="0,4,0,4">
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                    <Label Content="{lex:Loc EmulatedController}" ToolTip="{lex:Loc OutContNotice}" />
-                                    <ComboBox x:Name="outConTypeCombo" SelectedIndex="{Binding TempControllerIndex, FallbackValue=0}" IsEnabled="{Binding DInputOnly, Converter={StaticResource InverseBoolConverter}}" MinWidth="140"
-                                      ToolTip="{lex:Loc OutContNotice}">
-                                        <ComboBoxItem Content="DualShock 4"/>
-                                        <ComboBoxItem Content="Xbox 360"/>
-                                        <ComboBoxItem Content="DualSense"/>
-                                        <ComboBoxItem Content="DualSense Edge"/>
-                                        <ComboBoxItem Content="Switch 2 Pro"/>
-                                        <ComboBoxItem Content="Xbox One / Series"/>
-                                    </ComboBox>
-                                </StackPanel>
-                                <TextBlock x:Name="outputControllerHintText"
-                                           TextWrapping="Wrap"
-                                           MaxWidth="430"
-                                           Margin="6,0,0,8"
-                                           Opacity="0.78" />
-                                <StackPanel x:Name="switch2ViiperLegendPanel" Orientation="Horizontal" Margin="6,0,0,8" Visibility="Collapsed">
-                                    <Grid Width="92" Height="72" Margin="0,0,10,0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="24" />
-                                            <RowDefinition Height="24" />
-                                            <RowDefinition Height="24" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30" />
-                                            <ColumnDefinition Width="30" />
-                                            <ColumnDefinition Width="30" />
-                                        </Grid.ColumnDefinitions>
-                                        <Border Grid.Row="0" Grid.Column="1" BorderBrush="{DynamicResource ForegroundColor}" BorderThickness="1" CornerRadius="12" Width="24" Height="24">
-                                            <TextBlock Text="X" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                        <Border Grid.Row="1" Grid.Column="0" BorderBrush="{DynamicResource ForegroundColor}" BorderThickness="1" CornerRadius="12" Width="24" Height="24">
-                                            <TextBlock Text="Y" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                        <Border Grid.Row="1" Grid.Column="2" BorderBrush="{DynamicResource ForegroundColor}" BorderThickness="1" CornerRadius="12" Width="24" Height="24">
-                                            <TextBlock Text="A" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                        <Border Grid.Row="2" Grid.Column="1" BorderBrush="{DynamicResource ForegroundColor}" BorderThickness="1" CornerRadius="12" Width="24" Height="24">
-                                            <TextBlock Text="B" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        </Border>
-                                    </Grid>
-                                    <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="Nintendo face layout" FontWeight="Bold" />
-                                        <TextBlock Text="Plus, Minus, Home, Capture, L/R, ZL/ZR" Opacity="0.78" />
-                                    </StackPanel>
-                                </StackPanel>
-                                <CheckBox Content="{lex:Loc DisableVirtualController}" IsChecked="{Binding DInputOnly}"
-                                  ToolTip="{lex:Loc DisableVirtualControllerTip}" />
-                                <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
-                                    <Label Content="{lex:Loc ProfileEditor.VirtualDS4TrigOutput}" ContentStringFormat="{}{0}:" Margin="0,0,8,0" />
-                                    <ComboBox ItemsSource="{Binding Path=OutputDS4TriggerModeOptions}"
-                                        DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue" SelectedValue="{Binding OutputDS4TriggerMode}" />
-                                </StackPanel>
-                                
-                                <!--<CheckBox Content="{lex:Loc ProfileEditor.VirtualTrigButtonOutput}" IsChecked="{Binding VirtualTriggerButtons}"
-                                  Margin="0,8,0,0" />-->
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="Debouncing" MinHeight="30" Margin="4,4,4,0" Padding="0,4,0,4">
-                            <StackPanel Orientation="Horizontal">
-                                <xctk:IntegerUpDown x:Name="Debouncing" Value="{Binding DebouncingMs}" Minimum="0" Maximum="1000"
-                                                    MinWidth="50" DockPanel.Dock="Left" />
-                                <Label Content="ms" />
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="{lex:Loc Rumble}" MinHeight="50" Margin="4,4,4,0" Padding="0,4,0,4">
-                            <StackPanel>
-                            <UniformGrid Rows="1" Columns="3">
-                                <UniformGrid Columns="2" HorizontalAlignment="Left">
-                                    <DockPanel>
-                                        <Label Content="%" DockPanel.Dock="Right" />
-                                        <xctk:IntegerUpDown x:Name="RumbleBoostIUD" d:IsHidden="True" Value="{Binding RumbleBoost}" Minimum="0" Maximum="200" Increment="10"
-                                                       MinWidth="50" DockPanel.Dock="Left" />
-                                    </DockPanel>
-
-                                    <DockPanel>
-                                        <Label Content="{lex:Loc RumbleMaxSecs}" DockPanel.Dock="Right" />
-                                        <xctk:IntegerUpDown x:Name="RumbleAutostopTimeIUD" d:IsHidden="True" Value="{Binding RumbleAutostopTime}" Minimum="0" Maximum="3600" Increment="1" ToolTip="{lex:Loc RumbleMaxSecsTip}"
-                                                       MinWidth="50" DockPanel.Dock="Left"/>
-                                    </DockPanel>
-                                </UniformGrid>
-
-                                <Button x:Name="heavyRumbleTestBtn" Content="{lex:Loc TestHeavy}" Margin="10,0,0,0" Click="RumbleTestBtn_Click" />
-                                <Button x:Name="lightRumbleTestBtn" Content="{lex:Loc TestLight}" Margin="10,0,0,0" Click="RumbleTestBtn_Click" />
-                            </UniformGrid>
-                                <CheckBox Content="{lex:Loc InverseMotors}" IsChecked="{Binding InverseRumbleMotors}" />
-                                <CheckBox x:Name="XboxImpulseTriggersCheckBox" IsChecked="{Binding MapXboxImpulseTriggers}"
-                                          Content="Translate Xbox impulse-trigger vibration" Margin="0,5,0,0"
-                                          ToolTip="Feel Xbox trigger vibrations through your controller's triggers or rumble motors. Works independently of Trigger Lab." />
-                                <StackPanel Margin="20,4,0,0" IsEnabled="{Binding MapXboxImpulseTriggers}">
-                                    <CheckBox x:Name="XboxImpulseToAdaptiveTriggersCheckBox" IsChecked="{Binding XboxImpulseToAdaptiveTriggers}"
-                                              Content="Send impulse vibration to adaptive triggers" IsEnabled="{Binding SupportsAdaptiveTriggers}"
-                                              ToolTipService.ShowOnDisabled="True"
-                                              ToolTip="DualSense and Edge: use adaptive triggers for Xbox impulse vibration. Turn off to use body rumble. Requires impulse translation above.">
-                                        <CheckBox.Style>
-                                            <Style TargetType="CheckBox" BasedOn="{StaticResource CheckBoxStyle}">
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsEnabled" Value="False">
-                                                        <Setter Property="Opacity" Value="0.5" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </CheckBox.Style>
-                                    </CheckBox>
-                                </StackPanel>
-                                <GroupBox Header="PlayStation controller features" Margin="0,12,0,0" Padding="2,4"
-                                          Visibility="{Binding ShowPlayStationControllerSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                <Grid>
+                    <Grid.Resources>
+                        <DataTemplate x:Key="ProfileAdvancedCheckContentTemplate">
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel Margin="0,0,0,12">
+                        <RadioButton Content="Output" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="True" x:Name="profileAdvancedOutputNav"/>
+                        <RadioButton Content="Feedback" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedFeedbackNav"/>
+                        <RadioButton Content="Audio" IsEnabled="{Binding ShowPlayStationControllerSettings}" ToolTip="Controller audio options are available for PlayStation controllers." GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedAudioNav"/>
+                        <RadioButton Content="Input" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedInputNav"/>
+                        <RadioButton Content="Connection" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedConnectionNav"/>
+                    </WrapPanel>
+                    <Grid Grid.Row="1">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding IsChecked, ElementName=profileAdvancedOutputNav, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="0,0,12,8">
+                                <TextBlock Text="Virtual controller output and game compatibility." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
                                     <StackPanel>
-                                        <GroupBox Header="DualSense haptics" Padding="8,5"
-                                                  Visibility="{Binding ShowDualSenseHardwareControls, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <StackPanel>
-                                                <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-
-                                                    <Label Content="{lex:Loc DualSRumbleModeNPowerLevelTxt}" Margin="0,0,0,0"/>
-
-                                                    <ComboBox x:Name="dualSRumbleEmuMode" SelectedIndex="{Binding DualSenseRumbleEmulationPerIndex, FallbackValue=0}" MinWidth="40" ToolTip="{lex:Loc DualSRumbleModes_Tip}" Margin="0,0,0,0" Width="100">
-                                                        <ComboBoxItem Content="{lex:Loc DualSRumbleModeAccurate}"   />
-                                                        <ComboBoxItem Content="{lex:Loc DualSRumbleModeLegacy}" />
-                                                        <ComboBoxItem Content="{lex:Loc DualSRumbleModeDisabled}" />
-                                                    </ComboBox>
-
-                                                    <ComboBox SelectedIndex="{Binding DualSenseHapticPowerLevelPerIndex, FallbackValue=0}" MinWidth="40" ToolTip="{lex:Loc DualSRumblePowerLevel_Tip}" Margin="4,0,0,0" Width="58">
-                                                        <ComboBoxItem Content="100%" />
-                                                        <ComboBoxItem Content="87%" />
-                                                        <ComboBoxItem Content="75%" />
-                                                        <ComboBoxItem Content="62%" />
-                                                        <ComboBoxItem Content="50%" />
-                                                        <ComboBoxItem Content="37%" />
-                                                        <ComboBoxItem Content="25%" />
-                                                        <ComboBoxItem Content="12%" />
-                                                    </ComboBox>
-
-                                                </StackPanel>
-
-                                                <CheckBox x:Name="dualSForceGenRumbleRescale" IsChecked="{Binding EnableGenericRumbleStrRescaleForDualSenseDevices}" Content="{lex:Loc DualSRumbleForceGenericRescale}" ToolTip="{lex:Loc DualSRumbleForceGenericRescale_Tip}" Margin="3,8,0,0" HorizontalAlignment="Left" />
+                                        <TextBlock Text="{lex:Loc VirtualControllerSettings}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="Choose the controller games receive from this profile." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                <Label Content="{lex:Loc EmulatedController}" ToolTip="{lex:Loc OutContNotice}" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                <ComboBox x:Name="outConTypeCombo" Width="220" SelectedIndex="{Binding TempControllerIndex, FallbackValue=0}" IsEnabled="{Binding DInputOnly, Converter={StaticResource InverseBoolConverter}}" MinWidth="140" ToolTip="{lex:Loc OutContNotice}" MinHeight="34" VerticalAlignment="Center">
+                                                    <ComboBoxItem Content="DualShock 4"/>
+                                                    <ComboBoxItem Content="Xbox 360"/>
+                                                    <ComboBoxItem Content="DualSense"/>
+                                                    <ComboBoxItem Content="DualSense Edge"/>
+                                                    <ComboBoxItem Content="Switch 2 Pro"/>
+                                                    <ComboBoxItem Content="Xbox One / Series"/>
+                                                </ComboBox>
                                             </StackPanel>
-                                        </GroupBox>
-
-                                        <GroupBox Header="{Binding ControllerAudioHeader}" Margin="0,10,0,0" Padding="8,5"
-                                                  Visibility="{Binding ShowControllerAudioSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding ControllerAudioDescription}" Margin="2,0,2,7"
-                                                           FontSize="11" TextWrapping="Wrap"
-                                                           Foreground="{DynamicResource MutedForegroundColor}" />
-                                                <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="30" />
-                                                    <RowDefinition Height="30" />
-                                                    <RowDefinition Height="30" />
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="30" />
-                                                    <RowDefinition Height="30" />
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-
-                                                <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
-                                                    <CheckBox Content="Stream audio to controller" IsChecked="{Binding DualSenseEnableSpeakerOutput}"
-                                                              Margin="{StaticResource spaceMargin}"
-                                                              ToolTip="Streams the selected audio to the controller. Uses its built-in speaker unless Headset only routes it exclusively to the AUX port." />
-                                                    <CheckBox Content="Headset only (mute controller speaker)"
-                                                              IsChecked="{Binding DualSenseHeadsetOnlyAudio}"
-                                                              IsEnabled="{Binding DualSenseEnableSpeakerOutput}"
-                                                              Margin="20,2,3,2"
-                                                              ToolTip="Mutes the built-in speaker while continuing the same stream through a headset connected to the controller's AUX port." />
-                                                    <CheckBox Content="Mute controller speaker with mute button"
-                                                              IsChecked="{Binding DualSenseMuteButtonMutesSpeaker}"
-                                                              Margin="20,2,3,7"
-                                                              ToolTip="When Mute Button Mutes Input/Output is enabled, a lit mute LED turns off controller-speaker output. The setting has no effect while the master toggle is off." />
-                                                </StackPanel>
-                                                <Label Content="Audio source:" Grid.Row="1" Grid.Column="0"
-                                                       ToolTip="For game audio, select the virtual Wireless Controller endpoint created by a VIIPER PlayStation output. The first stereo pair is mirrored to the physical controller speaker." />
-                                                <ComboBox ItemsSource="{Binding AudioCaptureEndpointChoices}" DisplayMemberPath="Name" SelectedValuePath="EndpointId"
-                                                          SelectedValue="{Binding DualSenseAudioCaptureEndpointId}" Grid.Row="1" Grid.Column="1"
-                                                          Margin="{StaticResource spaceMargin}" />
-                                                <Border Grid.Row="2" Grid.ColumnSpan="2" Margin="3,2,3,7" Padding="9,6"
-                                                        Background="#26FFB020" BorderBrush="#80FFB020" BorderThickness="1"
-                                                        CornerRadius="3"
-                                                        Visibility="{Binding AudioHapticsSpeakerOverrideActive, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                    <TextBlock Text="Audio Haptics is currently supplying the selected app to this controller. Choose another Audio source here to release that override."
-                                                               TextWrapping="Wrap" FontSize="11" Foreground="#FFFFC45C" />
-                                                </Border>
-                                                <Grid Grid.Row="3" Grid.ColumnSpan="2" MinHeight="30"
-                                                      Visibility="{Binding ShowUsbDualSenseSpeakerSelector, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <TextBlock x:Name="outputControllerHintText" TextWrapping="Wrap" MaxWidth="430" Margin="6,0,0,8" Opacity="0.78" HorizontalAlignment="Left"/>
+                                            <StackPanel x:Name="switch2ViiperLegendPanel" Orientation="Horizontal" Margin="0,0,0,12" Visibility="Collapsed" VerticalAlignment="Center">
+                                                <Grid Width="92" Height="72" Margin="0,0,10,0">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="24"/>
+                                                        <RowDefinition Height="24"/>
+                                                        <RowDefinition Height="24"/>
+                                                    </Grid.RowDefinitions>
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto" />
-                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="30"/>
+                                                        <ColumnDefinition Width="30"/>
+                                                        <ColumnDefinition Width="30"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <Label Content="USB DualSense speaker:" Grid.Column="0"
-                                                           ToolTip="Only used for a physical USB DualSense. Bluetooth controllers stream audio directly to the controller." />
-                                                    <ComboBox ItemsSource="{Binding AudioSpeakerEndpointChoices}" DisplayMemberPath="Name" SelectedValuePath="EndpointId"
-                                                              SelectedValue="{Binding DualSenseAudioSpeakerEndpointId}" Grid.Column="1"
-                                                              Margin="{StaticResource spaceMargin}" />
+                                                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="{DynamicResource ForegroundColor}" BorderThickness="1" CornerRadius="12" Width="24" Height="24">
+                                                        <TextBlock Text="X" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <Border Grid.Row="1" Grid.Column="0" BorderBrush="{DynamicResource ForegroundColor}" BorderThickness="1" CornerRadius="12" Width="24" Height="24">
+                                                        <TextBlock Text="Y" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <Border Grid.Row="1" Grid.Column="2" BorderBrush="{DynamicResource ForegroundColor}" BorderThickness="1" CornerRadius="12" Width="24" Height="24">
+                                                        <TextBlock Text="A" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <Border Grid.Row="2" Grid.Column="1" BorderBrush="{DynamicResource ForegroundColor}" BorderThickness="1" CornerRadius="12" Width="24" Height="24">
+                                                        <TextBlock Text="B" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
                                                 </Grid>
-                                                <Label Content="Speaker volume:" Grid.Row="4" Grid.Column="0" />
-                                                <xctk:IntegerUpDown Value="{Binding DualSenseSpeakerVolume}" Minimum="0" Maximum="255" Grid.Row="4" Grid.Column="1"
-                                                                    Margin="{StaticResource spaceMargin}" />
-                                                <Label Content="Dynamic range:" Grid.Row="5" Grid.Column="0"
-                                                       ToolTip="Bluetooth speaker processing. Balanced raises quieter details and restrains loud effects. Strong narrows the range further. Processing is applied before native encoding (Opus on DualSense, SBC on DualShock 4) without look-ahead latency." />
-                                                <ComboBox SelectedIndex="{Binding DualSenseSpeakerCompressionIndex}" Grid.Row="5" Grid.Column="1"
-                                                          Margin="{StaticResource spaceMargin}">
-                                                    <ComboBoxItem Content="Off" />
-                                                    <ComboBoxItem Content="Balanced" />
-                                                    <ComboBoxItem Content="Strong" />
-                                                    <ComboBoxItem Content="NVIDIA AI"
-                                                                  IsEnabled="{Binding NvidiaNoiseSuppressionAvailable}"
-                                                                  ToolTip="{Binding NvidiaNoiseSuppressionAvailability}" />
-                                                </ComboBox>
-                                                <Label Content="Bass/body boost:" Grid.Row="6" Grid.Column="0"
-                                                       ToolTip="Adds up to 6 dB around 200 Hz while filtering unusable sub-bass. Applies only to the Bluetooth controller speaker stream." />
-                                                <xctk:IntegerUpDown Value="{Binding DualSenseSpeakerBassBoost}" Minimum="0" Maximum="6" Grid.Row="6" Grid.Column="1"
-                                                                    Margin="{StaticResource spaceMargin}" />
-                                                <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Margin="{StaticResource spaceMargin}">
-                                                    <CheckBox Content="{Binding ControllerMicrophoneToggleLabel}"
-                                                              IsChecked="{Binding DualSenseEnableMicrophonePassthrough}"
-                                                              IsEnabled="{Binding CanChangeControllerMicrophoneInput}"
-                                                              ToolTip="{Binding ControllerMicrophoneDescription}" />
-                                                    <CheckBox Content="Mute controller microphone with mute button"
-                                                              IsChecked="{Binding DualSenseMuteButtonMutesMicrophone}"
-                                                              Margin="20,4,0,0"
-                                                              ToolTip="When Mute Button Mutes Input/Output is enabled, a lit mute LED turns off controller-microphone input. The setting has no effect while the master toggle is off." />
-                                                    <TextBlock Text="{Binding ControllerMicrophoneAvailabilityText}"
-                                                               Visibility="{Binding ShowControllerMicrophoneAvailabilityMessage, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                               Margin="20,4,0,3" FontSize="11" TextWrapping="Wrap"
-                                                               Foreground="{DynamicResource MutedForegroundColor}" />
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="Nintendo face layout" FontWeight="Bold"/>
+                                                    <TextBlock Text="Plus, Minus, Home, Capture, L/R, ZL/ZR" Opacity="0.78"/>
                                                 </StackPanel>
-                                                <Label Content="Microphone level:" Grid.Row="8" Grid.Column="0"
-                                                       IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}"
-                                                       ToolTip="Adjusts the physical microphone level and the safely trimmed signal exposed to Windows." />
-                                                <xctk:IntegerUpDown Value="{Binding DualSenseMicrophoneVolume}" Minimum="0" Maximum="255" Grid.Row="8" Grid.Column="1"
-                                                                    IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}"
-                                                                    Margin="{StaticResource spaceMargin}" />
-                                                <Label Content="Noise suppression:" Grid.Row="9" Grid.Column="0"
-                                                       IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}"
-                                                       ToolTip="Balanced applies RNNoise speech cleanup. Strong also reduces low-level residual noise. Off retains only gain, high-pass, and clipping protection." />
-                                                <ComboBox SelectedIndex="{Binding DualSenseMicrophoneNoiseSuppressionIndex}" Grid.Row="9" Grid.Column="1"
-                                                          IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}"
-                                                          Margin="{StaticResource spaceMargin}">
-                                                    <ComboBoxItem Content="Off" />
-                                                    <ComboBoxItem Content="Balanced" />
-                                                    <ComboBoxItem Content="Strong" />
-                                                </ComboBox>
+                                            </StackPanel>
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc DisableVirtualController}" IsChecked="{Binding DInputOnly}" ToolTip="{lex:Loc DisableVirtualControllerTip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                <Label Content="{lex:Loc ProfileEditor.VirtualDS4TrigOutput}" ContentStringFormat="{}{0}:" Margin="0,4,10,10" VerticalAlignment="Center" Padding="0"/>
+                                                <ComboBox MinWidth="220" ItemsSource="{Binding Path=OutputDS4TriggerModeOptions}" DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue" SelectedValue="{Binding OutputDS4TriggerMode}" MinHeight="34" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <!--<CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc ProfileEditor.VirtualTrigButtonOutput}" IsChecked="{Binding VirtualTriggerButtons}"
+                                              Margin="0,8,0,0" />-->
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Game Bar" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="Optional compatibility while Xbox Game Bar is open." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel>
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="Enable Game Bar controller compatibility" IsChecked="{Binding GameBarControllerCompatibility}" Margin="{StaticResource spaceMargin}" ToolTip="While Xbox Game Bar is visible, temporarily route this profile's mapped input through an Xbox-compatible controller. The selected profile and native DualSense output stay configured." Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <TextBlock Margin="8,0,8,6" TextWrapping="Wrap" Text="Keeps this profile and its native output active. Only mapped input is temporarily sent through an Xbox-compatible companion while Game Bar is open; audio, haptics, lighting, and microphone routing stay untouched."/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding IsChecked, ElementName=profileAdvancedFeedbackNav, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="0,0,12,8">
+                                <TextBlock Text="Control feedback sent from games to your physical controller." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Game feedback" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <StackPanel Margin="0,8,0,2">
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc SendGameFeedbackToPhysicalController}" IsChecked="{Binding EnableOutputDataToDS4}" FontWeight="SemiBold" ToolTip="{lex:Loc SendGameFeedbackToPhysicalControllerTip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <TextBlock Text="{lex:Loc SendGameFeedbackToPhysicalControllerTip}" Margin="20,4,8,0" MaxWidth="560" FontSize="11" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" HorizontalAlignment="Left"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="{lex:Loc Rumble}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="Adjust body vibration and Xbox impulse-trigger translation." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel>
+                                            <WrapPanel>
+                                                <WrapPanel HorizontalAlignment="Left">
+                                                    <DockPanel Margin="0,0,16,12">
+                                                        <TextBlock Text="Strength" DockPanel.Dock="Left" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                        <Label Content="%" DockPanel.Dock="Right" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                        <xctk:IntegerUpDown x:Name="RumbleBoostIUD" d:IsHidden="True" Value="{Binding RumbleBoost}" Minimum="0" Maximum="200" Increment="10" MinWidth="50" DockPanel.Dock="Left" MinHeight="34" VerticalAlignment="Center"/>
+                                                    </DockPanel>
+                                                    <DockPanel Margin="0,0,16,12">
+                                                        <TextBlock Text="Auto-stop" DockPanel.Dock="Left" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                                        <Label Content="{lex:Loc RumbleMaxSecs}" DockPanel.Dock="Right" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                        <xctk:IntegerUpDown x:Name="RumbleAutostopTimeIUD" d:IsHidden="True" Value="{Binding RumbleAutostopTime}" Minimum="0" Maximum="3600" Increment="1" ToolTip="{lex:Loc RumbleMaxSecsTip}" MinWidth="50" DockPanel.Dock="Left" MinHeight="34" VerticalAlignment="Center"/>
+                                                    </DockPanel>
+                                                </WrapPanel>
+                                                <Button x:Name="heavyRumbleTestBtn" Content="{lex:Loc TestHeavy}" Margin="0,0,8,12" Click="RumbleTestBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
+                                                <Button x:Name="lightRumbleTestBtn" Content="{lex:Loc TestLight}" Margin="0,0,8,12" Click="RumbleTestBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
+                                            </WrapPanel>
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc InverseMotors}" IsChecked="{Binding InverseRumbleMotors}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" x:Name="XboxImpulseTriggersCheckBox" IsChecked="{Binding MapXboxImpulseTriggers}" Content="Translate Xbox impulse-trigger vibration" Margin="0,5,0,0" ToolTip="Feel Xbox trigger vibrations through your controller's triggers or rumble motors. Works independently of Trigger Lab." Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <StackPanel Margin="20,4,0,0" IsEnabled="{Binding MapXboxImpulseTriggers}">
+                                                <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" x:Name="XboxImpulseToAdaptiveTriggersCheckBox" IsChecked="{Binding XboxImpulseToAdaptiveTriggers}" Content="Send impulse vibration to adaptive triggers" IsEnabled="{Binding SupportsAdaptiveTriggers}" ToolTipService.ShowOnDisabled="True" ToolTip="DualSense and Edge: use adaptive triggers for Xbox impulse vibration. Turn off to use body rumble. Requires impulse translation above.">
+                                                    <CheckBox.Style>
+                                                        <Style TargetType="CheckBox" BasedOn="{StaticResource CheckBoxStyle}">
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsEnabled" Value="False">
+                                                                    <Setter Property="Opacity" Value="0.5"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </CheckBox.Style>
+                                                </CheckBox>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel Visibility="{Binding ShowPlayStationControllerSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Border Style="{DynamicResource BridgeCardStyle}" Visibility="{Binding ShowDualSenseHardwareControls, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Text="DualSense haptics" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                            <TextBlock Text="DualSense-specific rumble conversion and strength." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                    <Label Content="{lex:Loc DualSRumbleModeNPowerLevelTxt}" Margin="0,4,10,10" VerticalAlignment="Center" Padding="0"/>
+                                                    <ComboBox x:Name="dualSRumbleEmuMode" SelectedIndex="{Binding DualSenseRumbleEmulationPerIndex, FallbackValue=0}" MinWidth="40" ToolTip="{lex:Loc DualSRumbleModes_Tip}" Margin="0,0,0,0" Width="100" MinHeight="34" VerticalAlignment="Center">
+                                                        <ComboBoxItem Content="{lex:Loc DualSRumbleModeAccurate}"/>
+                                                        <ComboBoxItem Content="{lex:Loc DualSRumbleModeLegacy}"/>
+                                                        <ComboBoxItem Content="{lex:Loc DualSRumbleModeDisabled}"/>
+                                                    </ComboBox>
+                                                    <ComboBox SelectedIndex="{Binding DualSenseHapticPowerLevelPerIndex, FallbackValue=0}" MinWidth="40" ToolTip="{lex:Loc DualSRumblePowerLevel_Tip}" Margin="4,0,0,0" Width="58" MinHeight="34" VerticalAlignment="Center">
+                                                        <ComboBoxItem Content="100%"/>
+                                                        <ComboBoxItem Content="87%"/>
+                                                        <ComboBoxItem Content="75%"/>
+                                                        <ComboBoxItem Content="62%"/>
+                                                        <ComboBoxItem Content="50%"/>
+                                                        <ComboBoxItem Content="37%"/>
+                                                        <ComboBoxItem Content="25%"/>
+                                                        <ComboBoxItem Content="12%"/>
+                                                    </ComboBox>
+                                                </StackPanel>
+                                                <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" x:Name="dualSForceGenRumbleRescale" IsChecked="{Binding EnableGenericRumbleStrRescaleForDualSenseDevices}" Content="{lex:Loc DualSRumbleForceGenericRescale}" ToolTip="{lex:Loc DualSRumbleForceGenericRescale_Tip}" Margin="3,8,0,0" HorizontalAlignment="Left" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding IsChecked, ElementName=profileAdvancedAudioNav, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="0,0,12,8">
+                                <TextBlock Text="Controller speaker, headset, microphone and mute-button settings." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                <StackPanel Visibility="{Binding ShowPlayStationControllerSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Border Style="{DynamicResource BridgeCardStyle}" Visibility="{Binding ShowControllerAudioSettings, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding ControllerAudioHeader}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding ControllerAudioDescription}" Margin="2,0,2,7" FontSize="11" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition MaxWidth="360"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+                                                        <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="Stream audio to controller" IsChecked="{Binding DualSenseEnableSpeakerOutput}" Margin="{StaticResource spaceMargin}" ToolTip="Streams the selected audio to the controller. Uses its built-in speaker unless Headset only routes it exclusively to the AUX port." Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                        <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="Headset only (mute controller speaker)" IsChecked="{Binding DualSenseHeadsetOnlyAudio}" IsEnabled="{Binding DualSenseEnableSpeakerOutput}" Margin="20,2,3,2" ToolTip="Mutes the built-in speaker while continuing the same stream through a headset connected to the controller's AUX port." Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                        <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="Mute controller speaker with mute button" IsChecked="{Binding DualSenseMuteButtonMutesSpeaker}" Margin="20,2,3,7" ToolTip="When Mute Button Mutes Input/Output is enabled, a lit mute LED turns off controller-speaker output. The setting has no effect while the master toggle is off." Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                    </StackPanel>
+                                                    <Label Content="Audio source:" Grid.Row="1" Grid.Column="0" ToolTip="For game audio, select the virtual Wireless Controller endpoint created by a VIIPER PlayStation output. The first stereo pair is mirrored to the physical controller speaker." VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <ComboBox ItemsSource="{Binding AudioCaptureEndpointChoices}" DisplayMemberPath="Name" SelectedValuePath="EndpointId" SelectedValue="{Binding DualSenseAudioCaptureEndpointId}" Grid.Row="1" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <Border Grid.Row="2" Grid.ColumnSpan="2" Margin="3,2,3,7" Padding="9,6" Background="#26FFB020" BorderBrush="#80FFB020" BorderThickness="1" CornerRadius="3" Visibility="{Binding AudioHapticsSpeakerOverrideActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                        <TextBlock Text="Audio Haptics is currently supplying the selected app to this controller. Choose another Audio source here to release that override." TextWrapping="Wrap" FontSize="11" Foreground="#FFFFC45C"/>
+                                                    </Border>
+                                                    <Grid Grid.Row="3" Grid.ColumnSpan="2" MinHeight="30" Visibility="{Binding ShowUsbDualSenseSpeakerSelector, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="*" MaxWidth="360"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Label Content="USB DualSense speaker:" Grid.Column="0" ToolTip="Only used for a physical USB DualSense. Bluetooth controllers stream audio directly to the controller." VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                        <ComboBox ItemsSource="{Binding AudioSpeakerEndpointChoices}" DisplayMemberPath="Name" SelectedValuePath="EndpointId" SelectedValue="{Binding DualSenseAudioSpeakerEndpointId}" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                    <Label Content="Speaker volume:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <xctk:IntegerUpDown Value="{Binding DualSenseSpeakerVolume}" Minimum="0" Maximum="255" Grid.Row="4" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <Label Content="Dynamic range:" Grid.Row="5" Grid.Column="0" ToolTip="Bluetooth speaker processing. Balanced raises quieter details and restrains loud effects. Strong narrows the range further. Processing is applied before native encoding (Opus on DualSense, SBC on DualShock 4) without look-ahead latency." VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <ComboBox SelectedIndex="{Binding DualSenseSpeakerCompressionIndex}" Grid.Row="5" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center">
+                                                        <ComboBoxItem Content="Off"/>
+                                                        <ComboBoxItem Content="Balanced"/>
+                                                        <ComboBoxItem Content="Strong"/>
+                                                        <ComboBoxItem Content="NVIDIA AI" IsEnabled="{Binding NvidiaNoiseSuppressionAvailable}" ToolTip="{Binding NvidiaNoiseSuppressionAvailability}"/>
+                                                    </ComboBox>
+                                                    <Label Content="Bass/body boost:" Grid.Row="6" Grid.Column="0" ToolTip="Adds up to 6 dB around 200 Hz while filtering unusable sub-bass. Applies only to the Bluetooth controller speaker stream." VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <xctk:IntegerUpDown Value="{Binding DualSenseSpeakerBassBoost}" Minimum="0" Maximum="6" Grid.Row="6" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Margin="{StaticResource spaceMargin}">
+                                                        <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{Binding ControllerMicrophoneToggleLabel}" IsChecked="{Binding DualSenseEnableMicrophonePassthrough}" IsEnabled="{Binding CanChangeControllerMicrophoneInput}" ToolTip="{Binding ControllerMicrophoneDescription}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                        <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="Mute controller microphone with mute button" IsChecked="{Binding DualSenseMuteButtonMutesMicrophone}" Margin="20,4,0,0" ToolTip="When Mute Button Mutes Input/Output is enabled, a lit mute LED turns off controller-microphone input. The setting has no effect while the master toggle is off." Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                        <TextBlock Text="{Binding ControllerMicrophoneAvailabilityText}" Visibility="{Binding ShowControllerMicrophoneAvailabilityMessage, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="20,4,0,3" FontSize="11" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                                    </StackPanel>
+                                                    <Label Content="Microphone level:" Grid.Row="8" Grid.Column="0" IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}" ToolTip="Adjusts the physical microphone level and the safely trimmed signal exposed to Windows." VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <xctk:IntegerUpDown Value="{Binding DualSenseMicrophoneVolume}" Minimum="0" Maximum="255" Grid.Row="8" Grid.Column="1" IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <Label Content="Noise suppression:" Grid.Row="9" Grid.Column="0" IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}" ToolTip="Balanced applies RNNoise speech cleanup. Strong also reduces low-level residual noise. Off retains only gain, high-pass, and clipping protection." VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <ComboBox SelectedIndex="{Binding DualSenseMicrophoneNoiseSuppressionIndex}" Grid.Row="9" Grid.Column="1" IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center">
+                                                        <ComboBoxItem Content="Off"/>
+                                                        <ComboBoxItem Content="Balanced"/>
+                                                        <ComboBoxItem Content="Strong"/>
+                                                    </ComboBox>
                                                 </Grid>
-
                                                 <Expander Header="Advanced audio" Margin="2,8,2,0">
                                                     <StackPanel Margin="8,6,2,2">
                                                         <Grid MinHeight="30">
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto" />
-                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*" MaxWidth="360"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <Label Content="Headset / AUX volume:" Grid.Column="0"
-                                                                   ToolTip="Controls the headset jack independently from the controller speaker. DualShock 4 maps the full slider range to Sony's documented 0-80 headset gain." />
-                                                            <xctk:IntegerUpDown Value="{Binding DualSenseHeadphoneVolume}" Minimum="0" Maximum="255"
-                                                                                Grid.Column="1" Margin="{StaticResource spaceMargin}" />
+                                                            <Label Content="Headset / AUX volume:" Grid.Column="0" ToolTip="Controls the headset jack independently from the controller speaker. DualShock 4 maps the full slider range to Sony's documented 0-80 headset gain." VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                            <xctk:IntegerUpDown Value="{Binding DualSenseHeadphoneVolume}" Minimum="0" Maximum="255" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                                         </Grid>
-
-                                                        <Grid Margin="0,6,0,0"
-                                                              Visibility="{Binding ShowLegacyMicrophoneRouting, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                        <Grid Margin="0,6,0,0" Visibility="{Binding ShowLegacyMicrophoneRouting, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                             <Grid.RowDefinitions>
-                                                                <RowDefinition Height="Auto" />
-                                                                <RowDefinition Height="30" />
-                                                                <RowDefinition Height="30" />
+                                                                <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="Auto"/>
                                                             </Grid.RowDefinitions>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto" />
-                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*" MaxWidth="360"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <TextBlock Grid.ColumnSpan="2" Margin="3,0,3,5"
-                                                                       Text="USB/legacy microphone routing captures the physical Windows controller-mic endpoint and sends it to a virtual audio render device such as VB-CABLE Input. Bluetooth VIIPER microphone routing does not need these endpoints."
-                                                                       FontSize="11" TextWrapping="Wrap"
-                                                                       Foreground="{DynamicResource MutedForegroundColor}" />
-                                                            <Label Content="Controller mic:" Grid.Row="1" Grid.Column="0" />
-                                                            <ComboBox ItemsSource="{Binding MicrophoneCaptureEndpointChoices}" DisplayMemberPath="Name" SelectedValuePath="EndpointId"
-                                                                      SelectedValue="{Binding DualSenseMicrophoneCaptureEndpointId}" Grid.Row="1" Grid.Column="1"
-                                                                      Margin="{StaticResource spaceMargin}" />
-                                                            <Label Content="Virtual output:" Grid.Row="2" Grid.Column="0" />
-                                                            <ComboBox ItemsSource="{Binding MicrophoneOutputEndpointChoices}" DisplayMemberPath="Name" SelectedValuePath="EndpointId"
-                                                                      SelectedValue="{Binding DualSenseMicrophoneOutputEndpointId}" Grid.Row="2" Grid.Column="1"
-                                                                      Margin="{StaticResource spaceMargin}" />
+                                                            <TextBlock Grid.ColumnSpan="2" Margin="3,0,3,5" Text="USB/legacy microphone routing captures the physical Windows controller-mic endpoint and sends it to a virtual audio render device such as VB-CABLE Input. Bluetooth VIIPER microphone routing does not need these endpoints." FontSize="11" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                                            <Label Content="Controller mic:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                            <ComboBox ItemsSource="{Binding MicrophoneCaptureEndpointChoices}" DisplayMemberPath="Name" SelectedValuePath="EndpointId" SelectedValue="{Binding DualSenseMicrophoneCaptureEndpointId}" Grid.Row="1" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
+                                                            <Label Content="Virtual output:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                            <ComboBox ItemsSource="{Binding MicrophoneOutputEndpointChoices}" DisplayMemberPath="Name" SelectedValuePath="EndpointId" SelectedValue="{Binding DualSenseMicrophoneOutputEndpointId}" Grid.Row="2" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                                         </Grid>
                                                     </StackPanel>
                                                 </Expander>
                                             </StackPanel>
-                                        </GroupBox>
-
-                                        <GroupBox Header="DualSense mute button" Margin="0,10,0,0" Padding="2,4"
-                                                  Visibility="{Binding ShowDualSenseHardwareControls, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Style="{DynamicResource BridgeCardStyle}" Visibility="{Binding ShowDualSenseHardwareControls, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <StackPanel>
+                                            <TextBlock Text="DualSense mute button" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                            <TextBlock Text="Choose how the physical mute button controls audio and profile switching." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                                             <Grid>
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition Height="30" />
-                                                    <RowDefinition Height="30" />
-                                                    <RowDefinition Height="30" />
-                                                    <RowDefinition Height="30" />
-                                                    <RowDefinition Height="30" />
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition />
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition MaxWidth="360"/>
                                                 </Grid.ColumnDefinitions>
-
-                                                <CheckBox x:Name="MuteInputOutputCheck" Content="Mute Button Mutes Input/Output"
-                                                          IsChecked="{Binding DualSenseMuteButtonMutesInputOutput}"
-                                                          Grid.Row="0" Grid.ColumnSpan="2" Margin="{StaticResource spaceMargin}"
-                                                          ToolTip="Uses the controller mute button as a master for the speaker and microphone targets selected above. The mute LED is on while those targets are muted and off while they are live." />
-                                                <CheckBox Content="Enable mute button light" IsChecked="{Binding DualSenseMuteButtonLightEnabled}"
-                                                          IsEnabled="{Binding IsChecked, ElementName=MuteInputOutputCheck, Converter={StaticResource InverseBoolConverter}}"
-                                                          Grid.Row="1" Grid.ColumnSpan="2" Margin="{StaticResource spaceMargin}"
-                                                          ToolTip="Mirrors the physical DualSense mute button state to the controller mute LED while this profile is active. This only controls the light, not Windows microphone routing." />
-                                                <CheckBox Content="Mute button switches profiles"
-                                                          IsChecked="{Binding DualSenseMuteButtonSwitchesProfiles}"
-                                                          IsEnabled="{Binding IsChecked, ElementName=MuteInputOutputCheck, Converter={StaticResource InverseBoolConverter}}"
-                                                          Grid.Row="2" Grid.ColumnSpan="2" Margin="{StaticResource spaceMargin}"
-                                                          ToolTip="Switches between the selected profiles when mute changes. Enabling Mute Button Mutes Input/Output turns this option off and greys it out without erasing the saved profile choices." />
-                                                <Label Content="Mute on profile:" Grid.Row="3" Grid.Column="0"
-                                                       IsEnabled="{Binding DualSenseMuteButtonSwitchesProfiles}"
-                                                       ToolTip="Optional. Switch to this profile when the physical DualSense mute button toggles on." />
-                                                <ComboBox ItemsSource="{Binding OptionalProfileChoices}" SelectedItem="{Binding DualSenseMuteOnProfileName}"
-                                                          IsEnabled="{Binding DualSenseMuteButtonSwitchesProfiles}"
-                                                          Grid.Row="3" Grid.Column="1" Margin="{StaticResource spaceMargin}"
-                                                          ToolTip="Leave blank to avoid changing profiles when mute turns on." />
-                                                <Label Content="Mute off profile:" Grid.Row="4" Grid.Column="0"
-                                                       IsEnabled="{Binding DualSenseMuteButtonSwitchesProfiles}"
-                                                       ToolTip="Optional. Switch to this profile when the physical DualSense mute button toggles off." />
-                                                <ComboBox ItemsSource="{Binding OptionalProfileChoices}" SelectedItem="{Binding DualSenseMuteOffProfileName}"
-                                                          IsEnabled="{Binding DualSenseMuteButtonSwitchesProfiles}"
-                                                          Grid.Row="4" Grid.Column="1" Margin="{StaticResource spaceMargin}"
-                                                          ToolTip="Leave blank to avoid changing profiles when mute turns off." />
+                                                <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" x:Name="MuteInputOutputCheck" Content="Mute Button Mutes Input/Output" IsChecked="{Binding DualSenseMuteButtonMutesInputOutput}" Grid.Row="0" Grid.ColumnSpan="2" Margin="{StaticResource spaceMargin}" ToolTip="Uses the controller mute button as a master for the speaker and microphone targets selected above. The mute LED is on while those targets are muted and off while they are live." Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="Enable mute button light" IsChecked="{Binding DualSenseMuteButtonLightEnabled}" IsEnabled="{Binding IsChecked, ElementName=MuteInputOutputCheck, Converter={StaticResource InverseBoolConverter}}" Grid.Row="1" Grid.ColumnSpan="2" Margin="{StaticResource spaceMargin}" ToolTip="Mirrors the physical DualSense mute button state to the controller mute LED while this profile is active. This only controls the light, not Windows microphone routing." Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="Mute button switches profiles" IsChecked="{Binding DualSenseMuteButtonSwitchesProfiles}" IsEnabled="{Binding IsChecked, ElementName=MuteInputOutputCheck, Converter={StaticResource InverseBoolConverter}}" Grid.Row="2" Grid.ColumnSpan="2" Margin="{StaticResource spaceMargin}" ToolTip="Switches between the selected profiles when mute changes. Enabling Mute Button Mutes Input/Output turns this option off and greys it out without erasing the saved profile choices." Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                <Label Content="Mute on profile:" Grid.Row="3" Grid.Column="0" IsEnabled="{Binding DualSenseMuteButtonSwitchesProfiles}" ToolTip="Optional. Switch to this profile when the physical DualSense mute button toggles on." VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                <ComboBox ItemsSource="{Binding OptionalProfileChoices}" SelectedItem="{Binding DualSenseMuteOnProfileName}" IsEnabled="{Binding DualSenseMuteButtonSwitchesProfiles}" Grid.Row="3" Grid.Column="1" Margin="{StaticResource spaceMargin}" ToolTip="Leave blank to avoid changing profiles when mute turns on." MinHeight="34" VerticalAlignment="Center"/>
+                                                <Label Content="Mute off profile:" Grid.Row="4" Grid.Column="0" IsEnabled="{Binding DualSenseMuteButtonSwitchesProfiles}" ToolTip="Optional. Switch to this profile when the physical DualSense mute button toggles off." VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                <ComboBox ItemsSource="{Binding OptionalProfileChoices}" SelectedItem="{Binding DualSenseMuteOffProfileName}" IsEnabled="{Binding DualSenseMuteButtonSwitchesProfiles}" Grid.Row="4" Grid.Column="1" Margin="{StaticResource spaceMargin}" ToolTip="Leave blank to avoid changing profiles when mute turns off." MinHeight="34" VerticalAlignment="Center"/>
                                             </Grid>
-                                        </GroupBox>
-
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding IsChecked, ElementName=profileAdvancedInputNav, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="0,0,12,8">
+                                <TextBlock Text="Mouse mappings, input filtering and controller readout." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Mouse and touchpad" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="Tune controls mapped to mouse movement and the touchpad toggle." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                <Label Content="{lex:Loc MouseSensitivity}" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                <xctk:IntegerUpDown d:IsHidden="True" MinWidth="50" Value="{Binding ButtonMouseSensitivity,FallbackValue=25}" Minimum="0" Maximum="255" Increment="1" Margin="10,0,0,0" MinHeight="34" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding OutputMouseSpeed,Mode=OneWay,StringFormat='\{0} pps'}" MinWidth="50" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                <Label Content="{lex:Loc MouseVerticalScale}" ContentStringFormat="{}{0}:" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                <xctk:IntegerUpDown d:IsHidden="True" MinWidth="50" Value="{Binding ButtonMouseVerticalScale,FallbackValue='100'}" Minimum="0" Maximum="500" Increment="10" Margin="10,0,0,0" MinHeight="34" VerticalAlignment="Center"/>
+                                                <Label Content="%" VerticalContentAlignment="Center" Margin="0,4,10,10" VerticalAlignment="Center" Padding="0"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                <Label Content="{lex:Loc MouseOffset}" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                <xctk:DoubleUpDown d:IsHidden="True" MinWidth="50" FormatString="F3" DefaultValue="0" Minimum="0" Maximum="100" Value="{Binding ButtonMouseOffset,FallbackValue=0,UpdateSourceTrigger=LostFocus}" MinHeight="34" VerticalAlignment="Center"/>
+                                                <Label Content="%" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                <TextBlock Text="{Binding MouseOffsetSpeed,Mode=OneWay,StringFormat='\{0:0.00} pps'}" MinWidth="50" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                            </StackPanel>
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc MouseAcceleration}" IsChecked="{Binding MouseAcceleration}" Margin="0,6,0,0" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc EnableTouchpadToggle}" IsChecked="{Binding EnableTouchpadToggle}" Margin="0,6,0,0" ToolTip="{lex:Loc Resources:EnableTouchToggle}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                        </StackPanel>
                                     </StackPanel>
-
-                                </GroupBox>
-
+                                </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="{lex:Loc AbsoluteMouseOptions}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="Adjust the absolute mouse area and centering." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel Orientation="Vertical">
+                                            <Expander IsExpanded="False" Header="Settings">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*" MaxWidth="360"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                    </Grid.RowDefinitions>
+                                                    <Label Content="{lex:Loc Width}" ContentStringFormat="{}{0}:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsWidth}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="0" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <Label Content="{lex:Loc Height}" ContentStringFormat="{}{0}:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsHeight}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="1" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <Label Content="{lex:Loc XCenter}" ContentStringFormat="{}{0}:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsXCenter}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="2" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <Label Content="{lex:Loc YCenter}" ContentStringFormat="{}{0}:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsYCenter}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="3" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <Label Content="{lex:Loc AntiRadius}" ContentStringFormat="{}{0}:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <DockPanel Grid.Row="4" Grid.Column="1">
+                                                        <TextBlock Text="%" DockPanel.Dock="Right" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center"/>
+                                                        <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsAntiRadius}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
+                                                    </DockPanel>
+                                                    <Label Content="{lex:Loc SnapToCenter}" ContentStringFormat="{}{0}:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                                    <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" IsChecked="{Binding AbsSnapCenter}" MinWidth="50" Grid.Row="5" Grid.Column="1" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                </Grid>
+                                            </Expander>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Debouncing" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="Adjust the input debounce interval. Leave at zero unless needed." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                            <xctk:IntegerUpDown x:Name="Debouncing" Value="{Binding DebouncingMs}" Minimum="0" Maximum="1000" MinWidth="50" DockPanel.Dock="Left" MinHeight="34" VerticalAlignment="Center"/>
+                                            <Label Content="ms" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Controller readout" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="Choose the controller used by live profile readings." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                            <Label Content="{lex:Loc UseController}" ToolTip="{lex:Loc Resources:UseControllerForMapping}" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                            <xctk:IntegerUpDown x:Name="useControllerUD" d:IsHidden="True" Width="40" Margin="8,0,0,0" Value="0" Minimum="0" Maximum="4" IsEnabled="False" ToolTip="{lex:Loc Resources:UseControllerForMapping}" MinHeight="34" VerticalAlignment="Center"/>
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" x:Name="useControllerReadoutCk" FlowDirection="LeftToRight" Content="for readout" VerticalAlignment="Center" Margin="8,0,0,0" IsChecked="{Binding UseControllerReadout}" ToolTip="{lex:Loc Resources:UseControllerForMapping}" Click="UseControllerReadoutCk_Click" Style="{DynamicResource BridgeLabeledCheckBoxStyle}">
+                                                <CheckBox.Resources>
+                                                    <Style TargetType="{x:Type Path}">
+                                                        <Setter Property="FlowDirection" Value="LeftToRight"/>
+                                                    </Style>
+                                                </CheckBox.Resources>
+                                            </CheckBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
-                        </GroupBox>
-                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                            <Label Content="{lex:Loc UseController}" ToolTip="{lex:Loc Resources:UseControllerForMapping}" />
-                            <xctk:IntegerUpDown x:Name="useControllerUD" d:IsHidden="True" Width="40" Margin="8,0,0,0"
-                                            Value="0" Minimum="0" Maximum="4" IsEnabled="False"
-                                            ToolTip="{lex:Loc Resources:UseControllerForMapping}" />
-                            <CheckBox x:Name="useControllerReadoutCk" FlowDirection="RightToLeft" Content="for readout" VerticalAlignment="Center"
-                                  Margin="8,0,0,0" IsChecked="{Binding UseControllerReadout}"
-                                  ToolTip="{lex:Loc Resources:UseControllerForMapping}" Click="UseControllerReadoutCk_Click">
-                                <CheckBox.Resources>
-                                    <Style TargetType="{x:Type Path}">
-                                        <Setter Property="FlowDirection" Value="LeftToRight"/>
-                                    </Style>
-                                </CheckBox.Resources>
-                            </CheckBox>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Height="40" Margin="0,4,0,0">
-                            <Label Content="{lex:Loc MouseSensitivity}" VerticalAlignment="Center" />
-                            <xctk:IntegerUpDown d:IsHidden="True" MinWidth="50" Height="20"
-                                            Value="{Binding ButtonMouseSensitivity,FallbackValue=25}"
-                                            Minimum="0" Maximum="255" Increment="1" Margin="10,0,0,0" />
-                            <TextBlock Text="{Binding OutputMouseSpeed,Mode=OneWay,StringFormat='\{0} pps'}"
-                                   MinWidth="50" VerticalAlignment="Center"  Margin="10,0,0,0" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Height="40">
-                            <Label Content="{lex:Loc MouseVerticalScale}" ContentStringFormat="{}{0}:" VerticalAlignment="Center" />
-                            <xctk:IntegerUpDown d:IsHidden="True" MinWidth="50" Height="20"
-                            Value="{Binding ButtonMouseVerticalScale,FallbackValue='100'}"
-                            Minimum="0" Maximum="500" Increment="10" Margin="10,0,0,0" />
-                            <Label Content="%" VerticalContentAlignment="Center" Margin="4,0,0,0" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="{lex:Loc MouseOffset}" VerticalAlignment="Center" />
-                            <xctk:DoubleUpDown d:IsHidden="True" MinWidth="50" FormatString="F3" DefaultValue="0" Minimum="0" Maximum="100"
-                                           Value="{Binding ButtonMouseOffset,FallbackValue=0,UpdateSourceTrigger=LostFocus}" />
-                            <Label Content="%"/>
-                            <TextBlock Text="{Binding MouseOffsetSpeed,Mode=OneWay,StringFormat='\{0:0.00} pps'}"
-                                   MinWidth="50" VerticalAlignment="Center" Margin="10,0,0,0" />
-                        </StackPanel>
-                        <CheckBox Content="{lex:Loc MouseAcceleration}" IsChecked="{Binding MouseAcceleration}" Margin="0,6,0,0" />
-                        <CheckBox Content="{lex:Loc EnableTouchpadToggle}" IsChecked="{Binding EnableTouchpadToggle}" Margin="0,6,0,0"
-                              ToolTip="{lex:Loc Resources:EnableTouchToggle}" />
-                        <StackPanel Margin="0,8,0,2">
-                            <CheckBox Content="{lex:Loc SendGameFeedbackToPhysicalController}"
-                                      IsChecked="{Binding EnableOutputDataToDS4}"
-                                      FontWeight="SemiBold"
-                                      ToolTip="{lex:Loc SendGameFeedbackToPhysicalControllerTip}" />
-                            <TextBlock Text="{lex:Loc SendGameFeedbackToPhysicalControllerTip}"
-                                       Margin="20,4,8,0"
-                                       MaxWidth="560"
-                                       FontSize="11"
-                                       TextWrapping="Wrap"
-                                       Foreground="{DynamicResource MutedForegroundColor}" />
-                        </StackPanel>
-                        <GroupBox Header="Game Bar" Margin="0,8,0,0" Padding="2,4">
-                            <StackPanel>
-                                <CheckBox Content="Enable Game Bar controller compatibility" IsChecked="{Binding GameBarControllerCompatibility}"
-                                          Margin="{StaticResource spaceMargin}"
-                                          ToolTip="While Xbox Game Bar is visible, temporarily route this profile's mapped input through an Xbox-compatible controller. The selected profile and native DualSense output stay configured." />
-                                <TextBlock Margin="8,0,8,6" TextWrapping="Wrap"
-                                           Text="Keeps this profile and its native output active. Only mapped input is temporarily sent through an Xbox-compatible companion while Game Bar is open; audio, haptics, lighting, and microphone routing stay untouched." />
+                        </ScrollViewer>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding IsChecked, ElementName=profileAdvancedConnectionNav, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="0,0,12,8">
+                                <TextBlock Text="Bluetooth preferences and programs launched with this profile." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Idle disconnect" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="Disconnect an inactive Bluetooth controller to save battery." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc IdleDisconnect}" VerticalAlignment="Center" IsChecked="{Binding IdleDisconnectExists}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <xctk:IntegerUpDown x:Name="idleDisconnectUD" d:IsHidden="True" Value="{Binding IdleDisconnect,FallbackValue=5}" IsEnabled="{Binding IdleDisconnectExists}" MinWidth="50" Minimum="0" Maximum="60" Margin="10,0,0,0" MinHeight="34" VerticalAlignment="Center"/>
+                                            <Label Content="mins" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="DualShock 4 Bluetooth" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="This polling setting applies to DualShock 4 Bluetooth reports." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                            <Label Content="{lex:Loc DS4BTPollRate}" ContentStringFormat="{}{0}:" ToolTip="{lex:Loc Resources:BtPollRate}" VerticalAlignment="Center" Padding="0" Margin="0,4,10,10"/>
+                                            <ComboBox x:Name="btPollRateCombo" SelectedIndex="{Binding TempBTPollRateIndex,FallbackValue=4}" MinWidth="140" ToolTip="{lex:Loc Resources:BtPollRate}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center">
+                                                <ComboBoxItem Content="Max (1 ms)"/>
+                                                <ComboBoxItem Content="1000 Hz (1 ms)"/>
+                                                <ComboBoxItem Content="500 Hz (2 ms)"/>
+                                                <ComboBoxItem Content="333 Hz (3 ms)"/>
+                                                <ComboBoxItem Content="250 Hz (4 ms)"/>
+                                                <ComboBoxItem Content="200 Hz (5 ms)"/>
+                                                <ComboBoxItem Content="166 Hz (6 ms)"/>
+                                                <ComboBoxItem Content="142 Hz (7 ms)"/>
+                                                <ComboBoxItem Content="125 Hz (8 ms)"/>
+                                                <ComboBoxItem Content="111 Hz (9 ms)"/>
+                                                <ComboBoxItem Content="100 Hz (10 ms)"/>
+                                                <ComboBoxItem Content="90 Hz (11 ms)"/>
+                                                <ComboBoxItem Content="83 Hz (12 ms)"/>
+                                                <ComboBoxItem Content="76 Hz (13 ms)"/>
+                                                <ComboBoxItem Content="71 Hz (14 ms)"/>
+                                                <ComboBoxItem Content="66 Hz (15 ms)"/>
+                                                <ComboBoxItem Content="62 Hz (16 ms)"/>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Launch a program" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="Select a program to launch when this profile is activated." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" x:Name="launchProgCk" Content="{lex:Loc LaunchProgramWithProfile}" IsChecked="{Binding LaunchProgramExists}" IsEnabled="{Binding LaunchProgramExists}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <Button x:Name="launchProgBrowseBtn" Click="LaunchProgBrowseBtn_Click" Margin="0,0,8,12" Style="{DynamicResource BridgeSecondaryButtonStyle}">
+                                                <Button.Content>
+                                                    <PriorityBinding>
+                                                        <Binding Path="LaunchProgramName"/>
+                                                        <lex:BLoc Key="Browse"/>
+                                                    </PriorityBinding>
+                                                </Button.Content>
+                                            </Button>
+                                            <Button x:Name="launchProgIconBtn" Width="20" Height="20" Margin="20,0,0,0" Focusable="False">
+                                                <Button.Background>
+                                                    <ImageBrush ImageSource="{Binding LaunchProgramIcon}"/>
+                                                </Button.Background>
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
-                        </GroupBox>
-                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                            <CheckBox x:Name="launchProgCk" Content="{lex:Loc LaunchProgramWithProfile}" IsChecked="{Binding LaunchProgramExists}" IsEnabled="{Binding LaunchProgramExists}" />
-                            <Button x:Name="launchProgBrowseBtn" Click="LaunchProgBrowseBtn_Click" Width="80" Height="30" Margin="20,0,0,0">
-                                <Button.Content>
-                                    <PriorityBinding>
-                                        <Binding Path="LaunchProgramName" />
-                                        <lex:BLoc Key="Browse" />
-                                    </PriorityBinding>
-                                </Button.Content>
-                            </Button>
-                            <Button x:Name="launchProgIconBtn" Width="20" Height="20" Margin="20,0,0,0" Focusable="False" >
-                                <Button.Background>
-                                    <ImageBrush ImageSource="{Binding LaunchProgramIcon}" />
-                                </Button.Background>
-                            </Button>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Height="30" Margin="0,6,0,0">
-                            <CheckBox Content="{lex:Loc IdleDisconnect}" VerticalAlignment="Center" IsChecked="{Binding IdleDisconnectExists}" />
-                            <xctk:IntegerUpDown x:Name="idleDisconnectUD" d:IsHidden="True" Value="{Binding IdleDisconnect,FallbackValue=5}"
-                                            IsEnabled="{Binding IdleDisconnectExists}" MinWidth="50" Height="20" Minimum="0" Maximum="60" Margin="10,0,0,0" />
-                            <Label Content="mins" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                            <Label Content="{lex:Loc DS4BTPollRate}" ContentStringFormat="{}{0}:" ToolTip="{lex:Loc Resources:BtPollRate}" />
-                            <ComboBox x:Name="btPollRateCombo" SelectedIndex="{Binding TempBTPollRateIndex,FallbackValue=4}" MinWidth="140"
-                                  ToolTip="{lex:Loc Resources:BtPollRate}" Margin="8,0,0,0">
-                                <ComboBoxItem Content="Max (1 ms)" />
-                                <ComboBoxItem Content="1000 Hz (1 ms)" />
-                                <ComboBoxItem Content="500 Hz (2 ms)" />
-                                <ComboBoxItem Content="333 Hz (3 ms)" />
-                                <ComboBoxItem Content="250 Hz (4 ms)" />
-                                <ComboBoxItem Content="200 Hz (5 ms)" />
-                                <ComboBoxItem Content="166 Hz (6 ms)" />
-                                <ComboBoxItem Content="142 Hz (7 ms)" />
-                                <ComboBoxItem Content="125 Hz (8 ms)" />
-                                <ComboBoxItem Content="111 Hz (9 ms)" />
-                                <ComboBoxItem Content="100 Hz (10 ms)" />
-                                <ComboBoxItem Content="90 Hz (11 ms)" />
-                                <ComboBoxItem Content="83 Hz (12 ms)" />
-                                <ComboBoxItem Content="76 Hz (13 ms)" />
-                                <ComboBoxItem Content="71 Hz (14 ms)" />
-                                <ComboBoxItem Content="66 Hz (15 ms)" />
-                                <ComboBoxItem Content="62 Hz (16 ms)" />
-                            </ComboBox>
-                        </StackPanel>
-
-                        <GroupBox Header="{lex:Loc AbsoluteMouseOptions}" Margin="0,8,0,0">
-                            <StackPanel Orientation="Vertical">
-                                <Expander IsExpanded="False" Header="Settings">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                        </Grid.RowDefinitions>
-
-                                        <Label Content="{lex:Loc Width}" ContentStringFormat="{}{0}:" Grid.Row="0" Grid.Column="0" />
-                                        <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsWidth}"
-                                            MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05"
-                                            Margin="{StaticResource spaceMargin}" Grid.Row="0" Grid.Column="1" />
-
-                                        <Label Content="{lex:Loc Height}" ContentStringFormat="{}{0}:" Grid.Row="1" Grid.Column="0" />
-                                        <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsHeight}"
-                                            MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05"
-                                            Margin="{StaticResource spaceMargin}" Grid.Row="1" Grid.Column="1" />
-
-                                        <Label Content="{lex:Loc XCenter}" ContentStringFormat="{}{0}:" Grid.Row="2" Grid.Column="0" />
-                                        <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsXCenter}"
-                                            MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05"
-                                            Margin="{StaticResource spaceMargin}" Grid.Row="2" Grid.Column="1" />
-
-                                        <Label Content="{lex:Loc YCenter}" ContentStringFormat="{}{0}:" Grid.Row="3" Grid.Column="0" />
-                                        <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsYCenter}"
-                                            MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05"
-                                            Margin="{StaticResource spaceMargin}" Grid.Row="3" Grid.Column="1" />
-
-                                        <Label Content="{lex:Loc AntiRadius}" ContentStringFormat="{}{0}:" Grid.Row="4" Grid.Column="0" />
-                                        <DockPanel Grid.Row="4" Grid.Column="1">
-                                            <TextBlock Text="%" DockPanel.Dock="Right" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" />
-                                            <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsAntiRadius}"
-                                                MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05"
-                                                Margin="{StaticResource spaceMargin}" />
-                                        </DockPanel>
-
-                                        <Label Content="{lex:Loc SnapToCenter}" ContentStringFormat="{}{0}:" Grid.Row="5" Grid.Column="0" />
-                                        <CheckBox IsChecked="{Binding AbsSnapCenter}" MinWidth="50" Grid.Row="5" Grid.Column="1" />
-                                    </Grid>
-                                </Expander>
-                            </StackPanel>
-                        </GroupBox>
-                    </StackPanel>
-                </ScrollViewer>
-
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

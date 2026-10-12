@@ -1859,6 +1859,12 @@ namespace DS4Windows
             set => m_Config.verboseStartupLogging = value;
         }
 
+        public static bool ProfileEditorTimingLogging
+        {
+            get => m_Config.profileEditorTimingLogging;
+            set => m_Config.profileEditorTimingLogging = value;
+        }
+
         public static bool SuppressViiperSetupPrompt
         {
             get => m_Config.suppressViiperSetupPrompt;
@@ -5008,6 +5014,7 @@ namespace DS4Windows
         public bool useMoonlight = false;
         public bool useAdvancedMoonlight = false;
         public bool verboseStartupLogging = false;
+        public bool profileEditorTimingLogging = false;
         public bool suppressViiperSetupPrompt = false;
         public string preferredViiperPath = string.Empty;
         public bool closeMini = false;

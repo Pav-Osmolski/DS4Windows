@@ -415,6 +415,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
             set;
         }
 
+        [XmlElement("ProfileEditorTimingLogging")]
+        public bool ProfileEditorTimingLogging { get; set; }
+
         [XmlElement("SuppressViiperSetupPrompt")]
         public bool SuppressViiperSetupPrompt
         {
@@ -942,6 +945,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             UseMoonlight = source.useMoonlight;
             UseAdvancedMoonlight = source.useAdvancedMoonlight;
             VerboseStartupLogging = source.verboseStartupLogging;
+            ProfileEditorTimingLogging = source.profileEditorTimingLogging;
             SuppressViiperSetupPrompt = source.suppressViiperSetupPrompt;
             PreferredViiperPath = source.preferredViiperPath;
             CloseMinimizes = source.closeMini;
@@ -1052,6 +1056,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.useMoonlight = UseMoonlight;
             destination.useAdvancedMoonlight = UseAdvancedMoonlight;
             destination.verboseStartupLogging = VerboseStartupLogging;
+            destination.profileEditorTimingLogging = ProfileEditorTimingLogging;
             destination.suppressViiperSetupPrompt =
                 SuppressViiperSetupPrompt;
             destination.preferredViiperPath = PreferredViiperPath ??

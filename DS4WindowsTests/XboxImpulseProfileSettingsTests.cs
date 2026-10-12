@@ -39,12 +39,17 @@ public sealed class XboxImpulseProfileSettingsTests
         var checkbox = checkboxes.Single(node =>
             (string)node.Ancestors(Wpf + "TabItem").First().Attribute("Header") == "Advanced");
         Assert.AreEqual("Translate Xbox impulse-trigger vibration", (string)checkbox.Attribute("Content"));
-        Assert.AreEqual("{lex:Loc Rumble}", (string)checkbox.Ancestors(Wpf + "GroupBox").First().Attribute("Header"));
+        var rumbleCard = checkbox.Ancestors(Wpf + "Border").First();
+        Assert.AreEqual("{lex:Loc Rumble}", (string)rumbleCard.Element(Wpf + "StackPanel").Elements(Wpf + "TextBlock").First().Attribute("Text"));
         var tab = checkbox.Ancestors(Wpf + "TabItem").First();
         Assert.AreEqual("Advanced", (string)tab.Attribute("Header"));
         foreach (var element in checkbox.AncestorsAndSelf().TakeWhile(node => node != tab).Append(tab))
         {
-            Assert.IsNull(element.Attribute("Visibility"), "The impulse option must be visible for every controller.");
+            if (element.Name == Wpf + "ScrollViewer")
+                Assert.AreEqual("{Binding IsChecked, ElementName=profileAdvancedFeedbackNav, Converter={StaticResource BooleanToVisibilityConverter}}",
+                    (string)element.Attribute("Visibility"), "Only the user's selected category may hide the feedback page.");
+            else
+                Assert.IsNull(element.Attribute("Visibility"), "The impulse option must be available for every controller.");
             Assert.IsNull(element.Attribute("IsEnabled"), "The impulse option must not depend on Trigger Lab or hardware capabilities.");
         }
         Assert.IsFalse(editor.Descendants().Attributes().Any(attribute =>
@@ -62,7 +67,9 @@ public sealed class XboxImpulseProfileSettingsTests
         Assert.AreEqual("{Binding SupportsAdaptiveTriggers}", (string)routing.Attribute("IsEnabled"));
         Assert.AreEqual("{Binding MapXboxImpulseTriggers}", (string)routing.Parent.Attribute("IsEnabled"));
         Assert.AreSame(tab, routing.Ancestors(Wpf + "TabItem").First());
-        Assert.IsFalse(routing.AncestorsAndSelf().TakeWhile(node => node != tab).Attributes("Visibility").Any());
+        var routingVisibility = routing.AncestorsAndSelf().TakeWhile(node => node != tab).Attributes("Visibility").ToArray();
+        Assert.AreEqual(1, routingVisibility.Length);
+        Assert.AreEqual("{Binding IsChecked, ElementName=profileAdvancedFeedbackNav, Converter={StaticResource BooleanToVisibilityConverter}}", routingVisibility[0].Value);
     }
 
     [TestMethod]

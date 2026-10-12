@@ -183,6 +183,17 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public bool MinimizeToTaskbar { get => DS4Windows.Global.MinToTaskbar; set => DS4Windows.Global.MinToTaskbar = value; }
         public bool CloseMinimizes { get => DS4Windows.Global.CloseMini; set => DS4Windows.Global.CloseMini = value; }
         public bool QuickCharge { get => DS4Windows.Global.QuickCharge; set => DS4Windows.Global.QuickCharge = value; }
+        public bool ProfileEditorTimingLogging
+        {
+            get => DS4Windows.Global.ProfileEditorTimingLogging;
+            set
+            {
+                if (DS4Windows.Global.ProfileEditorTimingLogging == value) return;
+                DS4Windows.Global.ProfileEditorTimingLogging = value;
+                DS4Windows.Global.Save();
+            }
+        }
+
         public bool VerboseStartupLogging
         {
             get => DS4Windows.Global.VerboseStartupLogging;

@@ -3,6 +3,14 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## 5.0.20 — Unreleased
+
+### Changed
+
+- Organize Profile Editor Advanced options into Output, Feedback, Audio, Input and Connection categories with full-width cards, consistent controls and preserved controller-specific settings.
+- Align footer messages vertically, standardize profile toolbar button padding, and align the Dual Joy-Con aiming heading with the Nintendo feature cards.
+- Make profile-editor timing diagnostics opt-in through Settings > Updates & tools. Persist the separate setting, which defaults to off.
+
 ## [5.0.19](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.19) — 2026-10-12
 
 ### Fixed

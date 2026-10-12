@@ -70,7 +70,7 @@ Back up your settings before deleting profiles or importing replacements.
 | Audio Haptics | Use system or application audio as a haptics source |
 | Trigger Lab | Configure persistent adaptive-trigger effects |
 | Nintendo Options | Configure supported rumble, motion, calibration and Joy-Con 2 optical-mouse features |
-| Advanced | Choose output type and configure rumble, audio, latency and compatibility options |
+| Advanced | Use Output, Feedback, Audio, Input and Connection categories to configure output, rumble, controller audio, mouse mappings, latency and compatibility options. Hardware-specific controls follow the selected physical controller. |
 
 ![Profile editor with a DualShock 4 layout](images/profile-editor-current.png)
 
@@ -136,7 +136,7 @@ Settings fills the available window width and groups related options into cards.
 | General | Startup, window behavior, notifications and latency warnings |
 | Appearance | App theme, tray icon and language |
 | Controllers | VIIPER setup, HidHide, Steam Input recovery, device options and swipe profiles; optional Nintendo pairing |
-| Updates & tools | Update checks, profile folder, diagnostic utilities and verbose logging |
+| Updates & tools | Update checks, profile folder, diagnostic utilities, verbose logging and optional profile-editor timing logs (off by default) |
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
 
