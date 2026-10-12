@@ -103,7 +103,7 @@ releases. Download updates for this fork manually from
 - **Double input:** check HidHide is installed and enabled for the physical
   controller, then disable overlapping remapping software for the game.
 - **No virtual controller / backend not ready:** follow the displayed startup
-  error. Use **Settings > Install / Repair VIIPER** when requested, and restart
+  error. Use **Settings > Controllers > Install / Repair VIIPER** when requested, and restart
   only if setup asks. Keep DS4Windows and its bundled VIIPER version together.
 - **No native haptics:** confirm the game supports them, the profile emulates
   DualSense, controller audio/speaker support is enabled, and Steam Input is
