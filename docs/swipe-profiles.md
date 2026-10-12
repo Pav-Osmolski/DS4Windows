@@ -1,6 +1,6 @@
 # Swipe profile selection
 
-[User guide](../user_guide.md) · [Documentation index](README.md)
+[User guide](user-guide.md) · [Documentation index](README.md)
 
 A two-finger touchpad swipe can switch between saved profiles.
 In Settings, enable **Swipe touchpad to switch profiles**, then open

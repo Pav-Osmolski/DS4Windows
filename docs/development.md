@@ -24,8 +24,9 @@ hardware compatibility; use a supported matching package for controller testing.
 ## Publish and package
 
 ```powershell
-dotnet publish .\DS4Windows\DS4WinWPF.csproj -c Release -p:Platform=x64 -r win-x64 --self-contained true -o .\bin\x64\Release\output
-python .\utils\post-build.py .\bin\x64\Release\output .\DS4Windows <release-version>
+$packageVersion = "VIIPERRC4.6.6" # Match the intended InformationalVersion
+dotnet publish .\DS4Windows\DS4WinWPF.csproj -c Release -p:Platform=x64 -r win-x64 --self-contained true -p:InformationalVersion=$packageVersion -o .\bin\x64\Release\output
+python .\utils\post-build.py .\bin\x64\Release\output . $packageVersion
 ```
 
 The final argument is the package version; choose the intended version for your

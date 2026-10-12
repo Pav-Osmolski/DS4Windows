@@ -87,3 +87,5 @@ of a newer release. Release history is in [CHANGELOG.md](../../CHANGELOG.md).
 - [RC4.6.6 startup, dependencies and Edge delivery](rc466-delivery-ledger-20260923.md)
 - [USB/IP driver verification timeout: issues #118 and #126](usbip-driver-verification-timeout.md)
 - [VIIPER recovery contract](viiper-recovery-20260923.md)
+
+- [Legacy user guide](legacy-user-guide.md): original instructions and screenshots retained as historical context.
