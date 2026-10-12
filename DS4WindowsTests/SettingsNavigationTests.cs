@@ -17,6 +17,8 @@ public sealed class SettingsNavigationTests
     [DataRow("DefaultTheme", 640d)]
     [DataRow("DarkTheme", 980d)]
     [DataRow("DefaultTheme", 980d)]
+    [DataRow("DarkTheme", 1800d)]
+    [DataRow("DefaultTheme", 1800d)]
     public void ActualSettingsNavigationPreservesEditsAndKeepsEverySectionReachable(string theme, double width)
     {
         Exception failure = null;
@@ -26,6 +28,8 @@ public sealed class SettingsNavigationTests
             {
                 Grid root = LoadSettings(theme);
                 Layout(root, width);
+                Assert.AreEqual(width, root.ActualWidth, 1d,
+                    "Settings must fill the available width, including a maximized window.");
                 var startup = (CheckBox)root.FindName("runAtStartCk");
                 var steam = (TextBox)root.FindName("customSteamTxt");
                 startup.IsChecked = false;

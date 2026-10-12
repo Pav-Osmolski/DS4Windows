@@ -582,7 +582,7 @@
                 </local:OutputSlotManagerControl>
             </TabItem>
             <TabItem xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:DS4WinWPF.DS4Forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Name="settingsTab" Header="{lex:Loc Settings}" Tag="" IsEnabled="{Binding ViewEnabled,Mode=OneWay}">
-                <Grid MaxWidth="980" HorizontalAlignment="Stretch">
+                <Grid HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />

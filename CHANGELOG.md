@@ -9,6 +9,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Reorganize Settings into General, Appearance, Controllers, Updates & tools, Integrations, and Advanced sections. Group related options into focused cards with consistent inputs and action buttons; keep Nintendo setup collapsed until needed.
 - Bring language settings, update checks, controller setup, useful tools and logging shortcuts within easier reach while preserving existing settings and behavior.
+- Let Settings use the full available window width, matching the other app pages.
 
 ## [5.0.17](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.17) — 2026-10-11
 
