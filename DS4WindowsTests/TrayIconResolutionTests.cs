@@ -9,7 +9,7 @@ namespace DS4Windows.Tests;
 [TestClass]
 public class TrayIconResolutionTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(16, 16)]
     [DataRow(20, 24)]
     [DataRow(24, 24)]
@@ -51,8 +51,8 @@ public class TrayIconResolutionTests
     public void InvalidIconDataFailsBeforeNativeHandleCreation()
     {
         using var truncated = new MemoryStream(new byte[] { 0, 0, 1, 0, 1, 0 });
-        Assert.ThrowsException<InvalidDataException>(() => TrayIconLoader.Load(truncated, 32));
+        Assert.ThrowsExactly<InvalidDataException>(() => TrayIconLoader.Load(truncated, 32));
         using var empty = new MemoryStream();
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => TrayIconLoader.Load(empty, 0));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => TrayIconLoader.Load(empty, 0));
     }
 }

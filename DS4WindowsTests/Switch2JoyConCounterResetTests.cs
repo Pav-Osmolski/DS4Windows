@@ -16,7 +16,7 @@ public sealed class Switch2JoyConCounterResetTests
     private const long Frequency = 10_000_000;
     private const ulong PairEpoch = 24;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left, 1_431_651u, 12u)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, 1_431_652u, 13u)]
     public void StandaloneRuntimePublishesReleaseAtObservedCounterResetWithoutRetiring(
@@ -42,7 +42,7 @@ public sealed class Switch2JoyConCounterResetTests
         Assert.AreEqual(Switch2RuntimeInputDeviceState.Active, runtime.RuntimeState);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2JoyConProfileMode.StandaloneHorizontalLeft)]
     [DataRow(Switch2JoyConProfileMode.StandaloneVerticalLeft)]
     [DataRow(Switch2JoyConProfileMode.StandaloneHorizontalRight)]
@@ -71,7 +71,7 @@ public sealed class Switch2JoyConCounterResetTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void JoinedRuntimePublishesResetFromEitherHalfWithoutDroppingThePair(bool resetRight)
@@ -99,7 +99,7 @@ public sealed class Switch2JoyConCounterResetTests
         Assert.AreEqual(Switch2RuntimeInputDeviceState.Active, runtime.RuntimeState);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left, 1_431_651u, 12u)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, 1_431_652u, 13u)]
     public void ReplayAndLiveSessionPreserveResetEvidenceAndAdvanceTheNextBaseline(
@@ -131,7 +131,7 @@ public sealed class Switch2JoyConCounterResetTests
         Assert.AreEqual((Switch2CounterSequenceKind.Duplicate, 0u), actual[3]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
     public void ResetCannotBypassHostTimestampDescriptorOrSupportedReportFences(Switch2ControllerModel model)
@@ -152,7 +152,7 @@ public sealed class Switch2JoyConCounterResetTests
         Assert.IsFalse(Switch2CounterSequence.UsesArrivalOrdering(model, Switch2Transport.BluetoothLe, Switch2InputReportKind.JoyCon2Right08));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2, Switch2Transport.Usb)]
     [DataRow(Switch2ControllerModel.ProController2, Switch2Transport.BluetoothLe)]
     [DataRow(Switch2ControllerModel.JoyCon2Left, Switch2Transport.BluetoothLe)]

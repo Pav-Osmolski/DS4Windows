@@ -265,7 +265,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, false)]
     [DataRow(2, false)]
     [DataRow(1, true)]

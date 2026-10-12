@@ -8,7 +8,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2BluetoothServiceDiscoveryTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(GattCommunicationStatus.Success, (int)QueryStatus.Success)]
     [DataRow(GattCommunicationStatus.Unreachable, (int)QueryStatus.Unreachable)]
     [DataRow(GattCommunicationStatus.ProtocolError, (int)QueryStatus.ProtocolError)]
@@ -26,7 +26,7 @@ public class Switch2BluetoothServiceDiscoveryTests
         Assert.IsFalse(default(ServiceQuery).Succeeded);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)QueryStatus.Unreachable, 0, 10)]
     [DataRow((int)QueryStatus.Unreachable, 1, 10)]
     [DataRow((int)QueryStatus.Success, 0, 10)]
@@ -98,7 +98,7 @@ public class Switch2BluetoothServiceDiscoveryTests
         var device = new FakeDevice((_, _) => ValueTask.FromResult(
             new ServiceQuery(QueryStatus.Unreachable, new[] { broken, second })));
         int delays = 0;
-        await Assert.ThrowsExceptionAsync<IOException>(() => Switch2BluetoothServiceDiscovery.QueryAsync(
+        await Assert.ThrowsExactlyAsync<IOException>(() => Switch2BluetoothServiceDiscovery.QueryAsync(
             device, Switch2InputCodec.ServiceUuid, CancellationToken.None,
             (_, _) => { ++delays; return Task.CompletedTask; }).AsTask());
         Assert.AreEqual(1, broken.DisposeCalls);
@@ -133,7 +133,7 @@ public class Switch2BluetoothServiceDiscoveryTests
         Assert.AreEqual(0, device.QueryCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task NonCooperativeNativeQueryKeepsOwnershipUntilItsResultArrives(bool successful)

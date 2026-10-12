@@ -12,7 +12,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class PortableUpdaterBootstrapTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("v2.0.4")]
     [DataRow("v2.0.3")]
     [DataRow("v2.0.5")]
@@ -22,7 +22,7 @@ public sealed class PortableUpdaterBootstrapTests
     public void OldUnsafeUpdaterIsNeverAccepted(string tag)
     {
         using var json = Release(tag);
-        Assert.ThrowsException<InvalidOperationException>(() => PortableUpdaterBootstrap.ReadVerifiedAsset(json.RootElement));
+        Assert.ThrowsExactly<InvalidOperationException>(() => PortableUpdaterBootstrap.ReadVerifiedAsset(json.RootElement));
     }
 
     [TestMethod]
@@ -35,7 +35,7 @@ public sealed class PortableUpdaterBootstrapTests
         Assert.AreEqual(72L, asset.Size);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("v2.0.10")]
     [DataRow("v2.1.0")]
     [DataRow("v3.0.0")]
@@ -46,7 +46,7 @@ public sealed class PortableUpdaterBootstrapTests
         Assert.IsTrue(asset.Version > PortableUpdaterBootstrap.MinimumVersion);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("draft")]
     [DataRow("prerelease")]
     [DataRow("digest")]
@@ -58,10 +58,10 @@ public sealed class PortableUpdaterBootstrapTests
     public void InvalidOrAmbiguousReleaseCannotPrepareAnUpdater(string fault)
     {
         using var json = Release(fault: fault);
-        Assert.ThrowsException<InvalidDataException>(() => PortableUpdaterBootstrap.ReadVerifiedAsset(json.RootElement));
+        Assert.ThrowsExactly<InvalidDataException>(() => PortableUpdaterBootstrap.ReadVerifiedAsset(json.RootElement));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("..\\other.exe")]
     [DataRow("C:\\Windows\\other.exe")]
     [DataRow("other.exe:stream")]
@@ -75,18 +75,18 @@ public sealed class PortableUpdaterBootstrapTests
         var valid = PortableUpdaterBootstrap.CreateStartInfo(ticket,
             "VIIPERRC4.6.2", "DS4Windows.exe", 123, 456);
         Assert.AreEqual(fixture.Updater, valid.FileName);
-        Assert.ThrowsException<ArgumentException>(() => PortableUpdaterBootstrap.CreateStartInfo(ticket,
+        Assert.ThrowsExactly<ArgumentException>(() => PortableUpdaterBootstrap.CreateStartInfo(ticket,
             "VIIPERRC4.6.2", executable, 123, 456));
     }
 
     [TestMethod]
     public void LaunchWithoutVerifiedPreparationIsRejected()
     {
-        Assert.ThrowsException<ArgumentException>(() => PortableUpdaterBootstrap.CreateStartInfo(null,
+        Assert.ThrowsExactly<ArgumentException>(() => PortableUpdaterBootstrap.CreateStartInfo(null,
             "VIIPERRC4.5.1", "DS4Windows.exe", 123, 456));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task ConcurrentDestinationCreationOrChangeIsPreserved(bool existed)
@@ -94,12 +94,12 @@ public sealed class PortableUpdaterBootstrapTests
         using var f = new DownloadFixture();
         if (existed) File.WriteAllText(f.Updater, "old updater");
         f.BeforeDownload = () => File.WriteAllText(f.Updater, "concurrent unrelated replacement");
-        await Assert.ThrowsExceptionAsync<IOException>(() => PortableUpdaterBootstrap.PrepareAsync(f.Client, f.Root));
+        await Assert.ThrowsExactlyAsync<IOException>(() => PortableUpdaterBootstrap.PrepareAsync(f.Client, f.Root));
         Assert.AreEqual("concurrent unrelated replacement", File.ReadAllText(f.Updater));
         Assert.AreEqual(0, Directory.GetFiles(f.Root, ".DS4Updater-download-*").Length);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public async Task UnexpectedFinalResponseOriginNeverReplacesUpdater(bool metadata)
@@ -108,7 +108,7 @@ public sealed class PortableUpdaterBootstrapTests
         File.WriteAllText(f.Updater, "keep existing updater");
         f.RedirectMetadata = metadata;
         f.RedirectDownload = !metadata;
-        await Assert.ThrowsExceptionAsync<InvalidDataException>(() => PortableUpdaterBootstrap.PrepareAsync(f.Client, f.Root));
+        await Assert.ThrowsExactlyAsync<InvalidDataException>(() => PortableUpdaterBootstrap.PrepareAsync(f.Client, f.Root));
         Assert.AreEqual("keep existing updater", File.ReadAllText(f.Updater));
         Assert.AreEqual(metadata ? 1 : 2, f.RequestCount);
         Assert.AreEqual(0, Directory.GetFiles(f.Root, ".DS4Updater-download-*").Length);
@@ -120,7 +120,7 @@ public sealed class PortableUpdaterBootstrapTests
         using var f = new DownloadFixture();
         File.WriteAllText(f.Updater, "keep existing updater");
         f.CorruptDownload = true;
-        await Assert.ThrowsExceptionAsync<InvalidDataException>(() => PortableUpdaterBootstrap.PrepareAsync(f.Client, f.Root));
+        await Assert.ThrowsExactlyAsync<InvalidDataException>(() => PortableUpdaterBootstrap.PrepareAsync(f.Client, f.Root));
         Assert.AreEqual("keep existing updater", File.ReadAllText(f.Updater));
         Assert.AreEqual(0, Directory.GetFiles(f.Root, ".DS4Updater-download-*").Length);
     }
@@ -140,7 +140,7 @@ public sealed class PortableUpdaterBootstrapTests
             Assert.AreEqual("--portable-safe-v1", info.ArgumentList[0]);
             CollectionAssert.AreEqual(new[] { "--parentPid", "--parentStartUtcTicks", "--releaseTag", "--launchExe" },
                 info.ArgumentList.Skip(1).Where((_, index) => index % 2 == 0).ToArray());
-            Assert.ThrowsException<IOException>(() => File.WriteAllText(f.Updater, "tamper while pinned"));
+            Assert.ThrowsExactly<IOException>(() => File.WriteAllText(f.Updater, "tamper while pinned"));
             return false; // No child process is actually started in this test.
         }));
         Assert.IsTrue(called);
@@ -173,7 +173,7 @@ public sealed class PortableUpdaterBootstrapTests
     {
         using var f = new DownloadFixture();
         File.WriteAllText(Path.Combine(f.Root, PortableBrokerContext.MarkerFileName), " " + PortableBrokerContext.MarkerText);
-        Assert.ThrowsException<InvalidDataException>(() => PortableUpdaterBootstrap.ValidatePackageRoot(f.Root));
+        Assert.ThrowsExactly<InvalidDataException>(() => PortableUpdaterBootstrap.ValidatePackageRoot(f.Root));
     }
 
     private sealed class DownloadFixture : IDisposable

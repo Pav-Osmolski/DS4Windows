@@ -132,15 +132,15 @@ namespace DS4WindowsTests
         [TestMethod]
         public void ValidationAndExactStorageFailClosed()
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 State(buttons: 1u << 16));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 State(leftTrigger: 1024));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 State(rightTrigger: ushort.MaxValue));
-            Assert.ThrowsException<ArgumentException>(() =>
+            Assert.ThrowsExactly<ArgumentException>(() =>
                 XboxOneEgressState.Neutral.BuildInto(new byte[23]));
-            Assert.ThrowsException<ArgumentException>(() =>
+            Assert.ThrowsExactly<ArgumentException>(() =>
                 XboxOneEgressState.Neutral.BuildInto(new byte[25]));
         }
 

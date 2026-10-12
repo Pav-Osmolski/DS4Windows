@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class ViiperCanonicalMotionCalibrationTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ViiperVirtualDeviceType.DualSense)]
     [DataRow(ViiperVirtualDeviceType.DualSenseEdge)]
     public void CanonicalMotionSerializesAtSixteenGyroUnitsAnd8192AccelUnits(ViiperVirtualDeviceType type)

@@ -109,7 +109,7 @@ public sealed class StartupEvidenceCaptureTests
             incompleteResult);
         _ = incompleteRecorder.Begin(
             StartupEvidenceCommandKind.EnableUsbHidReports);
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             incompleteRecorder.Begin(
                 StartupEvidenceCommandKind.SetFeatureMask));
 
@@ -144,7 +144,7 @@ public sealed class StartupEvidenceCaptureTests
                 Convert.FromHexString("0C01000200F8000000000000"), true,
                 null)));
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             recorder.Begin(StartupEvidenceCommandKind.PlayerLed1));
     }
 
@@ -221,7 +221,7 @@ public sealed class StartupEvidenceCaptureTests
         int releaseCount = 0;
 
         HardwareVerificationException failure = await Assert
-            .ThrowsExceptionAsync<HardwareVerificationException>(() =>
+            .ThrowsExactlyAsync<HardwareVerificationException>(() =>
                 OwnedOperationDeadline.RunAsync(_ =>
                 {
                     allowCompletion.Wait();

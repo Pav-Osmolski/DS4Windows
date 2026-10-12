@@ -14,7 +14,7 @@ public sealed class ViiperNintendoPendingControlRepeatTests
 {
     private const BindingFlags PrivateInstance = BindingFlags.Instance | BindingFlags.NonPublic;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(76)]
     [DataRow(217)]
     [DataRow(474)]
@@ -54,7 +54,7 @@ public sealed class ViiperNintendoPendingControlRepeatTests
         Assert.AreEqual(0L, buffer.OrderedControlNintendoRepeated);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("target")]
     [DataRow("session")]
     [DataRow("device-generation")]
@@ -86,7 +86,7 @@ public sealed class ViiperNintendoPendingControlRepeatTests
         Assert.AreEqual(0L, buffer.OrderedControlNintendoRepeated);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("speaker")]
     [DataRow("ordinary-control")]
     [DataRow("explicit-media-boundary")]
@@ -116,7 +116,7 @@ public sealed class ViiperNintendoPendingControlRepeatTests
         Assert.AreEqual(0L, buffer.OrderedControlNintendoRepeated);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("pcm")]
     [DataRow("audio-routing")]
     [DataRow("unknown-trigger")]
@@ -223,7 +223,7 @@ public sealed class ViiperNintendoPendingControlRepeatTests
         for (byte i = 5; i <= 8; i++) AssertOrdinaryCommand(buffer, Rumble(76, i));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PendingRepeatAllocationGateDetectsOnlyThePositiveControl(bool allocateClone)
@@ -247,7 +247,7 @@ public sealed class ViiperNintendoPendingControlRepeatTests
         Assert.AreEqual(1, buffer.PendingOrderedControlCount);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -266,7 +266,7 @@ public sealed class ViiperNintendoPendingControlRepeatTests
         AssertOrdinaryCommand(fixture.Buffer, zero);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("delay")]
     [DataRow("retired-session")]
     [DataRow("missing-session")]

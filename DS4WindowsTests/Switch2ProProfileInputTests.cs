@@ -9,7 +9,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2ProProfileInputTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void SourceProjectionPublishesAdjacentMappedStickValuesBeforeLegacyQuantization(bool bluetooth)
@@ -376,7 +376,7 @@ public class Switch2ProProfileInputTests
         Assert.AreEqual(0.5, state.Motion.accelZG, 0.0001);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, 0, 1)]
     [DataRow(false, 0, -1)]
     [DataRow(false, 1, 1)]
@@ -416,7 +416,7 @@ public class Switch2ProProfileInputTests
         Assert.AreEqual(axis == 1 ? -8192 * sign : 0, state.Motion.accelZFull, "Canonical acceleration Z");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DoNotParallelize]
     [DataRow(false, 0)]
     [DataRow(false, 1)]

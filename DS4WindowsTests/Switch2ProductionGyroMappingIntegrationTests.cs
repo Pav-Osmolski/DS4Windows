@@ -24,7 +24,7 @@ public sealed class Switch2ProductionGyroMappingIntegrationTests
     private const int Timeout = 2_000;
     private const uint CButton = 1u << 14;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, DS4Controls.BLP, 0x02000000u)]
     [DataRow(0, DS4Controls.BRP, 0x01000000u)]
     [DataRow(0, DS4Controls.Capture, 0x00002000u)]
@@ -51,7 +51,7 @@ public sealed class Switch2ProductionGyroMappingIntegrationTests
         Assert.AreEqual(0, fixture.SystemInputCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, false)]
     [DataRow(1, false)]
     [DataRow(2, false)]
@@ -83,7 +83,7 @@ public sealed class Switch2ProductionGyroMappingIntegrationTests
         Assert.AreEqual(0, fixture.SystemInputCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -118,7 +118,7 @@ public sealed class Switch2ProductionGyroMappingIntegrationTests
         Assert.AreEqual(0, fixture.SystemInputCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -139,7 +139,7 @@ public sealed class Switch2ProductionGyroMappingIntegrationTests
         Assert.IsNull(fixture.Controllers[Slot]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     public void TerminalReportCannotConsumePendingGyroFromAnUnmappedRegularReport(int source)
@@ -157,7 +157,7 @@ public sealed class Switch2ProductionGyroMappingIntegrationTests
         Assert.IsFalse(fixture.Last.GyroActive);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     public void TerminalReportReleasesActualDirectionalSwipeButtonMapping(int source)
@@ -203,7 +203,7 @@ public sealed class Switch2ProductionGyroMappingIntegrationTests
         Mouse successor = fixture.TouchPads[Slot];
         Assert.AreNotSame(oldMouse, successor);
         calls = fixture.RegularCalls;
-        TargetInvocationException rejected = Assert.ThrowsException<TargetInvocationException>(() =>
+        TargetInvocationException rejected = Assert.ThrowsExactly<TargetInvocationException>(() =>
             oldReport.DynamicInvoke(oldDevice, oldEnvelope));
         Assert.IsInstanceOfType<InvalidOperationException>(rejected.InnerException);
         Assert.AreEqual(calls, fixture.RegularCalls);
@@ -244,7 +244,7 @@ public sealed class Switch2ProductionGyroMappingIntegrationTests
         Assert.AreEqual((ushort)2048, observed.Switch.RightStickY);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]

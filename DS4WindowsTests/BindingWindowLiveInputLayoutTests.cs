@@ -70,7 +70,7 @@ public sealed class BindingWindowLiveInputLayoutTests
         Assert.AreEqual("247", (string)Named(document, "outputControllerCanvas").Attribute("Height"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(BindingWindow.ExposeMode.Full, -1, false)]
     [DataRow(BindingWindow.ExposeMode.Full, 0, true)]
     [DataRow(BindingWindow.ExposeMode.Full, 2, true)]
@@ -101,7 +101,7 @@ public sealed class BindingWindowLiveInputLayoutTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1920d, 1040d, 1020d, 710d)]
     [DataRow(1280d, 680d, 1020d, 656d)]
     [DataRow(800d, 560d, 776d, 536d)]

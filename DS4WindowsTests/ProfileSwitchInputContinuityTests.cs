@@ -14,7 +14,7 @@ public sealed class ProfileSwitchInputContinuityTests
     private const int Slot = 7;
     private const uint W = 0x57;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]

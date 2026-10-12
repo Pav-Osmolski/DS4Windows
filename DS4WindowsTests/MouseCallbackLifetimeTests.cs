@@ -31,8 +31,8 @@ public sealed class MouseCallbackLifetimeTests
         Assert.IsFalse(owner.TryInvokeProjectedMotion(new DS4SixAxis(), fixture.Args));
         Assert.IsTrue(owner.TryInvokeProjectedMotion(fixture.Source.SixAxis, fixture.Args));
         Assert.AreEqual(1, fixture.Mouse.Calls);
-        Assert.ThrowsException<InvalidOperationException>(() => owner.Subscribe());
-        Assert.ThrowsException<InvalidOperationException>(() => owner.ActivateDirectPublication());
+        Assert.ThrowsExactly<InvalidOperationException>(() => owner.Subscribe());
+        Assert.ThrowsExactly<InvalidOperationException>(() => owner.ActivateDirectPublication());
         Assert.IsTrue(owner.TryRetire(0));
         Assert.IsFalse(owner.IsAcceptingCallbacks);
         Assert.IsFalse(owner.TryInvokeProjectedMotion(fixture.Source.SixAxis, fixture.Args));
@@ -46,7 +46,7 @@ public sealed class MouseCallbackLifetimeTests
         var owner = new ControlServiceMouseCallbackSubscription(fixture.Mouse, fixture.Source, 0);
         owner.ActivateDirectPublication();
         fixture.Mouse.Action = () => throw new InvalidOperationException("test");
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             owner.TryInvokeProjectedMotion(fixture.Source.SixAxis, fixture.Args));
         Assert.IsFalse(ControlServiceMouseCallbackSubscription.IsInsideCallback);
         fixture.Mouse.Action = () =>
@@ -84,7 +84,7 @@ public sealed class MouseCallbackLifetimeTests
         Assert.IsTrue(registry.TryRetireSource(fixture.Source, 1000));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NeutralPreparationClearsTransientGyroAndPreservesRequiredReleaseEdges(bool terminal)
@@ -148,7 +148,7 @@ public sealed class MouseCallbackLifetimeTests
     public void ExactSenderAndLogicalMouseSlotAreValidated()
     {
         using var fixture = new Fixture();
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new ControlServiceMouseCallbackSubscription(fixture.Mouse, fixture.Source, 1));
         var owner = new ControlServiceMouseCallbackSubscription(fixture.Mouse, fixture.Source, 0);
         owner.Subscribe();
@@ -291,7 +291,7 @@ public sealed class MouseCallbackLifetimeTests
         var owner = new ControlServiceMouseCallbackSubscription(fixture.Mouse, fixture.Source, 0);
         owner.Subscribe();
         fixture.Mouse.Action = () => throw new InvalidOperationException("test");
-        Assert.ThrowsException<InvalidOperationException>(() => fixture.Source.SixAxis.FireSixAxisEvent(fixture.Args));
+        Assert.ThrowsExactly<InvalidOperationException>(() => fixture.Source.SixAxis.FireSixAxisEvent(fixture.Args));
         Assert.IsTrue(owner.TryRetire(1000));
         owner = new ControlServiceMouseCallbackSubscription(fixture.Mouse, fixture.Source, 0);
         owner.Subscribe();
@@ -428,7 +428,7 @@ public sealed class MouseCallbackLifetimeTests
         Assert.AreSame(fixture.Mouse, service.touchPad[0]);
         copied(fixture.Source.SixAxis, fixture.Args);
         Assert.AreEqual(1, fixture.Mouse.Calls);
-        Assert.ThrowsException<InvalidOperationException>(() => service.TouchPadOn(0, fixture.Source));
+        Assert.ThrowsExactly<InvalidOperationException>(() => service.TouchPadOn(0, fixture.Source));
         Assert.IsTrue(registry.TryRetireSource(fixture.Source, 1000));
     }
 

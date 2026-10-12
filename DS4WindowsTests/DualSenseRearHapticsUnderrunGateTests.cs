@@ -28,7 +28,7 @@ public class DualSenseRearHapticsUnderrunGateTests
         Assert.AreEqual(0L, gate.Update(deadline + 10, false, true, 7, 990));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0L, 32L)]
     [DataRow(63L, 32L)]
     [DataRow(64L, 32L)]
@@ -43,7 +43,7 @@ public class DualSenseRearHapticsUnderrunGateTests
         Assert.AreEqual(wait == 0 ? 0 : 1000 + wait, result);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0L, 990L)]
     [DataRow(-1L, 990L)]
     [DataRow(1L, 0L)]
@@ -60,12 +60,12 @@ public class DualSenseRearHapticsUnderrunGateTests
     {
         var gate = new DualSenseRearHapticsUnderrunGate(Frequency);
         Assert.AreEqual(0L, gate.Update(long.MaxValue - 10, false, true, 1, long.MaxValue - 20));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => new DualSenseRearHapticsUnderrunGate(0));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => new DualSenseRearHapticsUnderrunGate(-1));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => new DualSenseRearHapticsUnderrunGate(long.MaxValue));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new DualSenseRearHapticsUnderrunGate(0));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new DualSenseRearHapticsUnderrunGate(-1));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new DualSenseRearHapticsUnderrunGate(long.MaxValue));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, 0, 5000, 1000)]
     [DataRow(true, 0, 500, 500)]
     [DataRow(false, 0, 5000, 5000)]
@@ -135,7 +135,7 @@ public class DualSenseRearHapticsUnderrunGateTests
         Assert.IsFalse(ring.Consumer.DataAvailableSignal.WaitOne(0));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((byte)0)]
     [DataRow((byte)0xA7)]
     public void BindingAndPhysicalRetryRetainExactPayloadUntilCommitIncludingRealZero(byte fill)
@@ -282,7 +282,7 @@ public class DualSenseRearHapticsUnderrunGateTests
         Assert.IsFalse(ring.Consumer.DataAvailableSignal.WaitOne(0));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void WarmedGatePrebindRetryCommitAndDataWakeAllocateZero(bool positiveControl)

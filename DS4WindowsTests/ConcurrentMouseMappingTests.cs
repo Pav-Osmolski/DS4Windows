@@ -104,7 +104,7 @@ public sealed class ConcurrentMouseMappingTests
 
     // Pattern 0 keeps gamepad movement/jump/crouch; 1 maps them to keyboard;
     // 2 adds stick mouse movement; 3 combines keyboard and mouse movement.
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, false)]
     [DataRow(0, true)]
     [DataRow(1, false)]
@@ -173,7 +173,7 @@ public sealed class ConcurrentMouseMappingTests
         CollectionAssert.AreEqual(new[] { LeftDown, LeftUp }, handler.MouseEvents);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(X360Controls.A)]
     [DataRow(X360Controls.RightMouse)]
     public void HeldUnrelatedToggleCannotSuppressLeftClickPress(X360Controls otherOutput)
@@ -190,7 +190,7 @@ public sealed class ConcurrentMouseMappingTests
             handler.MouseEvents.Where(value => value is LeftDown or LeftUp).ToArray());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(X360Controls.A)]
     [DataRow(X360Controls.RightMouse)]
     public void NewlyHeldUnrelatedToggleCannotSuppressLeftClickRelease(X360Controls otherOutput)
@@ -422,7 +422,7 @@ public sealed class ConcurrentMouseMappingTests
         CollectionAssert.AreEqual(new[] { LeftDown, LeftUp }, handler.MouseEvents);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]

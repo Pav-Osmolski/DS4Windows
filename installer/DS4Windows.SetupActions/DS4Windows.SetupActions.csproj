@@ -14,7 +14,7 @@
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.Management" Version="10.0.12" />
     <Compile Include="..\InstallerStartupTaskPolicy.cs" Link="InstallerStartupTaskPolicy.cs" />
     <Compile Include="..\StartupSetupState.cs" Link="StartupSetupState.cs" />
     <Compile Include="..\SetupResumeBundleSource.cs" Link="SetupResumeBundleSource.cs" />

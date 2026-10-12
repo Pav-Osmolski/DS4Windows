@@ -11,7 +11,7 @@ namespace DS4WindowsTests
     [TestClass]
     public class ControllerAudioEndpointTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(@"USB\VID_054C&PID_09CC&MI_01", (int)ControllerAudioEndpointKind.DualShock4)]
         [DataRow(@"USB\VID_054C&PID_05C4&MI_01", (int)ControllerAudioEndpointKind.DualShock4)]
         [DataRow(@"USB\VID_054C&PID_0CE6&MI_01", (int)ControllerAudioEndpointKind.DualSense)]
@@ -25,7 +25,7 @@ namespace DS4WindowsTests
                 DualSenseAudioPassthrough.ClassifyEndpointIdentity(identity));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         // Exact MMDevice property projection observed on the affected Sonar
         // endpoint: InstanceId is absent, while ControllerDeviceId and
         // InterfaceKey both project the ROOT\MEDIA adapter.
@@ -107,7 +107,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(extensible.BlockAlign, normalized.BlockAlign);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(OutContType.ViiperDS4, (int)ControllerAudioEndpointKind.DualShock4)]
         [DataRow(OutContType.ViiperDualSense, (int)ControllerAudioEndpointKind.DualSense)]
         [DataRow(OutContType.ViiperDualSenseEdge, (int)ControllerAudioEndpointKind.DualSense)]
@@ -120,7 +120,7 @@ namespace DS4WindowsTests
                 DualSenseAudioPassthrough.GetEndpointKind(output));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("", false, true)]
         [DataRow(DualSenseAudioPassthrough.AutoDetectGameAudioEndpointId,
             false, true)]
@@ -137,7 +137,7 @@ namespace DS4WindowsTests
                     endpointOwnedByDirectSource));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("", true, false,
             (int)DirectSpeakerEndpointOwnership.Unresolved,
             (int)DirectSpeakerRouteDecision.Pending)]
@@ -181,7 +181,7 @@ namespace DS4WindowsTests
                     (DirectSpeakerEndpointOwnership)ownership));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true, true, true, true, true, 1, 1,
             (int)DirectSpeakerEndpointOwnership.Owned)]
         [DataRow(true, true, true, true, true, 2, 1,
@@ -236,7 +236,7 @@ namespace DS4WindowsTests
             Assert.IsFalse(ViiperUsbipPortManager.IsActivePort(ownedPort));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0x05C4, true)]
         [DataRow(0x09CC, true)]
         [DataRow(0x0CE6, true)]
@@ -256,7 +256,7 @@ namespace DS4WindowsTests
             Assert.IsFalse(DS4Devices.IsOwnVirtualDevice(string.Empty));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)ControllerAudioEndpointKind.DualShock4,
             (int)ControllerAudioEndpointKind.DualSense, true)]
         [DataRow((int)ControllerAudioEndpointKind.DualSense,
@@ -282,7 +282,7 @@ namespace DS4WindowsTests
     [TestClass]
     public class ControllerMicrophoneRoutePolicyTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(OutContType.DS4, true)]
         [DataRow(OutContType.ViiperDS4, true)]
         [DataRow(OutContType.ViiperDualSense, true)]
@@ -771,7 +771,7 @@ namespace DS4WindowsTests
             cleanup.AssertCleanedExactlyOnce(27, "4", 11);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(320, DisplayName = "DualShock 4 microphone payload")]
         [DataRow(1920, DisplayName = "DualSense microphone payload")]
         public void CloseFirstRecoveryCanImmediatelySubmitMicrophonePayload(
@@ -790,7 +790,7 @@ namespace DS4WindowsTests
 
             oldStream.CloseTransport();
             cleanup.AssertNotCleaned();
-            Assert.ThrowsException<ObjectDisposedException>(() =>
+            Assert.ThrowsExactly<ObjectDisposedException>(() =>
                 oldStream.WriteFrame(0x03, 0x02, warmup));
 
             var replacementPayload = new CountingMemoryStream();
@@ -875,7 +875,7 @@ namespace DS4WindowsTests
             byte[] generation = Enumerable.Range(0, 2524)
                 .Select(index => (byte)(index * 23 + 5)).ToArray();
 
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 stream.WriteFrame(0x04, 0x83, generation));
             Assert.AreEqual(0, payloadStream.Length,
                 "Removed V4 frames must never reach the backend transport.");
@@ -1148,7 +1148,7 @@ namespace DS4WindowsTests
             activated.BindUsbipPort(12);
             activated.BindUsbipPort(12);
             Assert.AreEqual(12, activated.UsbipPort);
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 activated.BindUsbipPort(13));
             activated.Dispose();
             activatedCleanup.AssertCleanedExactlyOnce(51, "4", 12);
@@ -1157,7 +1157,7 @@ namespace DS4WindowsTests
             ViiperVirtualDeviceLifetime dormant = dormantCleanup.
                 CreateLifetime(52, "5", -1);
             dormant.Dispose();
-            Assert.ThrowsException<ObjectDisposedException>(() =>
+            Assert.ThrowsExactly<ObjectDisposedException>(() =>
                 dormant.BindUsbipPort(14));
             dormantCleanup.AssertRemovedWithoutOwnedPort(52, "5");
         }
@@ -1286,7 +1286,7 @@ namespace DS4WindowsTests
                     stop, binding, 16));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(null, 0)]
         [DataRow("", 0)]
         [DataRow("immediate", 0)]

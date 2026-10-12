@@ -1080,7 +1080,7 @@ namespace DS4WindowsTests
         {
             const string raw = "dualsensegamepadv5rawinput";
             int attempts = 0;
-            ViiperApiException failure = Assert.ThrowsException<
+            ViiperApiException failure = Assert.ThrowsExactly<
                 ViiperApiException>(() => ViiperOutDevice.
                     OpenRawInputV5StreamWithFallback(alias =>
                     {

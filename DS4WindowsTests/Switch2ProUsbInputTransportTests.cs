@@ -860,7 +860,7 @@ public class Switch2ProUsbInputTransportTests
         Assert.AreEqual(1, lease.DisposeCount);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ProUsbNativeReadStatus.DeviceRemoved)]
     [DataRow(Switch2ProUsbNativeReadStatus.Failed)]
     [DataRow(Switch2ProUsbNativeReadStatus.Cancelled)]

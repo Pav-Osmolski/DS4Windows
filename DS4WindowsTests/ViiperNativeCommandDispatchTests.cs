@@ -45,7 +45,7 @@ public sealed class ViiperNativeCommandDispatchTests
             ViiperVirtualDeviceType.DualSenseEdge, envelope, envelope.Length));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(39, false, false, ViiperVirtualDeviceType.DualSenseEdge)]
     [DataRow(41, false, false, ViiperVirtualDeviceType.DualSenseEdge)]
     [DataRow(39, true, false, ViiperVirtualDeviceType.DualSenseEdge)]
@@ -86,7 +86,7 @@ public sealed class ViiperNativeCommandDispatchTests
             "Do not partially rewrite a configuration command into a game effect.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(39)]
     [DataRow(41)]
     public void BasePersonaToBasePhysicalKeepsItsUninterpretedHighBits(int offset)
@@ -104,7 +104,7 @@ public sealed class ViiperNativeCommandDispatchTests
         Assert.AreEqual((byte)0x80, fixture.Reports.Single()[offset]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ViiperVirtualDeviceType.DualSense, false)]
     [DataRow(ViiperVirtualDeviceType.DualSense, true)]
     [DataRow(ViiperVirtualDeviceType.DualSenseEdge, false)]
@@ -135,7 +135,7 @@ public sealed class ViiperNativeCommandDispatchTests
         Assert.IsTrue(written.AsSpan(48).ToArray().All(value => value == 0));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x054C, 0x0CE6, true)]
     [DataRow(0x054C, 0x0DF2, true)]
     [DataRow(0x054C, 0x09CC, false)]
@@ -156,7 +156,7 @@ public sealed class ViiperNativeCommandDispatchTests
             envelope.Length, 0, out _), "A matching VID/PID alone cannot authorize physical writes.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ViiperVirtualDeviceType.DualSense, false)]
     [DataRow(ViiperVirtualDeviceType.DualSense, true)]
     [DataRow(ViiperVirtualDeviceType.DualSenseEdge, false)]
@@ -216,7 +216,7 @@ public sealed class ViiperNativeCommandDispatchTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("clear")]
     [DataRow("stop")]
     [DataRow("stream")]
@@ -310,7 +310,7 @@ public sealed class ViiperNativeCommandDispatchTests
         Assert.AreEqual(0, fixture.Device.CompatibilityRumbleCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("replacement")]
     [DataRow("profile")]
     [DataRow("binding-round-trip")]
@@ -383,7 +383,7 @@ public sealed class ViiperNativeCommandDispatchTests
         Assert.IsTrue(buffer.TryTakeControl(new byte[8], out _, out _, out _));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, true)]
     [DataRow(0x36, false)]
     [DataRow(0x32, false)]
@@ -399,7 +399,7 @@ public sealed class ViiperNativeCommandDispatchTests
         Assert.IsFalse(fixture.Output.TryCaptureNativeCommandContext(envelope, envelope.Length, 0, out _));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NativeCommandBurstRetainsPulseOrTriggerBeforeItsSuccessor(bool trigger)
@@ -427,7 +427,7 @@ public sealed class ViiperNativeCommandDispatchTests
             "The original pulse/trigger must reach the actual physical owner before stop/LED.", physical: true);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void AcceptedNativeStopOrLedDoesNotExpireBehindAConsumerPause(bool trigger)
@@ -449,7 +449,7 @@ public sealed class ViiperNativeCommandDispatchTests
             "An already-published pulse/trigger must still receive its accepted successor.", physical: true);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void UnpressuredNativeCommandPairReachesActualPhysicalOwnerInOrder(bool trigger)

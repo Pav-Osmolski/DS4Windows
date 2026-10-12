@@ -80,7 +80,7 @@ public class Switch2BluetoothWindowsAssociationOwnerTests
         Assert.AreEqual(0, graph.Command.Writes.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public async Task LazyConnectionChecksLinkOnlyAfterUncachedDiscovery(bool connects)

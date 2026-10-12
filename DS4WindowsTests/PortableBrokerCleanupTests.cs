@@ -37,14 +37,14 @@ public class PortableBrokerCleanupTests
             Directory.Delete(root, recursive: true);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("throws")]
     [DataRow("still-running")]
     public void FailedDisposeRetainsOwnedHandleAndPinsForAnotherVerifiedStop(string mode)
     {
         context.Start();
         host.Child.StopMode = mode;
-        PortableBrokerStartupException error = Assert.ThrowsException<PortableBrokerStartupException>(() => context.Dispose());
+        PortableBrokerStartupException error = Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Dispose());
         StringAssert.Contains(error.Message, "could not be confirmed stopped");
         Assert.AreEqual(0, host.Child.DisposeCalls);
         Assert.IsTrue(host.Child.Running);
@@ -60,7 +60,7 @@ public class PortableBrokerCleanupTests
         AssertReleased();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("throws")]
     [DataRow("still-running")]
     [DataRow("inspection-throws")]
@@ -74,11 +74,11 @@ public class PortableBrokerCleanupTests
             host.Peers.Add(new(999, 1000, Path.Combine(root, "foreign", "viiper.exe")));
             host.Child.InspectionThrows = mode == "inspection-throws";
         };
-        PortableBrokerStartupException error = Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        PortableBrokerStartupException error = Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         StringAssert.Contains(error.Message, "could not be confirmed stopped");
         Assert.AreEqual(0, host.Child.DisposeCalls);
         AssertProtected();
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.AreEqual(1, host.Starts, "Retry must not launch a second broker over an unretired child.");
 
         host.Peers.RemoveAll(peer => peer.ProcessId == 999);
@@ -99,7 +99,7 @@ public class PortableBrokerCleanupTests
         context.Start();
         PortableBrokerProcessIdentity[] captured = host.Snapshot().ToArray();
         host.RepairStopThrows = true;
-        Assert.ThrowsException<IOException>(() => context.RetireForRepair(captured));
+        Assert.ThrowsExactly<IOException>(() => context.RetireForRepair(captured));
         Assert.AreEqual(0, host.Child.DisposeCalls);
         AssertProtected();
         host.RepairStopThrows = false;
@@ -114,12 +114,12 @@ public class PortableBrokerCleanupTests
     {
         context.Start();
         host.Child.StopMode = "still-running";
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Dispose());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Dispose());
         PortableBrokerProcessIdentity original = host.Peers.Single();
         PortableBrokerProcessIdentity successor = original with { StartTimeUtcTicks = original.StartTimeUtcTicks + 1 };
         host.Peers[0] = successor;
         host.Child.SameIdentity = false;
-        PortableBrokerStartupException error = Assert.ThrowsException<PortableBrokerStartupException>(
+        PortableBrokerStartupException error = Assert.ThrowsExactly<PortableBrokerStartupException>(
             () => context.RetireForRepair(host.Snapshot()));
         StringAssert.Contains(error.Message, "owner changed");
         Assert.AreEqual(0, host.RepairStops.Count);
@@ -136,7 +136,7 @@ public class PortableBrokerCleanupTests
     {
         context.Start();
         host.Child.StopMode = "throws";
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Dispose());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Dispose());
         host.Child.Running = false;
         host.Peers.Clear();
         context.Dispose();
@@ -148,8 +148,8 @@ public class PortableBrokerCleanupTests
     private void AssertProtected()
     {
         Assert.IsTrue(context.IsVerifiedBackend(context.ViiperPath));
-        Assert.ThrowsException<IOException>(() => File.WriteAllText(context.ViiperPath, "must remain pinned"));
-        Assert.ThrowsException<IOException>(() => File.WriteAllText(context.ConfigPath, "must remain pinned"));
+        Assert.ThrowsExactly<IOException>(() => File.WriteAllText(context.ViiperPath, "must remain pinned"));
+        Assert.ThrowsExactly<IOException>(() => File.WriteAllText(context.ConfigPath, "must remain pinned"));
     }
 
     private void AssertReleased()

@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class TriggerLabRestorationTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -25,7 +25,7 @@ public sealed class TriggerLabRestorationTests
         Assert.AreEqual(rightArmed, lab.RightActive);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NoPersistentLabOverrideUsesTheProfileLegacyEffects(bool gameRumble)
@@ -43,7 +43,7 @@ public sealed class TriggerLabRestorationTests
         AssertLegacyPair(Restore(null));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void ActiveLabPreservesItsExistingPerTriggerActivationPolicy(bool leftActive)

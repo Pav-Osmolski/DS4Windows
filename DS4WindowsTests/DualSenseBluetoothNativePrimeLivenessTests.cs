@@ -17,7 +17,7 @@ public class DualSenseBluetoothNativePrimeLivenessTests
 {
     private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, false, false)]
     [DataRow(1, false, false)]
     [DataRow(7, false, false)]
@@ -116,7 +116,7 @@ public class DualSenseBluetoothNativePrimeLivenessTests
             "The retained thirty-third command cannot leak through the independent media template.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, false, false, false)]
     [DataRow(7, false, false, false)]
     [DataRow(1, false, true, false)]
@@ -161,7 +161,7 @@ public class DualSenseBluetoothNativePrimeLivenessTests
         CollectionAssert.AreEqual(trigger.AsSpan(11, 11).ToArray(), reports[0].AsSpan(13, 11).ToArray());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, false, false)]
     [DataRow(7, false, false)]
     [DataRow(1, true, false)]
@@ -275,7 +275,7 @@ public class DualSenseBluetoothNativePrimeLivenessTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ProtectedSpeakerAdmissionRejectsLastNativeStateFromEarlierGeneration(bool clear)

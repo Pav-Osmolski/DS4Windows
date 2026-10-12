@@ -68,7 +68,7 @@ public sealed class LegacyNintendoRumbleOutputTests
         Assert.IsFalse(owner.PumpOnce());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RejectedOrThrowingStopIsNotAcknowledgedAndHasBoundedAttempts(bool throws)
@@ -129,10 +129,10 @@ public sealed class LegacyNintendoRumbleOutputTests
     {
         var owner = new LegacyNintendoRumbleOutput(64, _ => true);
         owner.RequestStop(Packet(0));
-        Assert.ThrowsException<InvalidOperationException>(() => owner.Start("Rejected restart"));
+        Assert.ThrowsExactly<InvalidOperationException>(() => owner.Start("Rejected restart"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]

@@ -59,7 +59,7 @@ public class PortableBrokerRepairLifecycleTests
         File.WriteAllText(context.ConfigPath, "configuration pin released");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void StopFailureOrStillRunningTargetRetainsCurrentAndItsPins(bool ignoreStop)
@@ -77,7 +77,7 @@ public class PortableBrokerRepairLifecycleTests
         catch (PortableBrokerStartupException) when (ignoreStop) { }
         Assert.AreSame(context, PortableBrokerContext.Current);
         Assert.IsTrue(context.IsVerifiedBackend(image));
-        Assert.ThrowsException<IOException>(() => File.WriteAllText(image, "must remain pinned"));
+        Assert.ThrowsExactly<IOException>(() => File.WriteAllText(image, "must remain pinned"));
     }
 
     [TestMethod]
@@ -85,7 +85,7 @@ public class PortableBrokerRepairLifecycleTests
     {
         Open().Start();
         host.Peers[0] = host.Peers[0] with { StartTimeUtcTicks = 999 };
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.RetireForRepair());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.RetireForRepair());
         Assert.AreEqual(0, host.Stopped.Count);
         Assert.IsTrue(context.IsVerifiedBackend(image));
     }
@@ -133,7 +133,7 @@ public class PortableBrokerRepairLifecycleTests
         Assert.AreEqual(image, context.ViiperPath);
         Assert.AreEqual(Path.Combine(root, "portable-data", "VIIPER", "viiper.key.txt"), context.KeyPath);
         Assert.IsFalse(context.IsVerifiedBackend(image));
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.IsFalse(context.InspectOwnedProcess(out bool running, out _));
         Assert.IsFalse(running);
         Assert.AreEqual(0, host.Starts);
@@ -141,7 +141,7 @@ public class PortableBrokerRepairLifecycleTests
         Assert.IsFalse(PortableBrokerContext.IsActive);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void UnavailableOrDisposedContextCanRetireAnExactTargetForExplicitRepair(bool disposed)
@@ -169,7 +169,7 @@ public class PortableBrokerRepairLifecycleTests
         Assert.AreEqual(2, host.Snapshots);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("unknown-path")]
     [DataRow("unknown-start")]
     [DataRow("relative-path")]
@@ -178,7 +178,7 @@ public class PortableBrokerRepairLifecycleTests
         host.Peers.Add(new(501, 502, image));
         host.Peers.Add(new(601, mode == "unknown-start" ? 0 : 602,
             mode == "unknown-path" ? null : mode == "relative-path" ? "viiper.exe" : Path.Combine(root, "other", "viiper.exe")));
-        Assert.ThrowsException<PortableBrokerStartupException>(() => PortableBrokerProcessHost.StopSelectedForRepair(image, host));
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => PortableBrokerProcessHost.StopSelectedForRepair(image, host));
         Assert.AreEqual(0, host.Stopped.Count);
         Assert.AreEqual(2, host.Peers.Count);
     }
@@ -188,12 +188,12 @@ public class PortableBrokerRepairLifecycleTests
     {
         host.Peers.Add(new(501, 502, image));
         host.AfterStop = () => host.Peers.Add(new(701, 702, image));
-        Assert.ThrowsException<PortableBrokerStartupException>(() => PortableBrokerProcessHost.StopSelectedForRepair(image, host));
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => PortableBrokerProcessHost.StopSelectedForRepair(image, host));
         Assert.AreEqual(1, host.Stopped.Count);
         Assert.AreEqual(701, host.Peers.Single().ProcessId);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void UnavailableOrDisposedRetirementCannotAdoptANewSamePathProcess(bool disposed)
@@ -204,7 +204,7 @@ public class PortableBrokerRepairLifecycleTests
         IReadOnlyList<PortableBrokerProcessIdentity> captured = PortableBrokerProcessHost.CaptureForRepair(host);
         host.Peers.Add(new(801, 802, image));
         bool helperCalled = false;
-        Assert.ThrowsException<PortableBrokerStartupException>(() =>
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() =>
             PortableBrokerContext.RetireCurrentForRepair(captured, () => helperCalled = true));
         Assert.IsFalse(helperCalled);
         Assert.AreSame(context, PortableBrokerContext.Current);
@@ -219,7 +219,7 @@ public class PortableBrokerRepairLifecycleTests
         host.Peers[0] = host.Peers[0] with { StartTimeUtcTicks = 999 };
         IReadOnlyList<PortableBrokerProcessIdentity> captured = PortableBrokerProcessHost.CaptureForRepair(host);
         bool helperCalled = false;
-        Assert.ThrowsException<PortableBrokerStartupException>(() =>
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() =>
             context.RetireForRepair(captured, () => helperCalled = true));
         Assert.IsFalse(helperCalled);
         Assert.AreEqual(0, host.Stopped.Count);
@@ -236,7 +236,7 @@ public class PortableBrokerRepairLifecycleTests
         context.RetireForRepair(captured, () =>
         {
             helperCalls++;
-            Assert.ThrowsException<IOException>(() => File.WriteAllText(image, "pin must remain held during helper"));
+            Assert.ThrowsExactly<IOException>(() => File.WriteAllText(image, "pin must remain held during helper"));
             PortableBrokerProcessHost.StopCapturedForRepair(captured, processHost: host);
         });
         Assert.AreEqual(1, helperCalls);
@@ -251,7 +251,7 @@ public class PortableBrokerRepairLifecycleTests
         Open().Start();
         CurrentField.SetValue(null, context);
         IReadOnlyList<PortableBrokerProcessIdentity> captured = PortableBrokerProcessHost.CaptureForRepair(host);
-        Assert.ThrowsException<PortableBrokerStartupException>(() =>
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() =>
             PortableBrokerContext.RetireCurrentForRepair(captured, () =>
             {
                 PortableBrokerProcessHost.StopCapturedForRepair(captured, processHost: host);
@@ -261,7 +261,7 @@ public class PortableBrokerRepairLifecycleTests
         Assert.IsTrue(context.IsVerifiedBackend(image));
         Assert.AreEqual(1, host.Stopped.Count);
         Assert.AreEqual(901, host.Peers.Single().ProcessId);
-        Assert.ThrowsException<IOException>(() => File.WriteAllText(image, "must remain pinned"));
+        Assert.ThrowsExactly<IOException>(() => File.WriteAllText(image, "must remain pinned"));
     }
 
     [TestMethod]
@@ -270,7 +270,7 @@ public class PortableBrokerRepairLifecycleTests
         Open().Start();
         CurrentField.SetValue(null, context);
         IReadOnlyList<PortableBrokerProcessIdentity> captured = PortableBrokerProcessHost.CaptureForRepair(host);
-        Assert.ThrowsException<UnauthorizedAccessException>(() =>
+        Assert.ThrowsExactly<UnauthorizedAccessException>(() =>
             PortableBrokerContext.RetireCurrentForRepair(captured, () => throw new UnauthorizedAccessException("UAC denied")));
         Assert.AreSame(context, PortableBrokerContext.Current);
         Assert.IsTrue(context.IsVerifiedBackend(image));

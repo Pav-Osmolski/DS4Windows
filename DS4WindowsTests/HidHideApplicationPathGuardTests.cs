@@ -8,7 +8,7 @@ namespace DS4WindowsTests
     [TestClass]
     public class HidHideApplicationPathGuardTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(@"C:\Apps\DS4Windows.exe", @"\\?\C:\Apps\DS4Windows.exe")]
         [DataRow(@"c:/Program Files/App/app.exe", @"\\?\c:\Program Files\App\app.exe")]
         [DataRow(@"\Device\HarddiskVolume3\Apps\app.exe", @"\\?\GLOBALROOT\Device\HarddiskVolume3\Apps\app.exe")]
@@ -27,7 +27,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(0, error);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(null)]
         [DataRow("")]
         [DataRow(" ")]
@@ -68,7 +68,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(123, error);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0x400u, 0x8000001Bu, true)]
         [DataRow(0x420u, 0x8000001Bu, true)]
         [DataRow(0x80u, 0u, false)]
@@ -103,7 +103,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(0, error);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(2)] // Missing file.
         [DataRow(3)] // Missing parent.
         [DataRow(5)] // Access denied.

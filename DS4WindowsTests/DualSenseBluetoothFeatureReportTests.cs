@@ -8,7 +8,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class DualSenseBluetoothFeatureReportTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x20, 0x20, true, true)]
     [DataRow(0x20, 0x05, true, false)]
     [DataRow(0x20, 0x20, false, false)]
@@ -92,7 +92,7 @@ public class DualSenseBluetoothFeatureReportTests
         return report;
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedCalibrationReadPreservesAcceptedCoefficients(bool bluetooth)
@@ -124,7 +124,7 @@ public class DualSenseBluetoothFeatureReportTests
         Assert.AreEqual(13, PitchBias(motion));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(7)] [DataRow(11)] [DataRow(15)]
     [DataRow(23)] [DataRow(27)] [DataRow(31)] [DataRow(19)]
     public void InvalidAxisScaleCannotReplaceGoodCoefficients(int offset)

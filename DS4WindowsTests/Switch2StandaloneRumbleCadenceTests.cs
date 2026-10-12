@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class Switch2StandaloneRumbleCadenceTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left, 10)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, 10)]
     [DataRow(Switch2ControllerModel.ProController2, 15)]
@@ -76,7 +76,7 @@ public sealed class Switch2StandaloneRumbleCadenceTests
         finally { worker.Stop(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left, false, 10)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, false, 10)]
     [DataRow(Switch2ControllerModel.JoyCon2Left, true, 15)]

@@ -209,7 +209,7 @@ public sealed class ProfileEditorSaveTests
         Assert.AreEqual("Legacy.", Global.ProfilePath[0]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("Candidate.XML", "Candidate")]
     [DataRow("Dotted.name", "Dotted.name")]
     public void UserEnteredSuffixIsNormalizedWithoutRemovingOtherDots(string input, string expected)
@@ -219,7 +219,7 @@ public sealed class ProfileEditorSaveTests
         Assert.AreEqual(expected, Global.ProfilePath[0]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(".xml")]
     [DataRow(" ")]
     [DataRow("Invalid/Name")]

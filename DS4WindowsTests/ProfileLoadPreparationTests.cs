@@ -9,7 +9,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public class ProfileLoadPreparationTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("<DS4Windows>")]
     [DataRow("<WrongRoot />")]
     [DataRow("")]
@@ -119,7 +119,7 @@ public class ProfileLoadPreparationTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("5", false)]
     [DataRow("4", true)]
     public void PreparedSnapshotIsSingleUseAndDoesNotRereadOrSave(string version, bool migrated)
@@ -145,7 +145,7 @@ public class ProfileLoadPreparationTests
             CollectionAssert.AreEqual(new[] { 1, 2, 3 }, cross.action.actionMacro);
             var other = new BackingStore();
             other.rumble[2] = 32;
-            Assert.ThrowsException<InvalidOperationException>(() => candidate.ApplyTo(other));
+            Assert.ThrowsExactly<InvalidOperationException>(() => candidate.ApplyTo(other));
             Assert.AreEqual(32, (int)other.rumble[2]);
             Assert.AreEqual("This file was replaced after preparation.", File.ReadAllText(path));
         }

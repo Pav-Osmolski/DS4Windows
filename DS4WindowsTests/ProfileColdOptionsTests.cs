@@ -11,7 +11,7 @@ public class ProfileColdOptionsTests
 {
     private const int Slot = 0;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void UiRefreshRetriesBusyActionOrReportAdmissionOutsidePause(bool reportBusy)
@@ -216,7 +216,7 @@ public class ProfileColdOptionsTests
     public void ExceptionReleasesBothAdmissionGates()
     {
         var lifecycle = new object();
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             ProfileColdWorkQueue.TryApply(Slot, lifecycle, () => true,
                 () => throw new InvalidOperationException("fixture")));
         Assert.IsFalse(Monitor.IsEntered(lifecycle));

@@ -13,7 +13,7 @@ public sealed class DualShock4FreshFeedbackCadenceTests
     public static void InitializeCrcTable(TestContext context) =>
         Crc32Algorithm.InitializeTable(DS4Device.DefaultPolynomial);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ChangedMotorsAndFinalZeroReachAudioMailboxInsideMaintenanceWindow(bool microphone)
@@ -57,7 +57,7 @@ public sealed class DualShock4FreshFeedbackCadenceTests
         Assert.AreEqual((byte)170, device.Admitted[^1][8]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RejectedOrThrowingAdmissionRetainsFreshChangeForNextPass(bool throwOnRejection)
@@ -96,7 +96,7 @@ public sealed class DualShock4FreshFeedbackCadenceTests
         Assert.AreEqual(2, device.Attempts.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(4)]
     [DataRow(6)]
     public void MotorComparisonIgnoresOtherBytesAndDetectsEachMotorAndStop(int motorOffset)
@@ -116,7 +116,7 @@ public sealed class DualShock4FreshFeedbackCadenceTests
         Assert.IsTrue(DS4Device.HasChangedDualShock4RumbleState(prepared, admitted, motorOffset));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(8, 8, -1)]
     [DataRow(8, 8, int.MaxValue)]
     [DataRow(0, 8, 0)]

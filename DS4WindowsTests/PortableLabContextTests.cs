@@ -68,14 +68,14 @@ public class PortableLabContextTests
         Assert.IsFalse(Directory.Exists(context.DataPath));
         Assert.IsTrue(context.IsVerifiedBackend(Path.Combine(root, "viiper.exe")));
         Assert.IsFalse(context.IsVerifiedBackend(Path.Combine(root, "other", "viiper.exe")));
-        Assert.ThrowsException<IOException>(() => File.WriteAllText(context.ViiperPath, "replace"));
-        Assert.ThrowsException<IOException>(() => File.Delete(context.ViiperPath));
+        Assert.ThrowsExactly<IOException>(() => File.WriteAllText(context.ViiperPath, "replace"));
+        Assert.ThrowsExactly<IOException>(() => File.Delete(context.ViiperPath));
         context.Dispose();
         Assert.IsFalse(context.IsVerifiedBackend(context.ViiperPath));
         File.WriteAllText(context.ViiperPath, "replacement after disposal is allowed");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("-driverinstall")]
     [DataRow("-runtask")]
     [DataRow("-command")]
@@ -85,9 +85,9 @@ public class PortableLabContextTests
     [DataRow("--unknown")]
     public void AnyMaintenanceOrUnknownArgumentRejectsBeforeReadingAnImage(string option)
     {
-        Assert.ThrowsException<ArgumentException>(() => PortableLabContext.Create(
+        Assert.ThrowsExactly<ArgumentException>(() => PortableLabContext.Create(
             new[] { option, "--portable-lab", digest }, "nonexistent"));
-        Assert.ThrowsException<ArgumentException>(() => PortableLabContext.Create(
+        Assert.ThrowsExactly<ArgumentException>(() => PortableLabContext.Create(
             new[] { "--portable-lab", digest, option }, "nonexistent"));
     }
 
@@ -101,7 +101,7 @@ public class PortableLabContextTests
             new[] { "--portable-lab", digest, "--portable-lab", digest },
             new[] { "--portable-lab", digest, "-m", "-m" },
             new[] { "--portable-lab", digest, "-stop", "-stop" } })
-            Assert.ThrowsException<ArgumentException>(() => PortableLabContext.Create(args, "nonexistent"));
+            Assert.ThrowsExactly<ArgumentException>(() => PortableLabContext.Create(args, "nonexistent"));
         context = PortableLabContext.Create(new[] { "-m", "--portable-lab", digest.ToLowerInvariant(), "-stop" }, root);
         Assert.IsNotNull(context);
     }
@@ -110,7 +110,7 @@ public class PortableLabContextTests
     public void WrongDigestNeverFallsBackToAdjacentSidecarOrProduction()
     {
         File.WriteAllText(Path.Combine(root, "viiper.exe.sha256"), digest);
-        Assert.ThrowsException<InvalidDataException>(() => PortableLabContext.Create(
+        Assert.ThrowsExactly<InvalidDataException>(() => PortableLabContext.Create(
             new[] { "--portable-lab", new string('0', 64) }, root));
         Assert.IsFalse(Directory.Exists(Path.Combine(root, "lab-data")));
         File.WriteAllText(Path.Combine(root, "viiper.exe"), "failed validation releases its read pin");
@@ -126,7 +126,7 @@ public class PortableLabContextTests
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Lab"),
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Lab"),
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Lab") })
-            Assert.ThrowsException<ArgumentException>(() => PortableLabContext.ValidateRoot(path));
+            Assert.ThrowsExactly<ArgumentException>(() => PortableLabContext.ValidateRoot(path));
     }
 
     [TestMethod]
@@ -142,7 +142,7 @@ public class PortableLabContextTests
             Assert.IsTrue(Global.firstRun);
             Assert.IsFalse(Global.multisavespots);
             Assert.IsFalse(Directory.Exists(context.DataPath));
-            Assert.ThrowsException<InvalidOperationException>(() => Global.SaveWhere(Global.appDataPpath));
+            Assert.ThrowsExactly<InvalidOperationException>(() => Global.SaveWhere(Global.appDataPpath));
             Assert.AreEqual(context.DataPath, Global.appdatapath);
             Directory.CreateDirectory(context.DataPath);
             File.WriteAllText(Path.Combine(context.DataPath, "Auto Profiles.xml"), "<Programs />");
@@ -164,7 +164,7 @@ public class PortableLabContextTests
         Open(activate: true);
         Assert.AreEqual(context.KeyPath, ViiperAuthentication.DefaultKeyFilePath);
         using MemoryStream transport = new();
-        Assert.ThrowsException<IOException>(() => ViiperAuthentication.Authenticate(transport));
+        Assert.ThrowsExactly<IOException>(() => ViiperAuthentication.Authenticate(transport));
         Assert.AreEqual(0L, transport.Length, "No handshake can use the roaming deployment key.");
         string log = StartupFailureReporter.Write(new Exception("lab-only diagnostic"), "test", Global.appDataPpath);
         Assert.AreEqual(Path.Combine(context.DataPath, "Logs", "startup_failure.log"), log);
@@ -173,7 +173,7 @@ public class PortableLabContextTests
     [TestMethod]
     public void InvalidLabLaunchHasNoSharedDiagnosticFallback()
     {
-        Assert.ThrowsException<ArgumentException>(() => PortableLabContext.Initialize(new[] { "--portable-lab" }, root));
+        Assert.ThrowsExactly<ArgumentException>(() => PortableLabContext.Initialize(new[] { "--portable-lab" }, root));
         Assert.IsTrue(PortableLabContext.Requested);
         Assert.AreEqual("", StartupFailureReporter.Write(new Exception("invalid lab"), "test"));
         Assert.IsFalse(Directory.Exists(Path.Combine(root, "lab-data")));
@@ -189,7 +189,7 @@ public class PortableLabContextTests
             Open(activate: true);
             Assert.IsFalse(Global.UseExclusiveMode);
             Assert.IsFalse(Global.getUseExclusiveMode());
-            Assert.ThrowsException<InvalidOperationException>(() => DS4Devices.reEnableDevice("never-touch-a-device"));
+            Assert.ThrowsExactly<InvalidOperationException>(() => DS4Devices.reEnableDevice("never-touch-a-device"));
             CurrentField.SetValue(null, oldContext);
             Assert.IsTrue(Global.UseExclusiveMode, "Lab policy must not rewrite the stored setting.");
         }
@@ -244,7 +244,7 @@ public class PortableLabContextTests
         const string password = "failed-connection-test-password";
         File.WriteAllText(context.KeyPath, password);
         using (HandshakeWire rejected = new(accepted: false))
-            Assert.ThrowsException<IOException>(() =>
+            Assert.ThrowsExactly<IOException>(() =>
                 ViiperAuthentication.Authenticate(rejected));
 
         using HandshakeWire successorWire = new();
@@ -253,7 +253,7 @@ public class PortableLabContextTests
         successorWire.AssertAuthenticatedPayload(password, "successor"u8.ToArray());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("success")]
     [DataRow("rejected")]
     [DataRow("write failure")]
@@ -276,9 +276,9 @@ public class PortableLabContextTests
             using Stream authenticated = ViiperAuthentication.Authenticate(wire);
         }
         else if (outcome == "truncated")
-            Assert.ThrowsException<EndOfStreamException>(() => ViiperAuthentication.Authenticate(wire));
+            Assert.ThrowsExactly<EndOfStreamException>(() => ViiperAuthentication.Authenticate(wire));
         else
-            Assert.ThrowsException<IOException>(() => ViiperAuthentication.Authenticate(wire));
+            Assert.ThrowsExactly<IOException>(() => ViiperAuthentication.Authenticate(wire));
 
         Assert.IsNotNull(wire.HandshakeBuffer);
         CollectionAssert.AreEqual(new byte[wire.HandshakeBuffer.Length], wire.HandshakeBuffer);
@@ -361,7 +361,7 @@ public class PortableLabContextTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public async Task LabReadinessRequiresAuthenticatedEncryptedPing(bool matchingKey)

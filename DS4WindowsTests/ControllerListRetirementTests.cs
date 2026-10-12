@@ -11,7 +11,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class ControllerListRetirementTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2Transport.Usb)]
     [DataRow(Switch2Transport.BluetoothLe)]
     public void TypedRetirementRemovesRowWithoutLegacyDeviceRemoval(Switch2Transport transport)

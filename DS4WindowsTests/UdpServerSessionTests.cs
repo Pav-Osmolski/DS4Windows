@@ -17,7 +17,7 @@ public sealed class UdpServerSessionTests
     private const uint Ports = 0x100001;
     private const uint Data = 0x100002;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Version, 24)]
     [DataRow(Ports, 32)]
     public async Task ControlReplyUsesExactDatagramLengthAndCrc(uint message, int length)
@@ -78,7 +78,7 @@ public sealed class UdpServerSessionTests
         finally { server.Stop(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(-1)]
     [DataRow(0)]
     [DataRow(7)]
@@ -142,7 +142,7 @@ public sealed class UdpServerSessionTests
             await Send(nextClient, Request(Version));
             ValidateReply(await Receive(nextClient), 24, Version);
             Assert.AreEqual(0, ClientCount(nextSession));
-            Assert.ThrowsException<InvalidOperationException>(() => oldSession.Start(0));
+            Assert.ThrowsExactly<InvalidOperationException>(() => oldSession.Start(0));
         }
         finally { server.Stop(); }
     }
@@ -243,7 +243,7 @@ public sealed class UdpServerSessionTests
         {
             server.Start(0);
             UdpServerSession oldSession = server.CurrentSession;
-            Assert.ThrowsException<SocketException>(() => server.Start(((IPEndPoint)occupied.LocalEndPoint).Port));
+            Assert.ThrowsExactly<SocketException>(() => server.Start(((IPEndPoint)occupied.LocalEndPoint).Port));
             Assert.IsFalse(oldSession.IsRunning);
             Assert.IsNull(server.CurrentSession);
             server.Start(0);

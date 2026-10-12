@@ -30,7 +30,7 @@ public class FlickStickCalibrationBindingTests
         Assert.AreEqual(46, (byte)X360Controls.FlickStickCalibrate360RS);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(X360Controls.FlickStickCalibrate360LS, "360° turn — left stick calibration")]
     [DataRow(X360Controls.FlickStickCalibrate360RS, "360° turn — right stick calibration")]
     public void CalibrationHasMouseLabelsAndAcceptsBothProfileNameFormats(
@@ -115,7 +115,7 @@ public class FlickStickCalibrationBindingTests
             destination.ds4settings[0][(int)DS4Controls.R1 - 1].shiftAction.actionBtn);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(X360Controls.FlickStickCalibrate360LS, false)]
     [DataRow(X360Controls.FlickStickCalibrate360RS, false)]
     [DataRow(X360Controls.FlickStickCalibrate360LS, true)]

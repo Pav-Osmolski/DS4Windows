@@ -457,7 +457,7 @@ namespace DS4Windows.Tests
             AssertCrcIsValid(queued);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0)]
         [DataRow(500)]
         [DataRow(1000)]
@@ -483,7 +483,7 @@ namespace DS4Windows.Tests
                 "Phase lock must never compress catch-up by more than one millisecond.");
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(5)]
         [DataRow(10)]
         [DataRow(20)]
@@ -932,7 +932,7 @@ namespace DS4Windows.Tests
                 "Compact transport must remain helper-clocked.");
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(true, true, true)]
         [DataRow(true, false, false)]
         [DataRow(false, true, true)]

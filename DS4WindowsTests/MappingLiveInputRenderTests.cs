@@ -14,7 +14,7 @@ public sealed class MappingLiveInputRenderTests
 {
     public TestContext TestContext { get; set; }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)MappingLiveInputStatus.Disconnected)]
     [DataRow((int)MappingLiveInputStatus.Replaced)]
     [DataRow((int)MappingLiveInputStatus.Stale)]
@@ -42,7 +42,7 @@ public sealed class MappingLiveInputRenderTests
         });
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DarkTheme", 400, 96)]
     [DataRow("DarkTheme", 800, 96)]
     [DataRow("DarkTheme", 800, 144)]

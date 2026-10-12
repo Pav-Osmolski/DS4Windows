@@ -10,7 +10,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class ToolTipThemeTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DarkTheme")]
     [DataRow("DefaultTheme")]
     public void ThemeAliasRendersContrastingTextInsideTheThemedSurface(string themeName)
@@ -28,7 +28,7 @@ public sealed class ToolTipThemeTests
         });
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DarkTheme")]
     [DataRow("DefaultTheme")]
     public void ActualSwitch2WrappingOverrideKeepsTheThemeTemplateAndTextColors(string themeName)

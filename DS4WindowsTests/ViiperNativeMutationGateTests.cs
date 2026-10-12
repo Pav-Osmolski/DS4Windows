@@ -42,7 +42,7 @@ public class ViiperNativeMutationGateTests
             AssertWaiting(canceled.Thread);
             AssertWaiting(other.Thread);
             cancellation.Cancel();
-            OperationCanceledException error = Assert.ThrowsException<OperationCanceledException>(
+            OperationCanceledException error = Assert.ThrowsExactly<OperationCanceledException>(
                 () => Join(canceled));
             Assert.AreEqual(cancellation.Token, error.CancellationToken);
             Assert.IsFalse(other.Completion.IsCompleted,
@@ -64,7 +64,7 @@ public class ViiperNativeMutationGateTests
         var gate = new ViiperNativeMutationGate();
         using var cancellation = new CancellationTokenSource();
         cancellation.Cancel();
-        Assert.ThrowsException<OperationCanceledException>(() => gate.Enter(cancellation.Token));
+        Assert.ThrowsExactly<OperationCanceledException>(() => gate.Enter(cancellation.Token));
         Join(StartWorker(() => { using IDisposable next = gate.Enter(); }));
     }
 
@@ -75,7 +75,7 @@ public class ViiperNativeMutationGateTests
         using IDisposable owner = gate.Enter();
         using var cancellation = new CancellationTokenSource();
         cancellation.Cancel();
-        Assert.ThrowsException<OperationCanceledException>(() => gate.Enter(cancellation.Token));
+        Assert.ThrowsExactly<OperationCanceledException>(() => gate.Enter(cancellation.Token));
         var worker = StartWorker(() => { using IDisposable next = gate.Enter(); });
         try { AssertWaiting(worker.Thread); }
         finally
@@ -112,7 +112,7 @@ public class ViiperNativeMutationGateTests
     {
         var gate = new ViiperNativeMutationGate();
         using IDisposable owner = gate.Enter();
-        Assert.ThrowsException<SynchronizationLockException>(() => Join(StartWorker(owner.Dispose)));
+        Assert.ThrowsExactly<SynchronizationLockException>(() => Join(StartWorker(owner.Dispose)));
         var worker = StartWorker(() => { using IDisposable next = gate.Enter(); });
         try { AssertWaiting(worker.Thread); }
         finally
@@ -127,7 +127,7 @@ public class ViiperNativeMutationGateTests
     [TestMethod]
     public void ThrowingReentrantOperationReleasesSharedPortManagerGate()
     {
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             ViiperUsbipPortManager.WithNativePortMutationLock(() =>
                 ViiperUsbipPortManager.WithNativePortMutationLock<int>(() =>
                     throw new InvalidOperationException("test"))));
@@ -140,13 +140,13 @@ public class ViiperNativeMutationGateTests
         using var cancellation = new CancellationTokenSource();
         cancellation.Cancel();
         bool called = false;
-        Assert.ThrowsException<OperationCanceledException>(() =>
+        Assert.ThrowsExactly<OperationCanceledException>(() =>
             ViiperUsbipPortManager.WithNativePortMutationLock(() => called = true, cancellation.Token));
         Assert.IsFalse(called);
         Join(StartWorker(() => ViiperUsbipPortManager.WithNativePortMutationLock(() => true)));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void LegacyDetachUsesSameReentrantAdmissionWithoutCallingNativeCode(bool registered)

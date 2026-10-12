@@ -5,7 +5,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2DualMonoPlanTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(5, "raw")]
     [DataRow(5, "len8")]
     [DataRow(5, "lengths")]
@@ -52,7 +52,7 @@ public class Switch2DualMonoPlanTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(5, "t")]
     [DataRow(5, "a")]
     [DataRow(20, "t")]
@@ -108,14 +108,14 @@ public class Switch2DualMonoPlanTests
         left[1] = right[1] = 0xFF;
         Assert.AreEqual((byte)0, packed[2]);
         Assert.AreEqual((byte)0, packed[52]);
-        Assert.ThrowsException<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(new byte[49], right));
-        Assert.ThrowsException<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(left, new byte[51]));
+        Assert.ThrowsExactly<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(new byte[49], right));
+        Assert.ThrowsExactly<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(left, new byte[51]));
         left[0] = right[0] = 0xFC; // A coupled stereo stream is not dual mono.
-        Assert.ThrowsException<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(left, right));
+        Assert.ThrowsExactly<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(left, right));
         left[0] = right[0] = 0xF9; // Code 1 requires a different frame-length calculation.
-        Assert.ThrowsException<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(left, right));
+        Assert.ThrowsExactly<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(left, right));
         left[0] = 0xF8; right[0] = 0xE8; // Different stream durations are not this hypothesis.
-        Assert.ThrowsException<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(left, right));
+        Assert.ThrowsExactly<InvalidDataException>(() => DualMonoPlanFactory.PackSelfDelimitedDualMono(left, right));
     }
 
     private static void AssertQuietChannels(List<short>[] decoded)
@@ -143,9 +143,9 @@ public class Switch2DualMonoPlanTests
     [TestMethod]
     public void InvalidDualMonoHypothesesAreRejectedOffline()
     {
-        Assert.ThrowsException<ArgumentException>(() => DualMonoPlanFactory.Create("other", 5, 2, "raw"));
-        Assert.ThrowsException<ArgumentException>(() => DualMonoPlanFactory.Create("t", 10, 2, "raw"));
-        Assert.ThrowsException<ArgumentException>(() => DualMonoPlanFactory.Create("t", 5, 0, "raw"));
-        Assert.ThrowsException<ArgumentException>(() => DualMonoPlanFactory.Create("t", 5, 2, "unknown"));
+        Assert.ThrowsExactly<ArgumentException>(() => DualMonoPlanFactory.Create("other", 5, 2, "raw"));
+        Assert.ThrowsExactly<ArgumentException>(() => DualMonoPlanFactory.Create("t", 10, 2, "raw"));
+        Assert.ThrowsExactly<ArgumentException>(() => DualMonoPlanFactory.Create("t", 5, 0, "raw"));
+        Assert.ThrowsExactly<ArgumentException>(() => DualMonoPlanFactory.Create("t", 5, 2, "unknown"));
     }
 }

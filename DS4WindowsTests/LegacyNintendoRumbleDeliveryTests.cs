@@ -12,7 +12,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
 {
     public TestContext TestContext { get; set; }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)] // Pro, 64-byte reports
     [DataRow(1)] // Left Joy-Con, Bluetooth
     [DataRow(2)] // Right Joy-Con, Bluetooth
@@ -40,7 +40,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
             "A successfully delivered neutral must return to idle.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -63,7 +63,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         Assert.AreEqual(3, target.Sink.Reports.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -83,7 +83,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         target.AssertNeutral(target.Sink.Reports[2]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -106,7 +106,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         target.AssertNeutral(target.Sink.Reports[1]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -133,7 +133,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         target.AssertConsecutiveCounters();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -153,7 +153,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         Assert.AreEqual(2, target.Sink.Reports.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -186,7 +186,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         target.AssertConsecutiveCounters();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -239,7 +239,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         Assert.AreEqual(retiredCount, target.Sink.Reports.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -288,7 +288,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         Assert.AreEqual(0L, allocated);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -315,7 +315,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         target.AssertActive(target.Sink.Reports[0]);
         Assert.IsTrue(allocated >= target.Sink.Reports[0].Length,
             "The measurement isolation must retain the real report allocation.");
-        Assert.ThrowsException<AssertFailedException>(() => Assert.AreEqual(0L, allocated));
+        Assert.ThrowsExactly<AssertFailedException>(() => Assert.AreEqual(0L, allocated));
     }
 
     private void TraceAllocationWindow(Target target, int kind, string mode, int batch = 0)
@@ -408,7 +408,7 @@ public sealed class LegacyNintendoRumbleDeliveryTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     [DataRow(3)]

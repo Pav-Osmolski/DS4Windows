@@ -15,7 +15,7 @@ public sealed class DualShock4ProfileOutputStopTests
     public static void InitializeCrcTable(TestContext context) =>
         Crc32Algorithm.InitializeTable(DS4Device.DefaultPolynomial);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)] // USB
     [DataRow(1)] // Sony wireless adapter
     [DataRow(2)] // Bluetooth 0x11
@@ -42,7 +42,7 @@ public sealed class DualShock4ProfileOutputStopTests
         Assert.AreEqual(2, device.Reports.Count, "Even forced refresh must respect disabled output.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, false)]
     [DataRow(2, false)]
     [DataRow(3, true)]
@@ -68,7 +68,7 @@ public sealed class DualShock4ProfileOutputStopTests
         Assert.AreEqual(3, device.Reports.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     [DataRow(4)]
@@ -91,7 +91,7 @@ public sealed class DualShock4ProfileOutputStopTests
         Assert.AreEqual((byte)140, device.Reports[^1][device.MotorOffset + 1]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     [DataRow(4)]
@@ -123,7 +123,7 @@ public sealed class DualShock4ProfileOutputStopTests
         device.AssertNeutral(device.Reports[3]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     [DataRow(4)]
@@ -174,7 +174,7 @@ public sealed class DualShock4ProfileOutputStopTests
         Assert.IsTrue(device.FeatureSet.HasFlag(VidPidFeatureSet.NoOutputData));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     [DataRow(4)]
@@ -188,7 +188,7 @@ public sealed class DualShock4ProfileOutputStopTests
         Assert.AreEqual(0, device.Reports.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     [DataRow(4)]
@@ -265,7 +265,7 @@ public sealed class DualShock4ProfileOutputStopTests
         Assert.IsFalse(device.SupportsPhysicalOutput);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     [DataRow(5)]
@@ -297,7 +297,7 @@ public sealed class DualShock4ProfileOutputStopTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(2)]
     [DataRow(5)]
@@ -330,7 +330,7 @@ public sealed class DualShock4ProfileOutputStopTests
         Assert.AreEqual(1, device.Reports.Count);
         Assert.IsTrue(allocated >= device.Reports[0].Length,
             "The actual writer's managed report clone must remain visible.");
-        Assert.ThrowsException<AssertFailedException>(() => Assert.AreEqual(0L, allocated));
+        Assert.ThrowsExactly<AssertFailedException>(() => Assert.AreEqual(0L, allocated));
         GC.KeepAlive(device.Reports);
     }
 

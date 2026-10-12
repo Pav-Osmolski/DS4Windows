@@ -18,7 +18,7 @@ public class WindowsVersionInfoTests
         Assert.AreEqual("OS Version: Windows 11 Pro 26H2 (Build 26300.9550)", details.LogLines[0]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("Windows 10 Pro", "Client", 19045, "Windows 10 Pro")]
     [DataRow("Windows Server 2025 Standard", "Server", 26100, "Windows Server 2025 Standard")]
     [DataRow("Windows 10 Pro", "Server", 26100, "Windows 10 Pro")]

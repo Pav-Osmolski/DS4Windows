@@ -35,7 +35,7 @@ public sealed class ProfilePersistenceTests
         Assert.AreEqual(1, Directory.GetFiles(directory).Length);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void InterruptedWritePreservesPreviousProfileOrLeavesNewDestinationAbsent(bool existing)
@@ -43,7 +43,7 @@ public sealed class ProfilePersistenceTests
         string path = Path.Combine(directory, "Profile.xml");
         if (existing) File.WriteAllText(path, Original);
         var failure = new IOException("Synthetic interrupted write");
-        IOException observed = Assert.ThrowsException<IOException>(() => ProfilePersistence.Save(path, Updated,
+        IOException observed = Assert.ThrowsExactly<IOException>(() => ProfilePersistence.Save(path, Updated,
             writeTemporary: (temporary, xml) =>
             {
                 File.WriteAllText(temporary, "<DS4Windows>");
@@ -61,7 +61,7 @@ public sealed class ProfilePersistenceTests
         string path = Path.Combine(directory, "Profile.xml");
         File.WriteAllText(path, Original);
         using var held = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-        Assert.ThrowsException<IOException>(() => ProfilePersistence.Save(path, Updated));
+        Assert.ThrowsExactly<IOException>(() => ProfilePersistence.Save(path, Updated));
         Assert.AreEqual(Original, File.ReadAllText(path));
         Assert.AreEqual(1, Directory.GetFiles(directory).Length);
     }
@@ -72,7 +72,7 @@ public sealed class ProfilePersistenceTests
         string path = Path.Combine(directory, "Profile.xml");
         File.WriteAllText(path, Original);
         File.SetAttributes(path, FileAttributes.ReadOnly);
-        Assert.ThrowsException<UnauthorizedAccessException>(() => ProfilePersistence.Save(path, Updated));
+        Assert.ThrowsExactly<UnauthorizedAccessException>(() => ProfilePersistence.Save(path, Updated));
         Assert.AreEqual(Original, File.ReadAllText(path));
         Assert.AreEqual(1, Directory.GetFiles(directory).Length);
     }
@@ -101,7 +101,7 @@ public sealed class ProfilePersistenceTests
         string original = Path.Combine(directory, "Original.xml");
         string target = Path.Combine(directory, "Renamed.xml");
         File.WriteAllText(original, Original);
-        Assert.ThrowsException<IOException>(() => ProfilePersistence.Save(target, Updated,
+        Assert.ThrowsExactly<IOException>(() => ProfilePersistence.Save(target, Updated,
             originalPath: original, writeTemporary: (temporary, _) =>
             {
                 File.WriteAllText(temporary, "incomplete");
@@ -112,7 +112,7 @@ public sealed class ProfilePersistenceTests
         Assert.AreEqual(1, Directory.GetFiles(directory).Length);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void CreationAndRenameCannotOverwriteCollisionEvenIfItAppearsDuringWrite(bool rename)
@@ -120,7 +120,7 @@ public sealed class ProfilePersistenceTests
         string original = Path.Combine(directory, "Original.xml");
         string target = Path.Combine(directory, "Other.xml");
         File.WriteAllText(original, Original);
-        Assert.ThrowsException<IOException>(() => ProfilePersistence.Save(target, Updated,
+        Assert.ThrowsExactly<IOException>(() => ProfilePersistence.Save(target, Updated,
             originalPath: rename ? original : null, overwrite: false,
             writeTemporary: (temporary, xml) =>
             {
@@ -139,7 +139,7 @@ public sealed class ProfilePersistenceTests
         string target = Path.Combine(directory, "Renamed.xml");
         File.WriteAllText(original, Original);
         using var held = new FileStream(original, FileMode.Open, FileAccess.Read, FileShare.Read);
-        IOException error = Assert.ThrowsException<IOException>(() =>
+        IOException error = Assert.ThrowsExactly<IOException>(() =>
             ProfilePersistence.Save(target, Updated, originalPath: original));
         StringAssert.Contains(error.Message, "Both copies");
         Assert.AreEqual(Original, File.ReadAllText(original));
@@ -163,7 +163,7 @@ public sealed class ProfilePersistenceTests
         string original = Path.Combine(directory, "Original.xml");
         string target = Path.Combine(Directory.CreateDirectory(Path.Combine(directory, "Other")).FullName, "New.xml");
         File.WriteAllText(original, Original);
-        Assert.ThrowsException<IOException>(() => ProfilePersistence.Save(target, Updated, originalPath: original));
+        Assert.ThrowsExactly<IOException>(() => ProfilePersistence.Save(target, Updated, originalPath: original));
         Assert.AreEqual(Original, File.ReadAllText(original));
         Assert.IsFalse(File.Exists(target));
     }

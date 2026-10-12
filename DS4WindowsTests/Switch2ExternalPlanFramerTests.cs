@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2ExternalPlanFramerTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("id0", 1)]
     [DataRow("seq8", 1)]
     [DataRow("id0-seq8", 2)]
@@ -45,15 +45,15 @@ public class Switch2ExternalPlanFramerTests
         var source = new Switch2BluetoothLabPlan { Id = "limit", Generation = 2,
             Packets = new[] { new Switch2BluetoothLabPacket { Payload = new byte[509] } } };
         string digest = source.Fingerprint();
-        Assert.ThrowsException<InvalidDataException>(() => PlanFramer.Apply(source, "id0"));
-        Assert.ThrowsException<ArgumentException>(() => PlanFramer.Apply(source, "random-command"));
+        Assert.ThrowsExactly<InvalidDataException>(() => PlanFramer.Apply(source, "id0"));
+        Assert.ThrowsExactly<ArgumentException>(() => PlanFramer.Apply(source, "random-command"));
         Assert.AreEqual(digest, source.Fingerprint());
         source = new Switch2BluetoothLabPlan { Id = "length", Generation = 2,
             Packets = new[] { new Switch2BluetoothLabPacket { Payload = new byte[256] } } };
-        Assert.ThrowsException<InvalidDataException>(() => PlanFramer.Apply(source, "seq8-len8"));
+        Assert.ThrowsExactly<InvalidDataException>(() => PlanFramer.Apply(source, "seq8-len8"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(64)]
     [DataRow(112)]
     [DataRow(128)]
@@ -79,7 +79,7 @@ public class Switch2ExternalPlanFramerTests
             }
         }
         foreach (string invalid in new[] { "raw-pad64", "id0-pad64", "len16le-pad512", "seq8-len8-pad63" })
-            Assert.ThrowsException<ArgumentException>(() => PlanFramer.Apply(source, invalid));
+            Assert.ThrowsExactly<ArgumentException>(() => PlanFramer.Apply(source, invalid));
     }
 
     [TestMethod]
@@ -97,12 +97,12 @@ public class Switch2ExternalPlanFramerTests
         }
         Assert.IsFalse(grouped.HeadsetNotifications);
         var unsupported = new Switch2BluetoothLabPlan { Id = source.Id, Generation = 2, HeadsetNotifications = true, Packets = source.Packets };
-        Assert.ThrowsException<InvalidDataException>(() => PlanFramer.Apply(unsupported, "pcm-pair5"));
+        Assert.ThrowsExactly<InvalidDataException>(() => PlanFramer.Apply(unsupported, "pcm-pair5"));
         source.Packets[1].Payload[0] = 10;
         Assert.AreNotEqual(source.Packets[1].Payload[0], grouped.Packets[1].Payload[0]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("pro-raw", 33, false)]
     [DataRow("pro-len8", 34, false)]
     [DataRow("proseq-raw", 33, true)]

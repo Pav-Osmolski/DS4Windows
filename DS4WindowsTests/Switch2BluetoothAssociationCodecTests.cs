@@ -39,7 +39,7 @@ public class Switch2BluetoothAssociationCodecTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("112233445566", "665544332211")]
     [DataRow("FFEEDDCCBBAA", "AABBCCDDEEFF")]
     public void CanonicalHostUsesLittleEndianWireOrderAndMatchesReconnect(

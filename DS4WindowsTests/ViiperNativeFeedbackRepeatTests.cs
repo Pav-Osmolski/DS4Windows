@@ -13,7 +13,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
     private const int NativeOffset = 28;
     private const BindingFlags PrivateInstance = BindingFlags.Instance | BindingFlags.NonPublic;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(76)]
     [DataRow(217)]
     [DataRow(474)]
@@ -123,7 +123,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         AssertCommand(buffer, tail);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("generation")]
     [DataRow("device")]
     [DataRow("target")]
@@ -169,7 +169,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(5)]
     [DataRow(6)]
@@ -204,7 +204,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         Assert.AreEqual(0L, buffer.OrderedControlRepeated);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(75)]
     [DataRow(77)]
     [DataRow(216)]
@@ -215,7 +215,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         AssertRepeatedCommandNotSuppressed(Rumble(length));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(217, 76, 0x32)]
     [DataRow(474, 76, 0x36)]
     [DataRow(217, 216, 1)]
@@ -227,7 +227,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         AssertRepeatedCommandNotSuppressed(payload);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, 0x10)]
     [DataRow(1, 0x20)]
     [DataRow(1, 0x40)]
@@ -249,7 +249,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         AssertRepeatedCommandNotSuppressed(payload);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(5)]
     [DataRow(6)]
     [DataRow(7)]
@@ -281,7 +281,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         AssertRepeatedCommandNotSuppressed(payload);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x00)]
     [DataRow(0x01)]
     [DataRow(0x02)]
@@ -311,7 +311,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         AssertCommand(buffer, stop);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(11, 0x06)]
     [DataRow(22, 0x06)]
     [DataRow(11, 0xFC)]
@@ -326,7 +326,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         AssertRepeatedCommandNotSuppressed(payload);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(11, 7)]
     [DataRow(11, 8)]
     [DataRow(11, 10)]
@@ -342,7 +342,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         AssertRepeatedCommandNotSuppressed(payload);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x04)]
     [DataRow(0x10)]
     [DataRow(0x14)]
@@ -362,7 +362,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         Assert.AreEqual(1L, buffer.OrderedControlRepeated);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("speaker")]
     [DataRow("legacy-control")]
     [DataRow("explicit-lane-boundary")]
@@ -438,7 +438,7 @@ public sealed class ViiperNativeFeedbackRepeatTests
         AssertCommand(buffer, rejected);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ClearAndResetFenceOldRepeatIdentityAndStaleCommitReceipts(bool reset)

@@ -492,23 +492,23 @@ public sealed class LegacyHidInputControllerRegistrationOwnerTests
     [TestMethod]
     public void ResultShapeForbidsOutcomeAndOperationMismatches()
     {
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             LegacyHidInputControllerLifecycleResult.Reject(
                 LegacyHidInputControllerLifecycleOperation.StopAndQuiesce,
                 LegacyHidInputControllerLifecycleFailureKind.StopTimedOut));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             LegacyHidInputControllerLifecycleResult.Uncertain(
                 LegacyHidInputControllerLifecycleOperation.StopAndQuiesce,
                 LegacyHidInputControllerLifecycleFailureKind.StopRejected));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             LegacyHidInputControllerLifecycleResult.Reject(
                 LegacyHidInputControllerLifecycleOperation.StopAndQuiesce,
                 LegacyHidInputControllerLifecycleFailureKind.RemoveRejected));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             LegacyHidInputControllerLifecycleResult.Reject(
                 LegacyHidInputControllerLifecycleOperation.Remove,
                 LegacyHidInputControllerLifecycleFailureKind.StopRejected));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             LegacyHidInputControllerLifecycleResult.Uncertain(
                 LegacyHidInputControllerLifecycleOperation.Remove,
                 LegacyHidInputControllerLifecycleFailureKind.StopTimedOut));

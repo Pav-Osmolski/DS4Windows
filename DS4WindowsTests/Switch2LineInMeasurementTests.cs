@@ -44,7 +44,7 @@ public class Switch2LineInMeasurementTests
         Assert.IsFalse(LineInMeasurementBuffer.HasCompletePostSubmitCapture(16800, 16799, 64800, 350));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(350, 16800)]
     [DataRow(2000, 96000)]
     public void ExactMeasuredTailAndNormalExtraCallbackFramesAreAdmitted(int milliseconds, int requiredFrames)
@@ -82,7 +82,7 @@ public class Switch2LineInMeasurementTests
         Assert.IsFalse(result.CaptureValid);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(float.NaN)]
     [DataRow(float.PositiveInfinity)]
     [DataRow(float.NegativeInfinity)]

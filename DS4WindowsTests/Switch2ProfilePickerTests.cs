@@ -10,7 +10,7 @@ public sealed class Switch2ProfilePickerTests
     private static readonly Switch2ProfilePickerContext ProContext = new(true,
         Switch2JoyConProfileMode.Invalid, Switch2Transport.Usb, 1, 2, 0, 0, 0, 1_000_000, Switch2FaceButtonLayout.Xbox);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, Switch2FaceButtonLayout.Xbox)]
     [DataRow(false, Switch2FaceButtonLayout.Xbox)]
     [DataRow(true, Switch2FaceButtonLayout.Nintendo)]
@@ -38,7 +38,7 @@ public sealed class Switch2ProfilePickerTests
         Assert.AreEqual(Switch2ProfilePickerButtons.Down, down.Buttons);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2JoyConProfileMode.StandaloneVerticalLeft, 0x00010000u, 0x00040000u)]
     [DataRow(Switch2JoyConProfileMode.StandaloneHorizontalLeft, 0x00080000u, 0x00010000u)]
     [DataRow(Switch2JoyConProfileMode.StandaloneVerticalRight, 0x00000004u, 0x00000008u)]
@@ -57,7 +57,7 @@ public sealed class Switch2ProfilePickerTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2JoyConProfileMode.StandaloneVerticalLeft, 2048, 4095)]
     [DataRow(Switch2JoyConProfileMode.StandaloneHorizontalLeft, 4095, 2048)]
     [DataRow(Switch2JoyConProfileMode.StandaloneVerticalRight, 2048, 4095)]
@@ -264,7 +264,7 @@ public sealed class Switch2ProfilePickerTests
         Assert.AreEqual(Switch2ProfilePickerOutcome.Invalidated, session.Outcome);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]

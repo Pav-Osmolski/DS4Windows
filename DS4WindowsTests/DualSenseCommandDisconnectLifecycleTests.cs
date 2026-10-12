@@ -11,7 +11,7 @@ public class DualSenseCommandDisconnectLifecycleTests
 {
     private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, false)]
     [DataRow(true, false, false)]
     [DataRow(false, true, false)]

@@ -69,7 +69,7 @@ public sealed class Switch2GyroCalibrationFileStoreTests
         finally { Directory.Delete(root, recursive: true); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(48)]
     [DataRow(50)]

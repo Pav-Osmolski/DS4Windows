@@ -63,7 +63,7 @@ public sealed class Switch2RuntimeRawStickCalibrationTests
         finally { release.Set(); await beginning.WaitAsync(TimeSpan.FromSeconds(5)); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -269,7 +269,7 @@ public sealed class Switch2RuntimeRawStickCalibrationTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2, true, Switch2StickSide.Left, false)]
     [DataRow(Switch2ControllerModel.ProController2, true, Switch2StickSide.Right, false)]
     [DataRow(Switch2ControllerModel.ProController2, false, Switch2StickSide.Left, false)]
@@ -520,7 +520,7 @@ public sealed class Switch2RuntimeRawStickCalibrationTests
         finally { release.Set(); await saving.WaitAsync(TimeSpan.FromSeconds(4)); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2, true, Switch2StickSide.Left, false)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, false, Switch2StickSide.Right, true)]
     public void WarmDecoderMapperAndLateCalibrationPublicationAllocateNothing(
@@ -536,7 +536,7 @@ public sealed class Switch2RuntimeRawStickCalibrationTests
         Assert.AreEqual(0, f.Store.Removes);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task ClosedOrReboundRuntimeRejectsStaleOperationBeforeStorage(bool changeSlot)

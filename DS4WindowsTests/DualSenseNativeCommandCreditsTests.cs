@@ -8,12 +8,12 @@ namespace DS4Windows.Tests
     [TestClass]
     public class DualSenseNativeCommandCreditsTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0)]
         [DataRow(-1)]
         public void CapacityMustBePositive(int capacity)
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 new DualSenseNativeCommandCredits(capacity));
         }
 
@@ -114,7 +114,7 @@ namespace DS4Windows.Tests
             Assert.IsTrue(credits.TryRelease(3, 2));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(1)]
         [DataRow(int.MaxValue)]
         [DataRow(int.MinValue)]

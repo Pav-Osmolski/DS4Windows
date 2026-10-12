@@ -16,7 +16,7 @@ public sealed class LegacyJoyConHdRumbleTests
         return new(frame, frame, frame);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, 10)]
     [DataRow(false, 10)]
     [DataRow(true, 64)]
@@ -102,7 +102,7 @@ public sealed class LegacyJoyConHdRumbleTests
         CollectionAssert.AreEqual(newPacket, reports[1]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RichHeldRefreshesButStreamingDoesNotReplayAndExpiresNeutral(bool stream)
@@ -182,7 +182,7 @@ public sealed class LegacyJoyConHdRumbleTests
         CollectionAssert.AreEqual(expected, f.Reports[^1], "Only control, not expired PCM, may sustain.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ExplicitStopOrDifferentSourceCannotRestorePriorPcmOrControl(bool terminal)
@@ -299,7 +299,7 @@ public sealed class LegacyJoyConHdRumbleTests
         Assert.IsFalse(game.Delivery.TryStartConnectionCue(game.Credential, Switch2HdRumbleBodyTuning.Default));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RealJoyConPairRoutesAuthoredSidesRegardlessOfRetainedVirtualOwner(bool rightOwns)

@@ -39,7 +39,7 @@ public class Switch2JoyConProfileInputTests
         Assert.IsTrue(sawByteCollision, "Typed axes must distinguish source values which share a legacy byte.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2JoyConProfileMode.StandaloneVerticalLeft)]
     [DataRow(Switch2JoyConProfileMode.StandaloneVerticalRight)]
     [DataRow(Switch2JoyConProfileMode.StandaloneHorizontalLeft)]
@@ -60,7 +60,7 @@ public class Switch2JoyConProfileInputTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, true)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -105,7 +105,7 @@ public class Switch2JoyConProfileInputTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, true)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -168,7 +168,7 @@ public class Switch2JoyConProfileInputTests
         finally { storeField.SetValue(null, previousStore); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, true)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -234,7 +234,7 @@ public class Switch2JoyConProfileInputTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -424,7 +424,7 @@ public class Switch2JoyConProfileInputTests
             (Switch2FaceButtonLayout)99));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, true)]
     [DataRow(true, false)]
     [DataRow(false, true)]

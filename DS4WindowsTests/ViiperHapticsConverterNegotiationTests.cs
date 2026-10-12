@@ -11,7 +11,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class ViiperHapticsConverterNegotiationTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ViiperVirtualDeviceType.DualSense, false)]
     [DataRow(ViiperVirtualDeviceType.DualSense, true)]
     [DataRow(ViiperVirtualDeviceType.DualSenseEdge, false)]
@@ -37,7 +37,7 @@ public sealed class ViiperHapticsConverterNegotiationTests
             "USB retains its native PCM route without Bluetooth DSP.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ViiperVirtualDeviceType.DualSense, false, true, ConnectionType.BT, true, true)]
     [DataRow(ViiperVirtualDeviceType.DualSenseEdge, false, true, ConnectionType.BT, true, true)]
     [DataRow(ViiperVirtualDeviceType.DualSense, false, true, ConnectionType.USB, true, false)]
@@ -53,7 +53,7 @@ public sealed class ViiperHapticsConverterNegotiationTests
         Assert.AreEqual(expected, ViiperHapticsConverter.ShouldRequest(type,
             gamepadOnly, verified, connection, edgeCompatible));
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("{}", true, "box16")]
     [DataRow("null", true, "box16")]
     [DataRow("{\"hapticsConverter\":\"box16\"}", true, "box16")]
@@ -68,7 +68,7 @@ public sealed class ViiperHapticsConverterNegotiationTests
             ViiperHapticsConverter.ParseSelection(default, requested));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("{\"hapticsConverter\":\"sony-bt-wdl-sinc64-v1\"}", false)]
     [DataRow("{\"hapticsConverter\":\"unknown\"}", true)]
     [DataRow("{\"hapticsConverter\":true}", true)]
@@ -77,11 +77,11 @@ public sealed class ViiperHapticsConverterNegotiationTests
     public void InvalidOrUnsolicitedSelectionNeverClaimsWdl(string json, bool requested)
     {
         using JsonDocument document = JsonDocument.Parse(json);
-        Assert.ThrowsException<IOException>(() =>
+        Assert.ThrowsExactly<IOException>(() =>
             ViiperHapticsConverter.ParseSelection(document.RootElement, requested));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("box16", false, false, true)]
     [DataRow("box16", false, true, false)]
     [DataRow("box16", true, true, true)]
@@ -120,7 +120,7 @@ public sealed class ViiperHapticsConverterNegotiationTests
         Assert.IsFalse(unchanged.RootElement.TryGetProperty("deviceSpecific", out _));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, false)]
     [DataRow(false, true)]
     public void RealSlotBindingRejectsBothIncompatibleConverterDirections(bool wdl, bool sony)
@@ -134,7 +134,7 @@ public sealed class ViiperHapticsConverterNegotiationTests
         Assert.AreEqual(-1, (int)Get(fixture.Output, "lastInputDeviceIndex"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, true)]
     [DataRow(false, true)]
     [DataRow(false, false)]
@@ -163,7 +163,7 @@ public sealed class ViiperHapticsConverterNegotiationTests
         Assert.AreSame(fixture.Output, fixture.Bound[0]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, false)]
     [DataRow(false, true)]
     public void ExactIncompatibleUnboundSlotIsRetiredBeforeReplacement(bool wdl, bool sony)
@@ -179,7 +179,7 @@ public sealed class ViiperHapticsConverterNegotiationTests
             fixture.Slot, fixture.Output, 0), "A consumed hint must not retire a successor.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void WdlStreamCannotEnterEitherNintendoPcmInterpreter(bool switch2)

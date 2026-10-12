@@ -4,7 +4,7 @@ namespace DS4WindowsTests;
 
 public sealed partial class Switch2BluetoothWindowsAdapterTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(true, false)]
     [DataRow(false, true)]

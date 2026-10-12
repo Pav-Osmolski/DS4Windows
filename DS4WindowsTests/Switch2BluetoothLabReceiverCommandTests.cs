@@ -17,10 +17,10 @@ public sealed class Switch2BluetoothLabReceiverPlanTests
         var parsed = Switch2BluetoothLabReceiverPlan.Parse(json, 5);
         Assert.AreEqual(5, parsed.Commands.Length);
         Assert.IsFalse(parsed.AllowExperimentalParameters);
-        Assert.ThrowsException<InvalidDataException>(() => Switch2BluetoothLabReceiverPlan.Parse(json, 6));
-        Assert.ThrowsException<JsonException>(() => Switch2BluetoothLabReceiverPlan.Parse("{\"TargetUuid\":\"anything\"}"u8, 5));
-        Assert.ThrowsException<InvalidDataException>(() => Switch2BluetoothLabReceiverPlan.Parse(Array.Empty<byte>(), 5));
-        Assert.ThrowsException<InvalidDataException>(() => Switch2BluetoothLabReceiverPlan.Parse(
+        Assert.ThrowsExactly<InvalidDataException>(() => Switch2BluetoothLabReceiverPlan.Parse(json, 6));
+        Assert.ThrowsExactly<JsonException>(() => Switch2BluetoothLabReceiverPlan.Parse("{\"TargetUuid\":\"anything\"}"u8, 5));
+        Assert.ThrowsExactly<InvalidDataException>(() => Switch2BluetoothLabReceiverPlan.Parse(Array.Empty<byte>(), 5));
+        Assert.ThrowsExactly<InvalidDataException>(() => Switch2BluetoothLabReceiverPlan.Parse(
             new byte[Switch2BluetoothLabReceiverPlan.MaximumJsonBytes + 1], 5));
     }
 
@@ -31,13 +31,13 @@ public sealed class Switch2BluetoothLabReceiverPlanTests
                      "0C9101020004000027000000", "1591010100000000", "0291010100000000",
                      "099101070004000001000000", "1891010200000000", "189101030001000008",
                      "179101020007000080BB000002F0", "179101020007000080BB000002F00000" })
-            Assert.ThrowsException<InvalidDataException>(() => Plan(command).Validate(), command);
-        Assert.ThrowsException<InvalidDataException>(() => Plan("0C910104000400002F000000").Validate());
-        Assert.ThrowsException<InvalidDataException>(() => Plan().Validate());
-        Assert.ThrowsException<InvalidDataException>(() => Plan(Enumerable.Repeat("1891010100000000", 9).ToArray()).Validate());
-        Assert.ThrowsException<InvalidDataException>(() => new Switch2BluetoothLabReceiverPlan
+            Assert.ThrowsExactly<InvalidDataException>(() => Plan(command).Validate(), command);
+        Assert.ThrowsExactly<InvalidDataException>(() => Plan("0C910104000400002F000000").Validate());
+        Assert.ThrowsExactly<InvalidDataException>(() => Plan().Validate());
+        Assert.ThrowsExactly<InvalidDataException>(() => Plan(Enumerable.Repeat("1891010100000000", 9).ToArray()).Validate());
+        Assert.ThrowsExactly<InvalidDataException>(() => new Switch2BluetoothLabReceiverPlan
             { Id = "receiver", Generation = 0, Commands = new[] { Convert.FromHexString("1891010100000000") } }.Validate());
-        Assert.ThrowsException<InvalidDataException>(() => new Switch2BluetoothLabReceiverPlan
+        Assert.ThrowsExactly<InvalidDataException>(() => new Switch2BluetoothLabReceiverPlan
             { Id = new string('x', 49), Generation = 5, Commands = new[] { Convert.FromHexString("1891010100000000") } }.Validate());
     }
 
@@ -55,7 +55,7 @@ public sealed class Switch2BluetoothLabReceiverPlanTests
             experimental.Validate();
             var normal = new Switch2BluetoothLabReceiverPlan { Id = "receiver", Generation = 5, Commands = new[] { request } };
             if (channels == 2 && samples == 240) normal.Validate();
-            else Assert.ThrowsException<InvalidDataException>(() => normal.Validate());
+            else Assert.ThrowsExactly<InvalidDataException>(() => normal.Validate());
         }
         for (byte state = 0; state < 8; state++)
         {
@@ -64,12 +64,12 @@ public sealed class Switch2BluetoothLabReceiverPlanTests
             new Switch2BluetoothLabReceiverPlan { Id = "receiver", Generation = 5,
                 Commands = new[] { request }, AllowExperimentalParameters = true }.Validate();
             if (state != 7)
-                Assert.ThrowsException<InvalidDataException>(() => new Switch2BluetoothLabReceiverPlan
+                Assert.ThrowsExactly<InvalidDataException>(() => new Switch2BluetoothLabReceiverPlan
                     { Id = "receiver", Generation = 5, Commands = new[] { request } }.Validate());
         }
         foreach (string invalid in new[] { "179101020007000044AC000002F000", "179101020007000080BB000003F000",
                      "179101020007000080BB0000020100", "189101030001000008" })
-            Assert.ThrowsException<InvalidDataException>(() => new Switch2BluetoothLabReceiverPlan
+            Assert.ThrowsExactly<InvalidDataException>(() => new Switch2BluetoothLabReceiverPlan
                 { Id = "receiver", Generation = 5, Commands = new[] { Convert.FromHexString(invalid) },
                     AllowExperimentalParameters = true }.Validate());
     }
@@ -85,7 +85,7 @@ public sealed class Switch2BluetoothLabReceiverPlanTests
             var plan = new Switch2BluetoothLabReceiverPlan { Id = "receiver", Generation = 5,
                 Commands = new[] { Convert.FromHexString("189101030001000007") }, Audio = audio, HeadsetNotifications = true };
             if (generation == 5 && !headset) plan.Validate();
-            else Assert.ThrowsException<InvalidDataException>(() => plan.Validate());
+            else Assert.ThrowsExactly<InvalidDataException>(() => plan.Validate());
         }
         // Prior setup capability is the probe's same-generation responsibility,
         // so structural validation allows 18/03 + audio without resending 17/02.
@@ -171,7 +171,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task ReceiverStaleMaskAckCannotSatisfyEnable(bool completeEnable)
@@ -204,7 +204,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("1801010110780000000040F000006000")]
     [DataRow("180101031078000006")]
     [DataRow("18010103107800000700")]
@@ -225,7 +225,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     public async Task ReceiverWriteFailureKeepsOnlyPriorSetupSuccessAndFencesSuccessors(int failedStep)
@@ -251,7 +251,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task ReceiverCancelledLateWriteRetainsInnerWindowUntilDrainAndNeverSendsSuccessor(bool eventuallyWritten)

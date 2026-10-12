@@ -25,7 +25,7 @@ public sealed class Switch2FeedbackDetailTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     [DataRow(4)]
@@ -87,7 +87,7 @@ public sealed class Switch2FeedbackDetailTests
         TestContext.WriteLine($"Offline warmed stereo PCM converter mean: {microseconds:F3} us/report; not hardware latency.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void QuietPcmSurvivesHdConversionWithoutWakingTheSilentSide(bool combined)
@@ -101,7 +101,7 @@ public sealed class Switch2FeedbackDetailTests
         Assert.IsFalse(right.Third.HasNonzeroAmplitude);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, 2, false)]
     [DataRow(3, 6, true)]
     public void EqualStrengthTonesRetainDistinctBandFrequencies(int firstBin, int secondBin, bool high)

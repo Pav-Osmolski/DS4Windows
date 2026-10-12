@@ -32,7 +32,7 @@ public sealed class SetupResumeBundleSourceTests
             SetupResumeBundleSource.BundleTag, new[] { SetupResumeBundleSource.UpgradeCode }, BundlePath, Root));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("provider")]
     [DataRow("tag")]
     [DataRow("upgrade")]
@@ -58,18 +58,18 @@ public sealed class SetupResumeBundleSourceTests
             "executable" => Path.Combine(Root, BundleId, "unrelated.exe"),
             _ => BundlePath,
         };
-        Assert.ThrowsException<InvalidDataException>(() => SetupResumeBundleSource.ValidateRegistration(BundleId,
+        Assert.ThrowsExactly<InvalidDataException>(() => SetupResumeBundleSource.ValidateRegistration(BundleId,
             provider, tag, new[] { upgrade }, path, Root));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(null)]
     [DataRow("")]
     [DataRow("../other")]
     [DataRow("B9989EB0-A33C-4604-ABAB-BBD165F8A40E")]
     public void BundleIdentityCannotBecomeARegistryPath(string id)
     {
-        Assert.ThrowsException<InvalidDataException>(() => SetupResumeBundleSource.ValidateRegistration(id,
+        Assert.ThrowsExactly<InvalidDataException>(() => SetupResumeBundleSource.ValidateRegistration(id,
             BundleId, SetupResumeBundleSource.BundleTag, new[] { SetupResumeBundleSource.UpgradeCode }, BundlePath, Root));
     }
 
@@ -82,7 +82,7 @@ public sealed class SetupResumeBundleSourceTests
         StartupSetupRecovery.RequireProtectedSecurity(programData, ancestor: true);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("O:BUD:(A;;FA;;;BA)(A;;FRFX;;;BU)", false)]
     [DataRow("O:BAD:(A;;FA;;;BA)(A;;FW;;;BU)", false)]
     [DataRow("O:BAD:(A;;FA;;;BA)(A;;GA;;;WD)", false)]
@@ -92,7 +92,7 @@ public sealed class SetupResumeBundleSourceTests
     [DataRow("O:BAD:NO_ACCESS_CONTROL", false)]
     public void WritableOwnersFilesAndAncestorsAreRejected(string sddl, bool ancestor)
     {
-        Assert.ThrowsException<IOException>(() =>
+        Assert.ThrowsExactly<IOException>(() =>
             StartupSetupRecovery.RequireProtectedSecurity(Descriptor(sddl), ancestor));
     }
 

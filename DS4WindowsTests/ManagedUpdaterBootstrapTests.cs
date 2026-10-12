@@ -55,20 +55,20 @@ public sealed class ManagedUpdaterBootstrapTests
     public void InstalledHandoffRequiresNewUpdaterAndUnchangedRegistration()
     {
         var ticket = Ticket();
-        Assert.ThrowsException<ArgumentException>(() => ManagedUpdaterBootstrap.CreateStartInfo(
+        Assert.ThrowsExactly<ArgumentException>(() => ManagedUpdaterBootstrap.CreateStartInfo(
             ticket with { Image = ticket.Image with { Version = new(2, 0, 7, 0) } }, "VIIPERRC4.6.5", "DS4Windows.exe", path => path));
-        Assert.ThrowsException<InvalidDataException>(() => ManagedUpdaterBootstrap.CreateStartInfo(
+        Assert.ThrowsExactly<InvalidDataException>(() => ManagedUpdaterBootstrap.CreateStartInfo(
             ticket, "VIIPERRC4.6.5", "DS4Windows.exe", path => null));
-        Assert.ThrowsException<InvalidDataException>(() => ManagedUpdaterBootstrap.CreateStartInfo(
+        Assert.ThrowsExactly<InvalidDataException>(() => ManagedUpdaterBootstrap.CreateStartInfo(
             ticket, "VIIPERRC4.6.5", "DS4Windows.exe", path => path + "-other"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("..\\foreign.exe")]
     [DataRow("C:\\foreign.exe")]
     [DataRow("foreign.exe:stream")]
     public void UnsafeApplicationNameNeverLaunchesUpdater(string name) =>
-        Assert.ThrowsException<ArgumentException>(() => ManagedUpdaterBootstrap.CreateStartInfo(
+        Assert.ThrowsExactly<ArgumentException>(() => ManagedUpdaterBootstrap.CreateStartInfo(
             Ticket(), "VIIPERRC4.6.5", name, path => path));
 
     [TestMethod]
@@ -79,12 +79,12 @@ public sealed class ManagedUpdaterBootstrapTests
         Assert.IsFalse(ManagedUpdaterBootstrap.Launch(ticket, "VIIPERRC4.6.5", "DS4Windows.exe", info =>
         {
             called = true;
-            Assert.ThrowsException<IOException>(() => File.WriteAllText(info.FileName, "changed"));
+            Assert.ThrowsExactly<IOException>(() => File.WriteAllText(info.FileName, "changed"));
             return false;
         }, path => path));
         Assert.IsTrue(called);
         File.WriteAllText(ticket.Image.FilePath, "tampered");
-        Assert.ThrowsException<InvalidDataException>(() => ManagedUpdaterBootstrap.Launch(ticket,
+        Assert.ThrowsExactly<InvalidDataException>(() => ManagedUpdaterBootstrap.Launch(ticket,
             "VIIPERRC4.6.5", "DS4Windows.exe", _ => throw new AssertFailedException("Must not launch changed bytes"), path => path));
     }
 }

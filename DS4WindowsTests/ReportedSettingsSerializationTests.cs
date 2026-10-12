@@ -10,7 +10,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public class ReportedSettingsSerializationTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("en-US", "12/05/2023 00:24:15", 12, 5)]
     [DataRow("en-GB", "12/05/2023 00:24:15", 12, 5)]
     [DataRow("fr-FR", "12/05/2023 00:24:15", 12, 5)]
@@ -36,7 +36,7 @@ public class ReportedSettingsSerializationTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("en-GB")]
     [DataRow("fr-FR")]
     [DataRow("fi-FI")]
@@ -93,7 +93,7 @@ public class ReportedSettingsSerializationTests
         Assert.AreEqual(previous, dto.LastChecked);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("<Red>17</Red><Green>83</Green><Blue>201</Blue>", 17, 83, 201)]
     [DataRow("<Green>83</Green><Blue>201</Blue>", 0, 83, 201)]
     [DataRow("<Red>17</Red><Green>invalid</Green><Blue>201</Blue>", 17, 0, 201)]
@@ -119,7 +119,7 @@ public class ReportedSettingsSerializationTests
         Assert.AreEqual((byte)blue, actual.blue);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(DS4ControlSettings.ActionType.Default)]
     [DataRow(DS4ControlSettings.ActionType.Button)]
     [DataRow(DS4ControlSettings.ActionType.Key)]
@@ -162,7 +162,7 @@ public class ReportedSettingsSerializationTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("")]
     [DataRow(" Trigger=\"13\"")]
     [DataRow(" Trigger=\"0\"")]

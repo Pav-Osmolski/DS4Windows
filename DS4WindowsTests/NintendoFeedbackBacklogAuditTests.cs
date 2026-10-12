@@ -13,7 +13,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class NintendoFeedbackBacklogAuditTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(10_000, 0)]
     [DataRow(12_000, 0)]
     [DataRow(15_000, 0)]
@@ -110,7 +110,7 @@ public sealed class NintendoFeedbackBacklogAuditTests
         Assert.AreEqual(3, writer.Reports.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void LegacyLatestMailboxBurstAndStopCannotReplayOlderEffects(bool rejectFirst)
@@ -143,7 +143,7 @@ public sealed class NintendoFeedbackBacklogAuditTests
         Assert.IsFalse(output.Publish(Packet(3), true));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void LegacyExplicitDelayTerminalStopClearsQueuedAndExpiredRichFrames(bool streamed)

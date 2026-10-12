@@ -8,7 +8,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class GameBarCompatibilityAdmissionTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, OutContType.ViiperDualSense, false)]
     [DataRow(true, OutContType.ViiperXboxOne, false)]
     [DataRow(true, OutContType.ViiperX360, false)]

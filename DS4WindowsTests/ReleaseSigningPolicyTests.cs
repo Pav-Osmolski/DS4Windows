@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class ReleaseSigningPolicyTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("true", "VIIPERRC4.5", true)]
     [DataRow("true", "VIIPERRC4", true)]
     [DataRow("true", "VIIPERRC4.5.1.2", true)]
@@ -126,7 +126,7 @@ public sealed class ReleaseSigningPolicyTests
         Assert.IsFalse(verify.Contains("gh release upload", StringComparison.Ordinal));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("false", "5.0.14", true)]
     [DataRow("false", "5.0.15", true)]
     [DataRow("false", "6.0.0", true)]

@@ -71,7 +71,7 @@ public sealed class ViiperAuthenticationTests
             (byte[])key.Clone(), ViiperConnectionRole.Server);
         byte[] value = new byte[1];
         Assert.AreEqual(1, reader.Read(value, 0, 1));
-        Assert.ThrowsException<InvalidDataException>(() =>
+        Assert.ThrowsExactly<InvalidDataException>(() =>
             reader.Read(value, 0, 1));
         CryptographicOperations.ZeroMemory(key);
     }
@@ -109,12 +109,12 @@ public sealed class ViiperAuthenticationTests
         ThrowingDisposeStream transport = new();
         ViiperEncryptedStream stream = new(transport, key, ViiperConnectionRole.Client);
 
-        Assert.ThrowsException<IOException>(() => stream.Dispose());
+        Assert.ThrowsExactly<IOException>(() => stream.Dispose());
         CollectionAssert.AreEqual(new byte[32], key,
             "A failed transport close must not retain the connection-owned session key.");
         stream.Dispose();
         Assert.AreEqual(1, transport.DisposeCalls);
-        Assert.ThrowsException<ObjectDisposedException>(() =>
+        Assert.ThrowsExactly<ObjectDisposedException>(() =>
             stream.Write(new byte[1], 0, 1));
     }
 

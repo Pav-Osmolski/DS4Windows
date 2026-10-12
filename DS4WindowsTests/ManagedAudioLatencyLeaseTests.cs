@@ -6,7 +6,7 @@ namespace DS4Windows.Tests
     [TestClass]
     public class ManagedAudioLatencyLeaseTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(ProcessPriorityClass.Idle)]
         [DataRow(ProcessPriorityClass.BelowNormal)]
         [DataRow(ProcessPriorityClass.Normal)]
@@ -19,7 +19,7 @@ namespace DS4Windows.Tests
                     requestedPriority, mediaActive: true));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(ProcessPriorityClass.High)]
         [DataRow(ProcessPriorityClass.RealTime)]
         public void ActiveMediaPreservesHigherProcessClasses(

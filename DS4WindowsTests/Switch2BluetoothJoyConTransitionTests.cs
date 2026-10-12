@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 
 public sealed partial class Switch2BluetoothWindowsAdapterTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("success")]
     [DataRow("automatic")]
     [DataRow("store")]
@@ -111,7 +111,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
         public void PrepareSuccessor(Switch2RuntimeInputDevice device) { Assert.IsNull(Successor); Successor = device; }
         public void Dispose() => Disposals++;
     }
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     [DataRow(false, true)]
@@ -229,7 +229,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task JoyConReopenRequiresExactCleanReleaseAndCannotReplay(bool ambiguous)

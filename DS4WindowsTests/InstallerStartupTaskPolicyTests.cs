@@ -11,7 +11,7 @@ public sealed class InstallerStartupTaskPolicyTests
     private const string Exe = @"C:\Program Files\DS4Windows\DS4Windows.exe";
     private static readonly XNamespace Ns = "http://schemas.microsoft.com/windows/2004/02/mit/task";
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void OnlyMarkedExactManagedActionsAreEligible(bool viiper)
@@ -25,7 +25,7 @@ public sealed class InstallerStartupTaskPolicyTests
             "An unrepaired, unmarked same-path task must not be trusted by launch or uninstall.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("Description", "User task")]
     [DataRow("Command", @"C:\Foreign\DS4Windows.exe")]
     [DataRow("Command", "DS4Windows.exe")]
@@ -41,7 +41,7 @@ public sealed class InstallerStartupTaskPolicyTests
         Assert.IsFalse(InstallerStartupTaskPolicy.IsManaged(xml.ToString(), Exe, "-m", Sid, true));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("Actions")]
     [DataRow("Triggers")]
     [DataRow("Principals")]
@@ -66,7 +66,7 @@ public sealed class InstallerStartupTaskPolicyTests
         Assert.IsFalse(InstallerStartupTaskPolicy.IsManaged(xml.ToString(), Exe, "-m", Sid, true));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("")]
     [DataRow("<Task/>")]
     [DataRow("<!DOCTYPE x [<!ENTITY injected 'value'>]><Task>&injected;</Task>")]

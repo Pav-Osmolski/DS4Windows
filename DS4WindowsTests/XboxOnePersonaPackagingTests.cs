@@ -27,7 +27,7 @@ public sealed class XboxOnePersonaPackagingTests
         Assert.AreEqual("VIIPER GIP Test Controller", configuration.Strings.Product);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("xbox-one-authorized-persona.json", "xbox-one-authorized-persona.json")]
     [DataRow("XBOX-ONE-PERSONA-NOTICE.md", "extras\\XBOX-ONE-PERSONA-NOTICE.md")]
     public void PersonaAndNoticeAreIncludedInRawBuildAndPublish(string name, string link)

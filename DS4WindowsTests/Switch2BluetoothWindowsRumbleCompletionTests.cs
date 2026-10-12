@@ -55,7 +55,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
         Assert.AreEqual(1, fixture.Output.DisposeCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("success")]
     [DataRow("rejected")]
     [DataRow("faulted")]
@@ -115,7 +115,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
         Assert.AreEqual(1, fixture.Output.WriteCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("success")]
     [DataRow("rejected")]
     [DataRow("task-fault")]

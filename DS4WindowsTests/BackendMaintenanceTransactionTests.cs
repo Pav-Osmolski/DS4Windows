@@ -12,7 +12,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class BackendMaintenanceTransactionTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RepairDrainsBeforeMutationAndRestoresOnlyOriginallyRunningService(bool running)
@@ -37,13 +37,13 @@ public sealed class BackendMaintenanceTransactionTests
         Assert.IsFalse(transaction.RejectControllerStart);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RejectedDrainNeverChangesBrokerOrStartsEvenWhenRunningBecameFalse(bool running)
     {
         var transaction = new BackendMaintenanceTransaction();
-        Assert.ThrowsException<InvalidOperationException>(() => transaction.Execute(new object(),
+        Assert.ThrowsExactly<InvalidOperationException>(() => transaction.Execute(new object(),
             () => running, () => false, () => Assert.Fail("Mutation after rejected drain"),
             () => { Assert.Fail("Start after rejected drain"); return true; }));
         Assert.IsFalse(transaction.IsActive);
@@ -57,13 +57,13 @@ public sealed class BackendMaintenanceTransactionTests
     {
         var transaction = new BackendMaintenanceTransaction();
         var expected = new IOException("drain sentinel");
-        var actual = Assert.ThrowsException<IOException>(() => transaction.Execute(new object(),
+        var actual = Assert.ThrowsExactly<IOException>(() => transaction.Execute(new object(),
             () => true, () => throw expected, () => Assert.Fail(), () => { Assert.Fail(); return true; }));
         Assert.AreSame(expected, actual);
         Assert.IsFalse(transaction.RejectControllerStart);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedOrCanceledRepairLeavesStartBlockedAndPreservesFailure(bool canceled)
@@ -82,29 +82,29 @@ public sealed class BackendMaintenanceTransactionTests
         Assert.IsTrue(transaction.RejectControllerStart);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedRestartRetainsFence(bool throws)
     {
         var transaction = new BackendMaintenanceTransaction();
-        Assert.ThrowsException<InvalidOperationException>(() => transaction.Execute(new object(),
+        Assert.ThrowsExactly<InvalidOperationException>(() => transaction.Execute(new object(),
             () => true, () => true, () => { }, () => throws
                 ? throw new InvalidOperationException("restart sentinel") : false));
         Assert.IsFalse(transaction.IsActive);
         Assert.IsTrue(transaction.RejectControllerStart);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void OnlySuccessfulRetryClearsFailureFenceAndRestoresOriginalRunIntent(bool originallyRunning)
     {
         var transaction = new BackendMaintenanceTransaction();
         var gate = new object();
-        Assert.ThrowsException<IOException>(() => transaction.Execute(gate,
+        Assert.ThrowsExactly<IOException>(() => transaction.Execute(gate,
             () => originallyRunning, () => true, () => throw new IOException(), () => true));
-        Assert.ThrowsException<InvalidOperationException>(() => transaction.Execute(gate,
+        Assert.ThrowsExactly<InvalidOperationException>(() => transaction.Execute(gate,
             () => false, () => false, () => Assert.Fail(), () => true));
         Assert.IsTrue(transaction.RejectControllerStart);
         int restarts = 0;
@@ -123,7 +123,7 @@ public sealed class BackendMaintenanceTransactionTests
         var transaction = new BackendMaintenanceTransaction();
         var gate = new object();
         transaction.Execute(gate, () => false, () => true, () =>
-            Assert.ThrowsException<InvalidOperationException>(() => transaction.Execute(gate,
+            Assert.ThrowsExactly<InvalidOperationException>(() => transaction.Execute(gate,
                 () => false, () => { Assert.Fail(); return true; }, () => Assert.Fail(), () => true)), () => true);
         Assert.IsFalse(transaction.RejectControllerStart);
     }
@@ -139,7 +139,7 @@ public sealed class BackendMaintenanceTransactionTests
         service.running = true; // Start otherwise succeeds without entering real device startup.
         using var inMutation = new ManualResetEventSlim();
         using var finishMutation = new ManualResetEventSlim();
-        Task repair = Task.Run(() => Assert.ThrowsException<IOException>(() =>
+        Task repair = Task.Run(() => Assert.ThrowsExactly<IOException>(() =>
             transaction.Execute(gate, () => true, () => true, () =>
             {
                 inMutation.Set();

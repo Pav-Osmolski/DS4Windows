@@ -5,7 +5,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class PortableBrokerStartupDiagnosticsTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(70, "could not be found")]
     [DataRow(71, "does not match")]
     [DataRow(72, "timed out")]
@@ -21,7 +21,7 @@ public class PortableBrokerStartupDiagnosticsTests
         StringAssert.Contains(message, "Your key and profiles were not replaced");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(69)]

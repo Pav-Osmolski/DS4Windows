@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class DualSenseUsbSpeakerSampleRateTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, 1)]
     [DataRow(false, 2)]
     [DataRow(true, 2)]
@@ -33,7 +33,7 @@ public class DualSenseUsbSpeakerSampleRateTests
         Assert.IsNull(playback.Field("resampler"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(48000)]
     [DataRow(32000)]
     [DataRow(44100)]
@@ -54,7 +54,7 @@ public class DualSenseUsbSpeakerSampleRateTests
         AssertSilentOtherChannels(actual, 4, 1);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(32000)]
     [DataRow(44100)]
     [DataRow(96000)]
@@ -70,7 +70,7 @@ public class DualSenseUsbSpeakerSampleRateTests
             "Resampling must not advance beyond the source time actually received.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(32000)]
     [DataRow(44100)]
     [DataRow(96000)]
@@ -134,8 +134,8 @@ public class DualSenseUsbSpeakerSampleRateTests
     {
         var playback = new Playback(WaveFormat.CreateIeeeFloatWaveFormat(48000, 4));
         var source = WaveFormat.CreateIeeeFloatWaveFormat(48000, 2);
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => playback.Write(new byte[8], 2, source));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => playback.Write(new byte[8], -1, source));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => playback.Write(new byte[8], 2, source));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => playback.Write(new byte[8], -1, source));
         Assert.AreEqual(0, playback.Drain().Length);
     }
 
@@ -143,12 +143,12 @@ public class DualSenseUsbSpeakerSampleRateTests
     public void ZeroSampleRateCannotMatchTheUninitializedConverterCache()
     {
         var playback = new Playback(WaveFormat.CreateIeeeFloatWaveFormat(48000, 4));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             playback.Write(new byte[4], 1, new WaveFormat(0, 16, 2)));
         Assert.AreEqual(0, playback.Drain().Length);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ParentCaptureStopClearsEverySlotEvenWhenCaptureIsAlreadyAbsent(bool capturePresent)
@@ -175,7 +175,7 @@ public class DualSenseUsbSpeakerSampleRateTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(32000)]
     [DataRow(44100)]
     public void SameRateSourceReplacementDoesNotRetainOldFilterHistory(int sampleRate)

@@ -9,7 +9,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class Switch2XboxPublicationPolicyTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ProfileDisableDuringPublicationCannotFallBetweenSnapshotAndRefresh(bool disableAll)

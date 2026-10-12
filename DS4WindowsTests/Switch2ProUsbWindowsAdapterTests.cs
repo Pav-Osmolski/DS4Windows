@@ -518,7 +518,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
             out var lease));
         Assert.IsTrue(lease.TryWaitForInputQuiescence(0));
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         Assert.IsTrue(reservations.IsReserved(
             registration.ContainerIdentity));
@@ -555,7 +555,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
             out var lease));
         Assert.IsTrue(lease.TryWaitForInputQuiescence(0));
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         Assert.IsTrue(reservations.IsReserved(
             registration.ContainerIdentity));
@@ -626,7 +626,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
             registration.ContainerIdentity, out _),
             "An ambiguous live file lifetime must forbid replacement ownership.");
 
-        Assert.ThrowsException<
+        Assert.ThrowsExactly<
             Switch2ProUsbWindowsCleanupAmbiguousException>(
             retainedLease.DisposeQuiesced);
         Assert.AreEqual(1, closeCounter.Calls,
@@ -663,7 +663,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
         Assert.IsFalse(reservations.IsReserved(firstContainer));
         Assert.IsTrue(reservations.IsReserved(secondContainer));
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             second.ReleaseAfterTerminalDisposal(
                 new Switch2ProUsbWindowsCompositeTerminalFence(),
                 firstOwner));
@@ -745,7 +745,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
 
         Task firstDispose = Task.Run(lease.DisposeQuiesced);
         Assert.IsTrue(releaseEntered.Wait(1_000));
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         Assert.IsTrue(reservations.IsReserved(
             registration.ContainerIdentity));
@@ -778,7 +778,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
         input.Complete(Switch2ProUsbNativeReadStatus.Completed, 64);
         Assert.IsTrue(lease.TryWaitForInputQuiescence(0));
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         Assert.IsTrue(reservations.IsReserved(
             registration.ContainerIdentity));
@@ -815,7 +815,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
         input.Complete(Switch2ProUsbNativeReadStatus.Completed, 64);
         Assert.IsTrue(lease.TryWaitForInputQuiescence(0));
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         Assert.IsTrue(reservations.IsReserved(
             registration.ContainerIdentity));
@@ -912,7 +912,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
         Assert.IsTrue(fixture.Lease.TryWaitForInputQuiescence(0));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)ContradictoryReadStartKind.FalseWithOperation)]
     [DataRow((int)ContradictoryReadStartKind.TrueWithNull)]
     [DataRow((int)ContradictoryReadStartKind.ThrowWithOperation)]
@@ -924,7 +924,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
         using var fixture = LeaseFixture.Create(input);
         Switch2ProUsbReadClaim claim = Claim(1);
 
-        Assert.ThrowsException<
+        Assert.ThrowsExactly<
             Switch2ProUsbWindowsReadStartAmbiguousException>(() =>
             fixture.Lease.TryBeginInputRead(new byte[64], 0, 64, claim,
                 new RecordingTarget()));
@@ -934,7 +934,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
             Claim(2), new RecordingTarget()));
         Assert.AreEqual(1, input.BeginCalls);
         Assert.IsFalse(fixture.Lease.TryWaitForInputQuiescence(0));
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             fixture.Lease.DisposeQuiesced);
     }
 
@@ -1155,7 +1155,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
     {
         var input = new FakeInputHandle();
         var fixture = LeaseFixture.Create(input);
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             fixture.Lease.DisposeQuiesced);
         Assert.AreEqual(0, input.DisposeCalls);
         Assert.IsTrue(fixture.Lease.TryWaitForInputQuiescence(0));
@@ -1174,7 +1174,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
         var fixture = LeaseFixture.Create(input);
         Assert.IsTrue(fixture.Lease.TryWaitForInputQuiescence(0));
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             fixture.Lease.DisposeQuiesced);
         Assert.AreEqual(1, input.DisposeCalls);
         Assert.AreEqual(1, fixture.Presence.DisposeCalls);
@@ -1194,7 +1194,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
         fixture.Presence.DisposeFailuresRemaining = 1;
         Assert.IsTrue(fixture.Lease.TryWaitForInputQuiescence(0));
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             fixture.Lease.DisposeQuiesced);
         Assert.AreEqual(1, input.DisposeCalls);
         Assert.AreEqual(1, fixture.Presence.DisposeCalls);
@@ -1321,7 +1321,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
             out ISwitch2ProUsbReadOnlyCompositeLease opened));
         var lease = (Switch2ProUsbWindowsReadOnlyCompositeLease)opened;
         Assert.IsTrue(lease.TryWaitForInputQuiescence(0));
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         return new WeakReference<Switch2ProUsbWindowsReadOnlyCompositeLease>(
             lease);
@@ -1353,7 +1353,7 @@ public sealed class Switch2ProUsbWindowsAdapterTests
             out ISwitch2ProUsbReadOnlyCompositeLease opened));
         var lease = (Switch2ProUsbWindowsReadOnlyCompositeLease)opened;
         Assert.IsTrue(lease.TryWaitForInputQuiescence(0));
-        Assert.ThrowsException<
+        Assert.ThrowsExactly<
             Switch2ProUsbWindowsCleanupAmbiguousException>(
             lease.DisposeQuiesced);
         return (new WeakReference<

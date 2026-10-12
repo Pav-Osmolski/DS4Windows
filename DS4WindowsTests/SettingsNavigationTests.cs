@@ -12,7 +12,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class SettingsNavigationTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DarkTheme", 640d)]
     [DataRow("DefaultTheme", 640d)]
     [DataRow("DarkTheme", 980d)]
