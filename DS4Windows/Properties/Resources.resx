@@ -655,4 +655,8 @@
   <data name="TouchEnded" xml:space="preserve">
     <value>Touch Ended</value>
   </data>
+  <data name="ProfileNameInvalid" xml:space="preserve"><value>Enter a valid profile name without a trailing space or dot.</value></data>
+  <data name="ProfileRenameCollision" xml:space="preserve"><value>A profile with that name already exists. Choose another name. Neither profile has been changed.</value></data>
+  <data name="ProfileRenameFailed" xml:space="preserve"><value>The profile could not be renamed. Its name has not changed. Check file permissions or whether another program is using it.</value></data>
+  <data name="ResolvePendingProfileSave" xml:space="preserve"><value>This profile has unsaved Overview changes. Retry or discard its pending saves on Overview before editing or renaming it.</value></data>
 </root>

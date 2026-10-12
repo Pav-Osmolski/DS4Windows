@@ -76,20 +76,39 @@ namespace DS4WinWPF
             ProfileSaved?.Invoke(this, EventArgs.Empty);
         }
 
-        public void RenameProfile(string newProfileName)
+        public bool RenameProfile(string newProfileName, out string error)
         {
-            string oldFilePath = Path.Combine(DS4Windows.Global.appdatapath,
-                "Profiles", $"{name}.xml");
-
-            string newFilePath = Path.Combine(DS4Windows.Global.appdatapath,
-                "Profiles", $"{newProfileName}.xml");
-
-            if (File.Exists(oldFilePath) && !File.Exists(newFilePath))
+            error = null;
+            string target;
+            try { target = DS4Windows.ProfileName.Normalize(newProfileName,
+                existingIdentity: string.Equals(newProfileName, name, StringComparison.OrdinalIgnoreCase)); }
+            catch (ArgumentException)
             {
-                File.Move(oldFilePath, newFilePath);
-                // Send NameChanged event so controls get updated with new name
-                Name = newProfileName;
+                error = Properties.Resources.ResourceManager.GetString("ProfileNameInvalid");
+                return false;
             }
+            if (target == name) return true;
+            string oldFilePath = Path.Combine(DS4Windows.Global.appdatapath, "Profiles", name + ".xml");
+            string newFilePath = Path.Combine(DS4Windows.Global.appdatapath, "Profiles", target + ".xml");
+            try
+            {
+                if (!string.Equals(target, name, StringComparison.OrdinalIgnoreCase) && File.Exists(newFilePath))
+                {
+                    error = Properties.Resources.ResourceManager.GetString("ProfileRenameCollision");
+                    return false;
+                }
+                // Non-overwriting move also protects a collision appearing
+                // after the preflight check. Keep the serialized file intact.
+                File.Move(oldFilePath, newFilePath);
+            }
+            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
+            {
+                error = Properties.Resources.ResourceManager.GetString("ProfileRenameFailed") + " " + ex.Message;
+                DS4Windows.AppLogger.LogToGui(error, false);
+                return false;
+            }
+            Name = target;
+            return true;
         }
     }
 }

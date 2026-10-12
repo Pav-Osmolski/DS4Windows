@@ -1688,6 +1688,15 @@ Suspend support not enabled.", true);
             }
         }
 
+        private bool HasPendingOverviewSave(string profile)
+        {
+            if (!overviewFailedWrites.Keys.Any(key => key.Profile == profile)) return false;
+            mainTabCon.SelectedItem = overviewTab;
+            MessageBox.Show(this, Properties.Resources.ResourceManager.GetString("ResolvePendingProfileSave"),
+                "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Information);
+            return true;
+        }
+
         private void DiscardOverviewProfileSaves_Click(object sender, RoutedEventArgs e)
         {
             overviewFailedWrites.Clear();
@@ -3576,6 +3585,7 @@ Suspend support not enabled.", true);
 
         private async void ShowProfileEditor(int device, ProfileEntity entity = null)
         {
+            if (entity != null && HasPendingOverviewSave(entity.Name)) return;
             if (editor != null || profileEditorLoading)
             {
                 return;
@@ -3833,6 +3843,9 @@ Suspend support not enabled.", true);
         {
             if (profilesListBox.SelectedItem is ProfileEntity entity)
             {
+                foreach (var controller in conLvViewModel.ControllerCol.Where(item => item.SelectedProfile == entity.Name))
+                    FlushOverviewQuickSettings(controller.DevIndex, false);
+                if (HasPendingOverviewSave(entity.Name)) return;
                 string filename = Path.Combine(Global.appdatapath,
                     "Profiles", $"{entity.Name}.xml");
 
@@ -3841,11 +3854,12 @@ Suspend support not enabled.", true);
                     File.Exists(filename))
                 {
                     RenameProfileWindow renameWin = new RenameProfileWindow();
-                    renameWin.ChangeProfileName(entity.Name);
+                    renameWin.ChangeProfileName(entity);
                     bool? result = renameWin.ShowDialog();
                     if (result.HasValue && result.Value)
                     {
-                        entity.RenameProfile(renameWin.RenameProfileVM.ProfileName);
+                        foreach (CompositeDeviceModel controller in conLvViewModel.ControllerCol.Where(item => item.SelectedProfile == Path.GetFileNameWithoutExtension(filename)))
+                            ApplyProfileSelection(controller, () => controller.ChangeSelectedProfile(entity.Name));
                         profilesCollectionView?.Refresh();
                         trayIconVM.PopulateContextMenu();
                     }
