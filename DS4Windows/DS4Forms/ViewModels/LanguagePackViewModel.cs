@@ -35,6 +35,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private const string invariantCultureTextValue = "English (default)";
 
         private int selectedIndex;
+        private readonly string appliedCulture = Thread.CurrentThread.CurrentUICulture.Name;
+        public bool RequiresRestart => SettingsRestartRequirements.Language(appliedCulture, Global.UseLang);
 
         public List<LangPackItem> LangPackList { get => langPackList; }
         public int SelectedIndex

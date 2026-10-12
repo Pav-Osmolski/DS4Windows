@@ -5,6 +5,10 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Search all Settings sections, remember the last section and show language/executable restart reminders.
+- Report installed/portable deployment mode in the startup log.
+- Illustrate the user guide with app screenshots and refresh the Settings image.
+
 ### Changed
 
 - Reorganize Settings into General, Appearance, Controllers, Updates & tools, Integrations, and Advanced sections. Group related options into focused cards with consistent inputs and action buttons; keep Nintendo setup collapsed until needed.

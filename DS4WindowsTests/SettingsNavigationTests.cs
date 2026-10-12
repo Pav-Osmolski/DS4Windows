@@ -57,6 +57,25 @@ public sealed class SettingsNavigationTests
                     Assert.IsFalse(startup.IsChecked.Value, "Section changes must not reset checkbox edits.");
                     Assert.AreEqual(@"C:\Games\Steam", steam.Text, "Section changes must not recreate edited fields.");
                 }
+                var navigator = new DS4WinWPF.DS4Forms.SettingsNavigator((Grid)root.FindName("settingsPages"), navigation);
+                navigator.RestoreSection("Controllers");
+                Assert.IsTrue(((RadioButton)root.FindName("settingsControllersNav")).IsChecked.Value);
+                Assert.IsTrue(navigator.SetSearch("startup") > 0, "Search must find settings outside the selected section.");
+                Assert.AreEqual(Visibility.Visible, ((StackPanel)root.FindName("settingsGeneralPage")).Visibility);
+                Assert.IsTrue(navigator.SetSearch("controller") > 1);
+                Layout(root, width);
+                var visibleResults = ((Grid)root.FindName("settingsPages")).Children.OfType<StackPanel>()
+                    .Where(page => page.Visibility == Visibility.Visible).OrderBy(Grid.GetRow).ToArray();
+                for (int index = 1; index < visibleResults.Length; index++)
+                    Assert.IsTrue(visibleResults[index].TranslatePoint(new Point(), visibleResults[index - 1]).Y
+                        >= visibleResults[index - 1].ActualHeight - 1, "Search sections must stack without overlapping.");
+                Assert.AreEqual(0, navigator.SetSearch("zzzz-no-such-setting"));
+                navigator.SetSearch("");
+                Layout(root, width);
+                Assert.AreEqual(Visibility.Visible, ((StackPanel)root.FindName("settingsControllersPage")).Visibility);
+                Assert.AreEqual(Visibility.Collapsed, ((StackPanel)root.FindName("settingsGeneralPage")).Visibility);
+                Assert.IsFalse(startup.IsChecked.Value);
+                Assert.AreEqual(@"C:\Games\Steam", steam.Text);
             }
             catch (Exception error) { failure = error; }
         });
@@ -87,7 +106,7 @@ public sealed class SettingsNavigationTests
             }
             foreach (XAttribute attribute in element.Attributes().ToArray())
             {
-                if (attribute.Name.LocalName is "Click" or "Checked" or "SelectionChanged" ||
+                if (attribute.Name.LocalName is "Click" or "Checked" or "SelectionChanged" or "TextChanged" or "PreviewKeyDown" ||
                     attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
                 else if (attribute.Value.StartsWith("{lex:Loc ")) attribute.Value = attribute.Value[9..^1];
                 else if (attribute.Value.StartsWith("{Binding") && !attribute.Value.Contains("ElementName=settings"))

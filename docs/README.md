@@ -3,6 +3,16 @@
 For the current Windows x64 app. Start with the user guides; implementation
 contracts and dated validation records are intended for contributors.
 
+## Explore the app
+
+![DS4Windows overview](images/tour/overview.png)
+
+The [illustrated user guide](user-guide.md) walks through
+[controllers](user-guide.md#controllers), [profiles and remapping](user-guide.md#profiles),
+[Audio Haptics](user-guide.md#audio-haptics), [Trigger Lab](user-guide.md#trigger-lab),
+[Auto Profiles](user-guide.md#auto-profiles), [Output Slots](user-guide.md#output-slots)
+and [Settings](user-guide.md#settings). Screenshots sit beside the controls they explain.
+
 ## Use DS4Windows
 
 | Guide | What it covers |

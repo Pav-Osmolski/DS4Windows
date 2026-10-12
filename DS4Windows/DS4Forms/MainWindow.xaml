@@ -88,7 +88,7 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Border Width="116" Height="72" Margin="0,0,14,0" CornerRadius="5"
-                                                Background="{DynamicResource RaisedBackgroundColor}"
+                                                Background="{DynamicResource CardBackgroundColor}"
                                                 BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" Padding="5"
                                                 Visibility="{Binding HasControllerArtwork, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <Image Source="{Binding ControllerImageSource}" Stretch="Uniform"
@@ -143,7 +143,7 @@
                                             </Button>
                                         </StackPanel>
                                     </Grid>
-                                    <Border Grid.Column="1" Background="{DynamicResource RaisedBackgroundColor}"
+                                    <Border Grid.Column="1" Background="{DynamicResource CardBackgroundColor}"
                                             BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                                             CornerRadius="3" Padding="10,5" VerticalAlignment="Top">
                                         <StackPanel Orientation="Horizontal">
@@ -245,7 +245,7 @@
                                         <Border x:Name="candidateCard" MinWidth="230"
                                                 Margin="0,0,10,6" Padding="10,8"
                                                 CornerRadius="4"
-                                                Background="{DynamicResource RaisedBackgroundColor}">
+                                                Background="{DynamicResource CardBackgroundColor}">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
@@ -415,7 +415,7 @@
                                                        Margin="0,3,0,0" FontSize="11"
                                                        Foreground="{DynamicResource MutedForegroundColor}" />
                                         </StackPanel>
-                                        <Border Grid.Column="1" Background="{DynamicResource RaisedBackgroundColor}"
+                                        <Border Grid.Column="1" Background="{DynamicResource CardBackgroundColor}"
                                                 BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                                                 CornerRadius="4" Padding="10,5" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding ElementName=profilesListBox, Path=Items.Count, StringFormat={}{0} profiles}"
@@ -424,7 +424,7 @@
                                         </Border>
                                         <Border Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0"
                                                 Width="340" MaxWidth="340" HorizontalAlignment="Left"
-                                                Background="{DynamicResource RaisedBackgroundColor}"
+                                                Background="{DynamicResource CardBackgroundColor}"
                                                 BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                                                 CornerRadius="6">
                                             <Grid>
@@ -476,7 +476,7 @@
                                                 <Setter Property="Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="ListBoxItem">
-                                                            <Border x:Name="ProfileCard" Background="{DynamicResource RaisedBackgroundColor}"
+                                                            <Border x:Name="ProfileCard" Background="{DynamicResource CardBackgroundColor}"
                                                                     BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                                                                     CornerRadius="5" Padding="13">
                                                                 <ContentPresenter />
@@ -540,7 +540,7 @@
                                             </Style>
                                         </StackPanel.Style>
                                         <Border Width="52" Height="52" CornerRadius="8"
-                                                Background="{DynamicResource RaisedBackgroundColor}"
+                                                Background="{DynamicResource CardBackgroundColor}"
                                                 BorderBrush="{DynamicResource BorderColor}" BorderThickness="1">
                                             <TextBlock Text="P" FontSize="20" FontWeight="Bold"
                                                        Foreground="{DynamicResource AccentColor}"
@@ -581,22 +581,37 @@
 
                 </local:OutputSlotManagerControl>
             </TabItem>
-            <TabItem xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:DS4WinWPF.DS4Forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Name="settingsTab" Header="{lex:Loc Settings}" Tag="" IsEnabled="{Binding ViewEnabled,Mode=OneWay}">
+            <TabItem xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:DS4WinWPF.DS4Forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" PreviewKeyDown="SettingsTab_PreviewKeyDown" x:Name="settingsTab" Header="{lex:Loc Settings}" Tag="" IsEnabled="{Binding ViewEnabled,Mode=OneWay}">
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <WrapPanel Margin="0,0,0,12" KeyboardNavigation.TabNavigation="Continue">
-                        <RadioButton x:Name="settingsGeneralNav" GroupName="SettingsCategory" Content="General" IsChecked="True" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
-                        <RadioButton x:Name="settingsAppearanceNav" GroupName="SettingsCategory" Content="Appearance" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
-                        <RadioButton x:Name="settingsControllersNav" GroupName="SettingsCategory" Content="Controllers" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
-                        <RadioButton x:Name="settingsToolsNav" GroupName="SettingsCategory" Content="Updates &amp; tools" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
-                        <RadioButton x:Name="settingsIntegrationsNav" GroupName="SettingsCategory" Content="Integrations" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
-                        <RadioButton x:Name="settingsAdvancedNav" GroupName="SettingsCategory" Content="Advanced" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
+                    <DockPanel Margin="0,0,0,12">
+                        <Button x:Name="clearSettingsSearchBtn" DockPanel.Dock="Right" Content="Clear" Visibility="Collapsed" Margin="8,0,0,0" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearSettingsSearchBtn_Click" />
+                        <Border Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="6" Padding="8,0">
+                        <Grid>
+                            <TextBox x:Name="settingsSearchTextBox" Style="{DynamicResource BridgeSearchTextBoxStyle}" AutomationProperties.Name="Search settings" ToolTip="Search all settings (Ctrl+F)" TextChanged="SettingsSearchTextBox_TextChanged" />
+                            <TextBlock Text="Search settings…" Margin="12,0" VerticalAlignment="Center" IsHitTestVisible="False" Foreground="{DynamicResource MutedForegroundColor}">
+                                <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding Text, ElementName=settingsSearchTextBox}" Value=""><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                        </Border>
+                    </DockPanel>
+                    <TextBlock x:Name="settingsSearchStatus" Grid.Row="2" Visibility="Collapsed" Margin="0,0,0,12" Foreground="{DynamicResource MutedForegroundColor}" />
+                    <Border x:Name="settingsNoResults" Grid.Row="3" Visibility="Collapsed" VerticalAlignment="Top" Style="{DynamicResource BridgeCardStyle}"><StackPanel><TextBlock Text="No matching settings" Style="{DynamicResource BridgeSectionTitleStyle}" /><TextBlock Text="Try a different term, such as startup, USB/IP or language, or clear the search." TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" /></StackPanel></Border>
+                    <WrapPanel Grid.Row="1" Margin="0,0,0,12" KeyboardNavigation.TabNavigation="Continue">
+                        <RadioButton x:Name="settingsGeneralNav" Tag="General" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="General" IsChecked="True" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
+                        <RadioButton x:Name="settingsAppearanceNav" Tag="Appearance" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="Appearance" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
+                        <RadioButton x:Name="settingsControllersNav" Tag="Controllers" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="Controllers" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
+                        <RadioButton x:Name="settingsToolsNav" Tag="Tools" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="Updates &amp; tools" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
+                        <RadioButton x:Name="settingsIntegrationsNav" Tag="Integrations" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="Integrations" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
+                        <RadioButton x:Name="settingsAdvancedNav" Tag="Advanced" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="Advanced" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" />
                     </WrapPanel>
-                    <ScrollViewer x:Name="settingsScrollViewer" Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Background="{DynamicResource SurfaceBackgroundColor}">
-                        <Grid Margin="0,0,0,8" Grid.IsSharedSizeScope="True">
+                    <ScrollViewer x:Name="settingsScrollViewer" Grid.Row="3" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Background="{DynamicResource SurfaceBackgroundColor}">
+                        <Grid x:Name="settingsPages" Margin="0,0,0,8" Grid.IsSharedSizeScope="True">
                             <Grid.Resources>
                                 <Thickness x:Key="spaceMargin" Left="0" Right="0" Bottom="14" Top="0" />
                             </Grid.Resources>
@@ -985,6 +1000,7 @@
                                             </Button>
                                             <TextBox x:Name="fakeExeNameTxt" Text="{Binding FakeExeName, UpdateSourceTrigger=LostFocus}" MinWidth="140" IsEnabled="{Binding SystemIntegrationEnabled}" MinHeight="34" VerticalContentAlignment="Center" />
                                         </DockPanel>
+                                        <TextBlock x:Name="executableRestartHint" Visibility="Collapsed" Margin="0,0,0,14" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="{DynamicResource AccentColor}" />
                                         <Grid Margin="{StaticResource spaceMargin}">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
