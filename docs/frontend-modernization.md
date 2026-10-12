@@ -24,11 +24,13 @@ Nothing in the existing UI has been removed. The main shell exposes:
 - **Profiles**: create, edit, rename, duplicate, delete, import, and export.
 - **Auto Profiles**: application-driven profile and controller-slot switching.
 - **Output Slots**: virtual controller slot inspection and control.
-- **Settings**: ordinary startup, notification, charging, appearance, and update preferences.
-- **Advanced settings**: VIIPER setup, OSC input/output, UDP server and smoothing, language,
-  Steam/custom executable compatibility, process priority, absolute-mouse monitor, device
-  registration, driver/update utilities, and diagnostics.
-- **Log**: live status messages, export, clear, and detailed-message inspection.
+- **Settings**: six full-width sections (General, Appearance, Controllers, Updates & tools,
+  Integrations, Advanced), with cross-section search and a remembered section selection.
+  Related settings share focused cards; language and executable changes show restart or
+  re-launch reminders. See the [illustrated Settings guide](user-guide.md#settings) for
+  the current grouping and screenshot.
+- **Log**: startup/dependency diagnostics, installed or portable deployment mode, live
+  status messages, Copy Text, export, clear, and detailed-message inspection.
 
 The profile editor keeps the interactive controller mapping canvas and makes the dense
 settings rail explicit:

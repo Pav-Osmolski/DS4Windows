@@ -69,6 +69,7 @@ namespace DS4WinWPF.DS4Forms
         private ControllerListViewModel conLvViewModel;
         private TrayIconViewModel trayIconVM;
         private SettingsViewModel settingsWrapVM;
+        private SettingsNavigator settingsNavigator;
         private IntPtr regHandle = new IntPtr();
         private bool showAppInTaskbar = false;
         private ManagementEventWatcher managementEvWatcher;
@@ -160,6 +161,14 @@ namespace DS4WinWPF.DS4Forms
             App root = Application.Current as App;
             settingsWrapVM = new SettingsViewModel();
             settingsTab.DataContext = settingsWrapVM;
+            settingsNavigator = new SettingsNavigator(settingsPages, new[]
+            {
+                settingsGeneralNav, settingsAppearanceNav, settingsControllersNav,
+                settingsToolsNav, settingsIntegrationsNav, settingsAdvancedNav
+            });
+            settingsNavigator.RestoreSection(Global.LastSettingsSection);
+            settingsWrapVM.FakeExeNameChanged += (sender, args) => UpdateExecutableRestartHint();
+            UpdateExecutableRestartHint();
             RefreshViiperStatusText();
             RefreshDSXUdpStatus();
             logvm = new LogViewModel(App.rootHub);
@@ -1383,6 +1392,61 @@ Suspend support not enabled.", true);
         private void ClearLogBtn_Click(object sender, RoutedEventArgs e)
         {
             logvm.Clear();
+        }
+
+        private void SettingsCategory_Checked(object sender, RoutedEventArgs e)
+        {
+            // General is selected during XAML loading, before the viewer exists.
+            settingsScrollViewer?.ScrollToTop();
+            if (settingsNavigator == null || sender is not RadioButton category) return;
+            settingsSearchTextBox.Clear();
+            Global.LastSettingsSection = category.Tag as string;
+        }
+
+        private void SettingsSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (settingsNavigator == null) return;
+            int matches = settingsNavigator.SetSearch(settingsSearchTextBox.Text);
+            bool searching = settingsNavigator.IsSearching;
+            clearSettingsSearchBtn.Visibility = searching ? Visibility.Visible : Visibility.Collapsed;
+            settingsSearchStatus.Visibility = searching ? Visibility.Visible : Visibility.Collapsed;
+            settingsSearchStatus.Text = $"Searching all sections · {matches} matching settings group{(matches == 1 ? "" : "s")}";
+            settingsNoResults.Visibility = searching && matches == 0 ? Visibility.Visible : Visibility.Collapsed;
+            settingsScrollViewer.Visibility = searching && matches == 0 ? Visibility.Collapsed : Visibility.Visible;
+            settingsScrollViewer.ScrollToTop();
+        }
+
+        private void ClearSettingsSearchBtn_Click(object sender, RoutedEventArgs e)
+        {
+            settingsSearchTextBox.Clear();
+            settingsSearchTextBox.Focus();
+        }
+
+        private void SettingsTab_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                settingsSearchTextBox.Focus();
+                settingsSearchTextBox.SelectAll();
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Escape && settingsSearchTextBox.IsKeyboardFocusWithin)
+            {
+                settingsSearchTextBox.Clear();
+                e.Handled = true;
+            }
+        }
+
+        private void UpdateExecutableRestartHint()
+        {
+            executableRestartHint.Visibility = SettingsRestartRequirements.Executable(Global.exeFileName, Global.FakeExeName)
+                ? Visibility.Visible : Visibility.Collapsed;
+            executableRestartHint.Text = $"Re-launch required: close DS4Windows, then open {SettingsRestartRequirements.RequestedExecutable(Global.FakeExeName)}.";
+        }
+
+        private void OpenSettingsLog_Click(object sender, RoutedEventArgs e)
+        {
+            mainTabCon.SelectedItem = logTab;
         }
 
         private void MainTabCon_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -2684,10 +2748,11 @@ Suspend support not enabled.", true);
 
             ViiperPrerequisiteStatus status = ViiperSetupManager.GetStatus(tryStartServer: false);
             viiperStatusText.ToolTip = status.StartupPreferenceReadError;
-            viiperStatusText.Text = $"{status.DisplayText}. " +
-                $"VIIPER helper: {(status.ViiperInstalled ? "installed" : "missing")}; " +
-                $"usbip-win2: {(status.UsbipInstalled ? "installed" : "missing")}; " +
-                $"server: {(status.ServerRunning ? "running" : "not running")}.";
+            viiperStatusText.Text = $"{status.DisplayText}.\n" +
+                $"USB/IP: {status.UsbipVersion ?? "not detected"} · " +
+                $"Server: {(status.ServerRunning ? "running" : "not running")}.";
+            viiperStatusText.SetResourceReference(TextBlock.ForegroundProperty,
+                status.Ready ? "SuccessColor" : "DangerColor");
         }
 
         private sealed class Switch2AssociationListItem
