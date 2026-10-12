@@ -39,7 +39,7 @@ internal sealed class PendingProfileWrite
             if (!capturedIdentity || File.Exists(path) != originallyExists ||
                 originallyExists && !SHA256.HashData(File.ReadAllBytes(path)).AsSpan().SequenceEqual(originalHash))
                 throw new IOException("The profile changed since the failed save. Reopen it before making further changes.");
-            ProfilePersistence.Save(path, Xml);
+            ProfilePersistence.Save(path, Xml, overwrite: originallyExists);
             return true;
         }
         catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)

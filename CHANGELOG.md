@@ -3,6 +3,15 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Fixed
+
+- Incorporate [upstream PR #138](https://github.com/hbashton/DS4Windows/pull/138) by meiameiameia: report profile save failures, keep the editor open, and preserve the original file during a failed rename.
+- Keep user-entered XML suffixes, stored filenames, profile selections and creation events consistent, including profiles whose existing names end in `.xml`.
+- Retain failed Overview changes as snapshots tied to their original profiles. Offer explicit retry or discard instead of announcing success or automatically retrying a locked file. Refuse stale retries after a profile has been edited or deleted.
+- Report Rename collisions and file errors without closing the rename dialog or changing the selected name. Preserve file contents and update active controller selections only after a successful rename.
+
 ## [5.0.18](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.18) — 2026-10-12
 
 ### Added

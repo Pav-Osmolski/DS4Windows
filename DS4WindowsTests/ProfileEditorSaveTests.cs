@@ -200,6 +200,15 @@ public sealed class ProfileEditorSaveTests
         Assert.AreEqual("Existing.xml", Global.ProfilePath[0]);
     }
 
+    [TestMethod]
+    public void ExistingBasenameWithTrailingDotRemainsEditable()
+    {
+        string path = WriteProfile("Legacy.", Original);
+        Assert.IsTrue(CreateEditor(new ProfileEntity { Name = "Legacy." }).SaveProfileChanges("Legacy."));
+        AssertSavedXml(path);
+        Assert.AreEqual("Legacy.", Global.ProfilePath[0]);
+    }
+
     [DataTestMethod]
     [DataRow("Candidate.XML", "Candidate")]
     [DataRow("Dotted.name", "Dotted.name")]
