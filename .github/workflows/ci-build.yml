@@ -34,6 +34,9 @@ jobs:
         # the release gate. Hardware-dependent tests retain explicit opt-in gates.
         run: dotnet test .\DS4WindowsTests\DS4WindowsTests.csproj -c Release -p:Platform=x64 --verbosity normal
 
+      - name: Run standalone hardware-verification unit tests
+        run: dotnet test .\utils\Switch2UsbHardwareVerify.Tests\Switch2UsbHardwareVerify.Tests.csproj -c Release --verbosity normal
+
       - name: Test numeric release identity and legacy publication policy
         shell: pwsh
         run: .\utils\test-release-identity.ps1
