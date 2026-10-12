@@ -16,10 +16,15 @@ removes the redundant direct System.Memory reference, and
 MSTest proposals. [#14](https://github.com/Pav-Osmolski/DS4Windows/pull/14)
 configures fresh fork-specific NuGet and Actions proposals.
 
-Keep the old dependency branch pointers as historical references pending the
-maintainer's deferred cleanup decision. No inherited branch or release tag was
-deleted during this refresh. The counts and classifications below remain the
-original 2026-10-11 audit snapshot, not a fresh count of today's branches.
+On 2026-10-12, the maintainer authorized removal of those four inherited
+dependency branches. Each tip still matched the original audit and had not
+been repurposed. All four references were deleted after creating and verifying
+a local Git recovery bundle containing their complete history. Their original
+tips are recorded in the table below; fresh replacement PRs are merged and
+released in 5.0.19. No release tag or other inherited branch was deleted.
+
+The counts and other classifications below remain the original 2026-10-11
+audit snapshot, not a fresh count of today's branches.
 
 ## How to interpret the recommendations
 
@@ -58,10 +63,10 @@ Default branch: `main` — keep.
 | [agent/padforge-dualsense-audio](https://github.com/Pav-Osmolski/DS4Windows/tree/agent/padforge-dualsense-audio) | Review or archive: unmerged work | Four unmerged patches for isolated DualSense speaker transport, owner-state deduplication and Opus settings. Worth reviewing for DualSense audio work. Tip `9b887b1`, 2026-07-28. |
 | [battery-toast-notifications](https://github.com/Pav-Osmolski/DS4Windows/tree/battery-toast-notifications) | Review or archive: unmerged work | One unmerged feature patch: battery toast notifications, settings and a notifier service. A manageable candidate for a fresh feature branch. Tip `f0ae32b`, 2026-06-11. |
 | [cleanroom-dualsense-bt-audio](https://github.com/Pav-Osmolski/DS4Windows/tree/cleanroom-dualsense-bt-audio) | Review or archive: unmerged work | Three unmerged DualSense Bluetooth audio transport/diagnostic patches. Preserve as reference; review against the current audio implementation. Tip `8513a6e`, 2026-06-05. |
-| [dependabot/nuget/DS4Windows/System.Management-10.0.8](https://github.com/Pav-Osmolski/DS4Windows/tree/dependabot/nuget/DS4Windows/System.Management-10.0.8) | Review or archive: unmerged work | Inherited dependency-update proposal from June; replace with a fresh update against this fork rather than merging an old dependency snapshot. Upstream: [#10](https://github.com/hbashton/DS4Windows/pull/10) (open). Tip `6aa97ff`, 2026-06-02. |
-| [dependabot/nuget/DS4Windows/System.Memory-4.6.3](https://github.com/Pav-Osmolski/DS4Windows/tree/dependabot/nuget/DS4Windows/System.Memory-4.6.3) | Review or archive: unmerged work | Inherited dependency-update proposal from June; replace with a fresh update against this fork rather than merging an old dependency snapshot. Upstream: [#11](https://github.com/hbashton/DS4Windows/pull/11) (open). Tip `886c59e`, 2026-06-02. |
-| [dependabot/nuget/DS4WindowsTests/MSTest.TestFramework-4.2.3](https://github.com/Pav-Osmolski/DS4Windows/tree/dependabot/nuget/DS4WindowsTests/MSTest.TestFramework-4.2.3) | Review or archive: unmerged work | Inherited dependency-update proposal from June; replace with a fresh update against this fork rather than merging an old dependency snapshot. Upstream: [#8](https://github.com/hbashton/DS4Windows/pull/8) (open). Tip `75ac2fe`, 2026-06-02. |
-| [dependabot/nuget/DS4WindowsTests/multi-3f71d811c1](https://github.com/Pav-Osmolski/DS4Windows/tree/dependabot/nuget/DS4WindowsTests/multi-3f71d811c1) | Review or archive: unmerged work | Inherited dependency-update proposal from June; replace with a fresh update against this fork rather than merging an old dependency snapshot. Upstream: [#7](https://github.com/hbashton/DS4Windows/pull/7) (open). Tip `d404d86`, 2026-06-02. |
+| [dependabot/nuget/DS4Windows/System.Management-10.0.8](https://github.com/Pav-Osmolski/DS4Windows/commit/6aa97fffebc5301eadbd9c489c8a8d0f6eaace19) | Deleted 2026-10-12: superseded | Replaced by merged fork [PR #15](https://github.com/Pav-Osmolski/DS4Windows/pull/15), included in 5.0.19. Original tip preserved in the verified local recovery bundle. Upstream: [#10](https://github.com/hbashton/DS4Windows/pull/10) (open). Tip `6aa97ff`, 2026-06-02. |
+| [dependabot/nuget/DS4Windows/System.Memory-4.6.3](https://github.com/Pav-Osmolski/DS4Windows/commit/886c59e15a06271478d7db4650355f1ac01fe1eb) | Deleted 2026-10-12: superseded | Replaced by merged fork [PR #16](https://github.com/Pav-Osmolski/DS4Windows/pull/16), included in 5.0.19. Original tip preserved in the verified local recovery bundle. Upstream: [#11](https://github.com/hbashton/DS4Windows/pull/11) (open). Tip `886c59e`, 2026-06-02. |
+| [dependabot/nuget/DS4WindowsTests/MSTest.TestFramework-4.2.3](https://github.com/Pav-Osmolski/DS4Windows/commit/75ac2fefc35dc734093df4ffc4488e5a8c021656) | Deleted 2026-10-12: superseded | Replaced by merged fork [PR #17](https://github.com/Pav-Osmolski/DS4Windows/pull/17), included in 5.0.19. Original tip preserved in the verified local recovery bundle. Upstream: [#8](https://github.com/hbashton/DS4Windows/pull/8) (open). Tip `75ac2fe`, 2026-06-02. |
+| [dependabot/nuget/DS4WindowsTests/multi-3f71d811c1](https://github.com/Pav-Osmolski/DS4Windows/commit/d404d86c33e9c5896b15e66537204f1b454057ed) | Deleted 2026-10-12: superseded | Replaced by merged fork [PR #17](https://github.com/Pav-Osmolski/DS4Windows/pull/17), included in 5.0.19. Original tip preserved in the verified local recovery bundle. Upstream: [#7](https://github.com/hbashton/DS4Windows/pull/7) (open). Tip `d404d86`, 2026-06-02. |
 | [dualsense-bluetooth-emulation-driver](https://github.com/Pav-Osmolski/DS4Windows/tree/dualsense-bluetooth-emulation-driver) | Archive then delete: equivalent patches | 44 non-merge patches already represented in `main`; historical reference only. Tip: Route virtual DualSense IOCTLs through control device. Tip `e852043`, 2026-06-11. |
 | [experiment/xbox-series-emulation](https://github.com/Pav-Osmolski/DS4Windows/tree/experiment/xbox-series-emulation) | Review or archive: unmerged work | Unmerged Xbox Series X|S emulation experiment. The DS4Windows and VIIPER branches are a paired feature; preserve together if pursued. Tip `d48ad0b`, 2026-08-06. |
 | [feature/native-udecx-bus-integration](https://github.com/Pav-Osmolski/DS4Windows/tree/feature/native-udecx-bus-integration) | Review or archive: unmerged work | 38 unmerged patches integrating native UdeCx transport and driver package validation. A substantial driver/backend project, not a routine cleanup merge. Tip `0b68dc0`, 2026-08-13. |
@@ -114,7 +119,7 @@ The following work is left for the maintainer to decide later. No remaining bran
 
 1. Archive the 16 patch-equivalent historical branches before considering deletion of their branch pointers.
 2. Consider the two contained branches only while retaining their named containing branches or archive tags.
-3. Review or archive the 21 branches with unmerged work. The four inherited Dependabot proposals can be replaced by fresh fork-specific dependency updates.
+3. Review or archive the 21 branches with unmerged work. The four inherited Dependabot proposals were replaced and their branch pointers deleted on 2026-10-12; see the dependency refresh follow-up.
 4. Keep the three default branches, VIIPER gh-pages and all release tags. Automatic deletion after future PR merges is enabled.
 
 The most practical review candidates are DualSense Bluetooth reconnect/audio, battery notifications, stick-axis inversion and updater managed-file cleanup. Native UdeCx and Xbox Series emulation are larger cross-repository projects.
