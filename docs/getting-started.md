@@ -92,7 +92,7 @@ updating, especially when moving between versions or installation types.
 Settings may be in `%APPDATA%\DS4Windows` **or beside the application**, depending
 on your configuration. Check both before removing an old portable folder.
 Follow the release's update instructions when a matching backend update is
-required. In-app update checks use this fork's releases; stable builds do not
+required. In-app update checks use this project's releases; stable builds do not
 automatically install prereleases.
 
 ## If something isn't working

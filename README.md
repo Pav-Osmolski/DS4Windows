@@ -9,7 +9,7 @@ Profiles that follow the game you're playing.
 
 **Free and open source.**
 
-[**Download**](https://github.com/hbashton/DS4Windows/releases) · [Getting started](docs/getting-started.md) · [Community](https://www.reddit.com/r/DS4Windows/)
+[**Download**](https://github.com/hbashton/DS4Windows/releases) · [Getting started](docs/getting-started.md) · [Documentation index](docs/README.md) · [Community](https://www.reddit.com/r/DS4Windows/)
 
 [![Releases](https://img.shields.io/github/v/release/hbashton/DS4Windows?include_prereleases&logo=github&label=release)](https://github.com/hbashton/DS4Windows/releases)
 [![Main build](https://github.com/hbashton/DS4Windows/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/hbashton/DS4Windows/actions/workflows/ci-build.yml?query=branch%3Amain)
@@ -134,3 +134,5 @@ the DS4Windows community, with thanks to VIIPER, HidHide, usbip-win2, and the
 wider controller-research community.
 
 Licensed under [GPL-3.0](COPYING). See [third-party notices](NOTICE.txt).
+
+Release history is consolidated in [CHANGELOG.md](CHANGELOG.md).
