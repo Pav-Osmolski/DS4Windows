@@ -5,7 +5,8 @@ updates:
     directories:
       - "/DS4Windows"
       - "/DS4WindowsTests"
-      - "/installer/*"
+      - "/installer/DS4Windows.Bootstrapper"
+      - "/installer/DS4Windows.SetupActions"
       - "/utils/*"
     schedule:
       interval: "weekly"
