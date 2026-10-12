@@ -27,7 +27,7 @@ public class PendingProfileWriteTests
         }
         finally { Global.appdatapath = oldRoot; Global.ProfilePath[0] = oldProfile; Directory.Delete(root, true); }
     }
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RetryCannotOverwriteAnEditedOrDeletedProfile(bool delete)

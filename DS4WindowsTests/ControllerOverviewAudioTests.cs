@@ -16,7 +16,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class ControllerOverviewAudioTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.USB, true)]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.BT, true)]
     [DataRow(InputDeviceType.Switch2JoyConLeft, ConnectionType.BT, false)]

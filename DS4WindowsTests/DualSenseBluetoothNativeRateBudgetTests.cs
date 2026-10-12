@@ -20,7 +20,7 @@ public sealed class DualSenseBluetoothNativeRateBudgetTests
     private const int MediaFrames = 128;
     public TestContext TestContext { get; set; }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(250, 500, true)]
     [DataRow(500, 1000, true)]
     [DataRow(500, 200, false)]

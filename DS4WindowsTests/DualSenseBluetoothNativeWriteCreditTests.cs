@@ -15,7 +15,7 @@ namespace DS4Windows.Tests
         private const int PhysicalLength = 398;
         public TestContext TestContext { get; set; }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(0x31, 78)]
         [DataRow(0x36, 398)]
         public void ExplicitNativeCreditGatesStandaloneAndPiggybackWithoutBlockingMedia(
@@ -85,12 +85,12 @@ namespace DS4Windows.Tests
             Assert.IsFalse(fault);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(-1)]
         [DataRow(33)]
         public void InvalidNativeBudgetIsRejected(int limit)
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
                 Create(new ControlledNativeIo(), limit));
         }
 
@@ -174,7 +174,7 @@ namespace DS4Windows.Tests
             Assert.AreEqual(64L, writer.CompletedWrites);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(false, false)]
         [DataRow(true, true)]
         public void FailedOrShortNativeCompletionPoisonsCreditAndLaterWrites(
@@ -357,7 +357,7 @@ namespace DS4Windows.Tests
             Assert.AreEqual(PhysicalLength, io.LastClone.Length);
             CollectionAssert.AreEqual(command, io.LastClone.AsSpan(0, command.Length).ToArray());
             Assert.IsTrue(allocated >= PhysicalLength);
-            Assert.ThrowsException<AssertFailedException>(() => Assert.AreEqual(0L, allocated));
+            Assert.ThrowsExactly<AssertFailedException>(() => Assert.AreEqual(0L, allocated));
             if (capture) Assert.IsTrue(nativeObjects >= 1);
             TestContext?.WriteLine($"Native credit positive control: bytes={allocated} nativeCapture={capture} nativeObjects={nativeObjects}");
         }

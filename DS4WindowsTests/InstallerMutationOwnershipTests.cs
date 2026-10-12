@@ -98,7 +98,7 @@ public sealed class InstallerMutationOwnershipTests
     {
         string name = "Local\\DS4Windows-Setup-Test-" + Guid.NewGuid().ToString("N");
         var expected = new IOException("Synthetic transaction failure");
-        Assert.AreSame(expected, Assert.ThrowsException<IOException>(() =>
+        Assert.AreSame(expected, Assert.ThrowsExactly<IOException>(() =>
             SetupMutationOwnership.Run(() => throw expected, null, name)));
 
         int result = -1;

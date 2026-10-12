@@ -26,7 +26,7 @@ public class ViiperStartupTaskTests
         Assert.IsTrue(ViiperStartupTaskPolicy.IsValid(store.Task, Canonical, Sid));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, true, "", null, false)]
     [DataRow(true, false, "RestartRequired", null, false)]
     [DataRow(true, true, "RestartRequired", null, false)]
@@ -48,7 +48,7 @@ public class ViiperStartupTaskTests
         Assert.AreEqual(0, store.Deletes);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PreferenceOrDeferralChangedDuringTaskInspectionPreventsRegistration(
@@ -96,12 +96,12 @@ public class ViiperStartupTaskTests
     {
         var original = ManagedTask() with { Priority = ProcessPriorityClass.BelowNormal };
         var store = new MemoryStore { Task = original, RejectWrite = true };
-        Assert.ThrowsException<InvalidOperationException>(() => Register(store));
+        Assert.ThrowsExactly<InvalidOperationException>(() => Register(store));
         Assert.AreSame(original, store.Task);
         Assert.AreEqual(0, store.Deletes);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("foreign-description")]
     [DataRow("foreign-account")]
     [DataRow("foreign-command")]
@@ -142,8 +142,8 @@ public class ViiperStartupTaskTests
             _ => throw new InvalidOperationException(),
         };
         var store = new MemoryStore { Task = foreign };
-        Assert.ThrowsException<InvalidOperationException>(() => Register(store));
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() => Register(store));
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             ViiperStartupTaskPolicy.Remove(Sid, store));
         Assert.AreSame(foreign, store.Task);
         Assert.AreEqual(0, store.Deletes);
@@ -166,7 +166,7 @@ public class ViiperStartupTaskTests
     public void RegistrationCannotBeRetargetedToAPortableRuntime()
     {
         var store = new MemoryStore { Task = ManagedTask() };
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             ViiperStartupTaskPolicy.Register(Portable, Sid, Canonical, store));
         Assert.AreEqual(0, store.Deletes);
         Assert.AreEqual(0, store.Writes);
@@ -189,7 +189,7 @@ public class ViiperStartupTaskTests
             "Selecting the installed backend must clear the automatically persisted portable cache.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, true, Canonical)]
     [DataRow(true, false, Portable)]
     [DataRow(false, true, Portable)]
@@ -204,7 +204,7 @@ public class ViiperStartupTaskTests
             ViiperStartupTaskPolicy.NormalizePreferredRuntimePath(selected, Canonical));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void InstalledStartupWithStalePortableCacheUsesOneCanonicalBroker(bool alreadyRunning)
@@ -283,7 +283,7 @@ public class ViiperStartupTaskTests
         Assert.AreEqual(Canonical, installedTask.ExecutablePath);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void AnotherOrUnverifiableRunningBrokerBlocksSessionFallback(bool selectedAlsoRunning)

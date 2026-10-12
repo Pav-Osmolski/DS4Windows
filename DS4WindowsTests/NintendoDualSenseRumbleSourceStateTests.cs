@@ -5,7 +5,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class NintendoDualSenseRumbleSourceStateTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]

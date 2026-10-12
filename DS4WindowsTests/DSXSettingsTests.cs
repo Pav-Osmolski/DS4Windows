@@ -41,7 +41,7 @@ public class DSXSettingsTests
         Assert.AreEqual("127.0.0.1", store.dsxUdpServListenAddress);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("127.0.0.1", 6970)]
     [DataRow("::1", 65535)]
     public void EnabledLoopbackEndpointRoundTrips(string address, int port)
@@ -62,7 +62,7 @@ public class DSXSettingsTests
         Assert.AreEqual(port, restored.DSXUDPServerPort);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("0.0.0.0", 6969)]
     [DataRow("192.168.1.1", 6969)]
     [DataRow("::", 6969)]

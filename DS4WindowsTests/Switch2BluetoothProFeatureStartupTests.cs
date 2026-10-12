@@ -70,7 +70,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("0C0401021078000000000000")]
     [DataRow("0C9101021078000000000000")]
     [DataRow("0C0100021078000000000000")]
@@ -98,7 +98,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     public async Task ProWriteRejectionStopsAtTheFailedStep(int failedStep)
@@ -121,7 +121,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task ProDuplicateMaskAcknowledgementCannotCompleteEnableOrExtendItsDeadline(bool finishEnable)
@@ -156,7 +156,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     public async Task ProFeatureOwnershipExcludesLedsCalibrationAndBothStartupKindsForEachStep(int heldStep)
@@ -193,7 +193,7 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
         Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, true)]
     [DataRow(2, true)]
     [DataRow(1, false)]
@@ -283,7 +283,7 @@ public sealed partial class Switch2BluetoothWindowsAdapterTests
         Assert.IsTrue(await adapter.EndScanAsync(1));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     public async Task ProStartupBadReplyNeverPublishesInput(int failedStep)

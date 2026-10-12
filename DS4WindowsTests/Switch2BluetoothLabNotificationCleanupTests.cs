@@ -19,7 +19,7 @@ public class Switch2BluetoothLabNotificationCleanupTests
         result.ThrowIfFailed();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("ProtocolError", "Success")]
     [DataRow("Success", "Unreachable")]
     [DataRow(null, "Success")]
@@ -47,7 +47,7 @@ public class Switch2BluetoothLabNotificationCleanupTests
         Assert.AreEqual(1, restored);
         Assert.IsTrue(result.Fenced);
         Assert.AreSame(failure, result.HeadsetFailure);
-        Assert.AreSame(failure, Assert.ThrowsException<InvalidOperationException>(() => result.ThrowIfFailed()));
+        Assert.AreSame(failure, Assert.ThrowsExactly<InvalidOperationException>(() => result.ThrowIfFailed()));
     }
 
     [TestMethod]
@@ -103,7 +103,7 @@ public class Switch2BluetoothLabNotificationCleanupTests
         Assert.IsTrue(result.Fenced);
         Assert.AreEqual("Success", result.HeadsetStatus);
         Assert.AreSame(failure, result.CommonInputFailure);
-        Assert.AreSame(failure, Assert.ThrowsException<InvalidOperationException>(() => result.ThrowIfFailed()));
+        Assert.AreSame(failure, Assert.ThrowsExactly<InvalidOperationException>(() => result.ThrowIfFailed()));
     }
 
     [TestMethod]
@@ -114,7 +114,7 @@ public class Switch2BluetoothLabNotificationCleanupTests
         var result = await Switch2BluetoothLabNotificationCleanup.RunAsync(
             () => Task.FromException<string>(headset), () => throw common);
         Assert.IsTrue(result.Fenced);
-        var aggregate = Assert.ThrowsException<AggregateException>(() => result.ThrowIfFailed());
+        var aggregate = Assert.ThrowsExactly<AggregateException>(() => result.ThrowIfFailed());
         CollectionAssert.AreEqual(new Exception[] { headset, common }, aggregate.InnerExceptions.ToArray());
     }
 
@@ -122,7 +122,7 @@ public class Switch2BluetoothLabNotificationCleanupTests
     public async Task BothCallbacksAreValidatedBeforeAnyWrite()
     {
         int writes = 0;
-        await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => Switch2BluetoothLabNotificationCleanup.RunAsync(
+        await Assert.ThrowsExactlyAsync<ArgumentNullException>(() => Switch2BluetoothLabNotificationCleanup.RunAsync(
             () => { writes++; return Task.FromResult("Success"); }, null));
         Assert.AreEqual(0, writes);
     }

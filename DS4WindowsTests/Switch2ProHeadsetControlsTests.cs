@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2ProHeadsetControlsTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, Switch2ProButton.FaceSouth)]
     [DataRow(1, Switch2ProButton.FaceEast)]
     [DataRow(2, Switch2ProButton.FaceWest)]
@@ -71,7 +71,7 @@ public class Switch2ProHeadsetControlsTests
         Assert.AreNotEqual((Switch2ProButton)controls.RawButtonBits, controls.Buttons);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, 0)]
     [DataRow(0, 30)]
     [DataRow(0, 40)]

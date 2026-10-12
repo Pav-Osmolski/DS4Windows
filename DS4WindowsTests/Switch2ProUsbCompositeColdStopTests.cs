@@ -10,7 +10,7 @@ namespace DS4Windows.Tests;
 
 public partial class Switch2ProUsbRuntimeOwnerTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void UsbCompositeColdStopWaitsForMaintenanceOnlyWithinItsDeadline(

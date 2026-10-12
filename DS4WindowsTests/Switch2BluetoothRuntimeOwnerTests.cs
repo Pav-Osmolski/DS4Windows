@@ -12,7 +12,7 @@ public sealed class Switch2BluetoothRuntimeOwnerTests
     private const long QpcFrequency = 10_000_000;
     private const int LifecycleTimeoutMilliseconds = 1_000;
 
-    [DataTestMethod]
+    [TestMethod]
     [DoNotParallelize]
     [DataRow(Switch2ControllerModel.ProController2, false)]
     [DataRow(Switch2ControllerModel.JoyCon2Left, false)]
@@ -78,7 +78,7 @@ public sealed class Switch2BluetoothRuntimeOwnerTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2)]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
@@ -108,7 +108,7 @@ public sealed class Switch2BluetoothRuntimeOwnerTests
         Assert.IsTrue(session.TryRetire(), "Output removal must be locally idempotent.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ConnectedStopStillRequiresPhysicalFeedbackDelivery(bool reject)
@@ -176,7 +176,7 @@ public sealed class Switch2BluetoothRuntimeOwnerTests
         finally { StopWithoutRemoving(owner, registration, table, token); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2)]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
@@ -375,7 +375,7 @@ public sealed class Switch2BluetoothRuntimeOwnerTests
             tableFailure.ToString());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2)]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
@@ -655,7 +655,7 @@ public sealed class Switch2BluetoothRuntimeOwnerTests
             tableFailure.ToString());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -769,7 +769,7 @@ public sealed class Switch2BluetoothRuntimeOwnerTests
         Assert.IsTrue(owner.RequiresQuarantine);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2)]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
@@ -822,7 +822,7 @@ public sealed class Switch2BluetoothRuntimeOwnerTests
         Assert.AreEqual(Switch2BluetoothRuntimeOwnerState.Stopped, owner.State);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2)]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
@@ -955,7 +955,7 @@ public sealed class Switch2BluetoothRuntimeOwnerTests
             "Lifecycle attention is preallocated and coalesced once per generation.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void InlineBurstSurvivesFactoryCreationWhileDisconnectRemainsSilent(

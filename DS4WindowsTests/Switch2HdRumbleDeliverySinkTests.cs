@@ -576,7 +576,7 @@ public class Switch2HdRumbleDeliverySinkTests
         {
             ThrowAuthentication = true,
         };
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2HdRumbleDeliverySink(constructorWriter, 7, 11));
 
         FakeWriter writer = new(7, 11);
@@ -660,7 +660,7 @@ public class Switch2HdRumbleDeliverySinkTests
         Assert.IsFalse(sink.TryDeliver(default));
         Assert.AreEqual(0, writer.Calls);
 
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2HdRumbleDeliverySink(new FakeWriter(8, 11), 7, 11));
         writer.Authenticated = false;
         Assert.IsFalse(sink.TryDeliver(FrameDelivery(31, 1, 1_000)));

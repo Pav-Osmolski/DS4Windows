@@ -12,7 +12,7 @@ public class DualSenseNativeMediaFallbackTests
     // These tests use an unopened HID object and no physical/output workers.
     // The BT case is retiring its transport, deterministically modelling
     // unavailable media without timing, a recovery worker or hardware I/O.
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ConnectionType.USB, false)]
     [DataRow(ConnectionType.USB, true)]
     [DataRow(ConnectionType.BT, false)]

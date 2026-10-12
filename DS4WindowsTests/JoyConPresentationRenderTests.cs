@@ -26,7 +26,7 @@ public sealed class JoyConPresentationRenderTests
     private static DrawingImage[] Icons => new[] { JoyConArtwork.Left, JoyConArtwork.Right,
         JoyConArtwork.SidewaysLeft, JoyConArtwork.SidewaysRight, JoyConArtwork.Pair };
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(96)]
     [DataRow(120)]
     [DataRow(144)]

@@ -54,7 +54,7 @@ public class LogViewModelTests
             model.LogItems.CollectionChanged += throwingHandler;
             try
             {
-                Assert.ThrowsException<InvalidOperationException>(() =>
+                Assert.ThrowsExactly<InvalidOperationException>(() =>
                     model.AddLogMessage(null, new DebugEventArgs("First", false)));
                 Assert.IsFalse(model.LogListLocker.IsWriteLockHeld,
                     "A failed UI subscriber must not permanently block later logging.");
@@ -203,7 +203,7 @@ public class LogViewModelTests
         Dispatcher.PushFrame(frame);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(NotifyCollectionChangedAction.Remove)]
     [DataRow(NotifyCollectionChangedAction.Reset)]
     public void ThrowingEvictionOrClearSubscriberReleasesTheWriteLock(
@@ -222,7 +222,7 @@ public class LogViewModelTests
             model.LogItems.CollectionChanged += throwingHandler;
             try
             {
-                Assert.ThrowsException<InvalidOperationException>(() =>
+                Assert.ThrowsExactly<InvalidOperationException>(() =>
                 {
                     if (action == NotifyCollectionChangedAction.Reset)
                         model.Clear();

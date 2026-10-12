@@ -292,7 +292,7 @@ namespace DS4WindowsTests
             PumpHarness pump = Pump();
             Assert.IsTrue(pump.TryPublish(State(25), 1_000));
             ThrowingSink throwing = new();
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 pump.PumpOnce(1_000, throwing, out _));
 
             RetrySink retry = new(failuresBeforeSuccess: 0,

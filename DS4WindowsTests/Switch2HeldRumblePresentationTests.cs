@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class Switch2HeldRumblePresentationTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
     [DataRow(Switch2ControllerModel.ProController2)]
@@ -55,7 +55,7 @@ public sealed class Switch2HeldRumblePresentationTests
         AssertNeutralPacket(Switch2ControllerModel.JoyCon2Right, right.Payloads[^1]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left, false)]
     [DataRow(Switch2ControllerModel.JoyCon2Left, true)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, false)]
@@ -82,7 +82,7 @@ public sealed class Switch2HeldRumblePresentationTests
         Assert.IsTrue(fixture.Sink.NeedsSustainedRefresh);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)ControllerFeedbackPublicationOrigin.TestPreview)]
     [DataRow((int)ControllerFeedbackPublicationOrigin.NativeGame)]
     [DataRow((int)ControllerFeedbackPublicationOrigin.ProfileEffect)]
@@ -95,7 +95,7 @@ public sealed class Switch2HeldRumblePresentationTests
         AssertHeldPacket(Switch2ControllerModel.JoyCon2Left, fixture.Lease.Payloads[0], 40_000, 30_000);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
     [DataRow(Switch2ControllerModel.ProController2)]
@@ -118,7 +118,7 @@ public sealed class Switch2HeldRumblePresentationTests
         Assert.IsFalse(fixture.Sink.NeedsSustainedRefresh);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)Switch2HdRumbleFeedbackFidelity.NativeSwitch2PassThrough, false)]
     [DataRow((int)Switch2HdRumbleFeedbackFidelity.DualSensePcmDualBand, false)]
     [DataRow((int)Switch2HdRumbleFeedbackFidelity.DualSenseAdaptiveTriggerApproximation, false)]
@@ -160,7 +160,7 @@ public sealed class Switch2HeldRumblePresentationTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -225,7 +225,7 @@ public sealed class Switch2HeldRumblePresentationTests
         finally { lease.Uncertain = false; Assert.IsTrue(sink.TryDeliver(Stop())); Assert.IsTrue(sink.TryRetire()); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void WarmedActualSinkAndPhysicalEncoderPreserveStrictAllocationGate(bool capturePositiveControl)

@@ -82,7 +82,7 @@ namespace DS4WindowsTests
             Assert.AreEqual((short)0, ReadInt16(packet, 12));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(ViiperVirtualDeviceType.DualSense)]
         [DataRow(ViiperVirtualDeviceType.DualSenseEdge)]
         [DataRow(ViiperVirtualDeviceType.DualShock4)]
@@ -96,7 +96,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(0, packet[3], "RY should be centered");
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow(ViiperVirtualDeviceType.DualSense,
             "dualsensecombinedaudioduplexv5")]
         [DataRow(ViiperVirtualDeviceType.DualSenseEdge,
@@ -132,7 +132,7 @@ namespace DS4WindowsTests
                 MethodInfo method = builderType.GetMethod(methodName,
                     BindingFlags.Public | BindingFlags.Static)!;
                 TargetInvocationException exception =
-                    Assert.ThrowsException<TargetInvocationException>(() =>
+                    Assert.ThrowsExactly<TargetInvocationException>(() =>
                         method.Invoke(null, new object[] { invalid }));
                 Assert.IsInstanceOfType<ArgumentOutOfRangeException>(
                     exception.InnerException, methodName);
@@ -141,7 +141,7 @@ namespace DS4WindowsTests
             MethodInfo build = builderType.GetMethod("Build",
                 BindingFlags.Public | BindingFlags.Static)!;
             TargetInvocationException buildException =
-                Assert.ThrowsException<TargetInvocationException>(() =>
+                Assert.ThrowsExactly<TargetInvocationException>(() =>
                     build.Invoke(null, new object[]
                     {
                         invalid, new DS4State(), -1,

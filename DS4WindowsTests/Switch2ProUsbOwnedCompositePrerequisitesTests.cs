@@ -565,7 +565,7 @@ public sealed class Switch2ProUsbOwnedCompositePrerequisitesTests
             Switch2ProUsbOwnedCompositeInputAdoptionState.Quarantined,
             issuer.State,
             "A completion after native quiescence is a dependency breach and must fail closed.");
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             () => facet.DisposeQuiesced());
         Assert.AreEqual(0, context.Lease.DisposeCount);
         CleanupStandalone(owner, registration);

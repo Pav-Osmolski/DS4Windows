@@ -5,7 +5,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2XboxFeedbackPolicyRequestTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void OlderPublicationCannotReplaceNewerPendingWork(bool retry)
@@ -28,7 +28,7 @@ public class Switch2XboxFeedbackPolicyRequestTests
         Assert.AreSame(newer, pending);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -72,7 +72,7 @@ public class Switch2XboxFeedbackPolicyRequestTests
         Assert.AreEqual(3UL, pending.PublicationRevision, "An older retry must not overwrite newer work.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]

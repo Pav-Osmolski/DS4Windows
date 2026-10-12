@@ -92,7 +92,7 @@ public class MousePublicationFenceTests
         try
         {
             Mapping.MapClick(0, Mapping.Click.Left);
-            Assert.ThrowsException<InvalidOperationException>(() => Mapping.Commit(0));
+            Assert.ThrowsExactly<InvalidOperationException>(() => Mapping.Commit(0));
             Assert.IsFalse(PublicationLock.IsWriteLockHeld,
                 "An exception from the backend must not strand the mapper publication lock.");
 

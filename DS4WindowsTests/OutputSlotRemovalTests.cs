@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class OutputSlotRemovalTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, -1)]
     [DataRow(true, -1)]
     [DataRow(false, 0)]
@@ -37,7 +37,7 @@ public sealed class OutputSlotRemovalTests
         else output.FailDisconnect = true;
         try
         {
-            Assert.ThrowsException<IOException>(() => manager.DeferredRemoval(output, input, bound));
+            Assert.ThrowsExactly<IOException>(() => manager.DeferredRemoval(output, input, bound));
             Assert.AreSame(slot, manager.GetOutSlotDevice(output));
             Assert.AreSame(output, slot.OutputDevice);
             Assert.AreEqual(OutSlotDevice.AttachedStatus.Attached, slot.CurrentAttachedStatus);
@@ -85,7 +85,7 @@ public sealed class OutputSlotRemovalTests
         second.FailDisconnect = true;
         try
         {
-            Assert.ThrowsException<IOException>(() => manager.Stop());
+            Assert.ThrowsExactly<IOException>(() => manager.Stop());
             Assert.IsNull(manager.GetOutSlotDevice(first));
             Assert.AreSame(secondSlot, manager.GetOutSlotDevice(second));
             Assert.IsTrue(manager.IsExactBoundOutput(second, 1));

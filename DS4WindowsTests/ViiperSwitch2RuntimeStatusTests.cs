@@ -11,7 +11,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class ViiperSwitch2RuntimeStatusTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(3000, 1)]
     [DataRow(3200, 5)]
     [DataRow(3400, 9)]
@@ -73,7 +73,7 @@ public class ViiperSwitch2RuntimeStatusTests
     [TestMethod]
     public void IncompleteStatusCannotBeSerialized()
     {
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             ViiperClient.SerializeNS2ProRuntimeStatusV1(default));
     }
 

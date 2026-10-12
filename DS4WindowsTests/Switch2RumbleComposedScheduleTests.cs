@@ -11,7 +11,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class Switch2RumbleComposedScheduleTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(10)]
     [DataRow(12)]
     [DataRow(15)]
@@ -39,7 +39,7 @@ public sealed class Switch2RumbleComposedScheduleTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(10)]
     [DataRow(12)]
     [DataRow(15)]
@@ -60,7 +60,7 @@ public sealed class Switch2RumbleComposedScheduleTests
         Assert.AreEqual(3, fixture.Writer.Starts.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(10)]
     [DataRow(12)]
     [DataRow(15)]
@@ -79,7 +79,7 @@ public sealed class Switch2RumbleComposedScheduleTests
         Assert.AreEqual(3, fixture.Writer.Starts.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(10)]
     [DataRow(12)]
     [DataRow(15)]
@@ -103,7 +103,7 @@ public sealed class Switch2RumbleComposedScheduleTests
         Assert.AreEqual(3, fixture.Writer.Starts.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(10)]
     [DataRow(12)]
     [DataRow(15)]
@@ -129,7 +129,7 @@ public sealed class Switch2RumbleComposedScheduleTests
             "A completed non-contended service resets the fast-retry budget.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(10)]
     [DataRow(12)]
     [DataRow(15)]

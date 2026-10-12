@@ -20,7 +20,7 @@ namespace DS4Windows.Tests;
 [DoNotParallelize]
 public sealed class DualSenseBluetoothNativeBackpressureTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FinalNativeCommandRetriesAfterCapacityReturnsWithoutNewPublication(bool nativeCredits)
@@ -47,7 +47,7 @@ public sealed class DualSenseBluetoothNativeBackpressureTests
         fixture.AssertNoRecovery();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void LaterNativeCommandCannotReplaceBusyExactTransaction(bool nativeCredits)
@@ -72,7 +72,7 @@ public sealed class DualSenseBluetoothNativeBackpressureTests
         fixture.AssertNoRecovery();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void CachedTemplateFailureDoesNotPromoteNativeBusyToRecovery(bool nativeCredits)
@@ -89,7 +89,7 @@ public sealed class DualSenseBluetoothNativeBackpressureTests
         fixture.AssertNoRecovery();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -113,7 +113,7 @@ public sealed class DualSenseBluetoothNativeBackpressureTests
         fixture.AssertPending(37, 83);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void WarmedNativeBusyRetryPreservesStrictAllocationGate(bool positiveControl)
@@ -140,7 +140,7 @@ public sealed class DualSenseBluetoothNativeBackpressureTests
         fixture.AssertNoRecovery();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void OldBusyClassificationCannotSuppressRecoveryAfterOwnershipBoundary(bool replacePacer)
@@ -183,7 +183,7 @@ public sealed class DualSenseBluetoothNativeBackpressureTests
         fixture.AssertNoRecovery();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -222,7 +222,7 @@ public sealed class DualSenseBluetoothNativeBackpressureTests
             "Duplicate ACK must not create a second capacity notification.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RejectedResetPreservesGenerationAndValidStateLatches(bool exhaustPayloads)
@@ -275,7 +275,7 @@ public sealed class DualSenseBluetoothNativeBackpressureTests
         Assert.AreEqual(0, fixture.NativeCreditCount);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(int.MaxValue, int.MinValue)]
     [DataRow(-1, 1)]
     public void AcceptedResetPreservesSignedSerialGenerationAndSkipsZero(int previous, int next)

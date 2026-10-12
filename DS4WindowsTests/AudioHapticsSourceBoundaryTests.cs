@@ -16,7 +16,7 @@ namespace DS4Windows.Tests;
 [DoNotParallelize]
 public sealed class AudioHapticsSourceBoundaryTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("source")]
     [DataRow("mode")]
     [DataRow("disable")]
@@ -331,7 +331,7 @@ public sealed class AudioHapticsSourceBoundaryTests
         Assert.IsTrue(f.Get<int>("queuedFrames") > 0);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void CreatedProcessCaptureCannotReportActiveBeforeItsSourceStarts(bool automatic)
@@ -349,7 +349,7 @@ public sealed class AudioHapticsSourceBoundaryTests
         Assert.AreEqual(current, f.Get<long>("captureGeneration"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ModeChangeOrDisableInvalidatesOldFramesBeforeUpdatingSettings(bool disable)

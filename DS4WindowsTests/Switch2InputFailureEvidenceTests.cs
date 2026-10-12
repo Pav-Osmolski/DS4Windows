@@ -50,7 +50,7 @@ public sealed class Switch2InputFailureEvidenceTests
         Assert.IsFalse(messages[0].Contains("private controller", StringComparison.Ordinal));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)Switch2BluetoothInputEndReason.Disconnected, (int)Switch2BluetoothInputDrainPumpFailure.None, true)]
     [DataRow((int)Switch2BluetoothInputEndReason.QueueOverflow, (int)Switch2BluetoothInputDrainPumpFailure.None, true)]
     [DataRow((int)Switch2BluetoothInputEndReason.SinkFailure, (int)Switch2BluetoothInputDrainPumpFailure.SinkRejected, true)]
@@ -74,7 +74,7 @@ public sealed class Switch2InputFailureEvidenceTests
             messages[0].Contains("sink evidence unavailable", StringComparison.Ordinal));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
     public void StandaloneSubscriberFailureSurvivesRecoveryAndTerminalCleanup(Switch2ControllerModel model)
@@ -88,7 +88,7 @@ public sealed class Switch2InputFailureEvidenceTests
         runtime.Report += reject;
         runtime.StartUpdate();
         var frame = Frame(descriptor, 1, 100);
-        Assert.ThrowsException<InvalidOperationException>(() => sink.PublishJoyCon(frame));
+        Assert.ThrowsExactly<InvalidOperationException>(() => sink.PublishJoyCon(frame));
         var first = sink.FirstInputFailure;
         Assert.IsNotNull(first);
         StringAssert.Contains(first.Cause, "RuntimeSubscriberRejected");
@@ -119,7 +119,7 @@ public sealed class Switch2InputFailureEvidenceTests
         runtime.StartUpdate();
         sink.PublishJoyCon(Frame(left, 1, 100));
         var rightFrame = Frame(right, 1, 101);
-        Assert.ThrowsException<InvalidOperationException>(() => sink.PublishJoyCon(rightFrame));
+        Assert.ThrowsExactly<InvalidOperationException>(() => sink.PublishJoyCon(rightFrame));
         var first = sink.FirstInputFailure;
         Assert.IsNotNull(first);
         Assert.AreEqual(Switch2ControllerModel.JoyCon2Right, first.Model);
@@ -133,7 +133,7 @@ public sealed class Switch2InputFailureEvidenceTests
         StringAssert.Contains(runtime.FirstPublicationFailure.Cause, "ReportSubscriber");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RuntimeCapturesFirstGyroOrQueuedActionFaultWithoutSuppressingLaterReports(bool queuedAction)

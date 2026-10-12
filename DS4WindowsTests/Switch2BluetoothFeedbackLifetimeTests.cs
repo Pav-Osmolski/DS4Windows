@@ -26,7 +26,7 @@ public class Switch2BluetoothFeedbackLifetimeTests
     private const ulong DeviceGeneration = 17;
     private const ulong TransportGeneration = 23;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(true, false)]
     [DataRow(false, true)]
@@ -54,7 +54,7 @@ public class Switch2BluetoothFeedbackLifetimeTests
         Assert.IsFalse(session.TryPublish(Wire(1, session.OwnershipEpoch, 1000, 1000, 0, 0)));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, 50, true)]
     [DataRow(false, 50, false)]
     [DataRow(false, 180, true)]
@@ -91,7 +91,7 @@ public class Switch2BluetoothFeedbackLifetimeTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -216,7 +216,7 @@ public class Switch2BluetoothFeedbackLifetimeTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void LiveXboxPolicyDisablesRunningEffectWithoutBrokerSuccessor(bool disableAll)
@@ -279,7 +279,7 @@ public class Switch2BluetoothFeedbackLifetimeTests
         finally { _ = session.TryRetire(); _ = feedback.TryStopAndRetire(3); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(250, false)]
     [DataRow(9_999, false)]
     [DataRow(9_999, true)]
@@ -322,7 +322,7 @@ public class Switch2BluetoothFeedbackLifetimeTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, true)]
     [DataRow(true, true)]
     [DataRow(false, false)]
@@ -617,7 +617,7 @@ public class Switch2BluetoothFeedbackLifetimeTests
         Assert.IsTrue(feedback.TryStopAndRetire(maxAttempts: 3));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void UncertainNativeBluetoothCueIsAcceptedForExactRetryNotRepublished(bool preview)
@@ -671,7 +671,7 @@ public class Switch2BluetoothFeedbackLifetimeTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]

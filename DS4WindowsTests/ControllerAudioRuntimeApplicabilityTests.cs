@@ -12,7 +12,7 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
     private const BindingFlags PrivateInstance = BindingFlags.Instance |
         BindingFlags.NonPublic;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.USB, 0x057E, 0x2069, false)]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.BT, 0x057E, 0x2069, false)]
     [DataRow(InputDeviceType.Switch2JoyConLeft, ConnectionType.BT, 0x057E, 0x2067, false)]
@@ -43,7 +43,7 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
                     vendorId, productId)));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DoNotParallelize]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.USB)]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.BT)]
@@ -76,7 +76,7 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
             "Status evaluation must not rewrite a shared profile's saved choices.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DoNotParallelize]
     [DataRow(InputDeviceType.DS4, ConnectionType.BT)]
     [DataRow(InputDeviceType.DualSense, ConnectionType.BT)]

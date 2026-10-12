@@ -8,7 +8,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2HwOpusPlanTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("t")]
     [DataRow("a")]
     public void HeaderMatchesActualEncoderRangeAndPreservesQuietStereoSource(string mode)
@@ -82,8 +82,8 @@ public class Switch2HwOpusPlanTests
     [TestMethod]
     public void FactoryHasOnlyTwoFixedHypothesesAndIndependentPayloads()
     {
-        Assert.ThrowsException<ArgumentException>(() => HwOpusPlanFactory.Create("other", 2));
-        Assert.ThrowsException<ArgumentException>(() => HwOpusPlanFactory.Create("t", 0));
+        Assert.ThrowsExactly<ArgumentException>(() => HwOpusPlanFactory.Create("other", 2));
+        Assert.ThrowsExactly<ArgumentException>(() => HwOpusPlanFactory.Create("t", 0));
         var first = HwOpusPlanFactory.Create("t", 2);
         var second = HwOpusPlanFactory.Create("t", 2);
         CollectionAssert.AreEqual(first.Packets[0].Payload, second.Packets[0].Payload);

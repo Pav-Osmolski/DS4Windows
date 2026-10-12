@@ -43,7 +43,7 @@ public sealed class Switch2ProUsbCounterRolloverTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void ReplayAndLiveSessionAgreeAcrossCounterDiscontinuity(bool usb)
@@ -77,7 +77,7 @@ public sealed class Switch2ProUsbCounterRolloverTests
         Assert.AreEqual(Switch2CounterSequenceKind.Forward, actual[3].Sequence);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void CounterDiscontinuityCannotBypassHostClockOrLifetimeFences(bool usb)
@@ -128,7 +128,7 @@ public sealed class Switch2ProUsbCounterRolloverTests
         Assert.AreEqual(15u, forward.CounterDeltaRaw);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
     public void JoyConCounterPolicyIsLimitedToEvidencedBluetoothCommonReports(Switch2ControllerModel model)

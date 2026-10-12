@@ -22,7 +22,7 @@ namespace DS4WindowsTests
                 OutContType.X360.Normalize());
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("DS4")]
         [DataRow("DualShock 4")]
         [DataRow("DualShock4")]
@@ -48,7 +48,7 @@ namespace DS4WindowsTests
             Assert.AreEqual("ViiperDS4", slot.DeviceTypeString);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("X360")]
         [DataRow("Xbox360")]
         [DataRow("Xbox 360")]

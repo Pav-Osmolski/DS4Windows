@@ -185,7 +185,7 @@ public sealed partial class Switch2RuntimeRegistrationServiceTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FullOrExactOccupiedAdmissionDoesNotConstructParticipantOrConsumeOwner(bool exact)

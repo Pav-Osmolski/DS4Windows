@@ -37,14 +37,14 @@ public sealed class StrictAllocationMeasurementScopeTests
 
         GC.KeepAlive(retained);
         Assert.IsTrue(allocated >= 128L, "The real managed allocation must remain visible.");
-        Assert.ThrowsException<AssertFailedException>(() => Assert.AreEqual(0L, allocated));
+        Assert.ThrowsExactly<AssertFailedException>(() => Assert.AreEqual(0L, allocated));
     }
 
     [TestMethod]
     public void ReservationFailureIsNotRetriedAndDoesNotEndAnUnownedRegion()
     {
         var runtime = new FakeRuntime { StartSucceeds = false };
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             StrictAllocationMeasurementScope.Begin(runtime));
         Assert.AreEqual(1, runtime.StartCalls);
         Assert.AreEqual(StrictAllocationMeasurementScope.ReservationBytes, runtime.LastReservation);
@@ -57,7 +57,7 @@ public sealed class StrictAllocationMeasurementScopeTests
     public void StartupExceptionReleasesHelperGateWithoutEndingAnUnownedRegion()
     {
         var runtime = new FakeRuntime { ThrowOnStart = true };
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             StrictAllocationMeasurementScope.Begin(runtime));
         Assert.AreEqual(1, runtime.StartCalls);
         Assert.AreEqual(0, runtime.EndCalls);
@@ -68,7 +68,7 @@ public sealed class StrictAllocationMeasurementScopeTests
     public void ExistingExternalRegionIsNeitherAdoptedNorEnded()
     {
         var runtime = new FakeRuntime { IsActive = true };
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             StrictAllocationMeasurementScope.Begin(runtime));
         Assert.AreEqual(0, runtime.StartCalls);
         Assert.AreEqual(0, runtime.EndCalls);
@@ -83,7 +83,7 @@ public sealed class StrictAllocationMeasurementScopeTests
         var innerRuntime = new FakeRuntime();
         using (StrictAllocationMeasurementScope.Begin(outerRuntime))
         {
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 StrictAllocationMeasurementScope.Begin(innerRuntime));
             Assert.IsTrue(outerRuntime.IsActive);
             Assert.AreEqual(0, outerRuntime.EndCalls);
@@ -99,7 +99,7 @@ public sealed class StrictAllocationMeasurementScopeTests
         var runtime = new FakeRuntime();
         var scope = StrictAllocationMeasurementScope.Begin(runtime);
         runtime.IsActive = false;
-        Assert.ThrowsException<InvalidOperationException>(() => scope.Dispose());
+        Assert.ThrowsExactly<InvalidOperationException>(() => scope.Dispose());
         Assert.AreEqual(0, runtime.EndCalls);
         scope.Dispose();
         AssertNextScopeCanComplete();
@@ -110,7 +110,7 @@ public sealed class StrictAllocationMeasurementScopeTests
     {
         var runtime = new FakeRuntime { ThrowOnEnd = true };
         var scope = StrictAllocationMeasurementScope.Begin(runtime);
-        Assert.ThrowsException<InvalidOperationException>(() => scope.Dispose());
+        Assert.ThrowsExactly<InvalidOperationException>(() => scope.Dispose());
         Assert.AreEqual(1, runtime.EndCalls);
         scope.Dispose();
         Assert.AreEqual(1, runtime.EndCalls);
@@ -121,7 +121,7 @@ public sealed class StrictAllocationMeasurementScopeTests
     public void WorkloadExceptionStillEndsExactlyOnce()
     {
         var runtime = new FakeRuntime();
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
         {
             using (StrictAllocationMeasurementScope.Begin(runtime))
                 throw new ArgumentException("Synthetic workload failure.");
@@ -137,8 +137,22 @@ public sealed class StrictAllocationMeasurementScopeTests
         var runtime = new FakeRuntime();
         using (var scope = StrictAllocationMeasurementScope.Begin(runtime))
         {
-            Task.Run(() => Assert.ThrowsException<InvalidOperationException>(() => scope.Dispose()))
-                .GetAwaiter().GetResult();
+            // A synchronous wait may inline a thread-pool task under the new
+            // runner. This test must exercise a genuinely different thread.
+            Exception failure = null;
+            int ownerThread = Environment.CurrentManagedThreadId;
+            var worker = new Thread(() =>
+            {
+                try
+                {
+                    Assert.AreNotEqual(ownerThread, Environment.CurrentManagedThreadId);
+                    Assert.ThrowsExactly<InvalidOperationException>(() => scope.Dispose());
+                }
+                catch (Exception ex) { failure = ex; }
+            }) { IsBackground = true };
+            worker.Start();
+            Assert.IsTrue(worker.Join(TimeSpan.FromSeconds(5)), "Wrong-thread worker did not complete.");
+            if (failure != null) System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(failure).Throw();
             Assert.IsTrue(runtime.IsActive);
             Assert.AreEqual(0, runtime.EndCalls);
         }

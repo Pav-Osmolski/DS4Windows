@@ -14,7 +14,7 @@ public sealed class DualSenseBluetoothGenerationWrapTests
 {
     private const BindingFlags InstancePrivate = BindingFlags.Instance | BindingFlags.NonPublic;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1, 2)]
     [DataRow(int.MaxValue, int.MinValue)]
     [DataRow(int.MinValue, int.MinValue + 1)]
@@ -51,7 +51,7 @@ public sealed class DualSenseBluetoothGenerationWrapTests
         Assert.AreEqual(1L, consumer.PresentedCount);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(int.MinValue)]
     [DataRow(-1)]

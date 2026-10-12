@@ -524,7 +524,7 @@ public sealed class Switch2ControlServiceReversibleProfileStagingTests
         Assert.IsTrue(fixture.Host.TryAbort(fixture.Lease).Succeeded);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void OtherSlotColdProfileWorkDoesNotBlockActiveReportDispatch(bool cleanup)

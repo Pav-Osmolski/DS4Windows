@@ -37,7 +37,7 @@ public sealed class Switch2BluetoothProductionCoordinatorTests
             (await coordinator.AssociateAsync(retryId)).Failure);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)Switch2BluetoothRuntimeOwnerState.Created, false, null)]
     [DataRow((int)Switch2BluetoothRuntimeOwnerState.AbortedUnpublished, false, "transaction-complete")]
     [DataRow((int)Switch2BluetoothRuntimeOwnerState.Removed, false, "transaction-complete")]
@@ -67,7 +67,7 @@ public sealed class Switch2BluetoothProductionCoordinatorTests
         }, messages);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task AssociationLogsTypedFailureWithoutAddressesOrLoggerAffectingResult(bool loggerThrows)

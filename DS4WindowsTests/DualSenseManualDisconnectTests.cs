@@ -18,7 +18,7 @@ public sealed class DualSenseManualDisconnectTests
 
     public enum DisconnectSource { ControllerList, Tray, SpecialAction }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(DisconnectSource.ControllerList)]
     [DataRow(DisconnectSource.Tray)]
     [DataRow(DisconnectSource.SpecialAction)]
@@ -130,7 +130,7 @@ public sealed class DualSenseManualDisconnectTests
         return device;
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(ConnectionType.BT, true, false, true, true)]
     [DataRow(ConnectionType.BT, true, true, true, false)]
     [DataRow(ConnectionType.BT, false, false, true, false)]

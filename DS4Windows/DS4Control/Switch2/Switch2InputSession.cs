@@ -236,13 +236,6 @@ public enum Switch2CalibrationAdoptionStatus : byte
     AdoptedUser,
 }
 
-public enum Switch2CalibrationAdoptionFailure : byte
-{
-    None = 0,
-    SentinelOrErased,
-    NegativeEndpointOutOfRange,
-    PositiveEndpointOutOfRange,
-}
 
 /// <summary>
 /// Effective calibration for one logical side. Fallback is explicit and never

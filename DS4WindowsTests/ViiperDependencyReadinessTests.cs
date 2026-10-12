@@ -31,7 +31,7 @@ public class ViiperDependencyReadinessTests
             "One query cannot relax the timeout for subsequent dependency inspections.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ExplicitRepairReplacesBothStaleFailureAndStaleSuccess(bool initiallyReady)
@@ -44,7 +44,7 @@ public class ViiperDependencyReadinessTests
         Assert.AreEqual(current, readiness.Read(), "Later rendering must use the refreshed result.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(null)]
     [DataRow("Stopped")]
     [DataRow("Running")]
@@ -69,7 +69,7 @@ public class ViiperDependencyReadinessTests
             _ => Unsafe,
         });
         Assert.AreEqual(Ready, readiness.Read());
-        Assert.ThrowsException<IOException>(() => readiness.Read(refresh: true));
+        Assert.ThrowsExactly<IOException>(() => readiness.Read(refresh: true));
         Assert.AreEqual(Unsafe, readiness.Read());
         Assert.AreEqual(3, calls);
     }

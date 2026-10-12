@@ -30,7 +30,7 @@ public sealed class MappedStickTransformTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0.0)]
     [DataRow(1.0)]
     [DataRow(5.0)]

@@ -49,7 +49,7 @@ public sealed class ViiperManagedAuthenticationTests
         CollectionAssert.AreEqual(plain, decoded);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     public void ForcedManagedStreamMatchesBothDirectionalV2Vectors(int role)
@@ -72,7 +72,7 @@ public sealed class ViiperManagedAuthenticationTests
         CollectionAssert.AreEqual(payload.Concat(payload).ToArray(), actual);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(15)]
@@ -104,7 +104,7 @@ public sealed class ViiperManagedAuthenticationTests
         CollectionAssert.AreEqual(plain, decoded);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(16)] // Ciphertext.
     [DataRow(39)] // Tag.
     public void ManagedAuthenticationFailureReleasesNoPlaintextAndPoisonsStream(int tamperOffset)
@@ -114,24 +114,24 @@ public sealed class ViiperManagedAuthenticationTests
         using var wire = new MemoryStream(record.Concat(Convert.FromHexString(Records[0])).ToArray());
         using var stream = new ViiperEncryptedStream(wire, Key(), ViiperConnectionRole.Server, ViiperCipherImplementation.Managed);
         byte[] output = Enumerable.Repeat((byte)0x55, 8).ToArray();
-        Assert.ThrowsException<AuthenticationTagMismatchException>(() => stream.Read(output));
+        Assert.ThrowsExactly<AuthenticationTagMismatchException>(() => stream.Read(output));
         CollectionAssert.AreEqual(Enumerable.Repeat((byte)0x55, 8).ToArray(), output);
         byte[] internalPlaintext = (byte[])typeof(ViiperEncryptedStream).GetField("plaintextReadBuffer",
             BindingFlags.Instance | BindingFlags.NonPublic).GetValue(stream);
         Assert.IsTrue(internalPlaintext.All(value => value == 0));
-        Assert.ThrowsException<IOException>(() => stream.Read(output));
-        Assert.ThrowsException<IOException>(() => stream.Write(output));
+        Assert.ThrowsExactly<IOException>(() => stream.Read(output));
+        Assert.ThrowsExactly<IOException>(() => stream.Write(output));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     public void ManagedStreamStillRejectsCounterGapsAndReflectedDirection(int vector)
     {
         using var wire = new MemoryStream(Convert.FromHexString(Records[vector]));
         using var stream = new ViiperEncryptedStream(wire, Key(), ViiperConnectionRole.Server, ViiperCipherImplementation.Managed);
-        Assert.ThrowsException<InvalidDataException>(() => stream.Read(new byte[8]));
-        Assert.ThrowsException<IOException>(() => stream.Write(new byte[8]));
+        Assert.ThrowsExactly<InvalidDataException>(() => stream.Read(new byte[8]));
+        Assert.ThrowsExactly<IOException>(() => stream.Write(new byte[8]));
     }
 
     [TestMethod]
@@ -169,7 +169,7 @@ public sealed class ViiperManagedAuthenticationTests
         Assert.IsTrue(Task.WaitAll(new[] { encrypt, decrypt }, 5000));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ManagedStreamAllocationIsBoundedAfterWarmup(bool reading)
@@ -205,16 +205,16 @@ public sealed class ViiperManagedAuthenticationTests
         var wire = new ThrowingDisposeStream();
         var stream = new ViiperEncryptedStream(wire, key, ViiperConnectionRole.Client, ViiperCipherImplementation.Managed);
         stream.Write(new byte[] { 1, 2, 3 });
-        Assert.ThrowsException<IOException>(() => stream.Dispose());
+        Assert.ThrowsExactly<IOException>(() => stream.Dispose());
         CollectionAssert.AreEqual(new byte[32], key);
         foreach (string field in new[] { "writeBuffer", "encryptedReadBuffer", "plaintextReadBuffer" })
             Assert.IsTrue(((byte[])typeof(ViiperEncryptedStream).GetField(field,
                 BindingFlags.Instance | BindingFlags.NonPublic).GetValue(stream)).All(value => value == 0));
         stream.Dispose();
-        Assert.ThrowsException<ObjectDisposedException>(() => stream.Write(new byte[1]));
+        Assert.ThrowsExactly<ObjectDisposedException>(() => stream.Write(new byte[1]));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("encryptionGate")]
     [DataRow("decryptionGate")]
     public void ManagedDisposeDrainsEachDirectionBeforeRekeyingRetainedState(string direction)
@@ -235,9 +235,9 @@ public sealed class ViiperManagedAuthenticationTests
         }
         finally { Monitor.Exit(gate); }
         Assert.IsTrue(disposal.Wait(2000));
-        Assert.ThrowsException<ObjectDisposedException>(() =>
+        Assert.ThrowsExactly<ObjectDisposedException>(() =>
             cipher.Encrypt(new byte[12], new byte[1], new byte[1], new byte[16]));
-        Assert.ThrowsException<ObjectDisposedException>(() =>
+        Assert.ThrowsExactly<ObjectDisposedException>(() =>
             cipher.Decrypt(new byte[12], new byte[1], new byte[16], new byte[1]));
     }
 

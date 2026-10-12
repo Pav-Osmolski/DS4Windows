@@ -76,7 +76,7 @@ public class ViiperStartupReadinessTests
             probes++;
             throw new PortableBrokerStartupException("Synthetic owned child exited.");
         }
-        Assert.ThrowsException<PortableBrokerStartupException>(() =>
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() =>
             ViiperStartupReadiness.Wait(Probe, out _, () => 0,
                 _ => Assert.Fail("A dead or changed owner must not be retried.")));
         Assert.AreEqual(1, probes);

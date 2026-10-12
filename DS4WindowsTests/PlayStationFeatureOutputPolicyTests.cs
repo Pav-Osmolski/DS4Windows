@@ -6,7 +6,7 @@ namespace DS4WindowsTests
     [TestClass]
     public class PlayStationFeatureOutputPolicyTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)OutContType.ViiperX360)]
         [DataRow((int)OutContType.ViiperXboxOne)]
         [DataRow((int)OutContType.ViiperSwitch2Pro)]
@@ -20,13 +20,13 @@ namespace DS4WindowsTests
         [TestMethod]
         public void AudioAndGamepadRolesAreMutuallyExclusive()
         {
-            Assert.ThrowsException<System.ArgumentException>(() =>
+            Assert.ThrowsExactly<System.ArgumentException>(() =>
                 new ViiperOutDevice(OutContType.ViiperDualSense,
                     ViiperVirtualDeviceType.DualSense,
                     audioOnlySidecar: true, gamepadOnly: true));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)OutContType.ViiperDS4)]
         [DataRow((int)OutContType.ViiperDualSense)]
         [DataRow((int)OutContType.ViiperDualSenseEdge)]
@@ -41,7 +41,7 @@ namespace DS4WindowsTests
             Assert.IsFalse(output.IsAudioOnlySidecar);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)OutContType.ViiperX360)]
         [DataRow((int)OutContType.ViiperXboxOne)]
         [DataRow((int)OutContType.ViiperSwitch2Pro)]
@@ -56,7 +56,7 @@ namespace DS4WindowsTests
             Assert.IsFalse(output.IsAudioOnlySidecar);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)InputDeviceType.DS4, 0x05C4,
             (int)OutContType.ViiperX360, (int)OutContType.ViiperDS4)]
         [DataRow((int)InputDeviceType.DS4, 0x09CC,
@@ -83,7 +83,7 @@ namespace DS4WindowsTests
             Assert.AreEqual((OutContType)expectedType, actual);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)OutContType.ViiperDS4)]
         [DataRow((int)OutContType.ViiperDualSense)]
         [DataRow((int)OutContType.ViiperDualSenseEdge)]
@@ -98,7 +98,7 @@ namespace DS4WindowsTests
             Assert.AreEqual(OutContType.None, actual);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow((int)ConnectionType.USB, 0x054C, 0x0CE6,
             (int)OutContType.ViiperX360, false)]
         [DataRow((int)ConnectionType.BT, 0x1234, 0x0CE6,

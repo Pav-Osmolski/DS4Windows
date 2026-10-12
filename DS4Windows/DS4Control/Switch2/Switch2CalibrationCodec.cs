@@ -2,6 +2,14 @@ using System;
 
 namespace DS4Windows.Switch2;
 
+public enum Switch2CalibrationAdoptionFailure : byte
+{
+    None = 0,
+    SentinelOrErased,
+    NegativeEndpointOutOfRange,
+    PositiveEndpointOutOfRange,
+}
+
 public enum Switch2StickSide : byte
 {
     Invalid = 0,

@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class Switch2BluetoothLabReceiverResultTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -22,7 +22,7 @@ public sealed class Switch2BluetoothLabReceiverResultTests
         Assert.AreEqual(JsonValueKind.False, operation.GetProperty("BluetoothPlaybackConfirmed").ValueKind);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("root")]
     [DataRow("operation")]
     [DataRow("commands")]
@@ -44,7 +44,7 @@ public sealed class Switch2BluetoothLabReceiverResultTests
         Assert.IsFalse(Switch2BluetoothLabReceiverResult.IsCompleted(Element(root), Plan(true, true)));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("Status")]
     [DataRow("RestoreHeadset")]
     [DataRow("RestoreCommonInput")]
@@ -80,7 +80,7 @@ public sealed class Switch2BluetoothLabReceiverResultTests
         Assert.IsFalse(Switch2BluetoothLabReceiverResult.IsCompleted(Element(root), Plan(true, false)));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("missing-audio")]
     [DataRow("null-audio")]
     [DataRow("missing-sent")]
@@ -109,7 +109,7 @@ public sealed class Switch2BluetoothLabReceiverResultTests
         Assert.IsFalse(Switch2BluetoothLabReceiverResult.IsCompleted(Element(root), Plan(true, true)));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("outer-ack")]
     [DataRow("inner-ack")]
     [DataRow("missing-inner")]

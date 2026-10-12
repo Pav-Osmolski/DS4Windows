@@ -39,7 +39,7 @@ public sealed class AxisFlickCalibrationSettingsTests
             store.lsOutputSettings[0].outputSettings.flickSettings.calibrationTrigger);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(DS4Controls.None, DS4Controls.Cross)]
     [DataRow(DS4Controls.FnL, DS4Controls.FnR)]
     [DataRow(DS4Controls.BLP, DS4Controls.BRP)]
@@ -66,7 +66,7 @@ public sealed class AxisFlickCalibrationSettingsTests
         AssertConfiguredProfile(destination, left, right);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(null)]
     [DataRow("")]
     [DataRow("FutureControllerButton")]
@@ -107,7 +107,7 @@ public sealed class AxisFlickCalibrationSettingsTests
         Assert.AreEqual(DS4Controls.None, Right(destination).calibrationTrigger);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, "valid")]
     [DataRow(true, "valid")]
     [DataRow(false, "missing")]

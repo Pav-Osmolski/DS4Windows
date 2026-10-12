@@ -29,7 +29,7 @@ public class ViiperUsbipProbeOutputTests
         Assert.IsTrue(ViiperSetupManager.IsSuccessfulUsbipPortProbe(0, output));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void AStalledReaderCannotAdmitPartialOutputOrWaitBeyondTheRemainingBudget(bool stallError)
@@ -47,7 +47,7 @@ public class ViiperUsbipProbeOutputTests
         stalled.SetException(new IOException("late pipe close"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(-1)]
     public void ExpiredOverallBudgetCannotBeResetByAlreadyCompletedReaders(int remaining)

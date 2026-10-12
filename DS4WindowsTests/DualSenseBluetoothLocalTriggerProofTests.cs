@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class DualSenseBluetoothLocalTriggerProofTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void AdmittedNativeOrResetCommandAllowsTheSameLocalEffectAgain(bool control)
@@ -30,7 +30,7 @@ public sealed class DualSenseBluetoothLocalTriggerProofTests
         CollectionAssert.AreEqual(local.Skip(13).Take(47).ToArray(), commands[1].Payload);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RejectedInterventionDoesNotInvalidateAnAcceptedLocalCommand(bool control)
@@ -49,7 +49,7 @@ public sealed class DualSenseBluetoothLocalTriggerProofTests
         Assert.AreEqual(0, fixture.Drain().Count, "A rejected reset never changed the admitted trigger state.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, (byte)0)]
     [DataRow(true, (byte)0)]
     [DataRow(false, (byte)0x04)]
@@ -83,7 +83,7 @@ public sealed class DualSenseBluetoothLocalTriggerProofTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void FailedLocalReassertionRetainsTheNeedToRetryAfterAnAdmittedReset(bool control)

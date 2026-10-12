@@ -32,7 +32,7 @@ public sealed class Switch2JoyConActionAvailabilityTests
         runtime.ReadWaitEv.Dispose();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, false, 1, 2, false, false, false)]
     [DataRow(true, true, false, 1, 2, false, false, false)]
     [DataRow(true, false, true, 1, 2, false, false, false)]

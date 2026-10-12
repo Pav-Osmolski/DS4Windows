@@ -275,7 +275,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
             lease.Retire(retirement, 0).Outcome);
         Assert.IsTrue(lease.TryWaitForInputQuiescence(0));
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         Assert.IsTrue(reservations.IsReserved(
             lifetime.Registration.ContainerIdentity));
@@ -350,7 +350,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
             lease.Retire(retirement, 0).Outcome);
         hid.ReplayInputCompletionDuringDispose = true;
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         Assert.IsTrue(reservations.IsReserved(
             lifetime.Registration.ContainerIdentity));
@@ -388,7 +388,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
             Switch2ProUsbStartupRetirementOutcome.ExactLifetimeReleased,
             lease.Retire(retirement, 0).Outcome);
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         Assert.IsTrue(reservations.IsReserved(
             lifetime.Registration.ContainerIdentity));
@@ -433,7 +433,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
             Switch2ProUsbStartupRetirementOutcome.ExactLifetimeReleased,
             lease.Retire(retirement, 0).Outcome);
 
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         Assert.IsTrue(reservations.IsReserved(
             lifetime.Registration.ContainerIdentity));
@@ -518,7 +518,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
             "A copied capability cannot revive output after terminal invalidation.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0u, false)]
     [DataRow(31u, false)]
     [DataRow(995u, false)]
@@ -750,7 +750,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
             DeviceGeneration, TransportGeneration, 1);
         var target = new RecordingReadTarget();
 
-        Assert.ThrowsException<
+        Assert.ThrowsExactly<
             Switch2ProUsbWindowsReadStartAmbiguousException>(() =>
             lease.TryBeginInputRead(new byte[64], 0, 64, readClaim,
                 target));
@@ -778,7 +778,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
         Assert.AreEqual(Switch2ProUsbStartupRetirementOutcome.PossiblyReleased,
             lease.Retire(retirement, 1).Outcome);
         Assert.AreEqual(0, command.DisposeCalls);
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
     }
 
@@ -819,7 +819,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
         var lease = DirectLease(lifetime, hid, new FakeOwnedCommand());
         var target = new RecordingReadTarget();
 
-        Assert.ThrowsException<
+        Assert.ThrowsExactly<
             Switch2ProUsbWindowsReadStartAmbiguousException>(() =>
             lease.TryBeginInputRead(new byte[64], 0, 64,
                 new Switch2ProUsbReadClaim(new object(), DeviceGeneration,
@@ -1584,7 +1584,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
             lease.Retire(retirement, 0).Outcome);
         Assert.AreEqual(1, command.DisposeCalls,
             "An outcome-ambiguous release must never be repeated.");
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
     }
 
@@ -1778,7 +1778,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
                 TransportGeneration, 1);
 
         Assert.IsTrue(lease.TryWaitForInputQuiescence(0));
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced,
             "Open command facet must block whole disposal.");
         var retirementClaim = new Switch2ProUsbStartupRetirementClaim(
@@ -1787,7 +1787,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
         Assert.AreEqual(
             Switch2ProUsbStartupRetirementOutcome.ExactLifetimeReleased,
             lease.Retire(retirementClaim, 0).Outcome);
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced,
             "Retained output must block MI_00 disposal.");
 
@@ -2032,7 +2032,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
             Switch2ProUsbStartupRetirementOutcome.ExactLifetimeReleased,
             lease.Retire(retirement, 0).Outcome);
         Assert.IsTrue(lease.TryWaitForInputQuiescence(0));
-        Assert.ThrowsException<InvalidOperationException>(
+        Assert.ThrowsExactly<InvalidOperationException>(
             lease.DisposeQuiesced);
         return new WeakReference<Switch2ProUsbWindowsOwnedCompositeLease>(
             lease);

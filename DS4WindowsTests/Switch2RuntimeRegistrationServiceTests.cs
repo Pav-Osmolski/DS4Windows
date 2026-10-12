@@ -337,7 +337,7 @@ public sealed partial class Switch2RuntimeRegistrationServiceTests
             usbOwner.State);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]

@@ -140,7 +140,7 @@ public sealed class Switch2MappedStickLanePrecisionTests
         Assert.AreEqual((180.2 - 128) / 127 * 240, second.VelocityX);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void StandaloneRightAssistUsesPreciseCoordinatesForItsOrientation(bool horizontal)

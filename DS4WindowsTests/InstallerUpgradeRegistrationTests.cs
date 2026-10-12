@@ -35,7 +35,7 @@ public sealed class InstallerUpgradeRegistrationTests
         Assert.AreNotEqual("yes", (string)upgrade.Attribute("AllowDowngrades"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]

@@ -9,7 +9,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class XboxOneAuthorizedStartupTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow((int)XboxOneManagementOperation.CreateBus, "bus creation")]
     [DataRow((int)XboxOneManagementOperation.CreatePersona, "persona creation")]
     [DataRow((int)XboxOneManagementOperation.ActivatePersona, "activation")]
@@ -20,7 +20,7 @@ public sealed class XboxOneAuthorizedStartupTests
         var operation = (XboxOneManagementOperation)operationValue;
         using JsonDocument error = JsonDocument.Parse(
             "{\"status\":409,\"title\":\"private-token-secret\",\"detail\":\"request-and-capability-secret\"}");
-        var rejected = Assert.ThrowsException<XboxOneManagementException>(() =>
+        var rejected = Assert.ThrowsExactly<XboxOneManagementException>(() =>
             ViiperClient.ThrowIfXboxOneManagementError(error.RootElement, operation));
         Assert.AreEqual(operation, rejected.Operation);
         Assert.AreEqual(409, rejected.Status);
@@ -31,7 +31,7 @@ public sealed class XboxOneAuthorizedStartupTests
         Assert.IsNull(rejected.InnerException);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("{\"status\":\"secret\"}")]
     [DataRow("{\"status\":200}")]
     [DataRow("{\"status\":9999999999999999999}")]
@@ -40,7 +40,7 @@ public sealed class XboxOneAuthorizedStartupTests
     public void MalformedErrorStatusIsNotEchoedOrAcceptedAsSuccess(string json)
     {
         using JsonDocument error = JsonDocument.Parse(json);
-        var rejected = Assert.ThrowsException<XboxOneManagementException>(() =>
+        var rejected = Assert.ThrowsExactly<XboxOneManagementException>(() =>
             ViiperClient.ThrowIfXboxOneManagementError(error.RootElement,
                 XboxOneManagementOperation.ActivatePersona));
         Assert.AreEqual(0, rejected.Status);
@@ -48,7 +48,7 @@ public sealed class XboxOneAuthorizedStartupTests
         Assert.IsNull(rejected.InnerException);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task CreateStageApiFailureIsSanitizedAndNeverAuthorizesCleanup(bool afterBusCreation)
@@ -60,7 +60,7 @@ public sealed class XboxOneAuthorizedStartupTests
             await fixture.Reply("bus/create", "{\"busId\":42}");
         await fixture.Reply(afterBusCreation ? "bus/42/add-authorized-xboxone" : "bus/create",
             "{\"status\":403,\"title\":\"secret\",\"detail\":\"secret\"}");
-        var rejected = await Assert.ThrowsExceptionAsync<XboxOneManagementException>(async () =>
+        var rejected = await Assert.ThrowsExactlyAsync<XboxOneManagementException>(async () =>
             await creation.WaitAsync(TimeSpan.FromSeconds(5)));
         Assert.AreEqual(afterBusCreation ? XboxOneManagementOperation.CreatePersona :
             XboxOneManagementOperation.CreateBus, rejected.Operation);
@@ -77,7 +77,7 @@ public sealed class XboxOneAuthorizedStartupTests
         Task<bool> removal = Task.Run(() => fixture.Client.RemoveAuthorizedXboxOneRegistration(Registration()));
         await fixture.Reply("bus/42/7/remove-authorized-xboxone",
             "{\"status\":409,\"detail\":\"secret\"}", requireAuthority: true);
-        var rejected = await Assert.ThrowsExceptionAsync<XboxOneManagementException>(async () =>
+        var rejected = await Assert.ThrowsExactlyAsync<XboxOneManagementException>(async () =>
             await removal.WaitAsync(TimeSpan.FromSeconds(5)));
         Assert.AreEqual(XboxOneManagementOperation.RemovePersona, rejected.Operation);
         Assert.AreEqual(409, rejected.Status);
@@ -110,7 +110,7 @@ public sealed class XboxOneAuthorizedStartupTests
         Assert.IsFalse(fixture.Listener.Pending(), "No port/device/bus fallback or duplicate removal.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("missing-token")]
     [DataRow("missing-alias")]
     [DataRow("foreign-bus")]
@@ -132,12 +132,12 @@ public sealed class XboxOneAuthorizedStartupTests
             _ => ""
         };
         await fixture.Reply("bus/42/add-authorized-xboxone", receipt);
-        await Assert.ThrowsExceptionAsync<IOException>(async () =>
+        await Assert.ThrowsExactlyAsync<IOException>(async () =>
             await creation.WaitAsync(TimeSpan.FromSeconds(5)));
         Assert.IsFalse(fixture.Listener.Pending(), "An unverified receipt grants no removal authority.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("")]
     [DataRow("{}")]
     [DataRow("null")]
@@ -156,12 +156,12 @@ public sealed class XboxOneAuthorizedStartupTests
         Task<ViiperDeviceStream> creation = Task.Run(() =>
             fixture.Client.CreateAuthorizedXboxOneDeviceAndOpenStream(Request()));
         await fixture.Reply("bus/create", receipt);
-        await Assert.ThrowsExceptionAsync<IOException>(async () =>
+        await Assert.ThrowsExactlyAsync<IOException>(async () =>
             await creation.WaitAsync(TimeSpan.FromSeconds(5)));
         Assert.IsFalse(fixture.Listener.Pending());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("lost")]
     [DataRow("foreign-alias")]
     [DataRow("duplicate-port")]
@@ -185,14 +185,14 @@ public sealed class XboxOneAuthorizedStartupTests
         await fixture.Reply("bus/42/7/activate-authorized-xboxone", response, requireAuthority: true);
         if (failure == "conflict")
         {
-            var rejected = await Assert.ThrowsExceptionAsync<XboxOneManagementException>(async () =>
+            var rejected = await Assert.ThrowsExactlyAsync<XboxOneManagementException>(async () =>
                 await activation.WaitAsync(TimeSpan.FromSeconds(5)));
             Assert.AreEqual(XboxOneManagementOperation.ActivatePersona, rejected.Operation);
             Assert.AreEqual(409, rejected.Status);
             Assert.IsNull(rejected.InnerException);
         }
         else
-            await Assert.ThrowsExceptionAsync<IOException>(async () =>
+            await Assert.ThrowsExactlyAsync<IOException>(async () =>
                 await activation.WaitAsync(TimeSpan.FromSeconds(5)));
         Assert.AreEqual(-1, stream.UsbipPort);
         Assert.IsFalse(stream.IsTransportClosed);
@@ -220,7 +220,7 @@ public sealed class XboxOneAuthorizedStartupTests
         await fixture.Reply("bus/42/7/remove-authorized-xboxone",
             "{\"version\":1,\"removed\":true}", requireAuthority: true);
         await disposal.WaitAsync(TimeSpan.FromSeconds(5));
-        await Assert.ThrowsExceptionAsync<IOException>(async () =>
+        await Assert.ThrowsExactlyAsync<IOException>(async () =>
             await activation.WaitAsync(TimeSpan.FromSeconds(5)));
         // A peer may still try to send its late success. Local retirement
         // already closed this management connection, so receipt is impossible.
@@ -240,12 +240,12 @@ public sealed class XboxOneAuthorizedStartupTests
     {
         using var fixture = new StartupFixture();
         using var lifetime = new ViiperVirtualDeviceLifetime(Registration(), _ => true);
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             fixture.Client.OpenExistingDeviceStream(42, "7", -1, lifetime));
         Assert.IsFalse(fixture.Listener.Pending());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task DisposalCancelsPendingActivationButPreservesBrokerUntilExactCleanup(
@@ -281,7 +281,7 @@ public sealed class XboxOneAuthorizedStartupTests
                 "Exact removal must still be able to receive its broker Stop acknowledgement.");
             Assert.AreSame(activation, await Task.WhenAny(activation, Task.Delay(1000)),
                 "Retiring the exact lifetime must cancel its waiting management request, not wait for a reply.");
-            await Assert.ThrowsExceptionAsync<IOException>(async () => await activation);
+            await Assert.ThrowsExactlyAsync<IOException>(async () => await activation);
             Assert.IsTrue(await Task.Run(() =>
                 ViiperUsbipPortManager.WithNativePortMutationLock(() => true))
                 .WaitAsync(TimeSpan.FromSeconds(2)),
@@ -313,17 +313,17 @@ public sealed class XboxOneAuthorizedStartupTests
         int removals = 0;
         using var lifetime = new ViiperVirtualDeviceLifetime(Registration(), _ => { removals++; return true; });
         XboxOneActivationRequest old = lifetime.BeginXboxOneActivationRequest();
-        Assert.ThrowsException<InvalidOperationException>(() => lifetime.BeginXboxOneActivationRequest());
+        Assert.ThrowsExactly<InvalidOperationException>(() => lifetime.BeginXboxOneActivationRequest());
         old.Dispose();
         using XboxOneActivationRequest current = lifetime.BeginXboxOneActivationRequest();
         old.Cancel();
         old.Dispose();
         Assert.IsFalse(current.Token.IsCancellationRequested);
-        Assert.ThrowsException<InvalidOperationException>(() => lifetime.BeginXboxOneActivationRequest());
+        Assert.ThrowsExactly<InvalidOperationException>(() => lifetime.BeginXboxOneActivationRequest());
         lifetime.Dispose();
         Assert.IsTrue(current.Token.IsCancellationRequested);
         Assert.AreEqual(1, removals);
-        Assert.ThrowsException<ObjectDisposedException>(() => lifetime.BeginXboxOneActivationRequest());
+        Assert.ThrowsExactly<ObjectDisposedException>(() => lifetime.BeginXboxOneActivationRequest());
     }
 
     [TestMethod]
@@ -360,7 +360,7 @@ public sealed class XboxOneAuthorizedStartupTests
             await disposal.WaitAsync(TimeSpan.FromSeconds(5));
             Assert.AreSame(activation.Task, await Task.WhenAny(activation.Task, Task.Delay(1000)),
                 "A canceled waiter must exit without waiting for the unrelated controller's attach.");
-            await Assert.ThrowsExceptionAsync<IOException>(async () => await activation.Task);
+            await Assert.ThrowsExactlyAsync<IOException>(async () => await activation.Task);
             Assert.IsFalse(owner.IsCompleted, "Canceling a waiter cannot release or cancel the actual owner.");
             Assert.IsFalse(fixture.Listener.Pending(), "Cancellation must not submit a late activation.");
         }
@@ -426,7 +426,7 @@ public sealed class XboxOneAuthorizedStartupTests
         broker.Client.Shutdown(SocketShutdown.Send);
         await fixture.Reply("bus/42/7/remove-authorized-xboxone",
             "{\"version\":1,\"removed\":false}", requireAuthority: true);
-        await Assert.ThrowsExceptionAsync<IOException>(async () =>
+        await Assert.ThrowsExactlyAsync<IOException>(async () =>
             await creation.WaitAsync(TimeSpan.FromSeconds(5)));
         Assert.IsFalse(fixture.Listener.Pending());
     }
@@ -451,7 +451,7 @@ public sealed class XboxOneAuthorizedStartupTests
             .AsTask().WaitAsync(TimeSpan.FromSeconds(5)));
         await fixture.Reply("bus/42/7/remove-authorized-xboxone",
             "{\"version\":1,\"removed\":true}", requireAuthority: true);
-        await Assert.ThrowsExceptionAsync<IOException>(async () =>
+        await Assert.ThrowsExactlyAsync<IOException>(async () =>
             await creation.WaitAsync(TimeSpan.FromSeconds(5)));
         Assert.AreEqual(4, authenticationCalls);
         Assert.IsFalse(fixture.Listener.Pending());
@@ -494,7 +494,7 @@ public sealed class XboxOneAuthorizedStartupTests
             await fixture.Reply("bus/42/7/remove-authorized-xboxone",
                 "{\"version\":1,\"removed\":true}", requireAuthority: true,
                 acceptTimeout: TimeSpan.FromSeconds(12));
-            await Assert.ThrowsExceptionAsync<IOException>(async () =>
+            await Assert.ThrowsExactlyAsync<IOException>(async () =>
                 await creation.WaitAsync(TimeSpan.FromSeconds(5)));
             Assert.IsFalse(fixture.Listener.Pending());
         }
@@ -545,7 +545,7 @@ public sealed class XboxOneAuthorizedStartupTests
         Assert.IsFalse(ViiperUsbipPortManager.IsActivePort(port));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("x1-aaaaaaaaaaaaaaaaaaaaaaaaaa")]
     [DataRow("X1-AAAAAAAAAAAAAAAAAAAAAAAAAA")]
     [DataRow("x1-malformed")]
@@ -565,11 +565,11 @@ public sealed class XboxOneAuthorizedStartupTests
         using var lifetime = new ViiperVirtualDeviceLifetime(registration, _ => { removals++; return true; });
         using var foreign = ViiperUsbipPortManager.RegisterXboxOnePort(31009,
             XboxOneAuthorizedRegistrationTests.Alias[..^1] + "e");
-        Assert.ThrowsException<InvalidOperationException>(() => lifetime.BindXboxOnePort(foreign));
-        Assert.ThrowsException<InvalidOperationException>(() => lifetime.BindUsbipPort(31009));
+        Assert.ThrowsExactly<InvalidOperationException>(() => lifetime.BindXboxOnePort(foreign));
+        Assert.ThrowsExactly<InvalidOperationException>(() => lifetime.BindUsbipPort(31009));
         lifetime.Dispose();
         using var matching = ViiperUsbipPortManager.RegisterXboxOnePort(31010, registration.UsbipBusId);
-        Assert.ThrowsException<ObjectDisposedException>(() => lifetime.BindXboxOnePort(matching));
+        Assert.ThrowsExactly<ObjectDisposedException>(() => lifetime.BindXboxOnePort(matching));
         lifetime.Dispose();
         Assert.AreEqual(1, removals);
     }

@@ -65,7 +65,7 @@ public sealed class XboxImpulseProfileSettingsTests
         Assert.IsFalse(routing.AncestorsAndSelf().TakeWhile(node => node != tab).Attributes("Visibility").Any());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(null, 0, true)]
     [DataRow(InputDeviceType.DualSense, 0x0CE6, true)]
     [DataRow(InputDeviceType.DualSense, 0x0DF2, true)]
@@ -188,7 +188,7 @@ public sealed class XboxImpulseProfileSettingsTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ExistingProfileSettingRoundTripsThroughTheOriginalXmlField(bool enabled)
@@ -247,7 +247,7 @@ public sealed class XboxImpulseProfileSettingsTests
         Assert.IsFalse(store.xboxImpulseToAdaptiveTriggers[0]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -277,7 +277,7 @@ public sealed class XboxImpulseProfileSettingsTests
         Assert.IsFalse(restored.TriggerLabSettings.Enabled);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DarkTheme", 360, 120)]
     [DataRow("DarkTheme", 640, 144)]
     [DataRow("DefaultTheme", 360, 120)]

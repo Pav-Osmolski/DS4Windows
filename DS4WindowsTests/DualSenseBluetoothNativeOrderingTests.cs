@@ -14,7 +14,7 @@ namespace DS4Windows.Tests;
 [DoNotParallelize]
 public class DualSenseBluetoothNativeOrderingTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("pulse-stop")]
     [DataRow("trigger-a-b")]
     [DataRow("trigger-a-b-a")]
@@ -34,7 +34,7 @@ public class DualSenseBluetoothNativeOrderingTests
         AssertPresentedReceipts(fixture, commands.Length);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("pulse-stop")]
     [DataRow("trigger-a-b")]
     public void ActualHelperSpacedNativeCommandsRemainPositiveControls(string kind)
@@ -50,7 +50,7 @@ public class DualSenseBluetoothNativeOrderingTests
         AssertPresentedReceipts(fixture, commands.Length);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("pulse-stop")]
     [DataRow("trigger-a-b")]
     public void ActualHelperBusyHeadCannotBeReplacedByLaterNativeCommand(string kind)
@@ -69,7 +69,7 @@ public class DualSenseBluetoothNativeOrderingTests
         AssertPresentedReceipts(fixture, commands.Length);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("pulse-stop")]
     [DataRow("trigger-a-b")]
     [DataRow("led-claim-release")]
@@ -198,7 +198,7 @@ public class DualSenseBluetoothNativeOrderingTests
         AssertPresentedReceipts(fixture, 1);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("pulse-stop")]
     [DataRow("led-claim-release")]
     public void ActualHelperOlderOverlappingLocalStateCannotReplayAfterNativeCommand(string kind)
@@ -250,7 +250,7 @@ public class DualSenseBluetoothNativeOrderingTests
         AssertPresentedReceipts(fixture, 1);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("pulse-stop")]
     [DataRow("trigger-a-b")]
     public void ActualHelperFinalNativeCommitUpdatesBothStaleTemplatesAndPreservesLocalMedia(string kind)
@@ -326,7 +326,7 @@ public class DualSenseBluetoothNativeOrderingTests
         Assert.AreEqual(8, mediaCount);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ActualHelperClearDuringAcceptedNativeClaimRetainsSlotUntilPhysicalReturn(bool media)

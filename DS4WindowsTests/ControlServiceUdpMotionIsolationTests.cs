@@ -114,7 +114,7 @@ public sealed class ControlServiceUdpMotionIsolationTests
         tempBefore.AssertUnchanged();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void NullMotionIsSafeAndDoesNotRetainTheLastObservedMotion(bool smoothing)

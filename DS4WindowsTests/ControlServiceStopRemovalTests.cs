@@ -10,7 +10,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class ControlServiceStopRemovalTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -22,7 +22,7 @@ public sealed class ControlServiceStopRemovalTests
         // Run the actual public Stop wrapper and its actual per-device call.
         // The private sentinel exits after the observed worker wait, before
         // unrelated audio, registry, driver, or application shutdown code.
-        Assert.ThrowsException<StopStageCompleteException>(() =>
+        Assert.ThrowsExactly<StopStageCompleteException>(() =>
         {
             if (stopAndShutdown) fixture.Service.StopAndShutDown(immediateUnplug: true);
             else fixture.Service.Stop(showlog: false, immediateUnplug: true);
@@ -101,7 +101,7 @@ public sealed class ControlServiceStopRemovalTests
         finally { device.ReadWaitEv.Dispose(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     public void QueuedStaleOrDuplicateRemovalCannotRetireTheReplacementSlot(int callbackCount)

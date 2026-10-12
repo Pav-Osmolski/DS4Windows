@@ -9,7 +9,7 @@ namespace DS4Windows.Tests;
 [TestClass]
 public sealed class XboxOneFeedbackDeliveryDispatcherTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void LocalPolicyWakeRetriesWithoutGamePacketOrFabricatedAcknowledgement(bool throwsFirst)
@@ -72,7 +72,7 @@ public sealed class XboxOneFeedbackDeliveryDispatcherTests
         Assert.AreEqual(1, Volatile.Read(ref policies));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void SuccessorDuringAckWaitsAndCannotActuateAfterFailedAck(bool ackSucceeds)

@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class Switch2RawStickCalibrationCollectorTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2, Switch2StickSide.Left)]
     [DataRow(Switch2ControllerModel.ProController2, Switch2StickSide.Right)]
     [DataRow(Switch2ControllerModel.JoyCon2Left, Switch2StickSide.Left)]
@@ -24,7 +24,7 @@ public sealed class Switch2RawStickCalibrationCollectorTests
         Assert.AreEqual((ushort)1450, result.PositiveRangeY);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.ProController2, true, Switch2StickSide.Left)]
     [DataRow(Switch2ControllerModel.ProController2, true, Switch2StickSide.Right)]
     [DataRow(Switch2ControllerModel.ProController2, false, Switch2StickSide.Left)]
@@ -62,7 +62,7 @@ public sealed class Switch2RawStickCalibrationCollectorTests
             Assert.AreNotEqual(0, original.OffsetX);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(2000)]
     [DataRow(4000)]
     [DataRow(50000)]
@@ -138,7 +138,7 @@ public sealed class Switch2RawStickCalibrationCollectorTests
         Assert.AreEqual(Switch2RawStickCalibrationStage.Cancelled, f.Collector.Stage);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void ConfirmedProCounterDiscontinuityDoesNotDiscardCalibrationSamples(bool usb)
@@ -151,7 +151,7 @@ public sealed class Switch2RawStickCalibrationCollectorTests
         Assert.IsTrue(pro.Collector.RotationProgress > 0);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left, Switch2StickSide.Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, Switch2StickSide.Right)]
     public void JoyConCounterDiscontinuityRetainsCalibrationSampleButNotDuplicateHostTime(
@@ -172,11 +172,11 @@ public sealed class Switch2RawStickCalibrationCollectorTests
     public void ConstructorRequiresPhysicalPeerAndSidePresentOnThatModel()
     {
         var f = new Fixture(Switch2ControllerModel.JoyCon2Left, false, Switch2StickSide.Left);
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2RawStickCalibrationCollector(f.Descriptor, default, Switch2StickSide.Left));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2RawStickCalibrationCollector(f.Descriptor, f.Peer, Switch2StickSide.Right));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2RawStickCalibrationCollector(default, f.Peer, Switch2StickSide.Left));
     }
 

@@ -34,13 +34,13 @@ public class ControllerReadingsSnapshotTests
     {
         var device = new LegacyTestDevice();
         device.ReadWaitEv.Set();
-        Assert.ThrowsException<ArgumentNullException>(() => device.TryCopyControllerReadings(
+        Assert.ThrowsExactly<ArgumentNullException>(() => device.TryCopyControllerReadings(
             null, new DS4State(), new DS4StateOwnedSnapshot(), new DS4StateOwnedSnapshot()));
         Assert.IsTrue(device.ReadWaitEv.IsSet);
         device.ReadWaitEv.Dispose();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2Transport.Usb)]
     [DataRow(Switch2Transport.BluetoothLe)]
     public void ProReadingsCapturePublishedAxesWithoutLegacyReadWindow(Switch2Transport transport)

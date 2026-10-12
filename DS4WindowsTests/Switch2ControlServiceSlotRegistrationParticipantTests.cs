@@ -185,18 +185,18 @@ public sealed class Switch2ControlServiceSlotRegistrationParticipantTests
             decorated.MappingCallback, 2_000, out var token, out _));
         int admittedRegular = host.RegularCount;
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             decorated.MappingCallback(token.Slot + 1, fixture.Device,
                 new Switch2RuntimeReportEventArgs(
                     Switch2RuntimeReportKind.Regular,
                     fixture.Registration.Generation)));
         Fixture foreign = CreateFixture(17, 107);
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             decorated.MappingCallback(token.Slot, foreign.Device,
                 new Switch2RuntimeReportEventArgs(
                     Switch2RuntimeReportKind.Regular,
                     fixture.Registration.Generation)));
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             decorated.MappingCallback(token.Slot, fixture.Device,
                 new Switch2RuntimeReportEventArgs(
                     Switch2RuntimeReportKind.Regular,

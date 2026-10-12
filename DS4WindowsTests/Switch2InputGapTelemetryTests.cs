@@ -13,7 +13,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class Switch2InputGapTelemetryTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, "1", false)]
     [DataRow(true, "1", true)]
     [DataRow(true, "0", false)]
@@ -54,7 +54,7 @@ public sealed class Switch2InputGapTelemetryTests
         Assert.AreEqual(0L, telemetry.Snapshot().QpcFrequency);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RealAcceptedPublicationUsesOptInWithoutCountingForeignOrTerminalFrames(bool enabled)
@@ -84,7 +84,7 @@ public sealed class Switch2InputGapTelemetryTests
         finally { device.TryPublishTerminalNeutral(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left, Switch2JoyConProfileMode.StandaloneHorizontalLeft)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, Switch2JoyConProfileMode.StandaloneHorizontalRight)]
     public void StandaloneJoyConSnapshotRetainsExactPhysicalSideIdentity(
@@ -199,7 +199,7 @@ public sealed class Switch2InputGapTelemetryTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task RuntimeRetirementCancelsItsInputProbeOffTheInputCallback(bool abortUnpublished)

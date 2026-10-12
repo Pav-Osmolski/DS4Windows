@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2BluetoothLabToneTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("tone-opus5", 5, 0)]
     [DataRow("tone-opus20", 20, 0)]
     [DataRow("tone-rumble-opus5", 5, 32)]
@@ -61,10 +61,10 @@ public class Switch2BluetoothLabToneTests
         var tone = Switch2BluetoothLabTone.Create("tone-opus5");
         int writes = 0;
         Task<bool> Write(byte[] _) { writes++; return Task.FromResult(true); }
-        await Assert.ThrowsExceptionAsync<InvalidOperationException>(() => tone.SendAsync(49, Write, CancellationToken.None));
+        await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => tone.SendAsync(49, Write, CancellationToken.None));
         using var stopping = new CancellationTokenSource();
         stopping.Cancel();
-        await Assert.ThrowsExceptionAsync<OperationCanceledException>(() => tone.SendAsync(509, Write, stopping.Token));
+        await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => tone.SendAsync(509, Write, stopping.Token));
         Assert.AreEqual(0, writes);
     }
 
@@ -81,7 +81,7 @@ public class Switch2BluetoothLabToneTests
         stopping.Cancel();
         Assert.IsFalse(send.IsCompleted, "Do not release the service under a still-owned WinRT write.");
         finish.SetResult(true);
-        await Assert.ThrowsExceptionAsync<OperationCanceledException>(() => send);
+        await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => send);
         Assert.AreEqual(1, writes);
     }
 
@@ -89,7 +89,7 @@ public class Switch2BluetoothLabToneTests
     public async Task RejectedWriteIsNotReplayed()
     {
         int writes = 0;
-        await Assert.ThrowsExceptionAsync<InvalidOperationException>(() => Switch2BluetoothLabTone.Create("tone-opus20")
+        await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => Switch2BluetoothLabTone.Create("tone-opus20")
             .SendAsync(509, _ => { writes++; return Task.FromResult(false); }, CancellationToken.None));
         Assert.AreEqual(1, writes);
     }
@@ -111,7 +111,7 @@ public class Switch2BluetoothLabToneTests
         Assert.IsFalse(Switch2BluetoothLabHeadsetHeader.TryRead(value, out _, out _, out _));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("t:opus:1:20:20:raw", 1, 20.0, 50)]
     [DataRow("a:opus:1:20:20:len", 1, 20.0, 51)]
     [DataRow("t:opus:2:20:160:raw", 2, 20.0, 400)]

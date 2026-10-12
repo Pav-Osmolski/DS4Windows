@@ -23,9 +23,9 @@ public sealed class SwitchProCalibrationProtocolTests
     public void InvalidPayloadIsRejectedBeforeWriting()
     {
         var device = new FakePro();
-        Assert.ThrowsException<ArgumentException>(() => device.Subcommand(0x10, null, 5, true));
-        Assert.ThrowsException<ArgumentException>(() => device.Subcommand(0x10, new byte[4], 5, true));
-        Assert.ThrowsException<ArgumentException>(() => device.Subcommand(0x10, new byte[64], 64, true));
+        Assert.ThrowsExactly<ArgumentException>(() => device.Subcommand(0x10, null, 5, true));
+        Assert.ThrowsExactly<ArgumentException>(() => device.Subcommand(0x10, new byte[4], 5, true));
+        Assert.ThrowsExactly<ArgumentException>(() => device.Subcommand(0x10, new byte[64], 64, true));
         Assert.AreEqual(0, device.Writes.Count);
     }
 
@@ -67,7 +67,7 @@ public sealed class SwitchProCalibrationProtocolTests
         Assert.AreEqual(3, device.ReadCalls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(-1)]
     [DataRow(0)]
     [DataRow(363)]
@@ -144,7 +144,7 @@ public sealed class SwitchProCalibrationProtocolTests
         Assert.IsTrue(device.SpiAddresses.Contains(0x603D));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void MissingOrInvalidFactoryCalibrationThrowsIOExceptionAfterThreeAttempts(bool zeroData)
@@ -155,7 +155,7 @@ public sealed class SwitchProCalibrationProtocolTests
         else
             device.AcceptWrite = false;
 
-        Assert.ThrowsException<IOException>(device.CalibrationData);
+        Assert.ThrowsExactly<IOException>(device.CalibrationData);
         Assert.AreEqual(3, device.SpiAddresses.Count(address => address == 0x603D));
         Assert.AreEqual(4, device.Writes.Count);
     }
@@ -179,7 +179,7 @@ public sealed class SwitchProCalibrationProtocolTests
         var device = CalibratedDevice(user: false);
         Func<ushort, byte, byte[]> healthy = device.SpiData;
         device.SpiData = (address, count) => address == 0x6020 ? new byte[count] : healthy(address, count);
-        Assert.ThrowsException<IOException>(device.CalibrationData);
+        Assert.ThrowsExactly<IOException>(device.CalibrationData);
         Assert.AreEqual(3, device.SpiAddresses.Count(address => address == 0x6020));
         Assert.IsTrue(Field<double[]>(device, "accelCoeff").All(value => value == 0));
     }
@@ -199,7 +199,7 @@ public sealed class SwitchProCalibrationProtocolTests
         Assert.IsNull(Field<object>(device, "rumbleOutput"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x603D, 0)]
     [DataRow(0x603D, 1)]
     [DataRow(0x603D, 2)]
@@ -260,7 +260,7 @@ public sealed class SwitchProCalibrationProtocolTests
             "Bluetooth initialization must not depend on USB setup commands.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void BluetoothInitializationPreservesValidUserOrFactoryCalibration(bool user)
@@ -280,7 +280,7 @@ public sealed class SwitchProCalibrationProtocolTests
         Assert.IsTrue(Field<double[]>(device, "gyroCoeff").All(double.IsFinite));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x603D)]
     [DataRow(0x6046)]
     [DataRow(0x6020)]
@@ -318,7 +318,7 @@ public sealed class SwitchProCalibrationProtocolTests
         Assert.AreEqual((byte)0x3F, device.Writes[0][11]);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, false)]
     [DataRow(0, true)]
     [DataRow(1, false)]
@@ -342,7 +342,7 @@ public sealed class SwitchProCalibrationProtocolTests
         Assert.IsNull(Field<object>(device, "rumbleOutput"));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(1)]
     [DataRow(2)]
@@ -353,9 +353,9 @@ public sealed class SwitchProCalibrationProtocolTests
         var failure = new ObjectDisposedException("HID owner");
         SetNativeFailure(device, operation, failure);
         IOException observed = operation == 2 ?
-            Assert.ThrowsException<IOException>(device.SetInitRumble) :
-            operation == 3 ? Assert.ThrowsException<IOException>(device.SetOperational) :
-            Assert.ThrowsException<IOException>(() => device.Subcommand(0x30, new byte[] { 1 }, 1, true));
+            Assert.ThrowsExactly<IOException>(device.SetInitRumble) :
+            operation == 3 ? Assert.ThrowsExactly<IOException>(device.SetOperational) :
+            Assert.ThrowsExactly<IOException>(() => device.Subcommand(0x30, new byte[] { 1 }, 1, true));
         Assert.AreSame(failure, observed.InnerException);
     }
 
@@ -365,7 +365,7 @@ public sealed class SwitchProCalibrationProtocolTests
         var device = new FakePro { WriteException = new ArgumentException("Unexpected programming failure") };
         int removals = 0;
         device.Removal += (_, _) => removals++;
-        Assert.ThrowsException<ArgumentException>(device.StartUpdate);
+        Assert.ThrowsExactly<ArgumentException>(device.StartUpdate);
         Assert.AreEqual(0, removals);
     }
 
@@ -381,7 +381,7 @@ public sealed class SwitchProCalibrationProtocolTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ErasedOrOutOfRangeStickCalibrationIsRejected(bool right)

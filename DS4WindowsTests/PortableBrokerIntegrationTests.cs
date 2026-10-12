@@ -116,7 +116,7 @@ public class PortableBrokerIntegrationTests
             "The fallback must not throw through the original startup failure handler.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("Connect: SocketException")]
     [DataRow("Connect: timeout")]
     [DataRow("Authenticate: PlatformNotSupportedException")]
@@ -130,7 +130,7 @@ public class PortableBrokerIntegrationTests
         StringAssert.Contains(message, "Your key and profiles were not replaced.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(null)]
     [DataRow("")]
     [DataRow("Authenticate: token-secret-C:\\user\\viiper.key.txt")]
@@ -181,7 +181,7 @@ public class PortableBrokerIntegrationTests
         Assert.AreEqual(1, setup.Split("using ManagementObjectCollection drivers = searcher.Get();").Length - 1);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("public static void RefreshSelectedStartupTaskOnLaunch()",
         "public static void RefreshSelectedStartupTaskAfterRunAtStartupChange()")]
     [DataRow("public static void RefreshSelectedStartupTaskAfterRunAtStartupChange()",
@@ -318,7 +318,7 @@ public class PortableBrokerIntegrationTests
         StringAssert.Contains(launch, "PortableBrokerContext.FindPortableRoot(Global.exedirpath)");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void TotalProbeDeadlineClosesTrickledAuthenticationOrEncryptedPing(bool duringAuthentication)

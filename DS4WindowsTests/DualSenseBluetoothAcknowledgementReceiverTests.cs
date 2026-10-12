@@ -20,7 +20,7 @@ public sealed class DualSenseBluetoothAcknowledgementReceiverTests
     private const int NativeLength = sizeof(long) + sizeof(int) + sizeof(byte);
     private const BindingFlags InstancePrivate = BindingFlags.Instance | BindingFlags.NonPublic;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     [DataRow(5)]
@@ -49,7 +49,7 @@ public sealed class DualSenseBluetoothAcknowledgementReceiverTests
         Assert.AreEqual(0, f.CapacitySignals);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(int.MinValue)]
     [DataRow(-1)]
@@ -70,7 +70,7 @@ public sealed class DualSenseBluetoothAcknowledgementReceiverTests
         Assert.AreEqual(1, f.CapacitySignals);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     [DataRow(3)]
@@ -133,7 +133,7 @@ public sealed class DualSenseBluetoothAcknowledgementReceiverTests
         Assert.IsFalse(f.Pacer.IsFaulted);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0x83, 0)]
     [DataRow(0x83, NativeLength - 1)]
     [DataRow(0x83, NativeLength + 1)]
@@ -149,14 +149,14 @@ public sealed class DualSenseBluetoothAcknowledgementReceiverTests
         Assert.IsTrue(f.Credits.TryReserve(11, 3));
         f.Media.Add(22, 0);
         byte[] payload = new byte[length];
-        Assert.ThrowsException<InvalidDataException>(() => f.Receive(Frame(
+        Assert.ThrowsExactly<InvalidDataException>(() => f.Receive(Frame(
             (DualSenseBluetoothAudioPacer.MessageKind)kind, payload)));
         Assert.AreEqual(1, f.Credits.Count);
         Assert.AreEqual(1, f.Media.Count);
         Assert.AreEqual(0, f.CapacitySignals);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)]
     [DataRow(3)]
     [DataRow(4)]
@@ -167,11 +167,11 @@ public sealed class DualSenseBluetoothAcknowledgementReceiverTests
         Assert.IsTrue(f.Credits.TryReserve(11, 3));
         byte[] frame = Frame(DualSenseBluetoothAudioPacer.MessageKind.NativeStateAcknowledged,
             NativePayload(11, 3, (byte)disposition));
-        Assert.ThrowsException<InvalidDataException>(() => f.Receive(frame));
+        Assert.ThrowsExactly<InvalidDataException>(() => f.Receive(frame));
         Assert.AreEqual(1, f.Credits.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(-1)]
     [DataRow(4097)]
     public void FrameLengthOutsideProtocolBoundIsRejected(int length)
@@ -180,10 +180,10 @@ public sealed class DualSenseBluetoothAcknowledgementReceiverTests
         byte[] header = new byte[5];
         header[0] = 0x83;
         BinaryPrimitives.WriteInt32LittleEndian(header.AsSpan(1), length);
-        Assert.ThrowsException<InvalidDataException>(() => f.Receive(header));
+        Assert.ThrowsExactly<InvalidDataException>(() => f.Receive(header));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(2)]
     [DataRow(7)]
     public void TruncatedHeaderOrBodyIsNotAccepted(int availableBytes)
@@ -191,10 +191,10 @@ public sealed class DualSenseBluetoothAcknowledgementReceiverTests
         using Fixture f = new();
         byte[] frame = Frame(DualSenseBluetoothAudioPacer.MessageKind.NativeStateAcknowledged, NativePayload(11, 3, 1));
         Array.Resize(ref frame, availableBytes);
-        Assert.ThrowsException<EndOfStreamException>(() => f.Receive(frame));
+        Assert.ThrowsExactly<EndOfStreamException>(() => f.Receive(frame));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ActualFramedAckReceiverAllocatesZeroAfterWarmupWithPositiveControl(bool positiveControl)

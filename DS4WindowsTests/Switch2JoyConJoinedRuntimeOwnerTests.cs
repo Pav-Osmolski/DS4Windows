@@ -16,7 +16,7 @@ public sealed class Switch2JoyConJoinedRuntimeOwnerTests
     private const long QpcFrequency = 10_000_000;
     private const int TimeoutMilliseconds = 2_000;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void MaintenanceContentionUsesColdStopDeadlineBeforeDecidingQuarantine(bool releaseWithinDeadline)

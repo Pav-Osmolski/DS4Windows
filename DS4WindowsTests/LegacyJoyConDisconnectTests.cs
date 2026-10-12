@@ -7,7 +7,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class LegacyJoyConDisconnectTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false)]
     [DataRow(false, true)]
     [DataRow(true, false)]
@@ -42,7 +42,7 @@ public sealed class LegacyJoyConDisconnectTests
         Assert.AreEqual(0, unrelated.Queued.Count, "The obsolete JointDevice reference is never disconnect authority.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void QueuedDisconnectCannotRetireAReplacedConnectionEvenWhenThePhysicalObjectIsReused(bool reuseObject)

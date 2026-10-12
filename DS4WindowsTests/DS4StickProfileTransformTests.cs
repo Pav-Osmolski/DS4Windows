@@ -6,7 +6,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class DS4StickProfileTransformTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0)] [DataRow(1)] [DataRow(2)] [DataRow(3)] [DataRow(4)]
     [DataRow(5)] [DataRow(6)] [DataRow(7)] [DataRow(8)] [DataRow(9)]
     public void DeadzoneAndOuterMatchFrozenLegacyByteGrid(int variant)
@@ -29,7 +29,7 @@ public sealed class DS4StickProfileTransformTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)] [DataRow(true)]
     public void EveryOutputCurveMatchesFrozenLegacyByteGrid(bool axial)
     {
@@ -52,7 +52,7 @@ public sealed class DS4StickProfileTransformTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)] [DataRow(true)]
     public void PreciseDeadzonesHonorFractionalThresholdsAndCoupling(bool axial)
     {
@@ -99,7 +99,7 @@ public sealed class DS4StickProfileTransformTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)] [DataRow(true)]
     public void PreciseCurvesKeepSubByteMotionAndPiecewiseBoundaries(bool axial)
     {

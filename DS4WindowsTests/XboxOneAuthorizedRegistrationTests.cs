@@ -13,7 +13,7 @@ public sealed class XboxOneAuthorizedRegistrationTests
         "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
     internal const string Alias = "x1-aaaaaaaaaaaaaaaaaaaaaaaaaa";
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void DormantFactoryReceiptBindsCanonicalIdentityAndPrivateToken(
@@ -104,11 +104,11 @@ public sealed class XboxOneAuthorizedRegistrationTests
             yield return new object[] { valid.Replace(before, after) };
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DynamicData(nameof(InvalidReceipts), DynamicDataSourceType.Method)]
     public void InvalidReceiptNeverCreatesCleanupAuthority(string json)
     {
-        IOException error = Assert.ThrowsException<IOException>(() => Parse(json));
+        IOException error = Assert.ThrowsExactly<IOException>(() => Parse(json));
         Assert.IsFalse(error.Message.Contains(Token));
         Assert.IsFalse(error.Message.Contains("g" + Token[1..]));
     }
@@ -117,13 +117,13 @@ public sealed class XboxOneAuthorizedRegistrationTests
     public void RetainedUsbAddressLimitAndExpectedIdentityAreEnforced()
     {
         using JsonDocument document = JsonDocument.Parse(ReceiptJson());
-        Assert.ThrowsException<IOException>(() =>
+        Assert.ThrowsExactly<IOException>(() =>
             XboxOneAuthorizedRegistrationV1.ParseCreateResponse(
                 document.RootElement, 0, 0xf00d, 0xbeed));
-        Assert.ThrowsException<IOException>(() =>
+        Assert.ThrowsExactly<IOException>(() =>
             XboxOneAuthorizedRegistrationV1.ParseCreateResponse(
                 document.RootElement, 65536, 0xf00d, 0xbeed));
-        Assert.ThrowsException<IOException>(() =>
+        Assert.ThrowsExactly<IOException>(() =>
             XboxOneAuthorizedRegistrationV1.ParseCreateResponse(
                 document.RootElement, 42, 0xf00e, 0xbeed));
     }
@@ -168,17 +168,17 @@ public sealed class XboxOneAuthorizedRegistrationTests
             yield return new object[] { valid.Replace(before, after) };
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DynamicData(nameof(InvalidActivationResponses), DynamicDataSourceType.Method)]
     public void ActivationAcknowledgementCannotBindForeignOrAmbiguousIdentity(string json)
     {
         using JsonDocument document = JsonDocument.Parse(json);
-        IOException error = Assert.ThrowsException<IOException>(() =>
+        IOException error = Assert.ThrowsExactly<IOException>(() =>
             Parse(ReceiptJson()).ParseActivationResponse(document.RootElement));
         Assert.IsFalse(error.ToString().Contains(Token));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ActivationAcceptsExactAliasWithOptionalEmptySerial(bool includeSerial)
@@ -194,7 +194,7 @@ public sealed class XboxOneAuthorizedRegistrationTests
         {"version":1,"usbipPort":31007,"usbipBusId":"{{Alias}}","usbipOwnerSerial":""}
         """;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("{}")]
     [DataRow("null")]
     [DataRow("[]")]
@@ -211,11 +211,11 @@ public sealed class XboxOneAuthorizedRegistrationTests
     public void RemovalAcknowledgementHasClosedVersionedSchema(string json)
     {
         using JsonDocument document = JsonDocument.Parse(json);
-        Assert.ThrowsException<IOException>(() =>
+        Assert.ThrowsExactly<IOException>(() =>
             XboxOneAuthorizedRegistrationV1.ParseRemovalResponse(document.RootElement));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("{\"version\":1,\"removed\":true}", true, false)]
     [DataRow("{\"removed\":false,\"version\":1}", false, false)]
     [DataRow("{\"version\":1,\"removed\":true,\"removed\":false}", false, true)]
@@ -283,14 +283,14 @@ public sealed class XboxOneAuthorizedRegistrationTests
         listener.Start();
         var client = new ViiperClient("127.0.0.1",
             ((IPEndPoint)listener.LocalEndpoint).Port, stream => stream);
-        Assert.ThrowsException<ArgumentNullException>(() =>
+        Assert.ThrowsExactly<ArgumentNullException>(() =>
             client.RemoveAuthorizedXboxOneRegistration(null));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             client.RemoveAuthorizedXboxOneRegistration(Parse(ReceiptJson()), 0));
         Assert.IsFalse(listener.Pending());
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task LostOrDribblingResponseCannotExtendDeadlineOrRetry(bool reset)
@@ -331,7 +331,7 @@ public sealed class XboxOneAuthorizedRegistrationTests
             });
             try
             {
-                await Assert.ThrowsExceptionAsync<IOException>(async () =>
+                await Assert.ThrowsExactlyAsync<IOException>(async () =>
                     await removal.WaitAsync(TimeSpan.FromSeconds(5)));
             }
             finally
@@ -340,7 +340,7 @@ public sealed class XboxOneAuthorizedRegistrationTests
                 await producer.WaitAsync(TimeSpan.FromSeconds(5));
             }
         }
-        IOException failure = await Assert.ThrowsExceptionAsync<IOException>(async () =>
+        IOException failure = await Assert.ThrowsExactlyAsync<IOException>(async () =>
             await removal.WaitAsync(TimeSpan.FromSeconds(5)));
         Assert.IsFalse(failure.ToString().Contains(Token));
         Assert.IsFalse(listener.Pending());

@@ -15,6 +15,12 @@
   <ItemGroup>
     <Compile Include="..\..\DS4Windows\DS4Control\Switch2\Switch2UsbCommandCodec.cs"
              Link="Linked\Switch2UsbCommandCodec.cs" />
+    <Compile Include="..\..\DS4Windows\DS4Control\Switch2\Switch2InputCodec.cs"
+             Link="Linked\Switch2InputCodec.cs" />
+    <Compile Include="..\..\DS4Windows\DS4Control\Switch2\Switch2ProtocolTypes.cs"
+             Link="Linked\Switch2ProtocolTypes.cs" />
+    <Compile Include="..\..\DS4Windows\DS4Control\Switch2\Switch2CalibrationCodec.cs"
+             Link="Linked\Switch2CalibrationCodec.cs" />
     <Compile Include="..\..\DS4Windows\DS4Control\Switch2\Switch2HdRumbleCodec.cs"
              Link="Linked\Switch2HdRumbleCodec.cs" />
   </ItemGroup>

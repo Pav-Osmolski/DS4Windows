@@ -50,12 +50,12 @@ public sealed class LegacyJoyConPairStoreTests
         File.WriteAllText(path, "not json");
         var store = new LegacyJoyConPairStore(path);
         Assert.AreEqual(0, store.Pairs.Count);
-        Assert.ThrowsException<InvalidDataException>(() => store.Remember("L", "R", true));
+        Assert.ThrowsExactly<InvalidDataException>(() => store.Remember("L", "R", true));
         store.Forget("L", "R");
         Assert.AreEqual("not json", File.ReadAllText(path));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("null")]
     [DataRow("[null]")]
     [DataRow("[{\"Left\":\"L\",\"Right\":\"L\",\"PreferLeft\":true}]")]
@@ -65,7 +65,7 @@ public sealed class LegacyJoyConPairStoreTests
         File.WriteAllText(path, contents);
         var store = new LegacyJoyConPairStore(path);
         Assert.AreEqual(0, store.Pairs.Count);
-        Assert.ThrowsException<InvalidDataException>(() => store.Remember("L", "R", true));
+        Assert.ThrowsExactly<InvalidDataException>(() => store.Remember("L", "R", true));
         Assert.AreEqual(contents, File.ReadAllText(path));
     }
 
@@ -88,7 +88,7 @@ public sealed class LegacyJoyConPairStoreTests
         string blockedDirectory = Path.Combine(folder, "not-a-directory");
         File.WriteAllText(blockedDirectory, "keep");
         var store = new LegacyJoyConPairStore(Path.Combine(blockedDirectory, "pairs.json"));
-        Assert.ThrowsException<IOException>(() => store.Remember("L", "R", true));
+        Assert.ThrowsExactly<IOException>(() => store.Remember("L", "R", true));
         store.Forget("L", "R");
         Assert.AreEqual(0, store.Pairs.Count);
         Assert.AreEqual("keep", File.ReadAllText(blockedDirectory));

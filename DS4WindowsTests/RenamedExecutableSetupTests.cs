@@ -30,7 +30,7 @@ public class RenamedExecutableSetupTests
     [TestCleanup]
     public void Cleanup() => Directory.Delete(root, recursive: true);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DS4Windows.exe")]
     [DataRow("My Controller.exe")]
     public void StagesTheExactAdjacentHostUnderCanonicalPackageName(string hostName)
@@ -44,7 +44,7 @@ public class RenamedExecutableSetupTests
             File.ReadAllLines(Path.Combine(staged, ".ds4windows-managed-files.txt")));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void UpdatedCustomOwnershipStagesOnlyExactHostWithoutRestoringLiveDefault(bool unrelatedCanonicalExists)
@@ -75,7 +75,7 @@ public class RenamedExecutableSetupTests
         File.WriteAllText(Path.Combine(package, "Other.exe"), "unrelated apphost");
         File.WriteAllText(Path.Combine(package, ".ds4windows-managed-files.txt"),
             "Other.exe\nDS4Windows.runtimeconfig.json\nDS4Windows.deps.json\n");
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             ViiperSetupManager.StageInstallerPackageFiles(extras, setup, host));
         Assert.IsFalse(File.Exists(Path.Combine(setup, "package", "DS4Windows.exe")));
     }
@@ -97,7 +97,7 @@ public class RenamedExecutableSetupTests
         string executable = Path.Combine(package, "DS4Windows.exe");
         File.WriteAllText(executable, "apphost");
         File.Delete(Path.Combine(package, "DS4Windows.deps.json"));
-        Assert.ThrowsException<FileNotFoundException>(() => ExecutableAliasFiles.Create(executable, "Alias"));
+        Assert.ThrowsExactly<FileNotFoundException>(() => ExecutableAliasFiles.Create(executable, "Alias"));
         Assert.IsFalse(File.Exists(Path.Combine(package, "Alias.exe")));
         Assert.IsFalse(File.Exists(Path.Combine(package, "Alias.runtimeconfig.json")));
     }
@@ -119,7 +119,7 @@ public class RenamedExecutableSetupTests
         string host = Path.Combine(package, "Alias.exe");
         File.WriteAllText(host, "apphost");
         File.AppendAllText(Path.Combine(package, ".ds4windows-managed-files.txt"), "DS4Windows.dll\n");
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             ViiperSetupManager.StageInstallerPackageFiles(extras, setup, host));
         Assert.IsFalse(File.Exists(Path.Combine(setup, "package", "DS4Windows.dll")));
     }
@@ -129,12 +129,12 @@ public class RenamedExecutableSetupTests
     {
         string host = Path.Combine(root, "Alias.exe");
         File.WriteAllText(host, "unrelated host");
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             ViiperSetupManager.StageInstallerPackageFiles(extras, setup, host));
         Assert.IsFalse(Directory.Exists(Path.Combine(setup, "package")));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("../escaped.exe")]
     [DataRow("DS4Windows.exe\nDS4Windows.exe")]
     [DataRow("C:/escaped.exe")]
@@ -143,11 +143,11 @@ public class RenamedExecutableSetupTests
         string host = Path.Combine(package, "Alias.exe");
         File.WriteAllText(host, "apphost");
         File.WriteAllText(Path.Combine(package, ".ds4windows-managed-files.txt"), entries);
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             ViiperSetupManager.StageInstallerPackageFiles(extras, setup, host));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("../escape")]
     [DataRow("C:\\escape")]
     [DataRow("safe:stream")]
@@ -163,7 +163,7 @@ public class RenamedExecutableSetupTests
         string executable = Path.Combine(package, "DS4Windows.exe");
         File.WriteAllText(executable, "apphost");
         string[] before = Directory.GetFiles(package);
-        Assert.ThrowsException<ArgumentException>(() => ExecutableAliasFiles.Create(executable, name));
+        Assert.ThrowsExactly<ArgumentException>(() => ExecutableAliasFiles.Create(executable, name));
         CollectionAssert.AreEquivalent(before, Directory.GetFiles(package));
     }
 
@@ -174,7 +174,7 @@ public class RenamedExecutableSetupTests
         File.WriteAllText(executable, "apphost");
         string collision = Path.Combine(package, "Alias.exe");
         File.WriteAllText(collision, "user-owned file");
-        Assert.ThrowsException<IOException>(() => ExecutableAliasFiles.Create(executable, "Alias"));
+        Assert.ThrowsExactly<IOException>(() => ExecutableAliasFiles.Create(executable, "Alias"));
         Assert.AreEqual("user-owned file", File.ReadAllText(collision));
         Assert.IsFalse(File.Exists(Path.Combine(package, "Alias.runtimeconfig.json")));
         Assert.IsFalse(File.Exists(Path.Combine(package, "Alias.deps.json")));

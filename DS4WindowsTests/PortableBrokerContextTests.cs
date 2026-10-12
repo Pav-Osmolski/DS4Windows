@@ -46,7 +46,7 @@ public class PortableBrokerContextTests
         Assert.IsFalse(Directory.Exists(Path.Combine(root, "portable-data")));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("")]
     [DataRow("DS4Windows portable package v2")]
     [DataRow(" DS4Windows portable package v1")]
@@ -54,7 +54,7 @@ public class PortableBrokerContextTests
     public void InvalidMarkerFailsClosed(string marker)
     {
         File.WriteAllText(Path.Combine(root, PortableBrokerContext.MarkerFileName), marker);
-        Assert.ThrowsException<PortableBrokerStartupException>(() => Open());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => Open());
         Assert.AreEqual(0, host.Starts);
     }
 
@@ -65,7 +65,7 @@ public class PortableBrokerContextTests
         Assert.IsFalse(Directory.Exists(context.DataPath));
         Assert.IsTrue(context.IsVerifiedBackend(Path.Combine(root, "viiper.exe")));
         Assert.IsFalse(context.IsVerifiedBackend(Path.Combine(root, "elsewhere", "viiper.exe")));
-        Assert.ThrowsException<IOException>(() => File.WriteAllText(context.ViiperPath, "replace"));
+        Assert.ThrowsExactly<IOException>(() => File.WriteAllText(context.ViiperPath, "replace"));
         Assert.IsTrue(context.InspectOwnedProcess(out bool running, out _));
         Assert.IsFalse(running);
         context.Dispose();
@@ -78,12 +78,12 @@ public class PortableBrokerContextTests
     {
         File.WriteAllText(Path.Combine(root, "viiper.exe.sha256"), digest);
         digest = new string('0', 64);
-        Assert.ThrowsException<PortableBrokerStartupException>(() => Open());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => Open());
         Assert.IsFalse(Directory.Exists(Path.Combine(root, "portable-data")));
         File.WriteAllText(Path.Combine(root, "viiper.exe"), "failed validation released handle");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RegisteredManagedRootAndDescendantsPreserveInstalledMode(bool parent)
@@ -107,14 +107,14 @@ public class PortableBrokerContextTests
         Assert.IsFalse(Directory.Exists(Path.Combine(root, "portable-data")));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(".")]
     [DataRow(@"C:relative")]
     [DataRow(@"C:\")]
     [DataRow(@"\\server\share\DS4Windows")]
     public void InvalidRegisteredPathCannotAuthorizeManagedBypass(string managed)
     {
-        Assert.ThrowsException<PortableBrokerStartupException>(() => Open(() => new[] { managed }));
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => Open(() => new[] { managed }));
         Assert.AreEqual(0, host.Starts);
     }
 
@@ -132,10 +132,10 @@ public class PortableBrokerContextTests
         foreach (string path in new[] { ".", @"C:relative", @"\\server\share\portable", Path.GetPathRoot(root),
                      Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                      Environment.GetFolderPath(Environment.SpecialFolder.Windows) })
-            Assert.ThrowsException<ArgumentException>(() => PortableBrokerContext.ValidateRoot(path));
+            Assert.ThrowsExactly<ArgumentException>(() => PortableBrokerContext.ValidateRoot(path));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DS4Windows.portable")]
     [DataRow("viiper.exe")]
     [DataRow("portable-data/VIIPER")]
@@ -144,14 +144,14 @@ public class PortableBrokerContextTests
     public void EverySelectedPathMustPassReparseInspection(string relative)
     {
         string rejected = Path.GetFullPath(Path.Combine(root, relative));
-        Assert.ThrowsException<PortableBrokerStartupException>(() => Open(pathCheck: path =>
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => Open(pathCheck: path =>
         {
             if (path == rejected) throw new IOException("Injected link rejection.");
         }));
         Assert.AreEqual(0, host.Starts);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("foreign")]
     [DataRow("unreadable")]
     [DataRow("multiple")]
@@ -164,7 +164,7 @@ public class PortableBrokerContextTests
             host.Peers.Add(new(71, 72, mode == "unreadable" ? null : Path.Combine(root, "other", "viiper.exe")));
             if (mode == "multiple") host.Peers.Add(new(73, 74, host.ImagePath));
         }
-        Assert.ThrowsException<PortableBrokerStartupException>(() => Open());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => Open());
         Assert.AreEqual(0, host.Starts);
         Assert.AreEqual(0, host.Child.StopCalls);
     }
@@ -195,8 +195,8 @@ public class PortableBrokerContextTests
             Assert.AreEqual("{}", File.ReadAllText(context.ConfigPath));
             using (var ordinaryReader = new FileStream(context.ConfigPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 Assert.AreEqual((int)'{', ordinaryReader.ReadByte());
-            Assert.ThrowsException<IOException>(() => File.WriteAllText(context.ConfigPath, "replacement"));
-            Assert.ThrowsException<IOException>(() => File.Delete(context.ConfigPath));
+            Assert.ThrowsExactly<IOException>(() => File.WriteAllText(context.ConfigPath, "replacement"));
+            Assert.ThrowsExactly<IOException>(() => File.Delete(context.ConfigPath));
             Assert.IsFalse(File.Exists(context.KeyPath), "Only VIIPER creates the real key; this fake host never runs VIIPER.");
             context.Start();
             Assert.AreEqual(1, host.Starts);
@@ -212,7 +212,7 @@ public class PortableBrokerContextTests
         Open();
         Directory.CreateDirectory(context.DataPath);
         File.WriteAllText(context.ConfigPath, "{\"log.file\":\"elsewhere\"}");
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.AreEqual("{\"log.file\":\"elsewhere\"}", File.ReadAllText(context.ConfigPath));
         Assert.AreEqual(0, host.Starts);
     }
@@ -223,7 +223,7 @@ public class PortableBrokerContextTests
         Open();
         Directory.CreateDirectory(context.DataPath);
         File.WriteAllText(context.ConfigPath, "");
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.AreEqual(0L, new FileInfo(context.ConfigPath).Length);
         Assert.AreEqual(0, host.Starts);
     }
@@ -239,7 +239,7 @@ public class PortableBrokerContextTests
             if (path == configPath && ++configInspections == 4)
                 File.WriteAllText(configPath, "{\"changed\":true}");
         });
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.AreEqual("{\"changed\":true}", File.ReadAllText(configPath));
         Assert.AreEqual(0, host.Starts);
     }
@@ -249,7 +249,7 @@ public class PortableBrokerContextTests
     {
         Open();
         host.Peers.Add(new(99, 100, Path.Combine(root, "other", "viiper.exe")));
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.AreEqual(0, host.Starts);
         Assert.AreEqual(0, host.Child.StopCalls);
     }
@@ -259,7 +259,7 @@ public class PortableBrokerContextTests
     {
         Open();
         host.AfterStart = () => host.Peers.Add(new(99, 100, Path.Combine(root, "other", "viiper.exe")));
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.AreEqual(1, host.Child.StopCalls);
         Assert.AreEqual(1, host.Peers.Count);
         Assert.AreEqual(99, host.Peers[0].ProcessId);
@@ -270,12 +270,12 @@ public class PortableBrokerContextTests
     {
         Open();
         host.StartFailure = true;
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.AreEqual(1, host.Starts);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(70, "could not be found")]
     [DataRow(71, "does not match")]
     [DataRow(72, "timed out")]
@@ -292,7 +292,7 @@ public class PortableBrokerContextTests
             host.Child.StartupExitCode = code;
             host.Peers.Clear();
         };
-        var failure = Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        var failure = Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         StringAssert.Contains(failure.Message, expected);
         Assert.AreEqual(0, host.Child.StopCalls, "An exited process needs no termination.");
         Assert.AreEqual(1, host.Child.DisposeCalls);
@@ -345,7 +345,7 @@ public class PortableBrokerContextTests
         Assert.IsTrue(restarted, "A failed attempt must not require a machine reboot to recreate its owner.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void CleanupTerminatesOnlyTheStillIdenticalOwnedChild(bool sameIdentity)
@@ -385,7 +385,7 @@ public class PortableBrokerContextTests
         Assert.AreEqual(1, host.Peers.Count);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("key")]
     [DataRow("config-only")]
     [DataRow("authority")]
@@ -399,7 +399,7 @@ public class PortableBrokerContextTests
         if (change == "authority") host.Arguments = host.Arguments.Where(value => !value.StartsWith("--usb.retained-import-authority-id=")).ToArray();
         if (change == "unreadable") host.ArgumentFailure = true;
         if (change == "pid-reused") host.AfterReadArguments = () => host.Peers[0] = host.Peers[0] with { StartTimeUtcTicks = 999 };
-        Assert.ThrowsException<PortableBrokerStartupException>(() => context.Start());
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.AreEqual(0, host.Starts);
         Assert.AreEqual(0, host.Child.StopCalls);
         Assert.AreEqual(1, host.Peers.Count);

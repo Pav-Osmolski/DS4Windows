@@ -78,7 +78,7 @@ public class DSXControllerAdmissionTests
         var admission = new DSXControllerAdmission<Device>(owner, slots.Length);
         Assert.IsTrue(admission.Begin(owner, slots, (_, _) => true));
 
-        Assert.ThrowsException<InvalidOperationException>(() => admission.Begin(owner, slots,
+        Assert.ThrowsExactly<InvalidOperationException>(() => admission.Begin(owner, slots,
             (index, _) => index == 0 ? true : throw new InvalidOperationException("test capture failure")));
 
         Assert.IsFalse(admission.TryGet(owner, 0, slots, out _));

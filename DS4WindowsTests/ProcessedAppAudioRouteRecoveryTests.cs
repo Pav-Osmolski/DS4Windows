@@ -33,7 +33,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void ActualSnapshotDoesNotTurnCurrentQueryFailureIntoRelocation(bool failIdentity)
@@ -98,7 +98,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
         Assert.AreEqual(1, selected.DisposeCount);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RouteQueryDoesNotDisposeTheEndpointsBorrowedSessionManager(bool exclusiveQuery)
@@ -118,7 +118,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
         {
             if (exclusiveQuery)
             {
-                var exception = Assert.ThrowsException<TargetInvocationException>(() =>
+                var exception = Assert.ThrowsExactly<TargetInvocationException>(() =>
                     typeof(ProcessedAppAudioRouteResolver).GetMethod("TryGetExclusiveTargetPeak",
                         BindingFlags.Static | BindingFlags.NonPublic).Invoke(null,
                         new object[] { endpoint, Environment.ProcessId, 0.0f }));
@@ -126,7 +126,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
             }
             else
             {
-                Assert.ThrowsException<NullReferenceException>(() =>
+                Assert.ThrowsExactly<NullReferenceException>(() =>
                     ProcessedAppAudioRouteResolver.IsTargetRouteAudiblyActive(endpoint, Environment.ProcessId));
             }
             Assert.AreSame(manager, endpoint.AudioSessionManager);
@@ -138,7 +138,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
         Assert.IsNull(manager.Sessions, "The endpoint owner remains responsible for terminal manager disposal.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void SameSonarEndpointNeverBecomesRelocationEvidence(bool currentAudible)
@@ -166,7 +166,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
             recovery.Observe("sonar-gaming", moved, 100 + Threshold, 100 + Threshold));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("unknown")]
     [DataRow("silence")]
     [DataRow("current-route")]
@@ -192,7 +192,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
             recovery.Observe("sonar-gaming", moved, 100 + Threshold * 3, 100 + Threshold * 3));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, true, true)]
     [DataRow(true, false, false)]
     [DataRow(false, true, false)]
@@ -206,7 +206,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
             recovery.Observe("sonar-gaming", observation, 100, 100 + Threshold));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true)]
     [DataRow(false)]
     public void PositivelyObservedUnrelatedApplicationRetiresEndpointMix(bool known)
@@ -228,7 +228,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
             "sonar-chat", expected, WaveFormat.CreateIeeeFloatWaveFormat(48000, 2)));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("same", true)]
     [DataRow("subformat", false)]
     [DataRow("channel-mask", false)]
@@ -262,7 +262,7 @@ public sealed class ProcessedAppAudioRouteRecoveryTests
             "A format-incompatible lease must not reuse a registered capture with the same coarse format fields.");
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("sample-rate")]
     [DataRow("channels")]
     [DataRow("encoding")]

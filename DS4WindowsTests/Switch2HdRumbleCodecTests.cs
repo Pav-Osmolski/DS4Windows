@@ -106,13 +106,13 @@ public class Switch2HdRumbleCodecTests
                 out _));
         }
 
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2HdRumbleSubframe(0x400, 0, 0, 0));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2HdRumbleSubframe(0, 0x400, 0, 0));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2HdRumbleSubframe(0, 0, 0x400, 0));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2HdRumbleSubframe(0, 0, 0, 0x400));
     }
 

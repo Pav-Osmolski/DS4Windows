@@ -11,7 +11,7 @@ public class XboxOneProcessInteropTests
 {
     public TestContext TestContext { get; set; }
 
-    [DataTestMethod]
+    [TestMethod]
     [TestCategory("PortableProcessInterop")]
     [DataRow("active")]
     [DataRow("cancel")]
@@ -94,7 +94,7 @@ public class XboxOneProcessInteropTests
             else if (mode == "deadline")
             {
                 XboxOneManagementException rejected =
-                    await Assert.ThrowsExceptionAsync<XboxOneManagementException>(async () =>
+                    await Assert.ThrowsExactlyAsync<XboxOneManagementException>(async () =>
                     await activation.WaitAsync(TimeSpan.FromSeconds(10)));
                 Assert.AreEqual(XboxOneManagementOperation.ActivatePersona, rejected.Operation);
                 Assert.AreEqual(409, rejected.Status,
@@ -144,7 +144,7 @@ public class XboxOneProcessInteropTests
             }
             if (mode == "cancel")
             {
-                await Assert.ThrowsExceptionAsync<IOException>(async () =>
+                await Assert.ThrowsExactlyAsync<IOException>(async () =>
                     await activation.WaitAsync(TimeSpan.FromSeconds(2)));
                 Assert.AreEqual(-1, stream.UsbipPort);
             }

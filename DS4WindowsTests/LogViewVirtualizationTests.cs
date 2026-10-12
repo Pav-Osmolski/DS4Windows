@@ -16,7 +16,7 @@ public sealed class LogViewVirtualizationTests
 {
     public TestContext TestContext { get; set; }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DarkTheme", 1000)]
     [DataRow("DarkTheme", 2000)]
     [DataRow("DefaultTheme", 1000)]

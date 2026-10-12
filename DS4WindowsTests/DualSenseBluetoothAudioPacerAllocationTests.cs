@@ -128,7 +128,7 @@ namespace DS4Windows.Tests
 
             lock (stateLock)
             {
-                Assert.ThrowsException<InvalidOperationException>(() =>
+                Assert.ThrowsExactly<InvalidOperationException>(() =>
                     boundary.TryWrite(writer, report, out _),
                     "The runtime boundary must reject lock-held HID I/O.");
             }

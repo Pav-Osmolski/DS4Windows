@@ -15,28 +15,28 @@ public class Switch2ProUsbHdRumblePhysicalWriterTests
     [TestMethod]
     public void ConstructorRequiresExactProModelAndLifetime()
     {
-        Assert.ThrowsException<ArgumentNullException>(() =>
+        Assert.ThrowsExactly<ArgumentNullException>(() =>
             new Switch2ProUsbHdRumblePhysicalWriter(null,
                 DeviceGeneration, TransportGeneration));
 
         RecordingLease lease = new(DeviceGeneration, TransportGeneration);
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2ProUsbHdRumblePhysicalWriter(lease, 0,
                 TransportGeneration));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2ProUsbHdRumblePhysicalWriter(lease,
                 DeviceGeneration, 0));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2ProUsbHdRumblePhysicalWriter(lease,
                 DeviceGeneration, TransportGeneration, initialCounter: 16));
 
         lease.Authenticated = false;
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2ProUsbHdRumblePhysicalWriter(lease,
                 DeviceGeneration, TransportGeneration));
         lease.Authenticated = true;
         lease.ThrowAuthentication = true;
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2ProUsbHdRumblePhysicalWriter(lease,
                 DeviceGeneration, TransportGeneration));
 
@@ -46,7 +46,7 @@ public class Switch2ProUsbHdRumblePhysicalWriterTests
             ExpectedAuthenticationModel =
                 Switch2ControllerModel.JoyCon2Left,
         };
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             new Switch2ProUsbHdRumblePhysicalWriter(joyConLease,
                 DeviceGeneration, TransportGeneration));
     }

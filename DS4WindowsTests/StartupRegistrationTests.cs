@@ -14,7 +14,7 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public class StartupRegistrationTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, false, false, false)]
     [DataRow(true, true, true, true, false)]
     [DataRow(true, true, true, false, true)]
@@ -36,7 +36,7 @@ public class StartupRegistrationTests
             matchesCurrentConfiguration: false, requested: false));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PassiveRepairCannotBypassDeferredSetupEvenWhenStartupIsRequested(
@@ -66,13 +66,13 @@ public class StartupRegistrationTests
     {
         WithShortcut(path =>
         {
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 StartupRegistrationPolicy.RemoveShortcut(path, _ => false));
             Assert.IsTrue(File.Exists(path));
         });
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("DS4Windows managed startup task v1", true, true, false, true)]
     [DataRow("DS4Windows managed startup task v1", false, true, true, false)]
     [DataRow("DS4Windows managed startup task v1", true, false, true, false)]
@@ -87,7 +87,7 @@ public class StartupRegistrationTests
             description, currentUser, contract, legacyProduct));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, "S-1-5-21-123", "S-1-5-21-123", true)]
     [DataRow(false, "S-1-5-21-123", "S-1-5-21-123", false)]
     [DataRow(true, "S-1-5-21-123", "S-1-5-21-456", false)]
@@ -112,7 +112,7 @@ public class StartupRegistrationTests
         Assert.AreEqual(0, access.Refreshes);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(true, null, null, "", true, false)]
     [DataRow(false, null, null, "", false, false)]
     [DataRow(false, null, true, "RestartRequired", true, true)]
@@ -239,14 +239,14 @@ public class StartupRegistrationTests
     [TestMethod]
     public void LegacySchedulerReadFailureCannotBecomeAnInstallerOptOut()
     {
-        IOException error = Assert.ThrowsException<IOException>(() =>
+        IOException error = Assert.ThrowsExactly<IOException>(() =>
             StartupRegistrationPolicy.ResolveRequestedStartup(null,
                 () => new(false, false, ReadError: "Scheduler unavailable")));
         StringAssert.Contains(error.InnerException.Message, "Scheduler unavailable");
         Assert.IsFalse(error.Message.Contains("Scheduler unavailable", StringComparison.Ordinal));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void RecordedPreferenceDoesNotDependOnTaskSchedulerAvailability(bool requested)
@@ -275,7 +275,7 @@ public class StartupRegistrationTests
         Assert.AreEqual(0, access.Changes);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("RepairRequired")]
     [DataRow("UnrecognizedSetupState")]
     [DataRow("")]
@@ -311,7 +311,7 @@ public class StartupRegistrationTests
         Assert.AreEqual(0, access.Changes);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, true, "RebootPending")]
     [DataRow(true, false, true, "RebootPending")]
     [DataRow(null, true, true, "RebootPending")]
@@ -370,7 +370,7 @@ public class StartupRegistrationTests
         Assert.IsTrue(access.CreateView().RunAtStartup);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void DeniedOrCanceledTaskRemovalKeepsTheVerifiedSetting(bool canceled)

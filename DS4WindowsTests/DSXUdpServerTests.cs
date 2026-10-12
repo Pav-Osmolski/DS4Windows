@@ -34,14 +34,14 @@ public sealed class DSXUdpServerTests
         yield return new object[] { 26, new byte[] { 10, 8, 8, 8, 8, 8, 0, 0, 0, 8, 8 }, "261F03FF7F003F00000A00" };
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DynamicData(nameof(GoldenVectors), DynamicDataSourceType.Method)]
     public void VerifiedTriggerModesMatchAllElevenGoldenBytes(int mode, byte[] parameters, string expected)
     {
         CollectionAssert.AreEqual(Convert.FromHexString(expected), DSXUdpServer.EncodeTriggerPayload(mode, parameters));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(13, "[0,0]")]
     [DataRow(16, "[2,7,0]")]
     [DataRow(14, "[1,7,0,4]")]
@@ -59,7 +59,7 @@ public sealed class DSXUdpServerTests
         CollectionAssert.AreEqual(Convert.FromHexString("0500000000000000000000"), bytes);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(21, "[]")]
     [DataRow(21, "[2]")]
     [DataRow(21, "[2,6,9]")]
@@ -101,7 +101,7 @@ public sealed class DSXUdpServerTests
         Assert.AreEqual(TriggerId.RightTrigger, commands[1].Trigger);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, 0x04)]
     [DataRow(1, 0x0A)]
     [DataRow(2, 0x15)]
@@ -146,7 +146,7 @@ public sealed class DSXUdpServerTests
         Assert.IsFalse(DSXUdpServer.TryParsePacket(Packet("{\"type\":0}"), out _));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("{}")]
     [DataRow("{\"type\":7}")]
     [DataRow("{\"type\":7,\"parameters\":[]}")]
@@ -232,7 +232,7 @@ public sealed class DSXUdpServerTests
         Assert.IsFalse(budget.TryTake(0)); // A backward timestamp cannot replenish tokens.
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0, "127.0.0.1", false)]
     [DataRow(-1, "127.0.0.1", false)]
     [DataRow(65536, "127.0.0.1", false)]

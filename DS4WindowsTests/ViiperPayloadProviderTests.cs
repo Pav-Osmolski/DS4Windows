@@ -28,18 +28,18 @@ public class ViiperPayloadProviderTests
             CollectionAssert.AreEqual(Payload, File.ReadAllBytes(acquired.Path));
             File.WriteAllText(fixture.Local, "Changed source after verification");
             CollectionAssert.AreEqual(Payload, File.ReadAllBytes(acquired.Path));
-            Assert.ThrowsException<IOException>(() =>
+            Assert.ThrowsExactly<IOException>(() =>
             {
                 using var denied = File.Open(acquired.Path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite);
             });
-            Assert.ThrowsException<IOException>(() => File.Delete(acquired.Path));
+            Assert.ThrowsExactly<IOException>(() => File.Delete(acquired.Path));
         }
         lease.Result.Dispose();
         fixture.AssertClean();
         Assert.AreEqual("Changed source after verification", File.ReadAllText(fixture.Local));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task MissingOrInvalidLocalUsesOnlyPinnedOfficialUrl(bool corruptLocal)
@@ -67,11 +67,11 @@ public class ViiperPayloadProviderTests
     {
         using var fixture = new Fixture();
         using var client = Client((_, _) => Task.FromResult(Ok(new byte[] { 1, 2, 3 })));
-        await Assert.ThrowsExceptionAsync<InvalidDataException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
+        await Assert.ThrowsExactlyAsync<InvalidDataException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
         fixture.AssertClean();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(0L)]
     [DataRow(252L)]
     public async Task DeclaredInvalidSizeIsRejectedBeforeBodyRead(long size)
@@ -84,13 +84,13 @@ public class ViiperPayloadProviderTests
             response.Content.Headers.ContentLength = size;
             return Task.FromResult(response);
         });
-        await Assert.ThrowsExceptionAsync<InvalidDataException>(() =>
+        await Assert.ThrowsExactlyAsync<InvalidDataException>(() =>
             fixture.Provider(client, Payload.Length).AcquireAsync(fixture.Package));
         Assert.AreEqual(0, stream.ReadCalls);
         fixture.AssertClean();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(250)]
     [DataRow(252)]
     public async Task DeclaredLengthMustExactlyMatchActualStream(int declaredLength)
@@ -102,7 +102,7 @@ public class ViiperPayloadProviderTests
             response.Content.Headers.ContentLength = declaredLength;
             return Task.FromResult(response);
         });
-        await Assert.ThrowsExceptionAsync<InvalidDataException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
+        await Assert.ThrowsExactlyAsync<InvalidDataException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
         fixture.AssertClean();
     }
 
@@ -114,7 +114,7 @@ public class ViiperPayloadProviderTests
         {
             Content = new StreamContent(new NonSeekableStream(Payload))
         }));
-        await Assert.ThrowsExceptionAsync<InvalidDataException>(() =>
+        await Assert.ThrowsExactlyAsync<InvalidDataException>(() =>
             fixture.Provider(client, Payload.Length - 1).AcquireAsync(fixture.Package));
         fixture.AssertClean();
     }
@@ -126,7 +126,7 @@ public class ViiperPayloadProviderTests
         using var client = Client((_, _) => throw new AssertFailedException("Cancelled request reached HTTP."));
         using var cancel = new CancellationTokenSource();
         cancel.Cancel();
-        await Assert.ThrowsExceptionAsync<OperationCanceledException>(() =>
+        await Assert.ThrowsExactlyAsync<OperationCanceledException>(() =>
             fixture.Provider(client).AcquireAsync(fixture.Package, cancel.Token));
         fixture.AssertClean();
     }
@@ -147,7 +147,7 @@ public class ViiperPayloadProviderTests
         fixture.AssertClean();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public async Task AcquisitionDeadlineCoversHeadersAndBody(bool body)
@@ -181,7 +181,7 @@ public class ViiperPayloadProviderTests
         fixture.AssertClean();
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("http://github.com/unsafe")]
     [DataRow("https://evil.example/payload")]
     [DataRow("https://github.com.evil.example/payload")]
@@ -192,7 +192,7 @@ public class ViiperPayloadProviderTests
         using var fixture = new Fixture();
         int count = 0;
         using var client = Client((_, _) => { count++; return Task.FromResult(Redirect(location)); });
-        await Assert.ThrowsExceptionAsync<InvalidDataException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
+        await Assert.ThrowsExactlyAsync<InvalidDataException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
         Assert.AreEqual(1, count);
         fixture.AssertClean();
     }
@@ -203,7 +203,7 @@ public class ViiperPayloadProviderTests
         using var fixture = new Fixture();
         int count = 0;
         using var client = Client((_, _) => { count++; return Task.FromResult(Redirect("https://github.com/cycle")); });
-        await Assert.ThrowsExceptionAsync<HttpRequestException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
+        await Assert.ThrowsExactlyAsync<HttpRequestException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
         Assert.AreEqual(5, count);
         fixture.AssertClean();
     }
@@ -213,7 +213,7 @@ public class ViiperPayloadProviderTests
     {
         using var fixture = new Fixture();
         using var client = Client((_, _) => Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound)));
-        await Assert.ThrowsExceptionAsync<HttpRequestException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
+        await Assert.ThrowsExactlyAsync<HttpRequestException>(() => fixture.Provider(client).AcquireAsync(fixture.Package));
         fixture.AssertClean();
     }
 
@@ -233,12 +233,12 @@ public class ViiperPayloadProviderTests
     {
         using var fixture = new Fixture();
         using var client = Client((_, _) => throw new AssertFailedException());
-        Assert.ThrowsException<ArgumentException>(() => new ViiperPayloadProvider(client, fixture.Staging, "../" + Name, Tag, Hash));
-        Assert.ThrowsException<ArgumentException>(() => new ViiperPayloadProvider(client, fixture.Staging, Name, "vother", Hash));
-        Assert.ThrowsException<ArgumentException>(() => new ViiperPayloadProvider(client, fixture.Staging, Name, Tag, "short"));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => fixture.Provider(client, ViiperPayloadProvider.MaximumPayloadBytes + 1));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => fixture.Provider(client, timeout: TimeSpan.FromMinutes(1)));
-        Assert.ThrowsException<ArgumentException>(() => new ViiperPayloadProvider(client, "relative", Name, Tag, Hash));
+        Assert.ThrowsExactly<ArgumentException>(() => new ViiperPayloadProvider(client, fixture.Staging, "../" + Name, Tag, Hash));
+        Assert.ThrowsExactly<ArgumentException>(() => new ViiperPayloadProvider(client, fixture.Staging, Name, "vother", Hash));
+        Assert.ThrowsExactly<ArgumentException>(() => new ViiperPayloadProvider(client, fixture.Staging, Name, Tag, "short"));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => fixture.Provider(client, ViiperPayloadProvider.MaximumPayloadBytes + 1));
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => fixture.Provider(client, timeout: TimeSpan.FromMinutes(1)));
+        Assert.ThrowsExactly<ArgumentException>(() => new ViiperPayloadProvider(client, "relative", Name, Tag, Hash));
     }
 
     [TestMethod]
@@ -247,7 +247,7 @@ public class ViiperPayloadProviderTests
         int disposed = 0, cleaned = 0;
         var lease = new ViiperPayloadLease("test", new CallbackDisposable(() =>
         { disposed++; throw new IOException("fixture"); }), () => cleaned++);
-        Assert.ThrowsException<IOException>(() => lease.Dispose());
+        Assert.ThrowsExactly<IOException>(() => lease.Dispose());
         lease.Dispose();
         Assert.AreEqual(1, disposed);
         Assert.AreEqual(1, cleaned);

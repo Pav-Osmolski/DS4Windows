@@ -179,7 +179,7 @@ public sealed class PostMapStickConcurrentPublicationTests
         Assert.AreEqual((byte)128, state.RX);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, false, false)]
     [DataRow(false, false, true)]
     [DataRow(false, true, false)]

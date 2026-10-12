@@ -20,13 +20,13 @@ public class Switch2BluetoothLabPlanTests
         var second = Switch2BluetoothLabPlan.Parse(bytes, 5);
         Assert.AreEqual(first.Fingerprint(), second.Fingerprint());
         CollectionAssert.AreEqual(first.Packets[1].Payload, second.Packets[1].Payload);
-        Assert.ThrowsException<InvalidDataException>(() => Switch2BluetoothLabPlan.Parse(bytes, 6));
-        Assert.ThrowsException<JsonException>(() => Switch2BluetoothLabPlan.Parse("{\"TargetUuid\":\"anything\"}"u8, 5));
+        Assert.ThrowsExactly<InvalidDataException>(() => Switch2BluetoothLabPlan.Parse(bytes, 6));
+        Assert.ThrowsExactly<JsonException>(() => Switch2BluetoothLabPlan.Parse("{\"TargetUuid\":\"anything\"}"u8, 5));
         foreach (var invalid in new[] { Plan(), Plan(Packet(1)), Plan(Packet(size: 510)), Plan(Packet(), Packet(1000000)),
             Plan(Packet(), Packet(5000), Packet(4000)), Plan(Packet(size: 0)), Plan(Enumerable.Range(0, 5).Select(_ => Packet()).ToArray()),
             Plan(Enumerable.Range(0, 1025).Select(i => Packet(i * 500)).ToArray()),
             Plan(Enumerable.Range(0, 600).Select(i => Packet(i * 1000, 509)).ToArray()) })
-            Assert.ThrowsException<InvalidDataException>(() => invalid.Validate(509));
+            Assert.ThrowsExactly<InvalidDataException>(() => invalid.Validate(509));
     }
 
     [TestMethod]
@@ -34,12 +34,12 @@ public class Switch2BluetoothLabPlanTests
     {
         int calls = 0;
         Task<bool> Write(byte[] _) { calls++; return Task.FromResult(true); }
-        await Assert.ThrowsExceptionAsync<InvalidDataException>(() => Switch2BluetoothLabPacketSender.SendAsync(Plan(Packet(size: 50)), 49, Write, CancellationToken.None));
-        await Assert.ThrowsExceptionAsync<OperationCanceledException>(() => Switch2BluetoothLabPacketSender.SendAsync(Plan(Packet()), 509, Write, new CancellationToken(true)));
+        await Assert.ThrowsExactlyAsync<InvalidDataException>(() => Switch2BluetoothLabPacketSender.SendAsync(Plan(Packet(size: 50)), 49, Write, CancellationToken.None));
+        await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => Switch2BluetoothLabPacketSender.SendAsync(Plan(Packet()), 509, Write, new CancellationToken(true)));
         Assert.AreEqual(0, calls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(1)]
     [DataRow(2)]
     public async Task LateWriteRemainsOwnedAndCancellationIsReportedEvenOnFinalPacket(int count)
@@ -54,7 +54,7 @@ public class Switch2BluetoothLabPlanTests
         stopping.Cancel();
         Assert.IsFalse(send.IsCompleted);
         completed.SetResult(true);
-        await Assert.ThrowsExceptionAsync<OperationCanceledException>(() => send);
+        await Assert.ThrowsExactlyAsync<OperationCanceledException>(() => send);
         Assert.AreEqual(1, calls);
     }
 
@@ -63,7 +63,7 @@ public class Switch2BluetoothLabPlanTests
     {
         var plan = Plan(Packet(0, 1), Packet(0, 23), Packet(5000, 19));
         int calls = 0;
-        await Assert.ThrowsExceptionAsync<InvalidOperationException>(() => Switch2BluetoothLabPacketSender.SendAsync(plan, 509, bytes =>
+        await Assert.ThrowsExactlyAsync<InvalidOperationException>(() => Switch2BluetoothLabPacketSender.SendAsync(plan, 509, bytes =>
         {
             CollectionAssert.AreEqual(plan.Packets[calls].Payload, bytes);
             calls++;

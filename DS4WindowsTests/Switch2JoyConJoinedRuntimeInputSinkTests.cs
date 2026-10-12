@@ -145,7 +145,7 @@ public class Switch2JoyConJoinedRuntimeInputSinkTests
             timestamp: 101);
 
         sink.PublishJoyCon(Frame(left, counter: 1, timestamp: 100));
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.PublishJoyCon(exactRight));
 
         Assert.AreEqual(Switch2JoyConJoinedRuntimeSinkFailure.
@@ -332,15 +332,15 @@ public class Switch2JoyConJoinedRuntimeInputSinkTests
             out var runtime, out _, out _, out _);
         runtime.StartUpdate();
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.LoseJoyConHalf(Switch2StickSide.Left,
                 LeftDeviceGeneration + 1, LeftTransportGeneration,
                 Switch2BluetoothInputEndReason.Disconnected));
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.LoseJoyConHalf((Switch2StickSide)0,
                 LeftDeviceGeneration, LeftTransportGeneration,
                 Switch2BluetoothInputEndReason.Disconnected));
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.LoseJoyConHalf(Switch2StickSide.Left,
                 LeftDeviceGeneration, LeftTransportGeneration,
                 Switch2BluetoothInputEndReason.ActivationAborted));
@@ -420,16 +420,16 @@ public class Switch2JoyConJoinedRuntimeInputSinkTests
             Switch2ControllerModel.JoyCon2Left, LeftDeviceGeneration,
             LeftTransportGeneration + 1);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.PublishJoyCon(Frame(foreignLeft, counter: 1,
                 timestamp: 100)));
         Assert.AreEqual(Switch2JoyConJoinedRuntimeSinkFailure.
             CanonicalFrameMismatch, sink.LastFailure);
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.PublishPro(Frame(left, counter: 1, timestamp: 100)));
 
         runtime.StopUpdate();
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.PublishJoyCon(Frame(left, counter: 1, timestamp: 100)));
         Assert.AreEqual(Switch2JoyConJoinedRuntimeSinkFailure.LifecycleClosed,
             sink.LastFailure);

@@ -34,7 +34,7 @@ namespace DS4WindowsTests
                 selected, "5.0.0.0", true, installedReleaseTag: null));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("VIIPERRC4.6.7", "5.0.12.0")]
         [DataRow("VIIPERRC4.6.8", "5.0.13.0")]
         public void OldForkRcBuildCanMoveToNumericLatestRelease(string installedTag, string installedVersion)
@@ -137,7 +137,7 @@ namespace DS4WindowsTests
             Assert.AreEqual("VIIPERBeta7", selected.TagName);
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("VIIPERRC4.5", "VIIPERRC4.3", false)]
         [DataRow("VIIPERRC4.5", "VIIPERRC4.4", false)]
         [DataRow("VIIPERRC4.5", "VIIPERRC4.5", false)]
@@ -182,7 +182,7 @@ namespace DS4WindowsTests
                 selected, "5.0.5.0", true, installed));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("v5.0.4.0-beta1", false)]
         [DataRow("v5.0.5.0-beta1", false)]
         [DataRow("v5.0.6.0-rc1", true)]
@@ -214,7 +214,7 @@ namespace DS4WindowsTests
                 "5.0.5", false, "v5.0.5"));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("v5.0.6.0-rc1", "VIIPERRC4.3", false)]
         [DataRow("v5.0.6.0-rc1", "v5.0.5.0-rc9", false)]
         [DataRow("v5.0.6.0-rc1", "v5.0.6-rc2", false)]
@@ -233,7 +233,7 @@ namespace DS4WindowsTests
                 "5.0.6.0", true, installed));
         }
 
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("v5.0.6.0.0.0-rc1")]
         [DataRow("v5.0.6.0 broken")]
         public void NamedPrereleaseRejectsPartiallyParsedNumericCandidate(string candidate)

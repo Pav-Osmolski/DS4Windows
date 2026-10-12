@@ -8,7 +8,7 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class LegacyJoyConProfileUiActionsTests
 {
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(InputDeviceType.JoyConL, (int)JoyConView.SidewaysLeft)]
     [DataRow(InputDeviceType.JoyConR, (int)JoyConView.SidewaysRight)]
     [DataRow(InputDeviceType.JoyConGrip, (int)JoyConView.Pair)]

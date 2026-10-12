@@ -67,7 +67,7 @@ public class Switch2BluetoothRuntimeInputSinkTests
             runtime.RuntimeState);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left)]
     [DataRow(Switch2ControllerModel.JoyCon2Right)]
     public void StandaloneJoyConUsesExistingStatefulProfileRuntime(
@@ -196,13 +196,13 @@ public class Switch2BluetoothRuntimeInputSinkTests
         Switch2InputSessionDescriptor stale = Descriptor(
             Switch2ControllerModel.ProController2,
             deviceGeneration: DeviceGeneration + 1);
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.PublishPro(Frame(stale, counter: 1, timestamp: 10)));
         Assert.AreEqual(Switch2BluetoothRuntimeSinkFailure.
             CanonicalFrameMismatch, sink.LastFailure);
         Assert.AreEqual(0L, sink.PublishedCount);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.ClearPro(DeviceGeneration, TransportGeneration + 1,
                 Switch2BluetoothInputEndReason.Stopped));
         Assert.AreEqual(Switch2BluetoothRuntimeSinkFailure.
@@ -227,7 +227,7 @@ public class Switch2BluetoothRuntimeInputSinkTests
         sink.ClearPro(DeviceGeneration, TransportGeneration,
             Switch2BluetoothInputEndReason.Stopped);
 
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.PublishPro(Frame(descriptor, counter: 1, timestamp: 10)));
         Assert.AreEqual(Switch2BluetoothRuntimeSinkFailure.LifecycleClosed,
             sink.LastFailure);
@@ -252,7 +252,7 @@ public class Switch2BluetoothRuntimeInputSinkTests
             Switch2RuntimeTerminalScheduler.Instance, out var sink,
             out var terminalCredential, out _));
 
-        Assert.ThrowsException<InvalidOperationException>(() => sink.ClearPro(
+        Assert.ThrowsExactly<InvalidOperationException>(() => sink.ClearPro(
             DeviceGeneration, TransportGeneration,
             Switch2BluetoothInputEndReason.Disconnected));
         Assert.AreEqual(Switch2BluetoothRuntimeSinkFailure.LifecycleClosed,
@@ -263,11 +263,11 @@ public class Switch2BluetoothRuntimeInputSinkTests
 
         runtime.Report += (_, _) => { };
         runtime.StartUpdate();
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             sink.LoseJoyConHalf((Switch2StickSide)0, DeviceGeneration,
                 TransportGeneration,
                 Switch2BluetoothInputEndReason.Disconnected));
-        Assert.ThrowsException<InvalidOperationException>(() => sink.ClearPro(
+        Assert.ThrowsExactly<InvalidOperationException>(() => sink.ClearPro(
             DeviceGeneration, TransportGeneration,
             Switch2BluetoothInputEndReason.ActivationAborted));
         Assert.AreEqual(Switch2BluetoothRuntimeSinkFailure.
@@ -352,7 +352,7 @@ public class Switch2BluetoothRuntimeInputSinkTests
         Assert.IsTrue(entered.Wait(1_000));
         try
         {
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
                 sink.PublishPro(Frame(descriptor, counter: 2,
                     timestamp: 20)));
             Assert.AreEqual(Switch2BluetoothRuntimeSinkFailure.
@@ -379,7 +379,7 @@ public class Switch2BluetoothRuntimeInputSinkTests
         joyRuntime.StartUpdate();
         Switch2CanonicalInputFrame frame = Frame(joyDescriptor,
             counter: 1, timestamp: 10);
-        Assert.ThrowsException<InvalidOperationException>(() =>
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
             joySink.PublishJoyCon(frame));
         Assert.AreEqual(Switch2BluetoothRuntimeSinkFailure.
             RuntimeSubscriberRejected, joySink.LastFailure);

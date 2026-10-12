@@ -24,7 +24,7 @@ public sealed class StartupSetupRecoveryTests
         Assert.IsFalse(StartupSetupRecovery.IsOwnedLegacyShortcut("DS4Windows Setup Resume.lnk", executable, "/repair", directory, executable));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("boot-a", null, false)]
     [DataRow("boot-b", null, true)]
     [DataRow("boot-b", Id, false)]
@@ -62,13 +62,13 @@ public sealed class StartupSetupRecoveryTests
     public void ChangedExecutableDoesNotConsumeTheResumeAttempt()
     {
         bool marked = false, removed = false;
-        Assert.ThrowsException<IOException>(() => StartupSetupRecovery.Claim(Pending(), Id, Sid, "boot-b", null,
+        Assert.ThrowsExactly<IOException>(() => StartupSetupRecovery.Claim(Pending(), Id, Sid, "boot-b", null,
             false, () => throw new IOException("changed"), () => marked = true, () => removed = true));
         Assert.IsFalse(marked);
         Assert.IsFalse(removed);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void VerifiedCleanupFailureCannotSuppressRepairOrOverrideCancellation(bool canceled)
@@ -92,7 +92,7 @@ public sealed class StartupSetupRecoveryTests
         Assert.AreEqual(StartupSetupRecovery.ExpectedExecutable(Pending()), StartupSetupRecovery.ExpectedExecutable(second));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("embedded")]
     [DataRow("bundle")]
     public void ResumeTargetIsDerivedFromProtectedSnapshotAndCannotBeAnArbitraryExecutable(string kind)
@@ -104,10 +104,10 @@ public sealed class StartupSetupRecoveryTests
         Assert.IsTrue(expected.StartsWith(Path.Combine(StartupSetupRecovery.NativeProgramFiles, "DS4Windows.Setup") + "\\",
             StringComparison.OrdinalIgnoreCase));
         pending.Executable = Path.Combine(Path.GetTempPath(), "foreign.exe");
-        Assert.ThrowsException<InvalidDataException>(() => StartupSetupRecovery.Validate(pending));
+        Assert.ThrowsExactly<InvalidDataException>(() => StartupSetupRecovery.Validate(pending));
         pending.Executable = expected;
         pending.SnapshotId = "..\\escape";
-        Assert.ThrowsException<InvalidDataException>(() => StartupSetupRecovery.Validate(pending));
+        Assert.ThrowsExactly<InvalidDataException>(() => StartupSetupRecovery.Validate(pending));
     }
 
     private static StartupSetupResume Pending() => new()

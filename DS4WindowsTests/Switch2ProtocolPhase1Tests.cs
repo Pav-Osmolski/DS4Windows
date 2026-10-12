@@ -736,26 +736,26 @@ public class Switch2ProtocolPhase1Tests
     [TestMethod]
     public void FixtureMetadataRejectsLikelyIdentifiersAndUnredactedSources()
     {
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureSource.Synthetic("AA11BB22CC33"));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureSource.Synthetic(new string('A', 32)));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureSource.Synthetic("serial-number"));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureSource.Synthetic("fact-AA-BB-CC-DD-EE-FF"));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureSource.Synthetic(
                 "fact-00000000000000000000000000000000"));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureSource.SanitizedCapture(SanitizedCaptureId, "BAD", 1));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureSource.SanitizedCapture(SanitizedCaptureId,
                 new string('A', 64), 0));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureSource.DerivedGolden(
                 "fact-ce006a25b40d468e90570a6e811a54f6", 2));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureSource.DerivedGolden(
                 "golden-ce006a25b40d468e90570a6e811a54f6", 0));
 
@@ -767,17 +767,17 @@ public class Switch2ProtocolPhase1Tests
         Assert.AreEqual(string.Empty, derived.SourceSha256);
 
         var source = Switch2FixtureSource.Synthetic(SyntheticSourceId);
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureEnvelope.CreateUsb("stream-AA-BB-CC-DD-EE-FF",
                 source, Switch2ControllerModel.ProController2, "unknown", 1,
                 0, OpaqueClockId("test-qpc"), TimeSpan.TicksPerSecond, 1,
                 BuildUsbCommon(Switch2ControllerModel.ProController2, 1)));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureEnvelope.CreateUsb("stream-AABB.CCDD.EEFF",
                 source, Switch2ControllerModel.ProController2, "unknown", 1,
                 0, OpaqueClockId("test-qpc"), TimeSpan.TicksPerSecond, 1,
                 BuildUsbCommon(Switch2ControllerModel.ProController2, 1)));
-        Assert.ThrowsException<ArgumentException>(() =>
+        Assert.ThrowsExactly<ArgumentException>(() =>
             Switch2FixtureEnvelope.CreateUsb(OpaqueStreamId("pro"), source,
                 Switch2ControllerModel.ProController2,
                 "AA-BB-CC-DD-EE-FF", 1, 0, OpaqueClockId("test-qpc"),

@@ -101,7 +101,7 @@ public sealed class DS4StickFilterTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(500)]
     [DataRow(1000)]
     [DataRow(8000)]

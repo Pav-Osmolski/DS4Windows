@@ -51,7 +51,7 @@ public class Switch2BluetoothHdRumblePhysicalWriterTests
         Assert.AreEqual(submission.Right, right);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(Switch2ControllerModel.JoyCon2Left, true)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, false)]
     public void JoyConWritesOnlyItsPhysicalSide(
@@ -130,11 +130,11 @@ public class Switch2BluetoothHdRumblePhysicalWriterTests
     public void ConstructorAndSubmissionFailClosedAcrossLifetimes()
     {
         RecordingLease lease = new(Switch2ControllerModel.ProController2);
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2BluetoothHdRumblePhysicalWriter(lease,
                 Switch2ControllerModel.Unknown, DeviceGeneration,
                 TransportGeneration));
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+        Assert.ThrowsExactly<ArgumentOutOfRangeException>(() =>
             new Switch2BluetoothHdRumblePhysicalWriter(lease,
                 Switch2ControllerModel.ProController2, 0,
                 TransportGeneration));
@@ -149,7 +149,7 @@ public class Switch2BluetoothHdRumblePhysicalWriterTests
         Assert.AreEqual(0, lease.Calls);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void DefaultPhysicalClockRejectsExpiredAndFutureSamplesBeforeTransport(bool future)

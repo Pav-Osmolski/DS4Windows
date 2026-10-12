@@ -8,7 +8,7 @@ public sealed class MappedStickProductionPipelineChainingTests
 {
     private const int Slot = Global.TEST_PROFILE_INDEX;
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false, 2, 5, true)]
     [DataRow(true, 2, 5, true)]
     [DataRow(false, 6, 3, true)]
@@ -52,7 +52,7 @@ public sealed class MappedStickProductionPipelineChainingTests
         }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void SwappingCompleteSideConfigurationAndInputSwapsProductionOutputs(bool precise)
@@ -81,7 +81,7 @@ public sealed class MappedStickProductionPipelineChainingTests
         Assert.AreEqual(first.OutputRSOuter, second.OutputLSOuter);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PreciseCalibrationDeadzoneSensitivityAndCurveStayInOrderAcrossBothSides(bool swapped)
