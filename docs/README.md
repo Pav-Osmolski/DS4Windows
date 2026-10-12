@@ -32,6 +32,7 @@ and [Settings](user-guide.md#settings). Screenshots sit beside the controls they
 
 - [Contributing](../contributing.md): reporting bugs, proposing changes and documentation rules.
 - [Development](development.md): build, tests, packaging and code layout.
+- [Dependency maintenance](dependency-maintenance.md): Dependabot coverage, review checks and manually maintained components.
 - [Roadmap](roadmap.md): priorities and proposals, rather than a completed-task list.
 - [Release process](release-process.md): numeric versions, draft builds and Latest publication.
 - [Installer](../installer/README.md) and [installer validation](INSTALLER_VALIDATION_STRATEGY.md).
