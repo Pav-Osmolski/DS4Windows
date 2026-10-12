@@ -103,6 +103,7 @@ namespace DS4WinWPF.DS4Forms
             overviewRequestedAudioSourceIds = new();
         private readonly HashSet<int>
             overviewAudioHapticsOverrideReleaseRequests = new();
+        private readonly Dictionary<(int Device, string Profile), PendingProfileWrite> overviewFailedWrites = new();
         private DispatcherTimer overviewProfileSaveTimer;
         private DispatcherTimer overviewStatusRefreshTimer;
         private readonly NintendoJoyConManualPairSelection
@@ -1587,6 +1588,8 @@ Suspend support not enabled.", true);
                     continue;
                 }
 
+                bool saved = false;
+                string snapshot = null;
                 Mapping.ExecuteSerializedProfileMutation(deviceIndex, () =>
                 {
                     // A profile reload can finish between the ComboBox setter
@@ -1621,16 +1624,17 @@ Suspend support not enabled.", true);
                         }
                     }
 
+                    try { snapshot = Global.store.SerializeProfile(deviceIndex); }
+                    catch (Exception ex) when (ex is InvalidOperationException || ex is ArgumentException)
+                    {
+                        AppLogger.LogToGui("Profile changes could not be serialized: " + ex.Message, false);
+                    }
                     ProfileEntity profile = profileListHolder.ProfileListCol
                         .SingleOrDefault(item => item.Name == profileName);
-                    if (profile != null)
-                    {
-                        profile.SaveProfile(deviceIndex);
-                    }
-                    else
-                    {
-                        Global.SaveProfile(deviceIndex, profileName);
-                    }
+                    saved = profile != null ? profile.SaveProfile(deviceIndex) : Global.SaveProfile(deviceIndex, profileName);
+                    var key = (deviceIndex, profileName);
+                    if (saved) overviewFailedWrites.Remove(key);
+                    else if (snapshot != null || !overviewFailedWrites.ContainsKey(key)) overviewFailedWrites[key] = new PendingProfileWrite(deviceIndex, profileName, snapshot);
                 });
 
                 overviewRequestedOutputControllers.Remove(deviceIndex);
@@ -1638,6 +1642,12 @@ Suspend support not enabled.", true);
                 overviewRequestedAudioSourceIds.Remove(deviceIndex);
                 overviewAudioHapticsOverrideReleaseRequests.Remove(
                     deviceIndex);
+
+                if (!saved)
+                {
+                    AppLogger.LogToGui($"Overview changes for '{profileName}' are not saved. Resolve the file error and use Retry unsaved changes on Overview.", false);
+                    continue;
+                }
 
                 ProfileEntity savedProfile = profileListHolder.ProfileListCol
                     .SingleOrDefault(item => item.Name == profileName);
@@ -1665,6 +1675,7 @@ Suspend support not enabled.", true);
                 }
             }
 
+            overviewSaveFailurePanel.Visibility = overviewFailedWrites.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
             // The source dropdown's ItemsSource is stable while its explicit
             // selection is being saved. Replacing the collection here made
             // WPF synthesize a selection of the first item and erase the app
@@ -1675,6 +1686,33 @@ Suspend support not enabled.", true);
             {
                 overviewProfileSaveTimer.Start();
             }
+        }
+
+        private void DiscardOverviewProfileSaves_Click(object sender, RoutedEventArgs e)
+        {
+            overviewFailedWrites.Clear();
+            overviewSaveFailurePanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void RetryOverviewProfileSaves_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var entry in overviewFailedWrites.ToArray())
+            {
+                PendingProfileWrite pending = entry.Value;
+                bool saved = false;
+                Mapping.ExecuteSerializedProfileMutation(pending.Device, () => saved = pending.TrySave());
+                if (!saved) continue;
+                overviewFailedWrites.Remove(entry.Key);
+                if (Global.ProfilePath[pending.Device] == pending.Profile)
+                {
+                    Global.CacheExtraProfileInfo(pending.Device);
+                    var profile = profileListHolder.ProfileListCol.SingleOrDefault(item => item.Name == pending.Profile);
+                    if (profile != null) profile.FireSaved();
+                    else Mapping.RequestRegularProfileReload(pending.Device, false, App.rootHub);
+                }
+            }
+            overviewSaveFailurePanel.Visibility = overviewFailedWrites.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+            mainWinVM.RefreshSelectedControllerProperties(refreshControllerAudioChoices: false);
         }
 
         private void ControllerOverview_EditProfileRequested(object sender, EventArgs e)

@@ -5592,6 +5592,22 @@ namespace DS4Windows
                 Path.Combine(Global.appdatapath, "Profiles", $"{originalName}{Global.XML_EXTENSION}");
             try
             {
+                string testStr = SerializeProfile(device);
+
+                ProfilePersistence.Save(path, testStr, originalPath: originalPath, overwrite: overwrite);
+            }
+            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException ||
+                ex is InvalidOperationException)
+            {
+                AppLogger.LogToGui("Profile save failed to path: " + path + ". " + ex.Message, false);
+                saved = false;
+            }
+
+            return saved;
+        }
+
+        internal string SerializeProfile(int device)
+        {
                 string testStr = string.Empty;
                 XmlSerializer serializer = ProfileDTO.Serializer;
                 using (Utf8StringWriter strWriter = new Utf8StringWriter())
@@ -5625,16 +5641,7 @@ namespace DS4Windows
                     //Trace.WriteLine(testStr);
                 }
 
-                ProfilePersistence.Save(path, testStr, originalPath: originalPath, overwrite: overwrite);
-            }
-            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException ||
-                ex is InvalidOperationException)
-            {
-                AppLogger.LogToGui("Profile save failed to path: " + path + ". " + ex.Message, false);
-                saved = false;
-            }
-
-            return saved;
+            return testStr;
         }
 
         public bool SaveProfileOld(int device, string proName)
