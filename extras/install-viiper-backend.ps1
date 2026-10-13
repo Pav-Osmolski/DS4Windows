@@ -607,25 +607,59 @@ function Set-UsbipReplacementBoundary([Version]$installedVersion,
         -LiteralPath $script:UsbipReplacementStatePath -Encoding UTF8
 }
 
+function Test-UsbipDeviceIsPresent($device) {
+    # Win32_PnPEntity also exposes retained, non-present device records. An
+    # absent/unknown Present property must not be interpreted as False.
+    $present = $device.PSObject.Properties['Present']
+    if ($present -and $present.Value -is [bool]) {
+        return $present.Value
+    }
+    $problem = $device.PSObject.Properties['ConfigManagerErrorCode']
+    # CM_PROB_PHANTOM (45) explicitly identifies a non-present device.
+    # A disabled or driverless device is still present and must block overlay.
+    return -not ($problem -and $null -ne $problem.Value -and
+        [string]$problem.Value -eq '45')
+}
+
 function Assert-UsbipPostRebootState {
-    $activeDevices = @(Get-CimInstance Win32_PnPEntity -ErrorAction Stop |
-        Where-Object {
-            $_.Service -eq 'usbip2_ude'
-        })
-    if ($activeDevices.Count -gt 0) {
-        throw "A usbip2_ude root device is still present after " +
-            "the reboot. No replacement driver was installed."
+    $usbipDevices = @(Get-CimInstance Win32_PnPEntity -ErrorAction Stop |
+        Where-Object { $_.Service -eq 'usbip2_ude' })
+    $activeDevices = @($usbipDevices | Where-Object {
+        Test-UsbipDeviceIsPresent $_
+    })
+    foreach ($device in $usbipDevices) {
+        $details = @('PNPDeviceID', 'Present', 'ConfigManagerErrorCode', 'Status') |
+            ForEach-Object {
+                $property = $device.PSObject.Properties[$_]
+                $value = if ($property -and $null -ne $property.Value) {
+                    [string]$property.Value
+                } else { 'unknown' }
+                "$_=$value"
+            }
+        Write-SetupLog ("USBIP post-reboot device: " + ($details -join '; ')) Cyan
     }
 
-    $runningDrivers = @(Get-CimInstance Win32_SystemDriver -ErrorAction Stop |
-        Where-Object {
-            $_.State -eq "Running" -and
-            $_.Name -match '(?i)^usbip2_(?:ude|filter)$'
-        })
+    $usbipDrivers = @(Get-CimInstance Win32_SystemDriver -ErrorAction Stop |
+        Where-Object { $_.Name -match '(?i)^usbip2_(?:ude|filter)$' })
+    $runningDrivers = @($usbipDrivers | Where-Object { $_.State -eq 'Running' })
+    foreach ($driver in $usbipDrivers) {
+        Write-SetupLog ("USBIP post-reboot driver: Name=$($driver.Name); " +
+            "State=$($driver.State)") Cyan
+    }
+    if ($activeDevices.Count -gt 0) {
+        throw "A present or unclassified usbip2_ude root device remains after " +
+            "the reboot. No replacement driver was installed. " +
+            "Share the USBIP post-reboot device/driver diagnostics from " +
+            "infrastructure-actions.log; do not force replacement of a live driver."
+    }
     if ($runningDrivers.Count -gt 0) {
         $names = ($runningDrivers | ForEach-Object { $_.Name }) -join ", "
         throw "Old USBIP driver service(s) are still running after reboot: " +
             "$names. No replacement driver was installed."
+    }
+    if ($usbipDevices.Count -gt 0) {
+        Write-SetupLog ("Only non-present USBIP device records remain; " +
+            "checking the DriverStore before permitting phase 2.") Cyan
     }
 
     $previousErrorActionPreference = $ErrorActionPreference

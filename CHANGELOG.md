@@ -3,6 +3,13 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Fixed
+
+- Restore Axis Config scrolling by bounding its viewport to the available editor height ([#19](https://github.com/Pav-Osmolski/DS4Windows/issues/19)). Add optional live Controller Readings beside the axis controls, stacking below them in narrow windows without creating another polling owner.
+- Distinguish confirmed non-present USB/IP device records from live or unclassified root devices during post-reboot verification ([#20](https://github.com/Pav-Osmolski/DS4Windows/issues/20)). Log device presence/problem codes and driver states; preserve the reboot boundary and rejection of running drivers or retained driver packages. The reported machine still needs validation to establish whether its remaining root record is non-present.
+
 ## [5.0.20](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.20) — 2026-10-13
 
 ### Changed

@@ -41,6 +41,25 @@ briefly while an active backend is repaired.
 Setup logs are under `%ProgramData%\DS4Windows\Installer`; use Open log or
 Copy diagnostics from the installer when available.
 
+## Setup stops after the USB/IP replacement reboot
+
+Driver replacement has two phases: remove the old package, restart Windows, then
+run Install / Repair again to verify removal before installing the matching
+replacement. A retained device record is not necessarily a live root device;
+Windows can keep non-present records after uninstall.
+
+The post-reboot check distinguishes confirmed non-present records from present
+or unclassified devices. Running USB/IP drivers or retained driver packages still
+block replacement. Do not delete the replacement-state file or force a driver
+overlay to bypass this boundary.
+
+If Repair remains blocked, collect **Open log / Copy diagnostics**, especially
+`infrastructure-actions.log` under `%ProgramData%\DS4Windows\Installer`.
+Include the `USBIP post-reboot device` lines (instance ID, presence and problem
+code) and `USBIP post-reboot driver` lines, the previous USB/IP version if known,
+and whether Windows was actually restarted. These identify whether the remaining
+item is a phantom record, a live device or an incomplete driver removal.
+
 ## Haptics, triggers or audio do not work
 
 First confirm ordinary input works. Check the game's controller support,

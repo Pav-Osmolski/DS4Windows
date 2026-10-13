@@ -290,3 +290,129 @@ finally {
     Remove-Item -LiteralPath $testRoot -Recurse -Force `
         -ErrorAction SilentlyContinue
 }
+
+# Exercise the real post-reboot inspection with fully mocked Windows/native
+# queries. Do not dot-source the installer or mutate drivers on the test host.
+& {
+    Invoke-Expression (Get-BackendFunctionDefinition 'Test-UsbipDeviceIsPresent')
+    Invoke-Expression (Get-BackendFunctionDefinition 'Assert-UsbipPostRebootState')
+    $script:PnPUtilPath = 'Invoke-TestDriverStoreQuery'
+    $script:TestDeviceRecords = @()
+    $script:TestDriverRecords = @()
+    $script:TestDriverStoreOutput = 'No third-party driver packages.'
+    $script:TestDriverStoreExitCode = 0
+    $script:TestQueryFailure = $false
+    $script:TestDriverStoreCalls = 0
+    $script:TestPostRebootMessages = [Collections.Generic.List[string]]::new()
+
+    function Get-CimInstance {
+        param([string]$ClassName, [string]$ErrorAction)
+        if ($script:TestQueryFailure) { throw 'Mock WMI query failed' }
+        switch ($ClassName) {
+            'Win32_PnPEntity' { return $script:TestDeviceRecords }
+            'Win32_SystemDriver' { return $script:TestDriverRecords }
+            default { throw "Unexpected live query: $ClassName" }
+        }
+    }
+    function Write-SetupLog {
+        param([string]$message, $color)
+        $script:TestPostRebootMessages.Add($message)
+    }
+    function Invoke-TestDriverStoreQuery {
+        param([string]$operation)
+        if ($operation -ne '/enum-drivers') { throw 'Unexpected native mutation' }
+        $script:TestDriverStoreCalls++
+        $script:LASTEXITCODE = $script:TestDriverStoreExitCode
+        return $script:TestDriverStoreOutput
+    }
+
+    $cases = @(
+        @{ Name='No remaining device'; Device=$null; Allowed=$true },
+        @{ Name='Explicitly non-present record'; Device=@{Present=$false;ConfigManagerErrorCode=0};Allowed=$true },
+        @{ Name='Phantom with unknown Present'; Device=@{ConfigManagerErrorCode=45};Allowed=$true },
+        @{ Name='Phantom with null Present'; Device=@{Present=$null;ConfigManagerErrorCode=45};Allowed=$true },
+        @{ Name='Present overrides contradictory phantom code'; Device=@{Present=$true;ConfigManagerErrorCode=45};Allowed=$false },
+        @{ Name='Unknown presence fails closed'; Device=@{ConfigManagerErrorCode=0};Allowed=$false },
+        @{ Name='Null presence fails closed'; Device=@{Present=$null;ConfigManagerErrorCode=0};Allowed=$false },
+        @{ Name='Disabled is still present'; Device=@{Present=$true;ConfigManagerErrorCode=22};Allowed=$false },
+        @{ Name='Driverless is still present'; Device=@{Present=$true;ConfigManagerErrorCode=28};Allowed=$false },
+        @{ Name='Phantom cannot bypass running UDE'; Device=@{Present=$false;ConfigManagerErrorCode=45};Driver='usbip2_ude';Allowed=$false },
+        @{ Name='Phantom cannot bypass running filter'; Device=@{Present=$false;ConfigManagerErrorCode=45};Driver='usbip2_filter';Allowed=$false },
+        @{ Name='Phantom cannot bypass retained UDE package'; Device=@{Present=$false;ConfigManagerErrorCode=45};Package='usbip2_ude.inf';Allowed=$false },
+        @{ Name='Phantom cannot bypass retained filter package'; Device=@{Present=$false;ConfigManagerErrorCode=45};Package='usbip2_filter.inf';Allowed=$false },
+        @{ Name='DriverStore query failure fails closed'; Device=$null;NativeExit=1;Allowed=$false },
+        @{ Name='WMI failure fails closed'; Device=$null;QueryFailure=$true;Allowed=$false }
+    )
+    foreach ($case in $cases) {
+        $script:TestDeviceRecords = @()
+        if ($null -ne $case.Device) {
+            $record = @{Service='usbip2_ude';PNPDeviceID='ROOT\USBIP_WIN2\0000';Status='Mock'}
+            foreach ($key in $case.Device.Keys) { $record[$key] = $case.Device[$key] }
+            $script:TestDeviceRecords = @([pscustomobject]$record)
+        }
+        $script:TestDriverRecords = @()
+        if ($case.ContainsKey('Driver')) {
+            $script:TestDriverRecords = @([pscustomobject]@{Name=$case.Driver;State='Running'})
+        }
+        $script:TestDriverStoreOutput = if ($case.ContainsKey('Package')) { $case.Package } else { 'No packages.' }
+        $script:TestDriverStoreExitCode = if ($case.ContainsKey('NativeExit')) { $case.NativeExit } else { 0 }
+        $script:TestQueryFailure = $case.ContainsKey('QueryFailure')
+        $script:TestDriverStoreCalls = 0
+        $script:TestPostRebootMessages.Clear()
+        $allowed = $true
+        try { Assert-UsbipPostRebootState } catch { $allowed = $false }
+        if ($allowed -ne $case.Allowed) { throw "Post-reboot policy failed: $($case.Name)" }
+        if ($allowed -and $script:TestDriverStoreCalls -ne 1) {
+            throw "DriverStore inspection was skipped: $($case.Name)"
+        }
+        if ($null -ne $case.Device -and
+            -not ($script:TestPostRebootMessages -match 'PNPDeviceID=ROOT')) {
+            throw "Missing device diagnostics: $($case.Name)"
+        }
+    }
+    # Mock the boundary file too: exercise the real resolver without writing
+    # or deleting installer state on the host.
+    $script:UsbipReplacementStatePath = 'MockBoundary:\usbip-replacement.json'
+    $script:TestBoundaryExists = $true
+    function Test-Path {
+        param([string]$LiteralPath)
+        if ($LiteralPath -ne $script:UsbipReplacementStatePath) {
+            throw 'Unexpected filesystem query'
+        }
+        return $script:TestBoundaryExists
+    }
+    function Get-Content {
+        param([string]$LiteralPath, [switch]$Raw)
+        if ($LiteralPath -ne $script:UsbipReplacementStatePath) {
+            throw 'Unexpected state read'
+        }
+        return '{"BootSessionId":"boot-a"}'
+    }
+    function Remove-Item {
+        param([string]$LiteralPath, [switch]$Force)
+        if ($LiteralPath -ne $script:UsbipReplacementStatePath -or -not $Force) {
+            throw 'Unexpected state removal'
+        }
+        $script:TestBoundaryExists = $false
+    }
+    function Get-WindowsBootSessionId { return 'boot-b' }
+    $script:TestQueryFailure = $false
+    $script:TestDriverStoreExitCode = 0
+    $script:TestDriverStoreOutput = 'No packages.'
+    $script:TestDriverRecords = @()
+    $script:TestDeviceRecords = @([pscustomobject]@{
+        Service='usbip2_ude';PNPDeviceID='ROOT\USBIP_WIN2\0000';Present=$true;ConfigManagerErrorCode=0;Status='Mock'
+    })
+    $rejected = $false
+    try { Resolve-UsbipReplacementBoundary } catch { $rejected = $true }
+    if (-not $rejected -or -not $script:TestBoundaryExists) {
+        throw 'An unsafe inspection must retain its reboot boundary.'
+    }
+    $script:TestDeviceRecords[0].Present = $false
+    $script:TestDeviceRecords[0].ConfigManagerErrorCode = 45
+    Resolve-UsbipReplacementBoundary
+    if ($script:TestBoundaryExists) {
+        throw 'A fully verified inspection must clear its boundary.'
+    }
+    Write-Host "USB-IP post-reboot inspection passed $($cases.Count) presence, driver and DriverStore cases plus boundary retention/recovery."
+}
