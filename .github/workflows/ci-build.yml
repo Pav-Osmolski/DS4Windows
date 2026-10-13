@@ -62,7 +62,7 @@ jobs:
           global-json-file: global.json
 
       - name: Cache NuGet packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/*.wixproj', '**/*.props', '**/*.targets', '**/packages.lock.json', 'global.json', 'NuGet.config') }}-tests
@@ -162,7 +162,7 @@ jobs:
         run: python .\utils\test-localization-package.py
 
       - name: Cache NuGet packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/*.wixproj', '**/*.props', '**/*.targets', '**/packages.lock.json', 'global.json', 'NuGet.config') }}-package
