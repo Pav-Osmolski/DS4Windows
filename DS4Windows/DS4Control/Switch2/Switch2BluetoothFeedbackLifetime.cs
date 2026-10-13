@@ -762,38 +762,7 @@ internal sealed class Switch2VirtualFeedbackSession
                     return;
                 }
 
-                impulseReleaseEnvelope.Resolve(nowMicroseconds,
-                    out ushort leftTrigger, out ushort rightTrigger);
-                if (nextImpulseReleasePresentationRevision == ulong.MaxValue)
-                {
-                    ClearImpulseReleaseNoLock(disposeTimer: false);
-                    return;
-                }
-                ulong revision = ++nextImpulseReleasePresentationRevision;
-                bool staged = owner.TryStageImpulseReleasePresentation(this,
-                    impulseReleaseCanonicalFrame, leftTrigger, rightTrigger,
-                    revision);
-                bool presented = staged &&
-                    owner.TryRefreshCurrentPresentation(this,
-                        impulseReleaseCanonicalFrame, revision);
-                bool frameExpired = nowMicroseconds >=
-                        impulseReleaseCanonicalFrame.TimestampMicroseconds &&
-                    nowMicroseconds - impulseReleaseCanonicalFrame.
-                        TimestampMicroseconds >=
-                    impulseReleaseCanonicalFrame.TimeToLiveMicroseconds;
-                if (presented &&
-                        !impulseReleaseEnvelope.HasPendingRelease ||
-                    frameExpired)
-                {
-                    if (presented)
-                    {
-                        _ = owner.TryClearImpulseReleasePresentation(this);
-                    }
-                    hasImpulseReleaseCanonicalFrame = false;
-                    StopImpulseReleaseTimerNoLock();
-                    return;
-                }
-                ScheduleImpulseReleaseTimerNoLock();
+                PresentImpulseReleaseNoLock(nowMicroseconds);
             }
         }
         catch
@@ -802,6 +771,43 @@ internal sealed class Switch2VirtualFeedbackSession
             // controller input or transport worker. Terminal lifecycle still
             // owns the mandatory physical neutral.
         }
+    }
+
+    // The timer supplies QPC time under gate; presentation is independently testable.
+    private void PresentImpulseReleaseNoLock(ulong nowMicroseconds)
+    {
+        impulseReleaseEnvelope.Resolve(nowMicroseconds,
+            out ushort leftTrigger, out ushort rightTrigger);
+        if (nextImpulseReleasePresentationRevision == ulong.MaxValue)
+        {
+            ClearImpulseReleaseNoLock(disposeTimer: false);
+            return;
+        }
+        ulong revision = ++nextImpulseReleasePresentationRevision;
+        bool staged = owner.TryStageImpulseReleasePresentation(this,
+            impulseReleaseCanonicalFrame, leftTrigger, rightTrigger,
+            revision);
+        bool presented = staged &&
+            owner.TryRefreshCurrentPresentation(this,
+                impulseReleaseCanonicalFrame, revision);
+        bool frameExpired = nowMicroseconds >=
+                impulseReleaseCanonicalFrame.TimestampMicroseconds &&
+            nowMicroseconds - impulseReleaseCanonicalFrame.
+                TimestampMicroseconds >=
+            impulseReleaseCanonicalFrame.TimeToLiveMicroseconds;
+        if (presented &&
+                !impulseReleaseEnvelope.HasPendingRelease ||
+            frameExpired)
+        {
+            if (presented)
+            {
+                _ = owner.TryClearImpulseReleasePresentation(this);
+            }
+            hasImpulseReleaseCanonicalFrame = false;
+            StopImpulseReleaseTimerNoLock();
+            return;
+        }
+        ScheduleImpulseReleaseTimerNoLock();
     }
 
     private void ScheduleImpulseReleaseTimerNoLock()

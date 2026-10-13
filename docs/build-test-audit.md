@@ -106,6 +106,23 @@ revision's initial branch run; cache extraction itself took 9s in each job.
 The test job fell from 4m01s to 3m25s. Hosted compilation/test variance contributes
 to that difference, so it cannot all be attributed to caching.
 
+## Scheduling-sensitive test correction
+
+The first PR validation of this follow-up failed in
+`XboxImpulseStopTraversesNinetyMillisecondBleReleaseEnvelope`; the branch run
+passed on the same source. Its wait required at least four packets. A first
+presentation callback after the 90ms fade legitimately emits the final neutral
+as packet three, so the test timed out even with that valid sequence.
+
+The fade test now drives the unchanged production presentation body at
+controlled times under the original session gate. It checks decreasing physical
+amplitudes through 80ms, exact neutral at 90ms, and late first callbacks at
+90/160ms without replaying stale intermediate frames. A separate real-timer
+integration test retains the two-second neutral deadline and the guard against
+an immediate stop. The callback still obtains QPC time under the same lock;
+only its existing presentation body was extracted into a private helper.
+No tests are skipped or automatically retried to conceal this failure.
+
 ## Remaining recommendations
 
 1. Collect more warm samples as ordinary changes run, rather than launching
@@ -117,7 +134,8 @@ to that difference, so it cannot all be attributed to caching.
    test parallelization. Do not remove elapsed-time recovery coverage or
    automatically rerun failures to make checks appear stable.
 
-No assertions were relaxed or installer checks disabled to shorten runs. No
+Fade assertions now have controlled-time coverage alongside the real-timer
+check; installer validation has not been disabled to shorten runs. No
 release workflow was dispatched during this audit because it writes release
 assets. Its syntax and identity policy are checked locally; CI exercises
 application publishing and installer construction.
