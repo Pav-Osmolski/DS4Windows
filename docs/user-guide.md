@@ -1,6 +1,6 @@
 # DS4Windows user guide
 
-[Documentation index](README.md) · [Install and update](getting-started.md) · [Troubleshooting](troubleshooting.md)
+[Documentation index](README.md) · [Install and update](getting-started.md) · [Compatibility](controller-compatibility.md) · [Troubleshooting](troubleshooting.md)
 
 DS4Windows reads a physical controller and presents the virtual controller
 selected by your profile. Available settings depend on the controller and connection.
@@ -23,7 +23,7 @@ Temporary changes and wireless disconnect controls apply to the selected device.
 For Joy-Cons, use Link/Unlink or the automatic pairing option. A pair needs a
 left and right controller of the same generation. Choose upright or sideways
 orientation for a single Joy-Con. Switch 2 Bluetooth discovery and association
-are available in Settings; see [Getting started](getting-started.md#connect-and-choose-a-profile).
+are available in **Settings → Controllers**; see [Nintendo setup and options](nintendo-options.md).
 
 ## Profiles
 
@@ -55,6 +55,10 @@ Overview saves, retry or discard those saves first.
 Back up your settings before deleting profiles or importing replacements.
 
 ### Edit a profile
+
+The [Profile Editor guide](profile-editor.md) explains each page and common setup
+tasks. Use [Nintendo Options](nintendo-options.md) and
+[Controller audio](controller-audio.md) for hardware-specific features.
 
 ![Profile editor and mapping navigation](images/tour/profile-editor.png)
 
@@ -113,28 +117,113 @@ Audio Haptics is separate from game-authored native DualSense haptics.
 
 ![Audio Haptics source and response settings](images/audio-haptics.png)
 
-The source and response controls let you tailor audio-driven feedback separately
-from your button mappings.
+Audio Haptics creates feedback from sound; it is separate from native,
+game-authored haptics. Use it on the main page for the selected controller, or
+in the editor for the profile you are configuring.
 
-Choose a system or application audio source and tune the haptics response. See
-[DualSense Bluetooth audio](dualsense-bluetooth-audio-haptics.md) for transport limits.
+1. Select a connected controller and enable Audio Haptics.
+2. Choose **System audio** or a running application's audio session. Refresh
+   sessions if the application is missing, and make sure it is producing sound.
+3. Start with Low or Medium gain. Choose **Mix** to add audio-driven feedback to
+   game haptics/rumble, or **Replace** to use only audio-derived feedback.
+4. Tune **Bass Focus**, **Response**, **Ramp** and **Fade** while listening
+   to a repeatable section of sound. Increase strength gradually.
+5. In the editor, use Apply/Save to keep the profile configuration. Main-page
+   changes are live profile changes; resolve any unsaved-change notice on Overview.
+
+System audio uses Windows' default output, not every output from an audio router
+such as Sonar. App capture follows the selected app on its output. **Automatically
+follow games** switches to recognized games using Windows game records and
+installed launcher manifests; the selected app remains the fallback. It does
+not guarantee recognition of every game or launcher.
+
+**Play app through controller** also streams the captured app to the controller
+speaker/AUX headset on supported hardware. **Headset only** keeps it off the
+built-in speaker. This overrides the Advanced audio source while enabled;
+choosing another source there releases the override. See
+[controller audio routing](controller-audio.md#speaker-and-headset-routing).
+
+| Response control | Effect |
+| --- | --- |
+| Bass Focus | Choose the low-frequency region that contributes vibration |
+| Response | Set how strongly peaks affect the feedback |
+| Ramp | Control how quickly feedback rises |
+| Fade | Control how quickly feedback falls after the sound stops |
+
+If feedback is absent, first verify the capture source, enable state and physical
+controller. Test native feedback with Audio Haptics disabled so the two paths
+are not confused. See [compatibility](controller-compatibility.md) for limitations.
 
 ## Trigger Lab
 
 ![Adaptive trigger controls](images/tour/trigger-lab.png)
 
-Build persistent adaptive-trigger effects for supported DualSense controllers.
-Enabled Trigger Lab effects take priority over game effects for that trigger.
+Trigger Lab designs persistent adaptive-trigger effects for physical
+DualSense/Edge controllers. Choose a connected controller on the main page, or
+configure the effect in a profile's Trigger Lab tab.
+
+1. Choose **Linked** for matching effects on both sides or **Split** to edit L2/R2
+   independently. Select an effect preset as a starting point.
+2. Choose **Feedback**, **Weapon** or **Vibration**, then adjust Start, Wall and
+   Force as applicable to that mode. Begin with low force.
+3. Use **Preview L2/R2** to feel a temporary preview. Use **Reset L2/R2** to reset
+   that side's Lab configuration; previewing alone does not save an effect.
+4. Enable the intended side(s) and the master **Enabled** toggle. A side marked
+   **Armed** is selected but the master override is not active.
+5. Use **Save new trigger profile** to name a custom effect preset; custom presets
+   can also be renamed or deleted. In the editor, Apply/Save writes the containing
+   DS4Windows profile. A named trigger preset is not a separate controller profile.
+
+Disable the master toggle or the relevant side to return that trigger to incoming
+game effects. Lab effects take priority over native game and DSX mod effects on
+that trigger; the other trigger can remain game-controlled.
+
+**Full-pull action** assigns a second action at the end of travel. Choose how it
+combines with the regular trigger action: Off, Add, Replace, Hair trigger or a
+Hip fire mode with a delay. This is a mapping feature; it is distinct from the
+physical resistance effect. **Game rumble vibration** can translate the game's
+heavy/light rumble motor into L2/R2 vibration. Test each feature separately before
+combining them, and check Special Actions protection notices for conflicts.
 
 ## Auto Profiles
 
 ![Application and window title profile rules](images/tour/auto-profiles.png)
 
-Associate profiles with applications or window titles to switch automatically.
-Check the selected controller slot and matching application when a profile fails
-to activate. Verify manual profile selection first before debugging automation.
+Auto Profiles selects saved profiles when the matching application/window is
+active. First verify the intended profile works when selected manually.
+
+For example, to use a gyro profile only in one game:
+
+1. Create and save that profile on Profiles.
+2. On Auto Profiles, use **Add Programs** to browse for the game's executable or
+   add it from the available program sources. A launcher and the game itself
+   may be different executables.
+3. Select the entry, choose the profile for the intended controller slot (or All
+   when that is intended), and Save. The read-only checkbox marks an existing
+   saved rule; it is not an enable switch.
+4. Launch/focus the game and confirm the active profile on Controllers.
+
+For a window-title rule, use **Add Programs → Add Window Title Rule**, enter the
+intended title condition and select/save its profiles. Use the title field to
+narrow an application rule where needed. Search filters the displayed entries;
+it does not change their matching configuration.
+
+The **Device** choice restricts a rule to a controller family. For a matching
+application/window, a matching device-specific rule takes priority over an Any
+rule; the first matching rule within each group is used. Use the entry's context
+menu **Move Up/Move Down** to order overlapping rules. A `(none)` profile does
+not request a profile switch for that controller. Remove a saved rule when you
+no longer want it to match.
+
+**Revert to default profile on unknown** determines whether to return to the
+default when no known rule matches. Leave the temporary-stop option off unless
+the application should intentionally stop DS4Windows mapping. Review overlapping
+rules and test one saved rule first if switching is unexpected. Optional
+Auto Profiles debug messages help identify a match; disable them after diagnosis.
 
 ## Output Slots
+
+![Output Slots with automatic column fitting and clear reservations](images/tour/output-slots.png)
 
 Use this page to see which physical controller feeds each virtual output slot.
 **Slot** is DS4Windows' output slot number, not a game-reported XInput index.
@@ -184,13 +273,29 @@ Run at Startup and Start Minimized are separate choices.
 
 ## Log and diagnostics
 
+![Startup log with deployment mode and backend verification](images/tour/log.png)
+
 The Log page shows startup, controller, profile and backend events, including
 installed/portable deployment mode, USB/IP status and detected driver versions.
-Use **Copy Text** to paste the visible log into an issue, or **Export** to save it. Include app version, Windows build,
-controller model, connection and output type. Review exported logs for personal
-information. See [Troubleshooting](troubleshooting.md) for the first checks.
+**Copy Text** copies the retained latest 1,000 entries with timestamps, including
+entries outside the current viewport. **Export** writes the same snapshot to a
+text file. Copy/export before Clear if you need to preserve the current entries.
+
+Include app version, Windows build, controller model, connection and output type
+when reporting an issue. Startup readiness and driver versions help distinguish
+a setup problem from a game/profile problem; they do not prove that a game's
+feedback features work. Review logs for personal information before sharing.
+
+Under **Settings → Updates & tools**, verbose logging adds diagnostic detail.
+**Profile editor timing logs** is a separate opt-in setting, off by default,
+for diagnosing editor opening phases. Enable only the information needed to
+reproduce an issue, collect it, then turn it off. Auto Profiles has its own debug
+message option. See [Troubleshooting](troubleshooting.md) for the first checks.
 
 ## Native feedback and feature limits
+
+See [Controller audio and game feedback](controller-audio.md) for setup and
+[Compatibility](controller-compatibility.md) for controller/output/connection limits.
 
 For native DualSense feedback, the game must support it, the profile must use
 compatible output, and overlapping Steam Input remapping must be disabled for

@@ -1,8 +1,11 @@
 # DualSense Bluetooth Audio and Haptics
 
+For everyday setup, use [Controller audio and game feedback](controller-audio.md).
+This page documents transport and implementation details.
+
 ## Scope
 
-This branch keeps three DualSense feedback paths separate:
+The current implementation keeps three DualSense feedback paths separate:
 
 | Path | Source | Physical controller transport |
 | --- | --- | --- |
@@ -81,7 +84,7 @@ a running session when an audio router recreates its endpoint.
 1. Install a VIIPER build containing the DualSense UAC interface.
 2. Select **DualSense** in the DS4Windows profile.
 3. Connect a physical DualSense or DualSense Edge over Bluetooth.
-4. In the profile's **Controller audio** section, enable **Stream audio to controller**.
+4. In **Profile Editor → Advanced → Audio**, in the controller-audio card, enable **Stream audio to controller**.
 5. Select the virtual `Wireless Controller` / DualSense render endpoint as **Audio source**.
 6. In the game, select that same endpoint when the game provides a controller-audio output choice.
 

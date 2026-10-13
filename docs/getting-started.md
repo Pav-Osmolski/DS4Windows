@@ -53,13 +53,15 @@ closing DS4Windows. Controller output pauses briefly during an active repair.
 ## Connect and choose a profile
 
 Connect a supported controller and select it in DS4Windows. Controller-family
-options are in **Settings > Device Options**; optional Moonlight/Sunshine input
+options are in **Settings > Controllers > Device Options**; optional Moonlight/Sunshine input
 must be enabled separately. Some devices, including DualShock 3, need their
 own compatible driver setup.
 
 For **Switch 2 Pro**, use USB or DS4Windows' Bluetooth discovery and
-association controls in **Settings**. For **Joy-Con 2**, use those Bluetooth
-controls. Put the controller into pairing mode and associate it there.
+association controls in **Settings → Controllers**. For **Joy-Con 2**, use those Bluetooth
+controls. Put the controller into pairing mode and associate it there. See
+[Nintendo setup](nintendo-options.md#connect-and-pair) for reconnecting, pairing
+and hardware-specific options.
 
 In **Controllers**, use Link/Unlink for Joy-Cons, or enable automatic pairing.
 Pairs require an opposite-side controller from the same generation. Choose a
@@ -69,6 +71,10 @@ Create or edit a profile and choose the emulated controller the game should
 see. **Auto Profiles** can select profiles when a matching game or application
 is active. Restart a game after changing emulation if it does not detect the
 new controller.
+
+See [Compatibility](controller-compatibility.md) to choose an output and check
+hardware/connection limits. [Profile Editor](profile-editor.md) explains its
+controls, and [Controller audio](controller-audio.md) covers speakers and microphones.
 
 For native DualSense advanced haptics, select **DualSense** output and enable
 controller audio/speaker support. The game must support advanced haptics.
@@ -94,9 +100,17 @@ updating, especially when moving between versions or installation types.
 Settings may be in `%APPDATA%\DS4Windows` **or beside the application**, depending
 on your configuration. Check both before removing an old portable folder.
 Follow the release's update instructions when a matching backend update is
-required. In RC4.6.7, in-app update checks still use hbashton's upstream
-releases. Download updates for this fork manually from
+required.
+
+Current fork builds check this repository and use the matching fork DS4Updater
+(2.0.9 or newer) for supported installed/portable updates. Configure checks under
+**Settings → Updates & tools**, or install manually from
 [Pav-Osmolski/DS4Windows Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
+
+**Older RC4.6.7 builds need one manual upgrade:** they still check hbashton's
+upstream releases. Replacing DS4Updater alone does not change that old app's
+release source. After installing a current fork build, later update checks use
+this fork.
 
 ## If something isn't working
 
@@ -108,8 +122,9 @@ releases. Download updates for this fork manually from
 - **No native haptics:** confirm the game supports them, the profile emulates
   DualSense, controller audio/speaker support is enabled, and Steam Input is
   not replacing the virtual pad. Restart the game after changing these settings.
-- **Game Bar navigation:** enable Game Bar compatibility and run DS4Windows
-  elevated. This feature requires Xbox Game Bar to be installed.
+- **Game Bar navigation:** enable compatibility under **Profile Editor → Advanced → Output**
+  and run DS4Windows elevated. Xbox Game Bar must be installed. See
+  [Game Bar setup](integrations.md#xbox-game-bar).
 
 Still stuck? [Open an issue](https://github.com/Pav-Osmolski/DS4Windows/issues) with
 your DS4Windows version, physical controller, USB/Bluetooth connection,

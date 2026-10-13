@@ -2,7 +2,7 @@
 
 [Documentation index](README.md) · [Troubleshooting](troubleshooting.md)
 
-On the Windows PC running Sunshine and DS4Windows, open **Settings > Device
+On the Windows PC running Sunshine and DS4Windows, open **Settings > Controllers > Device
 Options** and enable **Accept Moonlight / Sunshine virtual controllers**.
 Connect from Moonlight with controller input enabled, then select a DS4Windows
 profile for the detected input.

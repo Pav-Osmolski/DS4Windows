@@ -6,7 +6,7 @@ It is not a replacement for DSX and does not receive audio/PCM haptics.
 
 ## Setup
 
-1. In DS4Windows **Settings → Game mod support (DSX)**, enable
+1. In DS4Windows **Settings → Integrations → Game mod support (DSX)**, enable
    **Let game mods control triggers and lights**.
 2. Press **Start** in DS4Windows and connect your DualSense or DualSense Edge.
 3. Set your mod to address `127.0.0.1`, port `6969`, unless you selected another

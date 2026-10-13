@@ -10,7 +10,7 @@ output reproduce the problem.
 
 1. Confirm Windows sees the physical controller. Test a data-capable USB cable
    and another port before changing drivers.
-2. Check Settings > Device Options for the controller family. For Switch 2
+2. Check Settings > Controllers > Device Options for the controller family. For Switch 2
    Bluetooth, use DS4Windows discovery and association as described in the setup guide.
 3. If HidHide hides the controller, ensure this DS4Windows executable is allowed
    to see it. This matters after changing folders or executable names.
@@ -47,7 +47,9 @@ First confirm ordinary input works. Check the game's controller support,
 profile output type, controller audio/speaker settings, physical connection,
 and overlapping Steam Input. Restart the game after changing output type.
 Disable profile Trigger Lab effects while testing game-authored triggers.
-Test native game haptics separately from Audio Haptics capture.
+Test native game haptics separately from Audio Haptics capture. Use the
+[controller audio guide](controller-audio.md) for endpoint/mute setup and
+[compatibility guide](controller-compatibility.md) for hardware limits.
 
 ## Updates or profile settings are missing
 

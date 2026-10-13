@@ -3,7 +3,7 @@
 [User guide](user-guide.md) · [Documentation index](README.md)
 
 A two-finger touchpad swipe can switch between saved profiles.
-In Settings, enable **Swipe touchpad to switch profiles**, then open
+In **Settings → Controllers**, enable **Swipe touchpad to switch profiles**, then open
 **Config Swipe Profiles** and select the profiles to cycle through.
 
 A left/right swipe skips profiles outside the selection. Selecting no profiles

@@ -25,11 +25,12 @@ See [GitHub's fork instructions](https://docs.github.com/en/code-security/how-to
 
 ## Existing inherited branches
 
-The four inherited June dependency branches are historical proposals, not tested
-updates for this fork. Replace their intent with current-main PRs; the separate
-MSTest-framework proposal overlaps the adapter/framework proposal. Preserve the
-old references until replacements are accepted. Branch cleanup is a separate
-maintainer decision; preserve published release tags.
+The four inherited June dependency proposals were superseded by reviewed
+fork-specific updates, and the obsolete branches were removed after review.
+They are not active update branches. Fresh proposals should start from current
+main through this fork's Dependabot configuration; do not resurrect an old
+proposal merely because its package name matches. Published release tags are
+separate from branch cleanup and remain preserved.
 
 A removed direct NuGet reference can still appear transitively in the dependency
 graph. Confirm restored assets and published outputs before claiming a dependency
