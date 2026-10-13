@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <!-- Keep the resolved dependency graph reviewable across every app, test,
+         installer and diagnostic-tool project. CI refuses stale lock files;
+         local restore can refresh them when a dependency is intentionally changed. -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode Condition="'$(GITHUB_ACTIONS)' == 'true' And '$(RestoreLockedMode)' == ''">true</RestoreLockedMode>
+  </PropertyGroup>
+</Project>

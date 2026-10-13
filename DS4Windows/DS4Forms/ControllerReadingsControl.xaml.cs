@@ -157,7 +157,6 @@ namespace DS4WinWPF.DS4Forms
         }
         public event EventHandler R2DeadChanged;
 
-
         public sbyte LsDriftX
         {
             get => lsDriftX;
@@ -202,7 +201,6 @@ namespace DS4WinWPF.DS4Forms
         }
         public event EventHandler RsDriftYChanged;
 
-
         private LatencyWarnMode warnMode;
         private LatencyWarnMode prevWarnMode;
         private readonly DS4StateOwnedSnapshot baseSnapshot = new();
@@ -212,7 +210,6 @@ namespace DS4WinWPF.DS4Forms
         private DS4StateExposed exposeState;
         private const int CANVAS_WIDTH = 130;
         private const int CANVAS_MIDPOINT = CANVAS_WIDTH / 2;
-        private const double TRIG_LB_TRANSFORM_OFFSETY = 66.0;
 
         public ControllerReadingsControl()
         {
@@ -395,7 +392,7 @@ namespace DS4WinWPF.DS4Forms
                     Canvas.SetTop(sixAxisMapValRec, Math.Min(Math.Max(interState.Motion.outputAccelZ + 127.0, 0), 255.0) / 255.0 * CANVAS_WIDTH - 3);
 
                     l2Slider.Value = baseState.L2;
-                    l2ValLbTrans.Y = Math.Min(interState.L2, Math.Max(0, 255)) / 255.0 * -70.0 + TRIG_LB_TRANSFORM_OFFSETY;
+
                     if (interState.L2 >= 255)
                     {
                         l2ValLbBrush.Color = Colors.Green;
@@ -406,11 +403,11 @@ namespace DS4WinWPF.DS4Forms
                     }
                     else
                     {
-                        l2ValLbBrush.Color = Colors.Black;
+                        l2ValLbBrush.Color = ((SolidColorBrush)FindResource("ForegroundColor")).Color;
                     }
 
                     r2Slider.Value = baseState.R2;
-                    r2ValLbTrans.Y = Math.Min(interState.R2, Math.Max(0, 255)) / 255.0 * -70.0 + TRIG_LB_TRANSFORM_OFFSETY;
+
                     if (interState.R2 >= 255)
                     {
                         r2ValLbBrush.Color = Colors.Green;
@@ -421,7 +418,7 @@ namespace DS4WinWPF.DS4Forms
                     }
                     else
                     {
-                        r2ValLbBrush.Color = Colors.Black;
+                        r2ValLbBrush.Color = ((SolidColorBrush)FindResource("ForegroundColor")).Color;
                     }
 
                     gyroYawSlider.Value = baseState.Motion.gyroYawFull;
@@ -456,7 +453,7 @@ namespace DS4WinWPF.DS4Forms
                     {
                         warnMode = LatencyWarnMode.None;
                         inpuDelayBackBrush.Color = Colors.Transparent;
-                        inpuDelayForeBrush.Color = SystemColors.WindowTextColor;
+                        inpuDelayForeBrush.Color = ((SolidColorBrush)FindResource("ForegroundColor")).Color;
                     }
 
                     prevWarnMode = warnMode;

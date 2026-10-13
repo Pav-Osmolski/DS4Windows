@@ -415,6 +415,15 @@ namespace DS4WinWPF.DS4Control.DTOXml
             set;
         }
 
+        [XmlElement("OutputSlotsAutoFit")]
+        public bool OutputSlotsAutoFit { get; set; } = true;
+
+        [XmlArray("OutputSlotsColumnWidths"), XmlArrayItem("Width")]
+        public double[] OutputSlotsColumnWidths { get; set; } = Array.Empty<double>();
+
+        [XmlElement("ProfileEditorTimingLogging")]
+        public bool ProfileEditorTimingLogging { get; set; }
+
         [XmlElement("SuppressViiperSetupPrompt")]
         public bool SuppressViiperSetupPrompt
         {
@@ -942,6 +951,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
             UseMoonlight = source.useMoonlight;
             UseAdvancedMoonlight = source.useAdvancedMoonlight;
             VerboseStartupLogging = source.verboseStartupLogging;
+            ProfileEditorTimingLogging = source.profileEditorTimingLogging;
+            OutputSlotsAutoFit = source.outputSlotsAutoFit;
+            OutputSlotsColumnWidths = source.outputSlotsColumnWidths?.ToArray() ?? Array.Empty<double>();
             SuppressViiperSetupPrompt = source.suppressViiperSetupPrompt;
             PreferredViiperPath = source.preferredViiperPath;
             CloseMinimizes = source.closeMini;
@@ -1052,6 +1064,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.useMoonlight = UseMoonlight;
             destination.useAdvancedMoonlight = UseAdvancedMoonlight;
             destination.verboseStartupLogging = VerboseStartupLogging;
+            destination.profileEditorTimingLogging = ProfileEditorTimingLogging;
+            destination.outputSlotsAutoFit = OutputSlotsAutoFit;
+            destination.outputSlotsColumnWidths = OutputSlotsColumnWidths?.ToArray() ?? Array.Empty<double>();
             destination.suppressViiperSetupPrompt =
                 SuppressViiperSetupPrompt;
             destination.preferredViiperPath = PreferredViiperPath ??

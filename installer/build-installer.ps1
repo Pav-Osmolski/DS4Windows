@@ -11,6 +11,11 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+function Write-InstallerStageTiming([string]$stage, [Diagnostics.Stopwatch]$timer) {
+    $seconds = $timer.Elapsed.TotalSeconds.ToString('F3', [Globalization.CultureInfo]::InvariantCulture)
+    Write-Host "[InstallerBuildTiming] ${stage}: $seconds seconds"
+}
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
 $publishPath = [IO.Path]::GetFullPath($PublishRoot)
 if (-not $OutputDirectory) {
@@ -324,31 +329,39 @@ if (-not [string]::Equals($publishedRelease, $DisplayVersion,
 
 $generatedWix = Join-Path $repoRoot "installer\DS4Windows.Package\GeneratedFiles.wxs"
 $manifestPath = Join-Path $publishPath "package-manifest.json"
+$installerStageTimer = [Diagnostics.Stopwatch]::StartNew()
 & python (Join-Path $repoRoot "utils\generate-installer-files.py") `
     $publishPath $generatedWix $manifestPath --version $DisplayVersion
 if ($LASTEXITCODE -ne 0) { throw "Installer manifest generation failed." }
+Write-InstallerStageTiming "manifest" $installerStageTimer
 
+$installerStageTimer = [Diagnostics.Stopwatch]::StartNew()
 & dotnet publish (Join-Path $repoRoot "installer\DS4Windows.SetupActions\DS4Windows.SetupActions.csproj") `
     -c Release -p:Platform=x64 -p:Version=$ProductVersion `
     -r win-x64 --self-contained true `
     -o (Join-Path $repoRoot "installer\DS4Windows.SetupActions\bin\x64\Release\publish")
 if ($LASTEXITCODE -ne 0) { throw "Setup action host build failed." }
+Write-InstallerStageTiming "setup-actions" $installerStageTimer
 $setupActions = Join-Path $repoRoot "installer\DS4Windows.SetupActions\bin\x64\Release\publish\DS4Windows.SetupActions.exe"
 Invoke-SignAndVerify $setupActions
 
+$installerStageTimer = [Diagnostics.Stopwatch]::StartNew()
 & dotnet publish (Join-Path $repoRoot "installer\DS4Windows.Bootstrapper\DS4Windows.Bootstrapper.csproj") `
     -c Release -p:Platform=x64 -p:Version=$ProductVersion `
     -r win-x64 --self-contained true `
     -o (Join-Path $repoRoot "installer\DS4Windows.Bootstrapper\bin\x64\Release\publish")
 if ($LASTEXITCODE -ne 0) { throw "Bootstrapper UI build failed." }
+Write-InstallerStageTiming "bootstrapper" $installerStageTimer
 $baRoot = Join-Path $repoRoot "installer\DS4Windows.Bootstrapper\bin\x64\Release\publish"
 Invoke-SignAndVerify (Join-Path $baRoot "DS4Windows.Bootstrapper.exe")
 
 $packageProject = Join-Path $repoRoot "installer\DS4Windows.Package\DS4Windows.Package.wixproj"
+$installerStageTimer = [Diagnostics.Stopwatch]::StartNew()
 & dotnet build $packageProject -t:Rebuild -c Release -p:Platform=x64 `
     -p:Version=$ProductVersion -p:ProductVersion=$ProductVersion `
     -p:PublishRoot=$publishPath
 if ($LASTEXITCODE -ne 0) { throw "DS4Windows MSI build failed." }
+Write-InstallerStageTiming "msi" $installerStageTimer
 
 $msiPath = Join-Path $repoRoot "installer\DS4Windows.Package\bin\x64\Release\DS4Windows_${ProductVersion}_x64.msi"
 Invoke-SignAndVerify $msiPath
@@ -359,6 +372,7 @@ if ($setupActionsHash -notmatch '^[0-9A-F]{64}$') {
 $extrasRoot = Join-Path $repoRoot "extras"
 $bundleProject = Join-Path $repoRoot "installer\DS4Windows.Bundle\DS4Windows.Bundle.wixproj"
 $wixExecutable = Resolve-WixExecutable $bundleProject
+$installerStageTimer = [Diagnostics.Stopwatch]::StartNew()
 & dotnet build $bundleProject -t:Rebuild -c Release -p:Platform=x64 `
     -p:Version=$ProductVersion -p:BundleVersion=$BundleVersion `
     -p:DisplayVersion=$DisplayVersion `
@@ -366,6 +380,7 @@ $wixExecutable = Resolve-WixExecutable $bundleProject
     -p:SetupActionsPath=$setupActions -p:SetupActionsHash=$setupActionsHash `
     -p:ExtrasRoot=$extrasRoot
 if ($LASTEXITCODE -ne 0) { throw "DS4Windows Burn bundle build failed." }
+Write-InstallerStageTiming "bundle" $installerStageTimer
 
 $builtInstaller = Join-Path $repoRoot "installer\DS4Windows.Bundle\bin\x64\Release\DS4Windows_${DisplayVersion}_Setup_x64.exe"
 New-Item -ItemType Directory -Path $outputPath -Force | Out-Null
@@ -436,10 +451,13 @@ try {
             -Destination $pendingInstaller
     }
 
+    $installerStageTimer = [Diagnostics.Stopwatch]::StartNew()
     Assert-BurnBundleIntegrity $wixExecutable $pendingInstaller `
         $burnWorkRoot $msiPath $setupActions `
         (Join-Path $baRoot 'DS4Windows.Bootstrapper.exe')
+    Write-InstallerStageTiming "bundle-integrity" $installerStageTimer
 
+$installerStageTimer = [Diagnostics.Stopwatch]::StartNew()
 & (Join-Path $env:SystemRoot `
     "System32\WindowsPowerShell\v1.0\powershell.exe") `
     -NoLogo -NoProfile -ExecutionPolicy Bypass `
@@ -467,6 +485,7 @@ if ($LASTEXITCODE -ne 0) {
     --publish-root $publishPath --manifest $manifestPath `
     --installer $pendingInstaller --bundle-source (Join-Path $repoRoot "installer\DS4Windows.Bundle\Bundle.wxs")
 if ($LASTEXITCODE -ne 0) { throw "Installer validation failed." }
+Write-InstallerStageTiming "policy-and-payload-validation" $installerStageTimer
 
 Assert-ReleaseSignature $pendingInstaller
 

@@ -71,4 +71,7 @@ cannot change the old app's release source.
 - Relevant exported log or installer diagnostics, reviewed for personal data.
 
 Enable verbose logging only when needed to reproduce a problem, then turn it off.
+For slow profile-editor opening, enable **Settings > Updates & tools > Profile
+editor timing logs**. This separate option records `[ProfileEditorTiming]` phases
+and is off by default. Turn it off after collecting the log.
 Hardware-specific support is not established by a passing unit test alone.

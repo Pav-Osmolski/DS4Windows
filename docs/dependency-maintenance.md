@@ -1,8 +1,8 @@
 # Dependency maintenance
 
 Dependabot checks NuGet projects and GitHub Actions every Monday at 07:00
-Europe/London. Version-update PRs are limited to three for NuGet and two for
-Actions. Related MSTest/test-runner, Windows-management and WiX dependencies
+Europe/London. Version-update PRs are limited to three for NuGet, two for
+Actions and one for the .NET SDK. Related MSTest/test-runner, Windows-management and WiX dependencies
 are grouped to reduce mismatched versions. Actions patch/minor updates are
 grouped; major Actions changes remain separate. These groups do not imply
 compatibility or approval: major NuGet upgrades still need deliberate review.
@@ -74,11 +74,44 @@ stable NuGet versions during this audit; continue monitoring them.
 Keep Actions major-version updates separate from ordinary patch/minor batches,
 and verify their runtime requirements and the full workflow. Preserve workflow
 permissions, signing policy and secret handling unless a reviewed change needs
-them. The existing .NET 8 workflow selector follows SDK patches; a framework
-major-version migration is a separate compatibility project. There is currently
-no `global.json` to monitor through the `dotnet-sdk` ecosystem, and no npm,
-Python, Go or submodule manifests in this repository that justify additional
-Dependabot ecosystems.
+them. The SDK is now selected through `global.json`; Dependabot's
+`dotnet-sdk` ecosystem proposes servicing updates weekly. Major/minor SDK
+migrations remain separate compatibility work. No npm, Python, Go or submodule
+manifests justify additional ecosystems.
+
+## SDK and dependency locks
+
+Local builds and both workflows select the reviewed **8.0.425** SDK, with
+prereleases and automatic roll-forward disabled. SDK servicing updates therefore
+arrive as reviewable Dependabot PRs rather than silently changing the compiler
+and self-contained runtime inputs. See Microsoft's
+[SDK selection guidance](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json)
+and [GitHub's SDK update support](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories).
+
+Every application, test, installer and diagnostic-tool project has a committed
+`packages.lock.json`. `Directory.Build.props` enables lock generation locally
+and locked restore under GitHub Actions. A dependency-graph mismatch fails CI
+instead of updating the lock file silently. WiX SDK versions are still pinned
+in `.wixproj` declarations; their SDK-resolver packages are not ordinary
+PackageReference entries in the project lock graph.
+
+When changing a package or SDK intentionally:
+
+1. Install the SDK declared in `global.json`.
+2. Restore affected projects locally with `--force-evaluate`, using
+   `-p:Platform=x64 -p:Configuration=Release`. Restore projects referencing the
+   changed project too. For an SDK update, refresh all 16 project lock files.
+3. Review direct/transitive version changes and content hashes; commit the
+   manifests and affected lock files together. Do not bypass locked CI restore.
+4. Verify `dotnet restore <project> --locked-mode` and the normal full CI checks.
+
+The application lock graph retains its declared x64/x86 runtime identifiers.
+Restore that graph without overriding it with `-r`; publish the selected x64
+runtime afterward with `--no-restore`. Installer helpers already declare x64.
+Dependabot package proposals should update locks; if an SDK proposal leaves
+SDK-dependent lock entries stale, regenerate them on that PR before merging.
+See [NuGet's lock-file contract](https://learn.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files#locking-dependencies).
+
 
 ## Components requiring manual maintenance
 

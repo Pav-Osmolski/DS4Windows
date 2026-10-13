@@ -1090,8 +1090,11 @@ public class Switch2BluetoothFeedbackLifetimeTests
     }
 
     [TestMethod]
+    [DataRow(16)]
+    [DataRow(90)]
+    [DataRow(160)]
     [DoNotParallelize]
-    public void XboxImpulseStopTraversesNinetyMillisecondBleReleaseEnvelope()
+    public void XboxImpulseStopTraversesNinetyMillisecondBleReleaseEnvelope(int firstCallbackMilliseconds)
     {
         RecordingLease lease = new();
         Assert.IsTrue(Switch2BluetoothFeedbackLifetime.TryCreate(lease,
@@ -1109,63 +1112,115 @@ public class Switch2BluetoothFeedbackLifetimeTests
             DeviceGeneration, TransportGeneration,
             out Switch2VirtualFeedbackSession session));
 
-        Assert.IsTrue(session.TryPublish(Wire(sequence: 1,
-            ownershipEpoch: session.OwnershipEpoch, bodyLow: 0,
-            bodyHigh: 0, leftTrigger: ushort.MaxValue, rightTrigger: 0),
-            mapImpulseTriggersToHdRumble: true));
-        Assert.IsTrue(session.TryPublish(Wire(sequence: 2,
-            ownershipEpoch: session.OwnershipEpoch, bodyLow: 0,
-            bodyHigh: 0, leftTrigger: 0, rightTrigger: 0),
-            mapImpulseTriggersToHdRumble: true));
-        Assert.AreEqual(2, lease.PayloadCount);
-        Assert.IsTrue(Switch2BluetoothHdRumbleCodec.
-            TryDecodeProController(lease.PayloadAt(0), out _,
-                out Switch2HdRumbleGroup initialLeft,
-                out Switch2HdRumbleGroup initialRight, out _));
-        Assert.IsTrue(HasAmplitude(initialLeft));
-        Assert.IsFalse(HasAmplitude(initialRight));
-        Assert.IsTrue(Switch2BluetoothHdRumbleCodec.
-            TryDecodeProController(lease.PayloadAt(1), out _,
-                out Switch2HdRumbleGroup releaseStartLeft,
-                out Switch2HdRumbleGroup releaseStartRight, out _));
-        Assert.IsTrue(HasAmplitude(releaseStartLeft));
-        Assert.AreEqual(initialLeft, releaseStartLeft);
-        Assert.IsFalse(HasAmplitude(releaseStartRight));
+        const System.Reflection.BindingFlags hidden = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+        object sessionGate = typeof(Switch2VirtualFeedbackSession).GetField("gate", hidden).GetValue(session);
+        var stopTimer = typeof(Switch2VirtualFeedbackSession).GetMethod("StopImpulseReleaseTimerNoLock", hidden);
+        var present = typeof(Switch2VirtualFeedbackSession).GetMethod("PresentImpulseReleaseNoLock", hidden);
+        lock (sessionGate)
+        {
+            Assert.IsTrue(session.TryPublish(Wire(sequence: 1,
+                ownershipEpoch: session.OwnershipEpoch, bodyLow: 0,
+                bodyHigh: 0, leftTrigger: ushort.MaxValue, rightTrigger: 0),
+                mapImpulseTriggersToHdRumble: true));
+            Assert.IsTrue(session.TryPublish(Wire(sequence: 2,
+                ownershipEpoch: session.OwnershipEpoch, bodyLow: 0,
+                bodyHigh: 0, leftTrigger: 0, rightTrigger: 0),
+                mapImpulseTriggersToHdRumble: true));
+            Assert.AreEqual(2, lease.PayloadCount);
+            Assert.IsTrue(Switch2BluetoothHdRumbleCodec.
+                TryDecodeProController(lease.PayloadAt(0), out _,
+                    out Switch2HdRumbleGroup initialLeft,
+                    out Switch2HdRumbleGroup initialRight, out _));
+            Assert.IsTrue(HasAmplitude(initialLeft));
+            Assert.IsFalse(HasAmplitude(initialRight));
+            Assert.IsTrue(Switch2BluetoothHdRumbleCodec.
+                TryDecodeProController(lease.PayloadAt(1), out _,
+                    out Switch2HdRumbleGroup releaseStartLeft,
+                    out Switch2HdRumbleGroup releaseStartRight, out _));
+            Assert.IsTrue(HasAmplitude(releaseStartLeft));
+            Assert.AreEqual(initialLeft, releaseStartLeft);
+            Assert.IsFalse(HasAmplitude(releaseStartRight));
 
-        Stopwatch watch = Stopwatch.StartNew();
+            stopTimer.Invoke(session, null);
+            var envelope = typeof(Switch2VirtualFeedbackSession).GetField("impulseReleaseEnvelope", hidden).GetValue(session);
+            object leftSide = typeof(Switch2ImpulseReleaseEnvelope).GetField("left", hidden).GetValue(envelope);
+            ulong started = (ulong)leftSide.GetType().GetProperty("ReleaseStartedMicroseconds", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(leftSide);
+            int[] samples = firstCallbackMilliseconds < 90
+                ? new[] { 16, 32, 48, 64, 80, 90 }
+                : new[] { firstCallbackMilliseconds };
+            ushort previous = initialLeft.First.Oscillator0AmplitudeCode;
+            foreach (int elapsed in samples)
+            {
+                // Exercise the exact production presentation body with a controlled
+                // timestamp. A late first callback must not replay expired fade frames.
+                present.Invoke(session, new object[] { started + (ulong)elapsed * 1_000 });
+                stopTimer.Invoke(session, null);
+                Assert.IsTrue(Switch2BluetoothHdRumbleCodec.TryDecodeProController(
+                    lease.PayloadAt(lease.PayloadCount - 1), out _,
+                    out Switch2HdRumbleGroup left, out Switch2HdRumbleGroup right, out _));
+                Assert.IsFalse(HasAmplitude(right));
+                if (elapsed < 90)
+                {
+                    Assert.IsTrue(HasAmplitude(left), $"Fade disappeared at {elapsed}ms.");
+                    ushort amplitude = left.First.Oscillator0AmplitudeCode;
+                    Assert.IsTrue(amplitude > 0 && amplitude < previous, $"Fade must decrease at {elapsed}ms.");
+                    previous = amplitude;
+                }
+                else
+                {
+                    Assert.IsFalse(HasAmplitude(left), $"Fade must be neutral at {elapsed}ms.");
+                }
+            }
+            Assert.AreEqual(2 + samples.Length, lease.PayloadCount);
+            Assert.IsTrue(session.TryRetire());
+        }
+        Assert.IsTrue(feedback.TryStopAndRetireUntil(Environment.TickCount64 + 1_000, maxAttempts: 3));
+    }
+
+    [TestMethod]
+    [DoNotParallelize]
+    public void XboxImpulseReleaseRealTimerEventuallyPresentsNeutral()
+    {
+        RecordingLease lease = new();
+        Assert.IsTrue(Switch2BluetoothFeedbackLifetime.TryCreate(lease,
+            Switch2ControllerModel.ProController2, DeviceGeneration,
+            TransportGeneration, out var feedback));
+        Assert.IsTrue(Switch2RuntimeInputDevice.TryCreatePro(DeviceGeneration,
+            TransportGeneration, Switch2Transport.BluetoothLe,
+            out Switch2RuntimeInputDevice runtime, out _));
+        Assert.IsTrue(runtime.TryAttachBluetoothFeedbackLifetime(
+            Switch2ControllerModel.ProController2, DeviceGeneration,
+            TransportGeneration, feedback));
+        StartRuntime(runtime);
+        Assert.IsTrue(runtime.TryCreateVirtualFeedbackSession(
+            ControllerFeedbackSource.XboxOneVirtualDevice,
+            DeviceGeneration, TransportGeneration,
+            out Switch2VirtualFeedbackSession session));
+
+        const System.Reflection.BindingFlags hidden = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+        object sessionGate = typeof(Switch2VirtualFeedbackSession).GetField("gate", hidden).GetValue(session);
+        Stopwatch watch;
+        lock (sessionGate)
+        {
+            Assert.IsTrue(session.TryPublish(Wire(sequence: 1,
+                ownershipEpoch: session.OwnershipEpoch, bodyLow: 0,
+                bodyHigh: 0, leftTrigger: ushort.MaxValue, rightTrigger: 0),
+                mapImpulseTriggersToHdRumble: true));
+            watch = Stopwatch.StartNew();
+            Assert.IsTrue(session.TryPublish(Wire(sequence: 2,
+                ownershipEpoch: session.OwnershipEpoch, bodyLow: 0,
+                bodyHigh: 0, leftTrigger: 0, rightTrigger: 0),
+                mapImpulseTriggersToHdRumble: true));
+        }
         Assert.IsTrue(SpinWait.SpinUntil(() =>
         {
             int count = lease.PayloadCount;
-            if (count < 4)
-            {
-                return false;
-            }
-            return Switch2BluetoothHdRumbleCodec.TryDecodeProController(
-                    lease.PayloadAt(count - 1), out _,
-                    out Switch2HdRumbleGroup left,
-                    out Switch2HdRumbleGroup right, out _) &&
-                !HasAmplitude(left) && !HasAmplitude(right);
-        }, TimeSpan.FromSeconds(2)));
+            return count >= 3 && Switch2BluetoothHdRumbleCodec.TryDecodeProController(
+                lease.PayloadAt(count - 1), out _, out Switch2HdRumbleGroup left,
+                out Switch2HdRumbleGroup right, out _) && !HasAmplitude(left) && !HasAmplitude(right);
+        }, TimeSpan.FromSeconds(2)), $"Timer failed to neutralize; packets={lease.PayloadCount}.");
         Assert.IsTrue(watch.ElapsedMilliseconds >= 60,
             "The release must not collapse into an immediate trigger stop.");
-
-        int finalCount = lease.PayloadCount;
-        ushort initialAmplitude = initialLeft.First.
-            Oscillator0AmplitudeCode;
-        bool sawIntermediate = false;
-        for (int index = 2; index < finalCount - 1; index++)
-        {
-            Assert.IsTrue(Switch2BluetoothHdRumbleCodec.
-                TryDecodeProController(lease.PayloadAt(index), out _,
-                    out Switch2HdRumbleGroup left,
-                    out Switch2HdRumbleGroup right, out _));
-            Assert.IsTrue(HasAmplitude(left));
-            ushort amplitude = left.First.Oscillator0AmplitudeCode;
-            sawIntermediate |= amplitude > 0 &&
-                amplitude < initialAmplitude;
-            Assert.IsFalse(HasAmplitude(right));
-        }
-        Assert.IsTrue(sawIntermediate);
         Assert.IsTrue(session.TryRetire());
         Assert.IsTrue(feedback.TryStopAndRetireUntil(Environment.TickCount64 + 1_000, maxAttempts: 3));
     }

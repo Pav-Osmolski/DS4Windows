@@ -35,14 +35,14 @@
 
         <StackPanel DockPanel.Dock="Bottom" Height="38" VerticalAlignment="Bottom" Background="{DynamicResource SidebarBackgroundColor}">
             <DockPanel Height="38" Margin="10,0,10,0">
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button x:Name="aboutBtn" BorderThickness="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF3881D8"
                             Style="{StaticResource NoBGHoverBtn}" Click="AboutBtn_Click">
                         <TextBlock Text="{lex:Loc HotkeysAbout}" TextDecorations="Underline" Foreground="{DynamicResource AccentColor}" Cursor="Hand" x:Uid="hotkeysText" />
                     </Button>
                     <Button x:Name="StartStopBtn" Content="{lex:Loc StartText}" Margin="10,0,4,0" Click="StartStopBtn_Click" MinWidth="76" Height="28" Foreground="White" Style="{StaticResource BridgePrimaryButtonStyle}" Padding="12,2" />
                 </StackPanel>
-                <Label x:Name="lastMsgLb" Content="{Binding Message}" ToolTip="{Binding Message}" Foreground="{Binding Color}" Margin="4,0,2,0" />
+                <Label x:Name="lastMsgLb" Content="{Binding Message}" ToolTip="{Binding Message}" Foreground="{Binding Color}" Margin="4,0,2,0" Padding="0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
             </DockPanel>
         </StackPanel>
         <TabControl x:Name="mainTabCon" DockPanel.Dock="Top" SelectionChanged="MainTabCon_SelectionChanged" Style="{StaticResource BridgeMainTabControlStyle}">
@@ -885,6 +885,7 @@
                                         <TextBlock Text="Diagnostics" Style="{DynamicResource BridgeSectionTitleStyle}" />
                                         <TextBlock Text="Enable detailed logging only while investigating a problem." Style="{DynamicResource BridgeSectionDescriptionStyle}" />
                                         <CheckBox x:Name="verboseLoggingCheck" Content="Verbose logging" Margin="{StaticResource spaceMargin}" IsChecked="{Binding VerboseStartupLogging}" ToolTip="Writes detailed diagnostic markers to the log. Disable after testing." Style="{DynamicResource BridgeSettingsCheckBoxStyle}" />
+                                        <CheckBox Content="Profile editor timing logs" Margin="{StaticResource spaceMargin}" IsChecked="{Binding ProfileEditorTimingLogging}" ToolTip="Log how long each profile-editor opening phase takes. Off by default; enable when diagnosing a slow editor." Style="{DynamicResource BridgeSettingsCheckBoxStyle}" />
                                         <Button Content="Open log" HorizontalAlignment="Left" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="OpenSettingsLog_Click" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Border>

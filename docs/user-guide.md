@@ -70,7 +70,28 @@ Back up your settings before deleting profiles or importing replacements.
 | Audio Haptics | Use system or application audio as a haptics source |
 | Trigger Lab | Configure persistent adaptive-trigger effects |
 | Nintendo Options | Configure supported rumble, motion, calibration and Joy-Con 2 optical-mouse features |
-| Advanced | Choose output type and configure rumble, audio, latency and compatibility options |
+| Advanced | Use Output, Feedback, Audio, Input and Connection categories to configure output, rumble, controller audio, mouse mappings, latency and compatibility options. Hardware-specific controls follow the selected physical controller. |
+
+Special Actions uses an **Enabled** checkbox for each action. Check it to use
+that action in this profile. Select a row before choosing **Edit Action** or
+**Remove Action**; **New Action** creates a shortcut and **Export actions** saves
+an export. Long names and triggers wrap, and narrow windows allow horizontal
+scrolling. Trigger Lab protection notices remain visible above the list.
+
+Axis Config separates **Left stick**, **Right stick**, **Triggers** and **Motion
+axes**. Stick pages group dead zones, response shaping, outer-stick actions and
+calibration, with optional delta acceleration and flick-stick settings. Lightbar
+groups profile colors, battery alerts, charging and rainbow brightness. Touchpad
+and Gyro keep their output-mode selectors, with focused cards for the selected
+mode, activation, smoothing and calibration. Changing sections preserves unsaved
+edits; use **Apply** or **Save** to write them as usual.
+
+Controller Readings groups live status, sticks, triggers, motion sensors and the
+first touchpad contact into cards that wrap to the available width. **Input** is
+the physical reading; **Output** is the profile-mapped value. Blue plot markers
+show physical input, gray markers show mapped output, and red areas show dead
+zones or drift. The observed physical report interval is not end-to-end latency.
+Sensor bars are read-only; configure behavior on the other editor pages.
 
 ![Profile editor with a DualShock 4 layout](images/profile-editor-current.png)
 
@@ -115,12 +136,20 @@ to activate. Verify manual profile selection first before debugging automation.
 
 ## Output Slots
 
-![Virtual controller output slots](images/tour/output-slots.png)
+Use this page to see which physical controller feeds each virtual output slot.
+**Slot** is DS4Windows' output slot number, not a game-reported XInput index.
+**Current output** shows the virtual controller type. **Reservation** shows
+Dynamic allocation or the type reserved permanently. **Input bound** means a
+physical controller is feeding the slot.
 
-Inspect virtual output assignments and use the available plug/unplug controls.
-The physical controller is the input; the assigned virtual controller is what
-the game receives. A failed disconnect can leave an output registered for retry;
-use the log to diagnose it instead of repeatedly adding more outputs.
+**Auto-fit columns** uses the available window width. **Fit columns** restores
+that layout. Dragging a column edge switches to manual sizing and saves the
+widths with your application settings, including across restarts. Turning
+Auto-fit off restores your last manual layout. Long names wrap; narrower windows
+provide horizontal scrolling and full-text tooltips rather than hiding details.
+Select a row to access Plug, Unplug and the existing reservation controls.
+A failed disconnect can leave an output registered for retry; use the log to
+diagnose it instead of repeatedly adding more outputs.
 
 ## Settings
 
@@ -136,7 +165,7 @@ Settings fills the available window width and groups related options into cards.
 | General | Startup, window behavior, notifications and latency warnings |
 | Appearance | App theme, tray icon and language |
 | Controllers | VIIPER setup, HidHide, Steam Input recovery, device options and swipe profiles; optional Nintendo pairing |
-| Updates & tools | Update checks, profile folder, diagnostic utilities and verbose logging |
+| Updates & tools | Update checks, profile folder, diagnostic utilities, verbose logging and optional profile-editor timing logs (off by default) |
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
 

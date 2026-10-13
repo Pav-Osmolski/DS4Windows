@@ -281,6 +281,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler UnplugRequest;
         int idx;
 
+        public int SlotNumber => idx + 1;
+
         public bool DisplayXInputSlotNum => false;
 
         public string XInputSlotNum => string.Empty;

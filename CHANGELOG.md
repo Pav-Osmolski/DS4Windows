@@ -3,6 +3,26 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## 5.0.20 — Unreleased
+
+### Changed
+
+- Make the Bluetooth impulse-release test robust to delayed hosted callbacks, with controlled-time fade and late-callback checks plus a real-timer neutral-output check. Preserve runtime timing and output ownership.
+- Build one downloadable package from the proposed merge when a branch has an open PR, while retaining separate branch and merge tests and downloads for branches without PRs.
+- Align local and hosted SDK selection, add reviewed NuGet lock files across all projects and monitor .NET SDK servicing updates with Dependabot. Extract the shared UI test dispatcher and add installer-stage timing diagnostics without skipping validation.
+- Refresh Special Actions with a wrapping toolbar, a separate Enabled column and readable, wrapping action names and controller shortcuts. Preserve action editing, export, activation and Trigger Lab protection.
+- Cache NuGet dependencies, remove redundant restores, cancel superseded CI revisions and retain test reports and hang diagnostics. Run both .NET test suites against the exact release source before packaging; retain installer integrity and upgrade checks.
+
+- Improve Output Slots with explicit slot numbers, clearer column headings, wrapping controller names, fit-to-window controls and remembered manual column widths. Replace the unused XInput column and label input binding accurately.
+- Center the Lightbar RGB slider rail and thumb using a dedicated template, preserving mouse dragging, keyboard adjustment and color values.
+- Redesign Controller Readings into wrapping status, stick, trigger, motion and touchpad cards with clear Input/Output values, plot legends, read-only sensor bars and a fully visible report interval. Preserve live snapshot capture and plot coordinates.
+- Center RGB sliders within their color surfaces, replace the always-rainbow button artwork with a rainbow icon, and add breathing room above Touchpad rotation.
+- Organize Profile Editor Advanced options into Output, Feedback, Audio, Input and Connection categories with full-width cards, consistent controls and preserved controller-specific settings.
+- Align footer messages vertically, standardize profile toolbar button padding, and align the Dual Joy-Con aiming heading with the Nintendo feature cards.
+- Make profile-editor timing diagnostics opt-in through Settings > Updates & tools. Persist the separate setting, which defaults to off.
+- Redesign Axis Config, Lightbar, Touchpad and Gyro with focused cards, compact fields and consistent spacing. Preserve all output modes, controller settings and calibration actions; remove decorative lines around mode pages.
+- Use a scalable, theme-aware Keep size icon and confirmation checkmark so both remain visible in dark and light themes.
+
 ## [5.0.19](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.19) — 2026-10-12
 
 ### Fixed

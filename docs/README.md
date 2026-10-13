@@ -34,6 +34,7 @@ and [Settings](user-guide.md#settings). Screenshots sit beside the controls they
 - [Development](development.md): build, tests, packaging and code layout.
 - [Dependency maintenance](dependency-maintenance.md): Dependabot coverage, review checks and manually maintained components.
 - [Roadmap](roadmap.md): priorities and proposals, rather than a completed-task list.
+- [Build and test audit](build-test-audit.md): measured pipeline costs, improvements and remaining tradeoffs.
 - [Release process](release-process.md): numeric versions, draft builds and Latest publication.
 - [Installer](../installer/README.md) and [installer validation](INSTALLER_VALIDATION_STRATEGY.md).
 - [Translations](dev/translations.md) and [profile schema reference](dev/profile-schema-reference.md).

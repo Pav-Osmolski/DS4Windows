@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -39,6 +39,102 @@ namespace DS4WinWPF.DS4Forms
     /// </summary>
     public partial class OutputSlotManagerControl : UserControl
     {
+        private bool applyingColumnLayout;
+        private bool layoutReady;
+        private readonly System.Windows.Threading.DispatcherTimer layoutSaveTimer = new()
+        { Interval = TimeSpan.FromMilliseconds(400) };
+
+        private void Layout_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (layoutReady) return;
+            double[] widths = OutputSlotsColumnLayout.Normalize(DS4Windows.Global.OutputSlotsColumnWidths);
+            bool automatic = DS4Windows.Global.OutputSlotsAutoFit || widths.Length == 0;
+            DS4Windows.Global.OutputSlotsAutoFit = automatic;
+            DS4Windows.Global.OutputSlotsColumnWidths = widths;
+            applyingColumnLayout = true;
+            autoFitCheck.IsChecked = automatic;
+            ApplyColumnWidths(automatic, widths);
+            applyingColumnLayout = false;
+            layoutSaveTimer.Tick += LayoutSaveTimer_Tick;
+            layoutReady = true;
+        }
+
+        private void ApplyColumnWidths(bool automatic, double[] widths)
+        {
+            for (int i = 0; i < currentOutDevLV.Columns.Count; i++)
+                currentOutDevLV.Columns[i].Width = automatic
+                    ? (i == 1 ? new DataGridLength(1, DataGridLengthUnitType.Star) : DataGridLength.Auto)
+                    : new DataGridLength(widths[i]);
+        }
+
+        private double[] CaptureColumnWidths() => currentOutDevLV.Columns.Select(column =>
+            Math.Max(column.MinWidth, column.Width.IsAbsolute ? column.Width.Value : column.ActualWidth)).ToArray();
+
+        private void ColumnResize_Completed(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            if (applyingColumnLayout || !layoutReady || e.Canceled || Math.Abs(e.HorizontalChange) < 0.1) return;
+            DependencyObject target = e.OriginalSource as DependencyObject;
+            while (target != null && target is not System.Windows.Controls.Primitives.DataGridColumnHeader)
+                target = VisualTreeHelper.GetParent(target);
+            if (target is not System.Windows.Controls.Primitives.DataGridColumnHeader header || header.Column == null) return;
+            currentOutDevLV.UpdateLayout();
+            // Capture the completed user gesture, including a formerly flexible star column.
+            double[] widths = CaptureColumnWidths();
+            if (!DS4Windows.Global.OutputSlotsAutoFit &&
+                widths.SequenceEqual(DS4Windows.Global.OutputSlotsColumnWidths ?? Array.Empty<double>())) return;
+            applyingColumnLayout = true;
+            autoFitCheck.IsChecked = false;
+            ApplyColumnWidths(false, widths);
+            applyingColumnLayout = false;
+            DS4Windows.Global.OutputSlotsAutoFit = false;
+            DS4Windows.Global.OutputSlotsColumnWidths = widths;
+            QueueLayoutSave();
+        }
+
+        private void AutoFit_Changed(object sender, RoutedEventArgs e)
+        {
+            if (applyingColumnLayout || !layoutReady) return;
+            bool automatic = autoFitCheck.IsChecked == true;
+            double[] widths = OutputSlotsColumnLayout.Normalize(DS4Windows.Global.OutputSlotsColumnWidths);
+            if (widths.Length == 0) widths = CaptureColumnWidths();
+            applyingColumnLayout = true;
+            ApplyColumnWidths(automatic, widths);
+            applyingColumnLayout = false;
+            DS4Windows.Global.OutputSlotsAutoFit = automatic;
+            if (!automatic) DS4Windows.Global.OutputSlotsColumnWidths = widths;
+            QueueLayoutSave();
+        }
+
+        private void FitColumns_Click(object sender, RoutedEventArgs e)
+        {
+            autoFitCheck.IsChecked = true;
+            applyingColumnLayout = true;
+            ApplyColumnWidths(true, Array.Empty<double>());
+            applyingColumnLayout = false;
+            DS4Windows.Global.OutputSlotsAutoFit = true;
+            QueueLayoutSave();
+        }
+
+        private void QueueLayoutSave()
+        {
+            layoutSaveTimer.Stop();
+            layoutSaveTimer.Start();
+        }
+
+        private void LayoutSaveTimer_Tick(object sender, EventArgs e)
+        {
+            layoutSaveTimer.Stop();
+            DS4Windows.Global.Save();
+        }
+
+        private void Layout_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (!layoutReady) return;
+            if (layoutSaveTimer.IsEnabled) LayoutSaveTimer_Tick(this, EventArgs.Empty);
+            layoutSaveTimer.Tick -= LayoutSaveTimer_Tick;
+            layoutReady = false;
+        }
+
         private DS4Windows.ControlService controlService;
         private CurrentOutDeviceViewModel currentOutDevVM;
         //private PermanentOutDevViewModel permanentDevVM;
@@ -46,6 +142,8 @@ namespace DS4WinWPF.DS4Forms
         public OutputSlotManagerControl()
         {
             InitializeComponent();
+            currentOutDevLV.AddHandler(System.Windows.Controls.Primitives.Thumb.DragCompletedEvent,
+                new System.Windows.Controls.Primitives.DragCompletedEventHandler(ColumnResize_Completed), true);
         }
 
         public void SetupDataContext(DS4Windows.ControlService controlService,

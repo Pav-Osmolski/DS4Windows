@@ -3595,6 +3595,7 @@ Suspend support not enabled.", true);
             long previousPhaseMs = 0;
             void LogOpenPhase(string phase)
             {
+                if (!Global.ProfileEditorTimingLogging) return;
                 long totalMs = openTimer.ElapsedMilliseconds;
                 AppLogger.LogToGui($"[ProfileEditorTiming] {phase}: " +
                     $"phase={totalMs - previousPhaseMs}ms total={totalMs}ms", false);

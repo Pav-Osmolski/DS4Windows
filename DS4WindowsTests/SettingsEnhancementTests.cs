@@ -38,6 +38,29 @@ public class SettingsEnhancementTests
     }
 
     [TestMethod]
+    public void ProfileEditorTimingIsOptInAndPersistsAcrossSettingsReload()
+    {
+        var settings = new AppSettingsDTO();
+        Assert.IsFalse(settings.ProfileEditorTimingLogging);
+        Assert.IsFalse(new BackingStore().profileEditorTimingLogging);
+        var serializer = new System.Xml.Serialization.XmlSerializer(typeof(AppSettingsDTO));
+        using var legacyReader = new StringReader("<Profile />");
+        Assert.IsFalse(((AppSettingsDTO)serializer.Deserialize(legacyReader)).ProfileEditorTimingLogging,
+            "Existing settings files without the new option must keep timing diagnostics off.");
+        foreach (bool enabled in new[] { true, false })
+        {
+            settings.MapFrom(new BackingStore { profileEditorTimingLogging = enabled });
+            using var writer = new StringWriter();
+            serializer.Serialize(writer, settings);
+            using var reader = new StringReader(writer.ToString());
+            var restored = (AppSettingsDTO)serializer.Deserialize(reader);
+            var destination = new BackingStore();
+            restored.MapTo(destination);
+            Assert.AreEqual(enabled, destination.profileEditorTimingLogging);
+        }
+    }
+
+    [TestMethod]
     public void RestartReminderTracksAppliedValuesAndRevertingChanges()
     {
         Assert.IsTrue(SettingsRestartRequirements.Language("de", ""));
