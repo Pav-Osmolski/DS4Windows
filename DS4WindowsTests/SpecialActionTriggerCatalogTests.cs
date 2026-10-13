@@ -315,7 +315,7 @@ public sealed class SpecialActionTriggerCatalogTests
         box.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
     }
 
-    private static void OnSta(Action action, Func<string> progress = null)
+    internal static void OnSta(Action action, Func<string> progress = null)
     {
         var operation = EditorDispatcher.Value.InvokeAsync(action);
         Assert.AreSame(operation.Task, Task.WhenAny(operation.Task, Task.Delay(TimeSpan.FromSeconds(30))).GetAwaiter().GetResult(),

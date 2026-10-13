@@ -13,6 +13,7 @@ using DS4WinWPF.DS4Forms;
 namespace DS4WindowsTests;
 
 [TestClass]
+[DoNotParallelize]
 public class OutputSlotsLayoutTests
 {
     [TestMethod]
@@ -98,7 +99,7 @@ public class OutputSlotsLayoutTests
     public void RealColumnResizeAndAutoFitToggleUpdateTheRememberedLayoutWithoutDiskWrites()
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        SpecialActionTriggerCatalogTests.OnSta(() =>
         {
             bool previousAutomatic = Global.OutputSlotsAutoFit;
             double[] previousWidths = Global.OutputSlotsColumnWidths;
@@ -139,7 +140,6 @@ public class OutputSlotsLayoutTests
                 Global.OutputSlotsColumnWidths = previousWidths;
             }
         });
-        thread.SetApartmentState(ApartmentState.STA); thread.Start(); thread.Join();
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
