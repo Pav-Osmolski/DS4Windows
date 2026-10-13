@@ -1859,6 +1859,9 @@ namespace DS4Windows
             set => m_Config.verboseStartupLogging = value;
         }
 
+        public static bool OutputSlotsAutoFit { get => m_Config.outputSlotsAutoFit; set => m_Config.outputSlotsAutoFit = value; }
+        public static double[] OutputSlotsColumnWidths { get => m_Config.outputSlotsColumnWidths; set => m_Config.outputSlotsColumnWidths = value; }
+
         public static bool ProfileEditorTimingLogging
         {
             get => m_Config.profileEditorTimingLogging;
@@ -5015,6 +5018,8 @@ namespace DS4Windows
         public bool useAdvancedMoonlight = false;
         public bool verboseStartupLogging = false;
         public bool profileEditorTimingLogging = false;
+        public bool outputSlotsAutoFit = true;
+        public double[] outputSlotsColumnWidths = Array.Empty<double>();
         public bool suppressViiperSetupPrompt = false;
         public string preferredViiperPath = string.Empty;
         public bool closeMini = false;

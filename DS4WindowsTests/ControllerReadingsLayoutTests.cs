@@ -100,6 +100,22 @@ public sealed class ControllerReadingsLayoutTests
                     var slider = (Slider)surface.Child;
                     Point center = slider.TranslatePoint(new Point(slider.ActualWidth / 2, slider.ActualHeight / 2), surface);
                     Assert.AreEqual(surface.ActualHeight / 2, center.Y, 0.01, "RGB tracks must share the surface's vertical center.");
+                    foreach (string part in new[] { "RgbRail", "RgbThumb" })
+                    {
+                        var element = (FrameworkElement)slider.Template.FindName(part, slider);
+                        Assert.IsNotNull(element);
+                        Point actualCenter = element.TranslatePoint(new Point(element.ActualWidth / 2, element.ActualHeight / 2), surface);
+                        Assert.AreEqual(surface.ActualHeight / 2, actualCenter.Y, 0.01, part + " must be centered, not merely the slider's outer bounds.");
+                    }
+                    slider.Value = 255;
+                    Assert.AreEqual(255d, slider.Value);
+                    slider.Value = 0;
+                    Slider.IncreaseSmall.Execute(null, slider);
+                    Assert.AreEqual(slider.SmallChange, slider.Value, "Keyboard adjustment must remain available.");
+                    var thumb = (System.Windows.Controls.Primitives.Thumb)slider.Template.FindName("RgbThumb", slider);
+                    double beforeDrag = slider.Value;
+                    thumb.RaiseEvent(new System.Windows.Controls.Primitives.DragDeltaEventArgs(10, 0));
+                    Assert.IsTrue(slider.Value > beforeDrag, "Thumb dragging must still update the color value.");
                 }
             }
             catch (Exception error) { failure = error; }

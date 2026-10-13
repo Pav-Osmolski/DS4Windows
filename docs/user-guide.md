@@ -130,12 +130,20 @@ to activate. Verify manual profile selection first before debugging automation.
 
 ## Output Slots
 
-![Virtual controller output slots](images/tour/output-slots.png)
+Use this page to see which physical controller feeds each virtual output slot.
+**Slot** is DS4Windows' output slot number, not a game-reported XInput index.
+**Current output** shows the virtual controller type. **Reservation** shows
+Dynamic allocation or the type reserved permanently. **Input bound** means a
+physical controller is feeding the slot.
 
-Inspect virtual output assignments and use the available plug/unplug controls.
-The physical controller is the input; the assigned virtual controller is what
-the game receives. A failed disconnect can leave an output registered for retry;
-use the log to diagnose it instead of repeatedly adding more outputs.
+**Auto-fit columns** uses the available window width. **Fit columns** restores
+that layout. Dragging a column edge switches to manual sizing and saves the
+widths with your application settings, including across restarts. Turning
+Auto-fit off restores your last manual layout. Long names wrap; narrower windows
+provide horizontal scrolling and full-text tooltips rather than hiding details.
+Select a row to access Plug, Unplug and the existing reservation controls.
+A failed disconnect can leave an output registered for retry; use the log to
+diagnose it instead of repeatedly adding more outputs.
 
 ## Settings
 

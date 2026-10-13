@@ -7,6 +7,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Changed
 
+- Improve Output Slots with explicit slot numbers, clearer column headings, wrapping controller names, fit-to-window controls and remembered manual column widths. Replace the unused XInput column and label input binding accurately.
+- Center the Lightbar RGB slider rail and thumb using a dedicated template, preserving mouse dragging, keyboard adjustment and color values.
 - Redesign Controller Readings into wrapping status, stick, trigger, motion and touchpad cards with clear Input/Output values, plot legends, read-only sensor bars and a fully visible report interval. Preserve live snapshot capture and plot coordinates.
 - Center RGB sliders within their color surfaces, replace the always-rainbow button artwork with a rainbow icon, and add breathing room above Touchpad rotation.
 - Organize Profile Editor Advanced options into Output, Feedback, Audio, Input and Connection categories with full-width cards, consistent controls and preserved controller-specific settings.

@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -39,6 +39,103 @@ namespace DS4WinWPF.DS4Forms
     /// </summary>
     public partial class OutputSlotManagerControl : UserControl
     {
+        private bool applyingColumnLayout;
+        private bool columnEventsAttached;
+        private readonly System.Windows.Threading.DispatcherTimer layoutSaveTimer = new()
+        { Interval = TimeSpan.FromMilliseconds(400) };
+        private readonly System.ComponentModel.DependencyPropertyDescriptor columnWidthDescriptor =
+            System.ComponentModel.DependencyPropertyDescriptor.FromProperty(DataGridColumn.WidthProperty, typeof(DataGridColumn));
+
+        private void Layout_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (columnEventsAttached) return;
+            double[] widths = OutputSlotsColumnLayout.Normalize(DS4Windows.Global.OutputSlotsColumnWidths);
+            bool automatic = DS4Windows.Global.OutputSlotsAutoFit || widths.Length == 0;
+            DS4Windows.Global.OutputSlotsAutoFit = automatic;
+            DS4Windows.Global.OutputSlotsColumnWidths = widths;
+            applyingColumnLayout = true;
+            autoFitCheck.IsChecked = automatic;
+            ApplyColumnWidths(automatic, widths);
+            applyingColumnLayout = false;
+            foreach (DataGridColumn column in currentOutDevLV.Columns)
+                columnWidthDescriptor.AddValueChanged(column, ColumnWidth_Changed);
+            layoutSaveTimer.Tick += LayoutSaveTimer_Tick;
+            columnEventsAttached = true;
+        }
+
+        private void ApplyColumnWidths(bool automatic, double[] widths)
+        {
+            for (int i = 0; i < currentOutDevLV.Columns.Count; i++)
+                currentOutDevLV.Columns[i].Width = automatic
+                    ? (i == 1 ? new DataGridLength(1, DataGridLengthUnitType.Star) : DataGridLength.Auto)
+                    : new DataGridLength(widths[i]);
+        }
+
+        private double[] CaptureColumnWidths() => currentOutDevLV.Columns.Select(column =>
+            Math.Max(column.MinWidth, column.Width.IsAbsolute ? column.Width.Value : column.ActualWidth)).ToArray();
+
+        private void ColumnWidth_Changed(object sender, EventArgs e)
+        {
+            if (applyingColumnLayout || !columnEventsAttached || sender is not DataGridColumn column || !column.Width.IsAbsolute) return;
+            // A user drag switches the whole table to a stable, remembered manual layout.
+            double[] widths = CaptureColumnWidths();
+            if (!DS4Windows.Global.OutputSlotsAutoFit &&
+                widths.SequenceEqual(DS4Windows.Global.OutputSlotsColumnWidths ?? Array.Empty<double>())) return;
+            applyingColumnLayout = true;
+            autoFitCheck.IsChecked = false;
+            ApplyColumnWidths(false, widths);
+            applyingColumnLayout = false;
+            DS4Windows.Global.OutputSlotsAutoFit = false;
+            DS4Windows.Global.OutputSlotsColumnWidths = widths;
+            QueueLayoutSave();
+        }
+
+        private void AutoFit_Changed(object sender, RoutedEventArgs e)
+        {
+            if (applyingColumnLayout || !columnEventsAttached) return;
+            bool automatic = autoFitCheck.IsChecked == true;
+            double[] widths = OutputSlotsColumnLayout.Normalize(DS4Windows.Global.OutputSlotsColumnWidths);
+            if (widths.Length == 0) widths = CaptureColumnWidths();
+            applyingColumnLayout = true;
+            ApplyColumnWidths(automatic, widths);
+            applyingColumnLayout = false;
+            DS4Windows.Global.OutputSlotsAutoFit = automatic;
+            if (!automatic) DS4Windows.Global.OutputSlotsColumnWidths = widths;
+            QueueLayoutSave();
+        }
+
+        private void FitColumns_Click(object sender, RoutedEventArgs e)
+        {
+            autoFitCheck.IsChecked = true;
+            applyingColumnLayout = true;
+            ApplyColumnWidths(true, Array.Empty<double>());
+            applyingColumnLayout = false;
+            DS4Windows.Global.OutputSlotsAutoFit = true;
+            QueueLayoutSave();
+        }
+
+        private void QueueLayoutSave()
+        {
+            layoutSaveTimer.Stop();
+            layoutSaveTimer.Start();
+        }
+
+        private void LayoutSaveTimer_Tick(object sender, EventArgs e)
+        {
+            layoutSaveTimer.Stop();
+            DS4Windows.Global.Save();
+        }
+
+        private void Layout_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (!columnEventsAttached) return;
+            if (layoutSaveTimer.IsEnabled) LayoutSaveTimer_Tick(this, EventArgs.Empty);
+            foreach (DataGridColumn column in currentOutDevLV.Columns)
+                columnWidthDescriptor.RemoveValueChanged(column, ColumnWidth_Changed);
+            layoutSaveTimer.Tick -= LayoutSaveTimer_Tick;
+            columnEventsAttached = false;
+        }
+
         private DS4Windows.ControlService controlService;
         private CurrentOutDeviceViewModel currentOutDevVM;
         //private PermanentOutDevViewModel permanentDevVM;

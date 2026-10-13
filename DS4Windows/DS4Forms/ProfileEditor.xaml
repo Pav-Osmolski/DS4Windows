@@ -18,6 +18,42 @@
         <localConvert:InvertBoolToVisibilityConverter x:Key="InvertBoolToVisibilityConverter" />
         <local:ControlIndexCheck x:Key="controlIndexCheck" />
         <local:ResourcePaths x:Key="resourcesPaths" />
+        <!-- RGB controls use a centered track instead of the native slider's tick-row layout. -->
+        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid Background="Transparent">
+                            <Border x:Name="RgbRail" Height="4" VerticalAlignment="Center" Background="{DynamicResource MutedForegroundColor}" CornerRadius="2"/>
+                            <Track x:Name="PART_Track" VerticalAlignment="Center" Height="20" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value}" IsDirectionReversed="{TemplateBinding IsDirectionReversed}">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Focusable="False">
+                                        <RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Border Background="Transparent"/></ControlTemplate></RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb x:Name="RgbThumb" Width="12" Height="20">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb"><Border Background="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="2"/></ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Focusable="False">
+                                        <RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Border Background="Transparent"/></ControlTemplate></RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter TargetName="RgbRail" Property="Background" Value="{DynamicResource AccentColor}"/></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!-- Output-mode selectors keep their indices and contents; only page chrome is replaced. -->
         <Style x:Key="ProfileModeTabControlStyle" TargetType="TabControl">
             <Setter Property="Template">
@@ -1311,15 +1347,15 @@
                                                     <StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                             <Label Content="R" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                                            <Border Background="{Binding MainColorRString, FallbackValue=Red}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorR}" Minimum="0" Maximum="255" ToolTip="{Binding MainColorR}" MinWidth="100" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
+                                                            <Border Background="{Binding MainColorRString, FallbackValue=Red}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorR}" Minimum="0" Maximum="255" ToolTip="{Binding MainColorR}" MinWidth="100" Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                             <Label Content="G" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                                            <Border Background="{Binding MainColorGString, FallbackValue=Lime}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorG}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding MainColorG}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
+                                                            <Border Background="{Binding MainColorGString, FallbackValue=Lime}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorG}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding MainColorG}" Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                             <Label Content="B" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                                            <Border Background="{Binding MainColorBString, FallbackValue=Blue}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorB}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding MainColorB}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
+                                                            <Border Background="{Binding MainColorBString, FallbackValue=Blue}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorB}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding MainColorB}" Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </GroupBox>
@@ -1327,15 +1363,15 @@
                                                     <StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                             <Label Content="R" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                                            <Border Background="{Binding LowColorRString, FallbackValue=Red}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding LowColorR}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorR}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
+                                                            <Border Background="{Binding LowColorRString, FallbackValue=Red}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding LowColorR}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorR}" Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                             <Label Content="G" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                                            <Border Background="{Binding LowColorGString, FallbackValue=Lime}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding LowColorG}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorG}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
+                                                            <Border Background="{Binding LowColorGString, FallbackValue=Lime}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding LowColorG}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorG}" Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                             <Label Content="B" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                                            <Border Background="{Binding LowColorBString, FallbackValue=Blue}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding LowColorB}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorB}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
+                                                            <Border Background="{Binding LowColorBString, FallbackValue=Blue}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding LowColorB}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorB}" Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                         <Button x:Name="lowColorBtn" Width="34" Background="{Binding LowColor}" HorizontalAlignment="Left" Margin="0,6,0,0" Click="LowColorBtn_Click" MinHeight="34" Padding="4" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
                                                     </StackPanel>

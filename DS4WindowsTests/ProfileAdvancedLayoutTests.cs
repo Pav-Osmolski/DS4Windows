@@ -78,11 +78,11 @@ public sealed class ProfileAdvancedLayoutTests
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
         XDocument source = XDocument.Load(SourcePath());
-        XElement selected = page == "ControllerReadings"
-            ? XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "ControllerReadingsControl.xaml")).Root
+        XElement selected = page is "ControllerReadings" or "OutputSlots"
+            ? XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, page == "OutputSlots" ? "OutputSlotManagerControl.xaml" : "ControllerReadingsControl.xaml")).Root
             : source.Descendants(wpf + "TabItem")
                 .Single(e => (string)e.Attribute("Header") == (page == "Advanced" ? "Advanced" : "{lex:Loc " + page + "}"));
-        XElement content = selected.Elements().First(e => e.Name.LocalName != "TabItem.Resources");
+        XElement content = selected.Elements().First(e => !e.Name.LocalName.EndsWith(".Resources"));
         var markup = content.Name == wpf + "Grid" ? new XElement(content) : new XElement(wpf + "Grid", new XElement(content));
         // Render the actual shared axial layout without its controller wiring.
         foreach (XElement axial in markup.Descendants().Where(e => e.Name.LocalName == "AxialStickUserControl").ToArray())
@@ -99,13 +99,13 @@ public sealed class ProfileAdvancedLayoutTests
         foreach (XElement element in markup.DescendantsAndSelf())
         foreach (XAttribute attribute in element.Attributes().ToArray())
         {
-            if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged" || attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
+            if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged" or "Loaded" or "Unloaded" or "Checked" or "Unchecked" || attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
             else if (attribute.Value.StartsWith("{lex:Loc "))
             {
                 string key = attribute.Value[9..^1];
                 attribute.Value = strings.TryGetValue(key, out string value) ? value : key;
             }
-            else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis") && !(page == "ControllerReadings" && (attribute.Value.Contains("ElementName=") || attribute.Value.Contains("Source={StaticResource ForegroundColor}"))))
+            else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis") && !(page == "OutputSlots" && (attribute.Name.LocalName == "Binding" || attribute.Value.Contains("BoundInput"))) && !(page == "ControllerReadings" && (attribute.Value.Contains("ElementName=") || attribute.Value.Contains("Source={StaticResource ForegroundColor}"))))
             {
                 if (attribute.Name.LocalName == "Text" && attribute.Value.Contains("ControllerAudioHeader")) attribute.Value = "Controller audio";
                 else attribute.Remove();
@@ -123,8 +123,9 @@ public sealed class ProfileAdvancedLayoutTests
             new XElement(wpf + "BooleanToVisibilityConverter", new XAttribute(x + "Key", "BooleanToVisibilityConverter")),
             new XElement(wpf + "Thickness", new XAttribute(x + "Key", "spaceMargin"), "0,0,0,8"),
             new XElement("{http://schemas.xceed.com/wpf/xaml/toolkit}InverseBoolConverter", new XAttribute(x + "Key", "InverseBoolConverter")),
-            new XElement(modeStyle), existingEntries,
-            selected.Element(wpf + "TabItem.Resources")?.Elements().Where(e => (string)e.Attribute(x + "Key") != "spaceMargin").Select(e => new XElement(e)))));
+            new XElement(modeStyle),
+            new XElement(source.Root.Element(wpf + "UserControl.Resources").Elements().Single(e => (string)e.Attribute(x + "Key") == "ProfileRgbSliderStyle")), existingEntries,
+            selected.Elements().FirstOrDefault(e => e.Name.LocalName.EndsWith(".Resources"))?.Elements().Where(e => (string)e.Attribute(x + "Key") != "spaceMargin").Select(e => new XElement(e)))));
         string artifactDirectory = Environment.GetEnvironmentVariable("DS4W_PROFILE_LAYOUT_ARTIFACTS");
         if (!string.IsNullOrEmpty(artifactDirectory))
         {

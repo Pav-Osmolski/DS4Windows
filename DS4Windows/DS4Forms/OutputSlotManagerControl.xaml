@@ -11,77 +11,81 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="800">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <Style x:Key="SlotTextStyle" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Margin" Value="10,8"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="SlotHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{DynamicResource RaisedBackgroundColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="Padding" Value="10,10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style x:Key="SlotCellStyle" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="{DynamicResource NavigationSelectionColor}"/></Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
-    <DockPanel Margin="4,8">
-        <StackPanel x:Name="plugDevStackPanel" Orientation="Horizontal" DockPanel.Dock="Bottom" Height="30" Margin="0,20,0,0">
-            <Button x:Name="pluginBtn" MinWidth="60" Content="{lex:Loc Plug}" IsEnabled="{Binding PluginEnabled}" Click="PluginBtn_Click" />
-            <Button x:Name="unplugBtn" MinWidth="60" Content="{lex:Loc Unplug}" IsEnabled="{Binding UnpluginEnabled}" Click="UnplugBtn_Click" Margin="30,0,0,0" />
-        </StackPanel>
-
-        <DockPanel>
-            <StackPanel x:Name="sideStackPanel" Orientation="Vertical" Width="100" DockPanel.Dock="Right" Visibility="{Binding SidePanelVisibility}" Margin="10,0,10,0">
-                <StackPanel x:Name="outSlotStackPanel">
-                    <ComboBox x:Name="reserveCombo" SelectedIndex="{Binding ReserveChoice,FallbackValue=0}">
-                        <ComboBoxItem Tag="0" Content="{lex:Loc Dynamic}" />
-                        <ComboBoxItem Tag="1" Content="{lex:Loc Permanent}" />
-                    </ComboBox>
-
-                    <Button x:Name="slotChangeAcceptBtn" Content="{lex:Loc Accept}" IsEnabled="{Binding Dirty,FallbackValue=False}"
-                            Click="SlotChangeAcceptBtn_Click" Margin="0,8,0,0" />
-                </StackPanel>
+    <Grid Margin="0,0,12,8" Loaded="Layout_Loaded" Unloaded="Layout_Unloaded">
+        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+        <Border Style="{DynamicResource BridgeCardStyle}">
+            <StackPanel>
+                <TextBlock Text="Virtual controller slots" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                <TextBlock Text="See which physical controller feeds each virtual output. Dynamic slots are allocated when needed; permanent slots retain their reservation." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                <WrapPanel>
+                    <Button Content="Fit columns" ToolTip="Fit to this window; long controller names wrap." Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="FitColumns_Click" Margin="0,0,16,8"/>
+                    <CheckBox x:Name="autoFitCheck" Content="Auto-fit columns" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" VerticalAlignment="Center" Margin="0,0,16,8" Checked="AutoFit_Changed" Unchecked="AutoFit_Changed"/>
+                    <TextBlock Text="Manual column sizes are saved. Long controller names wrap." Style="{DynamicResource BridgeSectionDescriptionStyle}" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                </WrapPanel>
             </StackPanel>
-            <ListView x:Name="currentOutDevLV" ItemsSource="{Binding SlotDeviceEntries}" SelectedIndex="{Binding SelectedIndex,Mode=OneWayToSource}" DockPanel.Dock="Top">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Width="100" Header="{lex:Loc OutputSlotMan.InputNum}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding InputSlotDisplayString}" />
-                                    <!--<CheckBox IsChecked="{Binding BoundInput,Mode=OneWay}" IsEnabled="False" />-->
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="200" Header="{lex:Loc Current}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding CurrentType}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="200" Header="{lex:Loc Requested}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding DesiredType}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="60" Header="{lex:Loc OutputSlotMan.XInputNum}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding XInputSlotNum}" Visibility="{Binding DisplayXInputSlotNum, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
-                                    <!--<CheckBox IsChecked="{Binding BoundInput,Mode=OneWay}" IsEnabled="False" />-->
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="60" Header="{lex:Loc Active}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding BoundInput,Mode=OneWay}" IsEnabled="False" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </DockPanel>
-
-        <!--<ListView x:Name="permanentOutDevLV" IsEnabled="False" DockPanel.Dock="Top" Height="200">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding DevType}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
-    </DockPanel>
+        </Border>
+        <DataGrid x:Name="currentOutDevLV" Grid.Row="1" ItemsSource="{Binding SlotDeviceEntries}" SelectedIndex="{Binding SelectedIndex,Mode=OneWayToSource}"
+                  AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False"
+                  SelectionMode="Single" SelectionUnit="FullRow" HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="{DynamicResource BorderColor}"
+                  ColumnHeaderStyle="{StaticResource SlotHeaderStyle}" CellStyle="{StaticResource SlotCellStyle}" RowBackground="{DynamicResource CardBackgroundColor}" AlternatingRowBackground="{DynamicResource SurfaceBackgroundColor}"
+                  Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Slot" Binding="{Binding SlotNumber}" MinWidth="60" Width="Auto" ElementStyle="{StaticResource SlotTextStyle}"/>
+                <DataGridTextColumn Header="Input controller" Binding="{Binding InputSlotDisplayString}" MinWidth="220" Width="*" ElementStyle="{StaticResource SlotTextStyle}"/>
+                <DataGridTextColumn Header="Current output" Binding="{Binding CurrentType}" MinWidth="140" Width="Auto" ElementStyle="{StaticResource SlotTextStyle}"/>
+                <DataGridTextColumn Header="Reservation" Binding="{Binding DesiredType}" MinWidth="140" Width="Auto" ElementStyle="{StaticResource SlotTextStyle}"/>
+                <DataGridTemplateColumn Header="Input bound" MinWidth="110" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate><CheckBox IsChecked="{Binding BoundInput,Mode=OneWay}" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,8"/></DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Border Grid.Row="2" Style="{DynamicResource BridgeCardStyle}" Margin="0,14,0,0">
+            <StackPanel>
+                <TextBlock Text="Selected slot" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                <TextBlock Text="Select a row to plug or unplug an output, or change its reservation." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                <WrapPanel>
+                    <StackPanel x:Name="plugDevStackPanel" Orientation="Horizontal" Margin="0,0,24,8">
+                        <Button x:Name="pluginBtn" Content="{lex:Loc Plug}" IsEnabled="{Binding PluginEnabled}" Click="PluginBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
+                        <Button x:Name="unplugBtn" Content="{lex:Loc Unplug}" IsEnabled="{Binding UnpluginEnabled}" Click="UnplugBtn_Click" Margin="12,0,0,0" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
+                    </StackPanel>
+                    <StackPanel x:Name="sideStackPanel" Orientation="Horizontal" Visibility="{Binding SidePanelVisibility}">
+                        <StackPanel x:Name="outSlotStackPanel" Orientation="Horizontal">
+                            <ComboBox x:Name="reserveCombo" SelectedIndex="{Binding ReserveChoice,FallbackValue=0}" MinWidth="140" MinHeight="34" Margin="0,0,12,8">
+                                <ComboBoxItem Tag="0" Content="{lex:Loc Dynamic}"/>
+                                <ComboBoxItem Tag="1" Content="{lex:Loc Permanent}"/>
+                            </ComboBox>
+                            <Button x:Name="slotChangeAcceptBtn" Content="{lex:Loc Accept}" IsEnabled="{Binding Dirty,FallbackValue=False}" Click="SlotChangeAcceptBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,0,8"/>
+                        </StackPanel>
+                    </StackPanel>
+                </WrapPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>
