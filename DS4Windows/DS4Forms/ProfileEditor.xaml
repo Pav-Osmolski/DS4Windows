@@ -1310,34 +1310,34 @@
                                                 <GroupBox x:Name="colorGB" Header="{lex:Loc Color}" Padding="4" Margin="0,0,20,12">
                                                     <StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                            <Label Content="R" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                            <Slider Value="{Binding MainColorR}" Minimum="0" Maximum="255" ToolTip="{Binding MainColorR}" MinWidth="100" Background="{Binding MainColorRString, FallbackValue=Red}"/>
+                                                            <Label Content="R" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                                            <Border Background="{Binding MainColorRString, FallbackValue=Red}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorR}" Minimum="0" Maximum="255" ToolTip="{Binding MainColorR}" MinWidth="100" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                            <Label Content="G" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                            <Slider Value="{Binding MainColorG}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding MainColorG}" Background="{Binding MainColorGString, FallbackValue=Lime}"/>
+                                                            <Label Content="G" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                                            <Border Background="{Binding MainColorGString, FallbackValue=Lime}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorG}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding MainColorG}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                            <Label Content="B" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                            <Slider Value="{Binding MainColorB}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding MainColorB}" Background="{Binding MainColorBString, FallbackValue=Blue}"/>
+                                                            <Label Content="B" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                                            <Border Background="{Binding MainColorBString, FallbackValue=Blue}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorB}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding MainColorB}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </GroupBox>
                                                 <GroupBox x:Name="emptyColorGB" Header="Empty" Padding="4" Margin="0,0,20,12">
                                                     <StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                            <Label Content="R" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                            <Slider Value="{Binding LowColorR}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorR}" Background="{Binding LowColorRString, FallbackValue=Red}"/>
+                                                            <Label Content="R" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                                            <Border Background="{Binding LowColorRString, FallbackValue=Red}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding LowColorR}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorR}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                            <Label Content="G" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                            <Slider Value="{Binding LowColorG}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorG}" Background="{Binding LowColorGString, FallbackValue=Lime}"/>
+                                                            <Label Content="G" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                                            <Border Background="{Binding LowColorGString, FallbackValue=Lime}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding LowColorG}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorG}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                            <Label Content="B" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                            <Slider Value="{Binding LowColorB}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorB}" Background="{Binding LowColorBString, FallbackValue=Blue}"/>
+                                                            <Label Content="B" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                                            <Border Background="{Binding LowColorBString, FallbackValue=Blue}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding LowColorB}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding LowColorB}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
-                                                        <Button x:Name="lowColorBtn" Width="10" Background="{Binding LowColor}" HorizontalAlignment="Left" Margin="0,6,0,0" Click="LowColorBtn_Click" MinHeight="34" Padding="12,7" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
+                                                        <Button x:Name="lowColorBtn" Width="34" Background="{Binding LowColor}" HorizontalAlignment="Left" Margin="0,6,0,0" Click="LowColorBtn_Click" MinHeight="34" Padding="4" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
                                                     </StackPanel>
                                                 </GroupBox>
                                             </WrapPanel>
@@ -1380,10 +1380,15 @@
                                             <TextBlock Text="Rainbow and brightness" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                                             <TextBlock Text="Adjust the rainbow cycle and maximum light level." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                <Button x:Name="rainbowBtn" Height="20" Width="20" ToolTip="{lex:Loc Resources:AlwaysRainbow}" Click="RainbowBtn_Click">
-                                                    <Button.Content>
-                                                        <Image Source="{Binding Source={StaticResource resourcesPaths}, Path=DS4LightbarPNG}"/>
-                                                    </Button.Content>
+                                                <Button x:Name="rainbowBtn" Height="36" Width="40" Padding="5" Style="{DynamicResource BridgeSecondaryButtonStyle}" ToolTip="{lex:Loc Resources:AlwaysRainbow}" Click="RainbowBtn_Click" AutomationProperties.Name="Always rainbow mode">
+                                                    <Viewbox Width="26" Height="22">
+                                                        <Canvas Width="28" Height="24">
+                                                            <Path Data="M 2,21 A 12,12 0 0 1 26,21" Stroke="#F87171" StrokeThickness="3"/>
+                                                            <Path Data="M 5,21 A 9,9 0 0 1 23,21" Stroke="#FBBF24" StrokeThickness="3"/>
+                                                            <Path Data="M 8,21 A 6,6 0 0 1 20,21" Stroke="#34D399" StrokeThickness="3"/>
+                                                            <Path Data="M 11,21 A 3,3 0 0 1 17,21" Stroke="#60A5FA" StrokeThickness="3"/>
+                                                        </Canvas>
+                                                    </Viewbox>
                                                 </Button>
                                                 <xctk:IntegerUpDown MinWidth="80" Minimum="0" Maximum="60" Increment="1" Margin="8,0,0,0" Value="{Binding Rainbow,FallbackValue=5}" IsEnabled="{Binding RainbowExists}" MinHeight="34" VerticalAlignment="Center"/>
                                                 <Label Content="secs/cycle" Padding="0" Margin="12,4,12,10" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
@@ -1468,7 +1473,7 @@
                                                 <CheckBox Content="Lower Right as RMB" Grid.Row="2" Grid.Column="1" Margin="24,0,0,12" IsChecked="{Binding LowerRightTouchRMB}" VerticalAlignment="Center" ToolTip="{lex:Loc Resources:BestUsedRightSide}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                                                 <CheckBox Content="Passthru Click Action (DS4 mode)" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsChecked="{Binding TouchpadClickPassthru}" VerticalAlignment="Center" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                                             </Grid>
-                                            <CheckBox Content="Start with Slide/Scroll Off" IsChecked="{Binding StartTouchpadOff}" VerticalAlignment="Center" ToolTip="{lex:Loc Resources:TouchpadOffTip}" Margin="0,10,0,0" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <CheckBox Content="Start with Slide/Scroll Off" IsChecked="{Binding StartTouchpadOff}" VerticalAlignment="Center" ToolTip="{lex:Loc Resources:TouchpadOffTip}" Margin="0,10,0,14" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="Rotation" ContentStringFormat="{}{0}:" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
                                                 <xctk:DoubleUpDown d:IsHidden="True" MinWidth="80" Minimum="-180" Maximum="180" Increment="1" FormatString="F0" Value="{Binding TouchRelMouseRotation,FallbackValue='0'}" ToolTip="{lex:Loc TouchpadRotationTooltip}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center"/>

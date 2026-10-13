@@ -80,6 +80,13 @@ and Gyro keep their output-mode selectors, with focused cards for the selected
 mode, activation, smoothing and calibration. Changing sections preserves unsaved
 edits; use **Apply** or **Save** to write them as usual.
 
+Controller Readings groups live status, sticks, triggers, motion sensors and the
+first touchpad contact into cards that wrap to the available width. **Input** is
+the physical reading; **Output** is the profile-mapped value. Blue plot markers
+show physical input, gray markers show mapped output, and red areas show dead
+zones or drift. The observed physical report interval is not end-to-end latency.
+Sensor bars are read-only; configure behavior on the other editor pages.
+
 ![Profile editor with a DualShock 4 layout](images/profile-editor-current.png)
 
 The controller diagram follows the selected controller layout; this example

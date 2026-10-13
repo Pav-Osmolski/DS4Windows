@@ -7,6 +7,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Changed
 
+- Redesign Controller Readings into wrapping status, stick, trigger, motion and touchpad cards with clear Input/Output values, plot legends, read-only sensor bars and a fully visible report interval. Preserve live snapshot capture and plot coordinates.
+- Center RGB sliders within their color surfaces, replace the always-rainbow button artwork with a rainbow icon, and add breathing room above Touchpad rotation.
 - Organize Profile Editor Advanced options into Output, Feedback, Audio, Input and Connection categories with full-width cards, consistent controls and preserved controller-specific settings.
 - Align footer messages vertically, standardize profile toolbar button padding, and align the Dual Joy-Con aiming heading with the Nintendo feature cards.
 - Make profile-editor timing diagnostics opt-in through Settings > Updates & tools. Persist the separate setting, which defaults to off.

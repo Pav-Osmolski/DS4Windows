@@ -78,8 +78,10 @@ public sealed class ProfileAdvancedLayoutTests
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
         XDocument source = XDocument.Load(SourcePath());
-        XElement selected = source.Descendants(wpf + "TabItem")
-            .Single(e => (string)e.Attribute("Header") == (page == "Advanced" ? "Advanced" : "{lex:Loc " + page + "}"));
+        XElement selected = page == "ControllerReadings"
+            ? XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "ControllerReadingsControl.xaml")).Root
+            : source.Descendants(wpf + "TabItem")
+                .Single(e => (string)e.Attribute("Header") == (page == "Advanced" ? "Advanced" : "{lex:Loc " + page + "}"));
         XElement content = selected.Elements().First(e => e.Name.LocalName != "TabItem.Resources");
         var markup = content.Name == wpf + "Grid" ? new XElement(content) : new XElement(wpf + "Grid", new XElement(content));
         // Render the actual shared axial layout without its controller wiring.
@@ -89,6 +91,7 @@ public sealed class ProfileAdvancedLayoutTests
             axialGrid.SetAttributeValue(x + "Name", (string)axial.Attribute(x + "Name"));
             axial.ReplaceWith(axialGrid);
         }
+        markup.SetAttributeValue("TextElement.Foreground", "{DynamicResource ForegroundColor}");
         markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
         markup.SetAttributeValue(XNamespace.Xmlns + "xctk", "http://schemas.xceed.com/wpf/xaml/toolkit");
         var strings = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "..", "Translations", "Strings.resx"))
@@ -102,7 +105,7 @@ public sealed class ProfileAdvancedLayoutTests
                 string key = attribute.Value[9..^1];
                 attribute.Value = strings.TryGetValue(key, out string value) ? value : key;
             }
-            else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis"))
+            else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis") && !(page == "ControllerReadings" && (attribute.Value.Contains("ElementName=") || attribute.Value.Contains("Source={StaticResource ForegroundColor}"))))
             {
                 if (attribute.Name.LocalName == "Text" && attribute.Value.Contains("ControllerAudioHeader")) attribute.Value = "Controller audio";
                 else attribute.Remove();
