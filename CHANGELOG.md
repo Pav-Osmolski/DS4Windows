@@ -7,6 +7,9 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Changed
 
+- Refresh Special Actions with a wrapping toolbar, a separate Enabled column and readable, wrapping action names and controller shortcuts. Preserve action editing, export, activation and Trigger Lab protection.
+- Cache NuGet dependencies, remove redundant restores, cancel superseded CI revisions and retain test reports and hang diagnostics. Run both .NET test suites against the exact release source before packaging; retain installer integrity and upgrade checks.
+
 - Improve Output Slots with explicit slot numbers, clearer column headings, wrapping controller names, fit-to-window controls and remembered manual column widths. Replace the unused XInput column and label input binding accurately.
 - Center the Lightbar RGB slider rail and thumb using a dedicated template, preserving mouse dragging, keyboard adjustment and color values.
 - Redesign Controller Readings into wrapping status, stick, trigger, motion and touchpad cards with clear Input/Output values, plot legends, read-only sensor bars and a fully visible report interval. Preserve live snapshot capture and plot coordinates.

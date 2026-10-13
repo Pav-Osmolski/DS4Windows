@@ -17,6 +17,7 @@ permissions:
 jobs:
   identity:
     runs-on: windows-2022
+    timeout-minutes: 45
     outputs:
       tag: ${{ steps.release.outputs.tag }}
       release_id: ${{ steps.release.outputs.release_id }}
@@ -109,7 +110,9 @@ jobs:
     needs: identity
     if: needs.identity.outputs.verify_existing != 'true'
     runs-on: windows-2022
+    timeout-minutes: 45
     env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
       RELEASE_TAG: ${{ needs.identity.outputs.tag }}
       UNSIGNED_RELEASE: ${{ needs.identity.outputs.unsigned_release }}
       RELEASE_ID: ${{ needs.identity.outputs.release_id }}
@@ -127,8 +130,31 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: "3.10"
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.NUGET_PACKAGES }}
+        key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/*.wixproj', '**/*.props', '**/*.targets', 'global.json', 'NuGet.config') }}-package
+        restore-keys: nuget-${{ runner.os }}-
+    - name: Test exact release source
+      shell: pwsh
+      run: |
+        dotnet test .\DS4WindowsTests\DS4WindowsTests.csproj -c Release -p:Platform=x64 --verbosity minimal --logger trx --results-directory TestResults/main --blame-hang-timeout 5m
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        dotnet test .\utils\Switch2UsbHardwareVerify.Tests\Switch2UsbHardwareVerify.Tests.csproj -c Release --verbosity minimal --logger trx --results-directory TestResults/standalone --blame-hang-timeout 5m
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        python .\utils\test-localization-package.py
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    - name: Preserve release test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: DS4Windows_Release_Test_Results
+        path: TestResults/
+        if-no-files-found: warn
+        retention-days: 14
+    - name: Restore application publish dependencies
+      run: dotnet restore .\DS4Windows\DS4WinWPF.csproj -p:Platform=x64 -r win-x64 -p:SelfContained=true
     - name: Set envars for versions
       run: | 
         TAG="$RELEASE_TAG"
@@ -158,7 +184,7 @@ jobs:
       shell: pwsh
       run: |
         dotnet publish .\DS4Windows\DS4WinWPF.csproj -c Release `
-          /p:platform=x64 -r win-x64 --self-contained true `
+          /p:platform=x64 -r win-x64 --self-contained true --no-restore `
           "-p:AssemblyVersion=$env:BINARY_VERSION" `
           "-p:FileVersion=$env:BINARY_VERSION" `
           "-p:Version=$env:PACKAGE_VERSION" `
@@ -381,6 +407,7 @@ jobs:
     needs: identity
     if: needs.identity.outputs.verify_existing == 'true'
     runs-on: windows-2022
+    timeout-minutes: 45
     steps:
     - name: Verify published release bytes from the successful draft build
       shell: pwsh

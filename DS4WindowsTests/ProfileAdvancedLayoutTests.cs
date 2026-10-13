@@ -81,7 +81,7 @@ public sealed class ProfileAdvancedLayoutTests
         XElement selected = page is "ControllerReadings" or "OutputSlots"
             ? XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, page == "OutputSlots" ? "OutputSlotManagerControl.xaml" : "ControllerReadingsControl.xaml")).Root
             : source.Descendants(wpf + "TabItem")
-                .Single(e => (string)e.Attribute("Header") == (page == "Advanced" ? "Advanced" : "{lex:Loc " + page + "}"));
+                .Single(e => (string)e.Attribute("Header") == (page is "Advanced" or "Special Actions" ? page : "{lex:Loc " + page + "}"));
         XElement content = selected.Elements().First(e => !e.Name.LocalName.EndsWith(".Resources"));
         var markup = content.Name == wpf + "Grid" ? new XElement(content) : new XElement(wpf + "Grid", new XElement(content));
         // Render the actual shared axial layout without its controller wiring.
@@ -105,7 +105,7 @@ public sealed class ProfileAdvancedLayoutTests
                 string key = attribute.Value[9..^1];
                 attribute.Value = strings.TryGetValue(key, out string value) ? value : key;
             }
-            else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis") && !(page == "OutputSlots" && (attribute.Name.LocalName == "Binding" || attribute.Value.Contains("BoundInput"))) && !(page == "ControllerReadings" && (attribute.Value.Contains("ElementName=") || attribute.Value.Contains("Source={StaticResource ForegroundColor}"))))
+            else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis") && !((page == "OutputSlots" || page == "Special Actions") && (attribute.Name.LocalName == "Binding" || attribute.Value.Contains("BoundInput") || attribute.Value.Contains("Active"))) && !(page == "ControllerReadings" && (attribute.Value.Contains("ElementName=") || attribute.Value.Contains("Source={StaticResource ForegroundColor}"))))
             {
                 if (attribute.Name.LocalName == "Text" && attribute.Value.Contains("ControllerAudioHeader")) attribute.Value = "Controller audio";
                 else attribute.Remove();

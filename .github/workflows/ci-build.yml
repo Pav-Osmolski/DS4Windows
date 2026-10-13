@@ -15,9 +15,19 @@ on:
 permissions:
   contents: read
 
+# Cancel obsolete revisions of the same branch/PR, never unrelated runs.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  DOTNET_NOLOGO: true
+
 jobs:
   test:
     runs-on: windows-2022
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -26,16 +36,27 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/*.wixproj', '**/*.props', '**/*.targets', 'global.json', 'NuGet.config') }}-tests
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore test dependencies
+        shell: pwsh
+        run: |
+          dotnet restore .\DS4WindowsTests\DS4WindowsTests.csproj -p:Platform=x64
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          dotnet restore .\utils\Switch2UsbHardwareVerify.Tests\Switch2UsbHardwareVerify.Tests.csproj
 
       - name: Run tests (x64)
         # Keep the complete suite, including profile/settings round trips, as
         # the release gate. Hardware-dependent tests retain explicit opt-in gates.
-        run: dotnet test .\DS4WindowsTests\DS4WindowsTests.csproj -c Release -p:Platform=x64 --verbosity normal
+        run: dotnet test .\DS4WindowsTests\DS4WindowsTests.csproj -c Release -p:Platform=x64 --no-restore --verbosity minimal --logger "trx" --results-directory TestResults/main --blame-hang-timeout 5m
 
       - name: Run standalone hardware-verification unit tests
-        run: dotnet test .\utils\Switch2UsbHardwareVerify.Tests\Switch2UsbHardwareVerify.Tests.csproj -c Release --verbosity normal
+        run: dotnet test .\utils\Switch2UsbHardwareVerify.Tests\Switch2UsbHardwareVerify.Tests.csproj -c Release --no-restore --verbosity minimal --logger "trx" --results-directory TestResults/standalone --blame-hang-timeout 5m
 
       - name: Test numeric release identity and legacy publication policy
         shell: pwsh
@@ -77,8 +98,18 @@ jobs:
         shell: pwsh
         run: .\utils\test-previous-msi-upgrade-parameters.ps1
 
+      - name: Preserve test results and hang diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DS4Windows_Test_Results
+          path: TestResults/
+          if-no-files-found: warn
+          retention-days: 14
+
   build:
     runs-on: windows-2022
+    timeout-minutes: 30
     needs: test
     strategy:
       fail-fast: false
@@ -100,8 +131,15 @@ jobs:
       - name: Test localization package layout
         run: python .\utils\test-localization-package.py
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/*.wixproj', '**/*.props', '**/*.targets', 'global.json', 'NuGet.config') }}-package
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore application publish dependencies
+        run: dotnet restore .\DS4Windows\DS4WinWPF.csproj -p:Platform=x64 -r win-x64 -p:SelfContained=true
 
       - name: Compute version
         id: ver
@@ -117,7 +155,7 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Build ${{ matrix.platform }}
-        run: dotnet publish .\DS4Windows\DS4WinWPF.csproj -c Release /p:platform=${{ matrix.platform }} -r win-${{ matrix.platform }} --self-contained true -o .\bin\${{ matrix.platform }}\Release\output
+        run: dotnet publish .\DS4Windows\DS4WinWPF.csproj -c Release /p:platform=${{ matrix.platform }} -r win-${{ matrix.platform }} --self-contained true --no-restore -o .\bin\${{ matrix.platform }}\Release\output
 
       - name: Package ${{ matrix.platform }}
         run: python .\utils\post-build.py .\bin\${{ matrix.platform }}\Release\output . ${{ env.VERSION }}
@@ -146,7 +184,7 @@ jobs:
           $layout = ".\bin\${{ matrix.platform }}\Release\installer-layout"
           $process = Start-Process -FilePath $installer `
             -ArgumentList "/layout `"$layout`" /quiet" `
-            -PassThru -Wait
+            -WindowStyle Hidden -PassThru -Wait
           if ($process.ExitCode -ne 0) {
             throw "Installer layout planning failed with exit code $($process.ExitCode)."
           }
@@ -164,7 +202,7 @@ jobs:
           function Invoke-Msi([string]$arguments, [string]$phase) {
             $process = Start-Process -FilePath $msiexec `
               -ArgumentList "$arguments /qn /norestart /L*v `"$logRoot\$phase.log`"" `
-              -PassThru -Wait
+              -WindowStyle Hidden -PassThru -Wait
             if ($process.ExitCode -notin @(0, 3010)) {
               throw "MSI $phase failed with $($process.ExitCode). Log: $logRoot\$phase.log"
             }

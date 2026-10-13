@@ -72,6 +72,12 @@ Back up your settings before deleting profiles or importing replacements.
 | Nintendo Options | Configure supported rumble, motion, calibration and Joy-Con 2 optical-mouse features |
 | Advanced | Use Output, Feedback, Audio, Input and Connection categories to configure output, rumble, controller audio, mouse mappings, latency and compatibility options. Hardware-specific controls follow the selected physical controller. |
 
+Special Actions uses an **Enabled** checkbox for each action. Check it to use
+that action in this profile. Select a row before choosing **Edit Action** or
+**Remove Action**; **New Action** creates a shortcut and **Export actions** saves
+an export. Long names and triggers wrap, and narrow windows allow horizontal
+scrolling. Trigger Lab protection notices remain visible above the list.
+
 Axis Config separates **Left stick**, **Right stick**, **Triggers** and **Motion
 axes**. Stick pages group dead zones, response shaping, outer-stick actions and
 calibration, with optional delta acceleration and flick-stick settings. Lightbar
