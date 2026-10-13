@@ -3,12 +3,19 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## Unreleased
+## [5.0.21](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.21) — 2026-10-13
 
 ### Fixed
 
 - Restore Axis Config scrolling by bounding its viewport to the available editor height ([#19](https://github.com/Pav-Osmolski/DS4Windows/issues/19)). Add optional live Controller Readings beside the axis controls, stacking below them in narrow windows without creating another polling owner.
 - Distinguish confirmed non-present USB/IP device records from live or unclassified root devices during post-reboot verification ([#20](https://github.com/Pav-Osmolski/DS4Windows/issues/20)). Log device presence/problem codes and driver states; preserve the reboot boundary and rejection of running drivers or retained driver packages. The reported machine still needs validation to establish whether its remaining root record is non-present.
+
+### Documentation and maintenance
+
+- Expand the documentation index and practical guides for controller/output compatibility, Profile Editor, audio/feedback, Nintendo options and integrations. Document Audio Haptics, Trigger Lab, Auto Profiles and diagnostic controls in more detail, use all available documentation images, and correct setup/update/build instructions.
+- Refresh app screenshots to show the current interface, including Output Slots and Log.
+- Upgrade GitHub Actions Python setup from v5 to v7 and caching from v4 to v6 through reviewed Dependabot PRs [#21](https://github.com/Pav-Osmolski/DS4Windows/pull/21) and [#22](https://github.com/Pav-Osmolski/DS4Windows/pull/22). Retain the pinned .NET SDK, Python version, dependency locks and complete validation.
+- Release 5.0.21 with matching app and installer version 5.0.21.0. The maintainer tested the Axis Config/readings changes successfully before publication.
 
 ## [5.0.20](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.20) — 2026-10-13
 
