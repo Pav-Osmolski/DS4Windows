@@ -49,6 +49,14 @@ controller, connection, and game.
 
 ## Get started
 
+**Moving from another DS4Windows fork, including hbashton's?** Back up your
+profiles and settings, disable the old copy's startup entry, and uninstall the
+old installed app or retire its portable folder before using this fork. Setup
+handles replacement of an incompatible USB/IP package and may require a
+Windows restart before continuing. Follow the
+[clean migration steps](docs/getting-started.md#moving-from-another-fork).
+Routine updates of this fork do not require uninstalling it first.
+
 1. Download the **x64 Setup EXE** from [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 2. Follow setup to install the bundled VIIPER backend and USB/IP driver. HidHide helps prevent double input; restart if prompted.
 3. Connect your controller and choose a profile and emulated controller. Avoid overlapping Steam Input remapping for the same game.

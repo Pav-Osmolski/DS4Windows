@@ -21,6 +21,61 @@ Starting with **5.0.14**, new releases use numeric versions and are marked
 **Latest**. Check the release notes for limitations and signing status;
 this fork currently publishes unsigned builds.
 
+### Moving from another fork
+
+If you are moving from another DS4Windows distribution, including hbashton's
+fork, start with a clean set of application files and the matching bundled
+backend. Different releases may use different VIIPER and USB/IP versions.
+For a routine update of **this fork**, follow
+[Update without losing your profiles](#update-without-losing-your-profiles)
+instead; you do not need to uninstall a working installation first.
+
+1. **Back up your profiles and settings.** Check both `%APPDATA%\DS4Windows`
+   and the old application folder, including any `portable-data` folder.
+   Keep the backup until you have verified your controllers and profiles in
+   the new installation.
+2. **Disable the old copy's startup entry**, then close games, exit every
+   DS4Windows copy, and quit VIIPER from its tray icon. Remove old launch
+   shortcuts so you do not accidentally start both distributions.
+3. **Remove the old application installation.** For an installed copy, use
+   its registered uninstaller in Windows' installed-apps list. For a portable
+   copy, keep its folder as a backup but stop launching it; extract this fork
+   into a fresh folder. Do not overlay a different fork's program files.
+4. **Run this fork's x64 Setup EXE** and follow the USB/IP replacement and
+   restart instructions below. Portable users must also complete driver
+   setup when prompted.
+5. Restore only your user profiles and settings if needed. Do not copy old
+   executables, DLLs, runtimes, updater files, VIIPER, or driver installers
+   into the new installation. Test your controller before enabling startup
+   for the new copy.
+
+#### Existing USB/IP drivers
+
+An incompatible old USB/IP package must be removed before the bundled
+replacement is installed. **Let Setup perform this check and removal**:
+it can reuse an exact, verified supported package, so manually uninstalling
+USB/IP is not required for every installation or update.
+
+When replacing a recognized older package, Setup removes it and asks you to
+**restart Windows** before installing the replacement. Use **Restart**, then
+rerun the same Setup EXE and complete Install / Repair as directed. Complete
+any further requested restart before testing controller output. Copying new
+application files alone does not replace a system driver.
+
+If Setup cannot safely identify or remove the existing package, use that
+package's original uninstaller or its entry in Windows' installed-apps list,
+restart Windows, and rerun Setup. If removal still fails, use **Open log** or
+**Copy diagnostics** and follow the
+[USB/IP recovery guidance](troubleshooting.md#setup-stops-after-the-usbip-replacement-reboot). Do not force-delete driver
+files, DriverStore entries, or Setup's replacement-state file to bypass the
+checks. If another application uses USB/IP, coordinate its requirements
+before removing a shared installation.
+
+Keep working, compatible HidHide, FakerInput, and controller-specific drivers
+such as those used by DualShock 3; migrating DS4Windows does not require
+removing every controller driver. Use the USB/IP version bundled with this
+fork rather than independently upgrading or downgrading it.
+
 ### Recommended: all-in-one installer
 
 1. Close games, exit DS4Windows, and quit any running VIIPER from its tray icon.
