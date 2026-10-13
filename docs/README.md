@@ -49,6 +49,7 @@ contributors. Use the feature guides above for everyday setup.
 - [Contributing](../contributing.md): reporting bugs, proposing changes and documentation rules.
 - [Development](development.md): pinned SDK, build, both test suites, packaging and code layout.
 - [Dependency maintenance](dependency-maintenance.md): Dependabot coverage, lock-file review and manually maintained components.
+- [Branch audit and cleanup record](../BRANCH-AUDIT.md): dated findings across the three forks and recorded cleanup decisions; recheck live branch tips before further cleanup.
 - [Roadmap](roadmap.md): priorities and proposals, rather than a completed-task list.
 - [Build and test audit](build-test-audit.md): measured pipeline costs, improvements and remaining tradeoffs.
 - [Release process](release-process.md): numeric versions, draft builds and Latest publication.
