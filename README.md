@@ -16,9 +16,6 @@ Controller remapping, advanced feedback, and per-game profiles for Windows.
 
 </div>
 
-This fork continues [hbashton's DS4Windows](https://github.com/hbashton/DS4Windows).
-Download builds and report issues in this repository.
-
 ## Why this fork exists
 
 This fork continues DS4Windows development with a focus on usability, reliability and ongoing maintenance. The aim is to make its extensive controller features easier to configure and troubleshoot, while keeping the application, VIIPER backend and updater working together.
@@ -34,7 +31,7 @@ Major improvements include:
 - **A dedicated update and release channel:** Integrate this fork’s DS4Updater for portable and installed updates. Publish clearly versioned releases with matching source archives, dependency notices, checksums and build records.
 - **Stronger maintenance and documentation:** Expand the illustrated guides and troubleshooting information. Review dependency and SDK updates through Dependabot, lock build dependencies, improve CI efficiency and retain comprehensive automated tests, translation checks and installer upgrade verification.
 
-The fork builds on the work of hbashton and the wider DS4Windows community. Upstream fixes retain their attribution, and improvements suitable for upstream contribution are prepared separately for review.
+The fork builds on the work of [hbashton's DS4Windows](https://github.com/hbashton/DS4Windows) and the wider DS4Windows community. Upstream fixes retain their attribution, and improvements suitable for upstream contribution are prepared separately for review.
 
 See the [Changelog](CHANGELOG.md) for release-by-release details and [Documentation](docs/README.md) for setup and usage.
 
