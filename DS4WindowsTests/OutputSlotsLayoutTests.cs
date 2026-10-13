@@ -121,6 +121,9 @@ public class OutputSlotsLayoutTests
                 var automatic = (CheckBox)control.FindName("autoFitCheck");
                 Assert.AreEqual(300d, table.Columns[1].Width.Value);
                 table.Columns[1].Width = new DataGridLength(375);
+                var header = Visuals(table).OfType<System.Windows.Controls.Primitives.DataGridColumnHeader>().Single(h => h.Column == table.Columns[1]);
+                var grip = Visuals(header).OfType<System.Windows.Controls.Primitives.Thumb>().Single(t => t.Name == "PART_RightHeaderGripper");
+                grip.RaiseEvent(new System.Windows.Controls.Primitives.DragCompletedEventArgs(75, 0, false));
                 Assert.IsFalse(Global.OutputSlotsAutoFit);
                 Assert.AreEqual(375d, Global.OutputSlotsColumnWidths[1]);
                 Layout(control, 800);
@@ -130,6 +133,15 @@ public class OutputSlotsLayoutTests
                 Assert.IsTrue(table.Columns[1].Width.IsStar);
                 automatic.IsChecked = false;
                 Assert.AreEqual(375d, table.Columns[1].Width.Value, "Leaving auto-fit must restore the saved manual widths.");
+                automatic.IsChecked = true;
+                Layout(control, 980);
+                grip.RaiseEvent(new System.Windows.Controls.Primitives.DragStartedEventArgs(0, 0));
+                grip.RaiseEvent(new System.Windows.Controls.Primitives.DragDeltaEventArgs(-40, 0));
+                Layout(control, 980);
+                grip.RaiseEvent(new System.Windows.Controls.Primitives.DragCompletedEventArgs(-40, 0, false));
+                Assert.IsFalse(Global.OutputSlotsAutoFit, "A native drag of the flexible column must switch to a remembered manual layout.");
+                Assert.IsTrue(table.Columns[1].Width.IsAbsolute);
+                Assert.AreEqual(table.Columns[1].Width.Value, Global.OutputSlotsColumnWidths[1]);
             }
             catch (Exception error) { failure = error; }
             finally

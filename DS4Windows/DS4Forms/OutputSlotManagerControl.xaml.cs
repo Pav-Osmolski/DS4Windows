@@ -40,15 +40,13 @@ namespace DS4WinWPF.DS4Forms
     public partial class OutputSlotManagerControl : UserControl
     {
         private bool applyingColumnLayout;
-        private bool columnEventsAttached;
+        private bool layoutReady;
         private readonly System.Windows.Threading.DispatcherTimer layoutSaveTimer = new()
         { Interval = TimeSpan.FromMilliseconds(400) };
-        private readonly System.ComponentModel.DependencyPropertyDescriptor columnWidthDescriptor =
-            System.ComponentModel.DependencyPropertyDescriptor.FromProperty(DataGridColumn.WidthProperty, typeof(DataGridColumn));
 
         private void Layout_Loaded(object sender, RoutedEventArgs e)
         {
-            if (columnEventsAttached) return;
+            if (layoutReady) return;
             double[] widths = OutputSlotsColumnLayout.Normalize(DS4Windows.Global.OutputSlotsColumnWidths);
             bool automatic = DS4Windows.Global.OutputSlotsAutoFit || widths.Length == 0;
             DS4Windows.Global.OutputSlotsAutoFit = automatic;
@@ -57,10 +55,8 @@ namespace DS4WinWPF.DS4Forms
             autoFitCheck.IsChecked = automatic;
             ApplyColumnWidths(automatic, widths);
             applyingColumnLayout = false;
-            foreach (DataGridColumn column in currentOutDevLV.Columns)
-                columnWidthDescriptor.AddValueChanged(column, ColumnWidth_Changed);
             layoutSaveTimer.Tick += LayoutSaveTimer_Tick;
-            columnEventsAttached = true;
+            layoutReady = true;
         }
 
         private void ApplyColumnWidths(bool automatic, double[] widths)
@@ -74,10 +70,15 @@ namespace DS4WinWPF.DS4Forms
         private double[] CaptureColumnWidths() => currentOutDevLV.Columns.Select(column =>
             Math.Max(column.MinWidth, column.Width.IsAbsolute ? column.Width.Value : column.ActualWidth)).ToArray();
 
-        private void ColumnWidth_Changed(object sender, EventArgs e)
+        private void ColumnResize_Completed(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            if (applyingColumnLayout || !columnEventsAttached || sender is not DataGridColumn column || !column.Width.IsAbsolute) return;
-            // A user drag switches the whole table to a stable, remembered manual layout.
+            if (applyingColumnLayout || !layoutReady || e.Canceled || Math.Abs(e.HorizontalChange) < 0.1) return;
+            DependencyObject target = e.OriginalSource as DependencyObject;
+            while (target != null && target is not System.Windows.Controls.Primitives.DataGridColumnHeader)
+                target = VisualTreeHelper.GetParent(target);
+            if (target is not System.Windows.Controls.Primitives.DataGridColumnHeader header || header.Column == null) return;
+            currentOutDevLV.UpdateLayout();
+            // Capture the completed user gesture, including a formerly flexible star column.
             double[] widths = CaptureColumnWidths();
             if (!DS4Windows.Global.OutputSlotsAutoFit &&
                 widths.SequenceEqual(DS4Windows.Global.OutputSlotsColumnWidths ?? Array.Empty<double>())) return;
@@ -92,7 +93,7 @@ namespace DS4WinWPF.DS4Forms
 
         private void AutoFit_Changed(object sender, RoutedEventArgs e)
         {
-            if (applyingColumnLayout || !columnEventsAttached) return;
+            if (applyingColumnLayout || !layoutReady) return;
             bool automatic = autoFitCheck.IsChecked == true;
             double[] widths = OutputSlotsColumnLayout.Normalize(DS4Windows.Global.OutputSlotsColumnWidths);
             if (widths.Length == 0) widths = CaptureColumnWidths();
@@ -128,12 +129,10 @@ namespace DS4WinWPF.DS4Forms
 
         private void Layout_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (!columnEventsAttached) return;
+            if (!layoutReady) return;
             if (layoutSaveTimer.IsEnabled) LayoutSaveTimer_Tick(this, EventArgs.Empty);
-            foreach (DataGridColumn column in currentOutDevLV.Columns)
-                columnWidthDescriptor.RemoveValueChanged(column, ColumnWidth_Changed);
             layoutSaveTimer.Tick -= LayoutSaveTimer_Tick;
-            columnEventsAttached = false;
+            layoutReady = false;
         }
 
         private DS4Windows.ControlService controlService;
@@ -143,6 +142,8 @@ namespace DS4WinWPF.DS4Forms
         public OutputSlotManagerControl()
         {
             InitializeComponent();
+            currentOutDevLV.AddHandler(System.Windows.Controls.Primitives.Thumb.DragCompletedEvent,
+                new System.Windows.Controls.Primitives.DragCompletedEventHandler(ColumnResize_Completed), true);
         }
 
         public void SetupDataContext(DS4Windows.ControlService controlService,
