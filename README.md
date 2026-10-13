@@ -19,6 +19,25 @@ Controller remapping, advanced feedback, and per-game profiles for Windows.
 This fork continues [hbashton's DS4Windows](https://github.com/hbashton/DS4Windows).
 Download builds and report issues in this repository.
 
+## Why this fork exists
+
+This fork continues DS4Windows development with a focus on usability, reliability and ongoing maintenance. The aim is to make its extensive controller features easier to configure and troubleshoot, while keeping the application, VIIPER backend and updater working together.
+
+Major improvements include:
+
+- **A clearer interface:** Redesigned Settings with search, remembered navigation and full-width layouts. Reorganized the Profile Editor’s Advanced, Axis Config, Lightbar, Touchpad, Gyro and Special Actions pages, with more readable Controller Readings, consistent controls and improved dark/light theme visibility.
+- **More useful Output Slots:** Clear slot numbers and controller/output information, wrapping text, automatic column fitting and manual widths that survive restarts.
+- **Safer profile handling:** Preserve valid profiles when writes fail, report save and rename errors clearly, and provide explicit retry/discard controls for unsaved Overview changes. Incorporate upstream fixes with attribution and strengthen their handling of edge cases.
+- **Updated USB/IP and VIIPER integration:** Support usbip-win2 0.9.8.1 with the matching VIIPER backend, improve startup verification and check the installed executable, library and drivers while retaining controller-import safeguards.
+- **Practical controller fixes:** Address Bluetooth disconnect/reconnection problems, touchpad-click remapping and passthrough, and failed virtual-controller disconnects. Reduce repeated profile-serialization work during profile switching.
+- **Better diagnostics:** Report USB/IP versions and running states, HidHide versions, backend readiness and installed/portable mode. Add Copy Text for sharing logs, and make detailed Profile Editor timing diagnostics optional.
+- **A dedicated update and release channel:** Integrate this fork’s DS4Updater for portable and installed updates. Publish clearly versioned releases with matching source archives, dependency notices, checksums and build records.
+- **Stronger maintenance and documentation:** Expand the illustrated guides and troubleshooting information. Review dependency and SDK updates through Dependabot, lock build dependencies, improve CI efficiency and retain comprehensive automated tests, translation checks and installer upgrade verification.
+
+The fork builds on the work of hbashton and the wider DS4Windows community. Upstream fixes retain their attribution, and improvements suitable for upstream contribution are prepared separately for review.
+
+See the [Changelog](CHANGELOG.md) for release-by-release details and [Documentation](docs/README.md) for setup and usage.
+
 ## Features
 
 - Remap buttons, sticks, touchpad, keyboard, mouse, macros, and special actions.
