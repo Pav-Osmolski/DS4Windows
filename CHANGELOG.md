@@ -3,7 +3,7 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## 5.0.20 — Unreleased
+## [5.0.20](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.20) — 2026-10-13
 
 ### Changed
 
