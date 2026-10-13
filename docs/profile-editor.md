@@ -71,6 +71,12 @@ Output after changing its dead zone. Choose the readout controller under
 Choose **Left stick**, **Right stick**, **Triggers** or **Motion axes**. Begin with
 the normal output mode before tuning response.
 
+Enable **Show controller readings** to compare live Input/Output while adjusting
+axes. In wide windows the readings sit to the left of the controls; in narrow
+windows they stack below them. Both regions scroll independently. Turning it off
+restores the full settings width. The separate Controller Readings page remains
+available; the dock uses the same live view and calibration markers.
+
 | Setting group | What to adjust |
 | --- | --- |
 | Dead zones | Suppress unwanted movement around centre; choose the available radial/axial controls for your use case |
