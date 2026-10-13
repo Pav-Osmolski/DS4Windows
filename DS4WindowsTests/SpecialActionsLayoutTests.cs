@@ -17,7 +17,7 @@ public class SpecialActionsLayoutTests
     [DataRow("DefaultTheme", 980d)]
     public void LongActionsWrapAndEnabledCheckboxRemainsEditable(string theme, double width)
     {
-        SpecialActionTriggerCatalogTests.OnSta(() =>
+        HeadlessWpfDispatcher.Invoke(() =>
         {
             Grid root = ProfileAdvancedLayoutTests.Load(theme, "Special Actions");
             var table = (DataGrid)root.FindName("specialActionsLV");

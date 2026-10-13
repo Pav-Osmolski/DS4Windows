@@ -125,7 +125,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        global-json-file: global.json
     - name: Set up Python 3.10
       uses: actions/setup-python@v5
       with:
@@ -134,7 +134,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ env.NUGET_PACKAGES }}
-        key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/*.wixproj', '**/*.props', '**/*.targets', 'global.json', 'NuGet.config') }}-package
+        key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj', '**/*.wixproj', '**/*.props', '**/*.targets', '**/packages.lock.json', 'global.json', 'NuGet.config') }}-package
         restore-keys: nuget-${{ runner.os }}-
     - name: Test exact release source
       shell: pwsh
@@ -154,7 +154,7 @@ jobs:
         if-no-files-found: warn
         retention-days: 14
     - name: Restore application publish dependencies
-      run: dotnet restore .\DS4Windows\DS4WinWPF.csproj -p:Platform=x64 -r win-x64 -p:SelfContained=true
+      run: dotnet restore .\DS4Windows\DS4WinWPF.csproj -p:Platform=x64 -p:SelfContained=true
     - name: Set envars for versions
       run: | 
         TAG="$RELEASE_TAG"

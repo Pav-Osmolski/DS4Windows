@@ -14,6 +14,10 @@ For each release, advance all of these together:
 Every subsequent release increments the numeric version. Keep change lists
 and upgrade notes in [CHANGELOG.md](../CHANGELOG.md); the README stays concise.
 
+Builds use the SDK in `global.json` and committed NuGet lock files. The draft
+workflow runs both .NET suites against the checked-out tag before packaging.
+For dependency or SDK changes, follow [dependency maintenance](dependency-maintenance.md#sdk-and-dependency-locks).
+
 1. Merge reviewed changes and wait for the `main` CI tests, package checks and
    installer lifecycle/upgrade checks to pass.
 2. Create a draft targeting that exact `main` commit. Use a three-part numeric

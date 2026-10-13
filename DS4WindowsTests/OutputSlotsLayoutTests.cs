@@ -99,7 +99,7 @@ public class OutputSlotsLayoutTests
     public void RealColumnResizeAndAutoFitToggleUpdateTheRememberedLayoutWithoutDiskWrites()
     {
         Exception failure = null;
-        SpecialActionTriggerCatalogTests.OnSta(() =>
+        HeadlessWpfDispatcher.Invoke(() =>
         {
             bool previousAutomatic = Global.OutputSlotsAutoFit;
             double[] previousWidths = Global.OutputSlotsColumnWidths;

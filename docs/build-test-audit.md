@@ -34,7 +34,7 @@ merge. Keeping both preserves branch artifacts and merge checks.
   Jobs still restore project assets. Binaries, test results, signing material
   and installer outputs are never reused from this cache.
 - Explicitly restore each test graph, then run tests with `--no-restore`.
-  Packaging restores only the application with matching x64 runtime and
+  Packaging restores only the application with its declared runtime graph and
   self-contained properties, then publishes with `--no-restore`.
 - Cancel superseded CI runs within the same event and branch/PR. Separate
   event groups preserve branch and merge checks. Release runs are not
@@ -75,24 +75,47 @@ exercise elapsed-time and process behavior; replacing their waits with instant
 mocks would remove coverage. This local timing is not comparable directly with
 the hosted compile-plus-test step.
 
-## Recommended next steps
+## Follow-up implementation
 
-1. Compare several warm-cache hosted runs with this baseline. Initial restores
-   still download missing packages, and cache transfer has its own cost.
-2. If runner usage becomes a concern, decide whether feature-branch artifacts
-   are needed on every push with an open PR. Deduplication must still validate
-   the proposed merge and preserve fork/Dependabot checks.
-3. Profile installer construction before concurrent helper builds or incremental
-   WiX reuse. The mutex, rebuilds, hashes and MSI validation protect against
-   stale or mixed installers.
-4. Extract the persistent UI dispatcher into a dedicated shared fixture as more
-   localized-control tests are added. Separate deterministic tests from shared
-   globals/native fixtures before considering selective parallelization.
-5. Consider an SDK pin and NuGet lock files as a separate dependency-policy
-   change. The floating .NET 8 servicing SDK receives fixes; a pin requires
-   maintenance. Locking must cover installer SDKs, helpers and standalone tools.
-6. Keep install/uninstall and upgrade execution on disposable hosted machines;
-   local verification should not change the developer’s controller setup.
+- Package once from the proposed merge when a feature branch has an open PR.
+  Tests still run on both HEAD and merge revisions. Default-branch pushes,
+  manual runs and branches without PRs retain packages. Lookup errors fall back
+  to building, and ten policy cases cover closed/unrelated/fork PRs and failures.
+  Download the PR run's package when the branch build is skipped.
+- Extract localized-control dispatch into `HeadlessWpfDispatcher`. It keeps the
+  same process-lifetime STA thread and 30-second assertion; nested fixture calls
+  execute directly on that thread. Existing nonparallel guards remain.
+- Select the same reviewed .NET SDK locally and on hosted runners. Commit all
+  16 NuGet graphs and enforce locked restore in CI. Dependabot proposes SDK
+  servicing updates. See [dependency maintenance](dependency-maintenance.md)
+  for regeneration and review instructions.
+- Add installer-stage timings for manifest generation, both helper publishes,
+  MSI and bundle composition, final bundle integrity and policy/payload checks.
+  Native error checks, the repository mutex, forced rebuilds and all validations
+  remain intact. No installer is installed on the developer's machine.
+
+The existing installer log already narrows the bottleneck: on run 38386621163,
+MSI construction took about 76s and bundle construction 69s, while both helper
+publishes together took under ten seconds. Parallel helper compilation would
+save little. Skipping MSI consistency or payload validation is not justified.
+
+A manual warm-cache repeat of the unchanged `8992d7a` source is recorded in
+[run 38391237735](https://github.com/Pav-Osmolski/DS4Windows/actions/runs/38391237735).
+Restore took 15s for tests and 10s for packaging, versus 18s and 15s in that
+revision's initial branch run; cache extraction itself took 9s in each job.
+The test job fell from 4m01s to 3m25s. Hosted compilation/test variance contributes
+to that difference, so it cannot all be attributed to caching.
+
+## Remaining recommendations
+
+1. Collect more warm samples as ordinary changes run, rather than launching
+   numerous redundant builds solely to improve benchmark confidence.
+2. Use the new stage timings to investigate MSI/bundle compression and disk I/O
+   before changing WiX behavior. Keep final payload hashes and lifecycle/upgrade
+   execution on disposable hosted machines.
+3. Isolate shared globals and native-process fixtures before attempting selective
+   test parallelization. Do not remove elapsed-time recovery coverage or
+   automatically rerun failures to make checks appear stable.
 
 No assertions were relaxed or installer checks disabled to shorten runs. No
 release workflow was dispatched during this audit because it writes release

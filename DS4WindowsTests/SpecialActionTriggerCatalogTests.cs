@@ -17,22 +17,6 @@ namespace DS4WindowsTests;
 public sealed class SpecialActionTriggerCatalogTests
 {
     public TestContext TestContext { get; set; }
-    // Localization keeps process-wide weak targets. Their owning dispatcher
-    // must keep pumping between editor instances, just like the actual app.
-    // This background dispatcher owns no windows and ends with the testhost.
-    private static readonly Lazy<Dispatcher> EditorDispatcher = new(() =>
-    {
-        var ready = new TaskCompletionSource<Dispatcher>(TaskCreationOptions.RunContinuationsAsynchronously);
-        var thread = new Thread(() =>
-        {
-            ready.SetResult(Dispatcher.CurrentDispatcher);
-            Dispatcher.Run();
-        }) { IsBackground = true, Name = "Special Actions headless WPF dispatcher" };
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        return ready.Task.GetAwaiter().GetResult();
-    });
-
     [TestMethod]
     public void OneCatalogHasUniqueCanonicalTagsAndRuntimeEnumsForEveryChecklistEntry()
     {
@@ -60,7 +44,7 @@ public sealed class SpecialActionTriggerCatalogTests
     [TestMethod]
     public void EveryExtraCheckboxActuallyAddsAndRemovesItsRegularAndUnloadTrigger()
     {
-        OnSta(() =>
+        HeadlessWpfDispatcher.Invoke(() =>
         {
             var editor = new SpecialActionEditor(Global.TEST_PROFILE_INDEX, new ProfileList());
             Assert.AreEqual(SpecialActionTriggerCatalog.Entries.Count, editor.TriggerCheckBoxes.Count);
@@ -94,7 +78,7 @@ public sealed class SpecialActionTriggerCatalogTests
     public void ActualEditorSaveAndActionsXmlReloadPreserveSelectedExtras(string type, string details, string extras)
     {
         string stage = "starting STA";
-        OnSta(() =>
+        HeadlessWpfDispatcher.Invoke(() =>
         {
             stage = "preparing isolated action storage";
             string directory = Path.Combine(Path.GetTempPath(), "DS4Windows-special-action-" + Guid.NewGuid().ToString("N"));
@@ -170,7 +154,7 @@ public sealed class SpecialActionTriggerCatalogTests
     [TestMethod]
     public void OpeningOlderOrFutureTokensNeverSilentlyDeletesSelections()
     {
-        OnSta(() =>
+        HeadlessWpfDispatcher.Invoke(() =>
         {
             const string tags = "Capture/SideL/SideR/Future Extra";
             var editor = new SpecialActionEditor(Global.TEST_PROFILE_INDEX, new ProfileList(),
@@ -188,7 +172,7 @@ public sealed class SpecialActionTriggerCatalogTests
     [TestMethod]
     public void MacroOptionsAreNotMisrepresentedAsUnknownUnloadButtons()
     {
-        OnSta(() =>
+        HeadlessWpfDispatcher.Invoke(() =>
         {
             var editor = new SpecialActionEditor(Global.TEST_PROFILE_INDEX, new ProfileList(),
                 new SpecialAction("Macro options", "Switch 2 C", "Macro", "65/65",
@@ -246,7 +230,7 @@ public sealed class SpecialActionTriggerCatalogTests
         // persistent UI dispatcher whose ExecutionContext spans earlier rows.
         string renderDirectory = TestContext.TestResultsDirectory;
         string imagePath = Path.Combine(renderDirectory, $"special-actions-{theme}-{width}-{dpi}-{unload}.png");
-        OnSta(() =>
+        HeadlessWpfDispatcher.Invoke(() =>
         {
             var editor = new SpecialActionEditor(Global.TEST_PROFILE_INDEX, new ProfileList(),
                 new SpecialAction("Extra buttons", "Switch 2 C", "Key", "65", extras: "Press\nCapture"));
@@ -315,11 +299,4 @@ public sealed class SpecialActionTriggerCatalogTests
         box.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
     }
 
-    internal static void OnSta(Action action, Func<string> progress = null)
-    {
-        var operation = EditorDispatcher.Value.InvokeAsync(action);
-        Assert.AreSame(operation.Task, Task.WhenAny(operation.Task, Task.Delay(TimeSpan.FromSeconds(30))).GetAwaiter().GetResult(),
-            $"Headless WPF test timed out: {progress?.Invoke() ?? "render / selection"}.");
-        operation.Task.GetAwaiter().GetResult();
-    }
 }
