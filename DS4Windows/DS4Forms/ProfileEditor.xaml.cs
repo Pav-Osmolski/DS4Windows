@@ -1888,6 +1888,8 @@ namespace DS4WinWPF.DS4Forms
                 profileSettingsTabCon.SelectedIndex = nextSection - 3;
                 AnimateWorkspacePanel(profileSettingsTabCon);
             }
+
+            RefreshControllerReadingsPresentation();
         }
 
         private static void AnimateWorkspacePanel(UIElement panel)
@@ -3035,16 +3037,60 @@ namespace DS4WinWPF.DS4Forms
         private void SidebarTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             RefreshMappingLiveInput();
-            if (sidebarTabControl.SelectedItem == contReadingsTab)
-            {
-                controllerReadingsTabActive = true;
-                conReadingsUserCon.EnableControl(true);
-            }
-            else if (controllerReadingsTabActive)
-            {
-                controllerReadingsTabActive = false;
-                conReadingsUserCon.EnableControl(false);
-            }
+            RefreshControllerReadingsPresentation();
+        }
+
+        private void AxisReadingsToggle_Changed(object sender, RoutedEventArgs e)
+            => RefreshControllerReadingsPresentation();
+
+        private void AxisContentArea_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (axisReadingsHost != null)
+                ArrangeAxisReadingsDock(axisReadingsHost,
+                    axisReadingsHost.Visibility == Visibility.Visible, e.NewSize.Width);
+        }
+
+        private void RefreshControllerReadingsPresentation()
+        {
+            // Selection events can arrive while InitializeComponent builds the tabs.
+            if (conReadingsUserCon == null || axisReadingsHost == null ||
+                axisContentArea == null || contReadingsTab == null) return;
+
+            bool docked = profileSettingsTabCon.Visibility == Visibility.Visible &&
+                profileSettingsTabCon.SelectedItem == axisConfigTab &&
+                axisReadingsToggle.IsChecked == true;
+            MoveControllerReadings(contReadingsTab, axisReadingsHost, conReadingsUserCon, docked);
+            ArrangeAxisReadingsDock(axisReadingsHost, docked,
+                axisContentArea.ActualWidth);
+            controllerReadingsTabActive = docked ||
+                (sidebarTabControl.Visibility == Visibility.Visible &&
+                 sidebarTabControl.SelectedItem == contReadingsTab);
+            conReadingsUserCon.EnableControl(controllerReadingsTabActive);
+        }
+
+        internal static void MoveControllerReadings(ContentControl page, ContentControl dock,
+            FrameworkElement readings, bool docked)
+        {
+            ContentControl target = docked ? dock : page;
+            ContentControl previous = docked ? page : dock;
+            if (ReferenceEquals(target.Content, readings)) return;
+            previous.Content = null;
+            target.Content = readings;
+        }
+
+        internal static void ArrangeAxisReadingsDock(FrameworkElement dock,
+            bool visible, double width)
+        {
+            dock.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+            bool beside = visible && width >= 860;
+            // Keep the same live readings instance. At narrow widths stack it below
+            // the settings instead of squeezing labels and fields out of view.
+            Grid.SetColumn(dock, 0);
+            Grid.SetRow(dock, beside ? 0 : 1);
+            Grid.SetColumnSpan(dock, beside ? 1 : 2);
+            dock.Width = beside ? 330 : double.NaN;
+            dock.Height = visible && !beside ? 220 : double.NaN;
+            dock.Margin = beside ? new Thickness(0, 0, 12, 0) : new Thickness(0, 12, 0, 0);
         }
 
         private void TiltControlsButton_Click(object sender, RoutedEventArgs e)

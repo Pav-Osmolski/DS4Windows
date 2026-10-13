@@ -606,7 +606,7 @@
                 <Thickness x:Key="spaceMargin" Bottom="8" />
             </TabControl.Resources>
 
-            <TabItem Header="{lex:Loc AxisConfig}" Tag="Sticks, triggers, dead zones, curves, and motion axes">
+            <TabItem x:Name="axisConfigTab" Header="{lex:Loc AxisConfig}" Tag="Sticks, triggers, dead zones, curves, and motion axes">
                 <TabItem.Resources>
                     <Thickness x:Key="spaceMargin" Bottom="10"/>
                     <Style x:Key="gridRowHeight" TargetType="{x:Type RowDefinition}">
@@ -616,15 +616,29 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <WrapPanel Margin="0,0,0,12">
                         <RadioButton Content="Left stick" GroupName="ProfileAxisCategory" IsChecked="True" Style="{DynamicResource BridgeSettingsCategoryStyle}" x:Name="profileAxis0Nav"/>
                         <RadioButton Content="Right stick" GroupName="ProfileAxisCategory" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" x:Name="profileAxis1Nav"/>
                         <RadioButton Content="Triggers" GroupName="ProfileAxisCategory" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" x:Name="profileAxis2Nav"/>
                         <RadioButton Content="Motion axes" GroupName="ProfileAxisCategory" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" x:Name="profileAxis3Nav"/>
+                        <CheckBox x:Name="axisReadingsToggle" Content="Show controller readings"
+                                  Margin="12,0,0,0" VerticalAlignment="Center"
+                                  Checked="AxisReadingsToggle_Changed" Unchecked="AxisReadingsToggle_Changed"
+                                  Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                     </WrapPanel>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" x:Name="axisContentArea" SizeChanged="AxisContentArea_SizeChanged">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ContentControl x:Name="axisReadingsHost" Visibility="Collapsed" Margin="0,0,12,0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                        <Grid Grid.Column="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding IsChecked, ElementName=profileAxis0Nav, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <StackPanel Margin="0,0,12,8">
                                 <Border Style="{DynamicResource BridgeCardStyle}">
@@ -1357,6 +1371,7 @@
                                 </Border>
                             </StackPanel>
                         </ScrollViewer>
+                        </Grid>
                     </Grid>
                 </Grid>
             </TabItem>

@@ -99,7 +99,7 @@ public sealed class ProfileAdvancedLayoutTests
         foreach (XElement element in markup.DescendantsAndSelf())
         foreach (XAttribute attribute in element.Attributes().ToArray())
         {
-            if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged" or "Loaded" or "Unloaded" or "Checked" or "Unchecked" || attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
+            if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged" or "Loaded" or "Unloaded" or "SizeChanged" or "Checked" or "Unchecked" || attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
             else if (attribute.Value.StartsWith("{lex:Loc "))
             {
                 string key = attribute.Value[9..^1];
