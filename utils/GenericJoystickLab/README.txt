@@ -18,6 +18,7 @@ separate backend/key/configuration, and refuses existing USB/IP imports.
 It creates one temporary joystick at a time and tests two axis layouts with
 centred, full-range, combined and button triggers. Both 32-bit and 64-bit
 DirectInput and WinMM are checked, including disconnect neutral/reconnect.
+The first input stream opens only after Windows has enumerated the joystick.
 Only a port matching the lab's private server and allocated device is detached.
 Installed apps, drivers, startup tasks and controller hiding are not changed.
 

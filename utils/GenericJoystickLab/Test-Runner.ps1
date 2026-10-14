@@ -10,6 +10,7 @@ $script:MockAttached = $false
 $script:MockForeign = $false
 $script:MockDetaches = 0
 $script:MockReply = 0
+$script:MockConnected = $false
 $script:MockExpected = $null
 $script:MockNeutral = $null
 $script:MockListener = $null
@@ -47,6 +48,7 @@ function Start-LabProcess([string]$File, [string[]]$Arguments, [string]$Director
         $script:MockNeutral = [pscustomobject]@{ axes = $options.neutralAxes; buttons = 0; hat = 8 }
         $script:MockExpected = $script:MockNeutral
         $script:MockAttached = $true
+        $script:MockConnected = $false
         $script:MockReply = 0
         if ($env:LAB_MOCK_SCENARIO -eq 'foreign') { $script:MockForeign = $true }
     }
@@ -64,9 +66,10 @@ function Send-LabCommand($Process, [string]$Command) {
             if ($script:MockAttached) { throw 'Client stopped before owned native import was detached.' }
             $Process.HasExited = $true
         }
-        'disconnect' { $script:MockExpected = $script:MockNeutral }
-        'reconnect' { $script:MockExpected = $script:MockNeutral }
+        'disconnect' { $script:MockConnected = $false; $script:MockExpected = $script:MockNeutral }
+        'reconnect' { $script:MockConnected = $true; $script:MockExpected = $script:MockNeutral }
         default {
+            if (-not $script:MockConnected) { throw 'Input was sent before the post-enumeration stream connection.' }
             $step = @($plans | ForEach-Object { $_.steps } | Where-Object { $_.wire -ceq $Command })[0]
             $script:MockExpected = $step
         }
@@ -114,7 +117,7 @@ foreach ($scenario in @('success', 'probe-failure', 'attach-failure', 'foreign')
     if ($summaries.Count -ne 1) { throw "Missing summary for $scenario" }
     $summary = Get-Content $summaries[0].FullName -Raw | ConvertFrom-Json
     if ($scenario -eq 'success') {
-        if ($exitCode -ne 0 -or -not $summary.passed -or $summary.observations -ne 140) { throw 'Success orchestration failed.' }
+        if ($exitCode -ne 0 -or -not $summary.passed -or $summary.observations -ne 156) { throw 'Success orchestration failed.' }
     } elseif ($exitCode -eq 0 -or $summary.passed) { throw "Failure was missed: $scenario" }
     if ($scenario -ne 'foreign' -and @($summary.cleanupErrors).Count -ne 0) { throw "Owned cleanup failed: $scenario" }
     if ($scenario -eq 'foreign' -and @($summary.cleanupErrors).Count -eq 0) { throw 'Foreign import was silently ignored.' }

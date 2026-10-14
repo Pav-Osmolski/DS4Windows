@@ -110,7 +110,7 @@ The next milestone is an automatic synthetic-input test, before integrating a
 selectable Profile Editor output. It checks **DirectInput and WinMM in both
 32-bit and 64-bit processes**: six named axes, twelve buttons, hat directions,
 both stick layouts, all four trigger modes, producer-loss neutral and reconnect.
-The 140 observations are generated from the actual DS4Windows mapping policy,
+The 156 observations are generated from the actual DS4Windows mapping policy,
 not a separate copy of its calculations.
 
 Extract the prepared lab ZIP to a fresh writable folder, close DS4Windows,
@@ -151,3 +151,12 @@ Ownership/comparison/timeout tests and the launcher simulation perform no driver
 operations. The simulation covers successful completion, a probe timeout,
 post-attachment stream failure, foreign-import preservation and report privacy.
 Actual driver enumeration remains a user-run validation step.
+
+The first user-run lab report confirmed neutral enumeration and the complete
+six-axis/twelve-button/one-hat capabilities through both APIs and architectures.
+It then stopped with a stale producer, before testing motion. The lab now waits
+for Windows enumeration before connecting its input stream: asynchronous initial
+USB configuration retires any producer acquired too early. The socket integration
+test now includes SET_CONFIGURATION followed by neutral polling and stream
+creation. Later resets still invalidate the producer; the lab does not silently
+reconnect and hide them. The full matrix still needs another Windows run.

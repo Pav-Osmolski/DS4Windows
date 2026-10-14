@@ -142,6 +142,11 @@ try {
             $candidate = Read-LabReply $client
             if ($candidate.kind -ne 'ready' -or $candidate.bus -ne $bus -or $candidate.port -le 0 -or $candidate.vid -ne '0xffff' -or $candidate.pid -ne '0xd10c' -or [string]$candidate.device -notmatch '^\d+$') { throw 'Invalid native attachment receipt.' }
             $receipt = $candidate
+            # Initial Windows SET_CONFIGURATION can retire a producer opened
+            # immediately after IOCTL attach. Prove both consumers see neutral
+            # before creating the first producer; never silently retry resets.
+            Capture-Step $plan.name 'Windows enumeration before producer' $plan.neutral 15
+            Send-LabCommand $client 'reconnect'
             foreach ($step in $plan.steps) {
                 Send-LabCommand $client $step.wire
                 Start-Sleep -Milliseconds 350
