@@ -172,3 +172,15 @@ input arrived. Lab debug logs now include published/presented states and
 scheduler counters twice per second, allowing the next native report to separate
 backend delivery from consumer sampling. This revision is not yet proof of
 successful native movement or game compatibility.
+
+The third native report passed stick endpoints, buttons and hat directions
+through both APIs in both architectures. It reached the first trigger and
+revealed a probe conversion error: WinMM V carries Rx and U carries Ry for
+this complete six-axis descriptor, while the probe had reversed them.
+DirectInput and the backend presentation already agreed on the correct Rx
+value. The conversion now uses X/Y/Z/V/U/R with matching per-axis ranges;
+both native builds run independent sentinel/range tests during packaging.
+This order also matches the primary
+[Wine WinMM implementation](https://github.com/wine-mirror/wine/blob/master/dlls/winmm/joystick.c)
+for a descriptor containing X/Y/Z/Rx/Ry/Rz. Remaining trigger modes and
+disconnect/reconnect still await a full native run.

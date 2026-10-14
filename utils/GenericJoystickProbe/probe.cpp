@@ -42,6 +42,13 @@ static LONG normalized(DWORD value, UINT min, UINT max) {
     double unit = (static_cast<double>(value) - min) / (max - min);
     return static_cast<LONG>(std::clamp(unit, 0.0, 1.0) * 65534.0 - 32767.0);
 }
+static std::array<LONG, 6> winMMAxes(const JOYINFOEX& state, const JOYCAPSW& caps) {
+    // With all six HID axes present, WinMM names Rx=V, Ry=U, Rz=R.
+    // Keep canonical JSON order X/Y/Z/Rx/Ry/Rz, including each axis's range.
+    return { normalized(state.dwXpos, caps.wXmin, caps.wXmax), normalized(state.dwYpos, caps.wYmin, caps.wYmax),
+        normalized(state.dwZpos, caps.wZmin, caps.wZmax), normalized(state.dwVpos, caps.wVmin, caps.wVmax),
+        normalized(state.dwUpos, caps.wUmin, caps.wUmax), normalized(state.dwRpos, caps.wRmin, caps.wRmax) };
+}
 static void quote(const std::wstring& value) {
     std::wcout << L'"';
     for (wchar_t c : value) {
@@ -146,9 +153,7 @@ static int captureWinMM() {
         if (result == JOYERR_NOERROR) {
             Reading reading;
             reading.name = caps.szPname;
-            reading.axes = { normalized(state.dwXpos, caps.wXmin, caps.wXmax), normalized(state.dwYpos, caps.wYmin, caps.wYmax),
-                normalized(state.dwZpos, caps.wZmin, caps.wZmax), normalized(state.dwUpos, caps.wUmin, caps.wUmax),
-                normalized(state.dwVpos, caps.wVmin, caps.wVmax), normalized(state.dwRpos, caps.wRmin, caps.wRmax) };
+            reading.axes = winMMAxes(state, caps);
             reading.buttons = state.dwButtons; reading.hat = hatIndex(state.dwPOV);
             reading.axisCount = caps.wNumAxes; reading.buttonCount = caps.wNumButtons; reading.hatCount = (caps.wCaps & JOYCAPS_HASPOV) ? 1 : 0;
             mmReadings.push_back(reading);
@@ -206,6 +211,22 @@ static int serve() {
 }
 
 int wmain(int argc, wchar_t** argv) {
+    if (argc == 2 && std::wstring(argv[1]) == L"--self-test") {
+        JOYCAPSW caps{};
+        caps.wXmax = caps.wYmax = caps.wZmax = caps.wRmax = caps.wUmax = caps.wVmax = 65534;
+        JOYINFOEX state{};
+        state.dwXpos = 1; state.dwYpos = 2; state.dwZpos = 3;
+        state.dwVpos = 4; state.dwUpos = 5; state.dwRpos = 6;
+        const std::array<LONG, 6> expected = { -32766, -32765, -32764, -32763, -32762, -32761 };
+        if (winMMAxes(state, caps) != expected) return 1;
+        // Distinct V/U ranges must follow their values when reordered.
+        state.dwVpos = caps.wVmax = 100;
+        state.dwUpos = caps.wUmin = 50;
+        const auto axes = winMMAxes(state, caps);
+        if (axes[3] != 32767 || axes[4] != -32767) return 1;
+        std::wcout << L"WinMM axis ordering and normalization tests passed. No device access.\n";
+        return 0;
+    }
     serverMode = argc == 2 && std::wstring(argv[1]) == L"--server";
     jsonMode = serverMode || (argc == 2 && std::wstring(argv[1]) == L"--json");
     if (argc > 2 || (argc == 2 && !jsonMode && (std::wstring(argv[1]).find_first_not_of(L"0123456789") != std::wstring::npos))) {

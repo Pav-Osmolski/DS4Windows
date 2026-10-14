@@ -14,6 +14,7 @@ function Check-Exit([string]$What) { if ($LASTEXITCODE -ne 0) { throw "$What fai
 foreach ($architecture in @('x64', 'x86')) {
     & "$repo/utils/GenericJoystickProbe/build.ps1" -Architecture $architecture -OutputDirectory "$output-native"
     Copy-Item -LiteralPath "$output-native/GenericJoystickProbe-$architecture.exe" -Destination $output
+    & "$output/GenericJoystickProbe-$architecture.exe" --self-test; Check-Exit "Probe $architecture conversion tests"
 }
 Push-Location $viiper
 try {
