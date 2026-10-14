@@ -596,12 +596,13 @@ function Get-UsbipUninstallRecords {
 }
 
 function Set-UsbipReplacementBoundary([Version]$installedVersion,
-        [Version]$requiredVersion) {
+        [Version]$requiredVersion, [string]$uninstallLogPath) {
     $state = [ordered]@{
         BootSessionId = Get-WindowsBootSessionId
         RemovedVersion = $installedVersion.ToString()
         RequiredVersion = $requiredVersion.ToString()
         StartedUtc = [DateTime]::UtcNow.ToString("o")
+        UninstallLogPath = $uninstallLogPath
     }
     $state | ConvertTo-Json | Set-Content `
         -LiteralPath $script:UsbipReplacementStatePath -Encoding UTF8
@@ -628,11 +629,11 @@ function Assert-UsbipPostRebootState {
         Test-UsbipDeviceIsPresent $_
     })
     foreach ($device in $usbipDevices) {
-        $details = @('PNPDeviceID', 'Present', 'ConfigManagerErrorCode', 'Status') |
+        $details = @('PNPDeviceID', 'HardwareID', 'Present', 'ConfigManagerErrorCode', 'Status') |
             ForEach-Object {
                 $property = $device.PSObject.Properties[$_]
                 $value = if ($property -and $null -ne $property.Value) {
-                    [string]$property.Value
+                    (@($property.Value) | ForEach-Object { [string]$_ }) -join ', '
                 } else { 'unknown' }
                 "$_=$value"
             }
@@ -711,6 +712,11 @@ function Resolve-UsbipReplacementBoundary {
         "Detected the required reboot after USBIP removal; validating old " +
         "driver state before phase 2."
     ) Cyan
+    $uninstallLogProperty = $state.PSObject.Properties['UninstallLogPath']
+    if ($uninstallLogProperty -and $uninstallLogProperty.Value) {
+        Write-SetupLog ("USBIP phase-one uninstall log: " +
+            [string]$uninstallLogProperty.Value) Cyan
+    }
     Assert-UsbipPostRebootState
     Remove-Item -LiteralPath $script:UsbipReplacementStatePath -Force
     Write-SetupLog "USBIP reboot boundary validated; phase 2 may proceed." Green
@@ -1001,10 +1007,17 @@ function Remove-MismatchedUsbipPackage($entry, [Version]$installedVersion,
         "a required reboot boundary. Pinned $requiredVersion will not be " +
         "installed in this Windows session."
     ) Yellow
-    Set-UsbipReplacementBoundary $installedVersion $requiredVersion
+    # Keep a unique Inno log outside the package being removed. Exit code zero
+    # alone does not establish that its child device-removal commands succeeded.
+    New-Item -ItemType Directory -Path $script:InstallerLogRoot -Force | Out-Null
+    $uninstallLogPath = Join-Path $script:InstallerLogRoot (
+        "usbip-uninstall-" + [Guid]::NewGuid().ToString("N") + ".log")
+    Set-UsbipReplacementBoundary $installedVersion $requiredVersion $uninstallLogPath
+    Write-SetupLog ("USBIP phase-one uninstall log: $uninstallLogPath") Cyan
     try {
         $uninstall = Start-Process -FilePath $uninstaller `
-            -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" `
+            -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /LOG=`"$uninstallLogPath`"" `
+            -WindowStyle Hidden `
             -PassThru
     }
     catch {
@@ -1030,6 +1043,8 @@ function Remove-MismatchedUsbipPackage($entry, [Version]$installedVersion,
     }
 
     $uninstall.Refresh()
+    Write-SetupLog ("USBIP uninstaller exit code: $($uninstall.ExitCode). " +
+        "Driver removal still requires post-reboot verification.") Cyan
     if ($uninstall.ExitCode -ne 0) {
         $script:UsbipReplacementPhaseOne = $false
         Remove-Item -LiteralPath $script:UsbipReplacementStatePath -Force `

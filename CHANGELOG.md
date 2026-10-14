@@ -3,6 +3,19 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.22](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.22) — 2026-10-14
+
+### Fixed
+
+- Keep DS3/DS4 cleanup with its legacy controller owner when stopping the shared input service. Switch 2 cleanup no longer incorrectly quarantines those connections, blocking Stop/Start ([#25](https://github.com/Pav-Osmolski/DS4Windows/issues/25)). Report incomplete disconnect cleanup in the normal log to help diagnose remaining reconnect failures.
+- Prevent Output Slots' horizontal scrollbar from flashing during auto-fit window resizing. Retain horizontal scrolling for narrow windows and saved manual column widths.
+- Center the Profile Editor's launch-program controls, add consistent spacing, and show the program icon without an empty button border.
+- Give the controller readings dock beside Axis Config enough width for its cards, margins and scrollbar, preventing clipped right edges when Show controller readings is enabled ([#19](https://github.com/Pav-Osmolski/DS4Windows/issues/19)).
+
+### Diagnostics
+
+- Preserve a unique USB/IP uninstall log across reboot/repair attempts and include hardware IDs in post-reboot device diagnostics ([#20](https://github.com/Pav-Osmolski/DS4Windows/issues/20)). This improves investigation of incomplete removal; it does not bypass checks for live drivers or claim to resolve the reported installation failure.
+
 ## [5.0.21](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.21) — 2026-10-13
 
 ### Fixed

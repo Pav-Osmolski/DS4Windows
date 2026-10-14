@@ -4900,6 +4900,7 @@ namespace DS4Windows
                         out InputControllerSlotTableFailure tableFailure))
                 {
                     StartupDiag($"Typed legacy retirement rejected index={index}: {beginFailure}/{tableFailure}");
+                    LogDebug($"Controller {index + 1} cleanup could not begin ({beginFailure}/{tableFailure}). Please share the full log if reconnecting fails.", true);
                     return;
                 }
 
@@ -4919,6 +4920,7 @@ namespace DS4Windows
                         out tableFailure))
                 {
                     StartupDiag($"Typed legacy terminal neutral failed index={index}: {neutralFailure}/{tableFailure}");
+                    LogDebug($"Controller {index + 1} output cleanup did not finish ({neutralFailure}/{tableFailure}). Please share the full log if reconnecting fails.", true);
                     return;
                 }
                 if (!legacyHidSlotAuthority.TryFinalizeRetirement(binding,
@@ -4928,6 +4930,7 @@ namespace DS4Windows
                         out tableFailure))
                 {
                     StartupDiag($"Typed legacy final retirement failed index={index}: {retireFailure}/{tableFailure}");
+                    LogDebug($"Controller {index + 1} connection cleanup did not finish ({retireFailure}/{tableFailure}). Please share the full log if reconnecting fails.", true);
                     return;
                 }
                 if (!ClearExactControllerSlot(device, index)) return;
