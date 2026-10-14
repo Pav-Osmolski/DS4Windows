@@ -3508,9 +3508,9 @@
                                     <StackPanel>
                                         <TextBlock Text="Launch a program" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                                         <TextBlock Text="Select a program to launch when this profile is activated." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
-                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" x:Name="launchProgCk" Content="{lex:Loc LaunchProgramWithProfile}" IsChecked="{Binding LaunchProgramExists}" IsEnabled="{Binding LaunchProgramExists}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
-                                            <Button x:Name="launchProgBrowseBtn" Click="LaunchProgBrowseBtn_Click" Margin="0,0,8,12" Style="{DynamicResource BridgeSecondaryButtonStyle}">
+                                        <WrapPanel>
+                                            <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" x:Name="launchProgCk" Content="{lex:Loc LaunchProgramWithProfile}" IsChecked="{Binding LaunchProgramExists}" IsEnabled="{Binding LaunchProgramExists}" VerticalAlignment="Center" Margin="0,0,12,8" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                            <Button x:Name="launchProgBrowseBtn" Click="LaunchProgBrowseBtn_Click" Margin="0,0,12,8" VerticalAlignment="Center" Style="{DynamicResource BridgeSecondaryButtonStyle}">
                                                 <Button.Content>
                                                     <PriorityBinding>
                                                         <Binding Path="LaunchProgramName"/>
@@ -3518,12 +3518,16 @@
                                                     </PriorityBinding>
                                                 </Button.Content>
                                             </Button>
-                                            <Button x:Name="launchProgIconBtn" Width="20" Height="20" Margin="20,0,0,0" Focusable="False">
-                                                <Button.Background>
-                                                    <ImageBrush ImageSource="{Binding LaunchProgramIcon}"/>
-                                                </Button.Background>
-                                            </Button>
-                                        </StackPanel>
+                                            <Image x:Name="launchProgIconImage" Source="{Binding LaunchProgramIcon}" Width="20" Height="20" Margin="0,0,0,8" VerticalAlignment="Center">
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="Source" Value="{x:Null}"><Setter Property="Visibility" Value="Collapsed"/></Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                        </WrapPanel>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>

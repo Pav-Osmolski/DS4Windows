@@ -9,6 +9,70 @@ namespace DS4Windows.Tests;
 public sealed class Switch2RuntimeRegistrationTransactionCoreTests
 {
     [TestMethod]
+    public void MissingSwitch2CleanupOwnerStillRequiresQuarantine()
+    {
+        var table = new InputControllerRegistrationTable(1);
+        var core = new Switch2RuntimeRegistrationTransactionCore(table);
+        Assert.IsTrue(table.TryOpen(105, out _));
+        Assert.IsTrue(core.TryAdoptOpen(105, out _));
+        var runtime = CreateRegistration(106, 107);
+        Assert.IsTrue(table.TryReserveAndBind(runtime.Registration, out var token, out _, out _));
+        Assert.IsTrue(table.TryClose(105, out var snapshots, out _));
+        Assert.IsTrue(core.TryObserveExternalTableClose(105, snapshots, out _));
+        Assert.IsFalse(core.TryClose(105, 1_000, out var failure));
+        Assert.AreEqual(Switch2RuntimeRegistrationTransactionFailureKind.QuarantineRequired, failure.Kind);
+        Assert.AreEqual(InputControllerSlotState.Quarantined, table.GetSnapshot()[token.Slot].State);
+    }
+
+    [TestMethod]
+    [DataRow(InputControllerSlotState.Bound)]
+    [DataRow(InputControllerSlotState.Attached)]
+    [DataRow(InputControllerSlotState.Quarantined)]
+    public void MixedCloseRetiresSwitch2AndPreservesLegacyOwnerState(InputControllerSlotState legacyState)
+    {
+        var table = new InputControllerRegistrationTable(2);
+        var core = new Switch2RuntimeRegistrationTransactionCore(table);
+        Assert.IsTrue(table.TryOpen(101, out _));
+        Assert.IsTrue(core.TryAdoptOpen(101, out _));
+        var hid = (DS4Windows.HidDevice)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(DS4Windows.HidDevice));
+        var legacy = new DS4Windows.InputDevices.DS3Device(hid, "Mixed close DS3");
+        try
+        {
+            var owner = new FakeRegistrationOwner(legacy, 102, InputControllerOwnershipKind.LegacyHid);
+            Assert.IsTrue(InputControllerRegistration.TryCreate(legacy, 102,
+                InputControllerOwnershipKind.LegacyHid, true, false, owner, out var registration, out _));
+            Assert.IsTrue(table.TryReserveAndBind(registration, out var legacyToken, out var rollback, out _));
+            if (legacyState == InputControllerSlotState.Attached)
+            {
+                Assert.IsTrue(table.TryBeginActivate(legacyToken, out var activation, out _));
+                Assert.IsTrue(table.TryAcquireActivationCommit(activation, out var commit, out _));
+                Assert.IsTrue(table.TryCompleteActivate(commit, true, out _));
+            }
+            else if (legacyState == InputControllerSlotState.Quarantined)
+            {
+                Assert.IsTrue(table.TryQuarantine(rollback, InputControllerSlotQuarantineReason.StopRejected, out _));
+            }
+            var runtime = CreateRegistration(103, 104);
+            var participant = new FakeParticipant(runtime.Registration);
+            Assert.IsTrue(core.TryAttach(runtime.Registration, () => participant,
+                static (_, _, _) => { }, 1_000, out var runtimeToken, out _));
+            Assert.IsTrue(table.TryClose(101, out var snapshots, out _));
+            Assert.IsTrue(core.TryObserveExternalTableClose(101, snapshots, out _));
+            Assert.IsTrue(core.TryClose(101, 1_000, out var failure), failure.Kind.ToString());
+            Assert.AreEqual(InputControllerSlotState.Removed, table.GetSnapshot()[runtimeToken.Slot].State);
+            var remaining = table.GetSnapshot()[legacyToken.Slot];
+            Assert.AreEqual(legacyState == InputControllerSlotState.Attached ?
+                InputControllerSlotState.Retiring : legacyState, remaining.State);
+            Assert.AreEqual(legacyToken, remaining.Token);
+            Assert.AreEqual(0, owner.StopCalls, "Only the legacy owner may stop its workers.");
+            Assert.AreEqual(0, owner.RemoveCalls);
+            if (legacyState == InputControllerSlotState.Quarantined)
+                Assert.AreEqual(InputControllerSlotQuarantineReason.StopRejected, remaining.QuarantineReason);
+        }
+        finally { legacy.ReadWaitEv.Dispose(); }
+    }
+
+    [TestMethod]
     public void RemovalNotificationIsExactTerminalOutsideLocksAndObserverIsolated()
     {
         RegistrationFixture fixture = CreateRegistration(791, 891);
@@ -578,15 +642,19 @@ public sealed class Switch2RuntimeRegistrationTransactionCoreTests
     {
         private readonly DS4Device device;
         private readonly ulong generation;
+        private readonly InputControllerOwnershipKind kind;
+        internal int StopCalls { get; private set; }
+        internal int RemoveCalls { get; private set; }
 
-        internal FakeRegistrationOwner(DS4Device device, ulong generation)
+        internal FakeRegistrationOwner(DS4Device device, ulong generation,
+            InputControllerOwnershipKind kind = InputControllerOwnershipKind.Switch2Runtime)
         {
             this.device = device;
             this.generation = generation;
+            this.kind = kind;
         }
 
-        public InputControllerOwnershipKind Kind =>
-            InputControllerOwnershipKind.Switch2Runtime;
+        public InputControllerOwnershipKind Kind => kind;
 
         public bool Authenticates(DS4Device candidate,
             ulong candidateGeneration) =>
@@ -597,6 +665,7 @@ public sealed class Switch2RuntimeRegistrationTransactionCoreTests
             ulong candidateGeneration, int timeoutMilliseconds,
             out InputControllerOwnerOperationFailure failure)
         {
+            StopCalls++;
             bool authenticated = Authenticates(candidate,
                 candidateGeneration);
             failure = authenticated ?
@@ -608,9 +677,11 @@ public sealed class Switch2RuntimeRegistrationTransactionCoreTests
 
         public bool TryRemove(DS4Device candidate,
             ulong candidateGeneration,
-            out InputControllerOwnerOperationFailure failure) =>
-            TryStopAndQuiesce(candidate, candidateGeneration, 0,
-                out failure);
+            out InputControllerOwnerOperationFailure failure)
+        {
+            RemoveCalls++;
+            return TryStopAndQuiesce(candidate, candidateGeneration, 0, out failure);
+        }
     }
 
     private sealed class AdoptionFence

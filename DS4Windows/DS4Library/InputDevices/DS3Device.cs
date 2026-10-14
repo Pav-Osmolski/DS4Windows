@@ -32,6 +32,7 @@ namespace DS4Windows.InputDevices
         private bool outputDirty = false;
         private DS4HapticState previousHapticState = new DS4HapticState();
         private byte[] featureReport;
+        private bool inputTransportLost;
         internal Func<byte[], bool> PhysicalOutputWriteTestHook;
 
         public override event ReportHandler<EventArgs> Report = null;
@@ -162,13 +163,7 @@ namespace DS4Windows.InputDevices
                         //Console.WriteLine(Mac.ToString() + " " + DateTime.UtcNow.ToString("o") + "> disconnect due to read failure: " + winError);
                         //Log.LogToGui(Mac.ToString() + " disconnected due to read failure: " + winError, true);
 
-                        exitInputThread = true;
-                        readWaitEv.Reset();
-                        StopOutputUpdate();
-                        isDisconnecting = true;
-                        RunRemoval();
-
-                        timeoutExecuted = true;
+                        HandleInputTransportLoss();
                         continue;
                     }
 
@@ -437,6 +432,18 @@ namespace DS4Windows.InputDevices
             timeoutExecuted = true;
         }
 
+        private void HandleInputTransportLoss()
+        {
+            // This connection is already being removed after a failed read.
+            // Its final physical output cannot be delivered over this transport.
+            Volatile.Write(ref inputTransportLost, true);
+            exitInputThread = true;
+            readWaitEv.Reset();
+            isDisconnecting = true;
+            RunRemoval();
+            timeoutExecuted = true;
+        }
+
         protected override void StopOutputUpdate()
         {
             SendEmptyOutputReport();
@@ -447,6 +454,21 @@ namespace DS4Windows.InputDevices
         {
             try
             {
+                if (Volatile.Read(ref inputTransportLost))
+                {
+                    // DS3 writes physical output on its input worker; it has
+                    // no separate output worker. Once that exact worker has
+                    // exited after transport loss, there is nothing left to
+                    // stop and no reachable controller to receive a neutral.
+                    // Never use transport loss alone as proof of quiescence.
+                    Thread input = ds4Input;
+                    return input != null && input.Join(0) ?
+                        DS4DeviceWorkerLifecycleResult.Success(
+                            DS4DeviceWorkerLifecycleOperation.Stop) :
+                        DS4DeviceWorkerLifecycleResult.Uncertain(
+                            DS4DeviceWorkerLifecycleOperation.Stop,
+                            DS4DeviceWorkerLifecycleFailureKind.StopTimedOut);
+                }
                 return SendEmptyOutputReport(timeoutMilliseconds) ?
                     DS4DeviceWorkerLifecycleResult.Success(
                         DS4DeviceWorkerLifecycleOperation.Stop) :

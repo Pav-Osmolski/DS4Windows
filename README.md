@@ -4,7 +4,7 @@
 
 Controller remapping, advanced feedback, and per-game profiles for Windows.
 
-[**Download**](https://github.com/Pav-Osmolski/DS4Windows/releases) · [Documentation](docs/README.md) · [Changelog](CHANGELOG.md) · [Community](https://www.reddit.com/r/DS4Windows/)
+[**Download**](https://github.com/Pav-Osmolski/DS4Windows/releases) · [Documentation](docs/README.md) · [Changelog](CHANGELOG.md) · [Community](https://www.reddit.com/r/DS4Windows/) · [Support on Ko-fi](https://ko-fi.com/devilhood42)
 
 [![Releases](https://img.shields.io/github/v/release/Pav-Osmolski/DS4Windows?logo=github&label=release)](https://github.com/Pav-Osmolski/DS4Windows/releases)
 [![Main build](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml?query=branch%3Amain)
@@ -67,6 +67,10 @@ For portable use, extract the entire `DS4Windows_<version>_x64.zip`, keeping the
 `Lang` folder with the app. See [Documentation](docs/README.md) for
 setup, update instructions, and troubleshooting. Read the release notes for
 signing status and known limitations.
+
+## Support development
+
+If this fork is useful to you, you can [support Pawel's ongoing work on Ko-fi](https://ko-fi.com/devilhood42). Contributions help support maintenance, bug fixes, controller testing and continued development of this independent fork. Support is entirely optional; DS4Windows remains free and open source.
 
 ## Project links
 

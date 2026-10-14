@@ -8,6 +8,61 @@ namespace DS4Windows.Tests;
 public sealed class ControlServiceLegacyHidSlotAuthorityTests
 {
     [TestMethod]
+    [DataRow(false, false)]
+    [DataRow(true, false)]
+    [DataRow(false, true)]
+    [DataRow(true, true)]
+    public void SharedServiceCloseLeavesLegacyRetirementWithItsExactOwner(bool ds3, bool removalTimedOut)
+    {
+        var workers = new FakeWorkerLifecycle();
+        int removals = 0;
+        var authority = new ControlServiceLegacyHidSlotAuthority(1, _ => removals++, workers);
+        Assert.IsTrue(authority.TryOpenNext(out ulong generation, out _, out _));
+        var runtime = new DS4Windows.Switch2.Switch2RuntimeRegistrationTransactionCore(authority.Table);
+        Assert.IsTrue(runtime.TryAdoptOpen(generation, out _));
+        var hid = (HidDevice)RuntimeHelpers.GetUninitializedObject(typeof(HidDevice));
+        DS4Device device = ds3 ? new DS4Windows.InputDevices.DS3Device(hid, "Shared DS3 stop") :
+            new DS4Device(hid, "Shared DS4 stop");
+        try
+        {
+            var binding = Attach(authority, device);
+            if (removalTimedOut)
+            {
+                // A physical disconnect can already have retired presentation
+                // but failed to join its input worker before the user clicks Stop.
+                Assert.IsTrue(authority.TryBeginRetirement(binding, out _, out _));
+                Assert.IsTrue(authority.TryPublishTerminalNeutral(binding, () => { }, 1_000, out _, out _));
+                workers.StopResults.Enqueue(DS4DeviceWorkerLifecycleResult.Uncertain(
+                    DS4DeviceWorkerLifecycleOperation.Stop, DS4DeviceWorkerLifecycleFailureKind.StopTimedOut));
+                Assert.IsFalse(authority.TryFinalizeRetirement(binding, 1_000, out _, out _));
+            }
+            int previousStops = workers.StopCalls;
+            Assert.IsTrue(authority.TryClose(out var snapshots, out _, out _));
+            Assert.IsTrue(runtime.TryObserveExternalTableClose(generation, snapshots, out _));
+            Assert.IsTrue(runtime.TryClose(generation, 1_000, out var failure), failure.Kind.ToString());
+            Assert.AreEqual(removalTimedOut ? InputControllerSlotState.Quarantined :
+                InputControllerSlotState.Retiring, authority.Table.GetSnapshot()[0].State,
+                "Switch 2 cleanup must not quarantine a DS3/DS4 lifetime owned by the legacy authority.");
+            Assert.AreEqual(previousStops, workers.StopCalls);
+            Assert.AreEqual(0, removals);
+            if (removalTimedOut)
+                Assert.IsTrue(authority.TryRecoverQuarantinedActivation(binding, 1_000, out _));
+            else
+            {
+                Assert.IsTrue(authority.TryPublishTerminalNeutral(binding, () => { }, 1_000, out _, out _));
+                Assert.IsTrue(authority.TryFinalizeRetirement(binding, 1_000, out _, out _));
+            }
+            Assert.AreEqual(previousStops + 1, workers.StopCalls);
+            Assert.AreEqual(1, removals);
+            Assert.AreEqual(removalTimedOut ? InputControllerSlotState.Quarantined :
+                InputControllerSlotState.Removed, authority.Table.GetSnapshot()[0].State);
+            Assert.IsTrue(authority.TryOpenNext(out ulong next, out _, out _));
+            Assert.IsTrue(runtime.TryAdoptOpen(next, out _), "A completed stop must allow the next Start.");
+        }
+        finally { device.ReadWaitEv.Dispose(); }
+    }
+
+    [TestMethod]
     public void ExactLegacyProfileTargetRequiresAttachedTableAndRejectsRetirement()
     {
         var hid = (HidDevice)RuntimeHelpers.GetUninitializedObject(typeof(HidDevice));
