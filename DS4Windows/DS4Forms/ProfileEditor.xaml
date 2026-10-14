@@ -3099,9 +3099,41 @@
                                                     <ComboBoxItem Content="DualSense Edge"/>
                                                     <ComboBoxItem Content="Switch 2 Pro"/>
                                                     <ComboBoxItem Content="Xbox One / Series"/>
+                                                    <ComboBoxItem Content="Generic joystick (preview)" IsEnabled="{Binding ExperimentalJoystickAvailable}" ToolTip="Available in the matched portable DirectInput preview."/>
                                                 </ComboBox>
                                             </StackPanel>
                                             <TextBlock x:Name="outputControllerHintText" TextWrapping="Wrap" MaxWidth="430" Margin="6,0,0,8" Opacity="0.78" HorizontalAlignment="Left"/>
+                                            <Border x:Name="genericJoystickPanel" Visibility="Collapsed" BorderThickness="1" BorderBrush="{DynamicResource BorderColor}" Padding="14" Margin="0,0,0,12" CornerRadius="6">
+                                                <StackPanel>
+                                                    <TextBlock Text="Generic joystick (DirectInput)" FontWeight="SemiBold" FontSize="18" Margin="0,0,0,8"/>
+                                                    <TextBlock Text="Experimental, input only: six axes, twelve buttons and a direction hat. No virtual rumble, force feedback or audio. Game compatibility is still being tested." TextWrapping="Wrap" Margin="0,0,0,14"/>
+                                                    <TextBlock Text="Axis layout" Margin="0,0,0,6"/>
+                                                    <ComboBox SelectedIndex="{Binding JoystickLayoutIndex}" Width="280" HorizontalAlignment="Left" MinHeight="34" Margin="0,0,0,8">
+                                                        <ComboBoxItem Content="Legacy games (three sticks)"/>
+                                                        <ComboBoxItem Content="Racing games (two sticks and pedals)"/>
+                                                    </ComboBox>
+                                                    <TextBlock Text="{Binding JoystickAxisHint}" TextWrapping="Wrap" Margin="0,0,0,14"/>
+                                                    <TextBlock Text="Trigger behaviour" Margin="0,0,0,6"/>
+                                                    <ComboBox SelectedIndex="{Binding JoystickTriggerModeIndex}" Width="280" HorizontalAlignment="Left" MinHeight="34" Margin="0,0,0,8">
+                                                        <ComboBoxItem Content="Separate axes, centred at rest"/>
+                                                        <ComboBoxItem Content="Separate axes, full range"/>
+                                                        <ComboBoxItem Content="One combined axis"/>
+                                                        <ComboBoxItem Content="Buttons only"/>
+                                                    </ComboBox>
+                                                    <TextBlock Text="{Binding JoystickTriggerHint}" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                                                    <WrapPanel>
+                                                        <CheckBox Content="Invert left trigger" IsChecked="{Binding JoystickInvertLeft}" IsEnabled="{Binding JoystickSeparateTriggers}" Margin="0,0,18,8"/>
+                                                        <CheckBox Content="Invert right trigger" IsChecked="{Binding JoystickInvertRight}" IsEnabled="{Binding JoystickSeparateTriggers}" Margin="0,0,18,8"/>
+                                                        <CheckBox Content="Invert combined axis" IsChecked="{Binding JoystickInvertCombined}" IsEnabled="{Binding JoystickCombinedTriggers}" Margin="0,0,0,8"/>
+                                                    </WrapPanel>
+                                                    <StackPanel Orientation="Horizontal" IsEnabled="{Binding JoystickButtonTriggers}" Margin="0,4,0,8">
+                                                        <TextBlock Text="Button threshold" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                                        <xctk:IntegerUpDown Value="{Binding JoystickButtonThreshold}" Minimum="1" Maximum="255" Width="90"/>
+                                                        <TextBlock Text="of 255" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                                    </StackPanel>
+                                                    <TextBlock Text="Apply or save to recreate the virtual joystick with these settings. Bind controls inside your game afterwards." TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                            </Border>
                                             <StackPanel x:Name="switch2ViiperLegendPanel" Orientation="Horizontal" Margin="0,0,0,12" Visibility="Collapsed" VerticalAlignment="Center">
                                                 <Grid Width="92" Height="72" Margin="0,0,10,0">
                                                     <Grid.RowDefinitions>

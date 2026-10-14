@@ -214,3 +214,39 @@ Production USB identity, physical-controller output allocation/lifetime,
 profile persistence/editor integration and original-game validation remain.
 No release, force-feedback, 16-button native layout or game compatibility claim
 follows from this result. Both feature PRs remain drafts.
+
+## Physical-controller portable preview (2026-10-15)
+
+The feature branch now connects the validated mapper to the existing mapped-input
+writer, output allocation and profile storage. Advanced offers an experimental
+generic joystick with Legacy/Racing layouts, four trigger modes, inversions and
+a button threshold. Changing its immutable options recreates the virtual device;
+malformed profile settings prevent activation. Existing output identities retain
+their numeric values. The preview requests twelve buttons and no feedback/audio.
+
+Activation is restricted to the existing hash-pinned `--portable-lab` context.
+Normal installations cannot activate this output. The backend must advertise the
+versioned joystick contract, acknowledge the requested resting axes and report
+an accepted Windows USB configuration before the initial producer opens. Native
+import closure clears readiness; an initial USB reset does not imply readiness.
+
+Build a matched package with `utils/GenericJoystickPreview/Build-Package.ps1`.
+It publishes a self-contained x64 application, builds the branch's VIIPER,
+records both source revisions and payload checksums, and validates the package
+without launching applications or touching devices. `START.cmd` requests user
+elevation and starts only those verified executables, with separate `lab-data`.
+The launcher requires installed USB/IP 0.9.8.1, no existing imports/app instances
+and exclusive owned listeners on ports 3241/3242. It collects an allowlist of logs
+and cleanup results; authentication keys and profiles are excluded from reports.
+
+Follow the package's `README.txt`: create a fresh gamepad profile, select Generic
+joystick in Advanced, assign it and test the generic device in `joy.cpl`. Check
+all layouts/modes, saved profile choices, physical unplug/reconnect and switching
+back to an existing output. Exit from the tray menu to finish and collect logs.
+Keep Output Slots dynamic for this first preview. Portable lab mode does not
+configure HidHide, so the physical device remains visible. Game device selection
+and hiding need separate coordinated tests.
+
+These implementation and local automated checks do not constitute physical
+controller or original-game validation. Production USB identity, force feedback,
+sixteen-button native validation and release packaging remain outside this stage.

@@ -1184,6 +1184,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                         type = 4;
                         break;
 
+                    case OutContType.ViiperGenericJoystick:
+                        type = 6;
+                        break;
+
                     case OutContType.ViiperXboxOne:
                         type = 5;
                         break;
@@ -1234,9 +1238,59 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 3 => OutContType.ViiperDualSenseEdge,
                 4 => OutContType.ViiperSwitch2Pro,
                 5 => OutContType.ViiperXboxOne,
+                6 => OutContType.ViiperGenericJoystick,
                 _ => OutContType.ViiperX360,
             };
         }
+
+        public bool ExperimentalJoystickAvailable => PortableLabContext.IsActive;
+        private GenericJoystickOptions JoystickOptions => Global.GenericJoystickSettings[device].Options;
+        private void SetJoystickOptions(GenericJoystickOptions value)
+        {
+            value.Validate();
+            var settings = Global.GenericJoystickSettings[device];
+            settings.Options = value; settings.Valid = true;
+            JoystickLayoutIndexChanged?.Invoke(this, EventArgs.Empty);
+            JoystickTriggerModeIndexChanged?.Invoke(this, EventArgs.Empty);
+            JoystickAxisHintChanged?.Invoke(this, EventArgs.Empty);
+            JoystickTriggerHintChanged?.Invoke(this, EventArgs.Empty);
+            JoystickSeparateTriggersChanged?.Invoke(this, EventArgs.Empty);
+            JoystickCombinedTriggersChanged?.Invoke(this, EventArgs.Empty);
+            JoystickButtonTriggersChanged?.Invoke(this, EventArgs.Empty);
+            JoystickInvertLeftChanged?.Invoke(this, EventArgs.Empty);
+            JoystickInvertRightChanged?.Invoke(this, EventArgs.Empty);
+            JoystickInvertCombinedChanged?.Invoke(this, EventArgs.Empty);
+            JoystickButtonThresholdChanged?.Invoke(this, EventArgs.Empty);
+        }
+        public int JoystickLayoutIndex { get => (int)JoystickOptions.Layout; set => SetJoystickOptions(JoystickOptions with { Layout = (GenericJoystickLayout)value }); }
+        public int JoystickTriggerModeIndex
+        {
+            get => (int)JoystickOptions.TriggerMode;
+            set => SetJoystickOptions(JoystickOptions with { TriggerMode = (GenericJoystickTriggerMode)value,
+                InvertLeftTrigger = value == 2 ? false : JoystickOptions.InvertLeftTrigger,
+                InvertRightTrigger = value == 2 ? false : JoystickOptions.InvertRightTrigger });
+        }
+        public int JoystickButtonThreshold { get => JoystickOptions.ButtonThreshold; set => SetJoystickOptions(JoystickOptions with { ButtonThreshold = value }); }
+        public bool JoystickInvertLeft { get => JoystickOptions.InvertLeftTrigger; set => SetJoystickOptions(JoystickOptions with { InvertLeftTrigger = value }); }
+        public bool JoystickInvertRight { get => JoystickOptions.InvertRightTrigger; set => SetJoystickOptions(JoystickOptions with { InvertRightTrigger = value }); }
+        public bool JoystickInvertCombined { get => JoystickOptions.InvertCombinedAxis; set => SetJoystickOptions(JoystickOptions with { InvertCombinedAxis = value }); }
+        public bool JoystickSeparateTriggers => JoystickOptions.TriggerMode is GenericJoystickTriggerMode.Centred or GenericJoystickTriggerMode.FullRange;
+        public bool JoystickCombinedTriggers => JoystickOptions.TriggerMode == GenericJoystickTriggerMode.Combined;
+        public bool JoystickButtonTriggers => JoystickOptions.TriggerMode == GenericJoystickTriggerMode.Buttons;
+        public string JoystickAxisHint => JoystickOptions.Layout == GenericJoystickLayout.Legacy
+            ? "Left stick: X / Y. Right stick: Z / Rz. Triggers: Rx / Ry."
+            : "Left stick: X / Y. Right stick: Rx / Ry. Triggers: Z / Rz.";
+        public string JoystickTriggerHint => JoystickOptions.TriggerMode switch
+        {
+            GenericJoystickTriggerMode.Centred => "Recommended first for older games: each trigger rests at the centre and moves in one direction.",
+            GenericJoystickTriggerMode.FullRange => "Each trigger uses its full axis range. Released triggers rest at an endpoint; bind and calibrate them in the game.",
+            GenericJoystickTriggerMode.Combined => "Both triggers share the first trigger axis. Equal presses cancel; the second trigger axis stays centred.",
+            _ => "Triggers become buttons 7 and 8. Their analogue axes stay centred. The threshold sets how far you must press."
+        };
+        public event EventHandler JoystickLayoutIndexChanged, JoystickTriggerModeIndexChanged,
+            JoystickAxisHintChanged, JoystickTriggerHintChanged, JoystickSeparateTriggersChanged,
+            JoystickCombinedTriggersChanged, JoystickButtonTriggersChanged, JoystickInvertLeftChanged, JoystickInvertRightChanged,
+            JoystickInvertCombinedChanged, JoystickButtonThresholdChanged;
 
         public OutContType TempConType =>
             GetOutputControllerType(tempControllerIndex);

@@ -3,8 +3,8 @@ using System.Buffers.Binary;
 
 namespace DS4Windows
 {
-    // Prototype contract only. Normal output selection is intentionally gated
-    // until Windows enumeration and target-game validation are recorded.
+    // Prototype contract. Output selection remains gated to the matched portable
+    // preview while physical-controller and target-game validation are pending.
     internal enum GenericJoystickLayout { Legacy, Racing }
     internal enum GenericJoystickTriggerMode { Centred, FullRange, Combined, Buttons }
 
@@ -62,6 +62,8 @@ namespace DS4Windows
         public short[] AxisValues => new[] { X, Y, Z, Rx, Ry, Rz };
     }
 
+    internal readonly record struct GenericJoystickInput(byte LX, byte LY, byte RX, byte RY, byte L2, byte R2, ushort Buttons, byte Dpad);
+
     internal static class GenericJoystickMapping
     {
         public const short Maximum = 32767;
@@ -70,6 +72,27 @@ namespace DS4Windows
             GenericJoystickOptions options)
         {
             ArgumentNullException.ThrowIfNull(mapped);
+            ushort buttons = 0;
+            if (mapped.Cross) buttons |= 1 << 0;
+            if (mapped.Circle) buttons |= 1 << 1;
+            if (mapped.Square) buttons |= 1 << 2;
+            if (mapped.Triangle) buttons |= 1 << 3;
+            if (mapped.L1) buttons |= 1 << 4;
+            if (mapped.R1) buttons |= 1 << 5;
+            if (mapped.Share) buttons |= 1 << 8;
+            if (mapped.Options) buttons |= 1 << 9;
+            if (mapped.L3) buttons |= 1 << 10;
+            if (mapped.R3) buttons |= 1 << 11;
+            if (mapped.PS) buttons |= 1 << 12;
+            if (mapped.TouchButton) buttons |= 1 << 13;
+            byte dpad = (byte)((mapped.DpadUp ? 1 : 0) | (mapped.DpadRight ? 2 : 0) |
+                (mapped.DpadDown ? 4 : 0) | (mapped.DpadLeft ? 8 : 0));
+            return Build(new GenericJoystickInput(mapped.LX, mapped.LY, mapped.RX, mapped.RY,
+                mapped.L2, mapped.R2, buttons, dpad), options);
+        }
+
+        internal static GenericJoystickFrame Build(GenericJoystickInput mapped, GenericJoystickOptions options)
+        {
             options.Validate();
             short lx = Stick(mapped.LX), ly = Stick(mapped.LY);
             short rx = Stick(mapped.RX), ry = Stick(mapped.RY);
@@ -90,29 +113,14 @@ namespace DS4Windows
                     break;
             }
 
-            ushort buttons = 0;
-            if (mapped.Cross) buttons |= 1 << 0;
-            if (mapped.Circle) buttons |= 1 << 1;
-            if (mapped.Square) buttons |= 1 << 2;
-            if (mapped.Triangle) buttons |= 1 << 3;
-            if (mapped.L1) buttons |= 1 << 4;
-            if (mapped.R1) buttons |= 1 << 5;
+            ushort buttons = (ushort)(mapped.Buttons & (options.ButtonCount == 12 ? 0x0F3F : 0x3F3F));
             // Do not inherit Sony's digital trigger followers in analog modes.
             if (options.TriggerMode == GenericJoystickTriggerMode.Buttons)
             {
                 if (mapped.L2 >= options.ButtonThreshold) buttons |= 1 << 6;
                 if (mapped.R2 >= options.ButtonThreshold) buttons |= 1 << 7;
             }
-            if (mapped.Share) buttons |= 1 << 8;
-            if (mapped.Options) buttons |= 1 << 9;
-            if (mapped.L3) buttons |= 1 << 10;
-            if (mapped.R3) buttons |= 1 << 11;
-            if (options.ButtonCount == 16)
-            {
-                if (mapped.PS) buttons |= 1 << 12;
-                if (mapped.TouchButton) buttons |= 1 << 13;
-            }
-            byte hat = Hat(mapped.DpadUp, mapped.DpadRight, mapped.DpadDown, mapped.DpadLeft);
+            byte hat = Hat((mapped.Dpad & 1) != 0, (mapped.Dpad & 2) != 0, (mapped.Dpad & 4) != 0, (mapped.Dpad & 8) != 0);
             return options.Layout == GenericJoystickLayout.Legacy
                 ? new GenericJoystickFrame(lx, ly, rx, lt, rt, ry, buttons, hat)
                 : new GenericJoystickFrame(lx, ly, lt, rx, ry, rt, buttons, hat);

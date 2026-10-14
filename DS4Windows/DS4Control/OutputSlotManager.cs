@@ -153,6 +153,9 @@ namespace DS4Windows
                     outputDevice = new ViiperOutDevice(contType,
                         ViiperVirtualDeviceType.XboxOne);
                     break;
+                case OutContType.ViiperGenericJoystick:
+                    outputDevice = new ViiperOutDevice(contType, ViiperVirtualDeviceType.GenericJoystick);
+                    break;
                 case OutContType.None:
                 default:
                     break;
@@ -435,7 +438,7 @@ namespace DS4Windows
                 boundOutputs[inputIndex] != null)
                 return false;
 
-            if (output is ViiperOutDevice viiper && viiper.NegotiatesHapticsConverter)
+            if (output is ViiperOutDevice viiper && (viiper.NegotiatesHapticsConverter || expectedType == OutContType.ViiperGenericJoystick))
             {
                 if (!viiper.CanReuseForPhysicalController(inputIndex)) return false;
                 viiper.BindPhysicalController(inputIndex);

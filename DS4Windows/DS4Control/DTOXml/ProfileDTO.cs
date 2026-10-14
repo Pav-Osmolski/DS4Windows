@@ -2220,6 +2220,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
             set => OutputContDevice = OutputSlotPersistDTO.ParseOutputDeviceType(value, BackingStore.DEFAULT_OUT_CONT_TYPE);
         }
 
+        [XmlAnyElement("GenericJoystick")]
+        public XmlElement GenericJoystickXml { get; set; }
+
         [XmlElement("AudioHaptics")]
         public AudioHapticsProfileSettings AudioHapticsSettings
         {
@@ -2777,6 +2780,8 @@ namespace DS4WinWPF.DS4Control.DTOXml
             };
 
             OutputContDevice = source.outputDevType[deviceIndex].Normalize();
+            GenericJoystickXml = source.genericJoystickSettings[deviceIndex].Valid || OutputContDevice == OutContType.ViiperGenericJoystick
+                ? source.genericJoystickSettings[deviceIndex].Write(new XmlDocument()) : null;
             AudioHapticsSettings = source.audioHapticsSettings[deviceIndex].Clone();
             TriggerLabSettings = source.triggerLabSettings[deviceIndex].Clone();
             OutputDS4TriggerMode = source.outputDS4TriggerMode[deviceIndex];
@@ -3684,6 +3689,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             };
 
             destination.outputDevType[deviceIndex] = OutputContDevice.Normalize();
+            destination.genericJoystickSettings[deviceIndex] = GenericJoystickProfileSettings.Read(GenericJoystickXml);
             destination.audioHapticsSettings[deviceIndex] = (AudioHapticsSettings ?? new AudioHapticsProfileSettings()).Clone();
             destination.triggerLabSettings[deviceIndex] = (TriggerLabSettings ?? new TriggerLabProfileSettings()).Clone();
             destination.outputDS4TriggerMode[deviceIndex] = OutputDS4TriggerMode;

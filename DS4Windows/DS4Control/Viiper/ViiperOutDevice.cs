@@ -13,6 +13,7 @@ using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -80,6 +81,8 @@ namespace DS4Windows
                     // discrete boundaries and coalesces continuous state;
                     // the other legacy paths retain latest-state behavior.
                     return DefaultControllerRateHz;
+                case ViiperVirtualDeviceType.GenericJoystick:
+                    return 250;
                 case ViiperVirtualDeviceType.DualSense:
                 case ViiperVirtualDeviceType.DualSenseEdge:
                     // V5 input is event-driven here. VIIPER's advertised
@@ -139,6 +142,7 @@ namespace DS4Windows
         DualSenseEdge,
         Switch2Pro,
         XboxOne,
+        GenericJoystick,
     }
 
     public sealed partial class ViiperOutDevice : OutputDevice
@@ -267,6 +271,7 @@ namespace DS4Windows
 
         private readonly OutContType outputType;
         private readonly ViiperVirtualDeviceType viiperType;
+        private GenericJoystickOptions genericJoystickOptions = GenericJoystickOptions.Default;
         private readonly bool audioOnlySidecar;
         private readonly bool gamepadOnly;
         private readonly ViiperClient client;
@@ -1021,6 +1026,16 @@ namespace DS4Windows
 
         internal void BindPhysicalController(int deviceIndex)
         {
+            if (viiperType == ViiperVirtualDeviceType.GenericJoystick)
+            {
+                var settings = Global.GenericJoystickSettings[deviceIndex];
+                if (!settings.Valid || settings.Options.ButtonCount != 12)
+                    throw new InvalidOperationException("The experimental joystick requires valid twelve-button profile settings.");
+                settings.Options.Validate();
+                if (connected && genericJoystickOptions != settings.Options)
+                    throw new InvalidOperationException("Joystick layout changes require a new output device.");
+                genericJoystickOptions = settings.Options;
+            }
             DualSenseDevice converterTarget = ResolvePhysicalControllerTarget(deviceIndex);
             if (connected && !CanReuseHapticsConverterForTarget(converterTarget))
                 throw new InvalidOperationException("The VIIPER haptics converter requires a new virtual device for this physical controller.");
@@ -1092,6 +1107,8 @@ namespace DS4Windows
             int preparedPhysicalControllerIndex = Volatile.Read(
                 ref lastInputDeviceIndex);
             Disconnect();
+            if (viiperType == ViiperVirtualDeviceType.GenericJoystick && !PortableLabContext.IsActive)
+                throw new InvalidOperationException("Generic joystick output requires the matched portable DirectInput preview.");
             streamRecoveryGate.Reset();
             lock (joyConFeedbackHandoffGate)
             {
@@ -1345,6 +1362,17 @@ namespace DS4Windows
                 0);
             Interlocked.Exchange(
                 ref virtualMicrophoneInterfaceRemoteGeneration, 0);
+
+            if (viiperType == ViiperVirtualDeviceType.GenericJoystick)
+            {
+                genericJoystickOptions.Validate();
+                activeFeedbackLength = 0;
+                return client.CreateDeviceAndOpenStream("genericjoystick", deviceSpecific: new
+                {
+                    version = 1, experimental = true, buttonCount = 12,
+                    neutralAxes = GenericJoystickMapping.Neutral(genericJoystickOptions).AxisValues
+                });
+            }
 
             if (viiperType == ViiperVirtualDeviceType.DualSense)
             {
@@ -2736,7 +2764,7 @@ namespace DS4Windows
                 else if (UsesMappedInputScheduler())
                 {
                     ViiperMappedInputState mapped = ViiperStatePacketBuilder.
-                        BuildMappedState(state, device);
+                        BuildMappedState(state, device, followDigitalTriggers: viiperType != ViiperVirtualDeviceType.GenericJoystick);
                     long mappedReadyAt = Stopwatch.GetTimestamp();
                     ViiperInputPublication publication = inputScheduler.Publish(
                         mapped, mappedReadyAt);
@@ -2874,7 +2902,8 @@ namespace DS4Windows
                 type == OutContType.ViiperDS4 ||
                 type == OutContType.ViiperDualSense ||
                 type == OutContType.ViiperDualSenseEdge ||
-                type == OutContType.ViiperSwitch2Pro;
+                type == OutContType.ViiperSwitch2Pro ||
+                type == OutContType.ViiperGenericJoystick;
         }
 
         public static bool SupportsVirtualMicrophone(OutContType type)
@@ -2906,7 +2935,8 @@ namespace DS4Windows
 
         private bool UsesMappedInputScheduler()
         {
-            return IsDualSenseType() && activeStreamUsesFramedProtocol &&
+            return viiperType == ViiperVirtualDeviceType.GenericJoystick ||
+                IsDualSenseType() && activeStreamUsesFramedProtocol &&
                 activeStreamFrameVersion == ViiperStreamFrameVersionV5;
         }
 
@@ -4589,14 +4619,15 @@ namespace DS4Windows
                             {
                                 bool includeRawInputStatus =
                                     activeStreamSupportsRawInputStatus;
-                                ViiperStatePacketBuilder.BuildInto(
-                                    inputClaim.State, stateWriterPacket,
-                                    includeRawInputStatus);
+                                if (viiperType == ViiperVirtualDeviceType.GenericJoystick)
+                                    GenericJoystickMappedBridge.Build(inputClaim.State, genericJoystickOptions)
+                                        .WriteWire(stateWriterPacket.AsSpan(0, GenericJoystickFrame.Size));
+                                else
+                                    ViiperStatePacketBuilder.BuildInto(inputClaim.State, stateWriterPacket, includeRawInputStatus);
                                 writeTiming = WriteState(writeStream,
                                     stateWriterPacket,
-                                    ViiperStatePacketBuilder.
-                                        GetDualSenseInputPacketSize(
-                                            includeRawInputStatus));
+                                    viiperType == ViiperVirtualDeviceType.GenericJoystick ? GenericJoystickFrame.Size :
+                                    ViiperStatePacketBuilder.GetDualSenseInputPacketSize(includeRawInputStatus));
                             }
                             else if (xbox360Claim)
                             {
@@ -5197,7 +5228,9 @@ namespace DS4Windows
                         interruptedStream.BusId,
                         interruptedStream.DevId,
                         interruptedStream.UsbipPort,
-                        interruptedStream.DeviceLifetime);
+                        interruptedStream.DeviceLifetime, genericJoystick: viiperType == ViiperVirtualDeviceType.GenericJoystick,
+                        genericJoystickNeutral: viiperType == ViiperVirtualDeviceType.GenericJoystick ?
+                            GenericJoystickMapping.Neutral(genericJoystickOptions).AxisValues : null);
                 }
                 catch (Exception ex)
                 {
@@ -10538,7 +10571,9 @@ namespace DS4Windows
                 idProduct, deviceSpecific);
             return CreateDeviceAndOpenStream(busId =>
                 SendRequest<ViiperDeviceResponse>($"bus/{busId}/add",
-                    payload), requestSonyBluetoothHaptics);
+                    payload), requestSonyBluetoothHaptics, deviceName == "genericjoystick",
+                deviceName == "genericjoystick" ? JsonSerializer.SerializeToElement(deviceSpecific).GetProperty("neutralAxes")
+                    .EnumerateArray().Select(axis => axis.GetInt16()).ToArray() : null);
         }
 
         internal ViiperDeviceStream CreateAuthorizedXboxOneDeviceAndOpenStream(
@@ -10686,15 +10721,15 @@ namespace DS4Windows
 
         private ViiperDeviceStream CreateDeviceAndOpenStream(
             Func<uint, ViiperDeviceResponse> createDevice,
-            bool requestSonyBluetoothHaptics = false)
+            bool requestSonyBluetoothHaptics = false, bool genericJoystick = false, short[] genericJoystickNeutral = null)
         {
             return ViiperUsbipPortManager.WithNativePortMutationLock(() =>
-                CreateDeviceAndOpenStreamCore(createDevice, requestSonyBluetoothHaptics));
+                CreateDeviceAndOpenStreamCore(createDevice, requestSonyBluetoothHaptics, genericJoystick, genericJoystickNeutral));
         }
 
         private ViiperDeviceStream CreateDeviceAndOpenStreamCore(
             Func<uint, ViiperDeviceResponse> createDevice,
-            bool requestSonyBluetoothHaptics)
+            bool requestSonyBluetoothHaptics, bool genericJoystick = false, short[] genericJoystickNeutral = null)
         {
             ArgumentNullException.ThrowIfNull(createDevice);
             ViiperUsbipPortManager.DetachStaleLocalViiperPorts();
@@ -10720,11 +10755,17 @@ namespace DS4Windows
                     bus.BusId, device.DevId, usbipPort);
                 ViiperUsbipPortManager.RegisterActivePort(usbipPort,
                     $"{bus.BusId}-{device.DevId}");
+                if (genericJoystick) WaitForGenericJoystickConfiguration(bus.BusId, device.DevId, genericJoystickNeutral);
                 return OpenStream(bus.BusId, device.DevId, usbipPort,
                     hapticsConverter: hapticsConverter);
             }
             catch
             {
+                if (genericJoystick && usbipPort > 0)
+                {
+                    try { ViiperUsbipPortManager.DetachRegisteredPort(usbipPort, "failed experimental joystick creation"); }
+                    catch (Exception cleanupError) { AppLogger.LogToGui($"Experimental joystick cleanup: {cleanupError.Message}", true); }
+                }
                 ViiperUsbipPortManager.UnregisterActivePort(usbipPort);
 
                 if (device != null && !string.IsNullOrEmpty(device.DevId))
@@ -10735,6 +10776,20 @@ namespace DS4Windows
                 TryRemoveBus(bus.BusId);
                 throw;
             }
+        }
+
+        private void WaitForGenericJoystickConfiguration(uint busId, string devId, short[] expectedNeutral = null)
+        {
+            var deadline = Stopwatch.StartNew();
+            do
+            {
+                var response = SendRequest<ViiperBusDevicesResponse>($"bus/{busId}/list");
+                var entry = response?.Devices?.FirstOrDefault(d => d.DevId == devId);
+                var args = entry?.DeviceSpecific ?? default;
+                if (GenericJoystickContract.ReadConfigured(args, expectedNeutral)) return;
+                Thread.Sleep(25);
+            } while (deadline.ElapsedMilliseconds < 5000);
+            throw new IOException("Windows did not configure the experimental joystick before the input deadline.");
         }
 
         public bool GetMicrophoneInterfaceActive(uint busId, string devId)
@@ -10859,8 +10914,9 @@ namespace DS4Windows
 
         internal ViiperDeviceStream OpenExistingDeviceStream(uint busId,
             string devId, int usbipPort,
-            ViiperVirtualDeviceLifetime deviceLifetime)
+            ViiperVirtualDeviceLifetime deviceLifetime, bool genericJoystick = false, short[] genericJoystickNeutral = null)
         {
+            if (genericJoystick) WaitForGenericJoystickConfiguration(busId, devId, genericJoystickNeutral);
             if (deviceLifetime?.XboxOneRegistration != null)
                 throw new InvalidOperationException("Xbox One streams cannot reopen in place.");
             if (string.IsNullOrWhiteSpace(devId))
@@ -12974,6 +13030,7 @@ namespace DS4Windows
             {
                 ViiperVirtualDeviceType.Xbox360 => "xbox360",
                 ViiperVirtualDeviceType.XboxOne => "xboxone",
+                ViiperVirtualDeviceType.GenericJoystick => "genericjoystick",
                 ViiperVirtualDeviceType.DualShock4 => "dualshock4",
                 ViiperVirtualDeviceType.DualSense =>
                     "dualsensecombinedaudioduplexv5",
@@ -12989,6 +13046,7 @@ namespace DS4Windows
             return type switch
             {
                 ViiperVirtualDeviceType.Xbox360 => 2,
+                ViiperVirtualDeviceType.GenericJoystick => 0,
                 ViiperVirtualDeviceType.XboxOne =>
                     ControllerFeedbackFrame.SerializedLength,
                 ViiperVirtualDeviceType.DualShock4 => 7,
@@ -13004,6 +13062,7 @@ namespace DS4Windows
             return type switch
             {
                 ViiperVirtualDeviceType.Xbox360 => X360PacketSize,
+                ViiperVirtualDeviceType.GenericJoystick => GenericJoystickFrame.Size,
                 ViiperVirtualDeviceType.XboxOne => XboxOnePacketSize,
                 ViiperVirtualDeviceType.DualShock4 => DS4PacketSize,
                 ViiperVirtualDeviceType.DualSense => DualSensePacketSize,
@@ -13027,8 +13086,17 @@ namespace DS4Windows
                 ViiperVirtualDeviceType.DualSense => BuildDualSense(state, device),
                 ViiperVirtualDeviceType.DualSenseEdge => BuildDualSense(state, device),
                 ViiperVirtualDeviceType.Switch2Pro => BuildSwitch2Pro(state, device),
+                ViiperVirtualDeviceType.GenericJoystick => BuildGenericJoystick(state, device),
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
+        }
+
+        private static byte[] BuildGenericJoystick(DS4State state, int device)
+        {
+            var options = device >= 0 ? Global.GenericJoystickSettings[device].Options : GenericJoystickOptions.Default;
+            var packet = new byte[GenericJoystickFrame.Size];
+            GenericJoystickMappedBridge.Build(BuildMappedState(state, device, false), options).WriteWire(packet);
+            return packet;
         }
 
         public static byte[] BuildNeutral(ViiperVirtualDeviceType type)
@@ -13132,7 +13200,7 @@ namespace DS4Windows
         /// classification and serialization. No managed object is created.
         /// </summary>
         internal static ViiperMappedInputState BuildMappedState(DS4State state,
-            int device)
+            int device, bool followDigitalTriggers = true)
         {
             ArgumentNullException.ThrowIfNull(state);
 
@@ -13148,11 +13216,11 @@ namespace DS4Windows
             // An explicitly mapped digital trigger is still a physical press.
             // Give it the smallest representable analog value so the wire's
             // analog and digital views can never contradict one another.
-            if (state.L2Btn && l2 == 0)
+            if (followDigitalTriggers && state.L2Btn && l2 == 0)
             {
                 l2 = 1;
             }
-            if (state.R2Btn && r2 == 0)
+            if (followDigitalTriggers && state.R2Btn && r2 == 0)
             {
                 r2 = 1;
             }

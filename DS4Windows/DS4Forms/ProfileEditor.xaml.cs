@@ -2768,8 +2768,11 @@ namespace DS4WinWPF.DS4Forms
                 return;
             }
 
+            if (genericJoystickPanel != null) genericJoystickPanel.Visibility = type == OutContType.ViiperGenericJoystick ? Visibility.Visible : Visibility.Collapsed;
+
             outputControllerHintText.Text = type switch
             {
+                OutContType.ViiperGenericJoystick => "Experimental DirectInput joystick for older games. Requires the matched portable preview; no XInput emulation or force feedback.",
                 OutContType.ViiperSwitch2Pro =>
                     "Switch 2 layout: Cross -> B, Circle -> A, Square -> Y, Triangle -> X, Share -> Minus, Options -> Plus, PS -> Home, Capture -> Capture.",
                 OutContType.ViiperDualSense =>
