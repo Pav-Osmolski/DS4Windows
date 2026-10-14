@@ -103,3 +103,51 @@ verified backend or disable its integrity checks.
 
 These results establish protocol and mapping behaviour, not Windows driver
 enumeration, physical controller integration or game compatibility.
+
+## Isolated Windows lab (2026-10-14)
+
+The next milestone is an automatic synthetic-input test, before integrating a
+selectable Profile Editor output. It checks **DirectInput and WinMM in both
+32-bit and 64-bit processes**: six named axes, twelve buttons, hat directions,
+both stick layouts, all four trigger modes, producer-loss neutral and reconnect.
+The 140 observations are generated from the actual DS4Windows mapping policy,
+not a separate copy of its calculations.
+
+Extract the prepared lab ZIP to a fresh writable folder, close DS4Windows,
+VIIPER and games, then run **START.cmd** and accept administrator approval.
+The launcher uses the already-installed USB/IP **0.9.8.1** runtime. It never
+installs a driver or replaces the released backend. No physical controller
+input is needed: this first test feeds known synthetic positions.
+
+It refuses existing USB/IP imports, uses separate authenticated localhost
+listeners and exclusive configuration, and creates one temporary joystick at a
+time. Cleanup detaches only an import matching its private server and allocated
+bus/device (plus native port when a receipt is available). An allocation event
+also allows cleanup when attachment succeeds but the stream connection fails.
+Foreign imports are preserved and cause an incomplete result. The report ZIP
+contains readings, source revisions, OS version and logs; its explicit allowlist
+excludes the API password. Let the test finish normally; if interrupted or if
+cleanup reports a remaining import, restart Windows before returning to the app.
+
+Send the generated **results/*-report.zip**, whether the result is PASS or FAIL.
+Passing this lab establishes Windows enumeration and axis semantics; it does
+not establish compatibility with a game, a physical controller or force feedback.
+
+Developer tools (from the repository root):
+
+```powershell
+./utils/GenericJoystickLab/Test-Helpers.ps1
+./utils/GenericJoystickLab/Build-Package.ps1 -OutputDirectory C:/temp/directinput-lab
+./utils/GenericJoystickLab/Test-Runner.ps1 -PlansFile C:/temp/directinput-lab/plans.json -OutputDirectory C:/temp/lab-runner-tests
+```
+
+Package creation needs Go, .NET 8 and Visual Studio C++ Build Tools; testing the
+finished ZIP needs none of those SDKs. `Build-Package.ps1` accepts explicit Go,
+.NET and sibling VIIPER repository paths. It records both source revisions and
+whether either checkout was dirty. The native probe's `--json` output normalizes
+both APIs to signed axis values and labels them in X/Y/Z/Rx/Ry/Rz order.
+
+Ownership/comparison/timeout tests and the launcher simulation perform no driver
+operations. The simulation covers successful completion, a probe timeout,
+post-attachment stream failure, foreign-import preservation and report privacy.
+Actual driver enumeration remains a user-run validation step.
