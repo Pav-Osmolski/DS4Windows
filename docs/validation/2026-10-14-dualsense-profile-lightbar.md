@@ -35,3 +35,27 @@ actual USB physical FIFO, and the live profile lightbar routine.
 No physical controller or WebHID browser test was available for this work.
 The issue reporter should validate Normal and Pass-through on their hardware.
 DirectInput work remains separate.
+
+## Release qualification follow-up
+
+The first post-merge main CI run (`38579920002`) aborted in
+DSXUdpListenerTests.ConcurrentStartStopAndDisposeFinishWithoutLockInversion.
+The unhandled NullReferenceException originated inside UdpClient.Receive,
+which reads its mutable socket field after its disposed check; concurrent
+Dispose can clear that field. The existing parser/handler catches do not
+cover this framework receive race. This is separate from lightbar ownership.
+
+The listener now captures the underlying Socket before publishing its
+session and receives through that exact reference. Its existing disposal
+and socket-exception handling remains responsible for shutdown and unexpected
+listener failure. The 65,536-byte receive capacity and per-datagram copies
+match the previous UdpClient behaviour, preserving packet boundaries and
+the existing 16,384-byte parser limit. Added real IPv4/IPv6 loopback tests
+send empty and oversized datagrams and verify a subsequent status response.
+All 140 DSX listener/parser tests pass locally.
+
+The first draft run (`38579929509`) independently failed the existing,
+unchanged ControllerFeedbackRuntimeTests allocation assertion (2,056 bytes).
+The same assertion previously failed intermittently during 5.0.22 qualification.
+Neither its assertion nor the measured feedback runtime is changed or skipped;
+the final complete run must pass it before publication.
