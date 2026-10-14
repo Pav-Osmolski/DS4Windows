@@ -9,6 +9,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Respect the profile's Normal lightbar mode when forwarding native DualSense/DualSense Edge feedback. Applications can no longer replace the profile colour through native USB or Bluetooth output, including cached Bluetooth audio state. Switching back from Pass-through restores the profile colour without requiring another application packet. Preserve native haptics, adaptive triggers, player LED control and explicit DSX overrides ([#28](https://github.com/Pav-Osmolski/DS4Windows/issues/28)).
 
+- Prevent a rare DSX UDP listener crash when socket reception races rapid stop/restart or disposal. Retain the exact session socket through its receive loop.
+
 ### Documentation
 
 - Add optional Ko-fi support links for ongoing maintenance of this independent fork.

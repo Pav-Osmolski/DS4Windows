@@ -14,6 +14,29 @@ public sealed class DSXUdpListenerTests
     private const string Status = "{\"type\":0,\"parameters\":[]}";
 
     [TestMethod]
+    [DataRow("127.0.0.1")]
+    [DataRow("::1")]
+    [Timeout(10000)]
+    public async Task OversizedAndEmptyDatagramsCannotBreakTheCapturedReceiveSocket(string address)
+    {
+        IPAddress ip = IPAddress.Parse(address);
+        using var server = new DSXUdpServer();
+        Assert.IsTrue(server.StartForTesting(ip), server.LastError);
+        using var client = new UdpClient(ip.AddressFamily);
+        client.Client.Bind(new IPEndPoint(ip, 0));
+        var endpoint = new IPEndPoint(ip, server.Port);
+        byte[] oversized = new byte[60_000];
+        await client.SendAsync(oversized, oversized.Length, endpoint);
+        await client.SendAsync(Array.Empty<byte>(), 0, endpoint);
+        AssertNoResponse(client);
+        byte[] request = DSXUdpServerTests.Packet(Status);
+        await client.SendAsync(request, request.Length, endpoint);
+        using var response = await Receive(client);
+        Assert.IsTrue(server.IsRunning);
+        Assert.AreEqual(string.Empty, server.LastError);
+    }
+
+    [TestMethod]
     [Timeout(10000)]
     public async Task MutationPacketGetsOneTruthfulResponseWithoutAnExplicitStatusInstruction()
     {

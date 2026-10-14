@@ -40,11 +40,21 @@ namespace DS4Windows.DS4Control
         private sealed class Session
         {
             internal readonly UdpClient Socket;
+            internal readonly Socket Receiver;
             internal readonly object Delivery;
             internal readonly PacketBudget Budget = new PacketBudget();
             internal Thread Thread;
             internal volatile bool Stopped;
-            internal Session(UdpClient socket, object delivery) { Socket = socket; Delivery = delivery; }
+            internal Session(UdpClient socket, object delivery)
+            {
+                Socket = socket;
+                // Capture before publishing the session. UdpClient.Dispose
+                // clears Client, so its Receive can dereference null when
+                // shutdown races the framework's disposed check. The exact
+                // Socket instead reports disposal through the normal catch.
+                Receiver = socket.Client;
+                Delivery = delivery;
+            }
         }
 
         // Fixed memory and a global listener budget, not an unbounded sender map.
@@ -112,7 +122,7 @@ namespace DS4Windows.DS4Control
             return StartCore(port, ip);
         }
 
-        internal bool StartForTesting() => StartCore(0, IPAddress.Loopback);
+        internal bool StartForTesting(IPAddress ip = null) => StartCore(0, ip ?? IPAddress.Loopback);
         internal void FailSocketForTesting() { lock (lifecycle) current?.Socket.Dispose(); }
 
         private bool StartCore(int requestedPort, IPAddress ip)
@@ -187,11 +197,15 @@ namespace DS4Windows.DS4Control
             string failure = null;
             try
             {
+                byte[] buffer = new byte[ushort.MaxValue + 1];
+                EndPoint peer = new IPEndPoint(session.Receiver.AddressFamily == AddressFamily.InterNetworkV6
+                    ? IPAddress.IPv6Any : IPAddress.Any, 0);
                 while (!session.Stopped)
                 {
-                    IPEndPoint peer = new IPEndPoint(IPAddress.Any, 0);
-                    byte[] data = session.Socket.Receive(ref peer);
-                    ProcessPacket(session, data, peer);
+                    int received = session.Receiver.ReceiveFrom(buffer, ref peer);
+                    byte[] data = new byte[received];
+                    Buffer.BlockCopy(buffer, 0, data, 0, received);
+                    ProcessPacket(session, data, (IPEndPoint)peer);
                 }
             }
             catch (Exception error) when (error is SocketException || error is ObjectDisposedException)
