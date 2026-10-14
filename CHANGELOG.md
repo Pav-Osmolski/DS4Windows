@@ -3,6 +3,12 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.23](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.23) — 2026-10-14
+
+### Fixed
+
+- Allow a disconnected DualShock 3 connection to finish cleanup once its input worker has stopped, without requiring a final physical output report over the lost transport. This addresses a remaining reconnect failure from [#25](https://github.com/Pav-Osmolski/DS4Windows/issues/25). Keep worker-stop checks and final physical neutral output for controllers that are still connected. Hardware confirmation remains pending.
+
 ## [5.0.22](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.22) — 2026-10-14
 
 ### Fixed
