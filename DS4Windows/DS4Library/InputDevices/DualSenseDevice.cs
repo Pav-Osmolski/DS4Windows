@@ -3005,6 +3005,14 @@ namespace DS4Windows.InputDevices
             }
         }
 
+        internal void SetProfileLightbarOwnership(bool ownsLightbar)
+        {
+            if (physicalOutputStateMailbox.SetProfileLightbarOwnership(ownsLightbar))
+            {
+                QueuePhysicalOutputUpdate();
+            }
+        }
+
         public void SetProfileMicrophoneMuteState(bool enabled, bool muted)
         {
             int state = enabled ? (muted ? 2 : 1) : 0;
@@ -8159,6 +8167,21 @@ namespace DS4Windows.InputDevices
         {
             if (report == null || stateOffset < 0 || stateOffset + 47 > report.Length)
                 throw new ArgumentException("A complete native state is required.");
+            if (outputState.ProfileOwnsLightbar)
+            {
+                // Normal mode owns RGB even while a native command or cached
+                // Bluetooth media template owns other controller fields. Patch
+                // only this disposable physical report; retain the game's raw
+                // underlay so Pass-through can reveal it again. Player LEDs,
+                // triggers, rumble and audio keep their independent ownership.
+                report[stateOffset + 1] = (byte)((report[stateOffset + 1] & ~0x08) | 0x04);
+                report[stateOffset + 38] |= 0x02;
+                report[stateOffset + 41] = 0x02;
+                report[stateOffset + 42] = 0x02;
+                report[stateOffset + 44] = outputState.ProfileLightbar.LightBarColor.red;
+                report[stateOffset + 45] = outputState.ProfileLightbar.LightBarColor.green;
+                report[stateOffset + 46] = outputState.ProfileLightbar.LightBarColor.blue;
+            }
             // Native packets are validity-masked deltas, not full snapshots.
             // Replace only their authored trigger commands. Explicit local
             // generations/releases may add a strobe once via this argument;
@@ -8198,7 +8221,8 @@ namespace DS4Windows.InputDevices
             }
             DS4Color? color = overlay.Color;
             if (!color.HasValue && (releasedFields & DualSenseDsxOverlay.ColorField) != 0)
-                color = !outputState.NativeGameLightbarOwnershipReleased && native.Color.HasValue
+                color = !outputState.ProfileOwnsLightbar &&
+                    !outputState.NativeGameLightbarOwnershipReleased && native.Color.HasValue
                     ? native.Color : outputState.ProfileLightbar.LightBarColor;
             if (color.HasValue)
             {

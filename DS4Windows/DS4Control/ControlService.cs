@@ -4257,6 +4257,11 @@ namespace DS4Windows
             device.RumbleAutostopTime = getRumbleAutostopTime(ind);
             device.setRumble(0, 0);
             device.LightBarColor = Global.getMainColor(ind);
+            if (device is InputDevices.DualSenseDevice profileLightbarDevice)
+            {
+                profileLightbarDevice.SetProfileLightbarOwnership(
+                    Global.getLightbarSettingsInfo(ind).mode == LightbarMode.DS4Win);
+            }
         }
 
         private void CheckProfileColdOptions(int ind, DS4Device device)

@@ -3,6 +3,16 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.24](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.24) — 2026-10-14
+
+### Fixed
+
+- Respect the profile's Normal lightbar mode when forwarding native DualSense/DualSense Edge feedback. Applications can no longer replace the profile colour through native USB or Bluetooth output, including cached Bluetooth audio state. Switching back from Pass-through restores the profile colour without requiring another application packet. Preserve native haptics, adaptive triggers, player LED control and explicit DSX overrides ([#28](https://github.com/Pav-Osmolski/DS4Windows/issues/28)).
+
+### Documentation
+
+- Add optional Ko-fi support links for ongoing maintenance of this independent fork.
+
 ## [5.0.23](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.23) — 2026-10-14
 
 ### Fixed
