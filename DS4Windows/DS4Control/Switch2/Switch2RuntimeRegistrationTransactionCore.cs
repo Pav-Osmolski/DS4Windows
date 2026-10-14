@@ -1111,6 +1111,16 @@ internal sealed class Switch2RuntimeRegistrationTransactionCore
         {
             InputControllerSlotSnapshot snapshot = epoch.Snapshots[index];
             Binding binding = epoch.Bindings[index];
+            // ControlService closes one table shared with the legacy HID
+            // authority. Its DS3/DS4 lifetimes have no Switch 2 participant;
+            // the legacy owner retires them after this coordinator closes.
+            // Preserve their claims and quarantine state for that owner.
+            if (snapshot.Token.IsValid &&
+                snapshot.Token.Registration.OwnershipKind ==
+                    InputControllerOwnershipKind.LegacyHid)
+            {
+                continue;
+            }
             bool entrySucceeded = true;
             bool entryRetryPending = false;
             Switch2RuntimeRegistrationTransactionFailure entryFailure = default;

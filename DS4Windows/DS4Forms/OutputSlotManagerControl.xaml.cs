@@ -65,6 +65,27 @@ namespace DS4WinWPF.DS4Forms
                 currentOutDevLV.Columns[i].Width = automatic
                     ? (i == 1 ? new DataGridLength(1, DataGridLengthUnitType.Star) : DataGridLength.Auto)
                     : new DataGridLength(widths[i]);
+            UpdateHorizontalScrolling();
+        }
+
+        private void UpdateHorizontalScrolling()
+        {
+            // A star column is resized asynchronously by DataGrid. During a
+            // window shrink its previous width can briefly exceed the viewport
+            // and make an Auto scrollbar appear for one layout pass. Constrain
+            // the viewport while auto-fit can accommodate every column; retain
+            // scrolling for genuinely narrow windows and saved manual widths.
+            double requiredWidth = currentOutDevLV.Columns.Sum(column =>
+                column.Width.IsStar ? column.MinWidth : Math.Max(column.MinWidth,
+                    double.IsFinite(column.Width.DesiredValue) ?
+                        column.Width.DesiredValue : column.ActualWidth));
+            requiredWidth += currentOutDevLV.BorderThickness.Left +
+                currentOutDevLV.BorderThickness.Right + SystemParameters.VerticalScrollBarWidth;
+            ScrollBarVisibility visibility = autoFitCheck.IsChecked == true &&
+                Math.Floor(currentOutDevLV.ActualWidth) >= Math.Ceiling(requiredWidth)
+                    ? ScrollBarVisibility.Disabled : ScrollBarVisibility.Auto;
+            if (currentOutDevLV.HorizontalScrollBarVisibility != visibility)
+                currentOutDevLV.HorizontalScrollBarVisibility = visibility;
         }
 
         private double[] CaptureColumnWidths() => currentOutDevLV.Columns.Select(column =>
@@ -142,6 +163,8 @@ namespace DS4WinWPF.DS4Forms
         public OutputSlotManagerControl()
         {
             InitializeComponent();
+            currentOutDevLV.SizeChanged += (_, _) => UpdateHorizontalScrolling();
+            currentOutDevLV.LayoutUpdated += (_, _) => UpdateHorizontalScrolling();
             currentOutDevLV.AddHandler(System.Windows.Controls.Primitives.Thumb.DragCompletedEvent,
                 new System.Windows.Controls.Primitives.DragCompletedEventHandler(ColumnResize_Completed), true);
         }

@@ -47,16 +47,20 @@ public sealed class AxisConfigScrollingTests
     }
 
     [TestMethod]
-    [DataRow(480d, 1, 2)]
-    [DataRow(980d, 0, 1)]
-    public void DockingReadingsKeepsSettingsReadableAndReturnsTheSameLiveView(double width, int row, int span)
+    [DataRow("DarkTheme", 480d, 1, 2)]
+    [DataRow("DarkTheme", 980d, 0, 1)]
+    [DataRow("DarkTheme", 860d, 0, 1)]
+    [DataRow("DefaultTheme", 480d, 1, 2)]
+    [DataRow("DefaultTheme", 980d, 0, 1)]
+    [DataRow("DefaultTheme", 860d, 0, 1)]
+    public void DockingReadingsKeepsSettingsReadableAndReturnsTheSameLiveView(string theme, double width, int row, int span)
     {
         HeadlessWpfDispatcher.Invoke(() =>
         {
-            Grid root = ProfileAdvancedLayoutTests.Load("DarkTheme", "AxisConfig");
+            Grid root = ProfileAdvancedLayoutTests.Load(theme, "AxisConfig");
             var area = (Grid)root.FindName("axisContentArea");
             var dock = (ContentControl)root.FindName("axisReadingsHost");
-            Grid readings = ProfileAdvancedLayoutTests.Load("DarkTheme", "ControllerReadings");
+            Grid readings = ProfileAdvancedLayoutTests.Load(theme, "ControllerReadings");
             var page = new TabItem { Content = readings };
             ProfileEditor.MoveControllerReadings(page, dock, readings, true);
             ProfileEditor.ArrangeAxisReadingsDock(dock, true, width);
@@ -71,6 +75,23 @@ public sealed class AxisConfigScrollingTests
             Grid settings = area.Children.OfType<Grid>().Single();
             Assert.IsTrue(settings.ActualHeight > 200 && settings.ActualWidth >= 480,
                 "Readings must not squeeze the axis controls out of view.");
+            foreach (Border card in Visuals(readings).OfType<Border>().Where(card => card.Width == 292))
+            {
+                var cards = (WrapPanel)LogicalTreeHelper.GetParent(card);
+                Point position = card.TranslatePoint(new Point(), cards);
+                Assert.IsTrue(position.X + card.ActualWidth + card.Margin.Right <= cards.ActualWidth + 1,
+                    "Docked readings cards must fit inside the actual scroll viewport, including its gutter.");
+            }
+            string directory = Environment.GetEnvironmentVariable("DS4W_PROFILE_LAYOUT_ARTIFACTS");
+            if (!string.IsNullOrEmpty(directory))
+            {
+                var bitmap = new System.Windows.Media.Imaging.RenderTargetBitmap((int)width, 620, 96, 96, PixelFormats.Pbgra32);
+                bitmap.Render(root);
+                var encoder = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bitmap));
+                using var file = System.IO.File.Create(System.IO.Path.Combine(directory, $"AxisDock-{theme}-{width}.png"));
+                encoder.Save(file);
+            }
 
             ProfileEditor.MoveControllerReadings(page, dock, readings, false);
             ProfileEditor.ArrangeAxisReadingsDock(dock, false, width);

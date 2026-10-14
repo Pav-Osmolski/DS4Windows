@@ -155,6 +155,65 @@ public class OutputSlotsLayoutTests
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
+    [TestMethod]
+    [DataRow("DarkTheme")]
+    [DataRow("DefaultTheme")]
+    public void AutoFitResizeDoesNotFlashScrollbarAndNarrowOrManualLayoutsRemainScrollable(string theme)
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            bool previousAutomatic = Global.OutputSlotsAutoFit;
+            double[] previousWidths = Global.OutputSlotsColumnWidths;
+            var control = new OutputSlotManagerControl();
+            var timer = (DispatcherTimer)typeof(OutputSlotManagerControl).GetField("layoutSaveTimer",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(control);
+            timer.Interval = TimeSpan.FromDays(1);
+            try
+            {
+                Global.OutputSlotsAutoFit = true;
+                Global.OutputSlotsColumnWidths = [70, 300, 160, 170, 120];
+                control.Resources.MergedDictionaries.Add(ProfileAdvancedLayoutTests.Load(theme, "OutputSlots").Resources);
+                ((Grid)control.Content).RaiseEvent(new RoutedEventArgs(FrameworkElement.LoadedEvent));
+                var table = (DataGrid)control.FindName("currentOutDevLV");
+                table.ItemsSource = Enumerable.Range(1, 8).Select(i => new { SlotNumber = i,
+                    InputSlotDisplayString = i == 1 ? "1 (DualSense [BC:C7:46:60:57:DE])" : "",
+                    CurrentType = i == 1 ? "Xbox 360" : "Empty", DesiredType = "Dynamic", BoundInput = i == 1 }).ToArray();
+                Layout(control, 1100);
+                var scrollbar = Visuals(table).OfType<System.Windows.Controls.Primitives.ScrollBar>()
+                    .Single(bar => bar.Orientation == Orientation.Horizontal);
+                var visibilityDescriptor = System.ComponentModel.DependencyPropertyDescriptor.FromProperty(
+                    UIElement.VisibilityProperty, typeof(System.Windows.Controls.Primitives.ScrollBar));
+                int flashes = 0;
+                EventHandler countVisible = (_, _) => { if (scrollbar.Visibility == Visibility.Visible) flashes++; };
+                visibilityDescriptor.AddValueChanged(scrollbar, countVisible);
+                for (double width = 1100; width >= 760; width -= 2)
+                {
+                    Layout(control, width);
+                    Assert.AreEqual(ScrollBarVisibility.Disabled, table.HorizontalScrollBarVisibility);
+                    Assert.AreNotEqual(Visibility.Visible, scrollbar.Visibility);
+                }
+                Assert.AreEqual(0, flashes, "A fitting auto-fit table must never briefly reveal the horizontal bar during a shrink.");
+                visibilityDescriptor.RemoveValueChanged(scrollbar, countVisible);
+                Layout(control, 480);
+                Assert.AreEqual(ScrollBarVisibility.Auto, table.HorizontalScrollBarVisibility);
+                Assert.AreEqual(Visibility.Visible, scrollbar.Visibility, "Minimum column widths still require horizontal scrolling in a narrow window.");
+                Layout(control, 980);
+                Assert.AreNotEqual(Visibility.Visible, scrollbar.Visibility);
+                ((CheckBox)control.FindName("autoFitCheck")).IsChecked = false;
+                Layout(control, 760);
+                Assert.AreEqual(ScrollBarVisibility.Auto, table.HorizontalScrollBarVisibility);
+                Assert.AreEqual(Visibility.Visible, scrollbar.Visibility, "Remembered manual widths must remain reachable.");
+            }
+            finally
+            {
+                timer.Stop();
+                ((Grid)control.Content).RaiseEvent(new RoutedEventArgs(FrameworkElement.UnloadedEvent));
+                Global.OutputSlotsAutoFit = previousAutomatic;
+                Global.OutputSlotsColumnWidths = previousWidths;
+            }
+        });
+    }
+
     private static void Layout(FrameworkElement root, double width)
     {
         root.Measure(new Size(width, 740)); root.Arrange(new Rect(0, 0, width, 740)); root.UpdateLayout();

@@ -94,6 +94,7 @@ try {
     [IO.File]::WriteAllBytes($uninstaller, [byte[]](0))
     $script:UsbipReplacementStatePath = Join-Path $testRoot `
         "usbip-replacement-pending.json"
+    $script:InstallerLogRoot = Join-Path $testRoot "Installer logs"
     $script:UsbipReplacementPhaseOne = $false
     $script:RebootRecommended = $false
     $script:UsbipRuntimeReady = $true
@@ -182,8 +183,13 @@ try {
         param(
             [string]$FilePath,
             [object]$ArgumentList,
+            [string]$WindowStyle,
             [switch]$PassThru
         )
+        $script:CapturedUninstallArguments = [string]$ArgumentList
+        if ($WindowStyle -ne 'Hidden') {
+            throw "USB-IP uninstaller must not open an interactive window."
+        }
         if (-not [string]::Equals((Resolve-Path -LiteralPath $FilePath).Path,
                 (Resolve-Path -LiteralPath $uninstaller).Path,
                 [StringComparison]::OrdinalIgnoreCase)) {
@@ -220,6 +226,13 @@ try {
             $state.RequiredVersion -ne "0.9.8.1") {
         throw "USB-IP replacement marker did not preserve exact versions."
     }
+    if (-not $state.UninstallLogPath.StartsWith($script:InstallerLogRoot) -or
+            -not $script:CapturedUninstallArguments.Contains(
+                '/LOG="' + $state.UninstallLogPath + '"') -or
+            -not $script:CapturedUninstallArguments.Contains('/NORESTART')) {
+        throw "USB-IP uninstall diagnostics must survive reboot with a quoted log path."
+    }
+    $firstUninstallLogPath = $state.UninstallLogPath
 
     $sameBootRejected = $false
     try {
@@ -282,6 +295,9 @@ try {
     if (-not $failedUninstallRejected -or
             (Test-Path -LiteralPath $script:UsbipReplacementStatePath)) {
         throw "A failed USB-IP uninstall could authorize a later phase."
+    }
+    if ($script:CapturedUninstallArguments.Contains($firstUninstallLogPath)) {
+        throw "A later uninstall must not overwrite the earlier diagnostic log."
     }
 
     Write-Host "USB-IP 0.9.7.7 -> reboot -> 0.9.8.1 state simulation passed."
