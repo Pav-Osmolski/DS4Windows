@@ -35,7 +35,14 @@ function Start-LabProcess([string]$File, [string[]]$Arguments, [string]$Director
     $reader | Add-Member ScriptMethod ReadToEndAsync { New-CompletedTask '' }
     $process | Add-Member NoteProperty StandardOutput $reader
     $process | Add-Member NoteProperty StandardError $reader
-    if ($File -like '*viiper-directinput-lab.exe') {
+    if ($File -like '*GenericJoystickProbe-*.exe') {
+        if ($Arguments[0] -ne '--server') { throw 'Probe must remain connected for the whole plan.' }
+        $process | Add-Member NoteProperty Kind 'probe'
+        $writer = [pscustomobject]@{ Owner = $process }
+        $writer | Add-Member ScriptMethod WriteLine { param($Command) if ($Command -eq 'quit') { $this.Owner.HasExited = $true } elseif ($Command -ne 'snapshot') { throw 'Unknown probe command.' } }
+        $writer | Add-Member ScriptMethod Flush {}
+        $process | Add-Member NoteProperty StandardInput $writer
+    } elseif ($File -like '*viiper-directinput-lab.exe') {
         $api = @($Arguments | Where-Object { $_ -like '--api.addr=*' })[0]
         $apiPort = [int]($api.Split(':')[-1])
         $script:MockListener = New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback, $apiPort)
@@ -55,6 +62,11 @@ function Start-LabProcess([string]$File, [string[]]$Arguments, [string]$Director
     $process
 }
 function Read-LabReply($Process, [int]$Timeout = 15000) {
+    if ($Process.PSObject.Properties['Kind'] -and $Process.Kind -eq 'probe') {
+        if ($env:LAB_MOCK_SCENARIO -eq 'probe-failure') { throw 'Simulated probe timeout.' }
+        $reading = [pscustomobject]@{ axes = $script:MockExpected.axes; buttons = $script:MockExpected.buttons; hat = $script:MockExpected.hat; axisCount = 6; buttonCount = 12; hatCount = 1 }
+        return [pscustomobject]@{ kind = 'reading'; error = $false; directInput = @($reading); winMM = @($reading) }
+    }
     $script:MockReply++
     if ($script:MockReply -eq 1) { return [pscustomobject]@{ kind = 'allocated'; bus = 17 } }
     if ($env:LAB_MOCK_SCENARIO -eq 'attach-failure') { throw 'Simulated stream failure after native attach.' }

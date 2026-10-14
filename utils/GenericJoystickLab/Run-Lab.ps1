@@ -27,6 +27,7 @@ $mutex = New-Object Threading.Mutex($false, 'Global\DS4WindowsGenericJoystickLab
 $locked = $false
 $backend = $null; $backendOut = $null; $backendErr = $null
 $client = $null; $clientErr = $null; $receipt = $null; $bus = $null
+$probes = @{}; $probeErrors = @{}
 $rows = New-Object 'Collections.Generic.List[object]'
 $cleanupErrors = New-Object 'Collections.Generic.List[string]'
 $failure = $null; $run = $null; $usbip = $null; $usbPort = 0
@@ -66,17 +67,35 @@ function Stop-LabClient {
         $client.Dispose()
     }
 }
+function Stop-LabProbes {
+    foreach ($architecture in @($probes.Keys)) {
+        $process = $probes[$architecture]
+        try {
+            if (-not $process.HasExited) {
+                $process.StandardInput.WriteLine('quit'); $process.StandardInput.Flush()
+                if (-not $process.WaitForExit(3000)) { throw "Probe $architecture did not exit." }
+            }
+        } catch { $cleanupErrors.Add($_.Exception.Message) } finally {
+            if (-not $process.HasExited) { $process.Kill(); $null = $process.WaitForExit(3000) }
+            if ($probeErrors[$architecture].Wait(2000)) { Add-Content -LiteralPath "$run/probe-errors.log" -Value $probeErrors[$architecture].Result }
+            $process.Dispose()
+        }
+    }
+    $probes.Clear(); $probeErrors.Clear()
+}
 function Capture-Step([string]$Plan, [string]$Label, $Expected, [int]$RetrySeconds = 0) {
     foreach ($architecture in @('x64', 'x86')) {
         $deadline = [DateTime]::UtcNow.AddSeconds($RetrySeconds)
         do {
-            $result = Invoke-LabProcess "$root/GenericJoystickProbe-$architecture.exe" @('--json') $root
+            $process = $probes[$architecture]
+            $process.StandardInput.WriteLine('snapshot'); $process.StandardInput.Flush()
+            $reading = Read-LabReply $process 10000
             $probe = $null; $problems = @()
             try {
-                $probe = $result.Output | ConvertFrom-Json
+                if ($reading.kind -ne 'reading') { throw 'Unexpected probe response.' }
+                $probe = $reading
                 $problems = @(Get-LabReadingErrors $probe $Expected)
-                if ($result.Code -ne 0) { $problems += "Probe exit code $($result.Code): $($result.Errors)" }
-            } catch { $problems = @("Could not read probe JSON: $($result.Output) $($result.Errors)") }
+            } catch { $problems = @($_.Exception.Message) }
             if ($problems.Count -eq 0 -or [DateTime]::UtcNow -ge $deadline) { break }
             Start-Sleep -Milliseconds 250
         } while ($true)
@@ -112,7 +131,7 @@ try {
     Write-Host 'Testing eight layouts/trigger modes through 32-bit and 64-bit Windows APIs.'
     Write-Host 'This uses synthetic inputs; you do not need to move your controller.'
     $backend = Start-LabProcess "$root/viiper-directinput-lab.exe" @(
-        '--config-only', "--config=$configPath", '--log.level=info', 'server',
+        '--config-only', "--config=$configPath", '--log.level=debug', 'server',
         "--usb.addr=127.0.0.1:$usbPort", "--api.addr=127.0.0.1:$apiPort",
         '--api.require-local-host-auth=true', '--api.auto-attach-local-client=true',
         '--api.auto-attach-windows-native=true', '--api.device-handler-connect-timeout=120s', "--key-file=$keyPath"
@@ -142,6 +161,10 @@ try {
             $candidate = Read-LabReply $client
             if ($candidate.kind -ne 'ready' -or $candidate.bus -ne $bus -or $candidate.port -le 0 -or $candidate.vid -ne '0xffff' -or $candidate.pid -ne '0xd10c' -or [string]$candidate.device -notmatch '^\d+$') { throw 'Invalid native attachment receipt.' }
             $receipt = $candidate
+            foreach ($architecture in @('x64', 'x86')) {
+                $probes[$architecture] = Start-LabProcess "$root/GenericJoystickProbe-$architecture.exe" @('--server') $root
+                $probeErrors[$architecture] = $probes[$architecture].StandardError.ReadToEndAsync()
+            }
             # Initial Windows SET_CONFIGURATION can retire a producer opened
             # immediately after IOCTL attach. Prove both consumers see neutral
             # before creating the first producer; never silently retry resets.
@@ -165,6 +188,7 @@ try {
             Start-Sleep -Milliseconds 350
             Capture-Step $plan.name 'Producer reconnected: held trigger' $held 3
         } finally {
+            Stop-LabProbes
             try { Remove-OwnedImport } catch { $cleanupErrors.Add($_.Exception.Message) }
             try { Stop-LabClient } catch { $cleanupErrors.Add($_.Exception.Message) }
             $client = $null; $clientErr = $null
@@ -176,6 +200,7 @@ try {
     $failure = $_.Exception.Message
     Write-Host "Test stopped: $failure" -ForegroundColor Red
 } finally {
+    Stop-LabProbes
     if ($null -ne $client) {
         try { Remove-OwnedImport } catch { $cleanupErrors.Add($_.Exception.Message) }
         try { Stop-LabClient } catch { $cleanupErrors.Add($_.Exception.Message) }
@@ -198,7 +223,7 @@ try {
         $text = if ($passed) { 'PASS: all Windows API readings matched; the temporary imports were removed.' } else { "INCOMPLETE/FAIL: $failure`r`nCleanup: $($cleanupErrors -join '; ')" }
         "$text`r`nSynthetic input test only. Physical controller and game compatibility are not yet validated." | Set-Content -LiteralPath "$run/REPORT.txt" -Encoding UTF8
         # Explicit allowlist: API password and per-run configuration stay local.
-        $files = @(Get-ChildItem -LiteralPath $run -File | Where-Object { $_.Name -match '^(summary\.json|readings\.json|remaining-imports\.json|REPORT\.txt|backend\.log|backend-errors\.log|client-errors\.log)$' })
+        $files = @(Get-ChildItem -LiteralPath $run -File | Where-Object { $_.Name -match '^(summary\.json|readings\.json|remaining-imports\.json|REPORT\.txt|backend\.log|backend-errors\.log|client-errors\.log|probe-errors\.log)$' })
         Compress-Archive -LiteralPath $files.FullName -DestinationPath "$run-report.zip"
         Write-Host $text
         Write-Host "Send this report: $run-report.zip"

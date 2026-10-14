@@ -19,6 +19,7 @@ static int duration = 0;
 static int found = 0;
 static bool failed = false;
 static bool jsonMode = false;
+static bool serverMode = false;
 struct Reading {
     std::wstring name;
     std::array<LONG, 6> axes{};
@@ -27,6 +28,14 @@ struct Reading {
     DWORD axisCount = 0, buttonCount = 0, hatCount = 0;
 };
 static std::vector<Reading> diReadings, mmReadings;
+struct OpenDevice {
+    IDirectInputDevice8W* device;
+    HWND window;
+    DIDEVCAPS caps;
+    std::wstring name;
+};
+static std::vector<OpenDevice> openDevices;
+
 static int hatIndex(DWORD value) { return LOWORD(value) == 0xFFFF ? 8 : static_cast<int>(value / 4500); }
 static LONG normalized(DWORD value, UINT min, UINT max) {
     if (max <= min) { failed = true; return 0; }
@@ -89,6 +98,13 @@ static BOOL CALLBACK devices(const DIDEVICEINSTANCEW* instance, VOID*) {
     if (SUCCEEDED(result)) result = device->SetProperty(DIPROP_RANGE, &range.diph);
     if (SUCCEEDED(result)) result = device->Acquire();
     if (FAILED(result)) { failed = true; std::wcerr << L"DirectInput setup failed: " << std::hex << result << L"\n"; DestroyWindow(window); device->Release(); return DIENUM_CONTINUE; }
+    if (serverMode) {
+        openDevices.push_back({ device, window, caps, instance->tszProductName });
+        return DIENUM_CONTINUE;
+    }
+    // A newly acquired DirectInput consumer may initially expose its default
+    // state before HID input arrives. Keep it alive long enough to receive it.
+    if (jsonMode) Sleep(500);
     ULONGLONG until = GetTickCount64() + duration * 1000ULL;
     do {
         device->Poll();
@@ -115,14 +131,8 @@ static BOOL CALLBACK devices(const DIDEVICEINSTANCEW* instance, VOID*) {
     return DIENUM_CONTINUE;
 }
 
-int wmain(int argc, wchar_t** argv) {
-    jsonMode = argc == 2 && std::wstring(argv[1]) == L"--json";
-    if (argc > 2 || (argc == 2 && !jsonMode && (std::wstring(argv[1]).find_first_not_of(L"0123456789") != std::wstring::npos))) {
-        std::wcerr << L"Usage: GenericJoystickProbe.exe [watch-seconds: 0..120]\n"; return 1;
-    }
-    duration = argc == 2 ? _wtoi(argv[1]) : 0;
-    if (duration > 120) { std::wcerr << L"Watch limit is 120 seconds.\n"; return 1; }
-    if (!jsonMode) std::wcout << L"Read-only VIIPER experimental joystick probe (" << sizeof(void*) * 8 << L"-bit)\n";
+static int captureWinMM() {
+    mmReadings.clear();
     int mmFound = 0;
     for (UINT id = 0; id < joyGetNumDevs(); ++id) {
         JOYCAPSW caps{};
@@ -148,16 +158,78 @@ int wmain(int argc, wchar_t** argv) {
                 << L" POV=" << state.dwPOV << L" buttons=" << state.dwButtons << L"\n";
         } else { failed = true; std::wcerr << L"joyGetPosEx failed: " << result << L"\n"; }
     }
+    return mmFound;
+}
+
+static void captureOpenDevices() {
+    diReadings.clear();
+    for (const auto& opened : openDevices) {
+        opened.device->Poll();
+        DIJOYSTATE state{};
+        HRESULT result = opened.device->GetDeviceState(sizeof(state), &state);
+        if (FAILED(result)) { failed = true; std::wcerr << L"GetDeviceState failed: " << std::hex << result << L"\n"; continue; }
+        Reading reading;
+        reading.name = opened.name;
+        reading.axes = { state.lX, state.lY, state.lZ, state.lRx, state.lRy, state.lRz };
+        for (int i = 0; i < 32; ++i) if (state.rgbButtons[i] & 0x80) reading.buttons |= 1u << i;
+        reading.hat = hatIndex(state.rgdwPOV[0]);
+        reading.axisCount = opened.caps.dwAxes;
+        reading.buttonCount = opened.caps.dwButtons;
+        reading.hatCount = opened.caps.dwPOVs;
+        diReadings.push_back(reading);
+    }
+}
+
+static void printSnapshot() {
+    std::wcout << L"{\"kind\":\"reading\",\"architecture\":" << sizeof(void*) * 8 << L",\"directInput\":";
+    printReadings(diReadings);
+    std::wcout << L",\"winMM\":"; printReadings(mmReadings);
+    std::wcout << L",\"error\":" << (failed ? L"true" : L"false") << L"}" << std::endl;
+}
+
+static int serve() {
+    std::string command;
+    while (std::getline(std::cin, command)) {
+        if (command == "quit") return 0;
+        if (command != "snapshot") { std::wcerr << L"Unknown probe command\n"; return 1; }
+        // Native attachment may return before the HID child becomes visible.
+        if (openDevices.empty()) {
+            HRESULT result = input->EnumDevices(DI8DEVCLASS_GAMECTRL, devices, nullptr, DIEDFL_ATTACHEDONLY);
+            if (FAILED(result)) failed = true;
+            if (!openDevices.empty()) Sleep(500);
+        }
+        captureOpenDevices();
+        captureWinMM();
+        printSnapshot();
+    }
+    return 0;
+}
+
+int wmain(int argc, wchar_t** argv) {
+    serverMode = argc == 2 && std::wstring(argv[1]) == L"--server";
+    jsonMode = serverMode || (argc == 2 && std::wstring(argv[1]) == L"--json");
+    if (argc > 2 || (argc == 2 && !jsonMode && (std::wstring(argv[1]).find_first_not_of(L"0123456789") != std::wstring::npos))) {
+        std::wcerr << L"Usage: GenericJoystickProbe.exe [--json | --server | watch-seconds: 0..120]\n"; return 1;
+    }
+    duration = argc == 2 ? _wtoi(argv[1]) : 0;
+    if (duration > 120) { std::wcerr << L"Watch limit is 120 seconds.\n"; return 1; }
+    if (!jsonMode) std::wcout << L"Read-only VIIPER experimental joystick probe (" << sizeof(void*) * 8 << L"-bit)\n";
     HRESULT result = DirectInput8Create(GetModuleHandleW(nullptr), DIRECTINPUT_VERSION,
         IID_IDirectInput8W, reinterpret_cast<VOID**>(&input), nullptr);
     if (FAILED(result)) { std::wcerr << L"DirectInput8Create failed: " << std::hex << result << L"\n"; return 1; }
+    if (serverMode) {
+        const int code = serve();
+        for (const auto& opened : openDevices) {
+            opened.device->Unacquire(); DestroyWindow(opened.window); opened.device->Release();
+        }
+        input->Release();
+        return code;
+    }
     result = input->EnumDevices(DI8DEVCLASS_GAMECTRL, devices, nullptr, DIEDFL_ATTACHEDONLY);
     input->Release();
     if (FAILED(result)) { std::wcerr << L"EnumDevices failed: " << std::hex << result << L"\n"; return 1; }
-    if (jsonMode) {
-        std::wcout << L"{\"architecture\":" << sizeof(void*) * 8 << L",\"directInput\":"; printReadings(diReadings);
-        std::wcout << L",\"winMM\":"; printReadings(mmReadings);
-        std::wcout << L",\"error\":" << (failed ? L"true" : L"false") << L"}\n";
-    } else std::wcout << L"Found DirectInput=" << found << L" WinMM=" << mmFound << L"\n";
+    const int mmFound = captureWinMM();
+    if (jsonMode) printSnapshot();
+    else std::wcout << L"Found DirectInput=" << found << L" WinMM=" << mmFound << L"\n";
     return failed ? 1 : (found && mmFound ? 0 : 2);
 }

@@ -160,3 +160,15 @@ USB configuration retires any producer acquired too early. The socket integratio
 test now includes SET_CONFIGURATION followed by neutral polling and stream
 creation. Later resets still invalidate the producer; the lab does not silently
 reconnect and hide them. The full matrix still needs another Windows run.
+
+The second native report got past startup but read zero at the first stick
+endpoint. Its stale-producer message occurred during final detach, rather than
+before the movement check. The consumer probe now supports a persistent
+`--server` mode: both architectures keep their acquired DirectInput devices
+alive for an entire plan, then sample DirectInput and WinMM on request.
+Newly acquired devices have a bounded settling interval. The earlier one-shot
+probe could sample a consumer's initial state and repeatedly discard it before
+input arrived. Lab debug logs now include published/presented states and
+scheduler counters twice per second, allowing the next native report to separate
+backend delivery from consumer sampling. This revision is not yet proof of
+successful native movement or game compatibility.
