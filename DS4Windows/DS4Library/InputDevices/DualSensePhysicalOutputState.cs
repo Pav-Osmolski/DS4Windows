@@ -53,6 +53,7 @@ namespace DS4Windows.InputDevices
         internal byte RightXboxImpulse { get; init; }
         internal DualSenseDsxOverlay DsxOverlay { get; init; }
         internal DualSenseDsxOverlay DsxNativeState { get; init; }
+        internal bool ProfileOwnsLightbar { get; init; }
         internal bool LeftTriggerLabActive { get; init; }
         internal bool RightTriggerLabActive { get; init; }
         internal int DsxReleaseFields { get; init; }
@@ -511,6 +512,17 @@ namespace DS4Windows.InputDevices
                 return PublishLocked(latest with
                 {
                     ProfileLightbar = value,
+                });
+            }
+        }
+
+        internal bool SetProfileLightbarOwnership(bool value)
+        {
+            lock (syncRoot)
+            {
+                return PublishLocked(latest with
+                {
+                    ProfileOwnsLightbar = value,
                 });
             }
         }

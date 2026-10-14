@@ -9,6 +9,60 @@ namespace DS4WindowsTests;
 public class DualSenseDsxNativeIngressTests
 {
     [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void PhysicalUsbQueueAppliesProfileLightbarPolicyWithoutChangingNativeUnderlay(bool normalMode)
+    {
+        var device = CreateDevice(ConnectionType.USB);
+        var profileColor = new DS4Color(7, 8, 239);
+        Mailbox(device).SetProfileLightbar(new DS4LightbarState { LightBarColor = profileColor });
+        device.SetProfileLightbarOwnership(normalMode);
+        byte[] raw = RawNative(0x21, 17);
+        byte[] expectedRaw = (byte[])raw.Clone();
+        byte[] written = null;
+        device.PhysicalRawOutputWriteTestHook = report => { written = (byte[])report.Clone(); return true; };
+        Assert.IsTrue(device.WriteRawOutputReportFromGame(raw, 0, raw.Length));
+        Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Published,
+            device.ProcessNextPhysicalOutputCommand());
+        Assert.IsNotNull(written);
+        Assert.AreEqual(normalMode ? profileColor.red : raw[45], written[45]);
+        Assert.AreEqual(normalMode ? profileColor.green : raw[46], written[46]);
+        Assert.AreEqual(normalMode ? profileColor.blue : raw[47], written[47]);
+        CollectionAssert.AreEqual(expectedRaw, raw);
+        CollectionAssert.AreEqual(raw.Skip(22).Take(11).ToArray(), written.Skip(22).Take(11).ToArray());
+        Assert.AreEqual(default(DualSenseDsxOverlay).ObserveNative(raw, 1), Mailbox(device).ReadLatest().DsxNativeState);
+    }
+
+    [TestMethod]
+    public void LiveProfileLightbarRoutinePublishesNormalAndPassThroughOwnership()
+    {
+        int slot = DS4LightBar.forcelight.Length - 1;
+        var lighting = Global.getLightbarSettingsInfo(slot);
+        var previousMode = lighting.mode;
+        bool previousForce = DS4LightBar.forcelight[slot];
+        bool previousDefault = DS4LightBar.defaultLight;
+        var device = CreateDevice(ConnectionType.USB);
+        try
+        {
+            DS4LightBar.forcelight[slot] = false;
+            DS4LightBar.defaultLight = false;
+            lighting.mode = LightbarMode.DS4Win;
+            DS4LightBar.updateLightBar(device, slot);
+            Assert.IsTrue(Mailbox(device).ReadLatest().ProfileOwnsLightbar);
+            lighting.mode = LightbarMode.Passthru;
+            DS4LightBar.updateLightBar(device, slot);
+            Assert.IsFalse(Mailbox(device).ReadLatest().ProfileOwnsLightbar);
+        }
+        finally
+        {
+            lighting.mode = previousMode;
+            DS4LightBar.forcelight[slot] = previousForce;
+            DS4LightBar.defaultLight = previousDefault;
+            device.ReadWaitEv.Dispose();
+        }
+    }
+
+    [TestMethod]
     public void UsbUnderlayCommitsOriginalBytesOnlyAfterSuccessfulPhysicalWrite()
     {
         var device = CreateDevice(ConnectionType.USB);

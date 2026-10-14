@@ -71,6 +71,12 @@ namespace DS4Windows
             LightbarSettingInfo lightbarSettingInfo = getLightbarSettingsInfo(deviceNum);
             LightbarDS4WinInfo lightModeInfo = lightbarSettingInfo.ds4winSettings;
             bool useLightRoutine = lightbarSettingInfo.mode == LightbarMode.DS4Win;
+            if (device is InputDevices.DualSenseDevice dualSense)
+            {
+                // Also publish Pass-through: live editor changes must release
+                // profile ownership even when this routine skips its colour.
+                dualSense.SetProfileLightbarOwnership(useLightRoutine);
+            }
             //bool useLightRoutine = false;
             if (!defaultLight && !useForceLight && useLightRoutine)
             {
