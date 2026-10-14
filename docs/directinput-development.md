@@ -43,8 +43,8 @@ claiming a vJoy or Mad Catz identity. See
 
 Next steps:
 
-1. Prove Windows enumeration, named axes and neutral through both APIs with a
-   separately owned lab backend; obtain eVenent's working profile if available.
+1. Windows enumeration, named axes and neutral are validated with the isolated
+   lab below. Obtain eVenent's working profile if available for game comparisons.
 2. Settle the production USB identity and descriptor caching policy.
 3. Add output allocation/lifecycle and profile persistence. Reject unsupported
    backend capabilities rather than falling back to another controller.
@@ -81,7 +81,8 @@ and 2 means one or both APIs did not find it. Enumeration is not game validation
 
 Automated backend integration tests use localhost sockets and simulated USB/IP
 imports; no Windows driver is attached. Actual lab attachment and game testing
-have not been performed. Do not copy a development VIIPER over the released,
+were not performed at the foundation stage; native lab results are recorded
+below. Do not copy a development VIIPER over the released,
 verified backend or disable its integrity checks.
 
 ## Foundation validation (2026-10-13)
@@ -150,7 +151,8 @@ both APIs to signed axis values and labels them in X/Y/Z/Rx/Ry/Rz order.
 Ownership/comparison/timeout tests and the launcher simulation perform no driver
 operations. The simulation covers successful completion, a probe timeout,
 post-attachment stream failure, foreign-import preservation and report privacy.
-Actual driver enumeration remains a user-run validation step.
+Native enumeration was subsequently validated by the user-run revision 4 lab;
+see the completed milestone below.
 
 The first user-run lab report confirmed neutral enumeration and the complete
 six-axis/twelve-button/one-hat capabilities through both APIs and architectures.
@@ -183,4 +185,32 @@ both native builds run independent sentinel/range tests during packaging.
 This order also matches the primary
 [Wine WinMM implementation](https://github.com/wine-mirror/wine/blob/master/dlls/winmm/joystick.c)
 for a descriptor containing X/Y/Z/Rx/Ry/Rz. Remaining trigger modes and
-disconnect/reconnect still await a full native run.
+disconnect/reconnect were still awaiting a full native run at that revision.
+
+## Native Windows lab validated (2026-10-14)
+
+Revision 4 report `20261014-233817-ea0f280a-report.zip` passed all **156 expected
+observations**, independently rechecked against the complete eight-plan matrix:
+**312 API comparisons**, with no mismatches, duplicates or missing steps.
+
+- Windows version reported: 10.0.26300.0, with USB/IP 0.9.8.1.
+- Both Legacy and Racing layouts; Centred, FullRange, Combined and Buttons
+  trigger modes; configured resting positions and endpoint values.
+- x86 and x64 DirectInput and WinMM, including stick endpoints, non-trigger
+  buttons and hat directions in the Centred plans.
+- Producer disconnect returned the configured neutral, and reconnection
+  delivered the held trigger, in every layout/mode/architecture combination.
+- All temporary imports were removed; no cleanup errors or probe errors.
+- Tested DS4Windows source: `4e158868809eaa3c60ddb014bb2a4fc3da2e1ea1`.
+- Tested VIIPER source: `01801558b9c52616afaf145290067c57ad2cbeb3`.
+
+The readiness socket probe produces an EOF log, and each deliberate final
+native detach retires the active producer, producing a stale-producer log.
+These messages occurred outside the successful input checks; they do not
+represent failed observations or failed cleanup.
+
+This completes native **synthetic-input** validation on one Windows machine.
+Production USB identity, physical-controller output allocation/lifetime,
+profile persistence/editor integration and original-game validation remain.
+No release, force-feedback, 16-button native layout or game compatibility claim
+follows from this result. Both feature PRs remain drafts.
