@@ -58,7 +58,7 @@ VIIPER_RELEASE = {
 # Preserve the strict machine-readable provenance tuple and independently bind
 # the complete, unabridged build notes and license documents to this artifact.
 VIIPER_NOTICE_HASHES = {
-    "VIIPER-0.1.11-BUILD-NOTES.txt": "08D2A28D937CAB9452A55FC37CD445C2E91741D5D0AF5572C2925893DC7098EF",
+    "VIIPER-0.1.11-BUILD-NOTES.txt": "63A355D4EE44EC131A094ED22EF2E45BDF981F97293E8CE5D912AADA1F5DFBBC",
     "LICENSE.txt": "F24EE094842DC3347A7A06B71373573CE18F6DCB935C81E95623723EE22E6CA6",
     "VIIPER-SYSTRAY-NOTICE.md": "6126849BBF404E8172729DAF992DDF7BE43C84F30721883F51C0FA52CC4CD192",
     "VIIPER-SYSTRAY-LICENSE.txt": "05C55BD8834035C143C17AA218BFF08E22B7A66C5603CBA8F070DCAAFC974B8F",
@@ -821,7 +821,7 @@ def main() -> int:
             raise SystemExit("Packaged VIIPER notice does not match its pinned hash: " + name)
 
     broker_source = args.publish_root / "extras" / "VIIPER-0.1.11-SOURCE.zip"
-    if sha256(broker_source) != "5273E1ED5E23260CF39A44628232E2C28C3406BDDC6AF697ECBE330836F465EB":
+    if sha256(broker_source) != "891764F0C7D3C4B48B1848FA836052226E7185F3D6D4DF0AAC025D1C76370136":
         raise SystemExit("Bundled VIIPER corresponding source hash mismatch.")
     with zipfile.ZipFile(broker_source) as source_zip:
         if source_zip.comment.decode("ascii") != VIIPER_RELEASE["Source commit"]:

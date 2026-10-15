@@ -20,7 +20,7 @@ License notice SHA-256: 535295E2144BDB53E5F6E48F04C41AD9DCAB6F2DCA20D84158A0CB8F
 
 Status: Unsigned numeric release build, paired with DS4Windows 5.0.25 after successful maintainer testing.
 Source archive: VIIPER-0.1.11-SOURCE.zip
-Source archive SHA-256: 5273E1ED5E23260CF39A44628232E2C28C3406BDDC6AF697ECBE330836F465EB
+Source archive SHA-256: 891764F0C7D3C4B48B1848FA836052226E7185F3D6D4DF0AAC025D1C76370136
 Source archive layout: git archive --format=zip --prefix=VIIPER-0.1.11-SOURCE/ of the tagged commit; ZIP comment and all 706 included Git blobs independently verified.
 Tagged build: https://github.com/Pav-Osmolski/VIIPER/actions/runs/38721486295
 Release archive: viiper-windows-amd64.zip
