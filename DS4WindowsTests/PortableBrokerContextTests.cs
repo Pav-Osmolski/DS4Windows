@@ -207,6 +207,27 @@ public class PortableBrokerContextTests
     }
 
     [TestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public void TrayPreferenceAppliesOnNextPortableStartWithoutRestartingCurrentOwner(bool visible)
+    {
+        bool previous = Global.ShowViiperTrayIcon;
+        try
+        {
+            Global.ShowViiperTrayIcon = visible;
+            Open().Start();
+            CollectionAssert.Contains(host.StartInfo.ArgumentList.ToArray(),
+                visible ? "--no-tray=false" : "--no-tray=true");
+            Global.ShowViiperTrayIcon = !visible;
+            Assert.IsTrue(context.InspectOwnedProcess(out bool running, out _));
+            Assert.IsTrue(running);
+            Assert.AreEqual(1, host.Starts);
+            Assert.AreEqual(0, host.Child.StopCalls);
+        }
+        finally { Global.ShowViiperTrayIcon = previous; }
+    }
+
+    [TestMethod]
     public void ExistingChangedConfigIsNotOverwrittenAndNoChildStarts()
     {
         Open();

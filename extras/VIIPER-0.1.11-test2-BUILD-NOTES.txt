@@ -1,0 +1,33 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.11-test2
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: d4203f00c76007c2a2b5d4f9a1c561ccd1490ba8
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: d4203f0
+Embedded build date: 2026-10-15T10:27:55Z
+Embedded VCS revision: d4203f00c76007c2a2b5d4f9a1c561ccd1490ba8
+Embedded VCS time: 2026-10-15T10:27:52Z
+Embedded VCS modified: false
+PE file version: 0.1.11.0
+PE product version: 0.1.11-test2
+Binary: VIIPER-0.1.11-test2-x64.exe
+Binary SHA-256: AB3D0B74D190C134617747B85BFBC24738634BA366958197256F993D1A2E92C2
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.11-test2-LICENSES.txt
+License notice SHA-256: 7EBB5AEC7C235976EF058933B3739698BE3B14057BE875683D5AEA123883F15A
+
+Status: Local unsigned test build for DS4Windows 5.0.24-viiper-test2; not a published release.
+Source archive: VIIPER-0.1.11-test2-SOURCE.zip
+Source archive SHA-256: 5C6FD1B6CBF4C67ED188E5623BF61BA12D17BC0C2F29560EB369D9F18C3350BF
+Source archive verification: Git ZIP comment matches the pinned commit; all 706 included blobs match the Git tree.
+Build receipt: VIIPER-0.1.11-test2-BUILD-INFO.json
+Binary size: 9470464 bytes
+Resource tool: github.com/josephspurrier/goversioninfo/cmd/goversioninfo v1.7.0
+Build flags: -tags release -trimpath -ldflags '-s -w' plus explicit version/commit/date metadata.
+Build ownership: Built locally from the clean source commit in VIIPER PR #5; this is not a GitHub Actions release asset.
+Behaviour: Acceleration calibration consistency, DS4 partial feedback validity, idle keyboard/mouse state, saved Settings tray visibility for portable/installed startup; existing seven-byte DS4 feedback and USB/IP 0.9.8.1 retained.
+Validation: Full Go and Release-tag suites, go vet, regression checks passed locally; GitHub validation is tracked on VIIPER PR #5. Hardware/game qualification remains pending.
+Notices: Fresh dependency report includes complete modified systray and WDL attribution. Existing complete GPL and component notices remain included.
+Upstream credit: Inherited hbashton/VIIPER help text remains; this build originates from Pav-Osmolski/VIIPER at the recorded commit.
