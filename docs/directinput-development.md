@@ -502,3 +502,12 @@ feedback and clean output cleanup. This does not clear the separate synthetic
 multi-controller GUID failure, establish normal HidHide behavior (still bypassed
 in the lab), or change the pending production identity/upstream driver retest.
 No further identical single-controller run is needed on this evidence.
+
+### Normal package composition proof
+
+The [normal packaging preparation](directinput-normal-packaging.md) records the
+new preview-isolation/backend-pin checks, real portable and installer composition
+proof, upgrade-ownership regressions and remaining promotion work. Full local
+application validation passed 7,393 tests with 12 existing opt-in skips. The
+normal proof retains released VIIPER 0.1.11 and refuses generic-joystick activation;
+it must not replace the matched feature backend from the working r8 preview.

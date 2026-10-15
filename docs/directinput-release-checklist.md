@@ -123,3 +123,12 @@ open. Repeating the same diagnostic package is not a substitute for these items.
 Checked on 2026-10-15: pid.codes PR #1317 remains open with no review; USB/IP's
 latest published release remains v.0.9.8.1. Both feature branches contain their
 current main branches. These checks do not approve normal activation or release.
+
+## Standard package preparation
+
+See [normal packaging preparation](directinput-normal-packaging.md) for the
+implemented backend-pin, preview-isolation and upgrade-ownership checks, and the
+coordinated promotion steps. Standard-format packaging proofs retain released
+VIIPER 0.1.11 and the generic-output activation gate; they are not matched
+feature release candidates. Automated HidHide policy/lifecycle checks do not
+replace the outstanding normal-installation hardware test.
