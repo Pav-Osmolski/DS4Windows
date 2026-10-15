@@ -8,6 +8,7 @@ using System.Windows.Controls;
 namespace DS4WindowsTests
 {
     [TestClass]
+    [DoNotParallelize]
     public class ThemeResourceTests
     {
         public TestContext TestContext { get; set; }
@@ -96,6 +97,7 @@ namespace DS4WindowsTests
                     Switch2StickCalibrationEditorTests.ValidateStickCalibrationWindow(application);
                     BindingWindowLiveInputLayoutTests.ValidateRenderedBindingWindows(
                         application, resultsDirectory, renderedFiles);
+                    ThemeConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
                 }
                 catch (Exception ex)
                 {
@@ -110,7 +112,7 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(14, renderedFiles.Count);
+            Assert.AreEqual(18, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

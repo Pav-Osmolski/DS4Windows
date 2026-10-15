@@ -3,6 +3,14 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Fixed
+
+- Keep Trigger Lab surfaces, labels and buttons consistent when switching between Dark and Light themes, including the main navigation page and Profile Editor. Light theme uses the shared pale blue raised surface (`#EAF1FA`).
+- Restore readable Profiles and Auto Profiles toolbar buttons in Light theme, with profile toolbar icons following their button text colour.
+- Give normal and low-battery RGB sliders distinct pale red, green and blue surfaces in Light theme, including zero-valued channels, while preserving Dark theme's existing channel colours.
+
 ## [5.0.26](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.26) — 2026-10-15
 
 ### Fixed
