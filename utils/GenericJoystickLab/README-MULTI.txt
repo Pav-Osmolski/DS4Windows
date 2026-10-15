@@ -17,3 +17,8 @@ Production VID/PID approval remains pending; this uses preview IDs.
 Diagnostic revision: records HID paths and USB serials beside DirectInput GUIDs.
 Identity-only failures are retained while later diagnostic steps continue;
 the final result still FAILS if any identity changed. Input/API failures stop.
+
+Revision 4 adds independent opened-device GUID and joystick-slot queries.
+Failed metadata queries are recorded as null plus their Windows error codes.
+This is a diagnostic build; identifier persistence failures are still failures.
+Run START.cmd as before and send the complete results report ZIP.

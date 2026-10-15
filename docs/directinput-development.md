@@ -390,3 +390,36 @@ Next investigation should compare enumeration GUIDs with GetDeviceInfo and
 Windows joystick configuration/PnP metadata while B remains attached, using
 read-only queries, before changing backend identity or registry configuration.
 No further identical owner rerun is needed to establish this finding.
+
+
+### Opened-device identity diagnostic (r4)
+
+The next matched lab adds independent read-only queries on each opened
+DirectInput device: `GetDeviceInfo` for its instance GUID and `GetProperty`
+with `DIPROP_JOYSTICKID` for its joystick slot. `instance` remains the GUID
+copied from the enumeration callback before nested DirectInput calls; the new
+`openedIdentity` object records `instance`, `joystickId`, `deviceInfoResult`
+and `joystickIdResult`. Unavailable query values are JSON null with the failing
+HRESULT retained, never a fabricated slot zero. The persistent probe also
+queries its opened objects when taking a snapshot.
+
+Interpretation for the next owner run:
+
+- If enumeration and opened-object GUIDs disagree for the same serial/path,
+  investigate that lookup discrepancy before attributing it to backend identity.
+- If both GUIDs change together and the joystick slot also changes, the
+  reassignment is visible in independent DirectInput queries. That still does
+  not establish which Windows/driver component causes it, or prove every game
+  loses its saved bindings.
+- Stable serial/path with changed GUID remains a recorded identity failure.
+  Existing pass/fail criteria, continuation rules and cleanup are unchanged.
+
+Native x86/x64 builds and no-device self-tests validate JSON serialization,
+normalization, separate enumeration/opened identifiers, and the distinction
+between unavailable metadata and a valid slot zero. The package builder runs
+these checks before creating its manifest. Lab matching, lifecycle and cleanup
+helper tests also pass. This is diagnostic instrumentation, not a production
+fix or a claim that GUID persistence is now validated.
+
+Microsoft references: [GetDeviceInfo](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ee417896%28v%3Dvs.85%29)
+and [GetProperty](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ee417908%28v%3Dvs.85%29).

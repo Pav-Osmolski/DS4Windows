@@ -27,6 +27,10 @@ struct Reading {
     std::wstring name;
     std::wstring instance;
     std::wstring path, serial;
+    bool hasDirectInputIdentity = false;
+    std::wstring openedInstance;
+    HRESULT deviceInfoResult = E_NOTIMPL, joystickIdResult = E_NOTIMPL;
+    DWORD joystickId = 0;
     std::array<LONG, 6> axes{};
     DWORD buttons = 0;
     int hat = 8;
@@ -49,6 +53,20 @@ static std::wstring instanceKey(const GUID& guid) {
     std::wstring key;
     for (size_t i = 0; i < sizeof(GUID); ++i) { key += hex[bytes[i] >> 4]; key += hex[bytes[i] & 15]; }
     return key;
+}
+
+// Independent read-only queries on the object actually opened by CreateDevice.
+// Preserve HRESULTs: an unavailable query must not look like GUID_NULL/slot 0.
+static void readOpenedIdentity(IDirectInputDevice8W* device, Reading& reading) {
+    reading.hasDirectInputIdentity = true;
+    DIDEVICEINSTANCEW info{}; info.dwSize = sizeof(info);
+    reading.deviceInfoResult = device->GetDeviceInfo(&info);
+    if (SUCCEEDED(reading.deviceInfoResult)) reading.openedInstance = instanceKey(info.guidInstance);
+    DIPROPDWORD slot{};
+    slot.diph.dwSize = sizeof(slot); slot.diph.dwHeaderSize = sizeof(slot.diph);
+    slot.diph.dwHow = DIPH_DEVICE;
+    reading.joystickIdResult = device->GetProperty(DIPROP_JOYSTICKID, &slot.diph);
+    if (SUCCEEDED(reading.joystickIdResult)) reading.joystickId = slot.dwData;
 }
 
 static int hatIndex(DWORD value) { return LOWORD(value) == 0xFFFF ? 8 : static_cast<int>(value / 4500); }
@@ -82,6 +100,14 @@ static void printReadings(const std::vector<Reading>& values) {
         std::wcout << L",\"instance\":"; quote(value.instance);
         std::wcout << L",\"path\":"; quote(value.path);
         std::wcout << L",\"serial\":"; quote(value.serial);
+        if (value.hasDirectInputIdentity) {
+            std::wcout << L",\"openedIdentity\":{\"deviceInfoResult\":" << value.deviceInfoResult;
+            std::wcout << L",\"instance\":";
+            if (SUCCEEDED(value.deviceInfoResult)) quote(value.openedInstance); else std::wcout << L"null";
+            std::wcout << L",\"joystickIdResult\":" << value.joystickIdResult << L",\"joystickId\":";
+            if (SUCCEEDED(value.joystickIdResult)) std::wcout << value.joystickId; else std::wcout << L"null";
+            std::wcout << L"}";
+        }
         std::wcout << L",\"axes\":[";
         for (size_t i = 0; i < 6; ++i) { if (i) std::wcout << L","; std::wcout << value.axes[i]; }
         std::wcout << L"],\"buttons\":" << value.buttons << L",\"hat\":" << value.hat
@@ -100,10 +126,13 @@ static BOOL CALLBACK objects(const DIDEVICEOBJECTINSTANCEW* object, VOID*) {
 static BOOL CALLBACK devices(const DIDEVICEINSTANCEW* instance, VOID*) {
     if (!experimental(LOWORD(instance->guidProduct.Data1), HIWORD(instance->guidProduct.Data1)))
         return DIENUM_CONTINUE;
+    // Freeze callback metadata before any nested DirectInput calls.
+    const GUID enumerationGuid = instance->guidInstance;
+    const std::wstring productName = instance->tszProductName;
     ++found;
     if (!jsonMode) std::wcout << L"DirectInput\t" << instance->tszProductName << L"\n";
     IDirectInputDevice8W* device = nullptr;
-    HRESULT result = input->CreateDevice(instance->guidInstance, &device, nullptr);
+    HRESULT result = input->CreateDevice(enumerationGuid, &device, nullptr);
     if (FAILED(result)) { failed = true; std::wcerr << L"CreateDevice failed: " << std::hex << result << L"\n"; return DIENUM_CONTINUE; }
     DIDEVCAPS caps{}; caps.dwSize = sizeof(caps);
     result = device->GetCapabilities(&caps);
@@ -141,7 +170,7 @@ static BOOL CALLBACK devices(const DIDEVICEINSTANCEW* instance, VOID*) {
         }
     }
     if (serverMode) {
-        openDevices.push_back({ device, window, caps, instance->tszProductName, instanceKey(instance->guidInstance), hidPath, serial });
+        openDevices.push_back({ device, window, caps, productName, instanceKey(enumerationGuid), hidPath, serial });
         return DIENUM_CONTINUE;
     }
     // A newly acquired DirectInput consumer may initially expose its default
@@ -154,8 +183,9 @@ static BOOL CALLBACK devices(const DIDEVICEINSTANCEW* instance, VOID*) {
         result = device->GetDeviceState(sizeof(state), &state);
         if (FAILED(result)) { failed = true; std::wcerr << L"GetDeviceState failed: " << std::hex << result << L"\n"; break; }
         Reading reading;
-        reading.name = instance->tszProductName;
-        reading.instance = instanceKey(instance->guidInstance);
+        reading.name = productName;
+        reading.instance = instanceKey(enumerationGuid);
+        readOpenedIdentity(device, reading);
         reading.path = hidPath; reading.serial = serial;
         reading.axes = { state.lX, state.lY, state.lZ, state.lRx, state.lRy, state.lRz };
         for (int i = 0; i < 32; ++i) if (state.rgbButtons[i] & 0x80) reading.buttons |= 1u << i;
@@ -226,6 +256,7 @@ static void captureOpenDevices() {
         Reading reading;
         reading.name = opened.name;
         reading.instance = opened.instance;
+        readOpenedIdentity(opened.device, reading);
         reading.path = opened.path; reading.serial = opened.serial;
         reading.axes = { state.lX, state.lY, state.lZ, state.lRx, state.lRy, state.lRz };
         for (int i = 0; i < 32; ++i) if (state.rgbButtons[i] & 0x80) reading.buttons |= 1u << i;
@@ -263,6 +294,17 @@ static int serve() {
 }
 
 int wmain(int argc, wchar_t** argv) {
+    if (argc == 2 && std::wstring(argv[1]) == L"--self-test-json") {
+        Reading valid, unavailable;
+        valid.name = L"fixture"; valid.instance = L"enumerated";
+        valid.hasDirectInputIdentity = true; valid.openedInstance = L"opened";
+        valid.deviceInfoResult = valid.joystickIdResult = S_OK;
+        unavailable.name = L"unsupported"; unavailable.hasDirectInputIdentity = true;
+        unavailable.deviceInfoResult = unavailable.joystickIdResult = E_NOTIMPL;
+        diReadings = { valid, unavailable };
+        printSnapshot();
+        return 0;
+    }
     if (argc == 2 && std::wstring(argv[1]) == L"--self-test") {
         JOYCAPSW caps{};
         caps.wXmax = caps.wYmax = caps.wZmax = caps.wRmax = caps.wUmax = caps.wVmax = 65534;
@@ -282,7 +324,7 @@ int wmain(int argc, wchar_t** argv) {
     serverMode = argc == 2 && std::wstring(argv[1]) == L"--server";
     jsonMode = serverMode || (argc == 2 && std::wstring(argv[1]) == L"--json");
     if (argc > 2 || (argc == 2 && !jsonMode && (std::wstring(argv[1]).find_first_not_of(L"0123456789") != std::wstring::npos))) {
-        std::wcerr << L"Usage: GenericJoystickProbe.exe [--json | --server | watch-seconds: 0..120]\n"; return 1;
+        std::wcerr << L"Usage: GenericJoystickProbe.exe [--json | --server | --self-test | --self-test-json | watch-seconds: 0..120]\n"; return 1;
     }
     duration = argc == 2 ? _wtoi(argv[1]) : 0;
     if (duration > 120) { std::wcerr << L"Watch limit is 120 seconds.\n"; return 1; }
