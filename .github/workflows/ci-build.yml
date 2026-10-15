@@ -158,6 +158,9 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Test normal package inputs and preview isolation
+        run: python .\utils\test-normal-package.py
+
       - name: Test localization package layout
         run: python .\utils\test-localization-package.py
 
@@ -189,6 +192,14 @@ jobs:
 
       - name: Package ${{ matrix.platform }}
         run: python .\utils\post-build.py .\bin\${{ matrix.platform }}\Release\output . ${{ env.VERSION }}
+
+      - name: Verify normal portable and installer inputs
+        shell: pwsh
+        run: |
+          $root = ".\bin\${{ matrix.platform }}\Release"
+          $archive = Join-Path $root "DS4Windows_$($env:VERSION)_${{ matrix.platform }}.zip"
+          python .\utils\normal_package.py --publish-root (Join-Path $root 'DS4Windows') --portable-zip $archive
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Verify packaged translations from different launch directories
         shell: pwsh

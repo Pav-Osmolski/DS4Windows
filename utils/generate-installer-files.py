@@ -11,6 +11,8 @@ import uuid
 from pathlib import Path
 from xml.sax.saxutils import escape
 
+from normal_package import reject_lab_payloads
+
 
 NAMESPACE = uuid.UUID("aa1633b0-7cbc-4592-b633-0ce627aff935")
 
@@ -82,6 +84,8 @@ def main() -> int:
         raise SystemExit(f"Publish root is incomplete: {root}")
     if is_reparse_point(root):
         raise SystemExit(f"Publish root cannot be a reparse point: {root}")
+
+    reject_lab_payloads(root)
 
     manifest_path = args.manifest_output.resolve()
     entries = list(root.rglob("*"))
