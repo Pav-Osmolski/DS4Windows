@@ -84,3 +84,21 @@ When it changes, Windows and games can see a new device and require new bindings
 Sixteen buttons, force feedback and arbitrary HID descriptors are outside this
 preview. See the [release checklist](directinput-release-checklist.md) for the
 remaining normal-installation validation.
+
+## Multiple joysticks and saved bindings
+
+The synthetic two-device test passed distinct input, buttons/hat isolation,
+producer reconnect, device recreation and reversed creation order in x86/x64
+DirectInput and WinMM. USB serials and HID paths remained distinct and stable
+through that run. However, removing the first joystick caused the remaining
+joystick to move from slot 1 to slot 0 and take the first joystick's former
+DirectInput instance GUID. Enumeration and the opened device both reported the
+change. Recreating the first joystick restored the original associations.
+
+This is a known unresolved compatibility limitation on the tested Windows build
+26300, not a guarantee of the same behavior on every machine. Games that rely
+on saved joystick identifiers may need their controller selection or bindings
+checked after output devices are added or removed. Configure the intended
+outputs before launching a game. No saved game-binding test has yet established
+whether a particular title is affected. See the
+[development evidence](directinput-development.md#completed-opened-device-comparison-r4).

@@ -423,3 +423,34 @@ fix or a claim that GUID persistence is now validated.
 
 Microsoft references: [GetDeviceInfo](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ee417896%28v%3Dvs.85%29)
 and [GetProperty](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ee417908%28v%3Dvs.85%29).
+
+### Completed opened-device comparison (r4)
+
+Owner report `20261015-165810-0ed8a66d` completed all 22 observations on Windows
+build 26300 with no cleanup errors. The two failures remain x86/x64 GUID
+persistence while A is absent; all input/capability/count comparisons passed.
+Every `GetDeviceInfo` and `DIPROP_JOYSTICKID` query returned success (HRESULT 0).
+Enumeration and opened-device GUIDs agreed in every reading:
+
+| State | B serial/path | B enumeration and opened GUID key | B joystick ID |
+| --- | --- | --- | --- |
+| A and B present | Unchanged, B identity | `20F10323B6C8F1118001444553540000` | 1 |
+| A removed, B still attached and held | Unchanged, B identity | `902A4ABF25C8F1118001444553540000` (A's former GUID) | 0 |
+| A recreated | Unchanged, B identity | Original B GUID restored | 1 |
+| Both recreated in reverse order | Unchanged, B identity | Original B GUID | 1 |
+
+This rules out a simple discrepancy between the enumeration callback and our
+opened-object metadata. It confirms GUID reassignment alongside slot compaction
+through independent successful DirectInput queries, with B's HID identity and
+input intact. It does not identify the responsible Windows/driver component or
+prove how a particular game handles a saved GUID. No unconditional production
+multi-controller binding guarantee is justified and the identity failure must
+not be relabelled as a pass.
+
+Further identical owner reruns are unnecessary. Next engineering work is to
+trace the Windows joystick configuration/driver mapping, and compare an
+unrelated two-joystick setup if available, before deciding whether a supported
+fix exists. Retaining a neutral virtual device across physical disconnects is
+only a possible mitigation requiring separate lifetime/cleanup design; it does
+not solve deliberate output removal. Do not change user registry mappings or
+keep hidden placeholder devices merely to make this test pass.
