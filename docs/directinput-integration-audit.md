@@ -88,4 +88,6 @@ and smaller viewports; rail centres are checked in both directions.
 After these refinements, the full Release/x64 suite passed with 7,384 tests and
 twelve existing opt-in skips (7,396 total). Rendered checks included both themes
 and confirmed that the fitted full editor has no scrolling when screen space
-permits it. Actual opening size on the owner's display remains to be confirmed.
+permits it. The owner subsequently confirmed that the button editor looks right
+on their display; the supplied screenshot shows the complete controller artwork,
+centred RGB controls and no outer editor scrollbars.
