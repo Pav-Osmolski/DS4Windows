@@ -22,14 +22,14 @@ This fork continues DS4Windows development with a focus on usability, reliabilit
 
 Major improvements include:
 
-- **A clearer interface:** Redesigned Settings with search, remembered navigation and full-width layouts. Reorganized the Profile Editor’s Advanced, Axis Config, Lightbar, Touchpad, Gyro and Special Actions pages, with more readable Controller Readings, consistent controls and improved dark/light theme visibility.
-- **More useful Output Slots:** Clear slot numbers and controller/output information, wrapping text, automatic column fitting and manual widths that survive restarts.
-- **Safer profile handling:** Preserve valid profiles when writes fail, report save and rename errors clearly, and provide explicit retry/discard controls for unsaved Overview changes. Incorporate upstream fixes with attribution and strengthen their handling of edge cases.
-- **Updated USB/IP and VIIPER integration:** Support usbip-win2 0.9.8.1 with the matching VIIPER backend, improve startup verification and check the installed executable, library and drivers while retaining controller-import safeguards.
-- **Practical controller fixes:** Address Bluetooth disconnect/reconnection problems, touchpad-click remapping and passthrough, and failed virtual-controller disconnects. Reduce repeated profile-serialization work during profile switching.
-- **Better diagnostics:** Report USB/IP versions and running states, HidHide versions, backend readiness and installed/portable mode. Add Copy Text for sharing logs, and make detailed Profile Editor timing diagnostics optional.
-- **A dedicated update and release channel:** Integrate this fork’s DS4Updater for portable and installed updates. Publish clearly versioned releases with matching source archives, dependency notices, checksums and build records.
-- **Stronger maintenance and documentation:** Expand the illustrated guides and troubleshooting information. Review dependency and SDK updates through Dependabot, lock build dependencies, improve CI efficiency and retain comprehensive automated tests, translation checks and installer upgrade verification.
+- **A clearer, consistent interface:** Searchable Settings with remembered navigation, a reorganized Profile Editor, clearer Controller Readings and live readings alongside Axis Config. Improved spacing, scrolling and Dark/Light theme consistency across the app.
+- **More useful Output Slots:** Clear slot numbers and controller information, wrapping text, automatic column fitting and remembered manual widths, with smoother resizing.
+- **Safer profile handling:** Preserve existing profiles when saves fail, explain save and rename errors, and offer retry/discard controls for unsaved Overview changes. Reliably save enabled Special Actions and reduce profile-switching overhead.
+- **More reliable controller cleanup:** Improve Bluetooth and DualShock 3 disconnect/reconnect handling. Retain failed virtual-controller removals for retry, protect replacement bindings, and continue shutdown when another controller or notification handler fails.
+- **More predictable controller feedback:** Respect profile lightbar settings during native DualSense feedback while preserving haptics and adaptive triggers. Correct touchpad-click remapping and passthrough, preserve partial virtual DS4 feedback, and improve virtual keyboard/mouse state handling.
+- **Updated USB/IP and VIIPER integration:** Support the latest usbip-win2 release with a matching, verified VIIPER backend, reviewed upstream improvements, stronger startup checks and controller-import safeguards. Add a saved option to hide VIIPER’s tray icon.
+- **Better diagnostics:** Report USB/IP and HidHide versions, driver states, backend readiness and installed/portable mode. Provide copyable logs, clearer disconnect and repair diagnostics, and optional Profile Editor timing information.
+- **Maintained updates, releases and documentation:** Integrate this fork’s DS4Updater for installed and portable updates. Provide illustrated guides, matching source archives, dependency notices, checksums and build records, backed by reviewed dependency updates, extensive automated tests and installer upgrade checks.
 
 The fork builds on the work of [hbashton's DS4Windows](https://github.com/hbashton/DS4Windows) and the wider DS4Windows community. Upstream fixes retain their attribution, and improvements suitable for upstream contribution are prepared separately for review.
 
@@ -51,10 +51,12 @@ controller, connection, and game.
 
 **Moving from another DS4Windows fork, including hbashton's?** Back up your
 profiles and settings, disable the old copy's startup entry, and uninstall the
-old installed app or retire its portable folder before using this fork. Setup
-handles replacement of an incompatible USB/IP package and may require a
+old installed app or retire its portable folder before using this fork.
+
+Setup handles replacement of an incompatible USB/IP package and may require a
 Windows restart before continuing. Follow the
 [clean migration steps](docs/getting-started.md#moving-from-another-fork).
+
 Routine updates of this fork do not require uninstalling it first.
 
 1. Download the **x64 Setup EXE** from [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
