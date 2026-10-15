@@ -3,13 +3,16 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## Unreleased
+## [5.0.27](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.27) — 2026-10-15
 
 ### Fixed
 
 - Keep Trigger Lab surfaces, labels and buttons consistent when switching between Dark and Light themes, including the main navigation page and Profile Editor. Light theme uses the shared pale blue raised surface (`#EAF1FA`).
 - Restore readable Profiles and Auto Profiles toolbar buttons in Light theme, with profile toolbar icons following their button text colour.
 - Give normal and low-battery RGB sliders distinct pale red, green and blue surfaces in Light theme, including zero-valued channels, while preserving Dark theme's existing channel colours.
+- Preserve exact virtual-controller ownership when disconnect or feedback cleanup fails, so removal can be retried safely. Make duplicate removal safe and reject invalid slot indices.
+- Commit slot changes before publishing notifications, deliver callbacks outside the manager lock in commit order, and isolate failing subscribers so remaining observers still run. Prevent an old disconnect from erasing a replacement controller binding.
+- Continue shutting down healthy outputs when another output fails, retain failed registrations for retry, and reject reentrant attachment while shutdown is in progress. Builds on upstream work by @hbashton with additional lifecycle regression coverage.
 
 ## [5.0.26](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.26) — 2026-10-15
 
