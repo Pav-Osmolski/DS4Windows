@@ -1,0 +1,116 @@
+{
+  "SchemaVersion": 1,
+  "Version": "v0.1.11-test1",
+  "SourceCommit": "e4012aa762913a7f5ca22375b8d045599e21aa20",
+  "BuildOrigin": "local-test-build",
+  "BuildDate": "2026-10-15T10:06:43Z",
+  "Binary": {
+    "Name": "VIIPER-0.1.11-test1-x64.exe",
+    "Sha256": "F2A948EF04123CD7B24A37C6186391634970A82F112156624F066C9C0D92E881"
+  },
+  "GoBuildInfo": {
+    "GoVersion": "go1.27.2",
+    "Path": "github.com/Alia5/VIIPER/cmd/viiper",
+    "Main": {
+      "Path": "github.com/Alia5/VIIPER",
+      "Version": "v0.1.11-0.20261015095721-e4012aa76291"
+    },
+    "Deps": [
+      {
+        "Path": "github.com/alecthomas/kong",
+        "Version": "v1.16.1",
+        "Sum": "h1:ixhCt93XkJ98kGposQ54+bl0IK6XwqB40AsMynU7Z8E="
+      },
+      {
+        "Path": "github.com/alecthomas/kong-toml",
+        "Version": "v0.4.1",
+        "Sum": "h1:wlRMMGGHZ222d8r91/2am4KnCqa7LJ6izyjHyH2oUSM="
+      },
+      {
+        "Path": "github.com/alecthomas/kong-yaml",
+        "Version": "v0.2.1-0.20240409173824-a56dc1466c79",
+        "Sum": "h1:Du+IEAmekl2qwpuFCjZPIEh6kFjrcVWIX9Nq/Ubh/Uw="
+      },
+      {
+        "Path": "github.com/pelletier/go-toml",
+        "Version": "v1.9.5",
+        "Sum": "h1:4yBQzkHv+7BHq2PQUZF3Mx0IYxG7LsP222s7Agd3ve8="
+      },
+      {
+        "Path": "golang.org/x/crypto",
+        "Version": "v0.58.0",
+        "Sum": "h1:COkYLr4k7nDI4r6QtMML2AfzeIswWHAJthLS6K/M/54="
+      },
+      {
+        "Path": "golang.org/x/exp",
+        "Version": "v0.0.0-20260908205506-85c1c2202aba",
+        "Sum": "h1:Ck8QetSgk912qxWLMCKxd0in+aiyBQyDSMae6e/xmpU="
+      },
+      {
+        "Path": "golang.org/x/sys",
+        "Version": "v0.49.0",
+        "Sum": "h1:XbzkgYJHdqh/8m2Uu0W/dQv8nktxx4BFHp1M0gROTXA="
+      },
+      {
+        "Path": "golang.org/x/term",
+        "Version": "v0.47.0",
+        "Sum": "h1:cpyOwQkr2Nzxe2p6KnrTG7Ei2wtzjsuSjhpXXepZ/BM="
+      },
+      {
+        "Path": "gopkg.in/yaml.v3",
+        "Version": "v3.0.1",
+        "Sum": "h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA="
+      }
+    ],
+    "Settings": [
+      {
+        "Key": "-buildmode",
+        "Value": "exe"
+      },
+      {
+        "Key": "-compiler",
+        "Value": "gc"
+      },
+      {
+        "Key": "-tags",
+        "Value": "release"
+      },
+      {
+        "Key": "-trimpath",
+        "Value": "true"
+      },
+      {
+        "Key": "CGO_ENABLED",
+        "Value": "0"
+      },
+      {
+        "Key": "GOARCH",
+        "Value": "amd64"
+      },
+      {
+        "Key": "GOOS",
+        "Value": "windows"
+      },
+      {
+        "Key": "GOAMD64",
+        "Value": "v1"
+      },
+      {
+        "Key": "vcs",
+        "Value": "git"
+      },
+      {
+        "Key": "vcs.revision",
+        "Value": "e4012aa762913a7f5ca22375b8d045599e21aa20"
+      },
+      {
+        "Key": "vcs.time",
+        "Value": "2026-10-15T09:57:21Z"
+      },
+      {
+        "Key": "vcs.modified",
+        "Value": "false"
+      }
+    ]
+  }
+}
