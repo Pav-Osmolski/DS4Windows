@@ -1,5 +1,8 @@
 using DS4Windows;
+using DS4Windows.InputDevices;
 using DS4WinWPF.DS4Control;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace DS4WindowsTests;
 
@@ -22,7 +25,6 @@ public sealed class OutputSlotRemovalTests
         int unassigned = 0;
         OutputSlotManager.SlotUnassignedDelegate onUnassigned = (_, index, detached) =>
         {
-            unassigned++;
             Assert.IsNull(detached.OutputDevice);
             Assert.AreEqual(OutSlotDevice.AttachedStatus.UnAttached, detached.CurrentAttachedStatus);
             Assert.IsNull(manager.GetOutSlotDevice(index).OutputDevice);
@@ -31,6 +33,9 @@ public sealed class OutputSlotRemovalTests
                 Assert.IsNull(manager.GetOutSlotDevice(output));
                 if (input >= 0) Assert.IsNull(bound[input]);
             }
+            // Signal success after assertions: subscriber exceptions are
+            // intentionally isolated by the production notification path.
+            unassigned++;
         };
         manager.SlotUnassigned += onUnassigned;
         if (failFeedback) output.FailFeedback = true;
@@ -126,6 +131,149 @@ public sealed class OutputSlotRemovalTests
             Assert.IsTrue(manager.IsExactBoundOutput(replacement, 0));
         }
         finally { manager.Stop(); }
+    }
+
+    [TestMethod]
+    public void ConcurrentDifferentControllerRemovalsRetireEachSlotOnce()
+    {
+        var manager = new OutputSlotManager();
+        var bound = new OutputDevice[2];
+        var first = new FakeOutput();
+        var second = new FakeOutput();
+        manager.DeferredPlugin(first, 0, "First", bound, OutContType.ViiperX360);
+        manager.DeferredPlugin(second, 1, "Second", bound, OutContType.ViiperX360);
+        using var start = new Barrier(2);
+        try
+        {
+            Task[] removals = new[] { (OutputDevice)first, second }.Select((output, index) => Task.Run(() =>
+            {
+                Assert.IsTrue(start.SignalAndWait(TimeSpan.FromSeconds(5)));
+                manager.DeferredRemoval(output, index, bound);
+            })).ToArray();
+
+            Assert.IsTrue(Task.WaitAll(removals, TimeSpan.FromSeconds(10)));
+            Assert.IsNull(manager.GetOutSlotDevice(first));
+            Assert.IsNull(manager.GetOutSlotDevice(second));
+            Assert.IsNull(bound[0]);
+            Assert.IsNull(bound[1]);
+            Assert.AreEqual(1, first.DisconnectAttempts);
+            Assert.AreEqual(1, second.DisconnectAttempts);
+        }
+        finally { manager.Stop(); }
+    }
+
+    [TestMethod]
+    public void ConcurrentDuplicateRemovalIsIdempotentAndObserversRunAfterUnlock()
+    {
+        var manager = new OutputSlotManager();
+        var bound = new OutputDevice[1];
+        var output = new FakeOutput();
+        manager.DeferredPlugin(output, 0, "First", bound, OutContType.ViiperX360);
+        OutSlotDevice assigned = manager.GetOutSlotDevice(output);
+        bool detachedStateWasCommitted = false;
+        assigned.CurrentInputBoundChanged += (sender, _) =>
+        {
+            var slot = (OutSlotDevice)sender;
+            detachedStateWasCommitted = slot.OutputDevice == null &&
+                slot.CurrentAttachedStatus == OutSlotDevice.AttachedStatus.UnAttached &&
+                slot.InputIndex == OutSlotDevice.INPUT_INDEX_DEFAULT;
+            throw new InvalidOperationException("Synthetic binding observer failure");
+        };
+        using var start = new Barrier(2);
+        int notifications = 0;
+        bool observerReadSucceeded = false;
+        manager.SlotUnassigned += (sender, _, _) =>
+        {
+            Interlocked.Increment(ref notifications);
+            try { observerReadSucceeded = sender.GetOutSlotDevice(output) == null; }
+            catch (LockRecursionException) { observerReadSucceeded = false; }
+        };
+        try
+        {
+            Task[] removals = Enumerable.Range(0, 2).Select(_ => Task.Run(() =>
+            {
+                Assert.IsTrue(start.SignalAndWait(TimeSpan.FromSeconds(5)));
+                manager.DeferredRemoval(output, 0, bound);
+            })).ToArray();
+            Assert.IsTrue(Task.WaitAll(removals, TimeSpan.FromSeconds(10)));
+            Assert.IsNull(manager.GetOutSlotDevice(output));
+            Assert.IsNull(bound[0]);
+            Assert.AreEqual(1, output.DisconnectAttempts);
+            Assert.AreEqual(1, notifications);
+            Assert.IsTrue(observerReadSucceeded);
+            Assert.IsTrue(detachedStateWasCommitted);
+        }
+        finally { manager.Stop(); }
+    }
+
+    [TestMethod]
+    public void SlotAssignmentObserverCanReadManagerStateWithoutReenteringWriterLock()
+    {
+        var manager = new OutputSlotManager();
+        var output = new FakeOutput();
+        bool observedCommittedSlot = false;
+        manager.SlotAssigned += (sender, _, _) =>
+        {
+            try { observedCommittedSlot = ReferenceEquals(sender.GetOutSlotDevice(output)?.OutputDevice, output); }
+            catch (LockRecursionException) { observedCommittedSlot = false; }
+        };
+
+        try
+        {
+            OutSlotDevice assigned = manager.DeferredPlugin(output, -1, "Unbound",
+                new OutputDevice[1], OutContType.ViiperX360);
+            Assert.IsNotNull(assigned);
+            Assert.IsTrue(observedCommittedSlot);
+        }
+        finally { manager.Stop(); }
+    }
+
+    [DataTestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void PhysicalRetirementRetainsInputOwnershipWhenVirtualTeardownFails(bool failFeedback)
+    {
+        var service = (ControlService)RuntimeHelpers.GetUninitializedObject(typeof(ControlService));
+        var manager = new OutputSlotManager();
+        service.outputDevices = new OutputDevice[ControlService.MAX_DS4_CONTROLLER_COUNT];
+        typeof(ControlService).GetField("outputslotMan", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(service, manager);
+        var output = new FakeOutput { FailDisconnect = !failFeedback, FailFeedback = failFeedback };
+        manager.DeferredPlugin(output, 0, "First", service.outputDevices, OutContType.ViiperX360);
+        var hid = (HidDevice)RuntimeHelpers.GetUninitializedObject(typeof(HidDevice));
+        var physical = new DS4Device(hid, "Physical DS4 retirement regression");
+        bool oldUseDInputOnly = Global.useDInputOnly[0];
+        OutContType oldActiveType = Global.activeOutDevType[0];
+        try
+        {
+            Global.useDInputOnly[0] = false;
+            Global.activeOutDevType[0] = OutContType.ViiperX360;
+            MethodInfo unplug = typeof(ControlService).GetMethod("UnplugOutDevCore",
+                BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var failure = Assert.ThrowsExactly<TargetInvocationException>(() =>
+                unplug.Invoke(service, new object[] { 0, physical, false, false }));
+            Assert.IsInstanceOfType<IOException>(failure.InnerException);
+            Assert.AreSame(output, service.outputDevices[0],
+                "The physical input must retain its output reference until teardown succeeds.");
+            Assert.IsFalse(Global.useDInputOnly[0]);
+            Assert.AreSame(output, manager.GetOutSlotDevice(output)?.OutputDevice);
+
+            output.FailDisconnect = false;
+            output.FailFeedback = false;
+            unplug.Invoke(service, new object[] { 0, physical, false, false });
+            Assert.IsNull(service.outputDevices[0]);
+            Assert.IsTrue(Global.useDInputOnly[0]);
+            Assert.IsNull(manager.GetOutSlotDevice(output));
+        }
+        finally
+        {
+            Global.useDInputOnly[0] = oldUseDInputOnly;
+            Global.activeOutDevType[0] = oldActiveType;
+            output.FailDisconnect = false;
+            output.FailFeedback = false;
+            manager.Stop();
+            physical.ReadWaitEv.Dispose();
+        }
     }
 
     // Synthetic methods never create a virtual device or touch a driver.

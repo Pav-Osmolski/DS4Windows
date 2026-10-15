@@ -102,9 +102,7 @@ namespace DS4WinWPF.DS4Control
             get => inputBound;
             set
             {
-                if (inputBound == value) return;
-                inputBound = value;
-                CurrentInputBoundChanged?.Invoke(this, EventArgs.Empty);
+                SetInputBindingDeferred(value)?.Invoke();
             }
         }
         public event EventHandler CurrentInputBoundChanged;
@@ -168,19 +166,57 @@ namespace DS4WinWPF.DS4Control
 
         public void DetachDevice()
         {
-            if (outputDevice != null)
-            {
-                outputDevice = null;
-                attachedStatus = AttachedStatus.UnAttached;
-                currentType = OutContType.None;
-                CurrentInputBound = InputBound.Unbound;
-                if (reserveStatus == ReserveStatus.Dynamic)
-                {
-                    PermanentType = OutContType.None;
-                }
+            DetachDeviceDeferred()?.Invoke();
+        }
 
-                inputIndex = INPUT_INDEX_DEFAULT;
-                inputDisplayString = string.Empty;
+        // The manager commits state while locked, then publishes these callbacks
+        // after unlocking. Snapshot subscribers at commit time, not dispatch time.
+        internal Action SetInputBindingDeferred(InputBound value)
+        {
+            if (inputBound == value) return null;
+            inputBound = value;
+            EventHandler handlers = CurrentInputBoundChanged;
+            return handlers == null ? null : () => NotifyObservers(handlers, "input binding");
+        }
+
+        internal Action DetachDeviceDeferred()
+        {
+            if (outputDevice == null) return null;
+
+            // Commit the whole detached state before notifying bindings. A UI
+            // observer must not leave a half-detached slot if it throws while
+            // reacting to the property change.
+            outputDevice = null;
+            attachedStatus = AttachedStatus.UnAttached;
+            currentType = OutContType.None;
+            bool inputBindingChanged = inputBound != InputBound.Unbound;
+            inputBound = InputBound.Unbound;
+            bool permanentTypeChanged = reserveStatus == ReserveStatus.Dynamic &&
+                permanentType != OutContType.None;
+            if (permanentTypeChanged) permanentType = OutContType.None;
+            inputIndex = INPUT_INDEX_DEFAULT;
+            inputDisplayString = string.Empty;
+
+            EventHandler bindingHandlers = inputBindingChanged ? CurrentInputBoundChanged : null;
+            EventHandler typeHandlers = permanentTypeChanged ? PermanentTypeChanged : null;
+            if (bindingHandlers == null && typeHandlers == null) return null;
+            return () =>
+            {
+                NotifyObservers(bindingHandlers, "input binding");
+                NotifyObservers(typeHandlers, "permanent type");
+            };
+        }
+
+        private void NotifyObservers(EventHandler handlers, string kind)
+        {
+            if (handlers == null) return;
+            foreach (EventHandler handler in handlers.GetInvocationList())
+            {
+                try { handler(this, EventArgs.Empty); }
+                catch (Exception error)
+                {
+                    ControlService.StartupDiag($"OutSlotDevice {kind} observer failed for slot #{index + 1}: {error}");
+                }
             }
         }
 

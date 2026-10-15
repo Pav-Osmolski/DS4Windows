@@ -221,18 +221,19 @@ namespace DS4WinWPF.DS4Forms
             Border triggerGraphic = new Border
             {
                 Width = 46, Height = 54, CornerRadius = new CornerRadius(9),
-                BorderBrush = FindBrush("AccentColor", Brushes.DodgerBlue), BorderThickness = new Thickness(2),
-                Background = FindBrush("RaisedBackgroundColor", Brushes.Transparent),
+                BorderThickness = new Thickness(2),
+                Style = FindResource("LabRaisedSurface") as Style,
                 Child = new TextBlock
                 {
                     Text = ui.IsLeft ? "L2" : "R2", FontWeight = FontWeights.Bold, FontSize = 14,
                     HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center,
                 },
             };
+            triggerGraphic.SetResourceReference(Border.BorderBrushProperty, "AccentColor");
             heading.Children.Add(triggerGraphic);
             StackPanel title = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
             title.Children.Add(new TextBlock { Text = ui.IsLeft ? "Left Trigger" : "Right Trigger", FontSize = 17, FontWeight = FontWeights.SemiBold });
-            title.Children.Add(new TextBlock { Text = $"Shape the {(ui.IsLeft ? "L2" : "R2")} trigger feel", Foreground = FindBrush("MutedForegroundColor", Brushes.Gray) });
+            title.Children.Add(new TextBlock { Text = $"Shape the {(ui.IsLeft ? "L2" : "R2")} trigger feel", Style = FindResource("LabMutedText") as Style });
             Grid.SetColumn(title, 1); heading.Children.Add(title);
             StackPanel active = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
             ui.ActiveLabel = new TextBlock
@@ -265,7 +266,7 @@ namespace DS4WinWPF.DS4Forms
             ui.ProfileDescription = new TextBlock
             {
                 Margin = new Thickness(0, -4, 0, 12),
-                Foreground = FindBrush("MutedForegroundColor", Brushes.Gray),
+                Style = FindResource("LabMutedText") as Style,
                 TextWrapping = TextWrapping.Wrap,
             };
             root.Children.Add(ui.ProfileDescription);
@@ -315,7 +316,7 @@ namespace DS4WinWPF.DS4Forms
             {
                 Text = $"Stream the game's {(ui.IsLeft ? "heavy / left" : "light / right")} HID rumble motor to {(ui.IsLeft ? "L2" : "R2")} as a low-latency vibration effect.",
                 Margin = new Thickness(0, 4, 14, 0),
-                Foreground = FindBrush("MutedForegroundColor", Brushes.Gray),
+                Style = FindResource("LabMutedText") as Style,
                 TextWrapping = TextWrapping.Wrap,
             });
             content.Children.Add(copy);
@@ -340,8 +341,7 @@ namespace DS4WinWPF.DS4Forms
 
             return new Border
             {
-                Background = FindBrush("RaisedBackgroundColor", Brushes.Transparent),
-                BorderBrush = FindBrush("BorderColor", Brushes.Gray),
+                Style = FindResource("LabRaisedSurface") as Style,
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(5),
                 Padding = new Thickness(12),
@@ -368,8 +368,7 @@ namespace DS4WinWPF.DS4Forms
             });
             Border badge = new Border
             {
-                Background = FindBrush("RaisedBackgroundColor", Brushes.Transparent),
-                BorderBrush = FindBrush("BorderColor", Brushes.Gray),
+                Style = FindResource("LabRaisedSurface") as Style,
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(4),
                 Padding = new Thickness(7, 3, 7, 3),
@@ -378,7 +377,7 @@ namespace DS4WinWPF.DS4Forms
                     Text = "END OF TRAVEL",
                     FontSize = 9,
                     FontWeight = FontWeights.Bold,
-                    Foreground = FindBrush("MutedForegroundColor", Brushes.Gray),
+                    Style = FindResource("LabMutedText") as Style,
                 },
             };
             Grid.SetColumn(badge, 1);
@@ -388,7 +387,7 @@ namespace DS4WinWPF.DS4Forms
             {
                 Text = $"When {(ui.IsLeft ? "L2" : "R2")} is pressed completely, run the action below using the selected behavior.",
                 Margin = new Thickness(0, 4, 0, 10),
-                Foreground = FindBrush("MutedForegroundColor", Brushes.Gray),
+                Style = FindResource("LabMutedText") as Style,
                 TextWrapping = TextWrapping.Wrap,
             });
 
@@ -404,7 +403,7 @@ namespace DS4WinWPF.DS4Forms
                 Text = "Assigned action",
                 FontSize = 10,
                 FontWeight = FontWeights.SemiBold,
-                Foreground = FindBrush("MutedForegroundColor", Brushes.Gray),
+                Style = FindResource("LabMutedText") as Style,
             });
             ui.FullPullActionName = new TextBlock
             {
@@ -418,7 +417,7 @@ namespace DS4WinWPF.DS4Forms
             TextBlock changeLabel = new TextBlock
             {
                 Text = "Change  ›",
-                Foreground = FindBrush("AccentColor", Brushes.DodgerBlue),
+                Style = FindResource("LabAccentText") as Style,
                 FontWeight = FontWeights.SemiBold,
                 VerticalAlignment = VerticalAlignment.Center,
             };
@@ -451,7 +450,7 @@ namespace DS4WinWPF.DS4Forms
             {
                 Text = "Behavior",
                 FontWeight = FontWeights.SemiBold,
-                Foreground = FindBrush("MutedForegroundColor", Brushes.Gray),
+                Style = FindResource("LabMutedText") as Style,
                 VerticalAlignment = VerticalAlignment.Center,
             });
             ui.FullPullMode = new ComboBox
@@ -473,7 +472,7 @@ namespace DS4WinWPF.DS4Forms
             ui.FullPullModeDescription = new TextBlock
             {
                 Margin = new Thickness(90, 6, 0, 0),
-                Foreground = FindBrush("MutedForegroundColor", Brushes.Gray),
+                Style = FindResource("LabMutedText") as Style,
                 TextWrapping = TextWrapping.Wrap,
             };
             content.Children.Add(ui.FullPullModeDescription);
@@ -492,7 +491,7 @@ namespace DS4WinWPF.DS4Forms
             {
                 Text = "Delay",
                 FontWeight = FontWeights.SemiBold,
-                Foreground = FindBrush("MutedForegroundColor", Brushes.Gray),
+                Style = FindResource("LabMutedText") as Style,
                 VerticalAlignment = VerticalAlignment.Center,
             });
             ui.HipFireDelay = new IntegerUpDown
@@ -517,7 +516,7 @@ namespace DS4WinWPF.DS4Forms
                 Text = "ms",
                 Margin = new Thickness(8, 0, 0, 0),
                 VerticalAlignment = VerticalAlignment.Center,
-                Foreground = FindBrush("MutedForegroundColor", Brushes.Gray),
+                Style = FindResource("LabMutedText") as Style,
             };
             Grid.SetColumn(milliseconds, 2);
             ui.HipFireDelayRow.Children.Add(milliseconds);
@@ -525,8 +524,7 @@ namespace DS4WinWPF.DS4Forms
 
             return new Border
             {
-                Background = FindBrush("RaisedBackgroundColor", Brushes.Transparent),
-                BorderBrush = FindBrush("BorderColor", Brushes.Gray),
+                Style = FindResource("LabRaisedSurface") as Style,
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(5),
                 Padding = new Thickness(12),
@@ -556,7 +554,7 @@ namespace DS4WinWPF.DS4Forms
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(46) });
             grid.ColumnDefinitions.Add(new ColumnDefinition());
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(48) });
-            grid.Children.Add(new TextBlock { Text = label, VerticalAlignment = VerticalAlignment.Center, Foreground = FindBrush("MutedForegroundColor", Brushes.Gray), FontWeight = FontWeights.SemiBold });
+            grid.Children.Add(new TextBlock { Text = label, VerticalAlignment = VerticalAlignment.Center, Style = FindResource("LabMutedText") as Style, FontWeight = FontWeights.SemiBold });
             slider = new Slider { Style = FindResource("LabSlider") as Style };
             Grid.SetColumn(slider, 1); grid.Children.Add(slider);
             value = new TextBlock { HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Center, FontWeight = FontWeights.SemiBold };
@@ -963,7 +961,8 @@ namespace DS4WinWPF.DS4Forms
 
         private string PromptName(string title, string initial)
         {
-            Window dialog = new Window { Title = title, Width = 390, Height = 170, WindowStartupLocation = WindowStartupLocation.CenterOwner, Owner = Window.GetWindow(this), ResizeMode = ResizeMode.NoResize, Background = FindBrush("SurfaceBackgroundColor", Brushes.Black) };
+            Window dialog = new Window { Title = title, Width = 390, Height = 170, WindowStartupLocation = WindowStartupLocation.CenterOwner, Owner = Window.GetWindow(this), ResizeMode = ResizeMode.NoResize };
+            dialog.SetResourceReference(Window.BackgroundProperty, "SurfaceBackgroundColor");
             Grid grid = new Grid { Margin = new Thickness(18) };
             grid.RowDefinitions.Add(new RowDefinition()); grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             TextBox text = new TextBox { Text = initial, MaxLength = 48, MinHeight = 36, VerticalContentAlignment = VerticalAlignment.Center };
@@ -1109,6 +1108,5 @@ namespace DS4WinWPF.DS4Forms
             (settings.LeftActive || settings.LeftGameRumbleVibration) &&
             (settings.RightActive || settings.RightGameRumbleVibration);
 
-        private Brush FindBrush(string key, Brush fallback) => TryFindResource(key) as Brush ?? fallback;
     }
 }

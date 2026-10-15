@@ -336,58 +336,51 @@
                                 <Button x:Name="newProfListBtn" Click="NewProfListBtn_Click"
                                         Style="{StaticResource BridgePrimaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding NewProfile, Source={StaticResource ImgLocPaths}}"
-                                               Width="16" Height="16" Margin="0,0,7,0" />
-                                        <TextBlock Text="New profile" VerticalAlignment="Center" />
+                                        <TextBlock Text="&#xE8A5;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="New profile" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="editProfBtn" IsEnabled="False" Click="EditProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding EditProfile, Source={StaticResource ImgLocPaths}}"
-                                               Width="16" Height="16" Margin="0,0,7,0" />
-                                        <TextBlock Text="{lex:Loc Edit}" VerticalAlignment="Center" />
+                                        <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Edit}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="dupProfBtn" IsEnabled="False" Click="DupProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding DuplicateProfile, Source={StaticResource ImgLocPaths}}"
-                                               Width="16" Height="16" Margin="0,0,7,0" />
-                                        <TextBlock Text="{lex:Loc Duplicate}" VerticalAlignment="Center" />
+                                        <TextBlock Text="&#xE8C8;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Duplicate}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="renameProfBtn" IsEnabled="False" Click="RenameProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding EditProfile, Source={StaticResource ImgLocPaths}}"
-                                               Width="16" Height="16" Margin="0,0,7,0" />
-                                        <TextBlock Text="{lex:Loc RenameProfile}" VerticalAlignment="Center" />
+                                        <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc RenameProfile}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="deleteProfBtn" IsEnabled="False" Click="DeleteProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Foreground="{DynamicResource DangerColor}"
                                         Margin="0,0,16,6">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding DeleteProfile, Source={StaticResource ImgLocPaths}}"
-                                               Width="16" Height="16" Margin="0,0,7,0" />
-                                        <TextBlock Text="{lex:Loc Delete}" VerticalAlignment="Center" />
+                                        <TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Delete}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="importProfBtn" Click="ImportProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding ImportProfile, Source={StaticResource ImgLocPaths}}"
-                                               Width="16" Height="16" Margin="0,0,7,0" />
-                                        <TextBlock Text="{lex:Loc Import}" VerticalAlignment="Center" />
+                                        <TextBlock Text="&#xE8B5;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Import}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="exportProfBtn" IsEnabled="False" Click="ExportProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,0,6">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding ExportProfile, Source={StaticResource ImgLocPaths}}"
-                                               Width="16" Height="16" Margin="0,0,7,0" />
-                                        <TextBlock Text="{lex:Loc Export}" VerticalAlignment="Center" />
+                                        <TextBlock Text="&#xE8B6;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Export}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                             </WrapPanel>

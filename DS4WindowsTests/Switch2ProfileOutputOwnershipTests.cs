@@ -129,7 +129,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
     }
 
     [TestMethod]
-    public void ThrowingBindingObserverPreservesProducedOutputForExactCleanup()
+    public void ThrowingBindingObserverCannotFailSuccessfulOutputAdoption()
     {
         using var fixture = new Fixture(initialOutput: false);
         fixture.Attach();
@@ -141,13 +141,13 @@ public sealed class Switch2ProfileOutputOwnershipTests
             if (slot.CurrentInputBound == DS4WinWPF.DS4Control.OutSlotDevice.InputBound.Bound)
                 throw new IOException("Synthetic observer failure after binding publication.");
         };
-        Assert.ThrowsExactly<IOException>(() =>
-            fixture.Service.PluginOutDev(0, fixture.Device, fixture.Replacement.Type));
+        fixture.Service.PluginOutDev(0, fixture.Device, fixture.Replacement.Type);
         Assert.AreSame(fixture.Replacement, fixture.Service.outputDevices[0]);
         var attempts = (ControllerVirtualOutputAttempt[])typeof(ControlService)
             .GetField("virtualOutputAttempts", BindingFlags.Instance | BindingFlags.NonPublic)
             .GetValue(fixture.Service);
-        Assert.IsTrue(attempts[0].Failed);
+        Assert.IsNull(attempts[0], "Successful adoption must not leave a failed output-attempt marker.");
+        Assert.IsTrue(fixture.Manager.IsExactBoundOutput(fixture.Replacement, 0));
 
         fixture.RetireAndRemove();
 
@@ -278,7 +278,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
     [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
-    public void UnprovenDetachCannotBecomeCleanBecauseLegacyArrayWasCleared(bool disconnectThrows)
+    public void UnprovenDetachRetainsLegacyOutputReferenceForExactRetry(bool disconnectThrows)
     {
         using var fixture = new Fixture();
         fixture.Attach();
@@ -287,7 +287,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
             fixture.Initial.ThrowOnDisconnect = true;
             Assert.ThrowsExactly<IOException>(() =>
                 fixture.Service.UnplugOutDev(0, fixture.Device, force: true));
-            Assert.IsNull(fixture.Service.outputDevices[0]);
+            Assert.AreSame(fixture.Initial, fixture.Service.outputDevices[0], "Failed teardown must retain the exact output for retry.");
             fixture.Initial.ThrowOnDisconnect = false;
         }
         else
