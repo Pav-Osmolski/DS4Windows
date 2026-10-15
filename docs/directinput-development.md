@@ -303,3 +303,13 @@ Normal automatic HidHide already recognizes the joystick through the common
 VIIPER output path. Its behaviour remains untested for this output because the
 isolated preview deliberately bypasses system integration. Production identity,
 normal matched packaging and that validation must precede lifting the gate.
+
+The [integration audit](directinput-integration-audit.md) records the reviewed
+selectors, status, profile lifetime, backend compatibility and packaging paths.
+It found and fixed missing generic-joystick mapping labels and added an
+explanation of the binding diagram's canonical targets. No descriptor, mapper,
+protocol or release-gate change is part of that audit.
+
+The [preview guide](directinput-preview-guide.md) describes the axis layouts,
+trigger modes, button numbers, tested game configurations and device-visibility
+limits for testers using the matched package.

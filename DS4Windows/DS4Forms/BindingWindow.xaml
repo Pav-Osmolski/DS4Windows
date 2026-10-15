@@ -171,6 +171,8 @@
                 </StackPanel>
 
                 <StackPanel x:Name="outConPanel" Width="630" Orientation="Vertical" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="0">
+                    <TextBlock x:Name="genericJoystickMappingHint" Visibility="Collapsed"
+                               TextWrapping="Wrap" Margin="8,4" />
                     <Canvas x:Name="outputControllerCanvas" Height="247" Margin="0,10,0,0"
                             RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" UseLayoutRounding="True">
                         <Canvas.Background>

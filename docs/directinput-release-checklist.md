@@ -4,6 +4,9 @@ Status: **working twelve-button preview; not ready for a normal release**.
 The paired `feature/directinput-output` branches remain the development path.
 Do not remove the portable-lab gate or replace the released backend independently.
 
+See the [integration audit](directinput-integration-audit.md) for source-review
+findings and the [preview guide](directinput-preview-guide.md) for tester setup.
+
 ## Evidence already collected
 
 - Native synthetic input: all 156 observations and 312 x86/x64 DirectInput/WinMM

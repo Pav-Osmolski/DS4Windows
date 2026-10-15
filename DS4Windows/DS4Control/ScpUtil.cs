@@ -1017,6 +1017,10 @@ namespace DS4Windows
         {
             conType = conType.Normalize();
             string result = string.Empty;
+            if (conType == DS4Windows.OutContType.ViiperGenericJoystick)
+            {
+                return GenericJoystickOutputLabels.Get(key);
+            }
             if (conType == DS4Windows.OutContType.X360 ||
                 conType == DS4Windows.OutContType.ViiperX360 ||
                 conType == DS4Windows.OutContType.ViiperXboxOne)

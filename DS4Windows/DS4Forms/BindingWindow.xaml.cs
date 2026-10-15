@@ -1106,6 +1106,9 @@ namespace DS4WinWPF.DS4Forms
             outputControllerRasterHighlight.Visibility = Visibility.Collapsed;
             outputType = outputType.Normalize();
             configuredOutputType = outputType;
+            genericJoystickMappingHint.Text = GenericJoystickOutputLabels.DiagramHint;
+            genericJoystickMappingHint.Visibility = outputType == OutContType.ViiperGenericJoystick
+                ? Visibility.Visible : Visibility.Collapsed;
             switch (outputType)
             {
                 case OutContType.ViiperDS4:
