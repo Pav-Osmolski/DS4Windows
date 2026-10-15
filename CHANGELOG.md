@@ -3,6 +3,12 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Fixed
+
+- Fix enabled Special Actions failing to save when selecting existing actions for another profile (#33). Checkbox changes now apply immediately, and saving captures the current selection, including disabling every action or renaming an enabled action.
+
 ## [5.0.25](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.25) — 2026-10-15
 
 ### Added
