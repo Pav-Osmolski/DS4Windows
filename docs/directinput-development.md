@@ -460,3 +460,20 @@ completed r4 report with read-only calibration entries and the pinned USB/IP
 attachment code. It records the documented API limits, alternatives considered
 and the recommendation to continue preview preparation without waiving the
 unresolved production multi-controller acceptance item.
+
+### Refreshed matched app preview (r8)
+
+Release preparation on 2026-10-15 confirmed both feature branches contain their
+current main branches, pid.codes #1317 is still open without review, and USB/IP
+0.9.8.1 remains the latest published release. The upstream serial fix is now an
+explicit controlled-retest item in the identity audit and release checklist.
+
+The 196 focused generic-joystick, HidHide, portable-lab and readiness tests passed
+with no skips. These are automated checks, not proof of normal installed HidHide
+behavior. A refreshed matched physical-controller preview carries the current
+per-controller identity and backend-echo checks alongside normal Lang packaging.
+It retains the preview gate, installed USB/IP 0.9.8.1 and isolated lab behavior.
+The requested follow-up is limited to profile save/reopen, physical reconnect and
+existing-output switching after the serial change. Game/layout matrices already
+passed need not be repeated. Normal installer activation and HidHide acceptance
+remain open until the production prerequisites are satisfied.

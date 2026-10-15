@@ -42,3 +42,14 @@ window should open with the full editor visible. Small screens or a manually
 reduced window can still scroll. Check that the RGB tracks are centered in
 their colour surfaces and that Show/Hide live preview remains usable. Existing
 gameplay/mapping tests do not need repeating just for these layout changes.
+
+Per-controller identity follow-up (r8): this matched preview includes distinct,
+stable USB serials derived from controller identity. Existing preview game
+bindings may need to be selected/bound once after the serial change. For this
+revision, focus on saving/reopening your joystick profile, physical reconnect,
+and switching Xbox 360 -> Generic joystick; the previously passed game and
+layout matrix need not be repeated. Built-in HidHide remains bypassed here.
+The synthetic two-device test found DirectInput GUID reassignment when the first
+output is removed, despite stable serials/paths and correct input isolation.
+The upstream USB/IP serial-completion fix is awaiting a packaged release for a
+controlled retest. This preview still uses installed USB/IP 0.9.8.1 unchanged.

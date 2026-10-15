@@ -88,3 +88,33 @@ place, and the production multi-controller acceptance item open. Before normal
 release, either validate a supported fix or explicitly decide the allowed
 compatibility scope and document it. USB ID allocation, matched normal packaging
 and built-in HidHide validation remain separate prerequisites.
+
+
+## Pending USB/IP serial fix: controlled retest required
+
+The published 0.9.8.1 [known issue](https://github.com/vadimgrn/usbip-win2/releases/tag/v.0.9.8.1)
+links [a2a1159](https://github.com/vadimgrn/usbip-win2/commit/a2a1159763088c85d940078cfa6491f38540953d).
+The fix corrects serial-override descriptor completion/status and length handling,
+and adds a fallback for successful requests left with pending USB status. On
+2026-10-15 the latest published release remained 0.9.8.1; a release incorporating
+the fix had not been published.
+
+VIIPER currently leaves the USB/IP serial override empty and serves its own
+USB serial descriptor. The successful serial queries in the reports do not prove
+that Windows received or used the serial during initial PnP enumeration. Thus
+the evidence makes the override bug a less direct explanation, but does not
+exclude an effect from this commit, especially its shared completion change.
+The earlier transport/API review is not a reason to close this retest item.
+
+Retest when a suitable packaged driver containing the commit is available:
+
+1. Verify the release's ancestry and record its version and artifact hashes.
+2. Keep the same DS4Windows/VIIPER feature revisions and synthetic input patterns
+   for the comparison; record any required transport compatibility changes.
+3. Rerun the two-device lab, comparing GUID, opened-device metadata, slot, serial,
+   path, input isolation and cleanup against r4 report `20261015-165810-0ed8a66d`.
+4. Record the outcome even if only the known GUID failures remain. Do not change
+   the GUID acceptance criterion to turn the comparison into a pass.
+
+This is a release-preparation follow-up, not a claim that the fix will resolve
+GUID reassignment. No driver was installed or replaced for this investigation.

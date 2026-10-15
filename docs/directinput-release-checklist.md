@@ -108,3 +108,18 @@ failure; no registry or transport workaround has been applied.
 
 The existing production-identity, normal-packaging and HidHide checks remain
 open. Repeating the same diagnostic package is not a substitute for these items.
+
+
+## Upstream USB/IP serial-completion retest
+
+- [ ] When a packaged USB/IP release containing
+  [a2a1159](https://github.com/vadimgrn/usbip-win2/commit/a2a1159763088c85d940078cfa6491f38540953d)
+  is available, verify inclusion and perform the controlled comparison described
+  in the [identity audit](directinput-identity-audit.md#pending-usbip-serial-fix-controlled-retest-required).
+  Later successful serial reads do not establish correct initial PnP handling.
+- [ ] Keep the known GUID reassignment and saved-binding limits visible until
+  new evidence establishes the result. Continue other preview preparation.
+
+Checked on 2026-10-15: pid.codes PR #1317 remains open with no review; USB/IP's
+latest published release remains v.0.9.8.1. Both feature branches contain their
+current main branches. These checks do not approve normal activation or release.
