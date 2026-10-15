@@ -409,43 +409,50 @@ public class PortableLabContextTests
         using TcpListener listener = new(IPAddress.Loopback, 0);
         listener.Start();
         int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        int checks = matchingKey ? 16 : 1;
         Task server = Task.Run(async () =>
         {
-            using TcpClient peer = await listener.AcceptTcpClientAsync();
-            peer.ReceiveTimeout = 2000;
-            peer.SendTimeout = 2000;
-            using NetworkStream wire = peer.GetStream();
-            byte[] hello = new byte[69];
-            wire.ReadExactly(hello);
-            CollectionAssert.AreEqual("eVI2\0"u8.ToArray(), hello[..5]);
-            byte[] clientNonce = hello[5..37];
-            byte[] key = ViiperAuthentication.DeriveKey(matchingKey ? "lab-test-password" : "other-server-key");
-            byte[] input = "VIIPER-Auth-v2"u8.ToArray().Concat(clientNonce).ToArray();
-            bool authenticated = CryptographicOperations.FixedTimeEquals(
-                HMACSHA256.HashData(key, input), hello[37..]);
-            Assert.AreEqual(matchingKey, authenticated);
-            if (!authenticated) return; // close, never downgrade to plaintext
-            byte[] nonce = RandomNumberGenerator.GetBytes(32);
-            wire.Write("OK\0"u8);
-            wire.Write(nonce);
-            using ViiperEncryptedStream encrypted = new(wire,
-                ViiperAuthentication.DeriveSessionKey(key, nonce, clientNonce),
-                ViiperConnectionRole.Server);
-            byte[] command = new byte[5];
-            encrypted.ReadExactly(command);
-            CollectionAssert.AreEqual("ping\0"u8.ToArray(), command);
-            byte[] reply = Encoding.ASCII.GetBytes("VIIPER lab test\0");
-            encrypted.Write(reply, 0, reply.Length);
+            for (int check = 0; check < checks; check++)
+            {
+                using TcpClient peer = await listener.AcceptTcpClientAsync();
+                peer.ReceiveTimeout = 2000;
+                peer.SendTimeout = 2000;
+                using NetworkStream wire = peer.GetStream();
+                byte[] hello = new byte[69];
+                wire.ReadExactly(hello);
+                CollectionAssert.AreEqual("eVI2\0"u8.ToArray(), hello[..5]);
+                byte[] clientNonce = hello[5..37];
+                byte[] key = ViiperAuthentication.DeriveKey(matchingKey ? "lab-test-password" : "other-server-key");
+                byte[] input = "VIIPER-Auth-v2"u8.ToArray().Concat(clientNonce).ToArray();
+                bool authenticated = CryptographicOperations.FixedTimeEquals(
+                    HMACSHA256.HashData(key, input), hello[37..]);
+                Assert.AreEqual(matchingKey, authenticated);
+                if (!authenticated) return; // close, never downgrade to plaintext
+                byte[] nonce = RandomNumberGenerator.GetBytes(32);
+                wire.Write("OK\0"u8);
+                wire.Write(nonce);
+                using ViiperEncryptedStream encrypted = new(wire,
+                    ViiperAuthentication.DeriveSessionKey(key, nonce, clientNonce),
+                    ViiperConnectionRole.Server);
+                byte[] command = new byte[5];
+                encrypted.ReadExactly(command);
+                CollectionAssert.AreEqual("ping\0"u8.ToArray(), command);
+                byte[] reply = Encoding.ASCII.GetBytes("VIIPER lab test\0");
+                encrypted.Write(reply, 0, reply.Length);
+            }
         });
-        Assert.AreEqual(matchingKey, ViiperSetupManager.ProbeServer("127.0.0.1", port,
-            authenticated: true, out string failure));
-        if (matchingKey) Assert.IsNull(failure);
-        else
+        for (int check = 0; check < checks; check++)
         {
-            StringAssert.StartsWith(failure, "Authenticate: ");
-            Assert.IsFalse(failure.Contains("lab-test-password"));
-            Assert.IsFalse(failure.Contains("other-server-key"));
-            Assert.IsFalse(failure.Contains(context.KeyPath));
+            Assert.AreEqual(matchingKey, ViiperSetupManager.ProbeServer("127.0.0.1", port,
+                authenticated: true, out string failure));
+            if (matchingKey) Assert.IsNull(failure);
+            else
+            {
+                StringAssert.StartsWith(failure, "Authenticate: ");
+                Assert.IsFalse(failure.Contains("lab-test-password"));
+                Assert.IsFalse(failure.Contains("other-server-key"));
+                Assert.IsFalse(failure.Contains(context.KeyPath));
+            }
         }
         await server.WaitAsync(TimeSpan.FromSeconds(5));
     }

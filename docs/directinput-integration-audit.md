@@ -36,3 +36,29 @@ not install a driver, start VIIPER or modify HidHide policy.
 
 Local Release/x64 results: all 81 targeted checks passed, then the complete
 suite passed with 7,382 tests and twelve existing opt-in skips (7,394 total).
+
+## r5 readiness popup follow-up
+
+Report `20261015-154154-8933a7c0` and its screenshot exposed a separate readiness
+probe failure when entering Button Mapping: `Connect: ObjectDisposedException`.
+The backend stream ran from 15:42:07 to 15:43:04 despite the failed check; the
+report recorded no launcher failure, cleanup errors or remaining imports. A
+handshake EOF was logged at 15:42:13. These facts support a failed probe rather
+than establishing that the active joystick stream stopped.
+
+The readiness probe still used `BeginConnect` and disposed its APM completion
+wait handle. The main API client already uses a cancellable `ConnectAsync` path
+to avoid that completion-handle lifetime hazard. The readiness probe now uses
+that pattern too, retaining its 750 ms connect budget, whole-probe deadline,
+authenticated encrypted ping and key-mismatch rejection. It does not bypass
+readiness, retry with plaintext or change backend ownership.
+
+Follow-up tests cover 256 consecutive loopback readiness checks, sixteen
+authenticated lab pings, wrong-key rejection and the existing trickled-response
+deadline tests. All 91 targeted checks passed. The simple repeated-check fixture
+also passed before the fix; it exercises the path but does not deterministically
+reproduce the user's timing-dependent exception. Opening Controls in the next
+matched preview remains the required owner confirmation.
+
+The complete follow-up Release/x64 suite passed: 7,383 passed and twelve existing
+opt-in skips (7,395 total).
