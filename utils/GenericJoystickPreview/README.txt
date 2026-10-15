@@ -1,5 +1,8 @@
 DS4Windows + VIIPER: physical-controller DirectInput preview
 
+New external testers: read TESTER-GUIDE.txt first. It includes legacy-game
+starting settings, physical-controller visibility guidance and what to report.
+
 Extract the entire ZIP into a fresh local folder outside Program Files/AppData.
 Exit installed DS4Windows and VIIPER, close games, then run START.cmd. Approve
 Windows elevation. USB/IP 0.9.8.1 must already be installed; this preview does
@@ -37,18 +40,10 @@ Please report controller model/connection, profile layout and trigger mode,
 results in joy.cpl, persistence/reconnect behaviour, and any errors. Include
 the generated report if useful. This is a feature preview, not a release.
 
-Mapping-window follow-up: on a screen with enough room, the Select action
-window should open with the full editor visible. Small screens or a manually
-reduced window can still scroll. Check that the RGB tracks are centered in
-their colour surfaces and that Show/Hide live preview remains usable. Existing
-gameplay/mapping tests do not need repeating just for these layout changes.
-
-Per-controller identity follow-up (r8): this matched preview includes distinct,
+This matched preview includes distinct,
 stable USB serials derived from controller identity. Existing preview game
-bindings may need to be selected/bound once after the serial change. For this
-revision, focus on saving/reopening your joystick profile, physical reconnect,
-and switching Xbox 360 -> Generic joystick; the previously passed game and
-layout matrix need not be repeated. Built-in HidHide remains bypassed here.
+bindings may need to be selected/bound once after the serial change.
+Built-in HidHide remains bypassed here.
 The synthetic two-device test found DirectInput GUID reassignment when the first
 output is removed, despite stable serials/paths and correct input isolation.
 The upstream USB/IP serial-completion fix is awaiting a packaged release for a

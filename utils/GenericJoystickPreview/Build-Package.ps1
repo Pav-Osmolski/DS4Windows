@@ -22,7 +22,7 @@ try {
 Check-Exit 'Portable application build'
 & $Python "$PSScriptRoot/Prepare-Localization.py" $output
 Check-Exit 'Preview localization composition'
-foreach ($name in @('START.cmd', 'Run-Preview.ps1', 'README.txt')) {
+foreach ($name in @('START.cmd', 'Run-Preview.ps1', 'README.txt', 'TESTER-GUIDE.txt')) {
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $output
 }
 Copy-Item -LiteralPath "$repo/utils/GenericJoystickLab/Lab.Helpers.ps1" -Destination $output
