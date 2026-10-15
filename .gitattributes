@@ -75,3 +75,8 @@ extras/xbox-one-authorized-persona.json -text
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+# Immutable VIIPER 0.1.11 release inputs.
+extras/VIIPER-0.1.11-LICENSES.txt -text whitespace=cr-at-eol,-blank-at-eof
+extras/VIIPER-0.1.11-BUILD-NOTES.txt -text
+extras/VIIPER-0.1.11-BUILD-INFO.json -text
