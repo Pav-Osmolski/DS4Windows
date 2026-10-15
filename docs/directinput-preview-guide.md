@@ -102,3 +102,11 @@ checked after output devices are added or removed. Configure the intended
 outputs before launching a game. No saved game-binding test has yet established
 whether a particular title is affected. See the
 [development evidence](directinput-development.md#completed-opened-device-comparison-r4).
+
+The refreshed r8 matched app preview was also checked by the owner after the
+per-controller USB serial change. The owner reported it observably worked fine
+following the requested profile-persistence, reconnect and output-switching
+follow-up. Report `20261015-172359-df3e2812` recorded clean launcher cleanup, no
+remaining imports and no backend WARN/ERROR entries. This single-controller
+follow-up does not resolve the multi-controller identifier limitation or validate
+normal HidHide integration.

@@ -477,3 +477,28 @@ The requested follow-up is limited to profile save/reopen, physical reconnect an
 existing-output switching after the serial change. Game/layout matrices already
 passed need not be repeated. Normal installer activation and HidHide acceptance
 remain open until the production prerequisites are satisfied.
+
+### Owner follow-up on matched physical preview r8
+
+Report `20261015-172359-df3e2812` identifies clean DS4Windows revision
+`d78d0cdd6a06479e394cfe00c922c0df5858e85c` and VIIPER revision
+`948855d83f25ecdf6f166adc54ca44040b14d240`. After being asked to check profile
+save/reopen, physical reconnect and Xbox 360/generic output switching, the owner
+reported that it observably worked fine. This is the owner's functional result;
+logs alone do not prove each UI action or saved profile value.
+
+The launcher summary has no failure, no cleanup errors and no remaining USB/IP
+imports. Backend logs contain five native attachments, five stream ends and five
+bus removals between 17:24 and 17:26 BST, with zero WARN/ERROR entries. Both error
+streams are empty. Application stdout records the physical read failure at
+16:25:35 UTC (17:25:35 BST), consistent with the requested unplug test, followed
+by another attachment. It also contains access-denied CreateFile messages while
+discovering input-driver interfaces, followed by successful discovery for both
+usage types; these messages are retained in the evidence rather than described
+as an entirely error-free stdout log.
+
+The refreshed per-controller-identity preview therefore has positive owner
+feedback and clean output cleanup. This does not clear the separate synthetic
+multi-controller GUID failure, establish normal HidHide behavior (still bypassed
+in the lab), or change the pending production identity/upstream driver retest.
+No further identical single-controller run is needed on this evidence.
