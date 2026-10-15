@@ -361,3 +361,32 @@ via read-only Windows metadata queries. Identity-only failures remain failed
 observations and force a final failure, while permitting later recreation/order
 observations to run. Input/enumeration/API failures still stop immediately.
 No controller/backend behavior was changed to hide or work around this result.
+
+The completed r3 owner run (`20261015-164334-2482c1b4`, Windows build 26300)
+collected all 22 planned observations. Twenty had no errors. Two (x64 and x86
+at "Remove A while B remains held") failed DirectInput GUID persistence.
+All expected input patterns, capabilities and device counts matched, including
+producer reconnect, A recreation and reversed creation order; cleanup had no
+errors. This is a complete diagnostic run with an unresolved compatibility
+failure, not a full pass.
+
+The HID evidence distinguishes controller identity from DirectInput GUIDs:
+
+- A always returned serial `VIIPER-GJ1-11111111111111111111111111111111`
+  and the HID instance path component `3&1ba4aecc&0&0000`.
+- B always returned serial `VIIPER-GJ1-22222222222222222222222222222222`
+  and path component `3&296b048d&0&0000`, including while A was absent.
+- With both present, A's raw-byte GUID key was
+  `902A4ABF25C8F1118001444553540000` and B's was
+  `20F10323B6C8F1118001444553540000`.
+- With only B present, B retained its serial/path/input but was reported under
+  A's former GUID key. Recreating A restored the original GUID associations.
+  The final reversed-order test also returned the original associations.
+
+Thus distinct USB serials reach Windows correctly and the HID paths remained
+stable throughout this particular run. Do not infer general game-binding
+persistence or blame a particular Windows/driver component from this alone.
+Next investigation should compare enumeration GUIDs with GetDeviceInfo and
+Windows joystick configuration/PnP metadata while B remains attached, using
+read-only queries, before changing backend identity or registry configuration.
+No further identical owner rerun is needed to establish this finding.
