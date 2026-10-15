@@ -21,10 +21,13 @@ public class PortableBrokerProcessTreeTests
         Assert.IsTrue(File.Exists(powershell));
         string childCode = Convert.ToBase64String(Encoding.Unicode.GetBytes("[Threading.Thread]::Sleep(60000)"));
         static string Quote(string value) => "'" + value.Replace("'", "''") + "'";
+        // Publish only after WriteAllText closes its exclusive writer. File.Exists
+        // can otherwise become true before ReadAllText is allowed to open it.
         string parentCode = "$helper = Start-Process -FilePath " + Quote(powershell) +
             " -ArgumentList '-NoProfile','-NonInteractive','-EncodedCommand'," + Quote(childCode) +
-            " -PassThru -WindowStyle Hidden; [IO.File]::WriteAllText(" + Quote(pidFile) +
-            ",$helper.Id.ToString()); $helper.WaitForExit()";
+            " -PassThru -WindowStyle Hidden; [IO.File]::WriteAllText(" + Quote(pidFile + ".tmp") +
+            ",$helper.Id.ToString()); [IO.File]::Move(" +
+            Quote(pidFile + ".tmp") + "," + Quote(pidFile) + "); $helper.WaitForExit()";
         var start = new ProcessStartInfo(powershell)
         {
             UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden,
