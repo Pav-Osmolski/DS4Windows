@@ -3,6 +3,25 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.25](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.25) — 2026-10-15
+
+### Added
+
+- Add **Show VIIPER tray icon** in Settings under Virtual controller support. It is enabled by default, saved between sessions, and respected by portable and installed startup. Changes apply the next time VIIPER starts, leaving active controller sessions running. DS4Windows retains its own separate tray icon.
+
+### Improved
+
+- Bundle [VIIPER 0.1.11](https://github.com/Pav-Osmolski/VIIPER/releases/tag/v0.1.11), adapting reviewed upstream improvements to this fork's DS4Windows integration.
+- Preserve unaffected rumble, RGB and flashing values when games send partial virtual DS4 output commands. Keep the existing seven-byte DS4Windows feedback protocol and accepted-command/reconnect ownership guarantees.
+- Align virtual DS4 acceleration defaults and conversion helpers with the existing calibration. Raw physical-controller motion forwarding remains unchanged.
+- Retain virtual keyboard keys and mouse buttons during idle polls without repeating relative mouse movement or scrolling.
+- Update VIIPER's existing dependencies and build toolchain while retaining DS4Windows-managed installation, updates and USB/IP scheduling.
+
+### Updating
+
+- The complete installer and portable ZIP include the matching VIIPER executable, source, notices and verification records. Close games, DS4Windows and VIIPER before updating. USB/IP remains at 0.9.8.1; no driver version change is required.
+- The maintainer successfully tested the paired changes before release. This release remains unsigned; no Authenticode signature is claimed.
+
 ## [5.0.24](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.24) — 2026-10-14
 
 ### Fixed

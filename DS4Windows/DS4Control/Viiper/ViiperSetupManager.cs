@@ -163,12 +163,12 @@ namespace DS4Windows
             "--run-embedded-viiper-installer";
         private const string InstallerResourceName =
             "DS4Windows.install-viiper-backend.ps1";
-        internal const string BundledViiperName = "VIIPER-0.1.10-x64.exe";
-        internal const string SupportedViiperReleaseTag = "v0.1.10";
+        internal const string BundledViiperName = "VIIPER-0.1.11-x64.exe";
+        internal const string SupportedViiperReleaseTag = "v0.1.11";
         private const string BundledViiperHashName =
             BundledViiperName + ".sha256";
         internal const string SupportedViiperSha256 =
-            "D604A28A19FD2B44ECF91E3849ECC9FE10FF7C4B243733EF9FB49A172BE25F91";
+            "949022AC8E30CABD2B06EBF92D38E34A2400BE6C31B417A53745BEE697A9C7A7";
         private const string BundledUsbipName = "USBip-0.9.8.1-x64.exe";
         private const string BundledHidHideName =
             "HidHide_1.5.230_x64.exe";
@@ -3069,7 +3069,8 @@ namespace DS4Windows
             : new ProcessStartInfo
             {
                 FileName = Path.GetFullPath(viiperPath),
-                Arguments = ViiperServerArguments,
+                Arguments = ViiperServerArguments + (Global.ShowViiperTrayIcon
+                    ? " --no-tray=false" : " --no-tray=true"),
                 WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(viiperPath)),
                 UseShellExecute = true,
                 Verb = administrator ? string.Empty : "runas",

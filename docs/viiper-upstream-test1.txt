@@ -1,0 +1,47 @@
+DS4Windows 5.0.24 / VIIPER upstream test 1
+
+This portable test build pairs the stable DS4Windows 5.0.24 code with VIIPER
+0.1.11-test1 from commit e4012aa762913a7f5ca22375b8d045599e21aa20.
+DS4Windows includes the matching backend identity and verification metadata.
+The DirectInput development work is not included. This is an unsigned local
+test build, not a new public release.
+
+HOW TO TEST
+
+1. Keep your regular DS4Windows folder and back up your profiles/settings.
+2. Exit the regular DS4Windows, then quit VIIPER through its tray icon.
+3. Extract the complete ZIP into a new writable folder outside Program Files.
+4. Open DS4Windows.exe inside the extracted DS4Windows folder. Leave
+   DS4Windows.portable and viiper.exe beside it; this selects the paired copy.
+5. Test your usual controller and games. With virtual DS4 output, check rumble,
+   game-controlled lightbar colour/flashing, motion, reconnect, and Stop/Start.
+6. When finished, exit the test DS4Windows and quit its VIIPER tray icon if it
+   remains running. Reopen your regular DS4Windows to return to the release.
+
+The supported USB/IP 0.9.8.1 installation is unchanged; no driver update is
+needed. Do not copy these files into your existing installation. Use the
+complete extracted folder. If another VIIPER is still running, close it first.
+
+PORTABLE DOES NOT MEAN SEPARATE PROFILES
+
+This is the normal portable package, not developer lab mode. DS4Windows can use
+your existing roaming settings/profiles. Avoid changing them if you want the
+test to leave your profile configuration as it was. Keep startup and update
+settings unchanged while testing; no installation or startup reconfiguration is
+needed for this test.
+
+WHAT CHANGED
+
+- DS4 acceleration defaults/helpers match existing calibration.
+- Partial game rumble/lightbar/flash commands preserve unselected fields.
+- VIIPER virtual keyboard/mouse retain buttons during idle polls without
+  repeating relative movement or scrolling. This does not replace ordinary
+  DS4Windows SendInput/FakerInput mappings.
+- Optional VIIPER server --no-tray is available; the test keeps the default tray.
+- Existing shared dependencies and Go are updated.
+
+The seven-byte DS4 feedback format remains unchanged. Source, fresh notices,
+hashes and build provenance for VIIPER are included under extras. Automated
+checks pass; please report the controller, connection type, virtual output,
+game/application, and steps if you encounter a problem. DS4Windows logs are
+available through the application's normal log facilities.

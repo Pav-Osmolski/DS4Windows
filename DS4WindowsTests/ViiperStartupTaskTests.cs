@@ -278,7 +278,8 @@ public class ViiperStartupTaskTests
             }));
         Assert.AreEqual(Portable, startInfo.FileName);
         Assert.AreEqual("runas", startInfo.Verb);
-        Assert.AreEqual(ViiperSetupManager.ViiperServerArguments, startInfo.Arguments);
+        Assert.AreEqual(ViiperSetupManager.ViiperServerArguments +
+            (Global.ShowViiperTrayIcon ? " --no-tray=false" : " --no-tray=true"), startInfo.Arguments);
         Assert.AreEqual(ProcessWindowStyle.Hidden, startInfo.WindowStyle);
         Assert.AreEqual(Canonical, installedTask.ExecutablePath);
     }

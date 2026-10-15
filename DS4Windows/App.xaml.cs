@@ -465,6 +465,12 @@ namespace DS4WinWPF
             SetUICulture(DS4Windows.Global.UseLang);
             ChangeTheme(DS4Windows.Global.UseCurrentTheme, false);
 
+            if (!DS4Windows.PortableLabContext.IsActive && (readAppConfig || firstRun))
+            {
+                try { DS4Windows.ViiperTrayPreference.WriteStartupPreference(DS4Windows.Global.ShowViiperTrayIcon); }
+                catch (Exception error) { logger.Warn("Could not sync the VIIPER tray preference: " + error.Message); }
+            }
+
             // VIIPER is the only virtual-controller backend. Make a missing
             // backend actionable at startup instead of letting profile output
             // fail later with an opaque device error. The installer requests

@@ -225,6 +225,33 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
         }
 
+        public bool ShowViiperTrayIcon
+        {
+            get => Global.ShowViiperTrayIcon;
+            set
+            {
+                if (!SystemIntegrationEnabled || value == Global.ShowViiperTrayIcon) return;
+                bool previous = Global.ShowViiperTrayIcon;
+                try
+                {
+                    ViiperTrayPreference.Apply(previous, value, visible =>
+                    {
+                        Global.ShowViiperTrayIcon = visible;
+                        if (!Global.Save()) throw new IOException("DS4Windows settings could not be saved.");
+                    }, visible => ViiperTrayPreference.WriteStartupPreference(visible));
+                }
+                catch (Exception error)
+                {
+                    Global.ShowViiperTrayIcon = previous;
+                    string message = "The VIIPER tray preference could not be saved. " + error.Message;
+                    DS4Windows.AppLogger.LogToGui(message, true);
+                    MessageBox.Show(message, "VIIPER tray icon", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                ShowViiperTrayIconChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler ShowViiperTrayIconChanged;
+
         public int IconChoiceIndex
         {
             get => (int)DS4Windows.Global.UseIconChoice;
