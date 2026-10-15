@@ -491,6 +491,7 @@ internal sealed class PortableBrokerContext : IDisposable
             "--usb.write-batch-flush-interval=0", "--usb.retained-input-service-ms=0",
             "--connection-timeout=30s", "--api.device-handler-connect-timeout=5s", "--usb.endpoint-diagnostics=false",
         }) start.ArgumentList.Add(argument);
+        ViiperTrayPreference.AddArgument(start, Global.ShowViiperTrayIcon);
         return start;
     }
 

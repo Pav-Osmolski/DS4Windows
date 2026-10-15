@@ -3,7 +3,7 @@
 # github.com/Alia5/VIIPER
 
 * Name: github.com/Alia5/VIIPER
-* Version: v0.1.10
+* Version: v0.1.11
 * License: [GPL-3.0](https://github.com/Alia5/VIIPER/blob/HEAD/LICENSE.txt)
 
 VIIPER - Virtual Input over IP EmulatoR
@@ -276,8 +276,8 @@ to its derived filter coefficients and sampling algorithm.
 ## github.com/alecthomas/kong
 
 * Name: github.com/alecthomas/kong
-* Version: v1.15.0
-* License: [MIT](https://github.com/alecthomas/kong/blob/v1.15.0/COPYING)
+* Version: v1.16.1
+* License: [MIT](https://github.com/alecthomas/kong/blob/v1.16.1/COPYING)
 
 
 Copyright (C) 2018 Alec Thomas
@@ -306,8 +306,8 @@ SOFTWARE.
 ## github.com/alecthomas/kong-toml
 
 * Name: github.com/alecthomas/kong-toml
-* Version: v0.4.0
-* License: [MIT](https://github.com/alecthomas/kong-toml/blob/v0.4.0/COPYING)
+* Version: v0.4.1
+* License: [MIT](https://github.com/alecthomas/kong-toml/blob/v0.4.1/COPYING)
 
 
 Copyright (C) 2018 Alec Thomas
@@ -882,8 +882,8 @@ License:
 ## golang.org/x/crypto
 
 * Name: golang.org/x/crypto
-* Version: v0.52.0
-* License: [BSD-3-Clause](https://cs.opensource.google/go/x/crypto/+/v0.52.0:LICENSE)
+* Version: v0.58.0
+* License: [BSD-3-Clause](https://cs.opensource.google/go/x/crypto/+/v0.58.0:LICENSE)
 
 
 Copyright 2009 The Go Authors.
@@ -920,8 +920,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ## golang.org/x/exp/constraints
 
 * Name: golang.org/x/exp/constraints
-* Version: v0.0.0-20260410095643-746e56fc9e2f
-* License: [BSD-3-Clause](https://cs.opensource.google/go/x/exp/+/746e56fc:LICENSE)
+* Version: v0.0.0-20260908205506-85c1c2202aba
+* License: [BSD-3-Clause](https://cs.opensource.google/go/x/exp/+/85c1c220:LICENSE)
 
 
 Copyright 2009 The Go Authors.
@@ -958,8 +958,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ## golang.org/x/sys
 
 * Name: golang.org/x/sys
-* Version: v0.45.0
-* License: [BSD-3-Clause](https://cs.opensource.google/go/x/sys/+/v0.45.0:LICENSE)
+* Version: v0.49.0
+* License: [BSD-3-Clause](https://cs.opensource.google/go/x/sys/+/v0.49.0:LICENSE)
 
 
 Copyright 2009 The Go Authors.
@@ -996,8 +996,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ## golang.org/x/term
 
 * Name: golang.org/x/term
-* Version: v0.43.0
-* License: [BSD-3-Clause](https://cs.opensource.google/go/x/term/+/v0.43.0:LICENSE)
+* Version: v0.47.0
+* License: [BSD-3-Clause](https://cs.opensource.google/go/x/term/+/v0.47.0:LICENSE)
 
 
 Copyright 2009 The Go Authors.
@@ -1035,7 +1035,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 * Name: gopkg.in/yaml.v3
 * Version: v3.0.1
-* License: [MIT](Unknown)
+* License: [MIT](https://github.com/go-yaml/yaml/blob/v3.0.1/LICENSE)
 
 
 

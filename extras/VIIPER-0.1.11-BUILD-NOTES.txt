@@ -1,0 +1,37 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.11
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: ab35e7f0cefd4e7145ac6638ee44fb40483634f0
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: ab35e7f
+Embedded build date: 2026-10-15T10:40:12Z
+Embedded VCS revision: ab35e7f0cefd4e7145ac6638ee44fb40483634f0
+Embedded VCS time: 2026-10-15T10:36:31Z
+Embedded VCS modified: false
+PE file version: 0.1.11.0
+PE product version: 0.1.11
+Binary: VIIPER-0.1.11-x64.exe
+Binary SHA-256: 949022AC8E30CABD2B06EBF92D38E34A2400BE6C31B417A53745BEE697A9C7A7
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.11-LICENSES.txt
+License notice SHA-256: 535295E2144BDB53E5F6E48F04C41AD9DCAB6F2DCA20D84158A0CB8F6880616D
+
+Status: Unsigned numeric release build, paired with DS4Windows 5.0.25 after successful maintainer testing.
+Source archive: VIIPER-0.1.11-SOURCE.zip
+Source archive SHA-256: 891764F0C7D3C4B48B1848FA836052226E7185F3D6D4DF0AAC025D1C76370136
+Source archive layout: git archive --format=zip --prefix=VIIPER-0.1.11-SOURCE/ of the tagged commit; ZIP comment and all 706 included Git blobs independently verified.
+Tagged build: https://github.com/Pav-Osmolski/VIIPER/actions/runs/38721486295
+Release archive: viiper-windows-amd64.zip
+Release archive SHA-256: CAD1405B62B0DA6F4D6CDC03863571B2BBD165396FD230626DFD0D9685D3BE2E
+Build receipt: BUILD-INFO.json in the tagged archive; also bundled as VIIPER-0.1.11-BUILD-INFO.json.
+Build receipt SHA-256: 10B7EAEF5B2A27AB22404199352BEE798C1F84F4D8EE648347BEB998C3B25A7E
+Binary size: 9470464 bytes
+Resource tool: github.com/josephspurrier/goversioninfo/cmd/goversioninfo v1.7.0
+Build flags: -tags release -trimpath; CGO_ENABLED=0; clean Go VCS stamping independently checked.
+Artifact identity: Binary, corresponding source and all five license notices copied byte-for-byte from the tagged Actions release assets. Receipt run 38721486295, attempt 1.
+Behaviour: DS4 acceleration calibration consistency, partial feedback validity while preserving the seven-byte protocol, idle keyboard/mouse state, optional tray visibility and saved DS4Windows startup preference. Existing USB/IP 0.9.8.1 ABI, low-latency receive mode and export ownership retained.
+Validation: Default and Release-tag Go suites and Windows/Linux CI passed. The maintainer confirmed both paired test packages work; runtime source matches tested d4203f0 exactly, with only release notes changed. Hardware-dependent coverage is limited to the maintainer's reported testing.
+Notices: Complete GPL-3.0, modified Apache-2.0 systray and WDL notices accompany this payload. No Authenticode signature is claimed.
+Upstream credit: Inherited hbashton/VIIPER help text remains; source and build originate from Pav-Osmolski/VIIPER at the recorded commit.
