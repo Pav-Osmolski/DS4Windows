@@ -62,3 +62,30 @@ matched preview remains the required owner confirmation.
 
 The complete follow-up Release/x64 suite passed: 7,383 passed and twelve existing
 opt-in skips (7,395 total).
+
+## r6 owner confirmation and action-window refinement
+
+The owner confirmed that the readiness popup no longer occurred, mapping labels
+and unavailable-button explanations displayed correctly, switching output to
+Xbox 360/DualShock 4 worked, and saved profile settings survived reopening.
+Report `20261015-155130-2887362d-report.zip` records the clean r6 source pair,
+four closed stream sessions between 15:51 and 16:00, no launcher failure, no
+cleanup errors and no remaining imports. It contains one backend 400 response
+at 15:57:59 for a microphone-status query on the **DualShock 4** output created
+at 15:57:58. The existing compatibility handler marks that endpoint unavailable
+after a 400/404 and preserves unknown/last state. This is not a generic joystick
+query and does not establish microphone functionality.
+
+The owner also identified unnecessary initial scrolling in the action dialog
+and misaligned RGB sliders. The dialog now measures its actual themed content,
+including the joystick explanation and optional live preview, before choosing
+an opening size clamped to the current monitor's DPI-adjusted work area. Small
+screens retain scrolling. The extras panel is slightly wider, long mouse-option
+text wraps, and RGB channels use symmetric colour surfaces with centred tracks.
+Headless layout checks cover both themes, a joystick dialog, the optional preview
+and smaller viewports; rail centres are checked in both directions.
+
+After these refinements, the full Release/x64 suite passed with 7,384 tests and
+twelve existing opt-in skips (7,396 total). Rendered checks included both themes
+and confirmed that the fitted full editor has no scrolling when screen space
+permits it. Actual opening size on the owner's display remains to be confirmed.

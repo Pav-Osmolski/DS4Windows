@@ -36,3 +36,9 @@ game device selection/hiding will be tested separately.
 Please report controller model/connection, profile layout and trigger mode,
 results in joy.cpl, persistence/reconnect behaviour, and any errors. Include
 the generated report if useful. This is a feature preview, not a release.
+
+Mapping-window follow-up: on a screen with enough room, the Select action
+window should open with the full editor visible. Small screens or a manually
+reduced window can still scroll. Check that the RGB tracks are centered in
+their colour surfaces and that Show/Hide live preview remains usable. Existing
+gameplay/mapping tests do not need repeating just for these layout changes.
