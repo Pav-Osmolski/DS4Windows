@@ -281,3 +281,11 @@ Testing also exposed an Overview omission: the joystick profile left the quick
 output selector blank and its summary said no emulated device. Overview now
 recognizes the joystick, keeps its custom profile options when switching output,
 and enables the preview choice only in the pinned portable lab context.
+
+The r3 Overview addition accidentally based menu items on the older generic
+theme style, losing the shared Overview template and spacing. The corrected
+preview retains the `BridgeDropDownItemStyle` template and the original profile
+dropdown padding/margins while adding the enabled-state binding. Regression
+checks compare those effective properties against the unchanged shared style.
+Preview packaging now also composes and validates the normal `Lang` satellite
+layout, and refreshes its file-ownership list after moving the translations.

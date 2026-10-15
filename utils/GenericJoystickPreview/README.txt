@@ -5,6 +5,9 @@ Exit installed DS4Windows and VIIPER, close games, then run START.cmd. Approve
 Windows elevation. USB/IP 0.9.8.1 must already be installed; this preview does
 not install drivers. It uses the matching backend and its own lab-data folder.
 Installed profiles, updater routing, startup tasks and HidHide are not changed.
+On first launch, enable support for your physical controller (DualSense Device
+Support for a DualSense), then click Close. Translations use the release Lang
+folder layout. The lab deliberately disables automatic HidHide configuration.
 
 1. Connect your physical controller. Create a NEW profile with a normal gamepad
    preset (not a mouse/keyboard preset). Name it DirectInput Test.
@@ -24,8 +27,9 @@ Installed profiles, updater routing, startup tasks and HidHide are not changed.
 
 Expected first-stage output: six axes, twelve buttons, one direction hat.
 No force feedback, virtual rumble, audio or XInput. Only this matched portable
-preview enables the option. Native synthetic tests passed, but real-controller
-and old-game compatibility still need testing. HidHide is intentionally not
+preview enables the option. USB DualSense Windows tests and initial gameplay
+in BeamNG.drive and current Steam FlatOut 2 passed; other configurations still
+need testing. HidHide is intentionally not
 configured here: the physical controller remains visible. Start with joy.cpl;
 game device selection/hiding will be tested separately.
 

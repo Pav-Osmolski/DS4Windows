@@ -386,7 +386,9 @@
                                                   PreviewKeyDown="OutputControllerCombo_PreviewKeyDown"
                                                   Style="{StaticResource OverviewSettingsComboBoxStyle}">
                                             <ComboBox.ItemContainerStyle>
-                                                <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemStyle}">
+                                                <Style TargetType="ComboBoxItem" BasedOn="{StaticResource BridgeDropDownItemStyle}">
+                                                    <Setter Property="Padding" Value="10,8" />
+                                                    <Setter Property="Margin" Value="0,1" />
                                                     <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
                                                 </Style>
                                             </ComboBox.ItemContainerStyle>
