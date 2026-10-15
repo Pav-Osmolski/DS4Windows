@@ -161,6 +161,9 @@ jobs:
       - name: Test normal package inputs and preview isolation
         run: python .\utils\test-normal-package.py
 
+      - name: Test review-only backend promotion planning
+        run: python .\utils\test-viiper-promotion.py
+
       - name: Test localization package layout
         run: python .\utils\test-localization-package.py
 

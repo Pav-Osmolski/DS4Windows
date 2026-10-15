@@ -6,6 +6,8 @@ Do not remove the portable-lab gate or replace the released backend independentl
 
 See the [integration audit](directinput-integration-audit.md) for source-review
 findings and the [preview guide](directinput-preview-guide.md) for tester setup.
+The [installed acceptance checklist](directinput-installed-acceptance.md) covers
+remaining normal setup, upgrade, built-in HidHide and saved-game binding checks.
 
 ## Evidence already collected
 
