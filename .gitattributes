@@ -78,5 +78,5 @@ extras/xbox-one-authorized-persona.json -text
 
 # Immutable VIIPER 0.1.11 release inputs.
 extras/VIIPER-0.1.11-LICENSES.txt -text whitespace=cr-at-eol,-blank-at-eof
-extras/VIIPER-0.1.11-BUILD-NOTES.txt -text
-extras/VIIPER-0.1.11-BUILD-INFO.json -text
+extras/VIIPER-0.1.11-BUILD-NOTES.txt -text whitespace=cr-at-eol
+extras/VIIPER-0.1.11-BUILD-INFO.json -text whitespace=cr-at-eol
