@@ -54,6 +54,43 @@ public class PortableLabContextTests
     }
 
     [TestMethod]
+    public void OverviewCanSelectJoystickInPinnedPreviewAndKeepsItsCustomOptions()
+    {
+        Open(activate: true);
+        var previous = Global.OutContType[0];
+        var previousTemp = Global.outDevTypeTemp[0];
+        var previousSettings = Global.GenericJoystickSettings[0];
+        try
+        {
+            Global.OutContType[0] = OutContType.ViiperX360;
+            Global.GenericJoystickSettings[0] = new GenericJoystickProfileSettings { Options = GenericJoystickOptions.Default with
+                { Layout = GenericJoystickLayout.Racing, TriggerMode = GenericJoystickTriggerMode.FullRange, InvertLeftTrigger = true } };
+            var options = Global.GenericJoystickSettings[0].Options;
+            var model = DS4WindowsTests.ControllerOverviewAudioTests.JoystickOverviewModel();
+            var choice = model.OutputControllerChoices.Single(c => c.Type == OutContType.ViiperGenericJoystick);
+            Assert.IsTrue(choice.IsEnabled);
+            int changes = 0;
+            model.QuickProfileSettingChanged += (_, e) =>
+            {
+                changes++;
+                Assert.IsTrue(e.RequiresProfileReload);
+                Assert.AreEqual(OutContType.ViiperGenericJoystick, e.RequestedOutputController);
+            };
+            model.SelectedOutputController = choice.Type;
+            Assert.AreEqual(choice.Name, model.SelectedOutputControllerName);
+            Assert.AreEqual(choice.Type, Global.outDevTypeTemp[0]);
+            Assert.AreEqual(options, Global.GenericJoystickSettings[0].Options);
+            model.SelectedOutputController = choice.Type;
+            Assert.AreEqual(1, changes);
+        }
+        finally
+        {
+            Global.OutContType[0] = previous; Global.outDevTypeTemp[0] = previousTemp;
+            Global.GenericJoystickSettings[0] = previousSettings;
+        }
+    }
+
+    [TestMethod]
     public void OmittedOptionPreservesNormalLaunchAndDoesNotInspectLabFiles()
     {
         Assert.IsNull(PortableLabContext.Create(new[] { "-driverinstall" }, "not a path"));

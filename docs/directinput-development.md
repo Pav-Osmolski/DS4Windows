@@ -250,3 +250,34 @@ and hiding need separate coordinated tests.
 These implementation and local automated checks do not constitute physical
 controller or original-game validation. Production USB identity, force feedback,
 sixteen-button native validation and release packaging remain outside this stage.
+
+## Physical-controller and game results (2026-10-15)
+
+The owner tested a USB DualSense with the matched r2 preview (DS4Windows
+`6c2760c100f04e515ec7458c0b7db565ff26c8e9`, VIIPER
+`bd8f6e21215b471015ca442945c2c7fc90f1cab4`). They confirmed all eight
+layout/trigger combinations in `joy.cpl`, inversion and button threshold controls,
+saved profile settings, physical unplug/reconnect and service Stop/Start.
+
+| Game | Configuration | Result |
+| --- | --- | --- |
+| BeamNG.drive 0.39.4.0.20972 | Racing + Full range; X steering, Rz throttle, Z brake | User confirmed hardware response, vehicle bindings and successful driving. |
+| FlatOut 2, current Steam installation (exact build not recorded) | Legacy + Centred; X steering, Ry throttle, Rx brake | User confirmed driving and automatic transmission. Analogue menu navigation felt tricky; screenshot showed 0% in-game dead zone. |
+
+Report `20261015-123537-0ff0761f-report.zip` records fifteen successful
+attachments/removals with clean final cleanup. The play-session report
+`20261015-124824-f68ac364-report.zip` spans about thirty minutes, with 3,570
+sampled joystick states, three closed device sessions, no backend WARN/ERROR
+events and no remaining native imports. INFO-level EOF messages coincide with
+device removal. These reports record backend delivery and lifecycle; gameplay
+success and menu behaviour are the user's observations, not automated assertions.
+
+This is compatibility evidence for those tested configurations on one machine,
+not proof for every game or older unpatched FlatOut 2 builds. Steam Input/HidHide
+state was not independently captured. Production identity and release readiness
+remain unresolved.
+
+Testing also exposed an Overview omission: the joystick profile left the quick
+output selector blank and its summary said no emulated device. Overview now
+recognizes the joystick, keeps its custom profile options when switching output,
+and enables the preview choice only in the pinned portable lab context.
