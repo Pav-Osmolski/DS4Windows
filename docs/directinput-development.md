@@ -454,3 +454,9 @@ fix exists. Retaining a neutral virtual device across physical disconnects is
 only a possible mitigation requiring separate lifetime/cleanup design; it does
 not solve deliberate output removal. Do not change user registry mappings or
 keep hidden placeholder devices merely to make this test pass.
+
+The [Windows identity investigation](directinput-identity-audit.md) compares the
+completed r4 report with read-only calibration entries and the pinned USB/IP
+attachment code. It records the documented API limits, alternatives considered
+and the recommendation to continue preview preparation without waiving the
+unresolved production multi-controller acceptance item.

@@ -92,3 +92,19 @@ activation is available, check:
 
 This checklist does not authorize merging, publishing a release, installing a
 driver or submitting an external identity request.
+
+## Multi-controller identity acceptance
+
+The [identity investigation](directinput-identity-audit.md) records the completed
+synthetic test and read-only Windows/transport research. Input isolation passed,
+but removing A reassigns B's DirectInput GUID along with its joystick slot.
+Distinct USB serials and HID paths persisted. This is still an identity-test
+failure; no registry or transport workaround has been applied.
+
+- [ ] Resolve the GUID persistence failure with a supported, validated change,
+  or explicitly approve a documented compatibility scope before normal release.
+- [ ] Test saved-game bindings for that chosen scope; synthetic inputs alone do
+  not establish how each game handles a reassigned identifier.
+
+The existing production-identity, normal-packaging and HidHide checks remain
+open. Repeating the same diagnostic package is not a substitute for these items.
