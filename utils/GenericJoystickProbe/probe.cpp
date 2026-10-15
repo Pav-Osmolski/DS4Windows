@@ -2,6 +2,9 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include <dinput.h>
+extern "C" {
+#include <hidsdi.h>
+}
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -23,6 +26,7 @@ static bool serverMode = false;
 struct Reading {
     std::wstring name;
     std::wstring instance;
+    std::wstring path, serial;
     std::array<LONG, 6> axes{};
     DWORD buttons = 0;
     int hat = 8;
@@ -35,6 +39,7 @@ struct OpenDevice {
     DIDEVCAPS caps;
     std::wstring name;
     std::wstring instance;
+    std::wstring path, serial;
 };
 static std::vector<OpenDevice> openDevices;
 
@@ -75,6 +80,8 @@ static void printReadings(const std::vector<Reading>& values) {
         if (!first) std::wcout << L","; first = false;
         std::wcout << L"{\"name\":"; quote(value.name);
         std::wcout << L",\"instance\":"; quote(value.instance);
+        std::wcout << L",\"path\":"; quote(value.path);
+        std::wcout << L",\"serial\":"; quote(value.serial);
         std::wcout << L",\"axes\":[";
         for (size_t i = 0; i < 6; ++i) { if (i) std::wcout << L","; std::wcout << value.axes[i]; }
         std::wcout << L"],\"buttons\":" << value.buttons << L",\"hat\":" << value.hat
@@ -116,8 +123,25 @@ static BOOL CALLBACK devices(const DIDEVICEINSTANCEW* instance, VOID*) {
     if (SUCCEEDED(result)) result = device->SetProperty(DIPROP_RANGE, &range.diph);
     if (SUCCEEDED(result)) result = device->Acquire();
     if (FAILED(result)) { failed = true; std::wcerr << L"DirectInput setup failed: " << std::hex << result << L"\n"; DestroyWindow(window); device->Release(); return DIENUM_CONTINUE; }
+    // Record the HID path behind a DirectInput GUID. Read only metadata with
+    // zero desired access, then close the handle before taking input samples.
+    std::wstring hidPath, serial;
+    DIPROPGUIDANDPATH identity{};
+    identity.diph.dwSize = sizeof(identity);
+    identity.diph.dwHeaderSize = sizeof(identity.diph);
+    identity.diph.dwHow = DIPH_DEVICE;
+    if (SUCCEEDED(device->GetProperty(DIPROP_GUIDANDPATH, &identity.diph))) {
+        hidPath = identity.wszPath;
+        HANDLE handle = CreateFileW(hidPath.c_str(), 0, FILE_SHARE_READ | FILE_SHARE_WRITE,
+            nullptr, OPEN_EXISTING, 0, nullptr);
+        if (handle != INVALID_HANDLE_VALUE) {
+            wchar_t buffer[128]{};
+            if (HidD_GetSerialNumberString(handle, buffer, sizeof(buffer))) serial = buffer;
+            CloseHandle(handle);
+        }
+    }
     if (serverMode) {
-        openDevices.push_back({ device, window, caps, instance->tszProductName, instanceKey(instance->guidInstance) });
+        openDevices.push_back({ device, window, caps, instance->tszProductName, instanceKey(instance->guidInstance), hidPath, serial });
         return DIENUM_CONTINUE;
     }
     // A newly acquired DirectInput consumer may initially expose its default
@@ -132,6 +156,7 @@ static BOOL CALLBACK devices(const DIDEVICEINSTANCEW* instance, VOID*) {
         Reading reading;
         reading.name = instance->tszProductName;
         reading.instance = instanceKey(instance->guidInstance);
+        reading.path = hidPath; reading.serial = serial;
         reading.axes = { state.lX, state.lY, state.lZ, state.lRx, state.lRy, state.lRz };
         for (int i = 0; i < 32; ++i) if (state.rgbButtons[i] & 0x80) reading.buttons |= 1u << i;
         reading.hat = hatIndex(state.rgdwPOV[0]);
@@ -201,6 +226,7 @@ static void captureOpenDevices() {
         Reading reading;
         reading.name = opened.name;
         reading.instance = opened.instance;
+        reading.path = opened.path; reading.serial = opened.serial;
         reading.axes = { state.lX, state.lY, state.lZ, state.lRx, state.lRy, state.lRz };
         for (int i = 0; i < 32; ++i) if (state.rgbButtons[i] & 0x80) reading.buttons |= 1u << i;
         reading.hat = hatIndex(state.rgdwPOV[0]);

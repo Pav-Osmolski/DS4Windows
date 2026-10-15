@@ -13,3 +13,7 @@ Only owned imports are removed. No drivers or HidHide settings are changed.
 Reports exclude authentication keys and configuration files.
 Physical reconnects, HidHide and saved game bindings need separate tests.
 Production VID/PID approval remains pending; this uses preview IDs.
+
+Diagnostic revision: records HID paths and USB serials beside DirectInput GUIDs.
+Identity-only failures are retained while later diagnostic steps continue;
+the final result still FAILS if any identity changed. Input/API failures stop.

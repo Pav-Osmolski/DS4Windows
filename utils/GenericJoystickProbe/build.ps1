@@ -17,7 +17,7 @@ $start = [Diagnostics.ProcessStartInfo]::new()
 $start.FileName = $env:ComSpec
 $start.UseShellExecute = $false
 $start.CreateNoWindow = $true
-$start.Arguments = "/d /s /c `"call `"$vcvars`" $Architecture >nul && cl /nologo /std:c++17 /EHsc /W4 /WX /DUNICODE /D_UNICODE `"$source`" /Fo`"$object`" /Fe`"$exe`" /link dinput8.lib dxguid.lib winmm.lib user32.lib`""
+$start.Arguments = "/d /s /c `"call `"$vcvars`" $Architecture >nul && cl /nologo /std:c++17 /EHsc /W4 /WX /DUNICODE /D_UNICODE `"$source`" /Fo`"$object`" /Fe`"$exe`" /link dinput8.lib dxguid.lib winmm.lib user32.lib hid.lib`""
 $process = [Diagnostics.Process]::Start($start)
 $process.WaitForExit()
 if ($process.ExitCode -ne 0) { throw "Probe compilation failed ($($process.ExitCode))." }

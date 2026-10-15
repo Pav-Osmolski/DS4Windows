@@ -75,3 +75,24 @@ try {
     Remove-Item -LiteralPath $run
 }
 Write-Host 'PASS: two-client tracking, distinct/stable IDs and independent cleanup after recreation and failed attachment receipt.'
+# Identity failures may continue diagnostic capture, but must remain failed rows.
+$capture=$ast.FindAll({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq 'Capture-Pair'},$false)[0]
+. ([scriptblock]::Create($capture.Extent.Text.Replace('AddSeconds(15)','AddSeconds(0)')))
+$rows=New-Object 'Collections.Generic.List[object]';$identityIssues=New-Object 'Collections.Generic.List[string]'
+$baseline=@{A='A';B='B'}
+$a=Reading 'A' @(100,0,0,0,0,0);$b=Reading 'CHANGED' @(-100,0,0,0,0,0)
+$expected=@([pscustomobject]@{name='A';state=$a},[pscustomobject]@{name='B';state=$b})
+$script:response=[pscustomobject]@{error=$false;directInput=@($a,$b);winMM=@($a,$b)}
+function Invoke-LabProcess { [pscustomobject]@{Code=0;Errors='';Output=($script:response|ConvertTo-Json -Depth 8)} }
+$run=Join-Path ([IO.Path]::GetTempPath()) ('joystick-capture-test-'+[Guid]::NewGuid().ToString('N'))
+$null=New-Item -ItemType Directory $run
+try {
+ Capture-Pair 'Changed GUID diagnostics' $expected
+ Check ($identityIssues.Count -eq 2 -and $rows.Count -eq 2 -and $rows[0].errors.Count -gt 0) 'Continuing must retain identity failures.'
+ Check ($baseline.B -ceq 'B') 'Diagnostic continuation must not overwrite original identity.'
+ $script:response.directInput=@($a)
+ $rejected=$false
+ try {Capture-Pair 'Missing device stops' $expected}catch{$rejected=$true}
+ Check $rejected 'Nonidentity failures must still stop the run.'
+}finally{Remove-Item -LiteralPath "$run/readings.json";Remove-Item -LiteralPath $run}
+Write-Host 'PASS: identity diagnostics retain failed observations/baseline; input or enumeration failures still stop.'

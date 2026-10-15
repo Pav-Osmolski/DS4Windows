@@ -349,3 +349,15 @@ not a multi-controller pass. The follow-up probe polls each WinMM device for a
 bounded 500 ms in the same process before reporting its final sample, testing
 the cold-reader hypothesis without relaxing any expected input or identity
 checks. Backend and controller mapping are unchanged for that retest.
+
+The r2 owner run (`20261015-163623-a67782e1`) passed both architectures through
+separate sticks, buttons/hat isolation, neutralization of A after producer loss,
+and producer reconnect. After A was removed, B retained its correct input in
+both APIs, but x64 DirectInput reported B with A's previous instance GUID. The
+run stopped there, with no cleanup errors; recreation/reverse order remain
+unvalidated. This is an identity-persistence failure, not an input-isolation
+failure. The r3 diagnostic reader records the HID interface path and USB serial
+via read-only Windows metadata queries. Identity-only failures remain failed
+observations and force a final failure, while permitting later recreation/order
+observations to run. Input/enumeration/API failures still stop immediately.
+No controller/backend behavior was changed to hide or work around this result.

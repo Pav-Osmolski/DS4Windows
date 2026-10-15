@@ -30,6 +30,7 @@ $backend = $null; $backendOut = $null; $backendErr = $null
 $client = $null; $clientErr = $null; $receipt = $null; $bus = $null
 $probes = @{}; $probeErrors = @{}
 $devices = @{}; $baseline = @{}
+$identityIssues = New-Object 'Collections.Generic.List[string]'
 $rows = New-Object 'Collections.Generic.List[object]'
 $cleanupErrors = New-Object 'Collections.Generic.List[string]'
 $failure = $null; $run = $null; $usbip = $null; $usbPort = 0
@@ -102,7 +103,14 @@ function Capture-Pair([string]$Label, [object[]]$Expected, [switch]$EnumerationO
         } while ($true)
         $rows.Add([pscustomobject]@{step=$Label; architecture=$architecture; expected=$Expected; observed=$probe; errors=$problems})
         $rows | ConvertTo-Json -Depth 14 | Set-Content "$run/readings.json" -Encoding UTF8
-        if ($problems.Count -gt 0) { throw "$Label / $architecture : $($problems -join ' ')" }
+        if ($problems.Count -gt 0) {
+            $otherErrors = @($problems | Where-Object { $_ -notlike 'DirectInput identity changed for controller *' })
+            if ($otherErrors.Count -gt 0) { throw "$Label / $architecture : $($problems -join ' ')" }
+            # Preserve identity failures, but finish the remaining diagnostics.
+            # The final report still fails; no requirement is relaxed.
+            $identityIssues.Add("$Label / $architecture : $($problems -join ' ')")
+            Write-Host 'Identity changed; recording failure and continuing diagnostics.' -ForegroundColor Yellow
+        }
         if (-not $EnumerationOnly) {
             foreach ($entry in $Expected) {
                 $reading = @($probe.directInput | Where-Object {
@@ -221,6 +229,7 @@ try {
     Feed B $right; Feed A $left
     Capture-Pair 'Reverse order preserves identities' @((Expect A $left),(Expect B $right))
     Stop-Device B; Stop-Device A
+    if ($identityIssues.Count -gt 0) { throw "Identity persistence failed: $($identityIssues -join '; ')" }
 
 } catch {
     $failure = $_.Exception.Message
