@@ -66,7 +66,8 @@ public sealed partial class ViiperOutDevice
 
     internal bool CanReuseForPhysicalController(int index) =>
         viiperType == ViiperVirtualDeviceType.GenericJoystick ?
-            Global.GenericJoystickSettings[index].Valid && genericJoystickOptions == Global.GenericJoystickSettings[index].Options :
+              Global.GenericJoystickSettings[index].Valid && genericJoystickOptions == Global.GenericJoystickSettings[index].Options &&
+              genericJoystickInstanceId == GenericJoystickIdentity.ForController(index) :
             CanReuseHapticsConverterForTarget(ResolvePhysicalControllerTarget(index));
 
     private bool CanReuseHapticsConverterForTarget(DualSenseDevice target) =>

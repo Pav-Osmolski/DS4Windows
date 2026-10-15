@@ -313,3 +313,29 @@ protocol or release-gate change is part of that audit.
 The [preview guide](directinput-preview-guide.md) describes the axis layouts,
 trigger modes, button numbers, tested game configurations and device-visibility
 limits for testers using the matched package.
+
+### Per-controller identity and synthetic multi-controller lab
+
+The identity audit found that generic joysticks shared one USB serial. Each
+instance now exposes `VIIPER-GJ1-<instanceId>`. DS4Windows derives the 32-hex-digit
+ID from the physical controller's existing profile-link identity, independently
+of profile settings, input slot or connection order. A hashed HID path is the
+fallback; that fallback may change across ports. Duplicate physical identities
+are rejected rather than silently sharing an output. Recovery checks the
+backend's identity echo as well as its neutral-state contract. Existing game
+bindings may need to be recreated once after this serial change.
+
+`utils/GenericJoystickLab/Build-Package.ps1 -MultiController` builds a separate
+Windows lab. Its START.cmd creates two synthetic joysticks, sends distinct
+inputs, disconnects one producer, recreates devices and reverses creation order.
+Fresh x86/x64 probes verify DirectInput instance GUIDs and DirectInput/WinMM
+readings. WinMM numeric slots are allowed to reorder. The runner records failed
+observations and removes only imports proven to belong to its allocated buses.
+
+Local validation: 7,392 DS4Windows tests passed, 12 existing opt-in tests skipped;
+VIIPER's full Go suite passed. Native probe builds/self-tests, lab ownership and
+failure-path checks, and synthetic pair matching/lifecycle checks passed.
+**The new Windows two-device run is pending owner validation.** This substitutes
+for a two-physical-controller test only at the virtual-device boundary. Physical
+USB/Bluetooth reconnects, normal HidHide and saved game bindings remain separate
+checks. Preview identities and the production activation gate remain unchanged.

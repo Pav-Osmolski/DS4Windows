@@ -22,6 +22,7 @@ static bool jsonMode = false;
 static bool serverMode = false;
 struct Reading {
     std::wstring name;
+    std::wstring instance;
     std::array<LONG, 6> axes{};
     DWORD buttons = 0;
     int hat = 8;
@@ -33,8 +34,17 @@ struct OpenDevice {
     HWND window;
     DIDEVCAPS caps;
     std::wstring name;
+    std::wstring instance;
 };
 static std::vector<OpenDevice> openDevices;
+
+static std::wstring instanceKey(const GUID& guid) {
+    const auto* bytes = reinterpret_cast<const unsigned char*>(&guid);
+    const wchar_t* hex = L"0123456789ABCDEF";
+    std::wstring key;
+    for (size_t i = 0; i < sizeof(GUID); ++i) { key += hex[bytes[i] >> 4]; key += hex[bytes[i] & 15]; }
+    return key;
+}
 
 static int hatIndex(DWORD value) { return LOWORD(value) == 0xFFFF ? 8 : static_cast<int>(value / 4500); }
 static LONG normalized(DWORD value, UINT min, UINT max) {
@@ -64,6 +74,7 @@ static void printReadings(const std::vector<Reading>& values) {
     for (const auto& value : values) {
         if (!first) std::wcout << L","; first = false;
         std::wcout << L"{\"name\":"; quote(value.name);
+        std::wcout << L",\"instance\":"; quote(value.instance);
         std::wcout << L",\"axes\":[";
         for (size_t i = 0; i < 6; ++i) { if (i) std::wcout << L","; std::wcout << value.axes[i]; }
         std::wcout << L"],\"buttons\":" << value.buttons << L",\"hat\":" << value.hat
@@ -106,7 +117,7 @@ static BOOL CALLBACK devices(const DIDEVICEINSTANCEW* instance, VOID*) {
     if (SUCCEEDED(result)) result = device->Acquire();
     if (FAILED(result)) { failed = true; std::wcerr << L"DirectInput setup failed: " << std::hex << result << L"\n"; DestroyWindow(window); device->Release(); return DIENUM_CONTINUE; }
     if (serverMode) {
-        openDevices.push_back({ device, window, caps, instance->tszProductName });
+        openDevices.push_back({ device, window, caps, instance->tszProductName, instanceKey(instance->guidInstance) });
         return DIENUM_CONTINUE;
     }
     // A newly acquired DirectInput consumer may initially expose its default
@@ -120,6 +131,7 @@ static BOOL CALLBACK devices(const DIDEVICEINSTANCEW* instance, VOID*) {
         if (FAILED(result)) { failed = true; std::wcerr << L"GetDeviceState failed: " << std::hex << result << L"\n"; break; }
         Reading reading;
         reading.name = instance->tszProductName;
+        reading.instance = instanceKey(instance->guidInstance);
         reading.axes = { state.lX, state.lY, state.lZ, state.lRx, state.lRy, state.lRz };
         for (int i = 0; i < 32; ++i) if (state.rgbButtons[i] & 0x80) reading.buttons |= 1u << i;
         reading.hat = hatIndex(state.rgdwPOV[0]);
@@ -153,6 +165,7 @@ static int captureWinMM() {
         if (result == JOYERR_NOERROR) {
             Reading reading;
             reading.name = caps.szPname;
+            reading.instance = std::to_wstring(id);
             reading.axes = winMMAxes(state, caps);
             reading.buttons = state.dwButtons; reading.hat = hatIndex(state.dwPOV);
             reading.axisCount = caps.wNumAxes; reading.buttonCount = caps.wNumButtons; reading.hatCount = (caps.wCaps & JOYCAPS_HASPOV) ? 1 : 0;
@@ -175,6 +188,7 @@ static void captureOpenDevices() {
         if (FAILED(result)) { failed = true; std::wcerr << L"GetDeviceState failed: " << std::hex << result << L"\n"; continue; }
         Reading reading;
         reading.name = opened.name;
+        reading.instance = opened.instance;
         reading.axes = { state.lX, state.lY, state.lZ, state.lRx, state.lRy, state.lRz };
         for (int i = 0; i < 32; ++i) if (state.rgbButtons[i] & 0x80) reading.buttons |= 1u << i;
         reading.hat = hatIndex(state.rgdwPOV[0]);

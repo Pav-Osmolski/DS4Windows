@@ -5,7 +5,7 @@ namespace DS4Windows;
 
 internal static class GenericJoystickContract
 {
-    internal static bool ReadConfigured(JsonElement args, short[] expectedNeutral = null)
+    internal static bool ReadConfigured(JsonElement args, short[] expectedNeutral = null, string expectedInstanceId = null)
     {
         bool valid = args.ValueKind == JsonValueKind.Object &&
             args.TryGetProperty("contract", out var contract) && contract.ValueKind == JsonValueKind.String && contract.GetString() == "genericjoystick-v1" &&
@@ -14,6 +14,9 @@ internal static class GenericJoystickContract
             args.TryGetProperty("buttonCount", out var count) && count.ValueKind == JsonValueKind.Number && count.TryGetInt32(out int buttons) && buttons == 12;
         if (!valid || !args.TryGetProperty("neutralAxes", out var axes) || axes.ValueKind != JsonValueKind.Array || axes.GetArrayLength() != 6)
             throw new IOException("VIIPER does not support the required experimental joystick contract. Use the complete matched DirectInput preview package, including its VIIPER backend.");
+        if (expectedInstanceId != null && (!args.TryGetProperty("instanceId", out var instanceId) ||
+            instanceId.ValueKind != JsonValueKind.String || instanceId.GetString() != expectedInstanceId))
+            throw new IOException("VIIPER did not confirm the requested joystick instance identity. Use the complete matched DirectInput preview package.");
         int index = 0;
         foreach (var axis in axes.EnumerateArray())
         {

@@ -2,7 +2,8 @@ param(
     [Parameter(Mandatory)][string]$OutputDirectory,
     [string]$ViiperRepository = (Join-Path $PSScriptRoot '../../../VIIPER'),
     [string]$Go = 'go.exe',
-    [string]$DotNet = 'dotnet.exe'
+    [string]$DotNet = 'dotnet.exe',
+    [switch]$MultiController
 )
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path "$PSScriptRoot/../..").Path
@@ -30,6 +31,13 @@ Check-Exit 'Mapping fixture build'
 foreach ($name in @('START.cmd', 'Run-Lab.ps1', 'Lab.Helpers.ps1', 'README.txt')) {
     Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $output
 }
+foreach ($name in @('Run-MultiControllerLab.ps1', 'MultiController.Helpers.ps1', 'START-MULTI.cmd')) {
+    Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination $output
+}
+if ($MultiController) {
+    Copy-Item -LiteralPath "$PSScriptRoot/START-MULTI.cmd" -Destination "$output/START.cmd"
+    Copy-Item -LiteralPath "$PSScriptRoot/README-MULTI.txt" -Destination "$output/README.txt"
+}
 Push-Location $repo
 try {
     $ds4Revision = & git rev-parse HEAD; Check-Exit 'DS4Windows revision'
@@ -43,5 +51,6 @@ $manifest = [ordered]@{
 }
 $manifest | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath "$output/manifest.json" -Encoding UTF8
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$output/Run-Lab.ps1" -ValidateOnly; Check-Exit 'Package validation'
+& powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$output/Run-MultiControllerLab.ps1" -ValidateOnly; Check-Exit 'Two-controller package validation'
 Compress-Archive -LiteralPath $output -DestinationPath "$output.zip"
 Write-Host "Package: $output.zip"

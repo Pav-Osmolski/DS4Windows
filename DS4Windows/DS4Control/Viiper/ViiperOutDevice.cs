@@ -272,6 +272,7 @@ namespace DS4Windows
         private readonly OutContType outputType;
         private readonly ViiperVirtualDeviceType viiperType;
         private GenericJoystickOptions genericJoystickOptions = GenericJoystickOptions.Default;
+        private string genericJoystickInstanceId;
         private readonly bool audioOnlySidecar;
         private readonly bool gamepadOnly;
         private readonly ViiperClient client;
@@ -1029,12 +1030,14 @@ namespace DS4Windows
             if (viiperType == ViiperVirtualDeviceType.GenericJoystick)
             {
                 var settings = Global.GenericJoystickSettings[deviceIndex];
+                string instanceId = GenericJoystickIdentity.ForController(deviceIndex);
                 if (!settings.Valid || settings.Options.ButtonCount != 12)
                     throw new InvalidOperationException("The experimental joystick requires valid twelve-button profile settings.");
                 settings.Options.Validate();
-                if (connected && genericJoystickOptions != settings.Options)
+                if (connected && (genericJoystickOptions != settings.Options || genericJoystickInstanceId != instanceId))
                     throw new InvalidOperationException("Joystick layout changes require a new output device.");
                 genericJoystickOptions = settings.Options;
+                genericJoystickInstanceId = instanceId;
             }
             DualSenseDevice converterTarget = ResolvePhysicalControllerTarget(deviceIndex);
             if (connected && !CanReuseHapticsConverterForTarget(converterTarget))
@@ -1366,10 +1369,12 @@ namespace DS4Windows
             if (viiperType == ViiperVirtualDeviceType.GenericJoystick)
             {
                 genericJoystickOptions.Validate();
+                if (string.IsNullOrEmpty(genericJoystickInstanceId))
+                    throw new InvalidOperationException("Bind a physical controller with a distinct identity before creating its generic joystick.");
                 activeFeedbackLength = 0;
                 return client.CreateDeviceAndOpenStream("genericjoystick", deviceSpecific: new
                 {
-                    version = 1, experimental = true, buttonCount = 12,
+                    version = 1, experimental = true, buttonCount = 12, instanceId = genericJoystickInstanceId,
                     neutralAxes = GenericJoystickMapping.Neutral(genericJoystickOptions).AxisValues
                 });
             }
@@ -5230,7 +5235,8 @@ namespace DS4Windows
                         interruptedStream.UsbipPort,
                         interruptedStream.DeviceLifetime, genericJoystick: viiperType == ViiperVirtualDeviceType.GenericJoystick,
                         genericJoystickNeutral: viiperType == ViiperVirtualDeviceType.GenericJoystick ?
-                            GenericJoystickMapping.Neutral(genericJoystickOptions).AxisValues : null);
+                            GenericJoystickMapping.Neutral(genericJoystickOptions).AxisValues : null,
+                        genericJoystickInstanceId: genericJoystickInstanceId);
                 }
                 catch (Exception ex)
                 {
@@ -10573,7 +10579,9 @@ namespace DS4Windows
                 SendRequest<ViiperDeviceResponse>($"bus/{busId}/add",
                     payload), requestSonyBluetoothHaptics, deviceName == "genericjoystick",
                 deviceName == "genericjoystick" ? JsonSerializer.SerializeToElement(deviceSpecific).GetProperty("neutralAxes")
-                    .EnumerateArray().Select(axis => axis.GetInt16()).ToArray() : null);
+                    .EnumerateArray().Select(axis => axis.GetInt16()).ToArray() : null,
+                deviceName == "genericjoystick" && JsonSerializer.SerializeToElement(deviceSpecific).TryGetProperty("instanceId", out var instanceId)
+                    ? instanceId.GetString() : null);
         }
 
         internal ViiperDeviceStream CreateAuthorizedXboxOneDeviceAndOpenStream(
@@ -10721,15 +10729,17 @@ namespace DS4Windows
 
         private ViiperDeviceStream CreateDeviceAndOpenStream(
             Func<uint, ViiperDeviceResponse> createDevice,
-            bool requestSonyBluetoothHaptics = false, bool genericJoystick = false, short[] genericJoystickNeutral = null)
+            bool requestSonyBluetoothHaptics = false, bool genericJoystick = false, short[] genericJoystickNeutral = null,
+            string genericJoystickInstanceId = null)
         {
             return ViiperUsbipPortManager.WithNativePortMutationLock(() =>
-                CreateDeviceAndOpenStreamCore(createDevice, requestSonyBluetoothHaptics, genericJoystick, genericJoystickNeutral));
+                CreateDeviceAndOpenStreamCore(createDevice, requestSonyBluetoothHaptics, genericJoystick, genericJoystickNeutral, genericJoystickInstanceId));
         }
 
         private ViiperDeviceStream CreateDeviceAndOpenStreamCore(
             Func<uint, ViiperDeviceResponse> createDevice,
-            bool requestSonyBluetoothHaptics, bool genericJoystick = false, short[] genericJoystickNeutral = null)
+            bool requestSonyBluetoothHaptics, bool genericJoystick = false, short[] genericJoystickNeutral = null,
+            string genericJoystickInstanceId = null)
         {
             ArgumentNullException.ThrowIfNull(createDevice);
             ViiperUsbipPortManager.DetachStaleLocalViiperPorts();
@@ -10755,7 +10765,7 @@ namespace DS4Windows
                     bus.BusId, device.DevId, usbipPort);
                 ViiperUsbipPortManager.RegisterActivePort(usbipPort,
                     $"{bus.BusId}-{device.DevId}");
-                if (genericJoystick) WaitForGenericJoystickConfiguration(bus.BusId, device.DevId, genericJoystickNeutral);
+                if (genericJoystick) WaitForGenericJoystickConfiguration(bus.BusId, device.DevId, genericJoystickNeutral, genericJoystickInstanceId);
                 return OpenStream(bus.BusId, device.DevId, usbipPort,
                     hapticsConverter: hapticsConverter);
             }
@@ -10778,7 +10788,7 @@ namespace DS4Windows
             }
         }
 
-        private void WaitForGenericJoystickConfiguration(uint busId, string devId, short[] expectedNeutral = null)
+        private void WaitForGenericJoystickConfiguration(uint busId, string devId, short[] expectedNeutral = null, string expectedInstanceId = null)
         {
             var deadline = Stopwatch.StartNew();
             do
@@ -10786,7 +10796,7 @@ namespace DS4Windows
                 var response = SendRequest<ViiperBusDevicesResponse>($"bus/{busId}/list");
                 var entry = response?.Devices?.FirstOrDefault(d => d.DevId == devId);
                 var args = entry?.DeviceSpecific ?? default;
-                if (GenericJoystickContract.ReadConfigured(args, expectedNeutral)) return;
+                if (GenericJoystickContract.ReadConfigured(args, expectedNeutral, expectedInstanceId)) return;
                 Thread.Sleep(25);
             } while (deadline.ElapsedMilliseconds < 5000);
             throw new IOException("Windows did not configure the experimental joystick before the input deadline.");
@@ -10914,9 +10924,10 @@ namespace DS4Windows
 
         internal ViiperDeviceStream OpenExistingDeviceStream(uint busId,
             string devId, int usbipPort,
-            ViiperVirtualDeviceLifetime deviceLifetime, bool genericJoystick = false, short[] genericJoystickNeutral = null)
+            ViiperVirtualDeviceLifetime deviceLifetime, bool genericJoystick = false, short[] genericJoystickNeutral = null,
+            string genericJoystickInstanceId = null)
         {
-            if (genericJoystick) WaitForGenericJoystickConfiguration(busId, devId, genericJoystickNeutral);
+            if (genericJoystick) WaitForGenericJoystickConfiguration(busId, devId, genericJoystickNeutral, genericJoystickInstanceId);
             if (deviceLifetime?.XboxOneRegistration != null)
                 throw new InvalidOperationException("Xbox One streams cannot reopen in place.");
             if (string.IsNullOrWhiteSpace(devId))
