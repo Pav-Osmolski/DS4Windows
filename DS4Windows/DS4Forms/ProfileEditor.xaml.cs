@@ -2322,6 +2322,7 @@ namespace DS4WinWPF.DS4Forms
             try { profileName = DS4Windows.ProfileName.Normalize(profileName,
                 existingIdentity: currentProfile != null && profileName == currentProfile.Name); }
             catch (ArgumentException) { return false; }
+            specialActionsVM.ExportEnabledActions();
             bool saved = currentProfile != null ?
                 currentProfile.SaveProfile(deviceNum, profileName) :
                 Global.SaveProfile(deviceNum, profileName, overwrite: false);
@@ -2853,6 +2854,7 @@ namespace DS4WinWPF.DS4Forms
                     specialActionsVM.ActionCol.Insert(currentIndex, newitem);
                     specialActionDockPanel.Children.Remove(actEditor);
                     baseSpeActPanel.Visibility = Visibility.Visible;
+                    specialActionsVM.ExportEnabledActions();
                     Global.CacheExtraProfileInfo(profileSettingsVM.Device);
                 };
             }

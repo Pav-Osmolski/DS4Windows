@@ -4,6 +4,12 @@ using System.Xml.Linq;
 using DS4Windows;
 using DS4WinWPF;
 using DS4WinWPF.DS4Forms;
+using DS4WinWPF.DS4Forms.ViewModels;
+using DS4WinWPF.DS4Control.DTOXml;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace DS4WindowsTests;
 
@@ -13,6 +19,7 @@ public sealed class ProfileEditorSaveTests
 {
     private string directory, previousRoot, previousProfile, previousOlderProfile;
     private byte previousRumble;
+    private List<string> previousActions;
     private const string Original = "<DS4Windows><RumbleBoost>77</RumbleBoost></DS4Windows>";
 
     [TestInitialize]
@@ -24,6 +31,8 @@ public sealed class ProfileEditorSaveTests
         previousProfile = Global.ProfilePath[0];
         previousOlderProfile = Global.OlderProfilePath[0];
         previousRumble = Global.store.rumble[0];
+        previousActions = Global.ProfileActions[0];
+        Global.ProfileActions[0] = new List<string>();
         Global.appdatapath = directory;
         Global.ProfilePath[0] = Global.OlderProfilePath[0] = "Original";
         Global.store.rumble[0] = 88;
@@ -36,6 +45,8 @@ public sealed class ProfileEditorSaveTests
         Global.ProfilePath[0] = previousProfile;
         Global.OlderProfilePath[0] = previousOlderProfile;
         Global.store.rumble[0] = previousRumble;
+        Global.ProfileActions[0] = previousActions;
+        Global.CacheExtraProfileInfo(0);
         foreach (string path in Directory.GetFiles(directory, "*", SearchOption.AllDirectories))
             File.SetAttributes(path, FileAttributes.Normal);
         Directory.Delete(directory, recursive: true);
@@ -230,6 +241,97 @@ public sealed class ProfileEditorSaveTests
         Assert.AreEqual(0, Directory.GetFiles(Path.Combine(directory, "Profiles")).Length);
     }
 
+    [TestMethod]
+    [DataRow("DarkTheme", false)]
+    [DataRow("DarkTheme", true)]
+    [DataRow("DefaultTheme", false)]
+    [DataRow("DefaultTheme", true)]
+    public void CheckingExistingActionsInAnotherProfilePersistsTheVisibleSelection(string theme, bool existing)
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            var vm = new SpecialActionsListViewModel(0);
+            foreach (string name in new[] { "test1", "test2", "test3" })
+                vm.ActionCol.Add(vm.CreateActionItem(new SpecialAction(name, "Cross", "Macro", "65/65")));
+            if (existing) WriteProfile("Second", Original);
+            var editor = CreateEditor(existing ? new ProfileEntity { Name = "Second" } : null);
+            typeof(ProfileEditor).GetField("specialActionsVM", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .SetValue(editor, vm);
+            var root = ProfileAdvancedLayoutTests.Load(theme, "Special Actions");
+            var table = (DataGrid)root.FindName("specialActionsLV");
+            table.ItemsSource = vm.ActionCol;
+            root.Measure(new Size(1000, 700));
+            root.Arrange(new Rect(0, 0, 1000, 700));
+            root.UpdateLayout();
+            Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ContextIdle);
+            root.UpdateLayout();
+            var checkboxes = Visuals(table).OfType<CheckBox>().ToArray();
+            Assert.AreEqual(3, checkboxes.Length);
+            foreach (var checkbox in checkboxes)
+                checkbox.Click += (_, args) => typeof(ProfileEditor)
+                    .GetMethod("SpecialActionCheckBox_Click", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .Invoke(editor, new object[] { checkbox, args });
+            foreach (var checkbox in checkboxes.Take(2))
+                typeof(CheckBox).GetMethod("OnClick", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .Invoke(checkbox, null);
+            Assert.IsTrue(checkboxes[0].IsChecked);
+            Assert.IsTrue(checkboxes[1].IsChecked);
+            Assert.IsTrue(vm.ActionCol[0].Active, "Checkbox edits must reach the model before the Click handler exports them.");
+            CollectionAssert.AreEqual(new[] { "test1", "test2" }, Global.ProfileActions[0]);
+            Assert.AreEqual(2, Global.getProfileActionCount(0));
+            Assert.IsTrue(editor.SaveProfileChanges("Second"));
+            Assert.AreEqual("test1/test2", XDocument.Load(ProfilePath("Second")).Root.Element("ProfileActions").Value);
+            CollectionAssert.AreEqual(new[] { "test1", "test2" }, ReloadActions("Second"));
+
+            // Deselecting every action must also survive saving an existing profile.
+            foreach (var checkbox in checkboxes.Take(2))
+                typeof(CheckBox).GetMethod("OnClick", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .Invoke(checkbox, null);
+            typeof(ProfileEditor).GetField("currentProfile", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .SetValue(editor, new ProfileEntity { Name = "Second" });
+            Assert.IsTrue(editor.SaveProfileChanges("Second"));
+            Assert.AreEqual("", XDocument.Load(ProfilePath("Second")).Root.Element("ProfileActions").Value);
+            Assert.AreEqual(0, ReloadActions("Second").Count);
+            Assert.AreEqual(0, Global.getProfileActionCount(0));
+        });
+    }
+
+    [TestMethod]
+    public void SaveCapturesActionChangesWithoutDependingOnACheckboxClick()
+    {
+        var vm = new SpecialActionsListViewModel(0);
+        var item = vm.CreateActionItem(new SpecialAction("Renamed action", "Cross", "Macro", "65/65"));
+        item.Active = true;
+        vm.ActionCol.Add(item);
+        var editor = CreateEditor(null);
+        typeof(ProfileEditor).GetField("specialActionsVM", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(editor, vm);
+        Assert.AreEqual(0, Global.ProfileActions[0].Count);
+        Assert.IsTrue(editor.SaveProfileChanges("Updated"));
+        CollectionAssert.AreEqual(new[] { "Renamed action" }, ReloadActions("Updated"));
+    }
+
+    private List<string> ReloadActions(string profileName)
+    {
+        using var reader = File.OpenText(ProfilePath(profileName));
+        var dto = (ProfileDTO)ProfileDTO.Serializer.Deserialize(reader);
+        dto.DeviceIndex = 0;
+        var store = new BackingStore();
+        store.profileActions[0].Clear();
+        dto.MapTo(store);
+        return store.profileActions[0];
+    }
+
+    private static IEnumerable<DependencyObject> Visuals(DependencyObject parent)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            yield return child;
+            foreach (var descendant in Visuals(child)) yield return descendant;
+        }
+    }
+
     private string ProfilePath(string name) => Path.Combine(directory, "Profiles", name + ".xml");
     private string WriteProfile(string name, string xml)
     {
@@ -247,6 +349,10 @@ public sealed class ProfileEditorSaveTests
         var editor = (ProfileEditor)RuntimeHelpers.GetUninitializedObject(typeof(ProfileEditor));
         typeof(ProfileEditor).GetField("currentProfile", BindingFlags.Instance | BindingFlags.NonPublic)!
             .SetValue(editor, entity);
+        var actions = new SpecialActionsListViewModel(0);
+        actions.LoadActions();
+        typeof(ProfileEditor).GetField("specialActionsVM", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(editor, actions);
         return editor;
     }
 }
