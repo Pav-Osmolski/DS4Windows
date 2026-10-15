@@ -339,3 +339,13 @@ failure-path checks, and synthetic pair matching/lifecycle checks passed.
 for a two-physical-controller test only at the virtual-device boundary. Physical
 USB/Bluetooth reconnects, normal HidHide and saved game bindings remain separate
 checks. Preview identities and the production activation gate remain unchanged.
+
+
+The first two-device owner run (`20261015-163319-aa0aad5a`) enumerated two
+separate DirectInput GUIDs in x86/x64. The x64 distinct-input observation matched
+both DirectInput devices, but WinMM's second device remained neutral. The run
+stopped before recreation/order tests and reported no cleanup errors. This is
+not a multi-controller pass. The follow-up probe polls each WinMM device for a
+bounded 500 ms in the same process before reporting its final sample, testing
+the cold-reader hypothesis without relaxing any expected input or identity
+checks. Backend and controller mapping are unchanged for that retest.

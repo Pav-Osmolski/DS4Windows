@@ -162,6 +162,18 @@ static int captureWinMM() {
             << L" caps=" << std::hex << caps.wCaps << std::dec << L"\n";
         JOYINFOEX state{}; state.dwSize = sizeof(state); state.dwFlags = JOY_RETURNALL;
         MMRESULT result = joyGetPosEx(id, &state);
+        // Fresh-process probes must allow WinMM's per-device polling to start.
+        // Re-launching a one-shot reader for every retry otherwise repeats its
+        // first cached sample forever. Keep errors visible and the wait bounded;
+        // expected values are never used to choose or manufacture a sample.
+        if (jsonMode && !serverMode && result == JOYERR_NOERROR) {
+            const auto until = GetTickCount64() + 500;
+            do {
+                Sleep(20);
+                result = joyGetPosEx(id, &state);
+                if (result != JOYERR_NOERROR) break;
+            } while (GetTickCount64() < until);
+        }
         if (result == JOYERR_NOERROR) {
             Reading reading;
             reading.name = caps.szPname;
