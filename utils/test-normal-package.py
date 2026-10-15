@@ -125,6 +125,16 @@ class NormalPackageTests(unittest.TestCase):
             with self.subTest(name=name), self.assertRaises(ValueError):
                 validate_portable(self.archive([(name, b'wrong')]), NAME, HASH, RELEASE)
 
+    def test_windows_path_aliases_cannot_shadow_a_verified_backend(self):
+        for name in ('DS4Windows/./viiper.exe', 'DS4Windows//viiper.exe',
+                     'DS4Windows/viiper.exe.', 'DS4Windows/viiper.exe ',
+                     'DS4Windows/extras./' + NAME):
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, 'Invalid portable archive path'):
+                validate_portable(self.archive([(name, b'unverified shadow')]), NAME, HASH, RELEASE)
+
+    def test_explicit_directory_entries_remain_valid(self):
+        validate_portable(self.archive([('DS4Windows/', b''), ('DS4Windows/extras/', b'')]), NAME, HASH, RELEASE)
+
     def test_real_composers_reject_preview_before_mutating_outputs(self):
         (self.publish / 'Run-Preview.ps1').write_bytes(b'preview launcher')
         old_output = self.root / 'DS4Windows'

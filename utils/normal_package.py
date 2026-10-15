@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 import re
 import stat
 import zipfile
@@ -71,8 +71,13 @@ def validate_portable(archive_path: Path, name: str, digest: str, release: str) 
         entries = {}
         for entry in archive.infolist():
             normalized = entry.filename.replace('\\', '/')
-            parts = PurePosixPath(normalized).parts
-            if not parts or parts[0] != 'DS4Windows' or any(part in ('.', '..') or ':' in part for part in parts):
+            # Inspect raw components: PurePath collapses dots/empty segments,
+            # while Windows also aliases trailing dots/spaces. Do not let an
+            # unchecked entry shadow a backend whose canonical name was hashed.
+            path_text = normalized[:-1] if entry.is_dir() else normalized
+            parts = path_text.split('/')
+            if parts[0] != 'DS4Windows' or any(not part or part in ('.', '..') or
+                    ':' in part or part.rstrip(' .') != part for part in parts):
                 raise ValueError('Invalid portable archive path: ' + entry.filename)
             if any(part.casefold() in LAB_NAMES for part in parts[1:]):
                 raise ValueError('Portable archive contains preview-only content: ' + entry.filename)

@@ -8,6 +8,8 @@ See the [integration audit](directinput-integration-audit.md) for source-review
 findings and the [preview guide](directinput-preview-guide.md) for tester setup.
 The [installed acceptance checklist](directinput-installed-acceptance.md) covers
 remaining normal setup, upgrade, built-in HidHide and saved-game binding checks.
+The [final preview review](directinput-final-review.md) records the reviewed
+branch revisions, CI evidence, package-validator correction and release gates.
 
 ## Evidence already collected
 
