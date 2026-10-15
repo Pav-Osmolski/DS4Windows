@@ -24,8 +24,9 @@ automated checks and the distinction between logs and user observations.
 
 ## 1. Obtain and adopt an identity
 
-- [ ] Submit the prepared pid.codes request with the maintainer's authorization:
-  [request draft in VIIPER](https://github.com/Pav-Osmolski/VIIPER/tree/feature/directinput-output/docs/identity-request).
+- [x] Submit the prepared pid.codes request with the maintainer's authorization:
+  [pid.codes PR #1317](https://github.com/pidcodes/pidcodes.github.com/pull/1317),
+  submitted on 2026-10-15. Allocation remains pending.
 - [ ] Confirm acceptance and record the registry entry/request URL. The proposed
   `1209:D10C` is **not assigned**. Existing `FFFF:D10C`/`FFFF:D110` remain lab IDs.
 - [ ] Change only the approved twelve-button descriptor. Leave sixteen buttons

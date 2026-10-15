@@ -294,8 +294,9 @@ layout, and refreshes its file-ownership list after moving the translations.
 
 The next stage is tracked in the [release checklist](directinput-release-checklist.md).
 The tested twelve-button prototype is the first release target. A concrete
-pid.codes request has been prepared in the paired VIIPER branch but has not been
-submitted or approved; its proposed identity must not be used yet. The optional
+pid.codes request was submitted with owner authorization as
+[PR #1317](https://github.com/pidcodes/pidcodes.github.com/pull/1317) on 2026-10-15.
+It remains pending approval; its proposed identity must not be used yet. The optional
 sixteen-button descriptor remains lab-only and requires a separate identity.
 
 Normal automatic HidHide already recognizes the joystick through the common
