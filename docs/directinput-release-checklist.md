@@ -20,6 +20,11 @@ remaining normal setup, upgrade, built-in HidHide and saved-game binding checks.
 - FlatOut 2, current Steam installation: Legacy + Centred, X steering, Ry throttle,
   Rx brake; driving and both manual/automatic transmission passed. Exact game
   build was not recorded. Stick menu navigation was awkward at 0% game dead zone.
+- Saved-binding follow-up on r8: after the restart/reconnect checks requested for
+  these games, the owner reported all seemed fine and supplied reports
+  `20261015-182751-e71f6be9` and `20261015-184143-bc25c694`. Both had clean launcher
+  cleanup and no backend warnings/errors. Binding persistence is owner-reported;
+  logs do not capture game bindings, and built-in HidHide remained bypassed.
 - The corrected r4 preview retained main's Overview dropdown styling and normal
   `Lang` packaging. The owner confirmed the fix. Both CI runs at DS4Windows
   `3e450abfab68d929a806e32a6060c3e7eda01886` passed.

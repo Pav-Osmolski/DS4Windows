@@ -503,6 +503,31 @@ multi-controller GUID failure, establish normal HidHide behavior (still bypassed
 in the lab), or change the pending production identity/upstream driver retest.
 No further identical single-controller run is needed on this evidence.
 
+### Saved-game binding follow-up on r8
+
+After the requested BeamNG.drive/FlatOut 2 saved-binding checks across full
+application/game restart and physical unplug/reconnect, the owner supplied
+reports `20261015-182751-e71f6be9` and `20261015-184143-bc25c694` and reported
+that all seemed fine. The owner noted testing was more awkward because built-in
+HidHide is bypassed in this preview. This is positive owner-reported binding
+persistence feedback; neither report independently captures game bindings or
+proves every requested action, and the individual reports are not assigned to
+a particular game without further evidence.
+
+Both reports identify the same clean r8 application/backend revisions recorded
+above. Both summaries contain null failure, no cleanup errors and no remaining
+imports. Both error streams are empty and backend logs contain no WARN, ERROR,
+FATAL or PANIC entries. Application stdout retains access-denied CreateFile
+messages during driver-interface discovery followed by success for both usage
+types. The later report also records a physical read-failure disconnect at
+17:44:28 UTC (18:44:28 BST), consistent with the requested reconnect test.
+These messages are not described as entirely error-free application stdout.
+
+Copies of both report ZIPs are retained in the enclosing workspace's `outputs`
+directory. This follow-up does not validate normal installed HidHide, removal
+of duplicate physical input, production USB identity or multi-controller GUID
+persistence. Those remain separate release acceptance requirements.
+
 ### Normal package composition proof
 
 The [normal packaging preparation](directinput-normal-packaging.md) records the
