@@ -85,10 +85,10 @@ public sealed class OutputSlotAtomicBindingTests
         {
             if (fixture.Candidate.CurrentInputBound != OutSlotDevice.InputBound.Bound)
                 return;
-            observed = true;
             Assert.AreEqual(1, fixture.Candidate.InputIndex);
             Assert.AreEqual("Second input", fixture.Candidate.InputDisplayString);
             Assert.AreSame(fixture.Output, fixture.BoundOutputs[1]);
+            observed = true;
         };
         Assert.IsTrue(fixture.Manager.TryBindExistingUnboundOutput(fixture.Candidate,
             fixture.BoundOutputs, 1, "Second input", OutContType.ViiperX360, out var produced));
