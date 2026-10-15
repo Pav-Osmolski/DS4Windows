@@ -289,3 +289,16 @@ dropdown padding/margins while adding the enabled-state binding. Regression
 checks compare those effective properties against the unchanged shared style.
 Preview packaging now also composes and validates the normal `Lang` satellite
 layout, and refreshes its file-ownership list after moving the translations.
+
+## Normal-release preparation (2026-10-15)
+
+The next stage is tracked in the [release checklist](directinput-release-checklist.md).
+The tested twelve-button prototype is the first release target. A concrete
+pid.codes request has been prepared in the paired VIIPER branch but has not been
+submitted or approved; its proposed identity must not be used yet. The optional
+sixteen-button descriptor remains lab-only and requires a separate identity.
+
+Normal automatic HidHide already recognizes the joystick through the common
+VIIPER output path. Its behaviour remains untested for this output because the
+isolated preview deliberately bypasses system integration. Production identity,
+normal matched packaging and that validation must precede lifting the gate.
