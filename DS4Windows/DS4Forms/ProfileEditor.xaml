@@ -581,7 +581,8 @@
                                 <DataGridTemplateColumn Header="Enabled" Width="Auto" MinWidth="80">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox IsChecked="{Binding Active,Mode=TwoWay}" Click="SpecialActionCheckBox_Click"
+                                            <!-- Update before Click exports the list, rather than waiting for a DataGrid row commit. -->
+                                            <CheckBox IsChecked="{Binding Active,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Click="SpecialActionCheckBox_Click"
                                                       HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12,10"
                                                       ToolTip="Enable this action for the current profile" />
                                         </DataTemplate>
