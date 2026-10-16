@@ -24,7 +24,7 @@ public sealed class DualSenseBluetoothNativeRateBudgetTests
     [DataRow(250, 500, true)]
     [DataRow(500, 1000, true)]
     [DataRow(500, 200, false)]
-    public void FixedDeadlineDistinctCommandsExposeServiceBudgetWithoutSlowingTheSource(
+    public void ThreadedFixedDeadlineCommandsPreserveCommandsAndDrainMedia(
         int offeredHz, int nativeBudgetHz, bool sufficientBudget)
     {
         using var fixture = new Fixture(realtimeCapacity: 16,
@@ -97,6 +97,15 @@ public sealed class DualSenseBluetoothNativeRateBudgetTests
             $"maximumEffectAgeMs={maximumEffectAgeMs:F3}; finalEffectAgeMs={finalEffectAgeMs:F3}; " +
             $"maximumSteadyMediaGapMs={maximumSteadyMediaGapMs:F3}");
 
+        // Hosted runners can pause either real thread for tens of milliseconds.
+        // Correctness (exact bytes/order, final stop, media and returned credits)
+        // remains mandatory above. Performance thresholds belong to an explicit
+        // controlled-machine run; virtual-time coverage below gates rate policy.
+        if (Environment.GetEnvironmentVariable("DS4WINDOWS_STRICT_REALTIME_TESTS") != "1")
+        {
+            TestContext?.WriteLine("Strict wall-clock thresholds are opt-in via DS4WINDOWS_STRICT_REALTIME_TESTS=1.");
+            return;
+        }
         if (sufficientBudget)
         {
             Assert.IsTrue(highWater < 16, $"Native occupancy grew to {highWater}/32.");
@@ -114,6 +123,86 @@ public sealed class DualSenseBluetoothNativeRateBudgetTests
             Assert.AreEqual(32, highWater);
             Assert.IsTrue(finalEffectAgeMs > 500,
                 "The insufficient-budget control unexpectedly hid source backlog.");
+        }
+    }
+
+    [TestMethod]
+    [DataRow(250, 500, true)]
+    [DataRow(500, 1000, true)]
+    [DataRow(500, 200, false)]
+    public void VirtualTimeActualHelperBudgetDetectsSustainedBacklog(
+        int offeredHz, int nativeBudgetHz, bool sufficientBudget)
+    {
+        // Drive the production helper's wake selector, FIFO claim/retirement and
+        // media clock with virtual QPC. No helper threads, sleeps or native I/O.
+        using var fixture = new Fixture(nativeCommandRateHz: nativeBudgetHz, writeSlotCount: 32);
+        object host = typeof(Fixture).GetField("host", Private)!.GetValue(fixture);
+        Type type = host.GetType();
+        MethodInfo select = type.GetMethod("SelectV5PresentationWakeDeadlineLocked", Private);
+        MethodInfo claim = type.GetMethod("ClaimControllerStateLocked", Private);
+        MethodInfo finish = type.GetMethod("FinishNativeClaimLocked", Private);
+        byte[] presentation = (byte[])type.GetField("controllerStatePresentation", Private).GetValue(host);
+        long origin = Stopwatch.Frequency;
+        long now = origin;
+        type.GetField("lastControllerStateSubmissionQpc", Private).SetValue(host,
+            origin - Stopwatch.Frequency / nativeBudgetHz);
+        type.GetField("nativeCommandCreditAvailable", Private).SetValue(host, true);
+        var media = new DualSenseV5NativePresentationScheduler(Stopwatch.Frequency);
+        media.Start(origin);
+        byte[][] commands = Enumerable.Range(0, offeredHz)
+            .Select(i => Command(i, stop: i == offeredHz - 1)).ToArray();
+        int offered = 0, presented = 0, highWater = 0, mediaSlots = 0;
+        long finalPresented = 0;
+        while (presented < commands.Length)
+        {
+            Assert.IsTrue(now < origin + 8 * Stopwatch.Frequency, "Virtual scheduler failed to drain.");
+            while (offered < commands.Length &&
+                origin + offered * Stopwatch.Frequency / offeredHz <= now &&
+                fixture.NativeOwnershipSnapshot().Admissions < 32)
+            {
+                fixture.ReceiveNativeCommand(commands[offered++]);
+                highWater = Math.Max(highWater, fixture.NativeOwnershipSnapshot().Admissions);
+            }
+            if (media.NextDeadlineQpc <= now)
+            {
+                media.AdvanceAfterSend(now);
+                mediaSlots++;
+            }
+            long wake = (long)select.Invoke(host, new object[] { now, media.NextDeadlineQpc });
+            if (fixture.NativeOwnershipSnapshot().Admissions > 0 && wake <= now)
+            {
+                Assert.IsTrue((bool)claim.Invoke(host, null));
+                CollectionAssert.AreEqual(commands[presented].AsSpan(1, presentation.Length).ToArray(), presentation);
+                finish.Invoke(host, new object[] { true, now, false });
+                var acknowledgements = fixture.DrainNativeAcknowledgements();
+                Assert.AreEqual(1, acknowledgements.Length);
+                Assert.AreEqual((presented + 1L, 1, DualSenseBluetoothAudioPacer.AcknowledgementDisposition.Presented),
+                    acknowledgements[0]);
+                presented++;
+                finalPresented = now;
+                wake = (long)select.Invoke(host, new object[] { now, media.NextDeadlineQpc });
+            }
+            if (offered < commands.Length && fixture.NativeOwnershipSnapshot().Admissions < 32)
+            {
+                long nextSource = origin + offered * Stopwatch.Frequency / offeredHz;
+                if (nextSource <= now) continue; // Backlogged source retains its original deadline.
+                wake = Math.Min(wake, nextSource);
+            }
+            Assert.IsTrue(wake > now, "Wake selection made no virtual-time progress.");
+            now = wake;
+        }
+        Assert.AreEqual((32, 0, 0, 0L), fixture.NativeOwnershipSnapshot());
+        Assert.IsTrue(mediaSlots > 90, "Independent media clock stopped progressing.");
+        double finalAge = Milliseconds(finalPresented - (origin + (commands.Length - 1L) * Stopwatch.Frequency / offeredHz));
+        if (sufficientBudget)
+        {
+            Assert.IsTrue(highWater < 16, $"Virtual native occupancy grew to {highWater}/32.");
+            Assert.IsTrue(finalAge < 80, $"Virtual final stop age: {finalAge:F3} ms.");
+        }
+        else
+        {
+            Assert.AreEqual(32, highWater);
+            Assert.IsTrue(finalAge > 500, "Insufficient service budget did not expose sustained backlog.");
         }
     }
 
