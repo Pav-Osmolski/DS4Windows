@@ -58,6 +58,8 @@ Updated CI and release workflow references to the supported Node 24 actions:
 [checkout v7](https://github.com/actions/checkout),
 [setup-dotnet v6](https://github.com/actions/setup-dotnet), and
 [upload-artifact v7](https://github.com/actions/upload-artifact).
+The small Linux package-planning and issue-label jobs are pinned to Ubuntu
+24.04 rather than following the announced ubuntu-latest image migration.
 Permissions, event triggers, package selection, signing requirements and payload
 validation are retained. Workflow syntax is checked with actionlint; hosted CI
 must verify the actual action execution.
