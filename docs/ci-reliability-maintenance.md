@@ -77,3 +77,38 @@ Results are retained in the enclosing workspace's `outputs/main-ci-cleanup`
 directory. No physical controller, driver or installed backend was used for
 these checks. Strict wall-clock benchmarking was not run as controlled hardware
 performance acceptance.
+
+## Readiness deadline follow-up
+
+A subsequent DirectInput-branch full-suite run exposed a separate readiness
+probe failure: a 500 ms authenticated probe took 3,276 ms. Its isolated and full
+reruns passed unchanged. Investigation found that closing the socket depended
+on a cancellation timer callback, while synchronous authentication and encrypted
+record reads could continue accepting trickled bytes. Busy ThreadPool workers
+can delay that callback. This is a demonstrated failure mechanism, not proof of
+the exact scheduling conditions during the original failure.
+
+A controlled loopback experiment occupied the worker pool after the handshake
+request reached a dedicated server thread. Before the fix, the authentication
+and encrypted-ping cases took 3,011 ms and 3,010 ms. With the fix they closed in
+507 ms and 511 ms. The experimental harness restored the pool before each case
+completed; it is retained with the workspace investigation evidence rather than
+changing process-wide pool limits in the regular suite.
+
+Readiness probes now wrap their transport with a monotonic deadline stream.
+Every underlying read and write uses the remaining whole-probe budget and checks
+the deadline again after returning. This also covers the inner loops used to
+read authentication replies and encrypted records, and rejects a final byte that
+arrives too late. The existing cancellation remains a backstop. Connection time
+counts against the budget, and the ping phase can shorten, never extend, it.
+This does not change normal controller traffic or the authentication protocol.
+
+Four deterministic tests cover trickled reads without any timer callbacks,
+the shorter ping budget, time already spent connecting, and late final data.
+Existing real authenticated-loopback tests retain their 500 ms requested budget,
+1,800 ms scheduling allowance, privacy checks and bounded peer cleanup.
+No user-facing timeout or test threshold was increased. This is a bound on I/O
+waiting, not a guarantee that an OS-suspended process can execute at its deadline.
+
+Investigation logs and reports are retained under the enclosing workspace's
+`outputs/probe-investigation` directory.
