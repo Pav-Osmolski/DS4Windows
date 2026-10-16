@@ -1241,6 +1241,22 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public OutContType TempConType =>
             GetOutputControllerType(tempControllerIndex);
 
+        public int GyroStickActivationIndex
+        {
+            get => (int)Global.GyroStickModes[device];
+            set => Global.GyroStickModes[device] = (GyroStickActivationMode)Math.Clamp(value, 0, 2);
+        }
+        public int GyroActivationStickIndex
+        {
+            get => (int)Global.GyroActivationSticks[device];
+            set => Global.GyroActivationSticks[device] = (GyroActivationStick)Math.Clamp(value, 0, 2);
+        }
+        public int GyroStickThreshold
+        {
+            get => Global.GyroStickThresholds[device];
+            set => Global.GyroStickThresholds[device] = Math.Clamp(value, 1, 95);
+        }
+
         public int GyroOutModeIndex
         {
             get

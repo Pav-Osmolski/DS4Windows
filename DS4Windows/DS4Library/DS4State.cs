@@ -73,6 +73,8 @@ namespace DS4Windows
         // distinct copied sidecar rather than overloading the Pro status.
         public Switch2JoyConRawInputStatus Switch2JoyConRawInputStatus;
         internal NintendoInputStatus NintendoInputStatus;
+        // Output policy only: never erase the physical motion observation.
+        public bool GyroStickGateOpen = true;
         public SixAxis Motion = null;
         public static readonly int DEFAULT_AXISDIR_VALUE = 127;
         public Int32 SASteeringWheelEmulationUnit;
@@ -190,6 +192,7 @@ namespace DS4Windows
             Switch2JoyConRawInputStatus = state.Switch2JoyConRawInputStatus;
             NintendoInputStatus = state.NintendoInputStatus;
             Motion = state.Motion;
+            GyroStickGateOpen = state.GyroStickGateOpen;
             TrackPadTouch0 = state.TrackPadTouch0;
             TrackPadTouch1 = state.TrackPadTouch1;
             SASteeringWheelEmulationUnit = state.SASteeringWheelEmulationUnit;
@@ -268,6 +271,7 @@ namespace DS4Windows
             state.Switch2JoyConRawInputStatus = Switch2JoyConRawInputStatus;
             state.NintendoInputStatus = NintendoInputStatus;
             state.Motion = Motion;
+            state.GyroStickGateOpen = GyroStickGateOpen;
             state.TrackPadTouch0 = TrackPadTouch0;
             state.TrackPadTouch1 = TrackPadTouch1;
             state.SASteeringWheelEmulationUnit = SASteeringWheelEmulationUnit;
@@ -286,6 +290,7 @@ namespace DS4Windows
             // Mapped stick axes are controls, not physical metadata. Copying
             // them here would undo custom mapping immediately before egress.
             state.Motion = Motion;
+            state.GyroStickGateOpen = GyroStickGateOpen;
             state.ds4Timestamp = ds4Timestamp;
             state.FrameCounter = FrameCounter;
             state.TouchPacketCounter = TouchPacketCounter;
