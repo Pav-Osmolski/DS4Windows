@@ -78,10 +78,12 @@ public sealed class ProfileAdvancedLayoutTests
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
         XDocument source = XDocument.Load(SourcePath());
-        XElement selected = page is "ControllerReadings" or "OutputSlots"
+        XElement selected = page == "NintendoSetup"
+            ? XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "MainWindow.xaml")).Descendants(wpf + "Expander").Single(e => (string)e.Attribute("Header") == "Nintendo Switch 2 controllers")
+            : page is "ControllerReadings" or "OutputSlots"
             ? XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, page == "OutputSlots" ? "OutputSlotManagerControl.xaml" : "ControllerReadingsControl.xaml")).Root
             : source.Descendants(wpf + "TabItem")
-                .Single(e => (string)e.Attribute("Header") == (page is "Advanced" or "Special Actions" ? page : "{lex:Loc " + page + "}"));
+                .Single(e => (string)e.Attribute("Header") == (page is "Advanced" or "Special Actions" or "Nintendo Options" ? page : "{lex:Loc " + page + "}"));
         XElement content = selected.Elements().First(e => !e.Name.LocalName.EndsWith(".Resources"));
         var markup = content.Name == wpf + "Grid" ? new XElement(content) : new XElement(wpf + "Grid", new XElement(content));
         // Render the actual shared axial layout without its controller wiring.
@@ -94,6 +96,7 @@ public sealed class ProfileAdvancedLayoutTests
         markup.SetAttributeValue("TextElement.Foreground", "{DynamicResource ForegroundColor}");
         markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
         markup.SetAttributeValue(XNamespace.Xmlns + "xctk", "http://schemas.xceed.com/wpf/xaml/toolkit");
+        markup.SetAttributeValue(XNamespace.Xmlns + "local", "clr-namespace:DS4WinWPF.DS4Forms;assembly=DS4Windows");
         var strings = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "..", "Translations", "Strings.resx"))
             .Descendants("data").ToDictionary(e => (string)e.Attribute("name"), e => e.Element("value")?.Value ?? "");
         foreach (XElement element in markup.DescendantsAndSelf())
@@ -105,7 +108,7 @@ public sealed class ProfileAdvancedLayoutTests
                 string key = attribute.Value[9..^1];
                 attribute.Value = strings.TryGetValue(key, out string value) ? value : key;
             }
-            else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis") && !((page == "OutputSlots" || page == "Special Actions") && (attribute.Name.LocalName == "Binding" || attribute.Value.Contains("BoundInput") || attribute.Value.Contains("Active"))) && !(page == "ControllerReadings" && (attribute.Value.Contains("ElementName=") || attribute.Value.Contains("Source={StaticResource ForegroundColor}"))))
+            else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !(page is "Nintendo Options" or "NintendoSetup" && attribute.Value is "{Binding Label}" or "{Binding IsSelected}" or "{Binding ActualWidth, ElementName=switch2SetupContent}") && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis") && !((page == "OutputSlots" || page == "Special Actions") && (attribute.Name.LocalName == "Binding" || attribute.Value.Contains("BoundInput") || attribute.Value.Contains("Active"))) && !(page == "ControllerReadings" && (attribute.Value.Contains("ElementName=") || attribute.Value.Contains("Source={StaticResource ForegroundColor}"))))
             {
                 if (attribute.Name.LocalName == "Text" && attribute.Value.Contains("ControllerAudioHeader")) attribute.Value = "Controller audio";
                 else attribute.Remove();
