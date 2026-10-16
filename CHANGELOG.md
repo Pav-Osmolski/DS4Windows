@@ -3,7 +3,7 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## [5.0.28](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.28) � 2026-10-16
+## [5.0.28](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.28) - 2026-10-16
 
 ### Improved
 
@@ -17,7 +17,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Enforce the VIIPER readiness-probe deadline during synchronous I/O so an unresponsive probe cannot exceed its startup allowance.
 
-## [5.0.27](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.27) — 2026-10-15
+## [5.0.27](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.27) - 2026-10-15
 
 ### Fixed
 
@@ -28,13 +28,13 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Commit slot changes before publishing notifications, deliver callbacks outside the manager lock in commit order, and isolate failing subscribers so remaining observers still run. Prevent an old disconnect from erasing a replacement controller binding.
 - Continue shutting down healthy outputs when another output fails, retain failed registrations for retry, and reject reentrant attachment while shutdown is in progress. Builds on upstream work by @hbashton with additional lifecycle regression coverage.
 
-## [5.0.26](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.26) — 2026-10-15
+## [5.0.26](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.26) - 2026-10-15
 
 ### Fixed
 
 - Fix enabled Special Actions failing to save when selecting existing actions for another profile (#33). Checkbox changes now apply immediately, and saving captures the current selection, including disabling every action or renaming an enabled action.
 
-## [5.0.25](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.25) — 2026-10-15
+## [5.0.25](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.25) - 2026-10-15
 
 ### Added
 
@@ -53,7 +53,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 - The complete installer and portable ZIP include the matching VIIPER executable, source, notices and verification records. Close games, DS4Windows and VIIPER before updating. USB/IP remains at 0.9.8.1; no driver version change is required.
 - The maintainer successfully tested the paired changes before release. This release remains unsigned; no Authenticode signature is claimed.
 
-## [5.0.24](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.24) — 2026-10-14
+## [5.0.24](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.24) - 2026-10-14
 
 ### Fixed
 
@@ -65,13 +65,13 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Add optional Ko-fi support links for ongoing maintenance of this independent fork.
 
-## [5.0.23](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.23) — 2026-10-14
+## [5.0.23](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.23) - 2026-10-14
 
 ### Fixed
 
 - Allow a disconnected DualShock 3 connection to finish cleanup once its input worker has stopped, without requiring a final physical output report over the lost transport. This addresses a remaining reconnect failure from [#25](https://github.com/Pav-Osmolski/DS4Windows/issues/25). Keep worker-stop checks and final physical neutral output for controllers that are still connected. Hardware confirmation remains pending.
 
-## [5.0.22](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.22) — 2026-10-14
+## [5.0.22](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.22) - 2026-10-14
 
 ### Fixed
 
@@ -84,7 +84,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Preserve a unique USB/IP uninstall log across reboot/repair attempts and include hardware IDs in post-reboot device diagnostics ([#20](https://github.com/Pav-Osmolski/DS4Windows/issues/20)). This improves investigation of incomplete removal; it does not bypass checks for live drivers or claim to resolve the reported installation failure.
 
-## [5.0.21](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.21) — 2026-10-13
+## [5.0.21](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.21) - 2026-10-13
 
 ### Fixed
 
@@ -98,7 +98,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Upgrade GitHub Actions Python setup from v5 to v7 and caching from v4 to v6 through reviewed Dependabot PRs [#21](https://github.com/Pav-Osmolski/DS4Windows/pull/21) and [#22](https://github.com/Pav-Osmolski/DS4Windows/pull/22). Retain the pinned .NET SDK, Python version, dependency locks and complete validation.
 - Release 5.0.21 with matching app and installer version 5.0.21.0. The maintainer tested the Axis Config/readings changes successfully before publication.
 
-## [5.0.20](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.20) — 2026-10-13
+## [5.0.20](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.20) - 2026-10-13
 
 ### Changed
 
@@ -118,7 +118,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Redesign Axis Config, Lightbar, Touchpad and Gyro with focused cards, compact fields and consistent spacing. Preserve all output modes, controller settings and calibration actions; remove decorative lines around mode pages.
 - Use a scalable, theme-aware Keep size icon and confirmation checkmark so both remain visible in dark and light themes.
 
-## [5.0.19](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.19) — 2026-10-12
+## [5.0.19](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.19) - 2026-10-12
 
 ### Fixed
 
@@ -135,7 +135,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Repair standalone USB hardware-verifier build dependencies and run its 75 existing unit tests in CI.
 - Configure weekly Dependabot proposals for the application's C# projects, installer helpers, tests, tools and GitHub Actions. Add a maintenance guide covering package review priorities and manual coordination of WiX tooling and bundled drivers. Updates remain subject to review and CI; automatic merging is not enabled.
 
-## [5.0.18](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.18) — 2026-10-12
+## [5.0.18](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.18) - 2026-10-12
 
 ### Added
 
@@ -149,7 +149,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Bring language settings, update checks, controller setup, useful tools and logging shortcuts within easier reach while preserving existing settings and behavior.
 - Let Settings use the full available window width, matching the other app pages.
 
-## [5.0.17](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.17) — 2026-10-11
+## [5.0.17](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.17) - 2026-10-11
 
 ### Fixed
 
@@ -168,7 +168,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Release **5.0.17**, with app and installer version **5.0.17.0**. The maintainer tested the combined UI and logging changes successfully before release.
 
-## [5.0.16](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.16) — 2026-10-11
+## [5.0.16](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.16) - 2026-10-11
 
 ### Fixed
 
@@ -184,7 +184,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Replace the sidebar letter badge with the maintainer-provided DS4Windows PNG icon.
 - Release **5.0.16**, with app and installer version **5.0.16.0**. The maintainer tested the UI changes successfully before publication.
 
-## [5.0.15](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.15) — 2026-10-11
+## [5.0.15](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.15) - 2026-10-11
 
 ### Fixed
 
@@ -201,7 +201,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Updated About and Moonlight help links for this fork, while retaining upstream credits.
 - Issue labels still close duplicate, out-of-scope and shipped-fix reports, but no longer lock conversations or automatically close reopened reports.
 
-## [5.0.14](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.14) — 2026-10-10
+## [5.0.14](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.14) - 2026-10-10
 
 ### Fixed
 
@@ -225,7 +225,7 @@ RC4.6.7 users still need one manual upgrade because that build checks upstream.
 The pinned VIIPER and USB/IP packages are unchanged. Every new release must
 increment the numeric app and installer version.
 
-## [VIIPERRC4.6.8](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/VIIPERRC4.6.8) — 2026-10-10
+## [VIIPERRC4.6.8](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/VIIPERRC4.6.8) - 2026-10-10
 
 ### Changed
 
@@ -245,7 +245,7 @@ DS4Updater [2.0.9](https://github.com/Pav-Osmolski/DS4Updater/releases/tag/v2.0.
 is published. RC4.6.8 was tested and published successfully. Its changes are included in
 5.0.14. The pinned VIIPER and USB/IP packages are unchanged from RC4.6.7.
 
-## [VIIPERRC4.6.7](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/VIIPERRC4.6.7) — 2026-10-09
+## [VIIPERRC4.6.7](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/VIIPERRC4.6.7) - 2026-10-09
 
 ### Fixed
 
@@ -282,7 +282,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc466"></a>
 
-## [VIIPERRC4.6.6](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.6) — 2026-09-23
+## [VIIPERRC4.6.6](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.6) - 2026-09-23
 
 ### Improved
 
@@ -294,7 +294,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc465"></a>
 
-## [VIIPERRC4.6.5](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.5) — 2026-09-23
+## [VIIPERRC4.6.5](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.5) - 2026-09-23
 
 ### Fixed
 
@@ -309,7 +309,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc464"></a>
 
-## [VIIPERRC4.6.4](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.4) — 2026-09-22
+## [VIIPERRC4.6.4](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.4) - 2026-09-22
 
 ### Improved
 
@@ -320,7 +320,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc463"></a>
 
-## [VIIPERRC4.6.3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.3) — 2026-09-21
+## [VIIPERRC4.6.3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.3) - 2026-09-21
 
 ### Fixed
 
@@ -336,7 +336,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc462"></a>
 
-## [VIIPERRC4.6.2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.2) — 2026-09-14
+## [VIIPERRC4.6.2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.2) - 2026-09-14
 
 ### Added
 
@@ -355,7 +355,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc461"></a>
 
-## [VIIPERRC4.6.1](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.1) — 2026-09-14
+## [VIIPERRC4.6.1](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6.1) - 2026-09-14
 
 ### Added
 
@@ -373,7 +373,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc46"></a>
 
-## [VIIPERRC4.6](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6) — 2026-09-14
+## [VIIPERRC4.6](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.6) - 2026-09-14
 
 ### Fixed
 
@@ -389,7 +389,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc459"></a>
 
-## [VIIPERRC4.5.9](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.9) — 2026-09-12
+## [VIIPERRC4.5.9](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.9) - 2026-09-12
 
 ### Improved
 
@@ -402,7 +402,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc458"></a>
 
-## [VIIPERRC4.5.8](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.8) — 2026-09-11
+## [VIIPERRC4.5.8](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.8) - 2026-09-11
 
 ### Fixed
 
@@ -416,7 +416,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc457"></a>
 
-## [VIIPERRC4.5.7](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.7) — 2026-09-11
+## [VIIPERRC4.5.7](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.7) - 2026-09-11
 
 ### Fixed
 
@@ -430,7 +430,7 @@ RC4.4 release.
 
 <a id="inherited-release-notes-rc456"></a>
 
-## [VIIPERRC4.5.6](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.6) — 2026-09-11
+## [VIIPERRC4.5.6](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.6) - 2026-09-11
 
 ### Added
 
@@ -446,7 +446,7 @@ RC4.4 release.
 
 <a id="inherited-2026-09-09-rc455-release-notes"></a>
 
-## [VIIPERRC4.5.5](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.5) — 2026-09-10
+## [VIIPERRC4.5.5](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.5) - 2026-09-10
 
 ### Fixed
 
@@ -457,7 +457,7 @@ RC4.4 release.
 
 <a id="inherited-2026-09-09-rc454-release-notes"></a>
 
-## [VIIPERRC4.5.4](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.4) — 2026-09-09
+## [VIIPERRC4.5.4](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.4) - 2026-09-09
 
 ### Fixed
 
@@ -471,7 +471,7 @@ RC4.4 release.
 
 <a id="inherited-2026-09-09-rc453-release-notes"></a>
 
-## [VIIPERRC4.5.3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.3) — 2026-09-09
+## [VIIPERRC4.5.3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.3) - 2026-09-09
 
 ### Fixed
 
@@ -486,7 +486,7 @@ RC4.4 release.
 
 <a id="inherited-2026-09-09-rc452-release-notes"></a>
 
-## [VIIPERRC4.5.2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.2) — 2026-09-09
+## [VIIPERRC4.5.2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.2) - 2026-09-09
 
 ### Added
 
@@ -505,7 +505,7 @@ RC4.4 release.
 
 <a id="inherited-release-candidate-4-5-1"></a>
 
-## [VIIPERRC4.5.1](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.1) — 2026-09-09
+## [VIIPERRC4.5.1](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5.1) - 2026-09-09
 
 ### Fixed
 
@@ -522,7 +522,7 @@ RC4.4 release.
 
 <a id="inherited-release-candidate-4-5"></a>
 
-## [VIIPERRC4.5](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5) — 2026-09-09
+## [VIIPERRC4.5](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.5) - 2026-09-09
 
 ### Added
 
@@ -543,7 +543,7 @@ RC4.4 release.
 
 <a id="inherited-release-candidate-4-3"></a>
 
-## [VIIPERRC4.3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.3) — 2026-08-09
+## [VIIPERRC4.3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.3) - 2026-08-09
 
 ### Improved
 
@@ -555,7 +555,7 @@ RC4.4 release.
 
 <a id="inherited-release-candidate-4-2"></a>
 
-## [VIIPERRC4.2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.2) — 2026-08-07
+## [VIIPERRC4.2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.2) - 2026-08-07
 
 ### Improved
 
@@ -568,7 +568,7 @@ RC4.4 release.
 
 <a id="inherited-release-candidate-4-1"></a>
 
-## [VIIPERRC4.1](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.1) — 2026-08-06
+## [VIIPERRC4.1](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4.1) - 2026-08-06
 
 ### Improved
 
@@ -585,7 +585,7 @@ RC4.4 release.
 
 - Bundle VIIPER 0.0.8 with offline setup, serialize installation and repair, enforce incompatible-driver reboot boundaries, and preserve files outside package ownership.
 
-## [VIIPERRC4](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4) — 2026-08-05
+## [VIIPERRC4](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC4) - 2026-08-05
 
 ### Added
 
@@ -600,13 +600,13 @@ RC4.4 release.
 - Preserve PlayStation audio features across Xbox/Switch virtual outputs and improve DS4 Bluetooth audio recovery.
 - Harden profile switching, Game Bar compatibility, backend verification and installer-owned update/repair/uninstall behaviour.
 
-## [VIIPERRC3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC3) — 2026-07-25
+## [VIIPERRC3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC3) - 2026-07-25
 
 ### Fixed
 
 - Harden VIIPER component installation, including backend source selection and service/startup-task registration.
 
-## [VIIPERRC2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC2) — 2026-07-25
+## [VIIPERRC2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC2) - 2026-07-25
 
 ### Fixed
 
@@ -615,7 +615,7 @@ RC4.4 release.
 - Prevent stuck Trigger Lab vibration and preserve lightbar state.
 - Improve restart/reconnect handling, UI startup ordering and VIIPER installation.
 
-## [VIIPERRC1](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC1) — 2026-07-24
+## [VIIPERRC1](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERRC1) - 2026-07-24
 
 ### Improved
 
@@ -629,7 +629,7 @@ RC4.4 release.
 
 - The upstream notes were a cumulative summary since 4.0.2.3, including beta work already released, rather than a list of features introduced only in RC1.
 
-## [VIIPERBeta9](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta9) — 2026-07-24
+## [VIIPERBeta9](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta9) - 2026-07-24
 
 ### Added
 
@@ -639,57 +639,57 @@ RC4.4 release.
 
 - Retain PlayStation audio/features across Xbox and Switch virtual outputs, update real-time DS4 transport and support prerelease-channel updates.
 
-## [VIIPERBeta8](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta8) — 2026-07-24
+## [VIIPERBeta8](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta8) - 2026-07-24
 
 ### Release notes
 
 - Publish the next VIIPER beta. Upstream supplied a [comparison with Beta 7](https://github.com/hbashton/DS4Windows/compare/VIIPERBeta7...VIIPERBeta8) without a separate feature summary.
 
-## [VIIPERBeta7](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta7) — 2026-07-23
+## [VIIPERBeta7](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta7) - 2026-07-23
 
 ### Improved
 
 - Make update checks follow the installed prerelease channel, switching to stable when a newer stable release becomes available.
 
-## [VIIPERBeta6](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta6) — 2026-07-23
+## [VIIPERBeta6](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta6) - 2026-07-23
 
 ### Changed
 
 - Publish the redesigned interface and expanded VIIPER feature work for beta testing.
 - Identify DS4 audio and Special Action profile hot-swapping as remaining areas of work in the release notes.
 
-## [VIIPERBeta5](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta5) — 2026-07-17
+## [VIIPERBeta5](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta5) - 2026-07-17
 
 ### Added
 
 - Add DualSense microphone support over Bluetooth, exposed as Headset Microphone (Wireless Controller). Upstream reported testing it in Discord.
 
-## [VIIPERBeta4](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta4) — 2026-07-16
+## [VIIPERBeta4](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta4) - 2026-07-16
 
 ### Fixed
 
 - Restore speaker output and vibration for physical DualSense controllers emulating a DualSense.
 
-## [VIIPERBeta3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta3) — 2026-07-14
+## [VIIPERBeta3](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta3) - 2026-07-14
 
 ### Improved
 
 - Reduce DualSense controller-speaker latency, with upstream reporting Bluetooth gameplay testing in Assassin's Creed Black Flag Resynced.
 
-## [VIIPERBeta2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta2) — 2026-06-24
+## [VIIPERBeta2](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta2) - 2026-06-24
 
 ### Added
 
 - Add DualSense Bluetooth advanced haptics, controller-speaker audio and headset output, including game and selected audio sources.
 - Allow the mute button to cycle configured profiles.
 
-## [v4.0.2.3](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.2.3) — 2026-06-14
+## [v4.0.2.3](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.2.3) - 2026-06-14
 
 ### Fixed
 
 - Re-enable persistent HidHide configuration writes and correct Moonlight virtual DS4 v2 recognition.
 
-## [VIIPERBeta](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta) — 2026-06-14
+## [VIIPERBeta](https://github.com/hbashton/DS4Windows/releases/tag/VIIPERBeta) - 2026-06-14
 
 ### Added
 
@@ -704,7 +704,7 @@ RC4.4 release.
 
 - Controller-speaker audio and advanced haptics were not yet included in this first VIIPER beta.
 
-## [v4.0.2.2](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.2.2) — 2026-06-14
+## [v4.0.2.2](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.2.2) - 2026-06-14
 
 ### Fixed
 
@@ -712,7 +712,7 @@ RC4.4 release.
 - Harden application startup.
 - Show full program filenames in Special Actions and include PowerShell scripts in the program picker.
 
-## [v4.0.2.1](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.2.1) — 2026-06-11
+## [v4.0.2.1](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.2.1) - 2026-06-11
 
 ### Added
 
@@ -722,14 +722,14 @@ RC4.4 release.
 
 - Initialize mapped mouse output when a profile starts. Upstream associated this fix with the reported profile-switch crash, without establishing a separate confirmed cause.
 
-## [v4.0.2](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.2) — 2026-06-07
+## [v4.0.2](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.2) - 2026-06-07
 
 ### Fixed
 
 - Prevent crashes with duplicate profiles using specific device identifiers.
 - Reduce lag when releasing a trigger used to switch profiles.
 
-## [v4.0.1](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.1) — 2026-06-06
+## [v4.0.1](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.1) - 2026-06-06
 
 ### Fixed
 
@@ -739,7 +739,7 @@ RC4.4 release.
 
 - Simplify the system-tray title.
 
-## [v4.0.0](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.0) — 2026-06-06
+## [v4.0.0](https://github.com/hbashton/DS4Windows/releases/tag/v4.0.0) - 2026-06-06
 
 ### Added
 
@@ -755,13 +755,13 @@ RC4.4 release.
 
 - Publish hbashton's first stable revived-fork release and direct application/updater checks to its repositories.
 
-## [3.9.9Beta3Hotfix](https://github.com/hbashton/DS4Windows/releases/tag/3.9.9Beta3Hotfix) — 2026-06-06
+## [3.9.9Beta3Hotfix](https://github.com/hbashton/DS4Windows/releases/tag/3.9.9Beta3Hotfix) - 2026-06-06
 
 ### Fixed
 
 - Give Game Bar profile rules priority over ordinary Auto Profiles.
 
-## [3.9.9Beta3](https://github.com/hbashton/DS4Windows/releases/tag/3.9.9Beta3) — 2026-06-05
+## [3.9.9Beta3](https://github.com/hbashton/DS4Windows/releases/tag/3.9.9Beta3) - 2026-06-05
 
 ### Added
 
@@ -771,14 +771,14 @@ RC4.4 release.
 
 - Refine dual-stage trigger threshold detection.
 
-## [3.9.9Beta2](https://github.com/hbashton/DS4Windows/releases/tag/3.9.9Beta2) — 2026-06-02
+## [3.9.9Beta2](https://github.com/hbashton/DS4Windows/releases/tag/3.9.9Beta2) - 2026-06-02
 
 ### Added
 
 - Add per-profile DualSense adaptive-trigger settings and separate soft/full-pull actions.
 - Add profile audio-passthrough modes, with connection-dependent audio-device availability.
 
-## [3.9.9Beta](https://github.com/hbashton/DS4Windows/releases/tag/3.9.9Beta) — 2026-05-31
+## [3.9.9Beta](https://github.com/hbashton/DS4Windows/releases/tag/3.9.9Beta) - 2026-05-31
 
 ### Added
 
