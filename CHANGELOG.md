@@ -3,6 +3,20 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.28](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.28) — 2026-10-16
+
+### Improved
+
+- Tidy Nintendo Switch 2 setup with left-aligned discovery results, wrapping controller names and pairing selectors, and consistent spacing around the join action.
+- Reorganize Nintendo Options with clearer section headings, aligned button-choice tiles and three steps for assigning second actions. Refine spacing throughout in both themes and remove unused space below dynamic trigger-rumble settings.
+- Give the Advanced DS4 Trigger Output Mode row more separation from the checkbox above it.
+- Simplify release downloads to seven uploaded files by grouping licences, notices and build information into one release-information ZIP. Keep both matching source archives, checksums and the updater build record separately available.
+- Refresh the README, organize inherited release history, and update notices and contributor credits.
+
+### Fixed
+
+- Enforce the VIIPER readiness-probe deadline during synchronous I/O so an unresponsive probe cannot exceed its startup allowance.
+
 ## [5.0.27](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.27) â€” 2026-10-15
 
 ### Fixed
