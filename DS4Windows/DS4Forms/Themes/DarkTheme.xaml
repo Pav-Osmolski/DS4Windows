@@ -853,9 +853,9 @@
 
                         <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Slide">
                             <Border BorderThickness="1" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                            Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
+                                            Background="{TemplateBinding Background}" BorderBrush="#2054A0">
                                 <ScrollViewer Style="{DynamicResource BridgeDropDownScrollViewerStyle}">
-                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0,5,0,5"/>
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
                                 </ScrollViewer>
                             </Border>
                         </Popup>
