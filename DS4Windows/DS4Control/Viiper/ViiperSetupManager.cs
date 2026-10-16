@@ -3097,10 +3097,11 @@ namespace DS4Windows
                     ReceiveTimeout = 1000,
                 };
 
-                // Bound the whole connection, including a trickled auth reply,
-                // rather than resetting the budget after each successful byte.
-                using var totalDeadline = new CancellationTokenSource(
-                    Math.Clamp(totalTimeoutMilliseconds, 1, 3000));
+                int budgetMilliseconds = Math.Clamp(totalTimeoutMilliseconds, 1, 3000);
+                long probeStarted = TimeProvider.System.GetTimestamp();
+                // Keep cancellation as a backstop. Synchronous reads also enforce
+                // the deadline because timer callbacks can wait behind busy workers.
+                using var totalDeadline = new CancellationTokenSource(budgetMilliseconds);
                 using var cancelTransport = totalDeadline.Token.Register(() =>
                 {
                     try { tcp.Dispose(); } catch (ObjectDisposedException) { }
@@ -3126,7 +3127,8 @@ namespace DS4Windows
                     }
                 }
 
-                NetworkStream transport = tcp.GetStream();
+                using var transport = new ViiperProbeDeadlineStream(tcp.GetStream(),
+                    probeStarted, budgetMilliseconds);
                 phase = authenticated ? "Authenticate" : "OpenStream";
                 using Stream stream = authenticated
                     ? ViiperAuthentication.Authenticate(transport) : transport;
@@ -3138,11 +3140,10 @@ namespace DS4Windows
                 int total = 0;
                 Stopwatch deadline = Stopwatch.StartNew();
                 phase = "ReadPing";
+                transport.LimitRemainingTime(1000);
                 while (total < buffer.Length &&
                        deadline.ElapsedMilliseconds < 1000)
                 {
-                    transport.ReadTimeout = Math.Max(1,
-                        1000 - (int)deadline.ElapsedMilliseconds);
                     int read = stream.Read(buffer, total,
                         buffer.Length - total);
                     if (read <= 0)
