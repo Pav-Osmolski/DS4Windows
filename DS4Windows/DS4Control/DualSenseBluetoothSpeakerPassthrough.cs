@@ -2955,6 +2955,10 @@ namespace DS4Windows
                           $"hapticsQueueDepth={device.BluetoothAudioPacerRealtimeHapticsQueueDepth} " +
                           $"hapticsQueueHighWater={device.BluetoothAudioPacerRealtimeHapticsQueueHighWater} " +
                           $"hapticsQueueAgeMaxMs={device.BluetoothAudioPacerRealtimeHapticsMaximumQueueAgeMilliseconds:F2} " +
+                          $"hapticsRetired={device.BluetoothAudioPacerRealtimeHapticsRetiredBlocks} " +
+                          $"hapticsRecoveries={device.BluetoothAudioPacerRealtimeHapticsRecoveries} " +
+                          $"hapticsProducerWaitMaxMs={device.BluetoothAudioPacerRealtimeHapticsProducerWaitMaximumMilliseconds:F2} " +
+                          $"hapticsLatencyLimitMs={DualSenseRealtimeHapticsSharedRing.MaximumLatencyMilliseconds} " +
                           $"hapticsPresented={device.BluetoothAudioPacerRealtimeHapticsPresentedCount} " +
                           $"pacerError='{device.BluetoothAudioPacerLastError}' " +
                         $"speakerWrites={device.BluetoothCombinedSpeakerReportsWritten} " +

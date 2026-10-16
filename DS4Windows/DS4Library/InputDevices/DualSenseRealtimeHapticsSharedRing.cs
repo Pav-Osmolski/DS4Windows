@@ -7,16 +7,23 @@ using System.Threading;
 namespace DS4Windows.InputDevices
 {
     /// <summary>
-    /// One lossless single-producer/single-consumer ring shared by the main
+    /// One single-producer/single-consumer ring shared by the main
     /// process and the isolated physical HID writer. A slot remains owned by
     /// the consumer until the corresponding HID write is accepted, so retrying
-    /// a saturated write cannot duplicate, replace, or reorder tactile media.
+    /// a briefly saturated write cannot duplicate or reorder tactile media.
+    /// Sustained overload retires obsolete media, never controller commands.
     /// </summary>
     internal sealed class DualSenseRealtimeHapticsSharedRing : IDisposable
     {
         internal const int Version = 2;
         internal const int DefaultCapacity = 64;
         internal const int PayloadLength = 64;
+        internal const int MaximumLatencyMilliseconds = 250;
+        internal const int RecoveryTargetMilliseconds = 50;
+        private static readonly long MaximumLatencyTicks =
+            Stopwatch.Frequency * MaximumLatencyMilliseconds / 1000;
+        private static readonly long RecoveryTargetTicks =
+            Stopwatch.Frequency * RecoveryTargetMilliseconds / 1000;
 
         private const int Magic = 0x48523444; // "D4RH"
         private const long MagicOffset = 0;
@@ -25,6 +32,12 @@ namespace DS4Windows.InputDevices
         private const long PayloadLengthOffset = 12;
         private const long WriteSequenceOffset = 16;
         private const long ReadSequenceOffset = 24;
+        // Previously reserved header space; the slot layout and protocol stay
+        // compatible. Each counter has exactly one process writing it.
+        private const long RetiredBlocksOffset = 32;
+        private const long RecoveriesOffset = 40;
+        private const long RejectedOldInputOffset = 48;
+        private const long ProducerWaitMaximumTicksOffset = 56;
         private const int HeaderLength = 64;
 
         private const int SlotPublishedSequenceOffset = 0;
@@ -47,6 +60,8 @@ namespace DS4Windows.InputDevices
         private bool prepared;
         private long preparedSequence;
         private long preparedEnqueuedQpc;
+        private long preparedExpiryQpc;
+        private bool recovering;
         private long committedSequence;
         private long committedEnqueuedQpc;
         private bool hasReceivedGeneration;
@@ -157,6 +172,11 @@ namespace DS4Windows.InputDevices
         }
         internal int MaximumQueueDepth => maximumQueueDepth;
         internal long MaximumQueueAgeTicks => maximumQueueAgeTicks;
+        internal long RetiredBlocks => ReadDiagnosticCounter(RetiredBlocksOffset) +
+            ReadDiagnosticCounter(RejectedOldInputOffset);
+        internal long RecoveryCount => ReadDiagnosticCounter(RecoveriesOffset);
+        internal long ProducerWaitMaximumTicks =>
+            ReadDiagnosticCounter(ProducerWaitMaximumTicksOffset);
         internal long PresentedCount => presentedCount;
 
         internal static DualSenseRealtimeHapticsSharedRing CreateOwner(
@@ -189,11 +209,25 @@ namespace DS4Windows.InputDevices
                     nameof(source));
             }
 
+            long waitStarted = 0;
             while (Volatile.Read(ref disposed) == 0 &&
                 !stopRequested.WaitOne(0))
             {
                 lock (producerLock)
                 {
+                    long now = Stopwatch.GetTimestamp();
+                    if (waitStarted != 0)
+                        view.Write(ProducerWaitMaximumTicksOffset, Math.Max(
+                            view.ReadInt64(ProducerWaitMaximumTicksOffset),
+                            now - waitStarted));
+                    if (waitStarted != 0 && now - waitStarted > MaximumLatencyTicks)
+                    {
+                        view.Write(RejectedOldInputOffset,
+                            view.ReadInt64(RejectedOldInputOffset) + 1);
+                        // Accepted disposition: retrying these obsolete bytes
+                        // would move their timestamp forward and defeat recovery.
+                        return true;
+                    }
                     long writeSequence = view.ReadInt64(WriteSequenceOffset);
                     long readSequence = view.ReadInt64(ReadSequenceOffset);
                     if (writeSequence - readSequence < capacity)
@@ -221,9 +255,9 @@ namespace DS4Windows.InputDevices
                     }
                 }
 
-                // Backpressure is lossless. A lifecycle stop is the only
-                // condition that aborts publication; no full-ring frame is
-                // replaced or retired for being late.
+                if (waitStarted == 0) waitStarted = Stopwatch.GetTimestamp();
+                // Keep short interruptions lossless, but do not block a
+                // source indefinitely behind media which is already too old.
                 if (WaitHandle.WaitAny(producerWaitHandles, 20) == 1)
                 {
                     return false;
@@ -252,7 +286,7 @@ namespace DS4Windows.InputDevices
                     return true;
                 }
 
-                if (empty && hasReceivedGeneration)
+                if ((empty || recovering) && hasReceivedGeneration)
                     Silence(report);
                 return false;
             }
@@ -283,10 +317,17 @@ namespace DS4Windows.InputDevices
                 if (preparedEnqueuedQpc > 0)
                     maximumQueueAgeTicks = Math.Max(maximumQueueAgeTicks,
                         Math.Max(0, nowQpc - preparedEnqueuedQpc));
-                return true;
+                if (!IsTooOld(nowQpc, preparedEnqueuedQpc, MaximumLatencyTicks) &&
+                    !IsExpired(nowQpc, preparedExpiryQpc))
+                    return true;
+                BeginRecovery();
+                Retire(preparedSequence);
+                prepared = false;
+                Array.Clear(preparedPayload, 0, preparedPayload.Length);
             }
 
-            while (true)
+            // A continuously publishing peer cannot monopolize this thread.
+            for (int scanned = 0; scanned <= capacity; scanned++)
             {
                 long readSequence = view.ReadInt64(ReadSequenceOffset);
                 long writeSequence = view.ReadInt64(WriteSequenceOffset);
@@ -298,6 +339,7 @@ namespace DS4Windows.InputDevices
                 }
                 if (readSequence >= writeSequence)
                 {
+                    recovering = false;
                     empty = true;
                     return false;
                 }
@@ -328,22 +370,63 @@ namespace DS4Windows.InputDevices
                     continue;
                 }
 
-                view.ReadArray(slotOffset + SlotPayloadOffset,
-                    preparedPayload, 0, PayloadLength);
                 long queuedAt = view.ReadInt64(slotOffset +
                     SlotEnqueuedQpcOffset);
+                long expiry = view.ReadInt64(slotOffset + SlotExpiryQpcOffset);
                 if (queuedAt > 0)
                 {
                     maximumQueueAgeTicks = Math.Max(
                         maximumQueueAgeTicks,
                         Math.Max(0, nowQpc - queuedAt));
                 }
+                if (IsTooOld(nowQpc, queuedAt, MaximumLatencyTicks) ||
+                    IsExpired(nowQpc, expiry))
+                    BeginRecovery();
+                if (recovering && (IsTooOld(nowQpc, queuedAt, RecoveryTargetTicks) ||
+                    IsExpired(nowQpc, expiry)))
+                {
+                    Retire(readSequence);
+                    continue;
+                }
+                recovering = false;
+                view.ReadArray(slotOffset + SlotPayloadOffset,
+                    preparedPayload, 0, PayloadLength);
                 preparedSequence = readSequence;
                 preparedEnqueuedQpc = queuedAt;
+                preparedExpiryQpc = expiry;
                 prepared = true;
                 hasReceivedGeneration = true;
                 return true;
             }
+            empty = true;
+            return false;
+        }
+
+        private long ReadDiagnosticCounter(long offset)
+        {
+            if (Volatile.Read(ref disposed) != 0) return 0;
+            try { return view.ReadInt64(offset); }
+            catch (ObjectDisposedException) { return 0; }
+        }
+
+        private static bool IsTooOld(long now, long queuedAt, long budget) =>
+            queuedAt > 0 && now >= queuedAt && now - queuedAt > budget;
+
+        private static bool IsExpired(long now, long expiry) =>
+            expiry > 0 && expiry != long.MaxValue && now > expiry;
+
+        private void BeginRecovery()
+        {
+            if (!recovering)
+                view.Write(RecoveriesOffset, view.ReadInt64(RecoveriesOffset) + 1);
+            recovering = true;
+            hasReceivedGeneration = true;
+        }
+
+        private void Retire(long sequence)
+        {
+            view.Write(RetiredBlocksOffset, view.ReadInt64(RetiredBlocksOffset) + 1);
+            AdvanceRead(sequence);
         }
 
         internal void CommitPrepared()
@@ -372,6 +455,8 @@ namespace DS4Windows.InputDevices
                 acceptedGeneration = generation;
                 prepared = false;
                 preparedEnqueuedQpc = 0;
+                preparedExpiryQpc = 0;
+                recovering = false;
                 committedSequence = 0;
                 committedEnqueuedQpc = 0;
                 Array.Clear(preparedPayload, 0, preparedPayload.Length);

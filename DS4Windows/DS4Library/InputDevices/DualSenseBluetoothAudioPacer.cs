@@ -703,6 +703,10 @@ namespace DS4Windows.InputDevices
         public double HelperRealtimeHapticsMaximumQueueAgeMilliseconds =>
             Interlocked.Read(ref helperRealtimeHapticsMaximumQueueAgeTicks) *
             1000.0 / Stopwatch.Frequency;
+        public long HelperRealtimeHapticsRetiredBlocks => realtimeHaptics?.RetiredBlocks ?? 0;
+        public long HelperRealtimeHapticsRecoveries => realtimeHaptics?.RecoveryCount ?? 0;
+        public double HelperRealtimeHapticsProducerWaitMaximumMilliseconds =>
+            (realtimeHaptics?.ProducerWaitMaximumTicks ?? 0) * 1000.0 / Stopwatch.Frequency;
         public long HelperRealtimeHapticsPresentedCount =>
             Interlocked.Read(ref helperRealtimeHapticsPresentedCount);
         public long ClearedReports => Interlocked.Read(ref clearedReports);
@@ -1385,7 +1389,7 @@ namespace DS4Windows.InputDevices
                 generation = realtimeHapticsGeneration;
             }
 
-            // Publishing may losslessly wait for the bounded media consumer.
+            // Publishing preserves brief waits, with a bounded overload budget.
             // Capture the generation under stateLock, then release it before
             // touching that independent scheduling plane.
             return realtimeHaptics.Publish(latestCombinedReport,
@@ -4768,8 +4772,8 @@ namespace DS4Windows.InputDevices
                                 // mutable state bit. Bind the oldest live
                                 // generation to this exact physical media
                                 // interval after template/state composition.
-                                // A rejected HID write retains both this
-                                // report and this haptics generation.
+                                // A rejected HID write retains this report. The rear
+                                // block can be rebased if its age budget expires.
                                 bool realRearBlock = realtimeHaptics.PrepareForPresentation(
                                     item.Report, presentedAt);
                                 pcmTakesOverSettingsRumble = realRearBlock &&

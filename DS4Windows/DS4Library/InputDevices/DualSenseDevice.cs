@@ -1306,6 +1306,18 @@ namespace DS4Windows.InputDevices
             }
         }
 
+        public long BluetoothAudioPacerRealtimeHapticsRetiredBlocks
+        {
+            get { lock (bluetoothAudioPacerLock) return bluetoothAudioPacer?.HelperRealtimeHapticsRetiredBlocks ?? 0; }
+        }
+        public long BluetoothAudioPacerRealtimeHapticsRecoveries
+        {
+            get { lock (bluetoothAudioPacerLock) return bluetoothAudioPacer?.HelperRealtimeHapticsRecoveries ?? 0; }
+        }
+        public double BluetoothAudioPacerRealtimeHapticsProducerWaitMaximumMilliseconds
+        {
+            get { lock (bluetoothAudioPacerLock) return bluetoothAudioPacer?.HelperRealtimeHapticsProducerWaitMaximumMilliseconds ?? 0; }
+        }
         public long BluetoothAudioPacerRealtimeHapticsPresentedCount
         {
             get
