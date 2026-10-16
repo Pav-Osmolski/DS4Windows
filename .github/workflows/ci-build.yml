@@ -91,6 +91,10 @@ jobs:
         shell: pwsh
         run: .\utils\test-release-identity.ps1
 
+      - name: Test release information archive and historical compatibility
+        shell: pwsh
+        run: .\utils\test-release-information.ps1
+
       - name: Test renamed executable setup process guards
         shell: powershell
         run: .\utils\test-renamed-executable-setup.ps1

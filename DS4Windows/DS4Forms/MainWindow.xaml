@@ -790,38 +790,41 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
-                                <Expander Header="Nintendo Switch 2 controllers" IsExpanded="False" Margin="0,6,0,0">
+                                <Expander Header="Nintendo Switch 2 controllers" IsExpanded="False" Margin="0,6,0,0" HorizontalContentAlignment="Stretch">
                                     <Border Style="{DynamicResource BridgeCardStyle}" Margin="0,12,0,0">
-                                        <StackPanel>
-                                            <TextBlock Text="Hold the controller’s sync button until its lights flash, then select it below. Controllers you have already added reconnect when you wake them." TextWrapping="Wrap" Opacity="0.8" Margin="0,0,0,8" />
+                                        <StackPanel x:Name="switch2SetupContent">
+                                            <TextBlock Text="Bluetooth discovery" Style="{DynamicResource BridgeSectionTitleStyle}" />
+                                            <TextBlock Text="Hold a new controller’s sync button until its lights flash, then refresh and select it below. Wake a controller you have already associated to reconnect." Style="{DynamicResource BridgeSectionDescriptionStyle}" />
                                             <CheckBox x:Name="switch2AutomaticJoyConPairingCheck" Content="Joy-Cons are automatically paired" IsChecked="{Binding AutomaticJoyConPairing}" Click="Switch2AutomaticJoyConPairingCheck_Click" ToolTip="Join available left and right Joy-Cons into one controller. A Joy-Con on its own still works separately." Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,0,0,10" />
-                                            <TextBlock x:Name="switch2DiscoveryStatusText" Text="Refresh to check Bluetooth discovery status." TextWrapping="Wrap" Margin="0,0,0,8" />
-                                            <ListBox x:Name="switch2AssociationCandidatesList" MinWidth="420" MaxWidth="520" Height="88" DisplayMemberPath="Label" SelectionChanged="Switch2AssociationCandidatesList_SelectionChanged" />
-                                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                            <TextBlock x:Name="switch2DiscoveryStatusText" Text="Refresh to check Bluetooth discovery status." TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,4,0,12" />
+                                            <TextBlock Text="Available controllers" Style="{DynamicResource BridgeSettingsFieldLabelStyle}" />
+                                            <ListBox x:Name="switch2AssociationCandidatesList" Width="520" MaxWidth="{Binding ActualWidth, ElementName=switch2SetupContent}" Height="112" HorizontalAlignment="Left" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="Switch2AssociationCandidatesList_SelectionChanged">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Label}" TextWrapping="Wrap" Margin="6,5" />
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                            <WrapPanel Margin="0,12,0,0">
                                                 <Button x:Name="switch2AssociationRefreshBtn" Content="Refresh" Click="Switch2AssociationRefreshBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,10,10" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                                 <Button x:Name="switch2AssociateBtn" Content="Add controller" IsEnabled="False" Margin="0,0,10,10" Click="Switch2AssociateBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                            </StackPanel>
+                                            </WrapPanel>
                                             <TextBlock x:Name="switch2AssociationStatusText" TextWrapping="Wrap" Margin="0,8,0,0" />
-                                            <Separator Margin="0,12,0,10" />
-                                            <TextBlock Text="Join Joy-Cons" FontWeight="SemiBold" Margin="0,0,0,6" />
-                                            <TextBlock Text="Each Joy-Con works on its own. To join two, select them here or use their link buttons on the Controllers tab." TextWrapping="Wrap" Opacity="0.8" Margin="0,0,0,8" />
+                                            <Separator Margin="0,16,0,16" />
+                                            <TextBlock Text="Join Joy-Cons" Style="{DynamicResource BridgeSectionTitleStyle}" />
+                                            <TextBlock Text="Each Joy-Con works on its own. To join two, select them here or use their link buttons on the Controllers tab." Style="{DynamicResource BridgeSectionDescriptionStyle}" />
                                             <TextBlock x:Name="switch2JoyConCandidateStatusText" Text="No unmatched Joy-Con 2 connections have been observed yet." TextWrapping="Wrap" Margin="0,0,0,8" />
-                                            <Grid MaxWidth="520" HorizontalAlignment="Left">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="250" />
-                                                    <ColumnDefinition Width="20" />
-                                                    <ColumnDefinition Width="250" />
-                                                </Grid.ColumnDefinitions>
-                                                <StackPanel Grid.Column="0">
-                                                    <TextBlock Text="Left Joy-Con 2" Margin="0,0,0,3" />
-                                                    <ComboBox x:Name="switch2JoyConLeftCandidates" MinWidth="250" IsEnabled="False" DisplayMemberPath="Label" SelectionChanged="Switch2JoyConCandidates_SelectionChanged" Style="{DynamicResource BridgeSettingsComboBoxStyle}" />
+                                            <WrapPanel HorizontalAlignment="Left">
+                                                <StackPanel Width="240" Margin="0,0,16,12">
+                                                    <TextBlock Text="Left Joy-Con 2" Style="{DynamicResource BridgeSettingsFieldLabelStyle}" />
+                                                    <ComboBox x:Name="switch2JoyConLeftCandidates" IsEnabled="False" DisplayMemberPath="Label" SelectionChanged="Switch2JoyConCandidates_SelectionChanged" Style="{DynamicResource BridgeSettingsComboBoxStyle}" />
                                                 </StackPanel>
-                                                <StackPanel Grid.Column="2">
-                                                    <TextBlock Text="Right Joy-Con 2" Margin="0,0,0,3" />
-                                                    <ComboBox x:Name="switch2JoyConRightCandidates" MinWidth="250" IsEnabled="False" DisplayMemberPath="Label" SelectionChanged="Switch2JoyConCandidates_SelectionChanged" Style="{DynamicResource BridgeSettingsComboBoxStyle}" />
+                                                <StackPanel Width="240" Margin="0,0,0,12">
+                                                    <TextBlock Text="Right Joy-Con 2" Style="{DynamicResource BridgeSettingsFieldLabelStyle}" />
+                                                    <ComboBox x:Name="switch2JoyConRightCandidates" IsEnabled="False" DisplayMemberPath="Label" SelectionChanged="Switch2JoyConCandidates_SelectionChanged" Style="{DynamicResource BridgeSettingsComboBoxStyle}" />
                                                 </StackPanel>
-                                            </Grid>
-                                            <Button x:Name="switch2CreateJoyConPairBtn" Content="Join selected Joy-Con 2 pair" IsEnabled="False" HorizontalAlignment="Left" Margin="0,0,10,10" Click="Switch2CreateJoyConPairBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" VerticalAlignment="Center" />
+                                            </WrapPanel>
+                                            <Button x:Name="switch2CreateJoyConPairBtn" Content="Join selected Joy-Con 2 pair" IsEnabled="False" HorizontalAlignment="Left" Margin="0,0,0,0" Click="Switch2CreateJoyConPairBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" VerticalAlignment="Center" />
                                             <StackPanel Orientation="Horizontal" Margin="0,6,0,0" Visibility="Collapsed">
                                                 <Button x:Name="switch2UseLeftJoyConSeparatelyBtn" Content="Use selected left separately" IsEnabled="False" Click="Switch2UseLeftJoyConSeparatelyBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,10,10" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                                 <Button x:Name="switch2UseRightJoyConSeparatelyBtn" Content="Use selected right separately" IsEnabled="False" Margin="0,0,10,10" Click="Switch2UseRightJoyConSeparatelyBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" />
