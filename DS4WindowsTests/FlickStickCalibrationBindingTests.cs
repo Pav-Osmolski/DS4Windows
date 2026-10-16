@@ -11,6 +11,7 @@ namespace DS4WindowsTests;
 public class FlickStickCalibrationBindingTests
 {
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0025", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void CalibrationActionsAppendAfterEveryExistingOutputId()
     {
         string[] previousNames =

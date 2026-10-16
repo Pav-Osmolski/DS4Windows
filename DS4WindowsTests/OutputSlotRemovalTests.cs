@@ -228,7 +228,7 @@ public sealed class OutputSlotRemovalTests
         finally { manager.Stop(); }
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PhysicalRetirementRetainsInputOwnershipWhenVirtualTeardownFails(bool failFeedback)

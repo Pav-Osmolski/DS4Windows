@@ -680,6 +680,7 @@ namespace DS4Windows.Tests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void NativeUniformCadencePrimeDoesNotDrain()
         {
             // Model the native transport's one produced and consumed frame each 32/3 ms.
@@ -769,6 +770,7 @@ namespace DS4Windows.Tests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void PairedSchedulerDoesNotReplayLegacyReserveTransfer()
         {
             const long qpcFrequency = 10_000_000;
@@ -1053,6 +1055,7 @@ namespace DS4Windows.Tests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void ProducerUsesOneTimePrimeAndSingleFrameSteadyLead()
         {
             Assert.AreEqual(1,

@@ -11,7 +11,7 @@ permissions:
 jobs:
   handle-label:
     if: ${{ contains(fromJSON('["duplicate", "out-of-scope", "fix-shipped"]'), github.event.label.name) }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Close duplicate report
         if: ${{ github.event.label.name == 'duplicate' }}

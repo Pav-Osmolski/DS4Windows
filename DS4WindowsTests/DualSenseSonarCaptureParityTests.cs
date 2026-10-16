@@ -70,6 +70,7 @@ public class DualSenseSonarCaptureParityTests
     }
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void SharedSonarBackendRetainsShortPollingAndFloatSampleInterpretation()
     {
         Assert.AreEqual(4, DualShock4SoftwareRouterLoopbackCapture.RequestedBufferMilliseconds);

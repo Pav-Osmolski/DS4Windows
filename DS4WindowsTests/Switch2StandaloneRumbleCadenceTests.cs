@@ -82,6 +82,7 @@ public sealed class Switch2StandaloneRumbleCadenceTests
     [DataRow(Switch2ControllerModel.JoyCon2Left, true, 15)]
     [DataRow(Switch2ControllerModel.JoyCon2Right, true, 15)]
     [DataRow(Switch2ControllerModel.ProController2, false, 15)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void CadenceSelectionDoesNotAccelerateJoinedOrProOutput(
         Switch2ControllerModel model, bool joined, int expected)
     {

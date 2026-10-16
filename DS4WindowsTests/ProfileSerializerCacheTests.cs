@@ -32,6 +32,7 @@ public class ProfileSerializerCacheTests
     }
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentionally protects cached serializer identity if its implementation changes.")]
     public void Serializer_ReturnsSameInstance()
     {
         Assert.IsNotNull(ProfileDTO.Serializer);
@@ -41,6 +42,7 @@ public class ProfileSerializerCacheTests
     [TestMethod]
     public void RepeatedTryPrepare_DoesNotGrowAssemblyCount()
     {
+        var serializer = ProfileDTO.Serializer;
         string path = Path.Combine(folder, "Aim.xml");
         File.WriteAllText(path, CreateSavedProfileXml(
             "custom", "0.72, 0.26, 1.00, 1.00"), Encoding.UTF8);
@@ -58,6 +60,7 @@ public class ProfileSerializerCacheTests
             Prepare();
         int after = AppDomain.CurrentDomain.GetAssemblies().Length;
 
+        Assert.AreSame(serializer, ProfileDTO.Serializer, "Profile preparation must reuse the cached serializer.");
         Assert.AreEqual(before, after, "TryPrepare loaded new assemblies per call.");
     }
 

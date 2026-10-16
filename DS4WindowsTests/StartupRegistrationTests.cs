@@ -40,10 +40,10 @@ public class StartupRegistrationTests
     [DataRow(false)]
     [DataRow(true)]
     public void PassiveRepairCannotBypassDeferredSetupEvenWhenStartupIsRequested(
-        bool actualEnabled)
+        bool expectedEnabled)
     {
         Assert.IsFalse(StartupRegistrationPolicy.ShouldRepairTask(
-            exists: true, enabled: actualEnabled, owned: true,
+            exists: true, enabled: expectedEnabled, owned: true,
             matchesCurrentConfiguration: false, requested: true, setupDeferred: true));
     }
 
@@ -120,13 +120,13 @@ public class StartupRegistrationTests
     [DataRow(false, true, false, "AdministratorRequired", true, true)]
     [DataRow(true, false, true, "", false, false)]
     public void RequestedStartupUsesExplicitChoiceThenSetupThenObservedState(
-        bool actualEnabled, bool? userRequested, bool? setupRequested,
+        bool expectedEnabled, bool? userRequested, bool? setupRequested,
         string deferredReason, bool expectedRequested, bool expectedPending)
     {
         StartupRegistrationState state = StartupRegistrationPolicy.ResolveState(
-            false, actualEnabled, userRequested, setupRequested, deferredReason);
+            false, expectedEnabled, userRequested, setupRequested, deferredReason);
 
-        Assert.AreEqual(actualEnabled, state.Enabled);
+        Assert.AreEqual(expectedEnabled, state.Enabled);
         Assert.AreEqual(expectedRequested, state.RunAtStartupRequested);
         Assert.AreEqual(expectedPending, state.Pending);
     }

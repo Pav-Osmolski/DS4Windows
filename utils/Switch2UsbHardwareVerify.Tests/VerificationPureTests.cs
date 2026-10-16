@@ -20,6 +20,8 @@ public sealed class VerificationPureTests
         new("87654321-4321-4321-4321-ba0987654321");
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentionally pins safety bounds and the closed live-mutation gate.")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0025", Justification = "Intentionally pins safety bounds and the closed live-mutation gate.")]
     public void FixedPlanIsBoundedAndValid()
     {
         Assert.IsTrue(VerificationPlan.TryValidate(out string failure),
@@ -52,6 +54,7 @@ public sealed class VerificationPureTests
     }
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentionally protects independent LED cleanup budget headroom.")]
     public void HapticAndLedCleanupBudgetsAreIndependent()
     {
         using CancellationTokenSource haptic =

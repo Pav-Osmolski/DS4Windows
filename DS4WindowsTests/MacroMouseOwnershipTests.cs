@@ -50,7 +50,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void MappedHoldSurvivesMacroPressAndRelease(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -69,7 +69,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void MacroHoldSurvivesMappedPressAndRelease(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -84,7 +84,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void OverlappingMacroOwnersReleaseOnlyTheirOwnHold(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -99,7 +99,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void ActualMacroCompletionCleanupCannotReleaseMappedOwner(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -113,7 +113,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void ActualMacroCompletionCleanupCannotReleaseAnotherMacro(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -126,7 +126,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void ActualMacroCompletionReleasesItsUnsharedButtonExactlyOnce(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -137,7 +137,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void KeepKeyStateIsClaimedByNextMacroAndCanBeFullyReleased(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -152,7 +152,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void RepeatedKeptMacrosDoNotAccumulateUnreachableOwners(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -168,7 +168,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void OverlappingKeptCompletionsCoalesceOnlyTheirRetainedOwner(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -185,7 +185,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void ClaimingRetainedHoldDoesNotStealAnotherActiveMacroOwner(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -204,7 +204,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void RetainedOwnersFromDifferentDevicesAreReleasedIndependently(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -221,7 +221,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void RetainedMacroSurvivesOrdinaryBindingRelease(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -235,7 +235,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void OrdinaryBindingSurvivesRetainedMacroClaimAndRelease(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -250,7 +250,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void NeutralRetiresActiveMacroAndRejectsItsDelayedSteps(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -276,7 +276,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void NeutralRetiresMacroRegisteredBeforeItsFirstMouseStep(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -295,7 +295,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void QueuedMacroFromRetiredEpochCannotClaimSuccessorRetainedHold(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -317,7 +317,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void NeutralClearsRetainedMacroWithoutSuppressingNextOrdinaryPress(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -336,7 +336,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void NeutralPreservesOtherDeviceMacroAndOrdinaryOwners(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -356,7 +356,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void NeutralClearsRetainedOwnersOnlyForItsDevice(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -371,7 +371,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void MacroPairPublishesDownBeforeUpToBufferedBackend(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -386,7 +386,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void BackendReplacementReprojectsMappedHoldAndLaterRelease(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -403,7 +403,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void BackendReplacementPreservesUnionOfActiveRetainedAndMappedOwners(bool faker, int button)
     {
         using var fixture = new Fixture(faker);
@@ -425,7 +425,7 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ButtonCases), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ButtonCases))]
     public void BackendReplacementRollbackDoesNotReplayToggleOnOriginalBackend(bool faker, int button)
     {
         using var fixture = new Fixture(faker);

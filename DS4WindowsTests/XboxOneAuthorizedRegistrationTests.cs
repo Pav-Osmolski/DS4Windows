@@ -105,7 +105,7 @@ public sealed class XboxOneAuthorizedRegistrationTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(InvalidReceipts), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(InvalidReceipts))]
     public void InvalidReceiptNeverCreatesCleanupAuthority(string json)
     {
         IOException error = Assert.ThrowsExactly<IOException>(() => Parse(json));
@@ -169,7 +169,7 @@ public sealed class XboxOneAuthorizedRegistrationTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(InvalidActivationResponses), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(InvalidActivationResponses))]
     public void ActivationAcknowledgementCannotBindForeignOrAmbiguousIdentity(string json)
     {
         using JsonDocument document = JsonDocument.Parse(json);

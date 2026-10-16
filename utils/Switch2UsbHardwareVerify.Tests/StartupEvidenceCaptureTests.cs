@@ -9,6 +9,7 @@ namespace DS4Windows.Switch2.Verification.Tests;
 public sealed class StartupEvidenceCaptureTests
 {
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentionally pins the nonexclusive HID sharing contract.")]
     public void PlanPinsOnlyTheClosedStartupAndLedRequests()
     {
         Assert.IsTrue(StartupEvidenceCapturePlan.TryValidate(out _));
