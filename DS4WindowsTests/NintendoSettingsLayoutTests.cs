@@ -35,7 +35,8 @@ public class NintendoSettingsLayoutTests
                     candidates.TranslatePoint(new Point(), setup).X, 1d, "Discovery results must align with the section's left edge.");
                 var join = (Button)setup.FindName("switch2CreateJoyConPairBtn");
                 var right = (ComboBox)setup.FindName("switch2JoyConRightCandidates");
-                Assert.IsTrue(join.TranslatePoint(new Point(), setup).Y >= right.TranslatePoint(new Point(0, right.ActualHeight), setup).Y + 12);
+                double pairGap = join.TranslatePoint(new Point(), setup).Y - right.TranslatePoint(new Point(0, right.ActualHeight), setup).Y;
+                Assert.IsTrue(pairGap >= 12 && pairGap <= 18, $"Pairing button gap must be 12–18px, got {pairGap}.");
                 CheckWidth(setup, width);
                 Save(setup, theme, width, "Nintendo-setup");
 
@@ -47,6 +48,16 @@ public class NintendoSettingsLayoutTests
                 foreach (ComboBox combo in Logical(editor).OfType<ComboBox>().Where(c => c.Items.Count > 0)) combo.SelectedIndex = 0;
                 Layout(editor, width, 840);
                 CheckWidth(editor, width);
+                var dynamicFeel = (CheckBox)editor.FindName("Switch2XboxImpulseDynamicFrequencyCheckBox");
+                var feedback = (Expander)editor.FindName("switch2FeedbackCard");
+                var fixedFeel = Logical(feedback).OfType<TextBlock>().Single(t => t.Text == "Fixed rumble feel:");
+                var fixedRow = (WrapPanel)LogicalTreeHelper.GetParent(fixedFeel);
+                dynamicFeel.IsChecked = true;
+                Layout(editor, width, 840);
+                Assert.AreEqual(Visibility.Collapsed, fixedRow.Visibility, "Unused rumble options must not reserve space.");
+                dynamicFeel.IsChecked = false;
+                Layout(editor, width, 840);
+                Assert.AreEqual(Visibility.Visible, fixedRow.Visibility, "Fixed rumble tuning must return when selected.");
                 TextBlock title = Logical(editor).OfType<TextBlock>().Single(t => t.Text == "Mouse on a desk");
                 Assert.AreEqual(((SolidColorBrush)editor.FindResource("ForegroundColor")).Color,
                     ((SolidColorBrush)title.Foreground).Color, "Section headings must remain readable in either theme.");
@@ -87,6 +98,7 @@ public class NintendoSettingsLayoutTests
                     preview.Children.Add(border);
                     preview.Measure(new Size(width, double.PositiveInfinity));
                     Layout(preview, width, preview.DesiredSize.Height);
+                    CheckSpacing(preview);
                     Save(preview, theme, width, name);
                 }
             }
@@ -116,6 +128,27 @@ public class NintendoSettingsLayoutTests
             Point at = control.TranslatePoint(new Point(), root);
             Assert.IsTrue(at.X >= -2 && at.X + control.ActualWidth <= width + 2,
                 $"{control.GetType().Name} {control.Name} extends beyond the {width}px page: {at.X}, {control.ActualWidth}.");
+        }
+    }
+
+    private static void CheckSpacing(FrameworkElement root)
+    {
+        foreach (StackPanel stack in Logical(root).OfType<StackPanel>().Where(s => s.Orientation == Orientation.Vertical))
+        {
+            var groups = stack.Children.OfType<FrameworkElement>().Select(child =>
+                Visuals(child).OfType<FrameworkElement>().Where(e => e.IsVisible && e.ActualHeight > 0 &&
+                    (e is TextBlock or Image or CheckBox or Button or ComboBox || e.GetType().Name.EndsWith("UpDown")))
+                .Select(e => new Rect(e.TranslatePoint(new Point(), root), e.RenderSize)).ToArray())
+                .Where(rects => rects.Length > 0).ToArray();
+            for (int i = 1; i < groups.Length; i++)
+            {
+                double gap = groups[i].Min(r => r.Top) - groups[i - 1].Max(r => r.Bottom);
+                Assert.IsTrue(gap <= 24.5, $"Nintendo vertical content gap exceeds 24px: {gap}, in {stack.Name}.");
+                var preceding = stack.Children.OfType<FrameworkElement>().Where(c => c.IsVisible && c.ActualHeight > 0).ToArray();
+                if (preceding.Length == groups.Length && preceding[i - 1] is TextBlock &&
+                    (preceding[i] is Control || Visuals(preceding[i]).OfType<Control>().Any()))
+                    Assert.IsTrue(gap <= 18.5, $"Text-to-control gap exceeds 18px: {gap}, after {((TextBlock)preceding[i - 1]).Text}.");
+            }
         }
     }
 
