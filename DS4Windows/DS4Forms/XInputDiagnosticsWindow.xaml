@@ -1,0 +1,101 @@
+<Window x:Class="DS4WinWPF.DS4Forms.XInputDiagnosticsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="XInput controller test" Width="860" Height="880"
+        MinWidth="720" MinHeight="480" WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False" Style="{DynamicResource WindowStyle}"
+        Background="{DynamicResource SurfaceBackgroundColor}"
+        Foreground="{DynamicResource ForegroundColor}">
+    <DockPanel Margin="24">
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+            <TextBlock Text="XInput controller test" FontSize="22" FontWeight="SemiBold"/>
+            <TextBlock Text="Press buttons, move the sticks or squeeze the triggers to find your controller."
+                       TextWrapping="Wrap" Margin="0,6,0,0" Foreground="{DynamicResource MutedForegroundColor}"/>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
+            <TextBlock Text="Xbox/XInput controllers only. Virtual DS4 and DualSense outputs do not appear here. These are Windows XInput slots, separate from DS4Windows controller and output slot numbers."
+                       TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}"/>
+            <TextBlock Text="Stick values: -32768 to 32767 (0 is centre). Triggers: 0 to 255. Readings update live; this is not a latency measurement."
+                       TextWrapping="Wrap" Margin="0,8,0,12" Foreground="{DynamicResource MutedForegroundColor}"/>
+            <Button Content="_Close" IsCancel="True" Click="Close_Click" MinWidth="90"
+                    HorizontalAlignment="Right" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
+        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <TextBlock Text="{Binding Error}" TextWrapping="Wrap" Margin="0,0,0,12">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Error}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <ItemsControl ItemsSource="{Binding Slots}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate><UniformGrid Columns="2"/></ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
+                                    CornerRadius="8" Padding="16" Margin="0,0,10,10"
+                                    Background="{DynamicResource RaisedBackgroundColor}">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Margin="0,5,0,12"
+                                               AutomationProperties.LiveSetting="Polite">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{DynamicResource MutedForegroundColor}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Connected}" Value="True">
+                                                        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"/>
+                                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <StackPanel IsEnabled="{Binding Connected}">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Opacity" Value="0.5"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBlock Text="Pressed buttons" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock Text="{Binding PressedButtons}" TextWrapping="Wrap" MinHeight="44" Margin="0,4,0,8"/>
+                                        <TextBlock Text="Left stick" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock Text="{Binding LeftStick}" FontFamily="Consolas" Margin="0,4,0,8"/>
+                                        <TextBlock Text="Right stick" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock Text="{Binding RightStick}" FontFamily="Consolas" Margin="0,4,0,12"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/><ColumnDefinition Width="12"/><ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="Left trigger" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                                <ProgressBar Foreground="{DynamicResource AccentColor}" Background="{DynamicResource SurfaceBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" Minimum="0" Maximum="255" Value="{Binding LeftTrigger, Mode=OneWay}" Height="8" Margin="0,6,0,4" AutomationProperties.Name="Left trigger"/>
+                                                <TextBlock Text="{Binding LeftTrigger, StringFormat={}{0}/255}"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2">
+                                                <TextBlock Text="Right trigger" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                                <ProgressBar Foreground="{DynamicResource AccentColor}" Background="{DynamicResource SurfaceBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" Minimum="0" Maximum="255" Value="{Binding RightTrigger, Mode=OneWay}" Height="8" Margin="0,6,0,4" AutomationProperties.Name="Right trigger"/>
+                                                <TextBlock Text="{Binding RightTrigger, StringFormat={}{0}/255}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
