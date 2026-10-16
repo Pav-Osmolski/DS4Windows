@@ -26,7 +26,7 @@ For dependency or SDK changes, follow [dependency maintenance](dependency-mainte
 3. Run **.NET Release** from that same commit/branch, entering the draft tag.
    The workflow creates a missing tag only when the draft target matches the
    selected commit. It builds the portable ZIP, installer, matching source
-   archives, notices, checksums and `RELEASE-BUILD.json` into the draft.
+   archives, a release-information ZIP, checksums and `RELEASE-BUILD.json` into the draft.
 4. Test those downloads. Existing release assets are never overwritten.
 5. Publish the tested draft with **Latest** selected. The publication workflow
    verifies the successful draft run, source identity and every recorded asset
@@ -48,3 +48,25 @@ The matching VIIPER corresponding-source ZIP is bundled offline and copied
 byte-for-byte into release records. The workflow checks its pinned hash and
 the public VIIPER tag commit; the backend draft can remain unpublished during
 combined hardware testing. See the [USB/IP upgrade guide](usbip-upgrade.md).
+
+## Download files
+
+Future releases upload seven assets: the installer, portable ZIP, matching
+DS4Windows and VIIPER source ZIPs, `DS4Windows-<version>-RELEASE-INFO.zip`,
+`SHA256SUMS.txt` and `RELEASE-BUILD.json`. GitHub also supplies its own automatic
+source downloads; these are separate from the seven uploaded assets.
+
+The release-information ZIP contains the licence, VIIPER licences, notices,
+build notes, provenance and `SOURCE-REVISIONS.txt` previously uploaded separately.
+The portable and installed distributions retain their existing bundled notices
+and VIIPER source. Both matching source archives remain individually downloadable.
+The build receipt records the information ZIP and each file inside it, and
+publication checks their hashes and exact membership. Its schema remains 1;
+the updater continues to use the standalone receipt and package digest.
+Existing published releases retain their original assets and verification path.
+
+Use this wording in release notes, without duplicating the asset links:
+
+- **Most users:** download the `Setup_x64.exe` installer.
+- **Portable use:** download the `_x64.zip` package.
+- The remaining files contain source code, licensing information and verification records.

@@ -324,14 +324,24 @@ jobs:
         }
         $noticeNames = @('VIIPER-0.1.11-LICENSES.txt', 'VIIPER-0.1.11-PROVENANCE.txt',
           'VIIPER-0.1.11-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md', 'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')
-        foreach ($name in $noticeNames) { Copy-Item -LiteralPath (Join-Path $publish "extras\$name") -Destination $records }
+        $infoDirectory = Join-Path $records 'release-info'
+        New-Item -ItemType Directory -Path $infoDirectory | Out-Null
+        foreach ($name in $noticeNames) { Copy-Item -LiteralPath (Join-Path $publish "extras\$name") -Destination $infoDirectory }
         $signing = if ($env:UNSIGNED_RELEASE -ceq 'true') { 'Unsigned release (no Authenticode signature)' } else { 'Required Authenticode signing verified' }
         @("DS4Windows release: $env:RELEASE_TAG", "DS4Windows source commit: $sourceCommit",
           "VIIPER source commit: $brokerCommit", "VIIPER binary SHA-256: $brokerHash",
           "Signing: $signing", "GitHub Actions run: $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID") |
-          Set-Content -LiteralPath (Join-Path $records 'SOURCE-REVISIONS.txt') -Encoding utf8
+          Set-Content -LiteralPath (Join-Path $infoDirectory 'SOURCE-REVISIONS.txt') -Encoding utf8
+        $infoName = "DS4Windows-$($env:VERSION)-RELEASE-INFO.zip"
+        $infoPath = Join-Path $records $infoName
+        $infoFiles = @(Get-ChildItem -LiteralPath $infoDirectory -File | Sort-Object Name)
+        Compress-Archive -LiteralPath $infoFiles.FullName -DestinationPath $infoPath
+        $releaseInfo = @{ name = $infoName; files = @($infoFiles | ForEach-Object {
+          @{ name = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }
+        }) }
         $assets = @((Resolve-Path $env:RELEASE_ASSET).Path, (Resolve-Path $env:INSTALLER_ASSET).Path) +
           @(Get-ChildItem -LiteralPath $records -File | Sort-Object Name | Select-Object -ExpandProperty FullName)
+        if ($assets.Count -ne 5) { throw 'Expected two binary packages, two source ZIPs and one information ZIP.' }
         $checksums = @($assets | ForEach-Object { "$( (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash ) *$([IO.Path]::GetFileName($_))" })
         $checksumPath = Join-Path $records 'SHA256SUMS.txt'
         $checksums | Set-Content -LiteralPath $checksumPath -Encoding ascii
@@ -342,6 +352,7 @@ jobs:
           unsignedRc = ($env:RELEASE_TAG -cmatch '^VIIPERRC'); unsignedRelease = ($env:UNSIGNED_RELEASE -ceq 'true')
           prerelease = ($env:RELEASE_TAG -cmatch '^VIIPERRC'); binaryVersion = $env:BINARY_VERSION
           brokerSourceName = $brokerSourceName; brokerCommit = $brokerCommit
+          releaseInfo = $releaseInfo
           assets = @($assets | ForEach-Object { @{ name = [IO.Path]::GetFileName($_); sha256 = (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash } })
         }
         $receiptPath = Join-Path $records 'RELEASE-BUILD.json'
@@ -454,10 +465,38 @@ jobs:
           throw 'Numeric release channel or Windows version mismatch.'
         }
         foreach ($required in @($portableName, "DS4Windows_$($receipt.binaryVersion)_Setup_x64.exe",
-          "DS4Windows-$($env:RELEASE_TAG)-SOURCE.zip", $receipt.brokerSourceName, 'SHA256SUMS.txt', 'SOURCE-REVISIONS.txt',
-          'VIIPER-0.1.11-LICENSES.txt', 'VIIPER-0.1.11-PROVENANCE.txt',
-          'VIIPER-0.1.11-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md', 'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')) {
+          "DS4Windows-$($env:RELEASE_TAG)-SOURCE.zip", $receipt.brokerSourceName, 'SHA256SUMS.txt')) {
           if (-not $seen.Contains($required)) { throw "Incomplete RC receipt: $required" }
+        }
+        $noticeNames = @('VIIPER-0.1.11-LICENSES.txt', 'VIIPER-0.1.11-PROVENANCE.txt',
+          'VIIPER-0.1.11-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md',
+          'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt', 'SOURCE-REVISIONS.txt')
+        if ($null -ne $receipt.releaseInfo) {
+          $infoName = "DS4Windows-$($env:RELEASE_TAG)-RELEASE-INFO.zip"
+          if ($receipt.releaseInfo.name -cne $infoName -or -not $seen.Contains($infoName) -or $seen.Count -ne 6 -or $release.assets.Count -ne 7) {
+            throw 'Consolidated release must contain exactly the six recorded assets plus its build receipt.'
+          }
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $zip = [IO.Compression.ZipFile]::OpenRead((Join-Path $records $infoName))
+          try {
+            if ($zip.Entries.Count -ne $noticeNames.Count -or $receipt.releaseInfo.files.Count -ne $noticeNames.Count) {
+              throw 'Release information archive has an unexpected file count.'
+            }
+            foreach ($name in $noticeNames) {
+              $entries = @($zip.Entries | Where-Object { $_.FullName -ceq $name })
+              $metadata = @($receipt.releaseInfo.files | Where-Object { $_.name -ceq $name })
+              if ($entries.Count -ne 1 -or $metadata.Count -ne 1) { throw "Missing or duplicate release information: $name" }
+              $stream = $entries[0].Open()
+              try { $hash = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($stream)) }
+              finally { $stream.Dispose() }
+              if ($hash -cne $metadata[0].sha256) { throw "Release information hash mismatch: $name" }
+            }
+          } finally { $zip.Dispose() }
+        } else {
+          # Preserve verification of already-published releases with loose notices.
+          foreach ($name in $noticeNames) {
+            if (-not $seen.Contains($name)) { throw "Incomplete historical receipt: $name" }
+          }
         }
         Write-Host 'Published release matches its successful draft build; no assets rebuilt or overwritten.'
         if (-not $receipt.unsignedRc) {
