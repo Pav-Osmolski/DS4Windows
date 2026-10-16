@@ -2366,7 +2366,7 @@
                                             <TextBlock Margin="0,0,0,4" TextWrapping="Wrap" Text="Place the sensor edge against a desk or mouse mat, then slide the Joy-Con. Lifting it lets you reposition without moving the pointer." Foreground="{DynamicResource MutedForegroundColor}"/>
                                             <TextBlock Margin="0,0,0,4" TextWrapping="Wrap" Text="Slide to aim or point at menus. Use the stick to scroll while the sensor touches the surface." Foreground="{DynamicResource MutedForegroundColor}"/>
                                             <TextBlock Margin="0,0,0,4" TextWrapping="Wrap" Text="Assign mouse clicks in Button Mapping. For different actions only while on the desk, use the matching IR Sensor as the Shift Modifier." Foreground="{DynamicResource MutedForegroundColor}"/>
-                                            <WrapPanel Margin="0,0,0,4">
+                                            <WrapPanel Margin="0,5,0,4">
                                                 <TextBlock Text="Which Joy-Con:" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                 <ComboBox MinHeight="34" MinWidth="120" IsEnabled="{Binding IsChecked, ElementName=Switch2JoyConIrMouseEnabledCheckBox}" SelectedIndex="{Binding Switch2JoyConIrMouseSourceIndex}" Margin="0,0,8,8">
                                                     <ComboBoxItem Content="Automatic"/>
@@ -2457,7 +2457,7 @@
                                         <Expander Header="Fine-tune aiming" Margin="0,10,0,0">
                                             <StackPanel Margin="0,8,0,0">
                                                 <CheckBox IsChecked="{Binding Switch2MagnetometerYawAssistEnabled}" Margin="0,7,0,0" Content="Reduce sideways gyro drift" ToolTip="Help reduce sideways gyro drift. Turn this off if nearby electronics affect aiming."/>
-                                                <WrapPanel Margin="0,0,0,4" ToolTip="Ignore tiny gyro movements to steady aim. Set to 0 for maximum sensitivity.">
+                                                <WrapPanel Margin="0,5,0,4" ToolTip="Ignore tiny gyro movements to steady aim. Set to 0 for maximum sensitivity.">
                                                     <TextBlock Text="Ignore small movements:" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                     <xctk:DoubleUpDown MinHeight="34" Value="{Binding Switch2VirtualGyroSoftDeadzone}" Minimum="0" Maximum="100" Increment="0.5" FormatString="F1" Width="75" Margin="0,0,8,8"/>
                                                 </WrapPanel>
@@ -2466,7 +2466,7 @@
                                                     <xctk:DoubleUpDown MinHeight="34" Value="{Binding Switch2GyroMouseStickAssistSensitivity}" Minimum="0" Maximum="10" Increment="0.2" FormatString="F1" Width="75" Margin="0,0,8,8"/>
                                                 </WrapPanel>
                                                 <CheckBox IsChecked="{Binding Switch2HighRateMousePresentation}" Margin="0,7,0,0" Content="Smoother mouse movement" ToolTip="Make mouse movement smoother between controller updates. This does not speed up the controller itself."/>
-                                                <WrapPanel Margin="0,0,0,4" ToolTip="Adjust sideways motion sensitivity in compatible emulators. 1 is the normal level.">
+                                                <WrapPanel Margin="0,5,0,4" ToolTip="Adjust sideways motion sensitivity in compatible emulators. 1 is the normal level.">
                                                     <TextBlock Text="Emulator turn sensitivity:" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                     <xctk:IntegerUpDown MinHeight="34" Value="{Binding Switch2CemuhookYawSensitivity}" Minimum="1" Maximum="5" Increment="1" Width="60" Margin="0,0,8,8"/>
                                                 </WrapPanel>
@@ -2721,8 +2721,8 @@
                                         </Expander.Header>
                                         <StackPanel Margin="24,10,0,0">
                                             <TextBlock Text="{Binding Switch2DualGyroEditor.ModeDescription}" TextWrapping="Wrap" Margin="0,0,0,10"/>
-                                            <StackPanel Margin="0,8,0,0">
-                                                <StackPanel Margin="0,8,0,0" IsEnabled="{Binding IsChecked, ElementName=Switch2DualJoyConGyroEnabledCheckBox}">
+                                            <StackPanel Margin="0">
+                                                <StackPanel Margin="0" IsEnabled="{Binding IsChecked, ElementName=Switch2DualJoyConGyroEnabledCheckBox}">
                                                     <WrapPanel Margin="0,0,0,4">
                                                         <TextBlock Text="Mode:" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                         <ComboBox MinHeight="34" MinWidth="165" SelectedIndex="{Binding Switch2DualGyroEditor.ModeIndex}" Margin="0,0,8,8">
@@ -2746,7 +2746,7 @@
                                                             <ComboBoxItem Content="Press to toggle"/>
                                                         </ComboBox>
                                                     </WrapPanel>
-                                                    <TextBlock Margin="0,10,0,6" TextWrapping="Wrap" Text="{Binding Switch2DualGyroEditor.ButtonActionDescription}"/>
+                                                    <TextBlock Margin="0,0,0,6" TextWrapping="Wrap" Text="{Binding Switch2DualGyroEditor.ButtonActionDescription}"/>
                                                     <TextBlock Margin="0,0,0,4" TextWrapping="Wrap" Text="{Binding Switch2DualGyroEditor.ButtonSelectionHint}" Foreground="{DynamicResource MutedForegroundColor}"/>
                                                     <Expander Header="Left Joy-Con buttons" Margin="0,4,0,0">
                                                         <ItemsControl ItemsSource="{Binding Switch2DualGyroEditor.LeftActivationChoices}" Margin="0,8,0,0">
@@ -2961,7 +2961,7 @@
                                         <StackPanel Margin="0,8,0,0">
                                             <TextBlock Margin="0,7,0,3" FontWeight="SemiBold" Text="Stick scrolling"/>
                                             <TextBlock Margin="0,0,0,4" TextWrapping="Wrap" Text="Assign scroll actions in Button Mapping first. Tap scrolls once; Hold keeps scrolling." Foreground="{DynamicResource MutedForegroundColor}"/>
-                                            <WrapPanel Margin="0,0,0,4">
+                                            <WrapPanel Margin="0,5,0,4">
                                                 <TextBlock Text="Left stick:" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                 <ComboBox MinHeight="34" MinWidth="100" SelectedIndex="{Binding Switch2LeftStickScrollActivationModeIndex}" Margin="0,0,8,8">
                                                     <ComboBoxItem Content="Hold"/>
@@ -2977,7 +2977,7 @@
                                             </WrapPanel>
                                             <TextBlock Margin="0,7,0,3" FontWeight="SemiBold" Text="Stick button actions"/>
                                             <TextBlock Margin="0,0,0,4" TextWrapping="Wrap" Text="Hold keeps an action pressed. Tap triggers it once each time you move the stick into that direction." Foreground="{DynamicResource MutedForegroundColor}"/>
-                                            <Grid>
+                                            <Grid Margin="0,5,0,0">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="54"/>
                                                     <ColumnDefinition Width="Auto"/>
@@ -3031,7 +3031,7 @@
                                             </Grid>
                                             <TextBlock Margin="0,7,0,3" FontWeight="SemiBold" Text="Stick mouse speed"/>
                                             <TextBlock Margin="0,0,0,4" TextWrapping="Wrap" Text="Adjust speed for sticks mapped to mouse movement. 5 is the normal speed; 0 stops movement." Foreground="{DynamicResource MutedForegroundColor}"/>
-                                            <WrapPanel Margin="0,0,0,4">
+                                            <WrapPanel Margin="0,5,0,4">
                                                 <TextBlock Text="Left stick:" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                 <xctk:DoubleUpDown MinHeight="34" MinWidth="72" FormatString="F1" Minimum="0.0" Maximum="10.0" Increment="0.2" Value="{Binding Switch2LeftStickMouseSensitivity}" Margin="0,0,8,8"/>
                                             </WrapPanel>

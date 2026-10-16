@@ -41,6 +41,15 @@ public class NintendoSettingsLayoutTests
                 Save(setup, theme, width, "Nintendo-setup");
 
                 Grid editor = ProfileAdvancedLayoutTests.Load(theme, "Nintendo Options");
+                editor.DataContext = new
+                {
+                    Switch2DualGyroEditor = new
+                    {
+                        ModeDescription = "Your preferred hand leads. The other helps when moving the same way.",
+                        ButtonActionDescription = "Hold a selected button on either Joy-Con to swap the lead hand; release to swap back. These buttons do not select their own hand.",
+                        ButtonSelectionHint = "Use one Joy-Con's swap buttons at a time. Release all checked buttons on it to end a hold."
+                    }
+                };
                 foreach (Expander expander in Logical(editor).OfType<Expander>()) expander.IsExpanded = true;
                 string[] labels = ["X / West", "Y / North", "A / South", "B / East", "Minus / Back", "Plus / Start", "Home", "Capture", "Left Stick", "Right Stick", "L", "R", "ZL", "ZR", "Down", "Up", "Right", "Left", "C / Chat", "GL 1", "GL 2", "GR 1", "GR 2", "Left SL (rail)", "Left SR (rail)", "Right SL (rail)", "Right SR (rail)", "Left IR Sensor", "Right IR Sensor"];
                 foreach (ItemsControl choices in Logical(editor).OfType<ItemsControl>().Where(i => i is not ComboBox))
@@ -92,7 +101,7 @@ public class NintendoSettingsLayoutTests
                     var border = parent as Border;
                     if (border == null) continue;
                     panel.Children.Remove(border);
-                    var preview = new Grid { Background = editor.Background };
+                    var preview = new Grid { Background = editor.Background, DataContext = editor.DataContext };
                     preview.Resources.MergedDictionaries.Add(editor.Resources);
                     preview.Resources.MergedDictionaries.Add(panel.Resources);
                     preview.Children.Add(border);
