@@ -1253,7 +1253,6 @@ namespace DS4Windows
             65, // DS4Controls.Switch2JoyConRightSL
             66, // DS4Controls.Switch2JoyConRightSR
         };
-        private static int macroEndIndex = DS4_CONTROL_MACRO_ARRAY_LEN - 1;
 
         // Special macros
         static bool altTabDone = true;

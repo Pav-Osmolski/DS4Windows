@@ -9,6 +9,7 @@ public class ViiperCanonicalMotionCalibrationTests
     [TestMethod]
     [DataRow(ViiperVirtualDeviceType.DualSense)]
     [DataRow(ViiperVirtualDeviceType.DualSenseEdge)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void CanonicalMotionSerializesAtSixteenGyroUnitsAnd8192AccelUnits(ViiperVirtualDeviceType type)
     {
         Assert.AreEqual(16, SixAxis.GYRO_RES_IN_DEG_SEC);

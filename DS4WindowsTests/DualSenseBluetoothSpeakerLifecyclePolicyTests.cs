@@ -9,6 +9,7 @@ namespace DS4WindowsTests
     public class DualSenseBluetoothSpeakerLifecyclePolicyTests
     {
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void VirtualAudioEndpointGetsAFullEnumerationWindow()
         {
             int retryWindowMilliseconds =
@@ -114,6 +115,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void StartupWarmupIsOneEightReportFifoTransfer()
         {
             Assert.AreEqual(8,
@@ -149,6 +151,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void FreshActiveCaptureShortageUsesReservoirBackpressure()
         {
             Assert.AreEqual(100,
@@ -486,6 +489,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void V5ReturningCallbackResetsOnlyAfterHardGenerationGap()
         {
             const long timestampFrequency = 10_000_000;

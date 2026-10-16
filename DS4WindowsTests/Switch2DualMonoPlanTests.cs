@@ -88,7 +88,7 @@ public class Switch2DualMonoPlanTests
                 var expected = new short[960];
                 int expectedCount = (side == 0 ? leftDecoder : rightDecoder).Decode(
                     source.AsSpan(side * 50, 50), expected.AsSpan(), 960, false);
-                Assert.AreEqual(count, expectedCount);
+                Assert.AreEqual(expectedCount, count);
                 for (int sample = 0; sample < count; sample++)
                 {
                     Assert.AreEqual(expected[sample], stereo[sample * 2 + side], "Framing preserves decoded channel samples.");

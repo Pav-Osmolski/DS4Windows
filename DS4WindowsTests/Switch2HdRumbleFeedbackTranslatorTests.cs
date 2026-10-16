@@ -116,6 +116,7 @@ public class Switch2HdRumbleFeedbackTranslatorTests
     }
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0025", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void ScalingPreservesLicensedIntegerTruncationAndCeiling()
     {
         ushort[] values = { 0, 1, 63, 64, 1_000, 32_768, 65_534, 65_535 };

@@ -119,11 +119,11 @@ jobs:
     # Build and test a draft before publication. This fork permits unsigned
     # numeric Latest releases; other release types retain signing gates.
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
            ref: ${{ needs.identity.outputs.tag }}
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         global-json-file: global.json
     - name: Set up Python 3.10
@@ -147,7 +147,7 @@ jobs:
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     - name: Preserve release test results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: DS4Windows_Release_Test_Results
         path: TestResults/

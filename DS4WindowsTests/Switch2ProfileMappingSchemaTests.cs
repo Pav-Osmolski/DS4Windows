@@ -31,6 +31,7 @@ public sealed class Switch2ProfileMappingSchemaTests
     ];
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void JoyConIrSourcesAreAppendOnlyCanonicalShiftTriggers()
     {
         var preserved = new (int Id, DS4Controls Control, string Label)[]
@@ -1062,6 +1063,8 @@ public sealed class Switch2ProfileMappingSchemaTests
     }
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0025", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void ExistingControlNumbersRemainStableAndNewControlsAreAppended()
     {
         string legacyNames =
@@ -1125,10 +1128,8 @@ public sealed class Switch2ProfileMappingSchemaTests
         Assert.AreEqual(cardinality, fieldMapping.gryodirs.Length);
         Assert.AreEqual(cardinality, fieldMapping.swipedirs.Length);
         Assert.AreEqual(cardinality, fieldMapping.swipedirbools.Length);
-        Assert.AreEqual(cardinality - 1,
-            DS4ControlSettings.LAST_DS4_ACTION);
-        Assert.AreEqual(cardinality - 1,
-            DS4StateFieldMapping.LAST_DS4_ACTION);
+        Assert.AreEqual(DS4ControlSettings.LAST_DS4_ACTION, cardinality - 1);
+        Assert.AreEqual(DS4StateFieldMapping.LAST_DS4_ACTION, cardinality - 1);
         Assert.AreEqual(cardinality - 1, Global.ds4inputNames.Count);
         Assert.AreEqual(cardinality - 1, settings.Count);
         CollectionAssert.AreEquivalent(
