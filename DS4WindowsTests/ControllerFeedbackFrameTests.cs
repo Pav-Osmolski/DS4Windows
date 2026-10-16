@@ -9,6 +9,7 @@ namespace DS4WindowsTests
     public class ControllerFeedbackFrameTests
     {
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0025", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void WireEnumValuesRemainStable()
         {
             Assert.AreEqual((byte)1,
@@ -176,6 +177,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void QpcConversionVectorsMatchViiperWithoutOverflow()
         {
             Assert.AreEqual("windows-qpc-host-v1",

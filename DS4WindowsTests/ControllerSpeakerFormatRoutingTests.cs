@@ -113,6 +113,7 @@ public class ControllerSpeakerFormatRoutingTests
     }
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void PhysicalDs4Keeps32KhzVirtualSourceAndExisting16KhzBluetoothSbc()
     {
         ViiperOutDevice output = CreateDs4Source();

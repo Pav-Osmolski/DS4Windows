@@ -35,7 +35,7 @@ public sealed class DSXUdpServerTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(GoldenVectors), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(GoldenVectors))]
     public void VerifiedTriggerModesMatchAllElevenGoldenBytes(int mode, byte[] parameters, string expected)
     {
         CollectionAssert.AreEqual(Convert.FromHexString(expected), DSXUdpServer.EncodeTriggerPayload(mode, parameters));

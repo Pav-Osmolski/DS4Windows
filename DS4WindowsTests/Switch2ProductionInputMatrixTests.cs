@@ -78,7 +78,7 @@ public sealed class Switch2ProductionInputMatrixTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(Routes), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Routes))]
     public void DecodedRegisteredButtonsAndTerminalNeutralEncodeForEveryTarget(int source, ViiperVirtualDeviceType target)
     {
         using var fixture = new Fixture(source, controllerOnly: true);
@@ -129,7 +129,7 @@ public sealed class Switch2ProductionInputMatrixTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(Routes), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Routes))]
     public void RawStickPrecisionOrientationAndUnusedAxesSurviveMapping(int source, ViiperVirtualDeviceType target)
     {
         using var fixture = new Fixture(source, controllerOnly: true);
@@ -214,7 +214,7 @@ public sealed class Switch2ProductionInputMatrixTests
     }
 
     [TestMethod]
-    [DynamicData(nameof(ExtraRoutes), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(ExtraRoutes))]
     public void ExtraButtonBindingDoesNotLeakUnmappedNativeButton(int source, DS4Controls control, uint left, uint right)
     {
         using var fixture = new Fixture(source, extraControl: control, controllerOnly: true);

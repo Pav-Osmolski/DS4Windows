@@ -27,7 +27,7 @@ env:
 
 jobs:
   package_plan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     permissions:
       contents: read
@@ -35,7 +35,7 @@ jobs:
     outputs:
       build: ${{ steps.select.outputs.build }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Select package build
         id: select
         shell: pwsh
@@ -54,10 +54,10 @@ jobs:
     runs-on: windows-2022
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
@@ -129,7 +129,7 @@ jobs:
 
       - name: Preserve test results and hang diagnostics
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: DS4Windows_Test_Results
           path: TestResults/
@@ -146,10 +146,10 @@ jobs:
       matrix:
         platform: [ x64 ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
@@ -279,7 +279,7 @@ jobs:
 
       - name: Preserve installer lifecycle evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: DS4Windows_Installer_Lifecycle_Evidence
           path: |
@@ -291,7 +291,7 @@ jobs:
 
       - name: Upload portable ZIP
         id: upload_portable
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: DS4Windows_${{ env.VERSION }}_${{ matrix.platform }}_Portable
           path: .\bin\${{ matrix.platform }}\Release\DS4Windows_${{ env.VERSION }}_${{ matrix.platform }}.zip
@@ -299,7 +299,7 @@ jobs:
 
       - name: Upload standard installer EXE
         id: upload_installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: DS4Windows_${{ env.VERSION }}_Setup_${{ matrix.platform }}
           path: .\bin\${{ matrix.platform }}\Release\installer\DS4Windows_${{ env.VERSION }}_Setup_${{ matrix.platform }}.exe

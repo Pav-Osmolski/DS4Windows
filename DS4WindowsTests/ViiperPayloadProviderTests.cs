@@ -218,6 +218,7 @@ public class ViiperPayloadProviderTests
     }
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void ProductionIdentityIsExactlyCompiledVersionNotLatest()
     {
         var provider = new ViiperPayloadProvider();

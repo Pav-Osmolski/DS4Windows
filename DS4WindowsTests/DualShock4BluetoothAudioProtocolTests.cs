@@ -399,6 +399,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void FourFrameSpeakerReportRepresentsExactlySixteenMilliseconds()
         {
             Assert.AreEqual(32000,
@@ -578,6 +579,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void MeasuredTransportAsyncTransportDoesNotBurstItsTwoFrameRemainder()
         {
             Assert.IsFalse(DualShock4AudioTransportSettings.
@@ -605,6 +607,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void MeasuredTransportAsyncCapacityStopsBeforeAQueuedFrameCanBeDequeued()
         {
             Assert.AreEqual(8, DualShock4AudioTransportSettings.
@@ -625,6 +628,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void ProductionReplayUsesLowBandwidthRealtimePrimeAndReserve()
         {
             Assert.AreEqual(1, DualShock4AudioTransportSettings.
@@ -671,6 +675,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void ProductionReplayUsesFixedEightMillisecondClockAndIdleReprime()
         {
             Assert.AreEqual(80000,
@@ -707,6 +712,8 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0025", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void ProductionA0SelectsTheExactProductionReplayPolicy()
         {
             Assert.IsTrue(DualShock4AudioTransportSettings.
@@ -826,6 +833,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void MeasuredTransportReferencePreservesMeasuredTwoOneTickCadence()
         {
             int frameThirds = 0;
@@ -1004,6 +1012,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void FifoBufferedPrimeConsumesSixteenFramesAndRetainsSixteen()
         {
             Assert.AreEqual(4, DualShock4AudioTransportSettings.
@@ -1045,6 +1054,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void FifoBufferedSteadyTransportUsesProductionClockServoAndReprime()
         {
             Assert.AreEqual(4, DualShock4AudioTransportSettings.
@@ -1138,6 +1148,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void CreditBufferedTransportFillsFourteenPhysicalCreditsAndKeepsSourceCushion()
         {
             Assert.AreEqual(4, DualShock4AudioTransportSettings.
@@ -1244,6 +1255,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void DirectSpeakerStartupRequiresPrimeAndLiveSourceCushions()
         {
             int prime = DualShock4BluetoothAudioProtocol.
@@ -1256,9 +1268,8 @@ namespace DS4WindowsTests
             Assert.AreEqual(prime + liveSource, startup);
             Assert.IsTrue(startup > prime,
                 "The physical speaker lane must not arm with only its hardware prime.");
-            Assert.AreEqual(prime,
-                DualShock4BluetoothAudioProtocol.SpeakerDirectPrimeReports *
-                DualShock4BluetoothAudioProtocol.SpeakerDirectFramesPerReport);
+            Assert.AreEqual(DualShock4BluetoothAudioProtocol.SpeakerDirectPrimeReports *
+                DualShock4BluetoothAudioProtocol.SpeakerDirectFramesPerReport, prime);
             Assert.AreEqual(80,
                 DualShock4BluetoothAudioProtocol.SpeakerDirectPrimeReports *
                 DualShock4BluetoothAudioProtocol.
@@ -1269,6 +1280,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void ScheduledSpeakerUsesOnlyPacedLargeReports()
         {
             Assert.AreEqual(8,
@@ -1515,6 +1527,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void CaptureLoopbackPacesSixteenKilohertzFramesAtEightMilliseconds()
         {
             Assert.AreEqual(8, DualShock4AudioTransportSettings.

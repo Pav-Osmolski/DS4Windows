@@ -31,6 +31,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void PairedTransportUsesMeasuredTransportWindowsWritePoolAndHostClock()
         {
             Assert.AreEqual(8,
@@ -585,6 +586,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
         public void PhysicalSequencePresentsSingleAudioAtNativeCadenceShape()
         {
             var sequence = new DualSenseBluetoothPhysicalOutputSequence();

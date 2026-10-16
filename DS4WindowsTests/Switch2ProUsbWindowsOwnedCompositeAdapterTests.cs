@@ -1801,6 +1801,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
     }
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void OwnedOpenPolicyMatchesHidSharingAndKeepsCommandWriterExact()
     {
         Assert.AreEqual(0xC0000000u,
@@ -1989,6 +1990,7 @@ public sealed class Switch2ProUsbWindowsOwnedCompositeAdapterTests
     }
 
     [TestMethod]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "MSTEST0032", Justification = "Intentional protocol/default contract assertion; changing the pinned constant must fail this test.")]
     public void ReadStartOutcomeNeverTreatsPriorBusySubmissionAsNewRejection()
     {
         Assert.AreEqual(0,
