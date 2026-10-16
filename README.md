@@ -76,7 +76,7 @@ If this fork is useful to you, you can [support Pawel's ongoing work on Ko-fi](h
 
 ## Project links
 
-[Report a bug](https://github.com/Pav-Osmolski/DS4Windows/issues) · [Contribute](contributing.md) · [VIIPER backend](https://github.com/Pav-Osmolski/VIIPER) · [DS4Updater](https://github.com/Pav-Osmolski/DS4Updater)
+[Report a bug](https://github.com/Pav-Osmolski/DS4Windows/issues) · [Contribute](contributing.md) · [Contributors](contributors.md) · [VIIPER backend](https://github.com/Pav-Osmolski/VIIPER) · [DS4Updater](https://github.com/Pav-Osmolski/DS4Updater)
 
 Use the matching backend bundled with DS4Windows. The updater is optional
 when downloading and installing updates manually.

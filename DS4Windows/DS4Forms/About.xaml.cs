@@ -102,7 +102,7 @@ namespace DS4WinWPF.DS4Forms
 
         private void ContributorsLink_OnClick(object sender, RoutedEventArgs e)
         {
-            Util.StartProcessHelper("https://github.com/Pav-Osmolski/DS4Windows/blob/main/contributors.txt");
+            Util.StartProcessHelper("https://github.com/Pav-Osmolski/DS4Windows/blob/main/contributors.md");
         }
     }
 }
