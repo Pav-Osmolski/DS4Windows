@@ -794,7 +794,7 @@
                         </xctk:ButtonChrome>
                         <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" HorizontalOffset="1" IsOpen="{Binding IsChecked, ElementName=PART_ToggleButton}" Placement="{TemplateBinding DropDownPosition}" StaysOpen="False" VerticalOffset="1">
                             <Border Background="{TemplateBinding DropDownContentBackground}" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                <ScrollViewer x:Name="DropDownScrollViewer" VerticalScrollBarVisibility="Auto">
+                                <ScrollViewer x:Name="DropDownScrollViewer" Style="{DynamicResource BridgeDropDownScrollViewerStyle}">
                                     <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding DropDownContent}"/>
                                 </ScrollViewer>
                             </Border>
