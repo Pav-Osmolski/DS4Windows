@@ -1,29 +1,123 @@
-This project includes the source code of some third party projects. This file
-will attempt to document some third party source code that is used in the
-DS4Windows source code and state the original source.
+DS4Windows attribution and third-party notice index
+=================================================
 
-Crc32:
+This fork builds on DS4Windows by Jays2Kings, Ryochan7, Schmaldeo, hbashton
+and the wider contributor community:
+https://github.com/Jays2Kings/DS4Windows
+https://github.com/Ryochan7/DS4Windows
+https://github.com/schmaldeo/DS4Windows
+https://github.com/hbashton/DS4Windows
+
+DS4Windows is distributed under the GNU General Public License, version 3;
+see COPYING and LICENSE.txt. Incorporated third-party components retain
+their respective licenses and copyright notices. This index identifies
+sources and component notices; it does not replace their full license texts
+or claim that every dependency is licensed under the GPL.
+
+Paths below are relative to the source repository unless a packaged path is
+specified. Versioned backend notices describe the currently bundled payloads.
+
+Incorporated source code
+------------------------
+
+Crc32 - implementation credited to Damien Guard, adapted via Crc32
+(Apache-2.0):
 https://github.com/dariogriffo/Crc32
+Source and license: DS4Windows/DS4Library/Crc32.cs and
+DS4Windows/DS4Library/LICENSE-Crc32.txt.
+
+HidLibrary - Copyright (c) 2010 Ultraviolet Catastrophe (MIT):
+Source and full notice: DS4Windows/HidLibrary/ and
+DS4Windows/HidLibrary/LICENSE.
+
+1€ Filter - C# implementation by Mitsuru Furuta / Sensorit:
+https://gery.casiez.net/1euro/
+https://gery.casiez.net/1euro/OneEuroFilter.cs
+Source: DS4Windows/OneEuroFilter.cs.
+
+vJoyInterfaceCS - interface adapted from Shaul's vJoy project:
+https://github.com/shauleiz/vJoy/tree/master/apps/common/vJoyInterfaceCS
+Source and original attribution: DS4Windows/VJoyFeeder/vJoyFeeder.cs.
+
+SbcSharp - vendored SBC codec sources by Ylianst (Apache-2.0):
+https://github.com/Ylianst/SbcSharp
+Source, modification notice and license: DS4Windows/ThirdParty/SbcSharp/.
+Packaged notices: ThirdParty/SbcSharp/NOTICE.md and LICENSE.txt in that folder.
+
+DualSense adaptive-trigger effect packing by John "Nielk1" Klein (MIT):
+https://gist.github.com/Nielk1/6d54cc2c00d2201ccb8c2720ad7538db
+Source notice: DS4Windows/Resources/DsxTriggerEffects.NOTICE.txt.
+Packaged notice: Resources/DsxTriggerEffects.NOTICE.txt.
+
+Audio and cryptography dependencies
+-----------------------------------
+
+RNNoise noise suppression:
+https://github.com/xiph/rnnoise
+https://github.com/Yellow-Dog-Man/rnnoise
+RNNoise uses the BSD-style license provided in its COPYING file.
+
+RNNoise.NET / YellowDogMan.RRNoise.NET (MIT package):
+https://github.com/Yellow-Dog-Man/RNNoise.Net
+The Windows native rnnoise.dll is supplied by this NuGet package. DS4Windows
+uses its own native interop; the package's managed wrapper is excluded from
+the application references. Package identity and version are declared in
+DS4Windows/DS4WinWPF.csproj and packages.lock.json in that directory.
+
+BouncyCastle.Cryptography - The Legion of the Bouncy Castle Inc. (MIT):
+https://www.bouncycastle.org/
+https://github.com/bcgit/bc-csharp
+Source notice: DS4Windows/Resources/BouncyCastle.NOTICE.txt.
+Packaged notice: Resources/BouncyCastle.NOTICE.txt.
+
+Other managed dependencies, including Concentus, NAudio, NLog and the WPF
+libraries, are declared in DS4Windows/DS4WinWPF.csproj and its lock file.
+Their upstream package metadata provides their respective license details.
+
+Artwork and icons
+-----------------
 
 Font Awesome:
 https://fontawesome.com/license
 
-1€ Filter (C# version):
-http://cristal.univ-lille.fr/~casiez/1euro/OneEuroFilter.cs
+Gamepad Asset Pack - AL2009man / Al. Lopez (MIT):
+https://github.com/AL2009man/Gamepad-Asset-Pack
+Controller thumbnails and DualSense remapping artwork are adapted from this
+project. Source notice: DS4Windows/Resources/ControllerArtwork.NOTICE.txt.
+Packaged notice: Resources/ControllerArtwork.NOTICE.txt.
 
-vJoyInterfaceCS:
-https://github.com/shauleiz/vJoy/tree/master/apps/common/vJoyInterfaceCS
-
-RNNoise:
-https://github.com/xiph/rnnoise
-
-RNNoise.NET wrapper and Windows native package:
-https://github.com/Yellow-Dog-Man/RNNoise.Net
 Switch 2 Pro Controller remapping artwork is an adapted project asset based on
 "Nintendo Switch 2 Pro Controller.jpg" by Kyu3a, licensed under CC BY-SA 4.0:
 https://commons.wikimedia.org/wiki/File:Nintendo_Switch_2_Pro_Controller.jpg
 https://creativecommons.org/licenses/by-sa/4.0/
 
-DualSense adaptive-trigger effect packing by John "Nielk1" Klein (MIT):
-https://gist.github.com/Nielk1/6d54cc2c00d2201ccb8c2720ad7538db
-The full notice also ships in Resources/DsxTriggerEffects.NOTICE.txt.
+Bundled backend and driver payloads
+----------------------------------
+
+VIIPER (GPL-3.0-or-later) originates with Alia5 / Peter Repukat and includes
+integration work maintained in the hbashton and Pav-Osmolski forks:
+https://github.com/Alia5/VIIPER
+https://github.com/hbashton/VIIPER
+https://github.com/Pav-Osmolski/VIIPER
+The matching source archive, dependency licenses and binary provenance are
+provided in extras/VIIPER-0.1.11-SOURCE.zip,
+extras/VIIPER-0.1.11-LICENSES.txt and extras/VIIPER-0.1.11-PROVENANCE.txt.
+The vendored Windows systray and WDL resampler have additional notices in
+extras/VIIPER-SYSTRAY-NOTICE.md, extras/VIIPER-SYSTRAY-LICENSE.txt and
+extras/VIIPER-WDL-NOTICE.txt.
+
+usbip-win2 - Vadym Hrynchyshyn and contributors (BSD-2-Clause):
+https://github.com/vadimgrn/usbip-win2
+Bundled license: extras/USBip-0.9.8.1-LICENSE.txt.
+
+HidHide - Eric Korff de Gidts, Benjamin Höglinger-Stelzer and contributors
+(MIT):
+https://github.com/nefarius/HidHide
+Bundled license: extras/HidHide-1.5.230-LICENSE.txt.
+
+FakerInput - Travis Nickles and contributors (MIT):
+https://github.com/Ryochan7/FakerInput
+Bundled license: extras/FakerInput-0.1.0-LICENSE.txt.
+
+The Xbox One/Series emulation identity has a separate scope and provenance
+notice in extras/XBOX-ONE-PERSONA-NOTICE.md.
