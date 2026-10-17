@@ -33,6 +33,17 @@ translated for supported hardware, but translation is not identical to that
 controller's original effects. Do not infer native game support from an ordinary
 rumble test. See [compatibility](controller-compatibility.md).
 
+### USB native haptics
+
+From 5.0.30, DS4Windows uses a separate USB route for the
+native waveform channels of the matching virtual DualSense/Edge Windows audio
+endpoint. It renders only the two actuator channels to the matching physical
+controller; audible speaker streaming and Audio Haptics remain independent.
+Both Windows audio endpoints must be enabled, unmuted and expose four-channel
+audio. Profile speaker volume/mute does not scale these waveform channels.
+Editor motor previews can also override native USB motor mode,
+then restore the game's cached mode when the preview stops. Follow the [USB acceptance checks](validation/dualsense-bluetooth-haptics-backlog-test.md#quick-usb-acceptance-for-the-added-corrections).
+
 ## Indicator lights and application control
 
 DualSense/Edge player and microphone indicators are under **Profile Editor >

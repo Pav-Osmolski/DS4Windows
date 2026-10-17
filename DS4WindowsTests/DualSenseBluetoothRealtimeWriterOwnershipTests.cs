@@ -3,6 +3,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace DS4Windows.Tests
 {
@@ -11,6 +14,35 @@ namespace DS4Windows.Tests
     {
         private const int ReportLength =
             DualSenseBluetoothAudioPacer.ReportLength;
+
+        [TestMethod]
+        public void OverduePendingWritePoisonsFifoAndRetainsBuffersUntilCancellationCompletes()
+        {
+            using var native = new PendingNativeIo(ReportLength);
+            var writer = new DualSenseBluetoothRealtimeWriter(
+                ReportLength, slotCount: 1, audioInFlightLimit: 1, native);
+            try
+            {
+                Assert.IsTrue(writer.TryWrite(new byte[ReportLength], out bool fault));
+                Assert.IsFalse(fault);
+                Assert.IsFalse(writer.WaitForNextWriteSlot(0, out fault));
+                Assert.IsFalse(fault, "Brief saturation must remain retriable.");
+                Array slots = (Array)typeof(DualSenseBluetoothRealtimeWriter)
+                    .GetField("slots", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(writer);
+                object slot = slots.GetValue(0);
+                slot.GetType().GetField("SubmittedTimestamp", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    .SetValue(slot, Stopwatch.GetTimestamp() - Stopwatch.Frequency * 2);
+                Assert.IsFalse(writer.WaitForNextWriteSlot(0, out fault));
+                Assert.IsTrue(fault, "A multi-second pending write must enter safe transport recovery.");
+                Assert.IsFalse(writer.TryWrite(new byte[ReportLength], out fault));
+                Assert.IsTrue(fault, "No later state or media may bypass the poisoned FIFO.");
+                Assert.IsFalse(writer.NativeResourcesReleased);
+            }
+            finally { writer.Dispose(); }
+            Assert.IsTrue(writer.WaitForDisposal(1000));
+            Assert.IsTrue(native.Cancelled);
+            Assert.IsTrue(writer.NativeResourcesReleased);
+        }
 
         [TestMethod]
         public void BlockingNativeSubmissionDoesNotOwnStateLockOrLifecycle()
@@ -126,7 +158,7 @@ namespace DS4Windows.Tests
                 return true;
             }
 
-            public void Cancel(IntPtr deviceHandle, IntPtr overlapped)
+            public virtual void Cancel(IntPtr deviceHandle, IntPtr overlapped)
             {
                 ObserveStateLock();
             }
@@ -174,6 +206,29 @@ namespace DS4Windows.Tests
                 SubmissionStarted.Dispose();
                 AllowSubmission.Dispose();
             }
+        }
+
+        private sealed class PendingNativeIo : ImmediateNativeIo
+        {
+            internal bool Cancelled;
+            internal PendingNativeIo(int completionLength) : base(completionLength) { }
+            public override bool TrySubmit(IntPtr deviceHandle, IntPtr buffer,
+                uint bytesToWrite, IntPtr overlapped, out bool pending, out int error)
+            {
+                pending = true;
+                error = 997;
+                return true;
+            }
+
+            // Dispose waits for completion before freeing its pinned slot.
+            public override void Cancel(IntPtr deviceHandle, IntPtr overlapped)
+            {
+                Cancelled = true;
+                SetEvent(Marshal.PtrToStructure<NativeOverlapped>(overlapped).EventHandle);
+            }
+
+            [DllImport("kernel32.dll")]
+            private static extern bool SetEvent(IntPtr handle);
         }
     }
 }
