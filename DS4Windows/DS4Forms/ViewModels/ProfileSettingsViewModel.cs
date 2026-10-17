@@ -195,6 +195,20 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private ImageBrush lightbarImgBrush = new ImageBrush();
         private SolidColorBrush lightbarColBrush = new SolidColorBrush();
 
+        public int PlayerIndicatorsIndex
+        {
+            get => (int)ProfileIndicatorSettings.Normalize(Global.LightbarSettingsInfo[device].PlayerIndicators);
+            set => Global.LightbarSettingsInfo[device].PlayerIndicators =
+                ProfileIndicatorSettings.Normalize((ProfilePlayerIndicators)value);
+        }
+
+        public int MicrophoneIndicatorIndex
+        {
+            get => (int)ProfileIndicatorSettings.Normalize(Global.LightbarSettingsInfo[device].MicrophoneIndicator);
+            set => Global.LightbarSettingsInfo[device].MicrophoneIndicator =
+                ProfileIndicatorSettings.Normalize((ProfileMicrophoneIndicator)value);
+        }
+
         public int LightbarModeIndex
         {
             get

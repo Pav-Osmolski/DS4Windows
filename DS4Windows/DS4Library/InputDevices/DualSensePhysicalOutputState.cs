@@ -54,6 +54,11 @@ namespace DS4Windows.InputDevices
         internal DualSenseDsxOverlay DsxOverlay { get; init; }
         internal DualSenseDsxOverlay DsxNativeState { get; init; }
         internal bool ProfileOwnsLightbar { get; init; }
+        internal byte? ProfilePlayerLedMask { get; init; }
+        internal byte? ProfileMicLedByte { get; init; }
+        internal long IndicatorReapplyRevision { get; init; }
+        internal byte EffectivePlayerLedMask => ProfilePlayerLedMask ?? ActivePlayerLedMask;
+        internal byte EffectiveMicLedByte => ProfileMicLedByte ?? MuteLedByte;
         internal bool LeftTriggerLabActive { get; init; }
         internal bool RightTriggerLabActive { get; init; }
         internal int DsxReleaseFields { get; init; }
@@ -482,6 +487,22 @@ namespace DS4Windows.InputDevices
                 {
                     MuteLedOverride = enabled,
                     MuteLedOn = ledOn,
+                });
+            }
+        }
+
+        internal bool SetProfileIndicators(byte? player, byte? mic, bool reapply)
+        {
+            lock (syncRoot)
+            {
+                return PublishLocked(latest with
+                {
+                    ProfilePlayerLedMask = player,
+                    ProfileMicLedByte = mic,
+                    // Another physical writer can change LEDs without changing
+                    // our desired state. An explicit reapply must dirty output
+                    // even when the selected mask is still zero (Off).
+                    IndicatorReapplyRevision = latest.IndicatorReapplyRevision + (reapply ? 1 : 0),
                 });
             }
         }

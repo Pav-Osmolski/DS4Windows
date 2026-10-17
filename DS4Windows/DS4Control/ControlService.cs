@@ -4268,6 +4268,9 @@ namespace DS4Windows
             device.LightBarColor = Global.getMainColor(ind);
             if (device is InputDevices.DualSenseDevice profileLightbarDevice)
             {
+                var indicators = Global.getLightbarSettingsInfo(ind);
+                profileLightbarDevice.ApplyProfileIndicators(indicators.PlayerIndicators,
+                    indicators.MicrophoneIndicator, reapply: true);
                 profileLightbarDevice.SetProfileLightbarOwnership(
                     Global.getLightbarSettingsInfo(ind).mode == LightbarMode.DS4Win);
             }

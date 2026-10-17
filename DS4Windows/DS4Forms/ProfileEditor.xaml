@@ -1394,6 +1394,28 @@
                                 </StackPanel>
                             </StackPanel>
                         </Border>
+                        <Border Style="{DynamicResource BridgeCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Indicator LEDs" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                <TextBlock Text="Available on DualSense and DualSense Edge. Choose Device settings to keep your controller-specific options. These controls work in both lightbar output modes." Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap"/>
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*" MaxWidth="240"/></Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                    <Label Content="White player lights:" Padding="0" VerticalAlignment="Center" Margin="0,0,12,8"/>
+                                    <ComboBox x:Name="playerIndicatorsCombo" Grid.Column="1" SelectedIndex="{Binding PlayerIndicatorsIndex}" MinHeight="34" MinWidth="140" MaxWidth="240" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" Margin="0,0,0,8">
+                                        <ComboBoxItem Content="Device settings"/><ComboBoxItem Content="Off"/>
+                                        <ComboBoxItem Content="Player 1"/><ComboBoxItem Content="Player 2"/><ComboBoxItem Content="Player 3"/><ComboBoxItem Content="Player 4"/>
+                                        <ComboBoxItem Content="All five lights"/><ComboBoxItem Content="Battery level"/>
+                                    </ComboBox>
+                                    <Label Grid.Row="1" Content="Orange microphone light:" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                    <ComboBox x:Name="microphoneIndicatorCombo" Grid.Row="1" Grid.Column="1" SelectedIndex="{Binding MicrophoneIndicatorIndex}" MinHeight="34" MinWidth="140" MaxWidth="240" HorizontalAlignment="Stretch" VerticalContentAlignment="Center">
+                                        <ComboBoxItem Content="Device settings"/><ComboBoxItem Content="Off"/><ComboBoxItem Content="On"/><ComboBoxItem Content="Pulse"/>
+                                    </ComboBox>
+                                </Grid>
+                                <TextBlock Text="Apply or save to update the lights. Close other lighting apps before reapplying. Microphone mute controls and DSX commands take priority; changing the light does not mute the microphone." Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap"/>
+                                <Button Content="Reapply indicators" Click="ReapplyIndicators_Click" HorizontalAlignment="Left" MinHeight="34" Padding="12,4"/>
+                            </StackPanel>
+                        </Border>
                         <TabControl SelectedIndex="{Binding LightbarModeIndex, FallbackValue='0'}" BorderBrush="{x:Null}" Margin="0" Style="{StaticResource ProfileModeTabControlStyle}">
                             <TabItem Header="{lex:Loc Normal}" Visibility="Collapsed">
                                 <StackPanel>
