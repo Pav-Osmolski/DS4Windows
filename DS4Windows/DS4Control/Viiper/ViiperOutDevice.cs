@@ -947,6 +947,8 @@ namespace DS4Windows
         internal bool IsRuntimeConnected =>
             connected && Volatile.Read(ref deviceStream) != null && !HasRuntimeFault;
 
+        internal long RuntimeFeedbackGeneration => Interlocked.Read(ref streamGeneration);
+
         internal bool HasRuntimeFault => Interlocked.Read(ref faultedRuntimeStreamGeneration) ==
             Interlocked.Read(ref streamGeneration);
 

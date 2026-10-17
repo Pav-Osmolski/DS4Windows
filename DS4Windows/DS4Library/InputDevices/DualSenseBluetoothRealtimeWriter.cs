@@ -42,6 +42,7 @@ namespace DS4Windows.InputDevices
         private const uint INFINITE = 0xFFFFFFFF;
         private const int ERROR_IO_PENDING = 997;
         private const uint CancellationCompletionGraceMilliseconds = 100;
+        internal const int MaximumPendingWriteMilliseconds = 1000;
         private const int LateSubmissionMilliseconds = 15;
         private const int SlowCompletionMilliseconds = 20;
         private const int SevereCompletionMilliseconds = 40;
@@ -1135,9 +1136,22 @@ namespace DS4Windows.InputDevices
             long now = Stopwatch.GetTimestamp();
             foreach (WriteSlot slot in slots)
             {
-                if (!slot.Pending || WaitForEvent(slot.EventHandle, 0) !=
-                    WAIT_OBJECT_0)
+                if (!slot.Pending)
                 {
+                    continue;
+                }
+                if (WaitForEvent(slot.EventHandle, 0) != WAIT_OBJECT_0)
+                {
+                    if (slot.SubmittedTimestamp > 0 &&
+                        now - slot.SubmittedTimestamp >
+                            Stopwatch.Frequency * MaximumPendingWriteMilliseconds / 1000)
+                    {
+                        // Hand the permanently unusable FIFO to the existing
+                        // fault/retirement path. Never reuse a pending slot or
+                        // let a newer controller command pass this old write.
+                        PoisonNativeCommandTransport();
+                        return false;
+                    }
                     continue;
                 }
 

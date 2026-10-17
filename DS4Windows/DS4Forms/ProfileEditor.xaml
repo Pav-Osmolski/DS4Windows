@@ -1858,7 +1858,7 @@
                                 <TextBlock Text="Use stick movement to enable or pause gyro. Applies to mapped gyro aiming and virtual-controller gyro; UDP motion stays unchanged. Mapped aiming also keeps its activation-button settings." Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,5,0,12">
                                     <TextBlock Text="Behaviour:" Width="180" VerticalAlignment="Center"/>
-                                    <ComboBox Width="260" SelectedIndex="{Binding GyroStickActivationIndex}">
+                                    <ComboBox Width="260" SelectedIndex="{Binding GyroStickActivationIndex}" MinHeight="34" VerticalAlignment="Center" VerticalContentAlignment="Center">
                                         <ComboBoxItem Content="Off"/>
                                         <ComboBoxItem Content="Enable while stick is moving"/>
                                         <ComboBoxItem Content="Pause while stick is moving"/>
@@ -1866,7 +1866,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
                                     <TextBlock Text="Stick:" Width="180" VerticalAlignment="Center"/>
-                                    <ComboBox Width="200" SelectedIndex="{Binding GyroActivationStickIndex}">
+                                    <ComboBox Width="200" SelectedIndex="{Binding GyroActivationStickIndex}" MinHeight="34" VerticalAlignment="Center" VerticalContentAlignment="Center">
                                         <ComboBoxItem Content="Left stick"/>
                                         <ComboBoxItem Content="Right stick"/>
                                         <ComboBoxItem Content="Either stick"/>
@@ -1874,7 +1874,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Movement threshold:" Width="180" VerticalAlignment="Center"/>
-                                    <xctk:IntegerUpDown Width="80" Minimum="1" Maximum="95" Value="{Binding GyroStickThreshold}"/>
+                                    <xctk:IntegerUpDown Width="80" Minimum="1" Maximum="95" Value="{Binding GyroStickThreshold}" MinHeight="34" VerticalAlignment="Center"/>
                                     <TextBlock Text="%" Margin="8,0,0,0" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <TextBlock Text="Separate from the output deadzone. Gyro switches back two percentage points below this threshold. Accelerometer data is preserved." TextWrapping="Wrap" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,12,0,0"/>

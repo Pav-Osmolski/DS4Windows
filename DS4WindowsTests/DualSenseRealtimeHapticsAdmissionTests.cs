@@ -311,7 +311,7 @@ public class DualSenseRealtimeHapticsAdmissionTests
 
         internal bool ConsumeInto(byte[] physicalReport)
         {
-            bool result = consumer.PrepareForPresentation(physicalReport, long.MaxValue - 1);
+            bool result = consumer.PrepareForPresentation(physicalReport, System.Diagnostics.Stopwatch.GetTimestamp());
             if (result) consumer.CommitPrepared();
             return result;
         }
@@ -393,7 +393,7 @@ public class DualSenseRealtimeHapticsAdmissionTests
         {
             var result = new List<byte[]>();
             byte[] physicalReport = new byte[398];
-            while (consumer.PrepareForPresentation(physicalReport, long.MaxValue - 1))
+            while (consumer.PrepareForPresentation(physicalReport, System.Diagnostics.Stopwatch.GetTimestamp()))
             {
                 result.Add(physicalReport[78..142]);
                 consumer.CommitPrepared();

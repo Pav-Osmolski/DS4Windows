@@ -42,6 +42,7 @@ namespace DS4Windows
     public partial class ControlService
     {
         private readonly DualSenseAudioPassthrough dualSenseAudioPassthrough = new DualSenseAudioPassthrough();
+        private readonly DualSenseUsbHapticsPassthrough dualSenseUsbHaptics = new();
         private readonly DualShock4AudioPassthrough dualShock4AudioPassthrough = new DualShock4AudioPassthrough();
         private readonly DualSenseMicrophonePassthrough dualSenseMicrophonePassthrough = new DualSenseMicrophonePassthrough();
         private readonly AudioHapticsService audioHapticsService = new AudioHapticsService();
@@ -3471,6 +3472,7 @@ namespace DS4Windows
 
                 StartupDiag("ControlService.Stop DualSenseAudio reset begin");
                 dualSenseAudioPassthrough.ResetForServiceStop();
+                dualSenseUsbHaptics.StopAll();
                 StartupDiag("ControlService.Stop DualSenseAudio reset end");
                 StartupDiag("ControlService.Stop DualShock4Audio reset begin");
                 dualShock4AudioPassthrough.ResetForServiceStop();
@@ -4369,6 +4371,14 @@ namespace DS4Windows
                 dualsense.MicrophoneVolume = useViiperControllerMicrophone ?
                     byte.MaxValue : DualSenseMicrophoneVolume[ind];
 
+                // USB native waveform channels remain active independently of
+                // audible speaker streaming and the Audio Haptics feature.
+                dualSenseUsbHaptics.Update(ind, dualsense,
+                    getEnableOutputDataToDS4(ind) &&
+                    (playStationFeatureOutputType.Normalize() == OutContType.ViiperDualSense ||
+                     playStationFeatureOutputType.Normalize() == OutContType.ViiperDualSenseEdge),
+                    DualSenseAudioSpeakerEndpointId[ind],
+                    () => GetPlayStationFeatureOutput(ind));
                 if (mediaCarrierEnabled)
                 {
                     // Audio Haptics and native game haptics use the same
@@ -4421,6 +4431,7 @@ namespace DS4Windows
             else
             {
                 dualSenseAudioPassthrough.Stop(ind);
+                dualSenseUsbHaptics.Stop(ind);
                 bool speakerEnabled = IsControllerSpeakerEnabled(ind);
                 string speakerCaptureEndpointId =
                     GetControllerSpeakerCaptureEndpointId(ind);
@@ -5129,6 +5140,7 @@ namespace DS4Windows
                 AppLogger.LogToTray(removed);
             }
             dualSenseAudioPassthrough.Stop(index);
+            dualSenseUsbHaptics.Stop(index);
             dualShock4AudioPassthrough.Stop(index);
             dualSenseMicrophonePassthrough.Stop();
             audioHapticsService.Stop(index);
