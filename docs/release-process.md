@@ -13,6 +13,10 @@ For each release, advance all of these together:
 
 Every subsequent release increments the numeric version. Keep change lists
 and upgrade notes in [CHANGELOG.md](../CHANGELOG.md); the README stays concise.
+Use explicit Markdown links for every PR and issue reference in new changelog
+entries (`[#123](https://github.com/Pav-Osmolski/DS4Windows/pull/123)`
+for PRs, or `/issues/123` for issues). Check that these links work in the
+rendered changelog before each release, including its tagged copy.
 
 Builds use the SDK in `global.json` and committed NuGet lock files. The draft
 workflow runs both .NET suites against the checked-out tag before packaging.
