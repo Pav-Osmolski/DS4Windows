@@ -1,10 +1,12 @@
 # DualSense Bluetooth haptics backlog: test guide
 
+This branch now includes the 5.0.29 main changes; its additional backlog recovery remains experimental and is not part of that release.
+
 This candidate addresses backlog behaviour investigated in [upstream issue 124](https://github.com/hbashton/DS4Windows/issues/124). It is a test build, not a claim that the reporter's machine-specific stall is fixed. No VIIPER or USB/IP update is required.
 
 ## Get ready
 
-1. Keep your installed 5.0.28 copy available for comparison and back up its profiles/settings.
+1. Keep your installed 5.0.29 copy available for comparison and back up its profiles/settings.
 2. Download the **x64 Portable** artifact linked from the candidate PR's successful CI build. Extract the outer artifact download and then the contained application ZIP into a new folder. Use the complete package; replacing only DS4Windows.exe omits the matching application DLL/helper code.
 3. Close the game and DS4Windows, quit VIIPER from its tray icon, then start the test copy. Run one DS4Windows copy at a time. Import a copy of your normal profile through Profiles. Keep the working release and existing drivers for this test.
 4. Enable **Settings > Updates & tools > Diagnostics > Verbose logging**. Restart DS4Windows for each comparison run and save its log separately with the build and connection type in the filename. Use **Open log** in that same section to locate the log. A fresh application session makes the cumulative counters easier to interpret.
@@ -14,8 +16,8 @@ This candidate addresses backlog behaviour investigated in [upstream issue 124](
 
 | Run | Build | Physical connection | Time |
 | --- | --- | --- | --- |
-| A | Released 5.0.28 | USB | About 5 minutes |
-| B | Released 5.0.28 | Bluetooth, USB cable unplugged | 15-20 minutes, or until delay appears |
+| A | Released 5.0.29 | USB | About 5 minutes |
+| B | Released 5.0.29 | Bluetooth, USB cable unplugged | 15-20 minutes, or until delay appears |
 | C | Candidate portable build | Bluetooth, USB cable unplugged | Repeat B's actions for at least the same duration |
 | D | Candidate portable build | USB | About 5 minutes |
 
@@ -48,4 +50,4 @@ A convincing result is reproducible delay in B, followed by a same-length C run 
 
 The candidate preserves FIFO playback through short interruptions. Beyond 250 ms of queue age it retires complete obsolete rear blocks until within a 50 ms catch-up target, preserving recent authored zero/stop blocks and lifecycle generation boundaries. A source waiting for capacity also has a 250 ms budget. Outstanding asynchronous HID writes which remain incomplete for over one second fault the existing transport owner and use its established cancellation/retirement/recovery path. Already-submitted writes are never overwritten or bypassed. These are initial software budgets to validate on hardware, not claims that Windows I/O or a suspended process can always execute within those times.
 
-Disable verbose logging after testing. Return to 5.0.28 by closing the test copy and VIIPER, then launching the installed copy normally; your original profiles were not replaced.
+Disable verbose logging after testing. Return to 5.0.29 by closing the test copy and VIIPER, then launching the installed copy normally; your original profiles were not replaced.
