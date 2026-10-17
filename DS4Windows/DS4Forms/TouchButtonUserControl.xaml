@@ -7,8 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="400">
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-        <Label Content="Button Activation Mode" ContentStringFormat="{}{0}:" Padding="0" />
-        <ComboBox ItemsSource="{Binding TouchButtonModes}" DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue" SelectedValue="{Binding CurrentMode}" MinWidth="120" Margin="8,0,0,0">
+        <Label Content="Button Activation Mode" ContentStringFormat="{}{0}:" Padding="0" VerticalAlignment="Center" />
+        <ComboBox VerticalAlignment="Center" ItemsSource="{Binding TouchButtonModes}" DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue" SelectedValue="{Binding CurrentMode}" MinWidth="120" Margin="8,0,0,0">
         </ComboBox>
     </StackPanel>
 </UserControl>
