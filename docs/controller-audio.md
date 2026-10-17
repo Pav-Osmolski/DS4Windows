@@ -33,6 +33,17 @@ translated for supported hardware, but translation is not identical to that
 controller's original effects. Do not infer native game support from an ordinary
 rumble test. See [compatibility](controller-compatibility.md).
 
+## Indicator lights and application control
+
+DualSense/Edge player and microphone indicators are under **Profile Editor >
+Lightbar > Indicator LEDs**. Use **Passthru** plus **Device settings** to follow
+application LED requests. A specific profile choice overrides them; returning to
+Device settings in Passthru restores the latest remembered application state.
+Normal mode retains the existing controller-specific policy. The orange light
+does not itself configure or mute microphone audio; mute indication and DSX
+commands retain their priority. See the [Lightbar guide](profile-editor.md#dualsense-indicator-leds)
+for available patterns and Reapply indicators.
+
 ## Speaker and headset routing
 
 Open **Profile Editor → Advanced → Audio**. Controls depend on physical model

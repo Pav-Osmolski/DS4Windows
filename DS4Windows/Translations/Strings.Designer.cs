@@ -2017,7 +2017,7 @@ namespace DS4WinWPF.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1€ Beta.
+        ///   Looks up a localized string similar to One Euro beta.
         /// </summary>
         public static string MainWin_OneEuroBeta {
             get {
@@ -2026,7 +2026,7 @@ namespace DS4WinWPF.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1€ MinCutoff.
+        ///   Looks up a localized string similar to One Euro min cutoff.
         /// </summary>
         public static string MainWin_OneEuroMinCutoff {
             get {

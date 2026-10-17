@@ -794,7 +794,7 @@
                         </xctk:ButtonChrome>
                         <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" HorizontalOffset="1" IsOpen="{Binding IsChecked, ElementName=PART_ToggleButton}" Placement="{TemplateBinding DropDownPosition}" StaysOpen="False" VerticalOffset="1">
                             <Border Background="{TemplateBinding DropDownContentBackground}" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                <ScrollViewer x:Name="DropDownScrollViewer" VerticalScrollBarVisibility="Auto">
+                                <ScrollViewer x:Name="DropDownScrollViewer" Style="{DynamicResource BridgeDropDownScrollViewerStyle}">
                                     <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding DropDownContent}"/>
                                 </ScrollViewer>
                             </Border>
@@ -853,9 +853,9 @@
 
                         <Popup x:Name="PART_Popup" AllowsTransparency="True" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Slide">
                             <Border BorderThickness="1" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                            Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
+                                            Background="{TemplateBinding Background}" BorderBrush="#2054A0">
                                 <ScrollViewer Style="{DynamicResource BridgeDropDownScrollViewerStyle}">
-                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0,5,0,5"/>
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
                                 </ScrollViewer>
                             </Border>
                         </Popup>

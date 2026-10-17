@@ -195,6 +195,20 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private ImageBrush lightbarImgBrush = new ImageBrush();
         private SolidColorBrush lightbarColBrush = new SolidColorBrush();
 
+        public int PlayerIndicatorsIndex
+        {
+            get => (int)ProfileIndicatorSettings.Normalize(Global.LightbarSettingsInfo[device].PlayerIndicators);
+            set => Global.LightbarSettingsInfo[device].PlayerIndicators =
+                ProfileIndicatorSettings.Normalize((ProfilePlayerIndicators)value);
+        }
+
+        public int MicrophoneIndicatorIndex
+        {
+            get => (int)ProfileIndicatorSettings.Normalize(Global.LightbarSettingsInfo[device].MicrophoneIndicator);
+            set => Global.LightbarSettingsInfo[device].MicrophoneIndicator =
+                ProfileIndicatorSettings.Normalize((ProfileMicrophoneIndicator)value);
+        }
+
         public int LightbarModeIndex
         {
             get
@@ -1294,6 +1308,22 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public OutContType TempConType =>
             GetOutputControllerType(tempControllerIndex);
+
+        public int GyroStickActivationIndex
+        {
+            get => (int)Global.GyroStickModes[device];
+            set => Global.GyroStickModes[device] = (GyroStickActivationMode)Math.Clamp(value, 0, 2);
+        }
+        public int GyroActivationStickIndex
+        {
+            get => (int)Global.GyroActivationSticks[device];
+            set => Global.GyroActivationSticks[device] = (GyroActivationStick)Math.Clamp(value, 0, 2);
+        }
+        public int GyroStickThreshold
+        {
+            get => Global.GyroStickThresholds[device];
+            set => Global.GyroStickThresholds[device] = Math.Clamp(value, 1, 95);
+        }
 
         public int GyroOutModeIndex
         {

@@ -13270,11 +13270,11 @@ namespace DS4Windows
                 return mapped;
             }
 
-            mapped.GyroX = ClampShort(SnapToZero(motion.gyroPitchFull,
+            mapped.GyroX = ClampShort(SnapToZero((state.GyroStickGateOpen ? motion.gyroPitchFull : 0),
                 DualSenseGyroRestDeadband));
-            mapped.GyroY = ClampShort(SnapToZero(-motion.gyroYawFull,
+            mapped.GyroY = ClampShort(SnapToZero(-(state.GyroStickGateOpen ? motion.gyroYawFull : 0),
                 DualSenseGyroRestDeadband));
-            mapped.GyroZ = ClampShort(SnapToZero(-motion.gyroRollFull,
+            mapped.GyroZ = ClampShort(SnapToZero(-(state.GyroStickGateOpen ? motion.gyroRollFull : 0),
                 DualSenseGyroRestDeadband));
             mapped.AccelX = ClampShort(-motion.accelXFull);
             mapped.AccelY = ClampShort(-motion.accelYFull);
@@ -13410,9 +13410,9 @@ namespace DS4Windows
                 ClampShort(state.Motion?.accelXFull ?? 0),
                 ClampShort(state.Motion?.accelYFull ?? 0),
                 ClampShort(state.Motion?.accelZFull ?? 0),
-                ClampShort(state.Motion?.gyroYawFull ?? 0),
-                ClampShort(state.Motion?.gyroPitchFull ?? 0),
-                ClampShort(state.Motion?.gyroRollFull ?? 0));
+                ClampShort(state.GyroStickGateOpen ? state.Motion?.gyroYawFull ?? 0 : 0),
+                ClampShort(state.GyroStickGateOpen ? state.Motion?.gyroPitchFull ?? 0 : 0),
+                ClampShort(state.GyroStickGateOpen ? state.Motion?.gyroRollFull ?? 0 : 0));
         }
 
         private static ushort BuildDualShock4Buttons(DS4State state)
@@ -13542,9 +13542,9 @@ namespace DS4Windows
                 return;
             }
 
-            int gyroX = SnapToZero(motion.gyroPitchFull, gyroDeadband);
-            int gyroY = SnapToZero(-motion.gyroYawFull, gyroDeadband);
-            int gyroZ = SnapToZero(-motion.gyroRollFull, gyroDeadband);
+            int gyroX = SnapToZero((state.GyroStickGateOpen ? motion.gyroPitchFull : 0), gyroDeadband);
+            int gyroY = SnapToZero(-(state.GyroStickGateOpen ? motion.gyroYawFull : 0), gyroDeadband);
+            int gyroZ = SnapToZero(-(state.GyroStickGateOpen ? motion.gyroRollFull : 0), gyroDeadband);
             int accelX = -motion.accelXFull;
             int accelY = -motion.accelYFull;
             int accelZ = motion.accelZFull;

@@ -4,6 +4,10 @@
 investigations and remaining acceptance limits. They do not establish the status
 of a newer release. Release history is in [CHANGELOG.md](../../CHANGELOG.md).
 
+- [Profile Editor field alignment](profile-editor-field-alignment.md)
+- [Stick-based gyro activation](stick-based-gyro-activation.md)
+- [DualSense indicator LEDs and Passthru](dualsense-indicator-leds.md)
+
 - [Joy-Con 2 artwork and thumbnail bounds — 2026-09-06](2026-09-06-joycon-artwork.md)
 - [Joy-Con 2 Bluetooth mouse and motion startup — 2026-09-06](2026-09-06-joycon-bluetooth-sensors.md)
 - [Complete Joy-Con thumbnails — b86 follow-up, 2026-09-06](2026-09-06-joycon-complete-silhouette.md)

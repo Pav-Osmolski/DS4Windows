@@ -697,6 +697,8 @@ namespace DS4Windows
     {
         public const LightbarMode DEFAULT_MODE = LightbarMode.DS4Win;
 
+        public ProfilePlayerIndicators PlayerIndicators { get; set; }
+        public ProfileMicrophoneIndicator MicrophoneIndicator { get; set; }
         public LightbarMode mode = DEFAULT_MODE;
         public LightbarDS4WinInfo ds4winSettings = new LightbarDS4WinInfo();
         public LightbarMode Mode

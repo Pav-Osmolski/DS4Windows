@@ -2534,6 +2534,10 @@ namespace DS4Windows
         }
 
 
+        public static GyroStickActivationMode[] GyroStickModes => m_Config.gyroStickModes;
+        public static GyroActivationStick[] GyroActivationSticks => m_Config.gyroActivationSticks;
+        public static int[] GyroStickThresholds => m_Config.gyroStickThresholds;
+
         public static GyroOutMode[] GyroOutputMode => m_Config.gyroOutMode;
         public static GyroOutMode GetGyroOutMode(int device)
         {
@@ -4935,6 +4939,9 @@ namespace DS4Windows
         { DEFAULT_TOUCH_OUT_MODE, DEFAULT_TOUCH_OUT_MODE, DEFAULT_TOUCH_OUT_MODE,
           DEFAULT_TOUCH_OUT_MODE, DEFAULT_TOUCH_OUT_MODE, DEFAULT_TOUCH_OUT_MODE,
           DEFAULT_TOUCH_OUT_MODE, DEFAULT_TOUCH_OUT_MODE, DEFAULT_TOUCH_OUT_MODE };
+        public GyroStickActivationMode[] gyroStickModes = new GyroStickActivationMode[Global.TEST_PROFILE_ITEM_COUNT];
+        public GyroActivationStick[] gyroActivationSticks = new GyroActivationStick[Global.TEST_PROFILE_ITEM_COUNT];
+        public int[] gyroStickThresholds = Enumerable.Repeat(15, Global.TEST_PROFILE_ITEM_COUNT).ToArray();
         public GyroOutMode[] gyroOutMode = new GyroOutMode[Global.TEST_PROFILE_ITEM_COUNT]
         { DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE,
           DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE,
@@ -5719,6 +5726,12 @@ namespace DS4Windows
                 rootElement.AppendChild(xmlColor);
                 XmlNode xmlRumbleBoost = m_Xdoc.CreateNode(XmlNodeType.Element, "RumbleBoost", null); xmlRumbleBoost.InnerText = rumble[device].ToString(); rootElement.AppendChild(xmlRumbleBoost);
                 XmlNode xmlRumbleAutostopTime = m_Xdoc.CreateNode(XmlNodeType.Element, "RumbleAutostopTime", null); xmlRumbleAutostopTime.InnerText = rumbleAutostopTime[device].ToString(); rootElement.AppendChild(xmlRumbleAutostopTime);
+                XmlNode xmlPlayerIndicators = m_Xdoc.CreateElement("PlayerIndicators");
+                xmlPlayerIndicators.InnerText = ProfileIndicatorSettings.Normalize(lightbarSettings.PlayerIndicators).ToString();
+                rootElement.AppendChild(xmlPlayerIndicators);
+                XmlNode xmlMicrophoneIndicator = m_Xdoc.CreateElement("MicrophoneIndicator");
+                xmlMicrophoneIndicator.InnerText = ProfileIndicatorSettings.Normalize(lightbarSettings.MicrophoneIndicator).ToString();
+                rootElement.AppendChild(xmlMicrophoneIndicator);
                 XmlNode xmlLightbarMode = m_Xdoc.CreateNode(XmlNodeType.Element, "LightbarMode", null); xmlLightbarMode.InnerText = GetLightbarModeString(lightbarSettings.mode); rootElement.AppendChild(xmlLightbarMode);
                 XmlNode xmlLedAsBatteryIndicator = m_Xdoc.CreateNode(XmlNodeType.Element, "ledAsBatteryIndicator", null); xmlLedAsBatteryIndicator.InnerText = lightInfo.ledAsBattery.ToString(); rootElement.AppendChild(xmlLedAsBatteryIndicator);
                 XmlNode xmlLowBatteryFlash = m_Xdoc.CreateNode(XmlNodeType.Element, "FlashType", null); xmlLowBatteryFlash.InnerText = lightInfo.flashType.ToString(); rootElement.AppendChild(xmlLowBatteryFlash);
@@ -5897,6 +5910,14 @@ namespace DS4Windows
                 XmlNode xmlGyroMinThreshold = m_Xdoc.CreateNode(XmlNodeType.Element, "GyroMouseMinThreshold", null); xmlGyroMinThreshold.InnerText = gyroMouseInfo[device].minThreshold.ToString(); rootElement.AppendChild(xmlGyroMinThreshold);
                 XmlNode xmlGyroMouseToggle = m_Xdoc.CreateNode(XmlNodeType.Element, "GyroMouseToggle", null); xmlGyroMouseToggle.InnerText = gyroMouseToggle[device].ToString(); rootElement.AppendChild(xmlGyroMouseToggle);
 
+                foreach (var setting in new[] { ("GyroStickActivationMode", gyroStickModes[device].ToString()),
+                    ("GyroActivationStick", gyroActivationSticks[device].ToString()),
+                    ("GyroStickThreshold", gyroStickThresholds[device].ToString()) })
+                {
+                    XmlNode node = m_Xdoc.CreateElement(setting.Item1);
+                    node.InnerText = setting.Item2;
+                    rootElement.AppendChild(node);
+                }
                 XmlNode xmlGyroOutMode = m_Xdoc.CreateNode(XmlNodeType.Element, "GyroOutputMode", null); xmlGyroOutMode.InnerText = gyroOutMode[device].ToString(); rootElement.AppendChild(xmlGyroOutMode);
                 XmlNode xmlGyroMStickTriggers = m_Xdoc.CreateNode(XmlNodeType.Element, "GyroMouseStickTriggers", null); xmlGyroMStickTriggers.InnerText = sAMouseStickTriggers[device].ToString(); rootElement.AppendChild(xmlGyroMStickTriggers);
                 XmlNode xmlGyroMStickTriggerCond = m_Xdoc.CreateNode(XmlNodeType.Element, "GyroMouseStickTriggerCond", null); xmlGyroMStickTriggerCond.InnerText = SaTriggerCondString(sAMouseStickTriggerCond[device]); rootElement.AppendChild(xmlGyroMStickTriggerCond);
@@ -6874,6 +6895,13 @@ namespace DS4Windows
                     lightbarSettings.mode = GetLightbarModeType(tempMode);
                 }
                 catch { lightbarSettings.mode = LightbarMode.DS4Win; missingSetting = true; }
+
+                lightbarSettings.PlayerIndicators = Enum.TryParse<ProfilePlayerIndicators>(
+                    m_Xdoc.SelectSingleNode("/" + rootname + "/PlayerIndicators")?.InnerText, out var playerIndicators)
+                    ? ProfileIndicatorSettings.Normalize(playerIndicators) : ProfilePlayerIndicators.DeviceSettings;
+                lightbarSettings.MicrophoneIndicator = Enum.TryParse<ProfileMicrophoneIndicator>(
+                    m_Xdoc.SelectSingleNode("/" + rootname + "/MicrophoneIndicator")?.InnerText, out var micIndicator)
+                    ? ProfileIndicatorSettings.Normalize(micIndicator) : ProfileMicrophoneIndicator.DeviceSettings;
 
                 //New method for saving color
                 try
@@ -7957,6 +7985,15 @@ namespace DS4Windows
                     Enum.TryParse(tempMode, out gyroOutMode[device]);
                 }
                 catch { PortOldGyroSettings(device); missingSetting = true; }
+
+                Enum.TryParse(m_Xdoc.SelectSingleNode("/" + rootname + "/GyroStickActivationMode")?.InnerText,
+                    out gyroStickModes[device]);
+                Enum.TryParse(m_Xdoc.SelectSingleNode("/" + rootname + "/GyroActivationStick")?.InnerText,
+                    out gyroActivationSticks[device]);
+                if (!Enum.IsDefined(gyroStickModes[device])) gyroStickModes[device] = GyroStickActivationMode.Disabled;
+                if (!Enum.IsDefined(gyroActivationSticks[device])) gyroActivationSticks[device] = GyroActivationStick.Left;
+                gyroStickThresholds[device] = int.TryParse(m_Xdoc.SelectSingleNode("/" + rootname +
+                    "/GyroStickThreshold")?.InnerText, out int stickThreshold) ? Math.Clamp(stickThreshold, 1, 95) : 15;
 
                 XmlNode xmlGyroControlsElement =
                     m_Xdoc.SelectSingleNode("/" + rootname + "/GyroControlsSettings");
@@ -11263,6 +11300,8 @@ namespace DS4Windows
             LightbarSettingInfo lightbarSettings = lightbarSettingInfo[device];
             LightbarDS4WinInfo lightInfo = lightbarSettings.ds4winSettings;
             lightbarSettings.Mode = LightbarMode.DS4Win;
+            lightbarSettings.PlayerIndicators = ProfilePlayerIndicators.DeviceSettings;
+            lightbarSettings.MicrophoneIndicator = ProfileMicrophoneIndicator.DeviceSettings;
             lightInfo.m_LowLed = new DS4Color(Color.Black);
             //m_LowLeds[device] = new DS4Color(Color.Black);
 
@@ -11298,6 +11337,9 @@ namespace DS4Windows
             sATriggers[device] = BackingStore.DEFAULT_SA_TRIGGERS;
             sATriggerCond[device] = DEFAULT_SA_TRIGGER_COND;
             gyroOutMode[device] = DEFAULT_GYRO_OUT_MODE;
+            gyroStickModes[device] = GyroStickActivationMode.Disabled;
+            gyroActivationSticks[device] = GyroActivationStick.Left;
+            gyroStickThresholds[device] = 15;
             sAMouseStickTriggers[device] = BackingStore.DEFAULT_GYRO_MSTICK_TRIGGERS;
             sAMouseStickTriggerCond[device] = true;
 

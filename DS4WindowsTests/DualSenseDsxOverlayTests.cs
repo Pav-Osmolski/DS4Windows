@@ -596,7 +596,9 @@ public class DualSenseDsxOverlayTests
     }
 
     [TestMethod]
-    public void OrderedReleaseRestoresNativeBOnlyOnReleasedFieldsAndKeepsUnrelatedClaimedBytes()
+    [DataRow(false)]
+    [DataRow(true)]
+    public void OrderedReleaseRestoresNativeBOnlyOnReleasedFieldsAndKeepsUnrelatedClaimedBytes(bool passthrough)
     {
         const int released = DualSenseDsxOverlay.LeftField | DualSenseDsxOverlay.ColorField;
         byte[] report = NativeReport(13, 0x04, 0x01);
@@ -618,6 +620,9 @@ public class DualSenseDsxOverlayTests
             NativeGameLightbarOwnershipReleased = false,
             MuteLedOverride = true,
             MuteLedOn = false,
+            IndicatorsFollowApplication = passthrough,
+            ProfilePlayerLedMask = 0,
+            ProfileMicLedByte = 2,
         };
 
         DualSenseDevice.ApplyDsxReleaseAtOrderedBoundary(report, 13, latest, released);

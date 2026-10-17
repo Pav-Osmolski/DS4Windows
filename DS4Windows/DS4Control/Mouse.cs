@@ -162,8 +162,19 @@ namespace DS4Windows
             touchStickTrackball.ResetAccel(friction);
         }
 
+        private readonly GyroStickActivation gyroStickActivation = new();
+
+        internal bool UpdateGyroStickActivation(DS4State state)
+        {
+            bool open = gyroStickActivation.Evaluate(state, Global.GyroStickModes[deviceNum],
+                Global.GyroActivationSticks[deviceNum], Global.GyroStickThresholds[deviceNum]);
+            state.GyroStickGateOpen = open;
+            return open;
+        }
+
         public void ResetToggleGyroModes()
         {
+            gyroStickActivation.Reset();
             Mapping.RequestPostMapStickReset(deviceNum);
             currentToggleGyroControls = false;
             currentToggleGyroMouse = false;
@@ -399,6 +410,7 @@ namespace DS4Windows
                 (uint)Mapping.mapStickActionData.Length ?
                 Mapping.PreparePostMapStickData(deviceNum) : null;
             long postMapEpoch = postMap?.CaptureEpoch() ?? 0;
+            bool stickGateOpen = UpdateGyroStickActivation(arg.SourceState ?? dev.getCurrentStateRef());
             GyroOutMode outMode = Global.GetGyroOutMode(deviceNum);
             if (outMode != GyroOutMode.MouseJoystick)
                 postMap?.TryClearGyro(postMapEpoch, deviceNum);
@@ -420,11 +432,11 @@ namespace DS4Windows
 
                 var triggerActive = IsGyroTriggerActive(outMode);
 
-                if (useReverseRatchet && triggerActive)
+                if (stickGateOpen && useReverseRatchet && triggerActive)
                 {
                     s.Motion.outputGyroControls = true;
                 }
-                else if (!useReverseRatchet && !triggerActive)
+                else if (stickGateOpen && !useReverseRatchet && !triggerActive)
                 {
                     s.Motion.outputGyroControls = true;
                 }
@@ -439,8 +451,8 @@ namespace DS4Windows
 
                 var triggerActive = IsGyroTriggerActive(outMode,
                     out int triggerIndex);
-                GyroMouseOutputActive = useReverseRatchet && triggerActive ||
-                    !useReverseRatchet && !triggerActive;
+                GyroMouseOutputActive = stickGateOpen && (useReverseRatchet && triggerActive ||
+                    !useReverseRatchet && !triggerActive);
                 Switch2GyroTriggerModifierResult modifier =
                     ResolveSwitch2GyroTriggerModifier(s,
                         GyroMouseOutputActive, outMode, triggerIndex,
@@ -457,8 +469,8 @@ namespace DS4Windows
                 s = arg.SourceState ?? dev.getCurrentStateRef();
                 var triggerActive = IsGyroTriggerActive(outMode,
                     out int triggerIndex);
-                bool outputActive = useReverseRatchet && triggerActive ||
-                    !useReverseRatchet && !triggerActive;
+                bool outputActive = stickGateOpen && (useReverseRatchet && triggerActive ||
+                    !useReverseRatchet && !triggerActive);
                 GyroMouseJoystickOutputActive = outputActive;
                 Switch2GyroTriggerModifierResult modifier =
                     ResolveSwitch2GyroTriggerModifier(s, outputActive,
@@ -487,11 +499,11 @@ namespace DS4Windows
                 gyroSwipe.previousSwipeUp = gyroSwipe.swipeUp;
                 gyroSwipe.previousSwipeDown = gyroSwipe.swipeDown;
 
-                if (useReverseRatchet && triggeractivated)
+                if (stickGateOpen && useReverseRatchet && triggeractivated)
                 {
                     SixDirectionalSwipe(arg, swipeMapInfo);
                 }
-                else if (!useReverseRatchet && !triggeractivated)
+                else if (stickGateOpen && !useReverseRatchet && !triggeractivated)
                 {
                     SixDirectionalSwipe(arg, swipeMapInfo);
                 }

@@ -3810,18 +3810,22 @@ Suspend support not enabled.", true);
                 MessageBoxImage.Information);
         }
 
+        private XInputDiagnosticsWindow xinputDiagnosticsWindow;
+
         private void XinputCheckerBtn_Click(object sender, RoutedEventArgs e)
         {
-            string path = System.IO.Path.Combine(Global.exedirpath, "Tools",
-                "XInputChecker", "XInputChecker.exe");
-
-            if (File.Exists(path))
+            if (Volatile.Read(ref shutdownRequested) != 0) return;
+            if (xinputDiagnosticsWindow == null)
             {
-                try
-                {
-                    using (Process proc = Process.Start(path)) { }
-                }
-                catch { }
+                xinputDiagnosticsWindow = new XInputDiagnosticsWindow { Owner = this };
+                xinputDiagnosticsWindow.Closed += (_, _) => xinputDiagnosticsWindow = null;
+                xinputDiagnosticsWindow.Show();
+            }
+            else
+            {
+                if (xinputDiagnosticsWindow.WindowState == WindowState.Minimized)
+                    xinputDiagnosticsWindow.WindowState = WindowState.Normal;
+                xinputDiagnosticsWindow.Activate();
             }
         }
 

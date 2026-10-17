@@ -14,6 +14,18 @@ used to write out a profile. Some older profiles did not contain the
 **config_version** attribute so tags used in the profile might have to be examined
 to determine an approximate version number corresponding to the schema version.
 
+## Current additive settings (5.0.29)
+
+These optional fields do not require a profile schema-version bump:
+
+- `GyroStickActivationMode`: Disabled / WhileMoving / WhileCentered; missing
+  values default to Disabled. `GyroActivationStick`: Left / Right / Either.
+  `GyroStickThreshold` defaults to 15 and is clamped to 1-95.
+- `PlayerIndicators` and `MicrophoneIndicator`: default to DeviceSettings when
+  absent. Their runtime interpretation also uses the existing `LightbarMode`:
+  inherited indicators follow application requests in Passthru. Explicit choices
+  override the native values. Both DTO and legacy XML paths preserve the fields.
+
 ### 5 (DS4Windows 2.1.15)
 
 Replace old **UseTPforControls** option with a new **TouchpadOutputMode**
