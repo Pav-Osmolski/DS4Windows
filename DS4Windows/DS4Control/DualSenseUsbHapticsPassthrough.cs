@@ -106,7 +106,7 @@ internal sealed class DualSenseUsbHapticsPassthrough
 
         internal async Task Run()
         {
-            bool waitingLogged = false;
+            string waitingReason = null;
             try
             {
                 stop.Token.ThrowIfCancellationRequested();
@@ -123,16 +123,16 @@ internal sealed class DualSenseUsbHapticsPassthrough
                         if (source?.IsRuntimeConnected != true || !source.SupportsRealtimeHaptics)
                             throw new InvalidOperationException("Waiting for this controller's virtual audio endpoint.");
                         await Play(source).ConfigureAwait(false);
-                        waitingLogged = false;
+                        waitingReason = null;
                     }
                     catch (OperationCanceledException) when (stop.IsCancellationRequested) { break; }
                     catch (Exception ex)
                     {
-                        if (!waitingLogged)
+                        if (!string.Equals(waitingReason, ex.Message, StringComparison.Ordinal))
                         {
                             AppLogger.LogToGui(
                                 $"DualSense USB native haptics waiting for controller {slot + 1}: {ex.Message}", true);
-                            waitingLogged = true;
+                            waitingReason = ex.Message;
                         }
                     }
                     await Task.Delay(250, stop.Token).ConfigureAwait(false);
@@ -295,10 +295,16 @@ internal sealed class DualSenseUsbHapticsPassthrough
 
     private static bool EndpointMatchesContainer(MMDevice endpoint, Guid container)
     {
-        foreach (var key in new[] { PropertyKeys.PKEY_Device_ControllerDeviceId, PropertyKeys.PKEY_Device_InstanceId })
+        foreach (var key in new[] { PropertyKeys.PKEY_Device_ControllerDeviceId,
+            PropertyKeys.PKEY_Device_InstanceId, PropertyKeys.PKEY_Device_InterfaceKey })
         {
             string instance;
-            try { instance = endpoint.Properties[key]?.Value?.ToString(); }
+            try
+            {
+                instance = NormalizeEndpointIdentityProperty(endpoint.Properties[key]?.Value?.ToString());
+                if (instance.StartsWith(@"\\?\", StringComparison.Ordinal))
+                    instance = Global.GetInstanceIdFromDevicePath(instance);
+            }
             catch { continue; }
             for (int depth = 0; depth < 16 && !string.IsNullOrEmpty(instance); depth++)
             {
@@ -308,6 +314,18 @@ internal sealed class DualSenseUsbHapticsPassthrough
             }
         }
         return false;
+    }
+
+    internal static string NormalizeEndpointIdentityProperty(string value)
+    {
+        value = value?.TrimEnd('\0') ?? string.Empty;
+        // Windows MMDevice string properties can carry an indexed "{1}."
+        // or "{2}." prefix. This is not part of the PnP instance/interface ID.
+        int marker = value.IndexOf("}.", StringComparison.Ordinal);
+        if (value.StartsWith('{') && marker > 1 &&
+            int.TryParse(value.AsSpan(1, marker - 1), out int index) && index >= 0)
+            return value[(marker + 2)..];
+        return value;
     }
 
     internal static bool SamePhysicalContainer(Guid controller, Guid endpoint) =>

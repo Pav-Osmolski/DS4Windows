@@ -140,6 +140,19 @@ public sealed class DualSenseUsbHapticsPlaybackTests
 
     private static WaveFormat Format(int bits) => bits == 0
         ? WaveFormat.CreateIeeeFloatWaveFormat(48000, 4) : new WaveFormat(48000, bits, 4);
+
+    [TestMethod]
+    [DataRow(@"{1}.USB\VID_054C&PID_0CE6&MI_00\8&2351730D&0&0000",
+        @"USB\VID_054C&PID_0CE6&MI_00\8&2351730D&0&0000")]
+    [DataRow(@"{2}.\\?\usb#vid_054c&pid_0ce6#example#{6994ad04-93ef-11d0-a3cc-00a0c9223196}\global",
+        @"\\?\usb#vid_054c&pid_0ce6#example#{6994ad04-93ef-11d0-a3cc-00a0c9223196}\global")]
+    [DataRow(@"USB\VID_054C&PID_0CE6\physical", @"USB\VID_054C&PID_0CE6\physical")]
+    [DataRow("{not-an-index}.keep", "{not-an-index}.keep")]
+    [DataRow(null, "")]
+    public void WindowsEndpointPropertyPrefixesDoNotBecomePartOfThePnpIdentity(string value, string expected)
+    {
+        Assert.AreEqual(expected, DualSenseUsbHapticsPassthrough.NormalizeEndpointIdentityProperty(value));
+    }
     private static BufferedWaveProvider Provider(WaveFormat format, double seconds = 1) =>
         new(format) { BufferDuration = TimeSpan.FromSeconds(seconds), ReadFully = false };
     private static byte[] Drain(BufferedWaveProvider p)
