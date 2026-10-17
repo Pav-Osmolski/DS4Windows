@@ -7,25 +7,25 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Added
 
-- Add **Stick-based gyro activation** in Profile Editor > Gyro. Enable or pause gyro while the left, right or either stick is held beyond an adjustable threshold. Applies to mapped aiming and supported virtual-controller gyro output; accelerometer/gravity and UDP/DSU motion remain active (#43).
-- Add per-profile **Indicator LEDs** controls for DualSense and DualSense Edge in the Lightbar tab. Choose white player-light patterns, battery indication or Off, and orange microphone-light Off, On or Pulse. Device settings in the existing **Passthru** mode follows application requests and restores their latest remembered values after a profile override is removed (#46, #40).
-- Add **Reapply indicators** so lights left on by another application can be cleared without changing profiles, including when Off is already selected (#46).
+- Add **Stick-based gyro activation** in Profile Editor > Gyro. Enable or pause gyro while the left, right or either stick is held beyond an adjustable threshold. Applies to mapped aiming and supported virtual-controller gyro output; accelerometer/gravity and UDP/DSU motion remain active ([#43](https://github.com/Pav-Osmolski/DS4Windows/pull/43)).
+- Add per-profile **Indicator LEDs** controls for DualSense and DualSense Edge in the Lightbar tab. Choose white player-light patterns, battery indication or Off, and orange microphone-light Off, On or Pulse. Device settings in the existing **Passthru** mode follows application requests and restores their latest remembered values after a profile override is removed ([#46](https://github.com/Pav-Osmolski/DS4Windows/pull/46), [#40](https://github.com/Pav-Osmolski/DS4Windows/issues/40)).
+- Add **Reapply indicators** so lights left on by another application can be cleared without changing profiles, including when Off is already selected ([#46](https://github.com/Pav-Osmolski/DS4Windows/pull/46)).
 
 ### Improved
 
-- Replace the silent external **XInputChecker** launcher with a built-in controller test. Inspect all four Windows XInput slots, buttons, triggers and sticks without downloading another tool. XInput slot numbers are separate from DS4Windows output slots; virtual PlayStation outputs do not appear in this test (#44).
-- Update the user guides for indicator ownership, stick-based gyro conditions and XInput diagnostics. Spell out One Euro smoothing-filter terminology in English (#41).
+- Replace the silent external **XInputChecker** launcher with a built-in controller test. Inspect all four Windows XInput slots, buttons, triggers and sticks without downloading another tool. XInput slot numbers are separate from DS4Windows output slots; virtual PlayStation outputs do not appear in this test ([#44](https://github.com/Pav-Osmolski/DS4Windows/pull/44)).
+- Update the user guides for indicator ownership, stick-based gyro conditions and XInput diagnostics. Spell out One Euro smoothing-filter terminology in English ([#41](https://github.com/Pav-Osmolski/DS4Windows/pull/41)).
 
 ### Fixed
 
-- Remove the top/bottom padding from standard Dark-theme dropdown lists and use a #2054A0 popup border. Preserve the closed toggle border, Light theme and the separate rounded profile/controller dropdown styles (#41).
-- Remove the right-hand gutter from the Controllers Edit > New Profile menu. Centre Profile Editor labels, inline checkboxes and unit suffixes beside their fields, with small readable gaps before units (#41).
-- Forward native microphone-light requests in Passthru and restore application player/microphone indicators after Off without requiring a new game packet. Preserve microphone mute indication, DSX priority and unrelated feedback fields (#46).
+- Remove the top/bottom padding from standard Dark-theme dropdown lists and use a #2054A0 popup border. Preserve the closed toggle border, Light theme and the separate rounded profile/controller dropdown styles ([#41](https://github.com/Pav-Osmolski/DS4Windows/pull/41)).
+- Remove the right-hand gutter from the Controllers Edit > New Profile menu. Centre Profile Editor labels, inline checkboxes and unit suffixes beside their fields, with small readable gaps before units ([#41](https://github.com/Pav-Osmolski/DS4Windows/pull/41)).
+- Forward native microphone-light requests in Passthru and restore application player/microphone indicators after Off without requiring a new game packet. Preserve microphone mute indication, DSX priority and unrelated feedback fields ([#46](https://github.com/Pav-Osmolski/DS4Windows/pull/46)).
 
 ### Updating
 
 - Close games, DS4Windows and VIIPER before updating. VIIPER remains at 0.1.11 and USB/IP at 0.9.8.1; no driver version change is required. This release is unsigned.
-- The maintainer confirmed the UI, native gyro forwarding, XInput diagnostics and indicator behaviour during testing. The separate Bluetooth haptics backlog candidate (#42) is **not included** and remains under extended hardware testing.
+- The maintainer confirmed the UI, native gyro forwarding, XInput diagnostics and indicator behaviour during testing. The separate Bluetooth haptics backlog candidate ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)) is **not included** and remains under extended hardware testing.
 
 ## [5.0.28](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.28) - 2026-10-16
 
