@@ -3107,19 +3107,26 @@ namespace DS4Windows
                     try { tcp.Dispose(); } catch (ObjectDisposedException) { }
                 });
 
-                IAsyncResult result = tcp.BeginConnect(host, port, null, null);
-                using (result.AsyncWaitHandle)
+                // Match the main API client's cancellable connect path. APM
+                // completion handles are not owned by this probe and can be
+                // disposed/reused by another completion, producing a false
+                // ObjectDisposedException while the broker is healthy.
+                using (var connectDeadline = CancellationTokenSource.CreateLinkedTokenSource(totalDeadline.Token))
                 {
-                    if (!result.AsyncWaitHandle.WaitOne(
-                            TimeSpan.FromMilliseconds(750)))
+                    connectDeadline.CancelAfter(750);
+                    try
+                    {
+                        tcp.ConnectAsync(host, port, connectDeadline.Token)
+                            .AsTask().GetAwaiter().GetResult();
+                    }
+                    catch (Exception exception) when (connectDeadline.IsCancellationRequested &&
+                        (exception is OperationCanceledException || exception is ObjectDisposedException || exception is SocketException))
                     {
                         failure = "Connect: timeout";
                         return false;
                     }
                 }
 
-                phase = "CompleteConnect";
-                tcp.EndConnect(result);
                 using var transport = new ViiperProbeDeadlineStream(tcp.GetStream(),
                     probeStarted, budgetMilliseconds);
                 phase = authenticated ? "Authenticate" : "OpenStream";

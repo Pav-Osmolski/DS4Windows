@@ -193,15 +193,28 @@ namespace DS4WinWPF.DS4Forms
             hasContext && previewVisible && loaded && visible && !closed;
 
         internal static Size GetLiveInputWindowSize(double workWidth, double workHeight,
-            bool previewVisible = true)
+            bool previewVisible = true, Size requiredSize = default)
         {
             const double margin = 24;
-            double desiredHeight = previewVisible ? 710 : 576;
+            double desiredWidth = Math.Max(1020, requiredSize.Width);
+            double desiredHeight = Math.Max(previewVisible ? 710 : 576, requiredSize.Height);
             return new Size(
                 double.IsFinite(workWidth) && workWidth > margin ?
-                    Math.Min(1020, workWidth - margin) : 1020,
+                    Math.Min(desiredWidth, workWidth - margin) : desiredWidth,
                 double.IsFinite(workHeight) && workHeight > margin ?
                     Math.Min(desiredHeight, workHeight - margin) : desiredHeight);
+        }
+
+        internal Size MeasureRequiredWindowSize(Size frameSize)
+        {
+            // Include the actual theme, translated labels and optional joystick
+            // explanation, rather than assuming the old fixed-height editor fits.
+            fullPanel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            liveInputPreviewToggle.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            liveInputPreviewScroll.Measure(new Size(fullPanel.DesiredSize.Width, 180));
+            return new Size(fullPanel.DesiredSize.Width + frameSize.Width + 2,
+                fullPanel.DesiredSize.Height + liveInputPreviewToggle.DesiredSize.Height +
+                liveInputPreviewScroll.DesiredSize.Height + frameSize.Height + 2);
         }
 
         internal static Point GetLiveInputWindowPosition(Rect workArea, Size windowSize,
@@ -228,7 +241,11 @@ namespace DS4WinWPF.DS4Forms
             Matrix fromDevice = PresentationSource.FromVisual(this)?.CompositionTarget?.TransformFromDevice ??
                 Matrix.Identity;
             Vector workSize = fromDevice.Transform(new Vector(working.Width, working.Height));
-            Size bounds = GetLiveInputWindowSize(workSize.X, workSize.Y, LiveInputPreviewVisible);
+            var content = (FrameworkElement)Content;
+            var frame = new Size(Math.Max(0, ActualWidth - content.ActualWidth),
+                Math.Max(0, ActualHeight - content.ActualHeight));
+            Size bounds = GetLiveInputWindowSize(workSize.X, workSize.Y, LiveInputPreviewVisible,
+                MeasureRequiredWindowSize(frame));
             Point workOrigin = fromDevice.Transform(new Point(working.Left, working.Top));
             Point position = GetLiveInputWindowPosition(new Rect(workOrigin,
                 new Size(workSize.X, workSize.Y)), bounds, new Point(Left, Top));
@@ -246,7 +263,7 @@ namespace DS4WinWPF.DS4Forms
 
         private void BindingWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (hasLiveInputContext) ApplyLiveInputWindowBounds();
+            if (expose == ExposeMode.Full) ApplyLiveInputWindowBounds();
             UpdateLiveInputObservation();
         }
 
@@ -1106,6 +1123,9 @@ namespace DS4WinWPF.DS4Forms
             outputControllerRasterHighlight.Visibility = Visibility.Collapsed;
             outputType = outputType.Normalize();
             configuredOutputType = outputType;
+            genericJoystickMappingHint.Text = GenericJoystickOutputLabels.DiagramHint;
+            genericJoystickMappingHint.Visibility = outputType == OutContType.ViiperGenericJoystick
+                ? Visibility.Visible : Visibility.Collapsed;
             switch (outputType)
             {
                 case OutContType.ViiperDS4:

@@ -8,6 +8,8 @@ import stat
 import tempfile
 import zipfile
 
+from normal_package import reject_lab_payloads
+
 
 def is_reparse_point(path: Path) -> bool:
     attributes = getattr(path.lstat(), "st_file_attributes", 0)
@@ -29,6 +31,9 @@ if not re.fullmatch(r"[0-9A-Za-z][0-9A-Za-z._-]{0,79}", version):
     )
 if not target_dir.is_dir() or is_reparse_point(target_dir):
     raise SystemExit(f"Publish directory is missing or unsafe: {target_dir}")
+
+# Refuse preview launchers/data before writing or replacing any output.
+reject_lab_payloads(target_dir)
 
 # These belong to the portable archive only. The unchanged publish tree is
 # also recursively harvested into the MSI, which uses its managed backend.

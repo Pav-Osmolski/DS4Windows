@@ -79,6 +79,7 @@ namespace DS4Windows
         ViiperDualSenseEdge,
         ViiperSwitch2Pro,
         ViiperXboxOne,
+        ViiperGenericJoystick,
     }
 
     public static class OutContTypeCompatibility
@@ -103,6 +104,7 @@ namespace DS4Windows
                 OutContType.ViiperDualSenseEdge => "DualSense Edge",
                 OutContType.ViiperSwitch2Pro => "Switch 2 Pro",
                 OutContType.ViiperXboxOne => "Xbox One / Series",
+                OutContType.ViiperGenericJoystick => "Generic joystick (experimental)",
                 _ => "None",
             };
         }
@@ -1015,6 +1017,10 @@ namespace DS4Windows
         {
             conType = conType.Normalize();
             string result = string.Empty;
+            if (conType == DS4Windows.OutContType.ViiperGenericJoystick)
+            {
+                return GenericJoystickOutputLabels.Get(key);
+            }
             if (conType == DS4Windows.OutContType.X360 ||
                 conType == DS4Windows.OutContType.ViiperX360 ||
                 conType == DS4Windows.OutContType.ViiperXboxOne)
@@ -3227,6 +3233,7 @@ namespace DS4Windows
         public static ControlServiceDeviceOptions DeviceOptions => m_Config.deviceOptions;
 
         public static OutContType[] OutContType => m_Config.outputDevType;
+        internal static GenericJoystickProfileSettings[] GenericJoystickSettings => m_Config.genericJoystickSettings;
         public static bool[] OutputVirtualTriggerButton => m_Config.outputVirtualTriggerButtons;
         public static DS4TriggerOutputMode[] OutputDS4TriggerMode => m_Config.outputDS4TriggerMode;
         public static DS4TriggerOutputMode GetOutputDS4TriggerMode(int index)
@@ -5202,6 +5209,9 @@ namespace DS4Windows
           DEFAULT_OUT_CONT_TYPE, DEFAULT_OUT_CONT_TYPE, DEFAULT_OUT_CONT_TYPE,
           DEFAULT_OUT_CONT_TYPE, DEFAULT_OUT_CONT_TYPE, DEFAULT_OUT_CONT_TYPE};
 
+        internal GenericJoystickProfileSettings[] genericJoystickSettings = Enumerable.Range(0, Global.TEST_PROFILE_ITEM_COUNT)
+            .Select(_ => new GenericJoystickProfileSettings()).ToArray();
+
         public AudioHapticsProfileSettings[] audioHapticsSettings = Enumerable.Range(0, Global.TEST_PROFILE_ITEM_COUNT)
             .Select(_ => new AudioHapticsProfileSettings()).ToArray();
 
@@ -5467,6 +5477,7 @@ namespace DS4Windows
                 case OutContType.ViiperDualSenseEdge: result = "ViiperDualSenseEdge"; break;
                 case OutContType.ViiperSwitch2Pro: result = "ViiperSwitch2Pro"; break;
                 case OutContType.ViiperXboxOne: result = "ViiperXboxOne"; break;
+                case OutContType.ViiperGenericJoystick: result = "ViiperGenericJoystick"; break;
                 default: break;
             }
 
@@ -5490,6 +5501,7 @@ namespace DS4Windows
                 case "XboxOne":
                 case "Xbox One":
                 case "ViiperXboxOne": id = OutContType.ViiperXboxOne; break;
+                case "ViiperGenericJoystick": id = OutContType.ViiperGenericJoystick; break;
                 default: break;
             }
 
@@ -6094,6 +6106,8 @@ namespace DS4Windows
                 // End of DualSense specific settings
 
                 XmlNode xmlOutContDevice = m_Xdoc.CreateNode(XmlNodeType.Element, "OutputContDevice", null); xmlOutContDevice.InnerText = OutContDeviceString(outputDevType[device]); rootElement.AppendChild(xmlOutContDevice);
+                if (genericJoystickSettings[device].Valid || outputDevType[device] == OutContType.ViiperGenericJoystick)
+                    rootElement.AppendChild(genericJoystickSettings[device].Write(m_Xdoc));
 
                 XmlNode NodeControl = m_Xdoc.CreateNode(XmlNodeType.Element, "Control", null);
                 XmlNode Key = m_Xdoc.CreateNode(XmlNodeType.Element, "Key", null);
@@ -9166,6 +9180,9 @@ namespace DS4Windows
                     catch { }
                 }
 
+                genericJoystickSettings[device] = GenericJoystickProfileSettings.Read(
+                    m_Xdoc.SelectSingleNode("/" + rootname + "/GenericJoystick"));
+
                 try { Item = m_Xdoc.SelectSingleNode("/" + rootname + "/OutputContDevice"); outputDevType[device] = OutContDeviceId(Item.InnerText).Normalize(); }
                 catch { outputDevType[device] = OutContType.ViiperX360; missingSetting = true; }
 
@@ -11198,6 +11215,7 @@ namespace DS4Windows
 
         private void ResetProfile(int device)
         {
+            genericJoystickSettings[device] = new GenericJoystickProfileSettings();
             buttonMouseInfos[device].Reset();
             buttonAbsMouseInfos[device].Reset();
             gyroControlsInf[device].Reset();
@@ -11954,7 +11972,9 @@ namespace DS4Windows
                     }
                 }
                 else if (!dinputOnly[device] &&
-                    oldContType != outputDevType[device])
+                    (oldContType != outputDevType[device] ||
+                     outputDevType[device] == OutContType.ViiperGenericJoystick &&
+                     control.outputDevices[device] is ViiperOutDevice joystick && !joystick.CanReuseForPhysicalController(device)))
                 {
                     xinputPlug = true;
                     xinputStatus = true;

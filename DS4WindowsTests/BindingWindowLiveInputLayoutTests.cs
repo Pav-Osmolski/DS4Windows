@@ -157,6 +157,14 @@ public sealed class BindingWindowLiveInputLayoutTests
     }
 
     [TestMethod]
+    public void ContentFitIncludesLargerLabelsButRemainsInsideTheMonitor()
+    {
+        var required = new Size(1200, 820);
+        Assert.AreEqual(required, BindingWindow.GetLiveInputWindowSize(1920, 1040, false, required));
+        Assert.AreEqual(new Size(776, 536), BindingWindow.GetLiveInputWindowSize(800, 560, false, required));
+    }
+
+    [TestMethod]
     public void ExplicitIdentityAndToggleUseOnlyReadOnlyObservation()
     {
         string source = File.ReadAllText(SourcePath("BindingWindow.xaml.cs"));
@@ -220,6 +228,8 @@ public sealed class BindingWindowLiveInputLayoutTests
                     ValidateRenderedBindingWindow(theme, BindingWindow.ExposeMode.Keyboard,
                         narrow, false, resultsDirectory, renderedFiles);
                 }
+                ValidateRenderedBindingWindow(theme, BindingWindow.ExposeMode.Full,
+                    false, false, resultsDirectory, renderedFiles, genericJoystick: true);
             }
         }
         finally
@@ -231,9 +241,12 @@ public sealed class BindingWindowLiveInputLayoutTests
     }
 
     private static void ValidateRenderedBindingWindow(string theme, BindingWindow.ExposeMode mode,
-        bool narrow, bool show, string resultsDirectory, ICollection<string> renderedFiles)
+        bool narrow, bool show, string resultsDirectory, ICollection<string> renderedFiles,
+        bool genericJoystick = false)
     {
         var settings = new DS4ControlSettings(DS4Controls.Cross);
+        var previousType = Global.outDevTypeTemp[Global.TEST_PROFILE_INDEX];
+        if (genericJoystick) Global.outDevTypeTemp[Global.TEST_PROFILE_INDEX] = OutContType.ViiperGenericJoystick;
         var window = new BindingWindow(Global.TEST_PROFILE_INDEX, settings, mode);
         var preview = (MappingLiveInputControl)window.FindName("bindingLiveInput");
         try
@@ -254,6 +267,13 @@ public sealed class BindingWindowLiveInputLayoutTests
             int width = narrow ? 600 : mode == BindingWindow.ExposeMode.Full ? 1000 : 930;
             int height = mode == BindingWindow.ExposeMode.Keyboard ? 260 :
                 narrow ? 346 : show ? 678 : 544;
+            if (!narrow && mode == BindingWindow.ExposeMode.Full)
+            {
+                Size required = window.MeasureRequiredWindowSize(new Size(16, 40));
+                Size fitted = BindingWindow.GetLiveInputWindowSize(1920, 1040, show, required);
+                width = (int)Math.Ceiling(fitted.Width - 16);
+                height = (int)Math.Ceiling(fitted.Height - 40);
+            }
             content.Measure(new Size(width, height));
             content.Arrange(new Rect(0, 0, width, height));
             content.UpdateLayout();
@@ -274,8 +294,24 @@ public sealed class BindingWindowLiveInputLayoutTests
                 Assert.AreEqual(247d, artwork.ActualHeight,
                     1.0 / VisualTreeHelper.GetDpi(artwork).DpiScaleY,
                     "Layout rounding may change the measured height by at most one physical pixel.");
-                if (!narrow && !show) Assert.AreEqual(0d, editor.ScrollableHeight,
-                    "The compact toggle must not force the previously visible editor to scroll.");
+                if (!narrow)
+                {
+                    Assert.AreEqual(0d, editor.ScrollableHeight, 1,
+                        "The fitted editor must show its complete content when the work area allows it.");
+                    Assert.AreEqual(0d, editor.ScrollableWidth, 1);
+                }
+                var channels = (Grid)window.FindName("bindingRgbChannels");
+                Border[] surfaces = channels.Children.OfType<Border>().ToArray();
+                Assert.AreEqual(3, surfaces.Length);
+                foreach (Border surface in surfaces)
+                {
+                    var slider = (Slider)surface.Child;
+                    slider.ApplyTemplate();
+                    var rail = (FrameworkElement)slider.Template.FindName("RgbRail", slider);
+                    var center = rail.TranslatePoint(new Point(rail.ActualWidth / 2, rail.ActualHeight / 2), surface);
+                    Assert.AreEqual(surface.ActualWidth / 2, center.X, 0.6, "RGB rail is not horizontally centred.");
+                    Assert.AreEqual(surface.ActualHeight / 2, center.Y, 0.6, "RGB rail is not vertically centred.");
+                }
             }
             else Assert.AreEqual(Visibility.Collapsed, toggle.Visibility);
             Assert.AreEqual(show ? Visibility.Visible : Visibility.Collapsed, viewport.Visibility);
@@ -290,11 +326,16 @@ public sealed class BindingWindowLiveInputLayoutTests
             int dpi = narrow ? 144 : 96;
             var bitmap = new RenderTargetBitmap(width * dpi / 96, height * dpi / 96,
                 dpi, dpi, PixelFormats.Pbgra32);
+            var background = new DrawingVisual();
+            using (DrawingContext drawing = background.RenderOpen())
+                drawing.DrawRectangle((Brush)window.FindResource("BackgroundColor"), null,
+                    new Rect(0, 0, width, height));
+            bitmap.Render(background);
             bitmap.Render(content);
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(bitmap));
             string path = Path.Combine(resultsDirectory,
-                $"binding-live-{theme}-{mode}-{width}-{(show ? "shown" : "hidden")}.png");
+                $"binding-live-{theme}-{mode}-{width}-{(show ? "shown" : "hidden")}{(genericJoystick ? "-joystick" : "")}.png");
             using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write)) encoder.Save(stream);
             renderedFiles.Add(path);
             window.LiveInputPreviewVisible = false;
@@ -306,6 +347,7 @@ public sealed class BindingWindowLiveInputLayoutTests
             preview.EnableControl(false);
             // Closing commits only the detached test-local settings object.
             window.Close();
+            Global.outDevTypeTemp[Global.TEST_PROFILE_INDEX] = previousType;
         }
         Assert.IsFalse(preview.IsPolling);
     }
