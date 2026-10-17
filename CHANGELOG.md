@@ -56,7 +56,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Fixed
 
-- Fix enabled Special Actions failing to save when selecting existing actions for another profile (#33). Checkbox changes now apply immediately, and saving captures the current selection, including disabling every action or renaming an enabled action.
+- Fix enabled Special Actions failing to save when selecting existing actions for another profile ([#33](https://github.com/Pav-Osmolski/DS4Windows/issues/33)). Checkbox changes now apply immediately, and saving captures the current selection, including disabling every action or renaming an enabled action.
 
 ## [5.0.25](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.25) - 2026-10-15
 
