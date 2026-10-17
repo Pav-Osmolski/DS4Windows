@@ -2,6 +2,8 @@
 
 This branch now includes the 5.0.29 main changes; its additional backlog recovery remains experimental and is not part of that release.
 
+The same candidate also contains USB feedback corrections found during the maintainer's DEATHLOOP comparisons: editor motor tests after native output, and forwarding native waveform channels to the physical USB audio endpoint. These USB changes are not in released 5.0.29 and still require hardware acceptance.
+
 This candidate addresses backlog behaviour investigated in [upstream issue 124](https://github.com/hbashton/DS4Windows/issues/124). It is a test build, not a claim that the reporter's machine-specific stall is fixed. No VIIPER or USB/IP update is required.
 
 ## Get ready
@@ -11,6 +13,18 @@ This candidate addresses backlog behaviour investigated in [upstream issue 124](
 3. Close the game and DS4Windows, quit VIIPER from its tray icon, then start the test copy. Run one DS4Windows copy at a time. Import a copy of your normal profile through Profiles. Keep the working release and existing drivers for this test.
 4. Enable **Settings > Updates & tools > Diagnostics > Verbose logging**. Restart DS4Windows for each comparison run and save its log separately with the build and connection type in the filename. Use **Open log** in that same section to locate the log. A fresh application session makes the cumulative counters easier to interpret.
 5. Use the same game, save/location, profile and graphics settings throughout. Choose a game which already gives native DualSense haptics on your PC, keeping its working virtual-controller selection (normally DualSense). Test locally first, without Sunshine/Moonlight. Desktop-audio-to-rumble effects alone do not exercise the same native-haptics source as the report.
+
+## Quick USB acceptance for the added corrections
+
+1. Close the game, the released DS4Windows copy and VIIPER. Start the complete latest candidate portable package; keep Audio Haptics disabled. Connect the DualSense by USB and confirm `(USB) (DualSense)` in the log.
+2. Use **Emulated Controller: DualSense**, keep **Advanced > Feedback > Send game feedback to physical controller** enabled, and save. Keep Steam Input disabled for DEATHLOOP. These native waveform checks do not use Xbox 360 emulation.
+3. Under **Advanced > Audio**, leave **USB DualSense speaker** on automatic selection initially. The native haptics route uses the matching virtual controller's four-channel Windows endpoint and the physical USB controller's four-channel endpoint, even with **Stream audio to controller** off. Keep both Windows endpoints enabled and unmuted; leave your usual headphones/speakers selected for ordinary game sound.
+4. Look for **DualSense USB native haptics started**. If the log says it is waiting for the physical USB audio endpoint, explicitly select the physical controller under **USB DualSense speaker**, save and retry. A stereo/downmixed endpoint is rejected, with a diagnostic, rather than playing vibration data as speaker sound.
+5. With the game closed, try **Test Heavy** and **Test Light** separately; press again to stop. Both should work and stop promptly. Start DEATHLOOP, replay the stabbing/punching intro, then pause and repeat those editor tests after the game has sent native feedback. Stopping an editor test must allow subsequent game effects to work again.
+6. With **Stream audio to controller** off, the intro should still produce native vibration without playing game sound through the built-in speaker. If you normally use speaker/headset streaming, enable it and check it alongside haptics, then disable it again. This must not switch on Audio Haptics.
+7. Pause/resume and disconnect/reconnect USB once; confirm new effects return. Then do a short Bluetooth comparison and check the previously working intro, triggers and editor tests.
+
+With verbose logging on, **DualSense USB native haptics stats** reports `sourceFrames`, `nonzeroRearBlocks` and `bufferedBytes`. During an active waveform scene, source frames and nonzero rear blocks should increase. USB now uses Windows four-channel capture/render for these actuator samples; `speakerDelivered` in the older VIIPER callback counters is not proof of USB delivery. Send the full log and describe which of the editor/game/speaker checks passed.
 
 ## Comparison runs
 
@@ -46,7 +60,7 @@ Keep the existing `hapticsQueueDepth`, `hapticsQueueAgeMaxMs`, `helperCompletion
 
 ## Acceptance
 
-A convincing result is reproducible delay in B, followed by a same-length C run without accumulating delayed effects, missing normal effects, repeated transport resets, or audio/control regressions. D should remain consistent with A. If neither released nor candidate Bluetooth runs reproduce delay, report that as a useful compatibility test, not proof of a fix. A one-off recovery that returns to normal is different from constant recovery/dropouts; report both accurately.
+A convincing result is reproducible delay in B, followed by a same-length C run without accumulating delayed effects, missing normal effects, repeated transport resets, or audio/control regressions. D must retain working USB feedback and exercise the added USB corrections above. Released 5.0.29 already lacked the maintainer's DEATHLOOP USB waveform effects, so matching that missing effect is not a successful candidate result. If neither released nor candidate Bluetooth runs reproduce delay, report that as a useful compatibility test, not proof of a fix. A one-off recovery that returns to normal is different from constant recovery/dropouts; report both accurately.
 
 The candidate preserves FIFO playback through short interruptions. Beyond 250 ms of queue age it retires complete obsolete rear blocks until within a 50 ms catch-up target, preserving recent authored zero/stop blocks and lifecycle generation boundaries. A source waiting for capacity also has a 250 ms budget. Outstanding asynchronous HID writes which remain incomplete for over one second fault the existing transport owner and use its established cancellation/retirement/recovery path. Already-submitted writes are never overwritten or bypassed. These are initial software budgets to validate on hardware, not claims that Windows I/O or a suspended process can always execute within those times.
 

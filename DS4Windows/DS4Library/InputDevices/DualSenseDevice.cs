@@ -7150,7 +7150,7 @@ namespace DS4Windows.InputDevices
                 (source[sourceOffset + 38] & 0x04));
         }
 
-        private void ApplyActiveRumblePreviewToV5AudioSnapshot(
+        private static void ApplyActiveRumblePreviewToV5AudioSnapshot(
             byte[] destination, int destinationOffset,
             in DualSensePhysicalOutputSnapshot outputState)
         {
@@ -8173,6 +8173,9 @@ namespace DS4Windows.InputDevices
             }
             ApplyDsxOverlayToNativeReport(destination, 1, outputState,
                 preparedTriggerLabValidity: preparedTriggerLabValidity);
+            // Preview is a local motor owner on either transport. Never alter
+            // the native underlay: ending the preview restores its motor mode.
+            ApplyActiveRumblePreviewToV5AudioSnapshot(destination, 1, outputState);
         }
 
         internal static void ApplyDsxOverlayToNativeReport(byte[] report, int stateOffset,

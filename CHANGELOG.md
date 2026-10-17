@@ -3,6 +3,15 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Fixed
+
+- Bound stale DualSense Bluetooth haptics backlog and pending-write recovery ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
+- Restore Profile Editor Heavy/Light motor previews over USB after native DualSense output, retaining the game's motor state when the preview ends ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
+- Forward native DualSense/Edge waveform haptics from the matching virtual four-channel Windows audio endpoint to the physical USB controller, independently of speaker streaming and Audio Haptics. Hardware acceptance is pending ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
+- Match gyro activation field/dropdown heights to the other Profile Editor controls ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
+
 ## [5.0.29](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.29) - 2026-10-17
 
 ### Added
