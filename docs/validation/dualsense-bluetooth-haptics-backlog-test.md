@@ -6,6 +6,14 @@ The same candidate also contains USB feedback corrections found during the maint
 
 This candidate addresses backlog behaviour investigated in [upstream issue 124](https://github.com/hbashton/DS4Windows/issues/124). It is a test build, not a claim that the reporter's machine-specific stall is fixed. No VIIPER or USB/IP update is required.
 
+## Confirmed hardware results — 2026-10-17
+
+- The maintainer confirmed **Test Heavy** and **Test Light** work with a physical USB DualSense and virtual DualSense in the first USB feedback candidate.
+- In `5.0.29-pr42-usb-feedback2` (source `2e02b44`), the maintainer confirmed DEATHLOOP's previously missing intro vibration now works over USB. The log shows the native USB route starting at 17:01:56, then 1,087,200 source frames and 2,104 nonzero rear-channel blocks at 17:02:56. The initial one-second endpoint-enumeration wait resolved automatically. The older VIIPER speaker callback counters still show no USB callback delivery, as expected for this separate Windows audio route.
+- The earlier Bluetooth candidate was reported to feel correct in-game, with native haptics active and no accumulating queue in its log. It did not reproduce the original reporter's stall, so it establishes compatibility rather than a demonstrated recovery fix.
+
+These confirmations cover the reported editor/intro cases; they do not establish every speaker/headset, reconnect or overload scenario in the acceptance checklist below.
+
 ## Get ready
 
 1. Keep your installed 5.0.29 copy available for comparison and back up its profiles/settings.
