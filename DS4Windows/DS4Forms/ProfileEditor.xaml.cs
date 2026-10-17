@@ -3181,6 +3181,21 @@ namespace DS4WinWPF.DS4Forms
             }
         }
 
+        private void ReapplyIndicators_Click(object sender, RoutedEventArgs e)
+        {
+            if (ResolveControllerContext(deviceNum, profileSettingsVM.FuncDevNum) is DualSenseDevice controller)
+            {
+                var settings = Global.LightbarSettingsInfo[deviceNum];
+                controller.ApplyProfileIndicators(settings.PlayerIndicators, settings.MicrophoneIndicator, reapply: true,
+                    passthrough: settings.mode == LightbarMode.Passthru);
+            }
+            else
+            {
+                MessageBox.Show("Connect and select a DualSense or DualSense Edge controller to reapply its indicator lights.",
+                    "Indicator LEDs", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
         private void ApplyBtn_Click(object sender, RoutedEventArgs e)
         {
             ApplyProfileStep();

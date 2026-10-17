@@ -5714,6 +5714,12 @@ namespace DS4Windows
                 rootElement.AppendChild(xmlColor);
                 XmlNode xmlRumbleBoost = m_Xdoc.CreateNode(XmlNodeType.Element, "RumbleBoost", null); xmlRumbleBoost.InnerText = rumble[device].ToString(); rootElement.AppendChild(xmlRumbleBoost);
                 XmlNode xmlRumbleAutostopTime = m_Xdoc.CreateNode(XmlNodeType.Element, "RumbleAutostopTime", null); xmlRumbleAutostopTime.InnerText = rumbleAutostopTime[device].ToString(); rootElement.AppendChild(xmlRumbleAutostopTime);
+                XmlNode xmlPlayerIndicators = m_Xdoc.CreateElement("PlayerIndicators");
+                xmlPlayerIndicators.InnerText = ProfileIndicatorSettings.Normalize(lightbarSettings.PlayerIndicators).ToString();
+                rootElement.AppendChild(xmlPlayerIndicators);
+                XmlNode xmlMicrophoneIndicator = m_Xdoc.CreateElement("MicrophoneIndicator");
+                xmlMicrophoneIndicator.InnerText = ProfileIndicatorSettings.Normalize(lightbarSettings.MicrophoneIndicator).ToString();
+                rootElement.AppendChild(xmlMicrophoneIndicator);
                 XmlNode xmlLightbarMode = m_Xdoc.CreateNode(XmlNodeType.Element, "LightbarMode", null); xmlLightbarMode.InnerText = GetLightbarModeString(lightbarSettings.mode); rootElement.AppendChild(xmlLightbarMode);
                 XmlNode xmlLedAsBatteryIndicator = m_Xdoc.CreateNode(XmlNodeType.Element, "ledAsBatteryIndicator", null); xmlLedAsBatteryIndicator.InnerText = lightInfo.ledAsBattery.ToString(); rootElement.AppendChild(xmlLedAsBatteryIndicator);
                 XmlNode xmlLowBatteryFlash = m_Xdoc.CreateNode(XmlNodeType.Element, "FlashType", null); xmlLowBatteryFlash.InnerText = lightInfo.flashType.ToString(); rootElement.AppendChild(xmlLowBatteryFlash);
@@ -6875,6 +6881,13 @@ namespace DS4Windows
                     lightbarSettings.mode = GetLightbarModeType(tempMode);
                 }
                 catch { lightbarSettings.mode = LightbarMode.DS4Win; missingSetting = true; }
+
+                lightbarSettings.PlayerIndicators = Enum.TryParse<ProfilePlayerIndicators>(
+                    m_Xdoc.SelectSingleNode("/" + rootname + "/PlayerIndicators")?.InnerText, out var playerIndicators)
+                    ? ProfileIndicatorSettings.Normalize(playerIndicators) : ProfilePlayerIndicators.DeviceSettings;
+                lightbarSettings.MicrophoneIndicator = Enum.TryParse<ProfileMicrophoneIndicator>(
+                    m_Xdoc.SelectSingleNode("/" + rootname + "/MicrophoneIndicator")?.InnerText, out var micIndicator)
+                    ? ProfileIndicatorSettings.Normalize(micIndicator) : ProfileMicrophoneIndicator.DeviceSettings;
 
                 //New method for saving color
                 try
@@ -11269,6 +11282,8 @@ namespace DS4Windows
             LightbarSettingInfo lightbarSettings = lightbarSettingInfo[device];
             LightbarDS4WinInfo lightInfo = lightbarSettings.ds4winSettings;
             lightbarSettings.Mode = LightbarMode.DS4Win;
+            lightbarSettings.PlayerIndicators = ProfilePlayerIndicators.DeviceSettings;
+            lightbarSettings.MicrophoneIndicator = ProfileMicrophoneIndicator.DeviceSettings;
             lightInfo.m_LowLed = new DS4Color(Color.Black);
             //m_LowLeds[device] = new DS4Color(Color.Black);
 

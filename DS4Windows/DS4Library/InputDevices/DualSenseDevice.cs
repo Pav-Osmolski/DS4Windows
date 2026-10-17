@@ -3007,9 +3007,11 @@ namespace DS4Windows.InputDevices
 
         internal void SetProfileLightbarOwnership(bool ownsLightbar)
         {
-            if (physicalOutputStateMailbox.SetProfileLightbarOwnership(ownsLightbar))
+            lock (profileIndicatorLock)
             {
-                QueuePhysicalOutputUpdate();
+                profileIndicatorsPassthrough = !ownsLightbar;
+                if (physicalOutputStateMailbox.SetProfileLightbarOwnership(ownsLightbar))
+                    QueuePhysicalOutputUpdate();
             }
         }
 
@@ -5829,7 +5831,7 @@ namespace DS4Windows.InputDevices
 
                 // Mute button LED. 0x01 = Solid. 0x02 = Pulsating
                 outputReport[9] = outputState.MuteLedOverride ? (outputState.MuteLedOn ? (byte)0x01 : (byte)0x00) :
-                    outputState.MicrophoneMuteOverride ? (outputState.MicrophoneMuted ? (byte)0x01 : (byte)0x00) : outputState.MuteLedByte;
+                    outputState.MicrophoneMuteOverride ? (outputState.MicrophoneMuted ? (byte)0x01 : (byte)0x00) : outputState.EffectiveMicLedByte;
 
                 // audio settings requiring mute toggling flags
                 outputReport[10] = outputState.MicrophoneMuteOverride && outputState.MicrophoneMuted ? (byte)0x10 : (byte)0x00; // 0x10 microphone mute, 0x40 audio mute
@@ -5881,7 +5883,7 @@ namespace DS4Windows.InputDevices
                 outputReport[43] = 0x02;
                 // 5 player LED lights below Touchpad.
                 // Bitmask 0x00-0x1F from left to right with 0x04 being the center LED. Bit 0x20 sets the brightness immediately with no fade in
-                outputReport[44] = outputState.ActivePlayerLedMask;
+                outputReport[44] = outputState.EffectivePlayerLedMask;
 
                 /* Lightbar colors */
                 outputReport[45] = currentHap.lightbarState.LightBarColor.red;
@@ -6004,7 +6006,7 @@ namespace DS4Windows.InputDevices
 
                 // Mute button LED. 0x01 = Solid. 0x02 = Pulsating
                 outputReport[10] = outputState.MuteLedOverride ? (outputState.MuteLedOn ? (byte)0x01 : (byte)0x00) :
-                    outputState.MicrophoneMuteOverride ? (outputState.MicrophoneMuted ? (byte)0x01 : (byte)0x00) : outputState.MuteLedByte;
+                    outputState.MicrophoneMuteOverride ? (outputState.MicrophoneMuted ? (byte)0x01 : (byte)0x00) : outputState.EffectiveMicLedByte;
 
                 // audio settings requiring mute toggling flags
                 outputReport[11] = outputState.MicrophoneMuteOverride && outputState.MicrophoneMuted ? (byte)0x10 : (byte)0x00; // 0x10 microphone mute, 0x40 audio mute
@@ -6056,7 +6058,7 @@ namespace DS4Windows.InputDevices
                 outputReport[44] = 0x02;
                 // 5 player LED lights below Touchpad.
                 // Bitmask 0x00-0x1F from left to right with 0x04 being the center LED. Bit 0x20 sets the brightness immediately with no fade in
-                outputReport[45] = outputState.ActivePlayerLedMask;
+                outputReport[45] = outputState.EffectivePlayerLedMask;
 
                 /* Lightbar colors */
                 outputReport[46] = currentHap.lightbarState.LightBarColor.red;
@@ -7333,7 +7335,7 @@ namespace DS4Windows.InputDevices
             destination[destinationOffset + 41] = 0x02;
             destination[destinationOffset + 42] = 0x02;
             destination[destinationOffset + 43] =
-                source.ActivePlayerLedMask;
+                source.EffectivePlayerLedMask;
             destination[destinationOffset + 44] =
                 source.ProfileLightbar.LightBarColor.red;
             destination[destinationOffset + 45] =
@@ -7980,7 +7982,7 @@ namespace DS4Windows.InputDevices
             // or cancel it as part of its predecessor's completed release.
             report[stateOffset] &= (byte)~(selectedTriggers & currentlyOwnedTriggers);
             ApplyDsxOverlayToNativeReport(report, stateOffset, selected, releasedFields,
-                (byte)(selectedTriggers & ~currentlyOwnedTriggers));
+                (byte)(selectedTriggers & ~currentlyOwnedTriggers), indicatorFields: releasedFields);
         }
 
         private bool TryPublishPreparedLocalTriggerState()
@@ -8104,7 +8106,7 @@ namespace DS4Windows.InputDevices
             {
                 report[stateOffset + 1] |=
                     DualSenseOutputFlag1MicrophoneMuteLedControlEnable;
-                report[stateOffset + 8] = outputState.MuteLedByte;
+                report[stateOffset + 8] = outputState.EffectiveMicLedByte;
             }
 
             if ((releaseStrobes & ProfileMuteReleaseMicrophone) != 0 &&
@@ -8163,7 +8165,8 @@ namespace DS4Windows.InputDevices
 
         internal static void ApplyDsxOverlayToNativeReport(byte[] report, int stateOffset,
             in DualSensePhysicalOutputSnapshot outputState, int releasedFields = 0,
-            byte additionalTriggerValidity = 0, int preparedTriggerLabValidity = -1)
+            byte additionalTriggerValidity = 0, int preparedTriggerLabValidity = -1,
+            int indicatorFields = DualSenseDsxOverlay.PlayerField | DualSenseDsxOverlay.MicField)
         {
             if (report == null || stateOffset < 0 || stateOffset + 47 > report.Length)
                 throw new ArgumentException("A complete native state is required.");
@@ -8231,21 +8234,31 @@ namespace DS4Windows.InputDevices
                 report[stateOffset + 45] = color.Value.green;
                 report[stateOffset + 46] = color.Value.blue;
             }
-            byte? player = overlay.PlayerLeds;
+            // Reconstruct the latest admitted native LED state in Passthru,
+            // including when a local Off override is removed. Native command
+            // strobes are consumed after emission, so replaying only the raw
+            // cached template would leave the physical LEDs stuck at Off.
+            byte? player = overlay.PlayerLeds ?? outputState.ProfilePlayerLedMask ??
+                (outputState.IndicatorsFollowApplication ? outputState.EffectivePlayerLedMask : null);
             if (!player.HasValue && (releasedFields & DualSenseDsxOverlay.PlayerField) != 0)
                 player = !outputState.NativeGameLightbarOwnershipReleased && native.PlayerLeds.HasValue
-                    ? native.PlayerLeds : outputState.ActivePlayerLedMask;
-            if (player.HasValue)
+                    ? native.PlayerLeds : outputState.EffectivePlayerLedMask;
+            if (player.HasValue && (indicatorFields & DualSenseDsxOverlay.PlayerField) != 0)
             {
                 report[stateOffset + 1] = (byte)((report[stateOffset + 1] & ~0x08) | 0x10);
                 report[stateOffset + 43] = player.Value;
             }
-            byte? mic = overlay.MicLed;
+            byte? mic = overlay.MicLed ??
+                (outputState.MuteLedOverride ? (outputState.MuteLedOn ? (byte)1 : (byte)0) :
+                    outputState.MicrophoneMuteOverride ? (outputState.MicrophoneMuted ? (byte)1 : (byte)0) : null);
+            if (!mic.HasValue && !outputState.MuteLedOverride && !outputState.MicrophoneMuteOverride)
+                mic = outputState.ProfileMicLedByte ??
+                    (outputState.IndicatorsFollowApplication ? outputState.EffectiveMicLedByte : null);
             if (!mic.HasValue && (releasedFields & DualSenseDsxOverlay.MicField) != 0)
                 mic = outputState.MuteLedOverride ? (outputState.MuteLedOn ? (byte)1 : (byte)0) :
                     outputState.MicrophoneMuteOverride ? (outputState.MicrophoneMuted ? (byte)1 : (byte)0) :
-                    native.MicLed ?? outputState.MuteLedByte;
-            if (mic.HasValue)
+                    native.MicLed ?? outputState.EffectiveMicLedByte;
+            if (mic.HasValue && (indicatorFields & DualSenseDsxOverlay.MicField) != 0)
             {
                 report[stateOffset + 1] |= 0x01;
                 report[stateOffset + 8] = mic.Value;
@@ -8306,7 +8319,7 @@ namespace DS4Windows.InputDevices
                 outputState.MicrophoneMuteOverride ?
                     (outputState.MicrophoneMuted ?
                         (byte)0x01 : (byte)0x00) :
-                    outputState.MuteLedByte;
+                    outputState.EffectiveMicLedByte;
             report[stateOffset + 9] =
                 outputState.MicrophoneMuteOverride &&
                 outputState.MicrophoneMuted ?
@@ -8522,8 +8535,31 @@ namespace DS4Windows.InputDevices
             }
         }
 
+        private readonly object profileIndicatorLock = new();
+        private ProfilePlayerIndicators profilePlayerIndicators;
+        private ProfileMicrophoneIndicator profileMicrophoneIndicator;
+        private bool profileIndicatorsPassthrough;
+
+        internal void ApplyProfileIndicators(ProfilePlayerIndicators player,
+            ProfileMicrophoneIndicator mic, bool reapply = false, bool passthrough = false)
+        {
+            lock (profileIndicatorLock)
+            {
+                profilePlayerIndicators = ProfileIndicatorSettings.Normalize(player);
+                profileMicrophoneIndicator = ProfileIndicatorSettings.Normalize(mic);
+                profileIndicatorsPassthrough = passthrough;
+                if (physicalOutputStateMailbox.SetProfileIndicators(
+                        ProfileIndicatorSettings.PlayerMask(profilePlayerIndicators, battery),
+                        ProfileIndicatorSettings.MicByte(profileMicrophoneIndicator), reapply, passthrough))
+                    QueuePhysicalOutputUpdate();
+            }
+        }
+
         private void PreparePlayerLEDBarByte()
         {
+            lock (profileIndicatorLock)
+                ApplyProfileIndicators(profilePlayerIndicators, profileMicrophoneIndicator,
+                    passthrough: profileIndicatorsPassthrough);
             byte value = physicalOutputStateMailbox.ReadLatest().
                 ActivePlayerLedMask;
             if (nativeOptionsStore != null)
