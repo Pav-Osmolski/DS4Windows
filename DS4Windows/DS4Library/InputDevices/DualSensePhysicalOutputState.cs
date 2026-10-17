@@ -56,9 +56,12 @@ namespace DS4Windows.InputDevices
         internal bool ProfileOwnsLightbar { get; init; }
         internal byte? ProfilePlayerLedMask { get; init; }
         internal byte? ProfileMicLedByte { get; init; }
+        internal bool IndicatorsFollowApplication { get; init; }
         internal long IndicatorReapplyRevision { get; init; }
-        internal byte EffectivePlayerLedMask => ProfilePlayerLedMask ?? ActivePlayerLedMask;
-        internal byte EffectiveMicLedByte => ProfileMicLedByte ?? MuteLedByte;
+        internal byte EffectivePlayerLedMask => ProfilePlayerLedMask ??
+            (IndicatorsFollowApplication && !NativeGameLightbarOwnershipReleased ? DsxNativeState.PlayerLeds : null) ?? ActivePlayerLedMask;
+        internal byte EffectiveMicLedByte => ProfileMicLedByte ??
+            (IndicatorsFollowApplication ? DsxNativeState.MicLed : null) ?? MuteLedByte;
         internal bool LeftTriggerLabActive { get; init; }
         internal bool RightTriggerLabActive { get; init; }
         internal int DsxReleaseFields { get; init; }
@@ -491,7 +494,7 @@ namespace DS4Windows.InputDevices
             }
         }
 
-        internal bool SetProfileIndicators(byte? player, byte? mic, bool reapply)
+        internal bool SetProfileIndicators(byte? player, byte? mic, bool reapply, bool passthrough = false)
         {
             lock (syncRoot)
             {
@@ -499,6 +502,7 @@ namespace DS4Windows.InputDevices
                 {
                     ProfilePlayerLedMask = player,
                     ProfileMicLedByte = mic,
+                    IndicatorsFollowApplication = passthrough,
                     // Another physical writer can change LEDs without changing
                     // our desired state. An explicit reapply must dirty output
                     // even when the selected mask is still zero (Off).
@@ -544,6 +548,7 @@ namespace DS4Windows.InputDevices
                 return PublishLocked(latest with
                 {
                     ProfileOwnsLightbar = value,
+                    IndicatorsFollowApplication = !value,
                 });
             }
         }

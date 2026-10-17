@@ -1397,7 +1397,7 @@
                         <Border Style="{DynamicResource BridgeCardStyle}">
                             <StackPanel>
                                 <TextBlock Text="Indicator LEDs" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-                                <TextBlock Text="Available on DualSense and DualSense Edge. Choose Device settings to keep your controller-specific options. These controls work in both lightbar output modes." Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap"/>
+                                <TextBlock Text="Available on DualSense and DualSense Edge. In Normal mode, Device settings keeps your controller-specific options. In Passthru, it lets the game or app control these indicators. A specific choice overrides either mode." Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap"/>
                                 <Grid Margin="0,0,0,12">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*" MaxWidth="240"/></Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>

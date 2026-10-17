@@ -3186,7 +3186,8 @@ namespace DS4WinWPF.DS4Forms
             if (ResolveControllerContext(deviceNum, profileSettingsVM.FuncDevNum) is DualSenseDevice controller)
             {
                 var settings = Global.LightbarSettingsInfo[deviceNum];
-                controller.ApplyProfileIndicators(settings.PlayerIndicators, settings.MicrophoneIndicator, reapply: true);
+                controller.ApplyProfileIndicators(settings.PlayerIndicators, settings.MicrophoneIndicator, reapply: true,
+                    passthrough: settings.mode == LightbarMode.Passthru);
             }
             else
             {

@@ -4270,7 +4270,8 @@ namespace DS4Windows
             {
                 var indicators = Global.getLightbarSettingsInfo(ind);
                 profileLightbarDevice.ApplyProfileIndicators(indicators.PlayerIndicators,
-                    indicators.MicrophoneIndicator, reapply: true);
+                    indicators.MicrophoneIndicator, reapply: true,
+                    passthrough: indicators.mode == LightbarMode.Passthru);
                 profileLightbarDevice.SetProfileLightbarOwnership(
                     Global.getLightbarSettingsInfo(ind).mode == LightbarMode.DS4Win);
             }

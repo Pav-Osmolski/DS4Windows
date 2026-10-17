@@ -12,6 +12,28 @@ namespace DS4WindowsTests;
 public class ProfileIndicatorTests
 {
     [TestMethod]
+    [DataRow(1, false)]
+    [DataRow(13, false)]
+    [DataRow(1, true)]
+    [DataRow(13, true)]
+    public void PassthruRespectsMutePriorityAndNativePlayerRelease(int offset, bool dsx)
+    {
+        var state = DualSensePhysicalOutputSnapshot.Default with
+        {
+            IndicatorsFollowApplication = true,
+            DsxNativeState = new DualSenseDsxOverlay(MicLed: 2, PlayerLeds: 0x1F),
+            NativeGameLightbarOwnershipReleased = true,
+            ActivePlayerLedMask = 0x04,
+            MicrophoneMuteOverride = true, MicrophoneMuted = true,
+            DsxOverlay = dsx ? new DualSenseDsxOverlay(new object(), MicLed: 0) : default,
+        };
+        byte[] report = new byte[offset + 47];
+        DualSenseDevice.ApplyDsxOverlayToNativeReport(report, offset, state);
+        Assert.AreEqual((byte)0x04, report[offset + 43], "Native LED release returns player indicators to the device policy.");
+        Assert.AreEqual(dsx ? (byte)0 : (byte)1, report[offset + 8]);
+    }
+
+    [TestMethod]
     [DataRow(ConnectionType.USB, 1)]
     [DataRow(ConnectionType.BT, 2)]
     public void PhysicalReportReapplyClearsLightsEvenWhenOffWasAlreadySelected(ConnectionType connection, int offset)
