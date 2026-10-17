@@ -40,7 +40,7 @@ See the [Changelog](CHANGELOG.md) for release-by-release details and [Documentat
 - Remap buttons, sticks, touchpad, keyboard, mouse, macros, and special actions.
 - Save per-game profiles and switch them automatically by application or window title.
 - Configure gyro aiming, including stick-based activation/pause, lighting, rumble, audio haptics, and adaptive triggers.
-- Receive native DualSense advanced haptics and adaptive-trigger feedback in supported games, including over Bluetooth.
+- Receive native DualSense advanced haptics and adaptive-trigger feedback in supported games, over USB and Bluetooth. USB waveform forwarding remains independent of speaker streaming and Audio Haptics.
 
 Supported inputs include DualShock 3/4, DualSense/Edge, Switch Pro, Joy-Con,
 Switch 2 Pro, and Joy-Con 2. Outputs include Xbox 360, Xbox One/Series,

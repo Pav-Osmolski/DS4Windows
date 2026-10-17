@@ -3,14 +3,19 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## Unreleased
+## [5.0.30](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.30) - 2026-10-17
 
 ### Fixed
 
 - Bound stale DualSense Bluetooth haptics backlog and pending-write recovery ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
 - Restore Profile Editor Heavy/Light motor previews over USB after native DualSense output, retaining the game's motor state when the preview ends ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
-- Forward native DualSense/Edge waveform haptics from the matching virtual four-channel Windows audio endpoint to the physical USB controller, independently of speaker streaming and Audio Haptics. Hardware acceptance is pending ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
+- Forward native DualSense/Edge waveform haptics from the matching virtual four-channel Windows audio endpoint to the physical USB controller, independently of speaker streaming and Audio Haptics. Resolve indexed Windows audio-device identities when matching physical endpoints ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
 - Match gyro activation field/dropdown heights to the other Profile Editor controls ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
+
+### Validation and updating
+
+- The maintainer confirmed USB Heavy/Light editor tests, DEATHLOOP intro waveform haptics over USB and Bluetooth, and Bluetooth controller-speaker playback. The original upstream Bluetooth stall was not reproduced on this machine; the backlog changes provide recovery safeguards without claiming that hardware-specific report is conclusively resolved ([#42](https://github.com/Pav-Osmolski/DS4Windows/pull/42)).
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at 0.1.11 and USB/IP at 0.9.8.1; no driver version change is required. This release is unsigned.
 
 ## [5.0.29](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.29) - 2026-10-17
 

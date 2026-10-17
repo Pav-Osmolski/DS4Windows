@@ -1,10 +1,10 @@
 # DualSense Bluetooth haptics backlog: test guide
 
-This branch now includes the 5.0.29 main changes; its additional backlog recovery remains experimental and is not part of that release.
+The changes tested in this guide were merged in [PR #42](https://github.com/Pav-Osmolski/DS4Windows/pull/42) and ship in 5.0.30. The comparison baseline is the earlier 5.0.29 release; candidate version names below identify the builds used during hardware validation.
 
-The same candidate also contains USB feedback corrections found during the maintainer's DEATHLOOP comparisons: editor motor tests after native output, and forwarding native waveform channels to the physical USB audio endpoint. These USB changes are not in released 5.0.29 and still require hardware acceptance.
+The same candidate also contains USB feedback corrections found during the maintainer's DEATHLOOP comparisons: editor motor tests after native output, and forwarding native waveform channels to the physical USB audio endpoint. These USB changes were absent from 5.0.29; the confirmed hardware results are recorded below.
 
-This candidate addresses backlog behaviour investigated in [upstream issue 124](https://github.com/hbashton/DS4Windows/issues/124). It is a test build, not a claim that the reporter's machine-specific stall is fixed. No VIIPER or USB/IP update is required.
+This candidate addresses backlog behaviour investigated in [upstream issue 124](https://github.com/hbashton/DS4Windows/issues/124). The original test build did not reproduce the reporter's machine-specific stall; the release does not claim that report is conclusively resolved. No VIIPER or USB/IP update is required.
 
 ## Confirmed hardware results — 2026-10-17
 
@@ -12,7 +12,9 @@ This candidate addresses backlog behaviour investigated in [upstream issue 124](
 - In `5.0.29-pr42-usb-feedback2` (source `2e02b44`), the maintainer confirmed DEATHLOOP's previously missing intro vibration now works over USB. The log shows the native USB route starting at 17:01:56, then 1,087,200 source frames and 2,104 nonzero rear-channel blocks at 17:02:56. The initial one-second endpoint-enumeration wait resolved automatically. The older VIIPER speaker callback counters still show no USB callback delivery, as expected for this separate Windows audio route.
 - The earlier Bluetooth candidate was reported to feel correct in-game, with native haptics active and no accumulating queue in its log. It did not reproduce the original reporter's stall, so it establishes compatibility rather than a demonstrated recovery fix.
 
-These confirmations cover the reported editor/intro cases; they do not establish every speaker/headset, reconnect or overload scenario in the acceptance checklist below.
+The maintainer subsequently confirmed Bluetooth intro rumble and controller-speaker playback in the combined USB feedback candidate.
+
+These confirmations cover the reported editor/intro cases and Bluetooth speaker playback; they do not establish every speaker/headset, reconnect or overload scenario in the acceptance checklist below.
 
 ## Get ready
 
@@ -70,6 +72,6 @@ Keep the existing `hapticsQueueDepth`, `hapticsQueueAgeMaxMs`, `helperCompletion
 
 A convincing result is reproducible delay in B, followed by a same-length C run without accumulating delayed effects, missing normal effects, repeated transport resets, or audio/control regressions. D must retain working USB feedback and exercise the added USB corrections above. Released 5.0.29 already lacked the maintainer's DEATHLOOP USB waveform effects, so matching that missing effect is not a successful candidate result. If neither released nor candidate Bluetooth runs reproduce delay, report that as a useful compatibility test, not proof of a fix. A one-off recovery that returns to normal is different from constant recovery/dropouts; report both accurately.
 
-The candidate preserves FIFO playback through short interruptions. Beyond 250 ms of queue age it retires complete obsolete rear blocks until within a 50 ms catch-up target, preserving recent authored zero/stop blocks and lifecycle generation boundaries. A source waiting for capacity also has a 250 ms budget. Outstanding asynchronous HID writes which remain incomplete for over one second fault the existing transport owner and use its established cancellation/retirement/recovery path. Already-submitted writes are never overwritten or bypassed. These are initial software budgets to validate on hardware, not claims that Windows I/O or a suspended process can always execute within those times.
+The candidate preserves FIFO playback through short interruptions. Beyond 250 ms of queue age it retires complete obsolete rear blocks until within a 50 ms catch-up target, preserving recent authored zero/stop blocks and lifecycle generation boundaries. A source waiting for capacity also has a 250 ms budget. Outstanding asynchronous HID writes which remain incomplete for over one second fault the existing transport owner and use its established cancellation/retirement/recovery path. Already-submitted writes are never overwritten or bypassed. These are software recovery budgets, not claims that Windows I/O or a suspended process can always execute within those times.
 
 Disable verbose logging after testing. Return to 5.0.29 by closing the test copy and VIIPER, then launching the installed copy normally; your original profiles were not replaced.
