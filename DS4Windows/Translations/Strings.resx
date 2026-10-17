@@ -1043,10 +1043,10 @@ Disabled:
     <value>Enable Server</value>
   </data>
   <data name="MainWin.OneEuroBeta" xml:space="preserve">
-    <value>1€ Beta</value>
+    <value>One Euro beta</value>
   </data>
   <data name="MainWin.OneEuroMinCutoff" xml:space="preserve">
-    <value>1€ MinCutoff</value>
+    <value>One Euro min cutoff</value>
   </data>
   <data name="MaxTravel" xml:space="preserve">
     <value>Max Travel</value>
