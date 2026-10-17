@@ -676,7 +676,7 @@
                                             <CheckBox Content="{lex:Loc FlashLightbarAtHighLatency}" VerticalAlignment="Center" IsChecked="{Binding FlashHighLatency}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0" />
                                             <StackPanel Orientation="Horizontal" Margin="8,0,0,0" IsEnabled="{Binding FlashHighLatency,FallbackValue='False'}">
                                                 <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding FlashHighLatencyAt}" MinWidth="80" ButtonSpinnerLocation="Right" Increment="1" Maximum="100" Minimum="10" MinHeight="34" VerticalContentAlignment="Center" />
-                                                <Label Content="ms" VerticalAlignment="Center" Padding="0" Margin="8,0,0,0" />
+                                                <Label Content="ms" VerticalAlignment="Center" Padding="0" Margin="8,0,0,0"  VerticalContentAlignment="Center"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
@@ -873,7 +873,7 @@
                                             <Button x:Name="profFolderBtn" Margin="0,0,10,10" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ProfFolderBtn_Click" HorizontalAlignment="Left" Content="{lex:Loc ProfileFolder}" VerticalAlignment="Center" />
                                             <Button x:Name="controlPanelBtn" Margin="0,0,10,10" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ControlPanelBtn_Click" HorizontalAlignment="Left" Content="{lex:Loc ControlPanel}" VerticalAlignment="Center" />
                                             <Button x:Name="html5GameBtn" Margin="0,0,10,10" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="Html5GameBtn_Click" HorizontalAlignment="Left" Content="{lex:Loc GamepadTest}" VerticalAlignment="Center" />
-                                            <Button x:Name="xinputCheckerBtn" Margin="0,0,10,10" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="XinputCheckerBtn_Click" HorizontalAlignment="Left" Content="{lex:Loc XInputChecker}" VerticalAlignment="Center" />
+                                            <Button x:Name="xinputCheckerBtn" Margin="0,0,10,10" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="XinputCheckerBtn_Click" HorizontalAlignment="Left" Content="{lex:Loc XInputChecker}" ToolTip="View Windows XInput slots and test Xbox controller input" VerticalAlignment="Center" />
                                             <Button x:Name="driverSetupBtn" Margin="0,0,10,10" Style="{DynamicResource BridgeSecondaryButtonStyle}" IsEnabled="{Binding SystemIntegrationEnabled}" Click="DriverSetupBtn_Click" HorizontalAlignment="Left" Content="{lex:Loc DriverSetup}" VerticalAlignment="Center" />
                                         </WrapPanel>
                                     </StackPanel>
@@ -939,11 +939,11 @@
                                         <CheckBox Content="{lex:Loc UseSmoothing}" IsChecked="{Binding UseUdpSmoothing,FallbackValue='False'}" IsEnabled="{Binding UseUDPServer,Mode=OneWay}" Margin="0,4,0,10" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" />
                                         <WrapPanel x:Name="udpEuroPanel" Margin="{StaticResource spaceMargin}" Visibility="{Binding UdpServerOneEuroPanelVisibility,FallbackValue='Collapsed'}">
                                             <StackPanel Orientation="Horizontal">
-                                                <Label Content="{lex:Loc MainWin.OneEuroMinCutoff}" />
+                                                <Label Content="{lex:Loc MainWin.OneEuroMinCutoff}" Padding="0" VerticalAlignment="Center" Margin="0,0,8,0" />
                                                 <xctk:DoubleUpDown d:IsHidden="True" FormatString="F5" Value="{Binding UdpSmoothMinCutoff,FallbackValue=1.0,UpdateSourceTrigger=LostFocus}" Minimum="0.00001" Maximum="100.0" Increment="0.1" MinWidth="80" MinHeight="34" VerticalContentAlignment="Center" />
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Margin="30,0,0,0">
-                                                <Label Content="{lex:Loc MainWin.OneEuroBeta}" />
+                                                <Label Content="{lex:Loc MainWin.OneEuroBeta}" Padding="0" VerticalAlignment="Center" Margin="0,0,8,0" />
                                                 <xctk:DoubleUpDown d:IsHidden="True" FormatString="F5" Value="{Binding UdpSmoothBeta,FallbackValue=0.0,UpdateSourceTrigger=LostFocus}" Minimum="0.0" Maximum="1.0" Increment="0.1" MinWidth="80" MinHeight="34" VerticalContentAlignment="Center" />
                                             </StackPanel>
                                         </WrapPanel>

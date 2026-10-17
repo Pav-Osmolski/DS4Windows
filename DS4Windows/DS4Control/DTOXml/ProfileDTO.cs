@@ -871,6 +871,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
             get; set;
         }
 
+        public ProfilePlayerIndicators PlayerIndicators { get; set; }
+        public ProfileMicrophoneIndicator MicrophoneIndicator { get; set; }
+
         [XmlElement("LightbarMode")]
         public LightbarMode LightbarMode
         {
@@ -1744,6 +1747,10 @@ namespace DS4WinWPF.DS4Control.DTOXml
             set => _gyroMouseJitterCompensation = XmlDataUtilities.StrToBool(value);
         }
 
+        public GyroStickActivationMode GyroStickActivationMode { get; set; }
+        public GyroActivationStick GyroActivationStick { get; set; }
+        public int GyroStickThreshold { get; set; } = 15;
+
         [XmlElement("GyroOutputMode")]
         public GyroOutMode GyroOutputMode
         {
@@ -2313,6 +2320,8 @@ namespace DS4WinWPF.DS4Control.DTOXml
             IdleDisconnect = source.idleDisconnectTimeout[deviceIndex];
             OutputDataToDS4 = source.enableOutputDataToDS4[deviceIndex];
             LightbarMode = source.lightbarSettingInfo[deviceIndex].mode;
+            PlayerIndicators = ProfileIndicatorSettings.Normalize(lightbarSettings.PlayerIndicators);
+            MicrophoneIndicator = ProfileIndicatorSettings.Normalize(lightbarSettings.MicrophoneIndicator);
             ColorString = $"{lightInfo.m_Led.red},{lightInfo.m_Led.green},{lightInfo.m_Led.blue}";
             _ledColor = new DS4Color(lightInfo.m_Led.red, lightInfo.m_Led.green, lightInfo.m_Led.blue);
             LeftStickDriftXAxis = source.leftStickDriftXAxis[deviceIndex];
@@ -2581,6 +2590,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
 
             SASteeringWheelFuzz = source.saWheelFuzzValues[deviceIndex];
             GyroOutputMode = source.gyroOutMode[deviceIndex];
+            GyroStickActivationMode = source.gyroStickModes[deviceIndex];
+            GyroActivationStick = source.gyroActivationSticks[deviceIndex];
+            GyroStickThreshold = source.gyroStickThresholds[deviceIndex];
             GyroControlsSettings = new GyroControlsSettings()
             {
                 Triggers = source.gyroControlsInf[deviceIndex].triggers,
@@ -3028,6 +3040,8 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.idleDisconnectTimeout[deviceIndex] = IdleDisconnect;
             destination.enableOutputDataToDS4[deviceIndex] = OutputDataToDS4;
             destination.lightbarSettingInfo[deviceIndex].mode = LightbarMode;
+            lightbarSettings.PlayerIndicators = ProfileIndicatorSettings.Normalize(PlayerIndicators);
+            lightbarSettings.MicrophoneIndicator = ProfileIndicatorSettings.Normalize(MicrophoneIndicator);
             lightInfo.m_Led = _ledColor;
 
             destination.useDs3PitchRollSim = UseDs3PitchRollSim;
@@ -3459,6 +3473,12 @@ namespace DS4WinWPF.DS4Control.DTOXml
             {
                 destination.gyroOutMode[deviceIndex] = GyroOutputMode;
             }
+
+            destination.gyroStickModes[deviceIndex] = Enum.IsDefined(GyroStickActivationMode) ?
+                GyroStickActivationMode : DS4Windows.GyroStickActivationMode.Disabled;
+            destination.gyroActivationSticks[deviceIndex] = Enum.IsDefined(GyroActivationStick) ?
+                GyroActivationStick : DS4Windows.GyroActivationStick.Left;
+            destination.gyroStickThresholds[deviceIndex] = Math.Clamp(GyroStickThreshold, 1, 95);
 
             if (GyroControlsSettings != null)
             {

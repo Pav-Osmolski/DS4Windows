@@ -9,6 +9,77 @@ namespace DS4WindowsTests;
 public class DualSenseDsxNativeIngressTests
 {
     [TestMethod]
+    public void UsbPassthruRestoresLatestIndicatorsAfterOffWithoutAnotherApplicationPacket()
+    {
+        var device = CreateDevice(ConnectionType.USB);
+        device.SetProfileLightbarOwnership(false);
+        device.ApplyProfileIndicators(ProfilePlayerIndicators.DeviceSettings,
+            ProfileMicrophoneIndicator.DeviceSettings, passthrough: true);
+        byte[] written = null;
+        device.PhysicalRawOutputWriteTestHook = report => { written = (byte[])report.Clone(); return true; };
+        byte[] native = RawNative(0x21, 17);
+        native[2] = 0x11; native[44] = 0x1F; native[9] = 2;
+        Assert.IsTrue(device.WriteRawOutputReportFromGame(native, 0, native.Length));
+        Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Published, device.ProcessNextPhysicalOutputCommand());
+        Assert.AreEqual((byte)2, written[9], "A fresh browser Blink must survive USB audio composition.");
+        Assert.AreEqual((byte)0x1F, written[44]);
+        // A later mic-only delta must update Blink to On and retain the player mask.
+        native[2] = 1; native[9] = 1; native[44] = 0;
+        Assert.IsTrue(device.WriteRawOutputReportFromGame(native, 0, native.Length));
+        Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Published, device.ProcessNextPhysicalOutputCommand());
+        Assert.AreEqual((byte)1, written[9]);
+        Assert.AreEqual((byte)0x1F, written[44]);
+        var originalUnderlay = Mailbox(device).ReadLatest().DsxNativeState;
+        device.ApplyProfileIndicators(ProfilePlayerIndicators.Off, ProfileMicrophoneIndicator.Off, true, true);
+        Invoke(device, "PrepareOutReport");
+        var output = Get<byte[]>(device, typeof(DS4Device), "outputReport");
+        Assert.AreEqual((byte)0, output[44]); Assert.AreEqual((byte)0, output[9]);
+        device.ApplyProfileIndicators(ProfilePlayerIndicators.DeviceSettings,
+            ProfileMicrophoneIndicator.DeviceSettings, true, true);
+        Invoke(device, "PrepareOutReport");
+        Assert.AreEqual((byte)0x1F, output[44]); Assert.AreEqual((byte)1, output[9]);
+        Assert.AreEqual(0x11, output[2] & 0x11);
+        Assert.AreEqual(originalUnderlay, Mailbox(device).ReadLatest().DsxNativeState);
+        device.SetProfileLightbarOwnership(true);
+        Invoke(device, "PrepareOutReport");
+        Assert.AreEqual((byte)0, output[9], "Normal mode keeps the existing microphone device policy.");
+        device.SetProfileLightbarOwnership(false);
+        Invoke(device, "PrepareOutReport");
+        Assert.AreEqual((byte)1, output[9], "Live Passthru changes must restore native state too.");
+        native[2] = 0x11; native[9] = 0; native[44] = 0;
+        Assert.IsTrue(device.WriteRawOutputReportFromGame(native, 0, native.Length));
+        Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Published, device.ProcessNextPhysicalOutputCommand());
+        Assert.AreEqual((byte)0, written[44]); Assert.AreEqual((byte)0, written[9]);
+        Invoke(device, "PrepareOutReport");
+        Assert.AreEqual((byte)0, output[44]); Assert.AreEqual((byte)0, output[9]);
+        device.ReadWaitEv.Dispose();
+    }
+
+    [TestMethod]
+    public void BluetoothPassthruRestoresBothIndicatorsThroughTheRealCombinedCompositor()
+    {
+        var device = CreateDevice(ConnectionType.BT);
+        Set(device, typeof(DualSenseDevice), "bluetoothOutputTransportStopping", 1);
+        device.SetProfileLightbarOwnership(false);
+        device.ApplyProfileIndicators(ProfilePlayerIndicators.Off, ProfileMicrophoneIndicator.Off, true, true);
+        byte[] raw = RawNative(0x21, 17); raw[2] = 0x11; raw[44] = 0x1F; raw[9] = 2;
+        Assert.IsTrue(device.WriteRawOutputReportFromGame(raw, 0, raw.Length));
+        Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Published, device.ProcessNextPhysicalOutputCommand());
+        var before = Mailbox(device).ReadLatest().DsxNativeState;
+        device.ApplyProfileIndicators(ProfilePlayerIndicators.DeviceSettings,
+            ProfileMicrophoneIndicator.DeviceSettings, true, true);
+        byte[] combined = new byte[398];
+        // Exercise the same final overlay used by idle writes and speaker templates.
+        var compositor = typeof(DualSenseDevice).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
+            .Single(m => m.Name == "ApplyBluetoothMicrophoneStreamingRequest" && m.GetParameters().Length == 5);
+        compositor.Invoke(device, new object[] { combined, Mailbox(device).ReadLatest(), (byte)0, false, -1 });
+        Assert.AreEqual((byte)0x1F, combined[13 + 43]); Assert.AreEqual((byte)2, combined[13 + 8]);
+        Assert.AreEqual(0x11, combined[14] & 0x11);
+        Assert.AreEqual(before, Mailbox(device).ReadLatest().DsxNativeState);
+        device.ReadWaitEv.Dispose();
+    }
+
+    [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
     public void PhysicalUsbQueueAppliesProfileLightbarPolicyWithoutChangingNativeUnderlay(bool normalMode)

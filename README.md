@@ -26,9 +26,9 @@ Major improvements include:
 - **More useful Output Slots:** Clear slot numbers and controller information, wrapping text, automatic column fitting and remembered manual widths, with smoother resizing.
 - **Safer profile handling:** Preserve existing profiles when saves fail, explain save and rename errors, and offer retry/discard controls for unsaved Overview changes. Reliably save enabled Special Actions and reduce profile-switching overhead.
 - **More reliable controller cleanup:** Improve Bluetooth and DualShock 3 disconnect/reconnect handling. Retain failed virtual-controller removals for retry, protect replacement bindings, and continue shutdown when another controller or notification handler fails.
-- **More predictable controller feedback:** Respect profile lightbar settings during native DualSense feedback while preserving haptics and adaptive triggers. Correct touchpad-click remapping and passthrough, preserve partial virtual DS4 feedback, and improve virtual keyboard/mouse state handling.
+- **More predictable controller feedback:** Respect profile lightbar settings during native DualSense feedback while preserving haptics and adaptive triggers. Add per-profile player/microphone indicators with application pass-through and explicit reapply controls. Correct touchpad-click remapping and passthrough, preserve partial virtual DS4 feedback, and improve virtual keyboard/mouse state handling.
 - **Updated USB/IP and VIIPER integration:** Support the latest usbip-win2 release with a matching, verified VIIPER backend, reviewed upstream improvements, stronger startup checks and controller-import safeguards. Add a saved option to hide VIIPER’s tray icon.
-- **Better diagnostics:** Report USB/IP and HidHide versions, driver states, backend readiness and installed/portable mode. Provide copyable logs, clearer disconnect and repair diagnostics, and optional Profile Editor timing information.
+- **Better diagnostics:** Report USB/IP and HidHide versions, driver states, backend readiness and installed/portable mode. Provide copyable logs, a built-in four-slot XInput controller test, clearer disconnect and repair diagnostics, and optional Profile Editor timing information.
 - **Maintained updates, releases and documentation:** Integrate this fork’s DS4Updater for installed and portable updates. Provide illustrated guides, matching source archives, dependency notices, checksums and build records, backed by reviewed dependency updates, extensive automated tests and installer upgrade checks.
 
 The fork builds on the work of [hbashton's DS4Windows](https://github.com/hbashton/DS4Windows) and the wider DS4Windows community. Upstream fixes retain their attribution, and improvements suitable for upstream contribution are prepared separately for review.
@@ -39,7 +39,7 @@ See the [Changelog](CHANGELOG.md) for release-by-release details and [Documentat
 
 - Remap buttons, sticks, touchpad, keyboard, mouse, macros, and special actions.
 - Save per-game profiles and switch them automatically by application or window title.
-- Configure gyro aiming, lighting, rumble, audio haptics, and adaptive triggers.
+- Configure gyro aiming, including stick-based activation/pause, lighting, rumble, audio haptics, and adaptive triggers.
 - Receive native DualSense advanced haptics and adaptive-trigger feedback in supported games, including over Bluetooth.
 
 Supported inputs include DualShock 3/4, DualSense/Edge, Switch Pro, Joy-Con,

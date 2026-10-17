@@ -4268,6 +4268,10 @@ namespace DS4Windows
             device.LightBarColor = Global.getMainColor(ind);
             if (device is InputDevices.DualSenseDevice profileLightbarDevice)
             {
+                var indicators = Global.getLightbarSettingsInfo(ind);
+                profileLightbarDevice.ApplyProfileIndicators(indicators.PlayerIndicators,
+                    indicators.MicrophoneIndicator, reapply: true,
+                    passthrough: indicators.mode == LightbarMode.Passthru);
                 profileLightbarDevice.SetProfileLightbarOwnership(
                     Global.getLightbarSettingsInfo(ind).mode == LightbarMode.DS4Win);
             }
@@ -6249,6 +6253,8 @@ namespace DS4Windows
                 cState = device.Debouncer.ProcessInput(cState);
 
 
+                // Capture raw calibrated stick intent before any output curves/remapping.
+                touchPad[ind]?.UpdateGyroStickActivation(cState);
                 cState = Mapping.SetCurveAndDeadzone(ind, cState, TempState[ind], device);
 
                 bool oscMonitoringPending = false;

@@ -106,6 +106,30 @@ the always-rainbow option.
 Passthrough uses game-provided lighting with a compatible output/game. A
 controller without the relevant lightbar hardware cannot reproduce that effect.
 
+### DualSense indicator LEDs
+
+**Indicator LEDs** controls the five white player lights below the touchpad and
+the orange microphone light on DualSense/Edge. White-light choices include Off,
+Player 1-4 patterns, All five lights and Battery level. The microphone light can
+be Off, On or Pulse. These are profile settings, saved with Apply/Save.
+
+| Lightbar output mode | Indicator selection | Behaviour |
+| --- | --- | --- |
+| Normal | Device settings | Keep the existing controller-specific policy; the microphone light defaults to Off. |
+| Passthru | Device settings | Follow the latest game/application indicator request, using device settings until a request arrives. |
+| Either | A specific choice | Override the application's indicator with the selected profile value. |
+
+In Passthru, returning from Off to Device settings restores the latest remembered
+application request without requiring it to be sent again. Player-light release
+commands return control to the device policy. Existing microphone mute indication
+and explicit DSX commands take priority. Changing the orange light does not mute
+the microphone.
+
+**Reapply indicators** applies the current editor selections without changing
+profiles. It sends a fresh update even when Off was already selected. Close a
+competing lighting application first when clearing lights it left on; an active
+writer can send another command. Use Apply/Save to persist the selections.
+
 ## Touchpad
 
 | Output mode | Purpose |
@@ -141,6 +165,37 @@ calibration: keep the controller still while following the calibration prompts.
 Use [Nintendo Options](nintendo-options.md) for motion lock, steady/slow aiming
 buttons and dual Joy-Con motion-source choices. Those helpers do not enable
 ordinary mouse/stick aiming by themselves.
+
+### Stick-based gyro activation
+
+Under **Gyro > Stick-based gyro activation**, choose a mode, stick and movement
+threshold, then Apply or Save:
+
+| Mode | Stick near centre | Stick beyond the threshold |
+| --- | --- | --- |
+| Off | Existing gyro behaviour | Existing gyro behaviour |
+| Enable while stick is moving | Gyro paused | Gyro allowed |
+| Pause while stick is moving | Gyro allowed | Gyro paused |
+
+Select Left stick, Right stick or Either stick. Moving means **held away from
+centre**, not repeatedly wiggling it; L3/R3 clicks alone do not count. Either
+stays in the moving state until both sticks return near centre. The default
+threshold is 15% of calibrated travel, independent of output dead zones; it
+switches back below 13% to avoid rapid changes near the boundary. The threshold
+can be set from 1% to 95%, with a two-percentage-point release gap.
+
+For mapped aiming, the stick condition combines with existing activation buttons;
+it does not bypass them. The condition also gates angular velocity sent to
+virtual DS4, DualSense/Edge and Switch 2 outputs. Accelerometer/gravity data,
+ordinary buttons/sticks and UDP/DSU motion remain active. A game's accelerometer
+tilt can therefore still respond while gyro is paused. Older profiles default
+to Off.
+
+For a quick native-motion check, use DualSense emulation and **Gyro output:
+Passthru**, select the virtual controller in a compatible tester, and watch its
+Gyroscope values while rotating with the stick centred/deflected. This is
+separate from Lightbar Passthru. Check mapped mouse/stick aiming separately if
+you use it.
 
 ## Advanced
 
