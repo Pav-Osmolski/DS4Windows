@@ -6249,6 +6249,8 @@ namespace DS4Windows
                 cState = device.Debouncer.ProcessInput(cState);
 
 
+                // Capture raw calibrated stick intent before any output curves/remapping.
+                touchPad[ind]?.UpdateGyroStickActivation(cState);
                 cState = Mapping.SetCurveAndDeadzone(ind, cState, TempState[ind], device);
 
                 bool oscMonitoringPending = false;

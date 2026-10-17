@@ -1744,6 +1744,10 @@ namespace DS4WinWPF.DS4Control.DTOXml
             set => _gyroMouseJitterCompensation = XmlDataUtilities.StrToBool(value);
         }
 
+        public GyroStickActivationMode GyroStickActivationMode { get; set; }
+        public GyroActivationStick GyroActivationStick { get; set; }
+        public int GyroStickThreshold { get; set; } = 15;
+
         [XmlElement("GyroOutputMode")]
         public GyroOutMode GyroOutputMode
         {
@@ -2581,6 +2585,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
 
             SASteeringWheelFuzz = source.saWheelFuzzValues[deviceIndex];
             GyroOutputMode = source.gyroOutMode[deviceIndex];
+            GyroStickActivationMode = source.gyroStickModes[deviceIndex];
+            GyroActivationStick = source.gyroActivationSticks[deviceIndex];
+            GyroStickThreshold = source.gyroStickThresholds[deviceIndex];
             GyroControlsSettings = new GyroControlsSettings()
             {
                 Triggers = source.gyroControlsInf[deviceIndex].triggers,
@@ -3459,6 +3466,12 @@ namespace DS4WinWPF.DS4Control.DTOXml
             {
                 destination.gyroOutMode[deviceIndex] = GyroOutputMode;
             }
+
+            destination.gyroStickModes[deviceIndex] = Enum.IsDefined(GyroStickActivationMode) ?
+                GyroStickActivationMode : DS4Windows.GyroStickActivationMode.Disabled;
+            destination.gyroActivationSticks[deviceIndex] = Enum.IsDefined(GyroActivationStick) ?
+                GyroActivationStick : DS4Windows.GyroActivationStick.Left;
+            destination.gyroStickThresholds[deviceIndex] = Math.Clamp(GyroStickThreshold, 1, 95);
 
             if (GyroControlsSettings != null)
             {
