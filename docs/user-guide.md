@@ -292,6 +292,25 @@ for diagnosing editor opening phases. Enable only the information needed to
 reproduce an issue, collect it, then turn it off. Auto Profiles has its own debug
 message option. See [Troubleshooting](troubleshooting.md) for the first checks.
 
+### XInput controller test
+
+Open **Settings > Updates & tools > XInputChecker** to show the built-in XInput
+controller test. It replaces the former external-program launcher; no separate
+XInputChecker download is needed. Pressing the button again brings the same
+window forward.
+
+The four cards show Windows XInput slots 1-4, their connection status, pressed
+buttons, trigger values (0-255) and signed raw stick values (-32768 to 32767).
+Move each control to see which slot responds. These are Windows XInput slots,
+not DS4Windows controller/output slot numbers. A physical Xbox controller and an
+emulated Xbox output can each occupy a slot.
+
+Virtual DS4 and DualSense outputs do not appear here; use a compatible PlayStation
+tester for them. The test is read-only: it does not assign slots, create virtual
+controllers, trigger rumble or measure latency. If Windows XInput is unavailable,
+the window explains the error; close and reopen it to retry. Close the window
+when finished.
+
 ## Native feedback and feature limits
 
 See [Controller audio and game feedback](controller-audio.md) for setup and

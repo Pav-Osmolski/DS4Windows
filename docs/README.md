@@ -11,8 +11,8 @@ are examples, not recommended settings for every controller.
 | Install, connect or update | [Getting started](getting-started.md), including portable setup and profile backups |
 | Choose a physical controller and virtual output | [Compatibility and feature limits](controller-compatibility.md) |
 | Fix detection, double input, missing feedback or updates | [Troubleshooting](troubleshooting.md) |
-| Collect information for an issue | [Log and diagnostics](user-guide.md#log-and-diagnostics) |
-| Upgrade the bundled backend | [USB/IP upgrade](usbip-upgrade.md): matching usbip-win2 0.9.8.1 / VIIPER 0.1.10 and restart requirements |
+| Collect information for an issue | [Log and diagnostics](user-guide.md#log-and-diagnostics), including the [XInput controller test](user-guide.md#xinput-controller-test) |
+| Upgrade the bundled backend | [USB/IP upgrade](usbip-upgrade.md): matching usbip-win2 0.9.8.1 / VIIPER 0.1.11 and restart requirements |
 
 ## Explore the app
 
