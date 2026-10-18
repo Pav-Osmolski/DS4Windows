@@ -3,6 +3,22 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.33](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.33) - 2026-10-18
+
+### Added
+
+- Add opt-in **Advanced tuning** to Audio Haptics with adjustable low-pass (40-1400 Hz) and high-pass (0-200 Hz; 0 disables high-pass) filters. Save the controls per profile and use the existing intensity adjustment. Custom filters replace Bass Focus only when enabled; older profiles retain their previous response ([#52](https://github.com/Pav-Osmolski/DS4Windows/pull/52)). Thanks to [u/d3boshy](https://www.reddit.com/user/d3boshy/) for the request, with [dsz](https://github.com/MaximumFreak/dsz) as the reference for the controls.
+- Make appreciation for [Nefarius](https://github.com/nefarius) and links to [support his projects](https://docs.nefarius.at/Donations/) more visible in the README, contributors page and About > Credits. Explain ViGEm's role in earlier DS4Windows versions, HidHide's ongoing contribution and this fork's current VIIPER backend ([#51](https://github.com/Pav-Osmolski/DS4Windows/pull/51)).
+
+### Fixed
+
+- Align the description and first card across all six Settings categories. Avoid fractional layout-rounding gaps from collapsed grid rows, while preserving multi-section search results and unsaved edits ([#52](https://github.com/Pav-Osmolski/DS4Windows/pull/52)).
+
+### Using the new controls
+
+- Open **Audio Haptics > Response > Advanced tuning** and enable **Use custom frequency filters**. Start around 100-160 Hz low-pass and 20 Hz high-pass, then adjust intensity gradually. Filters can reduce vibration from dialogue but cannot fully separate voices from other sounds. They do not filter audible audio or game-authored native haptics. See the [Audio Haptics guide](docs/user-guide.md#audio-haptics).
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.11** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source, checksums and build records accompany the release.
+
 ## [5.0.32](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.32) - 2026-10-18
 
 ### Improved
