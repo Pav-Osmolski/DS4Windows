@@ -31,9 +31,42 @@ namespace DS4WinWPF
     {
         private Logger logger;// = LogManager.GetCurrentClassLogger();
         public Logger Logger { get => logger; }
+        internal string LogDirectory { get; }
+        private FileTarget configuredFileTarget;
         private ReaderWriterLockSlim logLock = new ReaderWriterLockSlim();
 
         public LoggerHolder(DS4Windows.ControlService service)
+        {
+            string logDirectory = ResolveLogDirectory();
+            LogDirectory = logDirectory;
+            Directory.CreateDirectory(logDirectory);
+
+            LoggingConfiguration configuration =
+                LogManager.Configuration ?? new LoggingConfiguration();
+            FileTarget fileTarget = FindFileTarget(configuration);
+            if (fileTarget == null)
+            {
+                fileTarget = new FileTarget("logfile")
+                {
+                    Layout = "${longdate}|${level:uppercase=true}|${message}",
+                };
+                configuration.AddRule(LogLevel.Info, LogLevel.Fatal, fileTarget);
+            }
+            configuredFileTarget = fileTarget;
+            ConfigureArchiveLimits(fileTarget);
+            // Settings load after logger bootstrap. Defer age-based deletion
+            // until the user's saved retention preference has been read.
+            fileTarget.MaxArchiveDays = 0;
+            fileTarget.FileName = Path.Combine(logDirectory, "ds4windows_log.txt");
+            fileTarget.ArchiveFileName = Path.Combine(logDirectory, "ds4windows_log_{#}.txt");
+            LogManager.Configuration = configuration;
+            LogManager.ReconfigExistingLoggers();
+            logger = LogManager.GetCurrentClassLogger();
+            if (service != null) service.Debug += WriteToLog;
+            DS4Windows.AppLogger.GuiLog += WriteToLog;
+        }
+
+        internal static string ResolveLogDirectory()
         {
             string dataPath = PortableLabContext.Current?.DataPath ?? DS4Windows.Global.appdatapath;
             if (string.IsNullOrWhiteSpace(dataPath))
@@ -43,41 +76,25 @@ namespace DS4WinWPF
                     "DS4Windows");
             }
 
-            string logDirectory = Path.Combine(
-                dataPath, "Logs");
-            Directory.CreateDirectory(logDirectory);
+            return Path.Combine(dataPath, "Logs");
+        }
 
-            LoggingConfiguration configuration =
-                LogManager.Configuration ?? new LoggingConfiguration();
-            FileTarget fileTarget = FindFileTarget(configuration);
-            if (fileTarget == null)
-            {
-                // A partial extraction, antivirus quarantine, or packaging error
-                // can leave NLog.config absent. Logging must never be the reason
-                // the application silently fails to start.
-                fileTarget = new FileTarget("logfile")
-                {
-                    Layout = "${longdate}|${level:uppercase=true}|${message}",
-                    MaxArchiveFiles = 7,
-                };
-                configuration.AddRule(LogLevel.Info, LogLevel.Fatal,
-                    fileTarget);
-            }
+        internal static void ConfigureArchiveLimits(FileTarget target)
+        {
+            target.MaxArchiveFiles = StoredLogManager.MaximumArchiveFiles;
+            target.ArchiveAboveSize = StoredLogManager.ArchiveBytes;
+            target.ArchiveEvery = FileArchivePeriod.Day;
+            target.ArchiveOldFileOnStartup = true;
+            target.ArchiveNumbering = ArchiveNumberingMode.DateAndSequence;
+            target.ArchiveDateFormat = "yyyyMMdd";
+            target.Encoding = new System.Text.UTF8Encoding(false);
+        }
 
-            fileTarget.FileName = Path.Combine(logDirectory,
-                "ds4windows_log.txt");
-            fileTarget.ArchiveFileName = Path.Combine(logDirectory,
-                "ds4windows_log_{#}.txt");
-            LogManager.Configuration = configuration;
-            LogManager.ReconfigExistingLoggers();
-
-            logger = LogManager.GetCurrentClassLogger();
-
-            if (service != null)
-            {
-                service.Debug += WriteToLog;
-            }
-            DS4Windows.AppLogger.GuiLog += WriteToLog;
+        internal StoredLogCleanupResult ApplyRetention()
+        {
+            int days = Global.LogRetentionDays;
+            configuredFileTarget.MaxArchiveDays = days;
+            return StoredLogManager.Cleanup(LogDirectory, days, DateTime.UtcNow);
         }
 
         internal static FileTarget FindFileTarget(

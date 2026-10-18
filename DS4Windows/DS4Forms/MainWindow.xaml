@@ -1040,6 +1040,45 @@
             </TabItem>
             <TabItem x:Name="logTab" Header="{lex:Loc Log}" Tag="&#xE9D9;">
                 <DockPanel>
+                    <Border x:Name="logToolsPanel" DockPanel.Dock="Top" Style="{DynamicResource BridgeCardStyle}" Margin="0,0,0,12">
+                        <StackPanel>
+                            <WrapPanel>
+                                <Button x:Name="openLogFolderBtn" Content="Open log folder" Margin="0,0,8,8"
+                                        Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="OpenLogFolderBtn_Click" />
+                                <Button x:Name="reportIssueBtn" Content="Report an issue" Margin="0,0,8,8"
+                                        Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ReportIssueBtn_Click"
+                                        ToolTip="Open this fork's GitHub issue form. No logs are uploaded automatically." />
+                                <Button x:Name="clearStoredLogsBtn" Content="Clear stored logs" Margin="0,0,0,8"
+                                        Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearStoredLogsBtn_Click"
+                                        ToolTip="Remove saved archives and startup reports. Keep the current session log." />
+                            </WrapPanel>
+                            <WrapPanel Margin="0,4,0,4">
+                                <CheckBox x:Name="logVerboseCk" Content="Verbose logging" IsChecked="{Binding VerboseStartupLogging}"
+                                          Style="{DynamicResource BridgeLabeledCheckBoxStyle}" MinHeight="34" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,24,8"
+                                          ToolTip="Adds troubleshooting details. Restart to include startup diagnostics, then turn this off after testing." />
+                                <TextBlock Text="Keep stored logs for up to" VerticalAlignment="Center" Margin="0,0,10,8" />
+                                <ComboBox x:Name="logRetentionCombo" ItemsSource="{Binding LogRetentionChoices}"
+                                          SelectedItem="{Binding LogRetentionDays}" Width="90" Margin="0,0,8,8"
+                                          Style="{DynamicResource BridgeSettingsComboBoxStyle}"
+                                          AutomationProperties.Name="Log retention in days" />
+                                <TextBlock Text="days" VerticalAlignment="Center" Margin="0,0,0,8" />
+                            </WrapPanel>
+                            <TextBlock Text="Default: 30 days. Archives rotate at 10 MB, up to 20 files. The current session log is kept when clearing stored logs."
+                                       Foreground="{DynamicResource MutedForegroundColor}" TextWrapping="Wrap" />
+                            <TextBlock x:Name="logActionStatus" TextWrapping="Wrap" Margin="0,6,0,0"
+                                       AutomationProperties.LiveSetting="Polite">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
                     <Grid x:Name="logFooter" DockPanel.Dock="Bottom" Margin="4,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -1051,7 +1090,7 @@
                                 Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="CopyLogBtn_Click"
                                 ToolTip="Copy the latest log entries as plain text for pasting into GitHub." />
                         <Button x:Name="exportLogBtn" Grid.Column="1" Content="{lex:Loc Export}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ExportLogBtn_Click" />
-                        <Button x:Name="clearLogBtn" Grid.Column="3" Content="{lex:Loc Clear}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearLogBtn_Click" />
+                        <Button x:Name="clearLogBtn" Grid.Column="3" Content="Clear visible list" ToolTip="Clear this view only. Saved log files stay in the log folder." Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearLogBtn_Click" />
                         <TextBlock Grid.Column="2" Text="Latest 1,000 entries" VerticalAlignment="Center" Margin="16,0"
                                    Foreground="{DynamicResource MutedForegroundColor}"
                                    ToolTip="Older saved entries are available in the Logs folder." />

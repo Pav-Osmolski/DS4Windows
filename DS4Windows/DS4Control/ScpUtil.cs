@@ -1859,6 +1859,12 @@ namespace DS4Windows
             set => m_Config.verboseStartupLogging = value;
         }
 
+        public static int LogRetentionDays
+        {
+            get => DS4WinWPF.StoredLogManager.NormalizeRetentionDays(m_Config.logRetentionDays);
+            set => m_Config.logRetentionDays = DS4WinWPF.StoredLogManager.NormalizeRetentionDays(value);
+        }
+
         public static bool OutputSlotsAutoFit { get => m_Config.outputSlotsAutoFit; set => m_Config.outputSlotsAutoFit = value; }
         public static double[] OutputSlotsColumnWidths { get => m_Config.outputSlotsColumnWidths; set => m_Config.outputSlotsColumnWidths = value; }
 
@@ -5030,6 +5036,7 @@ namespace DS4Windows
         public bool useMoonlight = false;
         public bool useAdvancedMoonlight = false;
         public bool verboseStartupLogging = false;
+        public int logRetentionDays = DS4WinWPF.StoredLogManager.DefaultRetentionDays;
         public bool profileEditorTimingLogging = false;
         public bool outputSlotsAutoFit = true;
         public double[] outputSlotsColumnWidths = Array.Empty<double>();

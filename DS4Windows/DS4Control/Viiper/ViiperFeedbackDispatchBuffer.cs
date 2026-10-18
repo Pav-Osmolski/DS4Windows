@@ -408,7 +408,11 @@ namespace DS4Windows
                     return false;
                 bool repeatable = nativeCommand && nativeContext.Target != null &&
                     nativeContext.PendingBoundaryRevision == pendingBoundaryRevision &&
-                    DualSenseNativeFeedbackRepeatPolicy.IsRepeatable(source.AsSpan(0, length));
+                    (DualSenseNativeFeedbackRepeatPolicy.IsRepeatable(source.AsSpan(0, length)) ||
+                     nativeContext.Target is InputDevices.DualSenseDevice usb &&
+                     usb.ConnectionType == ConnectionType.USB &&
+                     DualSenseNativeUsbStatePolicy.ClassifyEnvelope(source.AsSpan(0, length)) !=
+                         DualSenseNativeUsbStatePolicy.Kind.Unknown);
                 if (repeatable && IsPendingNativeTailRepeat(source, length,
                     generation, deviceIndex, nativeContext))
                 {

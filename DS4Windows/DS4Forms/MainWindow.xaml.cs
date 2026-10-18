@@ -162,6 +162,21 @@ namespace DS4WinWPF.DS4Forms
             App root = Application.Current as App;
             settingsWrapVM = new SettingsViewModel();
             settingsTab.DataContext = settingsWrapVM;
+            logToolsPanel.DataContext = settingsWrapVM;
+            settingsWrapVM.LogRetentionDaysChanged += async (_, _) =>
+            {
+                try
+                {
+                    StoredLogCleanupResult result = await Task.Run(App.ApplyLogRetention);
+                    logActionStatus.Text = result.Failed == 0 ?
+                        $"Retention saved. Removed {result.Deleted} older log file(s)." :
+                        $"Retention saved. Removed {result.Deleted} file(s); {result.Failed} could not be removed.";
+                }
+                catch (Exception exception)
+                {
+                    logActionStatus.Text = "Retention was saved, but cleanup could not finish: " + exception.Message;
+                }
+            };
             settingsNavigator = new SettingsNavigator(settingsPages, new[]
             {
                 settingsGeneralNav, settingsAppearanceNav, settingsControllersNav,
@@ -1886,6 +1901,56 @@ Suspend support not enabled.", true);
             {
                 item.RequestDisconnect();
             }
+        }
+
+        private void OpenLogFolderBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Directory.CreateDirectory(App.LogDirectory);
+                using var process = Process.Start(new ProcessStartInfo(App.LogDirectory) { UseShellExecute = true });
+            }
+            catch (Exception exception)
+            {
+                logActionStatus.Text = "Could not open the log folder: " + exception.Message;
+            }
+        }
+
+        private void ReportIssueBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using var process = Process.Start(new ProcessStartInfo(
+                    "https://github.com/Pav-Osmolski/DS4Windows/issues/new/choose") { UseShellExecute = true });
+                logActionStatus.Text = "Paste the full log into your report and attach the affected profile if relevant. Nothing was uploaded automatically.";
+            }
+            catch (Exception exception)
+            {
+                logActionStatus.Text = "Could not open GitHub: " + exception.Message;
+            }
+        }
+
+        private async void ClearStoredLogsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show(this,
+                    "Delete all stored DS4Windows log archives and startup reports? The current session log and visible list will be kept. This cannot be undone.",
+                    "Clear stored logs", MessageBoxButton.YesNo, MessageBoxImage.Warning,
+                    MessageBoxResult.No) != MessageBoxResult.Yes) return;
+            clearStoredLogsBtn.IsEnabled = false;
+            try
+            {
+                string directory = App.LogDirectory;
+                StoredLogCleanupResult result = await Task.Run(() => StoredLogManager.Cleanup(
+                    directory, Global.LogRetentionDays, DateTime.UtcNow, clearAll: true));
+                logActionStatus.Text = result.Failed == 0 ?
+                    $"Deleted {result.Deleted} stored log file(s). The current session log is kept." :
+                    $"Deleted {result.Deleted} file(s); {result.Failed} could not be removed. They may be in use or read-only.";
+            }
+            catch (Exception exception)
+            {
+                logActionStatus.Text = "Could not clear stored logs: " + exception.Message;
+            }
+            finally { clearStoredLogsBtn.IsEnabled = true; }
         }
 
         private void CopyLogBtn_Click(object sender, RoutedEventArgs e)

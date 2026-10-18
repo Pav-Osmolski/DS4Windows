@@ -415,6 +415,14 @@ namespace DS4WinWPF.DS4Control.DTOXml
             set;
         }
 
+        private int logRetentionDays = StoredLogManager.DefaultRetentionDays;
+        [XmlElement("LogRetentionDays")]
+        public int LogRetentionDays
+        {
+            get => logRetentionDays;
+            set => logRetentionDays = StoredLogManager.NormalizeRetentionDays(value);
+        }
+
         [XmlElement("OutputSlotsAutoFit")]
         public bool OutputSlotsAutoFit { get; set; } = true;
 
@@ -954,6 +962,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             UseMoonlight = source.useMoonlight;
             UseAdvancedMoonlight = source.useAdvancedMoonlight;
             VerboseStartupLogging = source.verboseStartupLogging;
+            LogRetentionDays = source.logRetentionDays;
             ProfileEditorTimingLogging = source.profileEditorTimingLogging;
             OutputSlotsAutoFit = source.outputSlotsAutoFit;
             OutputSlotsColumnWidths = source.outputSlotsColumnWidths?.ToArray() ?? Array.Empty<double>();
@@ -1068,6 +1077,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.useMoonlight = UseMoonlight;
             destination.useAdvancedMoonlight = UseAdvancedMoonlight;
             destination.verboseStartupLogging = VerboseStartupLogging;
+            destination.logRetentionDays = LogRetentionDays;
             destination.profileEditorTimingLogging = ProfileEditorTimingLogging;
             destination.outputSlotsAutoFit = OutputSlotsAutoFit;
             destination.outputSlotsColumnWidths = OutputSlotsColumnWidths?.ToArray() ?? Array.Empty<double>();
