@@ -7,6 +7,8 @@ sample. The related upstream [issue #119](https://github.com/hbashton/DS4Windows
 reports weakness without comparable queue delays. These are separate symptoms;
 the logs do not measure actuator strength.
 
+Implementation: [PR #50](https://github.com/Pav-Osmolski/DS4Windows/pull/50).
+
 ## Scope in 5.0.32
 
 - Physical-device lifetime counters cover native command admission retries,

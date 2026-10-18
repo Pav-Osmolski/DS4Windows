@@ -7,13 +7,13 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Improved
 
-- Refresh the Log page with **Verbose logging**, **Open log folder**, **Report an issue**, and separate **Clear visible list** / confirmed **Clear stored logs** actions. Reporting opens GitHub without uploading anything automatically.
-- Add saved-log retention choices of 1, 7, 14, 30 or 90 days, defaulting to 30 days. Rotate archives daily or at 10 MB, retaining at most 20 archives. Keep the active session log, profiles and unrelated files when clearing archives.
-- Include physical DualSense native-feedback queue depth, age, owner duration, retries, report flags and explicit motor-stop receipt diagnostics in the copyable verbose log, including during speaker streaming. Distinguish physical USB write completion from Bluetooth transport handoff ([#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47)).
+- Refresh the Log page with **Verbose logging**, **Open log folder**, **Report an issue**, and separate **Clear visible list** / confirmed **Clear stored logs** actions ([#50](https://github.com/Pav-Osmolski/DS4Windows/pull/50)). Reporting opens GitHub without uploading anything automatically.
+- Add saved-log retention choices of 1, 7, 14, 30 or 90 days, defaulting to 30 days. Rotate archives daily or at 10 MB, retaining at most 20 archives. Keep the active session log, profiles and unrelated files when clearing archives ([#50](https://github.com/Pav-Osmolski/DS4Windows/pull/50)).
+- Include physical DualSense native-feedback queue depth, age, owner duration, retries, report flags and explicit motor-stop receipt diagnostics in the copyable verbose log, including during speaker streaming. Distinguish physical USB write completion from Bluetooth transport handoff ([#50](https://github.com/Pav-Osmolski/DS4Windows/pull/50), [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47)).
 
 ### Fixed
 
-- Suppress consecutive identical, unclaimed, recognized USB motor/trigger state reports that include actuator-power settings. Preserve distinct commands, stops, media, ownership boundaries and Bluetooth behaviour ([#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47)).
+- Suppress consecutive identical, unclaimed, recognized USB motor/trigger state reports that include actuator-power settings. Preserve distinct commands, stops, media, ownership boundaries and Bluetooth behaviour ([#50](https://github.com/Pav-Osmolski/DS4Windows/pull/50), [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47)).
 
 ### Validation and updating
 
