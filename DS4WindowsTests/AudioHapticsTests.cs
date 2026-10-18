@@ -139,6 +139,9 @@ namespace DS4WindowsTests
                     Source = AudioHapticsSourceKind.AppSession,
                     Mode = AudioHapticsMode.Replace,
                     GainPercent = 145,
+                    CustomFrequencyFilters = true,
+                    LowPassHz = 250,
+                    HighPassHz = 35,
                     BassFocus = AudioHapticsBassFocus.Wide,
                     Response = AudioHapticsResponse.Strong,
                     Attack = AudioHapticsAttack.Fast,
@@ -179,6 +182,9 @@ namespace DS4WindowsTests
                 restored.AudioHapticsSettings.Mode);
             Assert.AreEqual(145,
                 restored.AudioHapticsSettings.GainPercent);
+            Assert.IsTrue(restored.AudioHapticsSettings.CustomFrequencyFilters);
+            Assert.AreEqual(250, restored.AudioHapticsSettings.LowPassHz);
+            Assert.AreEqual(35, restored.AudioHapticsSettings.HighPassHz);
             Assert.AreEqual("instance",
                 restored.AudioHapticsSettings.SessionInstanceIdentifier);
         }

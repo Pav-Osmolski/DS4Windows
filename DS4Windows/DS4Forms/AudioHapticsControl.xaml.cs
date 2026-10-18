@@ -81,6 +81,7 @@ namespace DS4WinWPF.DS4Forms
                 gainValueText.Text = $"{settings.GainPercent}%";
                 UpdateGainPresetVisuals(settings.GainPercent);
                 bassFocusCombo.SelectedIndex = (int)settings.BassFocus;
+                UpdateFrequencyControls(settings);
                 responseCombo.SelectedIndex = (int)settings.Response;
                 attackCombo.SelectedIndex = (int)settings.Attack;
                 releaseCombo.SelectedIndex = (int)settings.Release;
@@ -211,7 +212,10 @@ namespace DS4WinWPF.DS4Forms
             sourceCombo.IsEnabled = hasDevice;
             mixModeButton.IsEnabled = hasDevice;
             replaceModeButton.IsEnabled = hasDevice;
-            bassFocusCombo.IsEnabled = hasDevice;
+            bool custom = CurrentSettings?.CustomFrequencyFilters == true;
+            customFiltersToggle.IsEnabled = hasDevice;
+            lowPassSlider.IsEnabled = highPassSlider.IsEnabled = hasDevice && custom;
+            bassFocusCombo.IsEnabled = hasDevice && !custom;
             responseCombo.IsEnabled = hasDevice;
             attackCombo.IsEnabled = hasDevice;
             releaseCombo.IsEnabled = hasDevice;
@@ -332,6 +336,40 @@ namespace DS4WinWPF.DS4Forms
             UpdateAppSpeakerOption(CurrentSettings);
             UpdateStatus(CurrentSettings);
             SettingsChanged?.Invoke(this, new ProfileFeatureSettingsChangedEventArgs(deviceIndex));
+        }
+
+        private void UpdateFrequencyControls(AudioHapticsProfileSettings settings)
+        {
+            bool previousLoading = loading;
+            loading = true;
+            try
+            {
+                customFiltersToggle.IsChecked = settings.CustomFrequencyFilters;
+                lowPassSlider.Value = settings.LowPassHz;
+                highPassSlider.Maximum = Math.Min(200, settings.LowPassHz - 10);
+                highPassSlider.Value = settings.HighPassHz;
+                lowPassValueText.Text = $"{settings.LowPassHz} Hz";
+                highPassValueText.Text = $"{settings.HighPassHz} Hz";
+                SetEditorEnabled(true);
+            }
+            finally { loading = previousLoading; }
+        }
+
+        private void CustomFiltersToggle_Click(object sender, RoutedEventArgs e)
+        {
+            Commit(settings => settings.CustomFrequencyFilters = customFiltersToggle.IsChecked == true);
+            if (CurrentSettings != null) UpdateFrequencyControls(CurrentSettings);
+        }
+
+        private void FrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (loading || CurrentSettings == null) return;
+            Commit(settings =>
+            {
+                if (ReferenceEquals(sender, lowPassSlider)) settings.LowPassHz = (int)Math.Round(e.NewValue);
+                else settings.HighPassHz = (int)Math.Round(e.NewValue);
+            });
+            UpdateFrequencyControls(CurrentSettings);
         }
 
         private void EnabledToggle_Click(object sender, RoutedEventArgs e) => Commit(settings => settings.Enabled = enabledToggle.IsChecked == true);

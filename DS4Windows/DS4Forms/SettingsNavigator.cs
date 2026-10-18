@@ -41,26 +41,38 @@ internal sealed class SettingsNavigator
         internal TextBlock SearchHeading;
     }
 
+    private readonly Grid pages;
     private readonly Section[] sections;
     private readonly Dictionary<Expander, bool> expansionBeforeSearch = new();
     internal bool IsSearching { get; private set; }
 
     internal SettingsNavigator(Grid pages, IEnumerable<RadioButton> navigation)
     {
-        // Search can reveal several sections at once; stack them in separate
-        // auto-sized rows rather than overlaying the normal category pages.
-        int row = 0;
+        this.pages = pages;
         sections = navigation.Select(button =>
         {
             var page = pages.Children.OfType<StackPanel>().Single(panel => panel.Name == button.Name.Replace("Nav", "Page"));
-            pages.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            Grid.SetRow(page, row++);
             var heading = new TextBlock { Text = button.Content + " — search results", Visibility = Visibility.Collapsed, Margin = new Thickness(0, 0, 0, 6) };
             heading.SetResourceReference(FrameworkElement.StyleProperty, "BridgeSectionTitleStyle");
             var cards = page.Children.OfType<FrameworkElement>().Where(child => child is Border or Expander).ToArray();
             page.Children.Insert(0, heading);
             return new Section { Navigation = button, Page = page, Cards = cards, SearchHeading = heading };
         }).ToArray();
+        ArrangeSections(searching: false);
+    }
+
+    private void ArrangeSections(bool searching)
+    {
+        // Collapsed auto rows can retain fractional rounding space. Normal
+        // categories share a single row so every page starts at the same point.
+        // Only search results need separate rows to show several pages at once.
+        pages.RowDefinitions.Clear();
+        for (int index = 0; index < sections.Length; index++)
+        {
+            if (searching || index == 0)
+                pages.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            Grid.SetRow(sections[index].Page, searching ? index : 0);
+        }
     }
 
     internal void RestoreSection(string id)
@@ -78,6 +90,7 @@ internal sealed class SettingsNavigator
                 expansionBeforeSearch[expander] = expander.IsExpanded;
         }
         foreach (var entry in expansionBeforeSearch) entry.Key.IsExpanded = entry.Value;
+        if (searching != IsSearching) ArrangeSections(searching);
         IsSearching = searching;
         int total = 0;
         foreach (Section section in sections)

@@ -44,6 +44,18 @@ testing for this fork:
 These credits acknowledge participation in the reports; they do not imply
 that each person validated every fix or release.
 
+## Nefarius and the controller ecosystem
+
+Special thanks to [Nefarius](https://github.com/nefarius) for his foundational
+contributions to Windows controller software. His [ViGEm project](https://github.com/nefarius/ViGEmBus)
+powered virtual-controller output in earlier DS4Windows versions, and
+[HidHide](https://github.com/nefarius/HidHide) helps prevent double input in
+this fork by hiding physical controllers from games.
+
+This fork now uses VIIPER for virtual-controller output, while continuing to
+benefit from the wider ecosystem he helped build. If his work has helped you,
+please consider [supporting his projects](https://docs.nefarius.at/Donations/).
+
 ## Earlier DS4Windows contributors
 
 The following names are preserved from the inherited contributor list.

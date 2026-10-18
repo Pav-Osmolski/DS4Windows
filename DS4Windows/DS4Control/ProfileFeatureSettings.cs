@@ -68,6 +68,10 @@ namespace DS4Windows
         public const int MaximumGainPercent = 200;
         public const int DefaultGainPercent = 100;
 
+        public bool CustomFrequencyFilters { get; set; }
+        public int LowPassHz { get; set; } = 160;
+        public int HighPassHz { get; set; } = 20;
+
         public bool Enabled { get; set; }
         public bool StreamAppAudioToController { get; set; }
         public bool StreamAppAudioToHeadsetOnly { get; set; }
@@ -99,6 +103,8 @@ namespace DS4Windows
             if (!Enum.IsDefined(typeof(AudioHapticsAttack), Attack)) Attack = AudioHapticsAttack.Balanced;
             if (!Enum.IsDefined(typeof(AudioHapticsRelease), Release)) Release = AudioHapticsRelease.Balanced;
             GainPercent = Math.Clamp(GainPercent, MinimumGainPercent, MaximumGainPercent);
+            LowPassHz = Math.Clamp(LowPassHz, 40, 1400);
+            HighPassHz = Math.Clamp(HighPassHz, 0, Math.Min(200, LowPassHz - 10));
             DisplayName = (DisplayName ?? string.Empty).Trim();
             ExecutableName = (ExecutableName ?? string.Empty).Trim();
             ProcessPath = (ProcessPath ?? string.Empty).Trim();
@@ -129,6 +135,9 @@ namespace DS4Windows
             Source = Source,
             Mode = Mode,
             GainPercent = GainPercent,
+            CustomFrequencyFilters = CustomFrequencyFilters,
+            LowPassHz = LowPassHz,
+            HighPassHz = HighPassHz,
             BassFocus = BassFocus,
             Response = Response,
             Attack = Attack,
@@ -142,6 +151,7 @@ namespace DS4Windows
         }.Normalize();
 
         public bool IsDefaultConfiguration() =>
+            !CustomFrequencyFilters && LowPassHz == 160 && HighPassHz == 20 &&
             !Enabled && !StreamAppAudioToController &&
             !StreamAppAudioToHeadsetOnly &&
             !AutomaticGameDetection &&

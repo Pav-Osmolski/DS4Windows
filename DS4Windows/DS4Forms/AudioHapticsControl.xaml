@@ -407,6 +407,41 @@
                                 </Grid>
                             </Border>
 
+                            <Expander Grid.Row="1" Header="Advanced tuning" Margin="0,16,0,0"
+                                      Foreground="{DynamicResource ForegroundColor}">
+                                <StackPanel Margin="0,10,0,0">
+                                    <CheckBox x:Name="customFiltersToggle" Content="Use custom frequency filters"
+                                              Click="CustomFiltersToggle_Click" />
+                                    <TextBlock Text="Replaces Bass Focus. Filters affect audio-derived vibration only."
+                                               TextWrapping="Wrap" Margin="0,8,0,12"
+                                               Foreground="{DynamicResource MutedForegroundColor}" />
+                                    <DockPanel>
+                                        <TextBlock Text="Low-pass" VerticalAlignment="Center" />
+                                        <TextBlock x:Name="lowPassValueText" Text="160 Hz" DockPanel.Dock="Right"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                    </DockPanel>
+                                    <Slider x:Name="lowPassSlider" Minimum="40" Maximum="1400" Value="160"
+                                            TickFrequency="10" IsSnapToTickEnabled="True"
+                                            Style="{StaticResource HapticsSlider}" ValueChanged="FrequencySlider_ValueChanged"
+                                            AutomationProperties.Name="Low-pass frequency in Hz" />
+                                    <TextBlock Text="Lower values reduce higher-frequency detail, including some dialogue."
+                                               TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
+                                    <DockPanel Margin="0,12,0,0">
+                                        <TextBlock Text="High-pass" VerticalAlignment="Center" />
+                                        <TextBlock x:Name="highPassValueText" Text="20 Hz" DockPanel.Dock="Right"
+                                                   HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                    </DockPanel>
+                                    <Slider x:Name="highPassSlider" Minimum="0" Maximum="150" Value="20"
+                                            TickFrequency="1" IsSnapToTickEnabled="True"
+                                            Style="{StaticResource HapticsSlider}" ValueChanged="FrequencySlider_ValueChanged"
+                                            AutomationProperties.Name="High-pass frequency in Hz" />
+                                    <TextBlock Text="Removes very low-frequency rumble. Set to 0 Hz to turn off."
+                                               TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
+                                    <TextBlock Text="Use the existing intensity slider to adjust strength. Filters cannot fully separate voices from other sounds."
+                                               TextWrapping="Wrap" Margin="0,12,0,0"
+                                               Foreground="{DynamicResource MutedForegroundColor}" />
+                                </StackPanel>
+                            </Expander>
                             <WrapPanel Grid.Row="2" Margin="0,16,0,0">
                                 <Border Style="{StaticResource StatusPill}">
                                     <StackPanel Orientation="Horizontal">

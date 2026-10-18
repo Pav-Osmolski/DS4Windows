@@ -85,6 +85,70 @@ public sealed class SettingsNavigationTests
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
+    [TestMethod]
+    [DataRow("DarkTheme", 640d)]
+    [DataRow("DefaultTheme", 640d)]
+    [DataRow("DarkTheme", 980d)]
+    [DataRow("DefaultTheme", 980d)]
+    public void EverySettingsSectionStartsAtTheSamePosition(string theme, double width)
+    {
+        Exception failure = null;
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                Grid root = LoadSettings(theme);
+                root.UseLayoutRounding = true;
+                Layout(root, width);
+                var navigation = Visuals(root).OfType<RadioButton>()
+                    .Where(control => control.GroupName == "SettingsCategory").ToArray();
+                var pages = (Grid)root.FindName("settingsPages");
+                var navigator = new DS4WinWPF.DS4Forms.SettingsNavigator(pages, navigation);
+                Point? expectedDescription = null;
+                double? expectedCard = null;
+                foreach (bool afterSearch in new[] { false, true })
+                {
+                    if (afterSearch)
+                    {
+                        navigator.SetSearch("controller");
+                        Layout(root, width);
+                        navigator.SetSearch("");
+                    }
+                    foreach (var category in navigation)
+                    {
+                        category.IsChecked = true;
+                        ((ScrollViewer)root.FindName("settingsScrollViewer")).ScrollToTop();
+                        Layout(root, width);
+                        var page = (StackPanel)root.FindName(category.Name.Replace("Nav", "Page"));
+                        var description = page.Children.OfType<TextBlock>().First(t => t.Visibility == Visibility.Visible);
+                        var card = page.Children.OfType<Border>().First();
+                        Point start = description.TranslatePoint(new Point(), root);
+                        double cardTop = card.TranslatePoint(new Point(), root).Y;
+                        expectedDescription ??= start;
+                        expectedCard ??= cardTop;
+                        Assert.AreEqual(expectedDescription.Value.X, start.X, 0.1, "Section left edges must match.");
+                        Assert.AreEqual(expectedDescription.Value.Y, start.Y, 0.1, "Section descriptions must start at the same height.");
+                        Assert.AreEqual(expectedCard.Value, cardTop, 0.1, "First settings cards must start at the same height.");
+                        string directory = Environment.GetEnvironmentVariable("DS4W_SETTINGS_LAYOUT_ARTIFACTS");
+                        if (!afterSearch && !string.IsNullOrEmpty(directory))
+                        {
+                            Directory.CreateDirectory(directory);
+                            var bitmap = new System.Windows.Media.Imaging.RenderTargetBitmap((int)width, 620, 96, 96, PixelFormats.Pbgra32);
+                            bitmap.Render(root);
+                            var encoder = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                            encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bitmap));
+                            using var file = File.Create(Path.Combine(directory, $"Settings-{theme}-{width}-{category.Tag}.png"));
+                            encoder.Save(file);
+                        }
+                    }
+                }
+            }
+            catch (Exception error) { failure = error; }
+        });
+        thread.SetApartmentState(ApartmentState.STA); thread.Start(); thread.Join();
+        if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
+    }
+
     private static Grid LoadSettings(string theme)
     {
         // Exercise the production layout without constructing the main window,

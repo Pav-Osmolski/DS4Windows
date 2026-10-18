@@ -74,6 +74,13 @@ signing status and known limitations.
 
 If this fork is useful to you, you can [support Pawel's ongoing work on Ko-fi](https://ko-fi.com/devilhood42). Contributions help support maintenance, bug fixes, controller testing and continued development of this independent fork. Support is entirely optional; DS4Windows remains free and open source.
 
+Special thanks to [Nefarius](https://github.com/nefarius) for his foundational
+contributions to Windows controller software, including ViGEm, which powered
+earlier DS4Windows versions, and HidHide, which helps prevent double input in
+this fork. This fork now uses VIIPER for virtual-controller output, while
+continuing to benefit from the wider ecosystem he helped build. If his work
+has helped you, please consider [supporting his projects](https://docs.nefarius.at/Donations/).
+
 ## Project links
 
 [Report a bug](https://github.com/Pav-Osmolski/DS4Windows/issues) · [Contribute](contributing.md) · [Contributors](contributors.md) · [VIIPER backend](https://github.com/Pav-Osmolski/VIIPER) · [DS4Updater](https://github.com/Pav-Osmolski/DS4Updater)
