@@ -103,6 +103,35 @@ Test native game haptics separately from Audio Haptics capture. Use the
 [controller audio guide](controller-audio.md) for endpoint/mute setup and
 [compatibility guide](controller-compatibility.md) for hardware limits.
 
+### Delayed or weak DualSense vibration
+
+For a useful report, enable **Log > Verbose logging**, restart DS4Windows and
+play for 1–2 minutes, including the problem and releasing all controls. Use
+**Log > Copy Text** to paste the whole retained log and label it **USB** or
+**Bluetooth**. Include the affected profile and roughly when the problem occurs.
+The full log is always best. If startup is no longer visible, use **Open log
+folder** and attach the saved log too. Turn verbose logging off after testing.
+
+Starting in 5.0.32, `DualSense native feedback` lines report the physical queue's
+pending/high-water counts, admission retries, queue/head age, owner processing
+time, completed commands and explicit motor-stop receipt revisions. These reach
+the copyable Log page even while controller-speaker streaming defers larger
+writer statistics. `USB-write` means a physical HID write completed;
+`BT-owner-handoff` means the Bluetooth transport accepted ownership, not that a
+radio write or actuator effect has completed. Timings are lifetime maxima for
+the physical device; they are not vibration-strength measurements. Profile
+and other local overrides can affect the final output.
+
+Only consecutive identical, unclaimed, recognized USB state reports can be
+suppressed. Alternating rumble/trigger commands, distinct values, stops, media,
+unknown commands and ownership changes retain their order. This release adds
+diagnostics and a narrow redundancy reduction; it does **not** confirm a full
+fix for [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47) or the
+related upstream [issue #119](https://github.com/hbashton/DS4Windows/issues/119).
+
+See [Log and diagnostics](user-guide.md#log-and-diagnostics) for stored-log
+retention, clearing and the Report an issue button.
+
 ## Updates or profile settings are missing
 
 Use [this fork's releases](https://github.com/Pav-Osmolski/DS4Windows/releases).

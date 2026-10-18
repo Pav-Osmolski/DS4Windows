@@ -279,7 +279,27 @@ The Log page shows startup, controller, profile and backend events, including
 installed/portable deployment mode, USB/IP status and detected driver versions.
 **Copy Text** copies the retained latest 1,000 entries with timestamps, including
 entries outside the current viewport. **Export** writes the same snapshot to a
-text file. Copy/export before Clear if you need to preserve the current entries.
+text file. **Clear visible list** clears only this view; saved files remain.
+Use **Open log folder** to find the active session and older saved logs. If the
+startup has scrolled beyond the 1,000-entry limit, attach the saved log as well.
+
+**Verbose logging** is available directly on the Log page and stays in sync
+with the existing Settings control. Enable it, restart DS4Windows to include
+startup diagnostics, reproduce the problem, then turn it off after collecting
+the log. **Report an issue** opens this fork's GitHub issue form in your browser;
+it does not upload a log or create a report automatically.
+
+**Keep stored logs for up to** offers 1, 7, 14, 30 or 90 days; the default is
+**30 days**. The preference persists across restarts. Archives also rotate daily
+or at 10 MB and are capped at 20 files, so busy sessions may retain less history.
+Cleanup runs after saved settings load and when you change retention; normal
+archive rotation also enforces the limits.
+
+**Clear stored logs** asks before deleting DS4Windows archives and saved startup
+failure reports in the active Logs folder. It keeps the current session log,
+the visible list, profiles and unrelated files. Locked or inaccessible files are
+reported so you can try again later. Retention never deletes the active session
+log or follows subfolders/links. Copy or export anything you need before clearing.
 
 Include app version, Windows build, controller model, connection and output type
 when reporting an issue. Startup readiness and driver versions help distinguish
