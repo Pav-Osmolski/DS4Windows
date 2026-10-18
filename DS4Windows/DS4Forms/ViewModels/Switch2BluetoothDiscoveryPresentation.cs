@@ -34,7 +34,7 @@ internal static class Switch2BluetoothDiscoveryPresentation
     internal static string DescribeReconnect(Switch2BluetoothWindowsAssociationResult result) =>
         result.Succeeded ? "Controller reconnected. Its existing association was preserved. Joy-Con halves may still need a pair selection." :
         result.Failure == Switch2BluetoothWindowsAssociationFailure.SlotActivationRejected ?
-            "The controller was reached, but its controller slot could not activate. Its association was preserved. Check the log, then wake it and retry after cleanup completes." :
+            "The controller was reached, but its controller slot could not activate. Its association was preserved. Check the log for profile, output or cleanup errors, correct the cause, then wake it and retry." :
             $"Reconnect failed: {result.Failure}. Its association was not changed. Wake it and refresh after cleanup completes; check the log if it remains unavailable.";
 
     private static string DescribeFailure(Switch2BluetoothWindowsScanStartFailure failure) =>

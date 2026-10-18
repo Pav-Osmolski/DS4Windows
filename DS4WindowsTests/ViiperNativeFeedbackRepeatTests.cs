@@ -558,6 +558,41 @@ public sealed class ViiperNativeFeedbackRepeatTests
         }
     }
 
+    [TestMethod]
+    public async Task NativeDiagnosticsReachTheCopyableGuiLogDuringActiveSpeakerStreaming()
+    {
+        using var fixture = new ReaderFixture();
+        bool previousVerbose = Global.VerboseStartupLogging;
+        var received = new TaskCompletionSource<(string Text, int Thread)>(TaskCreationOptions.RunContinuationsAsynchronously);
+        EventHandler<DebugEventArgs> handler = (_, args) =>
+        {
+            if (args.Data.StartsWith("DualSense native feedback (", StringComparison.Ordinal))
+                received.TrySetResult((args.Data, Environment.CurrentManagedThreadId));
+        };
+        AppLogger.GuiLog += handler;
+        try
+        {
+            Global.VerboseStartupLogging = true;
+            SetField(fixture.Output, "lastFeedbackSpeakerDispatchTimestamp", Stopwatch.GetTimestamp());
+            int caller = Environment.CurrentManagedThreadId;
+            typeof(ViiperOutDevice).GetMethod("LogWriterHealthIfNeeded", PrivateInstance)!.Invoke(fixture.Output, null);
+            var result = await received.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            StringAssert.Contains(result.Text, "nativePhysicalPending=0 ");
+            StringAssert.Contains(result.Text, "nativePhysicalCompletionScope=USB-write ");
+            StringAssert.Contains(result.Text, "nativeAdmissionWaitMaxMs=0.00 ");
+            Assert.AreNotEqual(caller, result.Thread, "Formatting and GUI publication must leave the transport thread.");
+            long first = (long)GetField(fixture.Output, "lastNativeFeedbackHealthLogTimestamp");
+            typeof(ViiperOutDevice).GetMethod("LogWriterHealthIfNeeded", PrivateInstance)!.Invoke(fixture.Output, null);
+            Assert.AreEqual(first, (long)GetField(fixture.Output, "lastNativeFeedbackHealthLogTimestamp"),
+                "Native diagnostics must remain rate limited during streaming.");
+        }
+        finally
+        {
+            AppLogger.GuiLog -= handler;
+            Global.VerboseStartupLogging = previousVerbose;
+        }
+    }
+
     private static ViiperFeedbackDispatchBuffer CreateBuffer(int capacity = 4) =>
         new(2, 4096, 474, capacity, orderedControlMaximumAgeMilliseconds: 20);
 

@@ -106,6 +106,8 @@ namespace DS4WinWPF
         private const string SingleAppComEventName = "{a52b5b20-d9ee-4f32-8518-307fa14aa0c6}";
         private EventWaitHandle threadComEvent = null;
         private static LoggerHolder logHolder;
+        internal static string LogDirectory => logHolder?.LogDirectory ?? LoggerHolder.ResolveLogDirectory();
+        internal static StoredLogCleanupResult ApplyLogRetention() => logHolder?.ApplyRetention() ?? default;
 
         private MemoryMappedFile ipcClassNameMMF = null; // MemoryMappedFile for inter-process communication used to hold className of DS4Form window
         private MemoryMappedFile ipcResultDataMMF = null; // MemoryMappedFile for inter-process communication used to exchange string result data between cmdline client process and the background running DS4Windows app
@@ -429,6 +431,8 @@ namespace DS4WinWPF
             StartupDiag(logger, "Global.Load begin");
             bool readAppConfig = DS4Windows.Global.Load();
             StartupDiag(logger, $"Global.Load end readAppConfig={readAppConfig}");
+            StoredLogCleanupResult logCleanup = ApplyLogRetention();
+            if (logCleanup.Failed > 0) logger.Warn("Some expired log files could not be removed; check the Logs folder permissions.");
             if (!firstRun && !readAppConfig)
             {
                 logger.Info($@"Profiles.xml not read at location ${DS4Windows.Global.appdatapath}\Profiles.xml. Using default app settings");

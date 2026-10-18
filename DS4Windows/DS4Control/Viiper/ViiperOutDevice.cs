@@ -505,6 +505,7 @@ namespace DS4Windows
         private int stateWriteRateHz;
         private long stateWriteMinimumIntervalTicks;
         private DateTime lastWriterHealthLogUtc = DateTime.MinValue;
+        private long lastNativeFeedbackHealthLogTimestamp;
         private DateTime lastMicrophoneHealthLogUtc = DateTime.MinValue;
         private int lastInputDeviceIndex = -1;
         private DualSenseDevice publishedPhysicalControllerTargetDevice;
@@ -5836,6 +5837,7 @@ namespace DS4Windows
 
         private void LogWriterHealthIfNeeded()
         {
+            QueueNativeFeedbackHealthIfNeeded();
             // Formatting the full transport snapshot allocates heavily and
             // publishes through the WPF logger. A live speaker stream has a
             // 10.667 ms deadline, so defer diagnostics instead of allowing a
@@ -5996,6 +5998,41 @@ namespace DS4Windows
                 orderedEgressStats +
                 latencyDistributions,
                 false);
+        }
+
+        // Keep the small physical-native snapshot available even while speaker
+        // streaming defers the much larger virtual-writer snapshot. Formatting
+        // and GUI publication run away from the input/audio/transport threads.
+        private void QueueNativeFeedbackHealthIfNeeded()
+        {
+            if (!Global.VerboseStartupLogging) return;
+            long now = Stopwatch.GetTimestamp();
+            long previous = Interlocked.Read(ref lastNativeFeedbackHealthLogTimestamp);
+            if (previous != 0 && now - previous < Stopwatch.Frequency * 30L) return;
+            int index = Volatile.Read(ref lastInputDeviceIndex);
+            if (Program.rootHub == null || index < 0 ||
+                index >= Program.rootHub.DS4Controllers.Length ||
+                Program.rootHub.DS4Controllers[index] is not DualSenseDevice physical) return;
+            if (Interlocked.CompareExchange(ref lastNativeFeedbackHealthLogTimestamp,
+                    now, previous) != previous) return;
+            var snapshot = (Device: physical,
+                Pending: feedbackDispatchBuffer.PendingOrderedControlCount,
+                AgeMax: feedbackDispatchBuffer.OrderedControlMaximumQueueAgeMilliseconds,
+                Waits: Interlocked.Read(ref feedbackNativeAdmissionWaits),
+                WaitMax: Interlocked.Read(ref feedbackNativeAdmissionMaximumWaitTicks),
+                Repeats: feedbackDispatchBuffer.OrderedControlRepeated);
+            ThreadPool.QueueUserWorkItem(static data =>
+            {
+                try
+                {
+                    AppLogger.LogToGui(data.Device.FormatNativeFeedbackHealth() +
+                        FormattableString.Invariant($" nativeDispatchPending={data.Pending} nativeDispatchAgeMaxMs={data.AgeMax:F2} nativeAdmissionWaits={data.Waits} nativeAdmissionWaitMaxMs={StopwatchTicksToMilliseconds(data.WaitMax):F2} nativeRepeatsSuppressed={data.Repeats}"), false);
+                }
+                catch (Exception exception)
+                {
+                    Trace.WriteLine("Native feedback diagnostics could not be logged: " + exception.Message);
+                }
+            }, snapshot, preferLocal: false);
         }
 
         private static void RecordMaximum(ref long target, long candidate)

@@ -17,6 +17,39 @@ output reproduce the problem.
 4. If Device Manager shows the controller disabled, verify its identity before
    enabling that device. Avoid disabling unrelated HID devices.
 
+## Switch 2 controller is reached but its slot cannot activate
+
+Starting in 5.0.31, an unassigned Switch 2 input slot loads the existing
+**Default** profile. It does not create or overwrite that profile. Explicitly
+selected or linked custom profiles are never silently replaced.
+
+The log now identifies the input slot, profile selection source and profile
+name. `failure=Missing`, `Invalid` or `Unreadable` means profile preparation
+failed. Restore the selected profile, fix its contents/access, or correct its
+saved/linked selection before reconnecting. An unassigned slot also needs a
+valid `Default` profile in the active settings folder. Back up settings before
+editing saved selections; deleting all settings or re-pairing is unnecessary
+for a profile-loading failure.
+
+`virtual-output-unavailable` means the profile loaded but its requested virtual
+controller could not activate. Include the preceding VIIPER/output errors in
+your report. This is separate from Bluetooth association; the association is
+preserved. Wake and retry after correcting the cause and completing cleanup.
+
+When reporting [issue #48](https://github.com/Pav-Osmolski/DS4Windows/issues/48),
+include the full log from startup through failure, app version, the affected
+Joy-Con half, selected profile and whether **Link profile** or automatic
+profiles are enabled. Test each half alone, both connection orders, and a few
+sleep/wake reconnects. Share successful results too. A full log is always best:
+earlier startup/profile/backend lines can explain the final rejection. For this
+test, enable **Log > Verbose logging**, fully exit/restart DS4Windows and
+reproduce once. Use **Log > Copy Text** to paste the whole retained log from
+startup through failure, then disable verbose logging. If startup has left the
+1,000-entry view, or extra saved diagnostics are needed, use **Open log folder**
+and attach `ds4windows_log.txt`. The saved file can contain additional markers.
+This release addresses
+reproduced profile failures; it does not establish the cause on every machine.
+
 ## Duplicate input or unexpected keyboard/mouse output
 
 Configure HidHide so the game sees the virtual controller without also seeing
@@ -69,6 +102,35 @@ Disable profile Trigger Lab effects while testing game-authored triggers.
 Test native game haptics separately from Audio Haptics capture. Use the
 [controller audio guide](controller-audio.md) for endpoint/mute setup and
 [compatibility guide](controller-compatibility.md) for hardware limits.
+
+### Delayed or weak DualSense vibration
+
+For a useful report, enable **Log > Verbose logging**, restart DS4Windows and
+play for 1–2 minutes, including the problem and releasing all controls. Use
+**Log > Copy Text** to paste the whole retained log and label it **USB** or
+**Bluetooth**. Include the affected profile and roughly when the problem occurs.
+The full log is always best. If startup is no longer visible, use **Open log
+folder** and attach the saved log too. Turn verbose logging off after testing.
+
+Starting in 5.0.32, `DualSense native feedback` lines report the physical queue's
+pending/high-water counts, admission retries, queue/head age, owner processing
+time, completed commands and explicit motor-stop receipt revisions. These reach
+the copyable Log page even while controller-speaker streaming defers larger
+writer statistics. `USB-write` means a physical HID write completed;
+`BT-owner-handoff` means the Bluetooth transport accepted ownership, not that a
+radio write or actuator effect has completed. Timings are lifetime maxima for
+the physical device; they are not vibration-strength measurements. Profile
+and other local overrides can affect the final output.
+
+Only consecutive identical, unclaimed, recognized USB state reports can be
+suppressed. Alternating rumble/trigger commands, distinct values, stops, media,
+unknown commands and ownership changes retain their order. This release adds
+diagnostics and a narrow redundancy reduction; it does **not** confirm a full
+fix for [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47) or the
+related upstream [issue #119](https://github.com/hbashton/DS4Windows/issues/119).
+
+See [Log and diagnostics](user-guide.md#log-and-diagnostics) for stored-log
+retention, clearing and the Report an issue button.
 
 ## Updates or profile settings are missing
 

@@ -20,6 +20,14 @@ entire rendered changelog before each release, including older entries and
 its tagged copy. Verify each reference targets the correct repository and
 uses `/pull/` for a PR or `/issues/` for an issue.
 
+Always read and write Markdown and release-note files with an explicit UTF-8
+encoding; never rely on the Windows default text encoding. Preserve existing
+BOMs when editing files that use them. Run
+`python utils/test-text-encoding.py --self-test` before release preparation,
+and run it with the release-note file path before uploading notes. CI and the
+draft release build reject invalid UTF-8 and common garbled punctuation/accent
+sequences. The check reports problems without rewriting historical text.
+
 Builds use the SDK in `global.json` and committed NuGet lock files. The draft
 workflow runs both .NET suites against the checked-out tag before packaging.
 For dependency or SDK changes, follow [dependency maintenance](dependency-maintenance.md#sdk-and-dependency-locks).
@@ -27,8 +35,12 @@ For dependency or SDK changes, follow [dependency maintenance](dependency-mainte
 1. Merge reviewed changes and wait for the `main` CI tests, package checks and
    installer lifecycle/upgrade checks to pass.
 2. Create a draft targeting that exact `main` commit. Use a three-part numeric
-   tag such as `5.0.15`, clear the prerelease flag, and link the release body to
-   the tagged `CHANGELOG.md`.
+   tag such as `5.0.15` and the release title `DS4Windows 5.0.15`. Clear the
+   prerelease flag and link the release body to the tagged `CHANGELOG.md`.
+   Link each related issue/PR in the release notes, including upstream reports
+   in their original repository. Verify the reporter's GitHub handle and thank
+   them beside the relevant change. Check the title, links and credits against
+   the previous release and source issues before publication.
 3. Run **.NET Release** from that same commit/branch, entering the draft tag.
    The workflow creates a missing tag only when the draft target matches the
    selected commit. It builds the portable ZIP, installer, matching source

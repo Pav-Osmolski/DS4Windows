@@ -114,6 +114,16 @@ Switch 2 Pro uses its **USB** headset path and Windows Headphones/Microphone
 endpoints. Bluetooth headset audio is unsupported. See
 [Nintendo USB headset setup](nintendo-options.md#usb-headset).
 
+## Collecting native-feedback diagnostics
+
+Use **Log > Verbose logging**, restart, reproduce for 1–2 minutes and use
+**Copy Text** to share the full log, labelled USB or Bluetooth. Disable verbose
+logging after the capture. The physical-native timing summary remains available
+while controller-speaker audio is streaming. Its USB completion measures the
+HID write; Bluetooth completion measures transport ownership handoff. Neither
+proves vibration strength or radio delivery. See the
+[diagnostic field guide](troubleshooting.md#delayed-or-weak-dualsense-vibration).
+
 ## If sound or feedback is missing
 
 Check the selected physical controller, USB/Bluetooth connection, virtual output,

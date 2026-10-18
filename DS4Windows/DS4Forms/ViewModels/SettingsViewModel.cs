@@ -205,7 +205,24 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 }
 
                 DS4Windows.Global.VerboseStartupLogging = value;
+                VerboseStartupLoggingChanged?.Invoke(this, EventArgs.Empty);
                 DS4Windows.Global.Save();
+            }
+        }
+
+        public event EventHandler VerboseStartupLoggingChanged;
+        public event EventHandler LogRetentionDaysChanged;
+        public int[] LogRetentionChoices => StoredLogManager.RetentionChoices;
+        public int LogRetentionDays
+        {
+            get => Global.LogRetentionDays;
+            set
+            {
+                int normalized = StoredLogManager.NormalizeRetentionDays(value);
+                if (Global.LogRetentionDays == normalized) return;
+                Global.LogRetentionDays = normalized;
+                Global.Save();
+                LogRetentionDaysChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

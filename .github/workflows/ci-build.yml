@@ -56,6 +56,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Check documentation text encoding
+        run: python utils/test-text-encoding.py --self-test
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:

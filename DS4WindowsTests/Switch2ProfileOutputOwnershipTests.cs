@@ -307,6 +307,128 @@ public sealed class Switch2ProfileOutputOwnershipTests
         Assert.AreSame(fixture.Device, fixture.Service.DS4Controllers[0]);
     }
 
+
+    [TestMethod]
+    [DataRow(Switch2ControllerModel.JoyCon2Left)]
+    [DataRow(Switch2ControllerModel.JoyCon2Right)]
+    public void UnassignedJoyConSlotLoadsExistingDefaultAndCanReconnect(Switch2ControllerModel model)
+    {
+        using var profiles = new ActivationProfiles();
+        profiles.Write("Default");
+        for (int attempt = 0; attempt < 2; attempt++)
+        {
+            using var fixture = new Fixture(initialOutput: false, productionProfile: true, joyCon: model);
+            fixture.Attach();
+            Assert.AreEqual("Default", Global.ProfilePath[0]);
+            Assert.AreEqual("Default", Global.OlderProfilePath[0]);
+            Assert.IsNull(fixture.Service.outputDevices[0]);
+            fixture.RetireAndRemove();
+        }
+    }
+
+    [TestMethod]
+    [DataRow("missing")]
+    [DataRow("invalid")]
+    [DataRow("locked")]
+    [DataRow("unassigned")]
+    public void ProfileActivationFailureNamesCauseAndPreservesMappings(string kind)
+    {
+        using var profiles = new ActivationProfiles();
+        profiles.Write("Default");
+        Global.OlderProfilePath[0] = kind == "unassigned" ? "" : "Custom";
+        if (kind == "unassigned") File.Delete(profiles.PathFor("Default"));
+        if (kind == "invalid") File.WriteAllText(profiles.PathFor("Custom"), "<WrongRoot />");
+        using var locked = kind == "locked" ? new FileStream(profiles.PathFor("Custom"),
+            FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None) : null;
+        using var fixture = new Fixture(initialOutput: false, productionProfile: true,
+            joyCon: Switch2ControllerModel.JoyCon2Left);
+        Global.store.rumble[0] = 77;
+        var result = fixture.TryPrepare();
+        Assert.IsFalse(result.Succeeded);
+        string cause = kind == "invalid" ? "Invalid" : kind == "locked" ? "Unreadable" : "Missing";
+        StringAssert.Contains(fixture.PrepareDiagnostic, "profile-load-rejected");
+        StringAssert.Contains(fixture.PrepareDiagnostic, "failure=" + cause);
+        StringAssert.Contains(fixture.PrepareDiagnostic, "slot=1");
+        Assert.AreEqual(77, (int)Global.store.rumble[0], "Rejected preparation must not reset live mappings.");
+        Assert.AreEqual(kind == "unassigned" ? "" : "Custom", Global.OlderProfilePath[0]);
+        Assert.IsTrue(fixture.AbortPreparation().Succeeded);
+    }
+
+    [TestMethod]
+    public void RepairedExplicitProfileCanActivateAfterCompletedAbort()
+    {
+        using var profiles = new ActivationProfiles();
+        Global.OlderProfilePath[0] = "Custom";
+        using var fixture = new Fixture(initialOutput: false, productionProfile: true,
+            joyCon: Switch2ControllerModel.JoyCon2Right);
+        Assert.IsFalse(fixture.TryPrepare().Succeeded);
+        Assert.IsTrue(fixture.AbortPreparation().Succeeded);
+        profiles.Write("Custom");
+        fixture.Attach();
+        Assert.AreEqual("Custom", Global.ProfilePath[0]);
+        fixture.RetireAndRemove();
+    }
+
+    [TestMethod]
+    public void LinkedMissingProfileDoesNotFallBackToExistingDefault()
+    {
+        using var profiles = new ActivationProfiles();
+        profiles.Write("Default");
+        Global.ProfilePath[0] = "Missing linked";
+        Global.linkedProfileCheck[0] = true;
+        Assert.IsFalse(Switch2ActivationProfileLoader.TryLoad(0, null, out string diagnostic));
+        StringAssert.Contains(diagnostic, "source=linked");
+        StringAssert.Contains(diagnostic, "failure=Missing");
+        Assert.AreEqual("Missing linked", Global.ProfilePath[0]);
+    }
+
+    [TestMethod]
+    public void VirtualOutputFailureIsDistinctFromProfileFailure()
+    {
+        using var profiles = new ActivationProfiles();
+        profiles.Write("Custom", virtualOutput: true);
+        Global.OlderProfilePath[0] = "Custom";
+        using var fixture = new Fixture(initialOutput: false, productionProfile: true,
+            joyCon: Switch2ControllerModel.JoyCon2Left);
+        foreach (var slot in fixture.Manager.OutputSlots.ToArray())
+            fixture.Manager.DeferredPlugin(new FakeOutput(OutContType.ViiperXboxOne), -1,
+                "occupied", fixture.Service.outputDevices, OutContType.ViiperXboxOne);
+        Assert.IsFalse(fixture.TryPrepare().Succeeded);
+        StringAssert.Contains(fixture.PrepareDiagnostic, "virtual-output-unavailable");
+        StringAssert.Contains(fixture.PrepareDiagnostic, "profile=\"Custom\"");
+        Assert.IsTrue(fixture.AbortPreparation().Succeeded);
+    }
+
+    private sealed class ActivationProfiles : IDisposable
+    {
+        private readonly FieldInfo storeField = typeof(Global).GetField("m_Config", BindingFlags.Static | BindingFlags.NonPublic);
+        private readonly object oldStore;
+        private readonly string oldRoot = Global.appdatapath;
+        private readonly bool[] oldLinked = Global.linkedProfileCheck.ToArray();
+        private readonly bool[] oldTemp = Global.useTempProfile.ToArray();
+        private readonly string root = Path.Combine(Path.GetTempPath(), "ds4w-activation-" + Guid.NewGuid().ToString("N"));
+        internal ActivationProfiles()
+        {
+            oldStore = storeField.GetValue(null);
+            storeField.SetValue(null, new BackingStore());
+            Global.appdatapath = root;
+            Array.Clear(Global.linkedProfileCheck);
+            Array.Clear(Global.useTempProfile);
+            Directory.CreateDirectory(Path.Combine(root, "Profiles"));
+        }
+        internal string PathFor(string name) => Path.Combine(root, "Profiles", name + ".xml");
+        internal void Write(string name, bool virtualOutput = false) => File.WriteAllText(PathFor(name),
+            $"<DS4Windows config_version=\"5\"><DinputOnly>{(!virtualOutput).ToString().ToLowerInvariant()}</DinputOnly><OutputContDevice>Xbox360</OutputContDevice></DS4Windows>");
+        public void Dispose()
+        {
+            storeField.SetValue(null, oldStore);
+            Global.appdatapath = oldRoot;
+            oldLinked.CopyTo(Global.linkedProfileCheck, 0);
+            oldTemp.CopyTo(Global.useTempProfile, 0);
+            Directory.Delete(root, true);
+        }
+    }
+
     private sealed class Fixture : IDisposable
     {
         private readonly bool oldDInput = Global.getDInputOnly(0);
@@ -331,13 +453,17 @@ public sealed class Switch2ProfileOutputOwnershipTests
         internal readonly FakeOutput Replacement = new(OutContType.ViiperXboxOne);
         internal InputControllerSlotToken Token => token;
 
-        internal Fixture(bool initialOutput = true, bool allocateReplacement = false)
+        internal Fixture(bool initialOutput = true, bool allocateReplacement = false,
+            bool productionProfile = false, Switch2ControllerModel? joyCon = null)
         {
             this.initialOutput = initialOutput;
             Manager = allocateReplacement ? new OutputSlotManager(null, _ => Replacement) : new OutputSlotManager();
             Assert.IsTrue(Table.TryOpen(701, out _));
-            Assert.IsTrue(Switch2RuntimeInputDevice.TryCreatePro(702, 703,
-                Switch2Transport.Usb, out Device, out _));
+            if (joyCon.HasValue)
+                Assert.IsTrue(Switch2RuntimeInputDevice.TryCreateStandaloneJoyCon(joyCon.Value, 702, 703, out Device, out _));
+            else
+                Assert.IsTrue(Switch2RuntimeInputDevice.TryCreatePro(702, 703,
+                    Switch2Transport.Usb, out Device, out _));
             Assert.IsTrue(InputControllerRegistration.TryCreate(Device, Device.RuntimeGeneration,
                 InputControllerOwnershipKind.Switch2Runtime, false, false,
                 new FakeOwner(Device), out var registration, out _));
@@ -347,6 +473,7 @@ public sealed class Switch2ProfileOutputOwnershipTests
             Service.DS4Controllers = new DS4Device[1];
             Service.touchPad = new Mouse[1];
             Service.outputDevices = new OutputDevice[1];
+            Service.touchreleased = new bool[8];
             SetField(Service, "inputRegistrationTable", Table);
             SetField(Service, "switch2RuntimeRegistrationService", registrationService);
             SetField(Service, "outputslotMan", Manager);
@@ -359,9 +486,17 @@ public sealed class Switch2ProfileOutputOwnershipTests
             Mapping.mapStickActionData[0] = new Mapping.PostMapStickData();
             host = new Switch2ControlServiceReversibleProfileSlotHost(Table,
                 registrationService.LifecycleGate, Service.DS4Controllers, Service.touchPad,
-                controllers, new RealInverseStage(this), static (_, _, _) => { });
+                controllers, productionProfile ? CreateProductionStage() : new RealInverseStage(this), static (_, _, _) => { });
             lease = new Switch2ControlServiceSlotLease(new object(), token);
         }
+
+        private ISwitch2ControlServiceReversibleProfileStage CreateProductionStage() =>
+            (ISwitch2ControlServiceReversibleProfileStage)Activator.CreateInstance(
+                typeof(ControlService).GetNestedType("Switch2ControlServiceProfileStage", BindingFlags.NonPublic),
+                BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { Service }, null);
+        internal Switch2ControlServiceSlotHostResult TryPrepare() => host.TryPrepare(lease);
+        internal string PrepareDiagnostic => host.LastPreparePhase;
+        internal Switch2ControlServiceSlotHostResult AbortPreparation() => host.TryAbort(lease);
 
         internal void Attach()
         {

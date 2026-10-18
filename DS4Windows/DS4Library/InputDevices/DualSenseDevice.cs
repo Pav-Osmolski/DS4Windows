@@ -882,6 +882,8 @@ namespace DS4Windows.InputDevices
         private byte physicalOutputTriggerLabMask;
         private readonly long[] physicalOutputCommandRevisions =
             new long[PhysicalOutputCommandCapacity];
+        private readonly long[] physicalOutputCommandQueuedAt = new long[PhysicalOutputCommandCapacity];
+        private readonly DualSenseNativeFeedbackDiagnostics nativeFeedbackDiagnostics = new();
         private readonly byte[] physicalOutputCommandBuffer =
             new byte[USB_OUTPUT_CHANGE_LENGTH];
         private readonly byte[] latestUsbNativeGameOutputReport =
@@ -3303,6 +3305,7 @@ namespace DS4Windows.InputDevices
                 {
                     physicalOutputCommandHead = 0;
                     physicalOutputCommandCount = 0;
+                    Array.Clear(physicalOutputCommandQueuedAt, 0, physicalOutputCommandQueuedAt.Length);
                     Array.Clear(physicalOutputCommandRevisions, 0,
                         physicalOutputCommandRevisions.Length);
                 }
@@ -3836,6 +3839,7 @@ namespace DS4Windows.InputDevices
                     nativeOutputRevision = 0;
                     Interlocked.Increment(
                         ref physicalOutputCommandOverflows);
+                    nativeFeedbackDiagnostics.RejectAdmission();
                     return false;
                 }
 
@@ -3852,7 +3856,10 @@ namespace DS4Windows.InputDevices
                 physicalOutputTriggerLabMasks[tail] = preparedTriggerLabValidity;
                 physicalOutputCommandRevisions[tail] =
                     nativeOutputRevision;
+                physicalOutputCommandQueuedAt[tail] = Stopwatch.GetTimestamp();
                 physicalOutputCommandCount++;
+                nativeFeedbackDiagnostics.Admit(physicalOutputUnderlaySlots[tail],
+                    nativeOutputRevision, physicalOutputCommandCount);
             }
             physicalOutputSignal.Set();
             return true;
@@ -3862,7 +3869,7 @@ namespace DS4Windows.InputDevices
             ProcessNextPhysicalOutputCommand()
         {
             if (!TryPeekPhysicalOutputCommand(physicalOutputCommandBuffer,
-                    out long nativeOutputRevision))
+                    out long nativeOutputRevision, out long queuedAt))
             {
                 if (conType == ConnectionType.BT)
                 {
@@ -3888,27 +3895,37 @@ namespace DS4Windows.InputDevices
                 return PhysicalOutputCommandProcessResult.None;
             }
 
-            if (!ProcessRawPhysicalOutputCommand(
-                    physicalOutputCommandBuffer, nativeOutputRevision,
-                    physicalOutputUnderlayBuffer, physicalOutputTriggerLabMask))
+            long startedAt = Stopwatch.GetTimestamp();
+            bool succeeded = false;
+            try
             {
-                return PhysicalOutputCommandProcessResult.Retry;
+                succeeded = ProcessRawPhysicalOutputCommand(
+                    physicalOutputCommandBuffer, nativeOutputRevision,
+                    physicalOutputUnderlayBuffer, physicalOutputTriggerLabMask);
             }
+            finally
+            {
+                nativeFeedbackDiagnostics.Attempt(physicalOutputUnderlayBuffer,
+                    nativeOutputRevision, queuedAt, startedAt, Stopwatch.GetTimestamp(), succeeded);
+            }
+            if (!succeeded) return PhysicalOutputCommandProcessResult.Retry;
 
             CommitPhysicalOutputCommand(nativeOutputRevision);
             return PhysicalOutputCommandProcessResult.Published;
         }
 
         private bool TryPeekPhysicalOutputCommand(byte[] destination,
-            out long nativeOutputRevision)
+            out long nativeOutputRevision, out long queuedAt)
         {
             lock (physicalOutputCommandLock)
             {
                 if (physicalOutputCommandCount == 0)
                 {
                     nativeOutputRevision = 0;
+                    queuedAt = 0;
                     return false;
                 }
+                queuedAt = physicalOutputCommandQueuedAt[physicalOutputCommandHead];
                 Buffer.BlockCopy(
                     physicalOutputCommandSlots[physicalOutputCommandHead], 0,
                     destination, 0, USB_OUTPUT_CHANGE_LENGTH);
@@ -3943,6 +3960,23 @@ namespace DS4Windows.InputDevices
                         PhysicalOutputCommandCapacity;
                 physicalOutputCommandCount--;
             }
+        }
+
+        internal string FormatNativeFeedbackHealth()
+        {
+            DualSenseNativeFeedbackDiagnostics.Snapshot snapshot;
+            int pending;
+            long headAge;
+            lock (physicalOutputCommandLock)
+            {
+                pending = physicalOutputCommandCount;
+                headAge = pending == 0 ? 0 :
+                    Stopwatch.GetTimestamp() - physicalOutputCommandQueuedAt[physicalOutputCommandHead];
+                snapshot = nativeFeedbackDiagnostics.Capture();
+            }
+            // Do not format/allocate while holding a transport admission lock.
+            return $"DualSense native feedback ({Mac}, {conType}): " +
+                snapshot.Format(pending, headAge, conType == ConnectionType.USB);
         }
 
         private bool HasPendingPhysicalOutputCommand()

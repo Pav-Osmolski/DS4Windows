@@ -3,6 +3,35 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.32](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.32) - 2026-10-18
+
+### Improved
+
+- Refresh the Log page with **Verbose logging**, **Open log folder**, **Report an issue**, and separate **Clear visible list** / confirmed **Clear stored logs** actions ([#50](https://github.com/Pav-Osmolski/DS4Windows/pull/50)). Reporting opens GitHub without uploading anything automatically.
+- Add saved-log retention choices of 1, 7, 14, 30 or 90 days, defaulting to 30 days. Rotate archives daily or at 10 MB, retaining at most 20 archives. Keep the active session log, profiles and unrelated files when clearing archives ([#50](https://github.com/Pav-Osmolski/DS4Windows/pull/50)).
+- Include physical DualSense native-feedback queue depth, age, owner duration, retries, report flags and explicit motor-stop receipt diagnostics in the copyable verbose log, including during speaker streaming. Distinguish physical USB write completion from Bluetooth transport handoff ([#50](https://github.com/Pav-Osmolski/DS4Windows/pull/50), [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47)).
+
+### Fixed
+
+- Suppress consecutive identical, unclaimed, recognized USB motor/trigger state reports that include actuator-power settings. Preserve distinct commands, stops, media, ownership boundaries and Bluetooth behaviour ([#50](https://github.com/Pav-Osmolski/DS4Windows/pull/50), [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47)).
+
+### Validation and updating
+
+- Thanks to @Jobima1st for the logs and report in [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), related to upstream [#119](https://github.com/hbashton/DS4Windows/issues/119). The reported game delay and Bluetooth strength/skipping still need hardware confirmation; this release does not claim a complete fix. See the [validation record](docs/validation/2026-10-18-native-feedback-and-logs.md) and [Log guide](docs/user-guide.md#log-and-diagnostics).
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at 0.1.11 and USB/IP at 0.9.8.1; no driver version change is required. This release is unsigned.
+
+## [5.0.31](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.31) - 2026-10-18
+
+### Fixed
+
+- Let an unassigned, unlinked Switch 2 input slot use the existing Default profile so Joy-Con activation does not fail solely because that slot has no saved selection. Explicit custom selections are preserved ([#49](https://github.com/Pav-Osmolski/DS4Windows/pull/49), [#48](https://github.com/Pav-Osmolski/DS4Windows/issues/48)).
+- Validate activation profiles before resetting mappings. Report the input slot, selected profile and missing/invalid/unreadable load failures separately from unavailable virtual output; improve the reconnect guidance ([#49](https://github.com/Pav-Osmolski/DS4Windows/pull/49)).
+
+### Validation and updating
+
+- Thanks to @doyoulikegirlz for reporting [#48](https://github.com/Pav-Osmolski/DS4Windows/issues/48). Automated production-stage tests reproduce profile failures and cover the changes; confirmation of the reporter's specific condition remains pending. See the [validation record](docs/validation/2026-10-18-switch2-profile-activation.md) and [troubleshooting guide](docs/troubleshooting.md#switch-2-controller-is-reached-but-its-slot-cannot-activate).
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at 0.1.11 and USB/IP at 0.9.8.1; no driver version change is required. This release is unsigned.
+
 ## [5.0.30](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.30) - 2026-10-17
 
 ### Fixed
@@ -436,7 +465,7 @@ RC4.4 release.
 
 ### Release notes
 
-- Controlled body-rumble bursts preserved all 251 changes and reduced final-stop submission delay from 252 ms to approximately 0.15–0.18 ms. These were host-side measurements, not radio or actuator latency, a hardware-rate guarantee, or adaptive-trigger gameplay acceptance.
+- Controlled body-rumble bursts preserved all 251 changes and reduced final-stop submission delay from 252 ms to approximately 0.15-0.18 ms. These were host-side measurements, not radio or actuator latency, a hardware-rate guarantee, or adaptive-trigger gameplay acceptance.
 
 <a id="inherited-release-notes-rc458"></a>
 
