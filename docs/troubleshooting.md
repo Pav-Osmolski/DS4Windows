@@ -1,6 +1,6 @@
 # Troubleshooting DS4Windows
 
-[Documentation index](README.md) · [Getting started](getting-started.md)
+[Documentation index](README.md) Â· [Getting started](getting-started.md)
 
 Back up profiles and settings before changing your installation. Change one
 setting at a time and note which physical controller, connection and virtual
@@ -16,6 +16,32 @@ output reproduce the problem.
    to see it. This matters after changing folders or executable names.
 4. If Device Manager shows the controller disabled, verify its identity before
    enabling that device. Avoid disabling unrelated HID devices.
+
+## Switch 2 controller is reached but its slot cannot activate
+
+Starting in 5.0.31, an unassigned Switch 2 input slot loads the existing
+**Default** profile. It does not create or overwrite that profile. Explicitly
+selected or linked custom profiles are never silently replaced.
+
+The log now identifies the input slot, profile selection source and profile
+name. `failure=Missing`, `Invalid` or `Unreadable` means profile preparation
+failed. Restore the selected profile, fix its contents/access, or correct its
+saved/linked selection before reconnecting. An unassigned slot also needs a
+valid `Default` profile in the active settings folder. Back up settings before
+editing saved selections; deleting all settings or re-pairing is unnecessary
+for a profile-loading failure.
+
+`virtual-output-unavailable` means the profile loaded but its requested virtual
+controller could not activate. Include the preceding VIIPER/output errors in
+your report. This is separate from Bluetooth association; the association is
+preserved. Wake and retry after correcting the cause and completing cleanup.
+
+When reporting [issue #48](https://github.com/Pav-Osmolski/DS4Windows/issues/48),
+include the full log from startup through failure, app version, the affected
+Joy-Con half, selected profile and whether **Link profile** or automatic
+profiles are enabled. Test each half alone, both connection orders, and a few
+sleep/wake reconnects. Share successful results too. This release addresses
+reproduced profile failures; it does not establish the cause on every machine.
 
 ## Duplicate input or unexpected keyboard/mouse output
 
