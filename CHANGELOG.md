@@ -45,7 +45,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Validation and updating
 
-- Thanks to @doyoulikegirlz for reporting [#48](https://github.com/Pav-Osmolski/DS4Windows/issues/48). Automated production-stage tests reproduce profile failures and cover the changes; confirmation of the reporter's specific condition remains pending. See the [validation record](docs/validation/2026-10-18-switch2-profile-activation.md) and [troubleshooting guide](docs/troubleshooting.md#switch-2-controller-is-reached-but-its-slot-cannot-activate).
+- Thanks to @doyoulikegirlz for reporting [#48](https://github.com/Pav-Osmolski/DS4Windows/issues/48). Automated production-stage tests reproduce profile failures and cover the changes. In a [later follow-up](https://github.com/Pav-Osmolski/DS4Windows/issues/48#issuecomment-6252913392), the reporter attributed their slot-assignment problem to merged very old backups and confirmed a clean install resolved it. The exact conflicting configuration was not recovered; [PR #49](https://github.com/Pav-Osmolski/DS4Windows/pull/49)'s independently tested profile-loading safeguards remain useful. See the [validation record](docs/validation/2026-10-18-switch2-profile-activation.md) and [troubleshooting guide](docs/troubleshooting.md#switch-2-controller-is-reached-but-its-slot-cannot-activate).
 - Close games, DS4Windows and VIIPER before updating. VIIPER remains at 0.1.11 and USB/IP at 0.9.8.1; no driver version change is required. This release is unsigned.
 
 ## [5.0.30](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.30) - 2026-10-17

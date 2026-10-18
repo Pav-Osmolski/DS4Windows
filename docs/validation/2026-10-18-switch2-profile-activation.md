@@ -23,10 +23,22 @@ missing/invalid/locked files, forbids fallback for a missing linked profile,
 checks retry after repairing an explicit profile, and fills output slots with
 fake devices to distinguish output exhaustion without hardware access.
 
-Reporter validation remains required: update to 5.0.31, test each half alone,
-connect left then right and right then left, and repeat sleep/wake reconnects.
-If activation fails, provide the full startup-to-failure log and selected/linked
-profile details. Do not close the issue solely on the basis of automated tests.
+## Reporter follow-up
+
+On 18 October 2026, [the reporter confirmed](https://github.com/Pav-Osmolski/DS4Windows/issues/48#issuecomment-6252913392)
+that they had merged backups from a very old DS4Windows installation and saw
+slot assignments getting mixed up when another physical controller was present.
+A clean install allowed the Joy-Cons to connect after their DualSense Edge was
+recognized. They could no longer reproduce the old configuration, so its exact
+conflicting setting was not established. The issue is closed.
+
+This confirms resolution for their clean installation; it does not establish
+that PR #49 repaired the old slot configuration. The independently reproduced
+profile-loading cases and regression coverage remain valid reasons to retain
+[PR #49](https://github.com/Pav-Osmolski/DS4Windows/pull/49) as activation hardening.
+See [migration guidance](../getting-started.md#moving-from-another-fork) for
+backing up settings, testing a fresh configuration and restoring profiles
+gradually.
 
 Local full suites passed: 7,468 application tests with 12 existing opt-in skips,
 and all 75 standalone tests. PR CI also passed packaging, installer lifecycle

@@ -36,8 +36,15 @@ controller could not activate. Include the preceding VIIPER/output errors in
 your report. This is separate from Bluetooth association; the association is
 preserved. Wake and retry after correcting the cause and completing cleanup.
 
-When reporting [issue #48](https://github.com/Pav-Osmolski/DS4Windows/issues/48),
-include the full log from startup through failure, app version, the affected
+If you migrated from another fork or merged an old backup, first review the
+[migration guidance](getting-started.md#moving-from-another-fork). In
+[issue #48](https://github.com/Pav-Osmolski/DS4Windows/issues/48#issuecomment-6252913392),
+the reporter resolved their problem with a clean install after mixing very old
+settings; the exact conflicting configuration could not be reproduced. The
+profile-loading safeguards above remain useful independently of that report.
+
+For a new activation-failure report, include the full log from startup through
+failure, app version, the affected
 Joy-Con half, selected profile and whether **Link profile** or automatic
 profiles are enabled. Test each half alone, both connection orders, and a few
 sleep/wake reconnects. Share successful results too. A full log is always best:
