@@ -250,6 +250,25 @@ public sealed class ViiperNativeFeedbackRepeatTests
     }
 
     [TestMethod]
+    public void PowerStateWhitelistChecksEveryReductionValueAndImprovedRumbleMode()
+    {
+        foreach (bool improved in new[] { false, true })
+        {
+            for (int power = 0; power <= 255; power++)
+            {
+                byte[] envelope = Rumble();
+                envelope[NativeOffset + 1] = improved ? (byte)2 : (byte)3;
+                envelope[NativeOffset + 2] |= 0x40;
+                envelope[NativeOffset + 37] = (byte)power;
+                envelope[NativeOffset + 39] = improved ? (byte)4 : (byte)0;
+                Assert.AreEqual((power & 15) <= 7 && (power >> 4) <= 7,
+                    DualSenseNativeFeedbackRepeatPolicy.IsRepeatable(envelope, allowPowerState: true),
+                    $"power=0x{power:X2}, improved={improved}");
+            }
+        }
+    }
+
+    [TestMethod]
     [DataRow(5)]
     [DataRow(6)]
     [DataRow(7)]

@@ -90,7 +90,7 @@ public sealed class DualSenseNativeUsbStatePolicyTests
     }
 
     [TestMethod]
-    public void BluetoothDoesNotUseTheUsbPowerStateRepeatExtension()
+    public void BluetoothPowerStateNowUsesTheSharedDocumentedRepeatPolicy()
     {
         var buffer = Buffer();
         var context = Context(buffer) with
@@ -100,7 +100,7 @@ public sealed class DualSenseNativeUsbStatePolicyTests
         byte[] report = Envelope(76, 3, 90);
         Assert.IsTrue(Enqueue(buffer, report, context));
         Assert.IsTrue(Enqueue(buffer, report, context));
-        Assert.AreEqual(0L, buffer.OrderedControlRepeated);
+        Assert.AreEqual(1L, buffer.OrderedControlRepeated);
     }
 
     private static ViiperFeedbackDispatchBuffer Buffer() => new(2, 4096, 474, 4);
