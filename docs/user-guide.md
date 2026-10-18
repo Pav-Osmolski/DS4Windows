@@ -150,6 +150,21 @@ choosing another source there releases the override. See
 | Ramp | Control how quickly feedback rises |
 | Fade | Control how quickly feedback falls after the sound stops |
 
+For finer control, expand **Advanced tuning** and enable **Use custom frequency
+filters**. This replaces Bass Focus for audio-derived vibration; leave it off
+to keep the existing response. The settings are saved per profile:
+
+- **Low-pass (40-1400 Hz):** lower values favour bass and reduce higher-frequency
+  detail. Start around 100-160 Hz if dialogue causes too much vibration.
+- **High-pass (0-200 Hz):** removes very low-frequency rumble. Set 0 Hz to disable
+  it. The maximum stays at least 10 Hz below the low-pass setting.
+- Use the existing intensity control for strength. Increase it gradually.
+
+Filters affect audio-derived haptics, not audible audio or game-authored native
+haptics. Voices, music and effects share frequencies, so these controls cannot
+fully isolate dialogue. Compare a repeatable dialogue scene with an action scene
+and adjust for each game. Disable custom filters to return to Bass Focus.
+
 If feedback is absent, first verify the capture source, enable state and physical
 controller. Test native feedback with Audio Haptics disabled so the two paths
 are not confused. See [compatibility](controller-compatibility.md) for limitations.

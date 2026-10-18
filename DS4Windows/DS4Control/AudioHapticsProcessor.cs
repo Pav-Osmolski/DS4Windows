@@ -31,6 +31,9 @@ namespace DS4Windows
         private readonly float gateCloseRate;
         private readonly float outputRampStep;
 
+        private FrequencyFilter customLeft;
+        private FrequencyFilter customRight;
+
         private float filterLeft;
         private float filterRight;
         private float envelopeLeft;
@@ -45,6 +48,8 @@ namespace DS4Windows
                 .Clone();
             inputSampleRate = Math.Max(8000, inputSampleRate);
 
+            customLeft = new FrequencyFilter(inputSampleRate, this.settings.LowPassHz, this.settings.HighPassHz);
+            customRight = new FrequencyFilter(inputSampleRate, this.settings.LowPassHz, this.settings.HighPassHz);
             filterCoefficient = ScaleCoefficient(FilterCoefficient(
                 this.settings.BassFocus), inputSampleRate);
             attackCoefficient = ScaleCoefficient(AttackCoefficient(
@@ -65,8 +70,16 @@ namespace DS4Windows
             left = Math.Clamp(left, -1.0f, 1.0f);
             right = Math.Clamp(right, -1.0f, 1.0f);
 
-            filterLeft += (left - filterLeft) * filterCoefficient;
-            filterRight += (right - filterRight) * filterCoefficient;
+            if (settings.CustomFrequencyFilters)
+            {
+                filterLeft = customLeft.Process(left);
+                filterRight = customRight.Process(right);
+            }
+            else
+            {
+                filterLeft += (left - filterLeft) * filterCoefficient;
+                filterRight += (right - filterRight) * filterCoefficient;
+            }
             envelopeLeft = FollowEnvelope(envelopeLeft, filterLeft);
             envelopeRight = FollowEnvelope(envelopeRight, filterRight);
 
@@ -84,7 +97,7 @@ namespace DS4Windows
             };
             float responseGain = settings.Response ==
                 AudioHapticsResponse.Subtle ? 0.68f : 1.0f;
-            float focusGain = settings.BassFocus switch
+            float focusGain = settings.CustomFrequencyFilters ? 1.0f : settings.BassFocus switch
             {
                 AudioHapticsBassFocus.Deep => 1.35f,
                 AudioHapticsBassFocus.Punchy => 1.12f,
@@ -98,6 +111,61 @@ namespace DS4Windows
                 EnvelopePunch(envelopeLeft, responsePunch));
             hapticRight = SoftClip(filterRight * gain *
                 EnvelopePunch(envelopeRight, responsePunch));
+        }
+
+        // Independent stereo filter state; coefficients are calculated once per
+        // settings snapshot, with no allocation or coefficient work per sample.
+        private struct FrequencyFilter
+        {
+            private Biquad low1;
+            private Biquad low2;
+            private Biquad high;
+            private readonly bool useHigh;
+
+            public FrequencyFilter(int sampleRate, int lowHz, int highHz)
+            {
+                // Fourth-order Butterworth low-pass, followed by an optional
+                // second-order high-pass, below the 1.5 kHz Nyquist frequency
+                // of the 3 kHz haptics stream.
+                low1 = new Biquad(sampleRate, lowHz, 0.5411961, false);
+                low2 = new Biquad(sampleRate, lowHz, 1.306563, false);
+                useHigh = highHz > 0;
+                high = useHigh ? new Biquad(sampleRate, highHz, Math.Sqrt(0.5), true) : default;
+            }
+
+            public float Process(float value)
+            {
+                double output = low2.Process(low1.Process(value));
+                return (float)(useHigh ? high.Process(output) : output);
+            }
+        }
+
+        private struct Biquad
+        {
+            private readonly double b0, b1, b2, a1, a2;
+            private double z1, z2;
+
+            public Biquad(int sampleRate, double frequency, double q, bool highPass)
+            {
+                double omega = 2.0 * Math.PI * frequency / sampleRate;
+                double cosine = Math.Cos(omega);
+                double alpha = Math.Sin(omega) / (2.0 * q);
+                double a0 = 1.0 + alpha;
+                b0 = (highPass ? 1.0 + cosine : 1.0 - cosine) / (2.0 * a0);
+                b1 = (highPass ? -(1.0 + cosine) : 1.0 - cosine) / a0;
+                b2 = b0;
+                a1 = -2.0 * cosine / a0;
+                a2 = (1.0 - alpha) / a0;
+                z1 = z2 = 0;
+            }
+
+            public double Process(double input)
+            {
+                double output = b0 * input + z1;
+                z1 = b1 * input - a1 * output + z2;
+                z2 = b2 * input - a2 * output;
+                return output;
+            }
         }
 
         public static byte Quantize(float sample)
