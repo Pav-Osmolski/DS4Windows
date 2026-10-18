@@ -27,3 +27,7 @@ Reporter validation remains required: update to 5.0.31, test each half alone,
 connect left then right and right then left, and repeat sleep/wake reconnects.
 If activation fails, provide the full startup-to-failure log and selected/linked
 profile details. Do not close the issue solely on the basis of automated tests.
+
+Local full suites passed: 7,468 application tests with 12 existing opt-in skips,
+and all 75 standalone tests. PR CI also passed packaging, installer lifecycle
+and upgrade/profile-preservation checks before merging.

@@ -448,7 +448,7 @@ RC4.4 release.
 
 ### Release notes
 
-- Controlled body-rumble bursts preserved all 251 changes and reduced final-stop submission delay from 252 ms to approximately 0.15â€“0.18 ms. These were host-side measurements, not radio or actuator latency, a hardware-rate guarantee, or adaptive-trigger gameplay acceptance.
+- Controlled body-rumble bursts preserved all 251 changes and reduced final-stop submission delay from 252 ms to approximately 0.15-0.18 ms. These were host-side measurements, not radio or actuator latency, a hardware-rate guarantee, or adaptive-trigger gameplay acceptance.
 
 <a id="inherited-release-notes-rc458"></a>
 
