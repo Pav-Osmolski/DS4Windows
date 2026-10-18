@@ -20,6 +20,14 @@ entire rendered changelog before each release, including older entries and
 its tagged copy. Verify each reference targets the correct repository and
 uses `/pull/` for a PR or `/issues/` for an issue.
 
+Always read and write Markdown and release-note files with an explicit UTF-8
+encoding; never rely on the Windows default text encoding. Preserve existing
+BOMs when editing files that use them. Run
+`python utils/test-text-encoding.py --self-test` before release preparation,
+and run it with the release-note file path before uploading notes. CI and the
+draft release build reject invalid UTF-8 and common garbled punctuation/accent
+sequences. The check reports problems without rewriting historical text.
+
 Builds use the SDK in `global.json` and committed NuGet lock files. The draft
 workflow runs both .NET suites against the checked-out tag before packaging.
 For dependency or SDK changes, follow [dependency maintenance](dependency-maintenance.md#sdk-and-dependency-locks).

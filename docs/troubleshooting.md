@@ -1,6 +1,6 @@
 # Troubleshooting DS4Windows
 
-[Documentation index](README.md) Â· [Getting started](getting-started.md)
+[Documentation index](README.md) · [Getting started](getting-started.md)
 
 Back up profiles and settings before changing your installation. Change one
 setting at a time and note which physical controller, connection and virtual
