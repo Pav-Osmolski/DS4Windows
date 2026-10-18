@@ -727,7 +727,17 @@ Public License instead of this License.  But first, please read
                         <StackPanel Orientation="Horizontal">
                             <TextBlock><Hyperlink Click="ContributorsLink_OnClick" Foreground="{DynamicResource AccentColor}">Contributors</Hyperlink></TextBlock>
                         </StackPanel>
-                        <Label Content="Translators:" Margin="0,20,0,0" />
+                        <TextBlock TextWrapping="Wrap" Margin="0,12,0,0">
+                            Special thanks to <Hyperlink Click="NefariusLink_Click" Foreground="{DynamicResource AccentColor}">Nefarius</Hyperlink>
+                            for his foundational contributions to Windows controller software, including ViGEm,
+                            which powered earlier DS4Windows versions, and HidHide, which helps prevent double input in this fork.
+                            This fork now uses VIIPER for virtual-controller output, while continuing to benefit from the wider ecosystem he helped build.
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap" Margin="0,6,0,0">
+                            If his work has helped you, please consider
+                            <Hyperlink Click="NefariusSupportLink_Click" Foreground="{DynamicResource AccentColor}">supporting his projects</Hyperlink>.
+                        </TextBlock>
+                        <Label Content="Translators:" Margin="0,12,0,0" />
                     </StackPanel>
                     <TextBox TextWrapping="Wrap" xml:space="preserve" IsReadOnly="True"
                              DockPanel.Dock="Bottom" VerticalScrollBarVisibility="Auto" Margin="10,0,10,10">xLive - Arabic

@@ -75,6 +75,16 @@ namespace DS4WinWPF.DS4Forms
             Util.StartProcessHelper("https://github.com/nefarius/HidHide/");
         }
 
+        private void NefariusLink_Click(object sender, RoutedEventArgs e)
+        {
+            Util.StartProcessHelper("https://github.com/nefarius");
+        }
+
+        private void NefariusSupportLink_Click(object sender, RoutedEventArgs e)
+        {
+            Util.StartProcessHelper("https://docs.nefarius.at/Donations/");
+        }
+
         private void Crc32Link_Click(object sender, RoutedEventArgs e)
         {
             Util.StartProcessHelper("https://github.com/dariogriffo/Crc32");
