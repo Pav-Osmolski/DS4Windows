@@ -42,12 +42,12 @@ Joy-Con half, selected profile and whether **Link profile** or automatic
 profiles are enabled. Test each half alone, both connection orders, and a few
 sleep/wake reconnects. Share successful results too. A full log is always best:
 earlier startup/profile/backend lines can explain the final rejection. For this
-test, enable **Settings > Updates & tools > Diagnostics > Verbose logging**,
-fully exit/restart DS4Windows and reproduce once. Attach
-`Logs\ds4windows_log.txt` from the active settings folder, then disable verbose
-logging. The saved file contains diagnostic markers absent from the Log tab
-export. **Tools > Profile Folder** opens Profiles; go up one folder to find
-Logs. This release addresses
+test, enable **Log > Verbose logging**, fully exit/restart DS4Windows and
+reproduce once. Use **Log > Copy Text** to paste the whole retained log from
+startup through failure, then disable verbose logging. If startup has left the
+1,000-entry view, or extra saved diagnostics are needed, use **Open log folder**
+and attach `ds4windows_log.txt`. The saved file can contain additional markers.
+This release addresses
 reproduced profile failures; it does not establish the cause on every machine.
 
 ## Duplicate input or unexpected keyboard/mouse output
