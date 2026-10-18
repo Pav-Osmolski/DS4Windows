@@ -94,6 +94,10 @@ public sealed class DualSenseNativeFeedbackDiagnosticsTests
         StringAssert.Contains(text, "nativeMotorStops=0 ");
         StringAssert.Contains(text, "nativeLastFlags=0x0E/0x40 ");
         StringAssert.Contains(text, "nativePhysicalHeadAgeMs=1000.00 ");
+        diagnostics.Admit(improved, 2, 2);
+        text = diagnostics.Format(2, 0, false);
+        StringAssert.Contains(text, "nativeRumbleReports=1 ");
+        StringAssert.Contains(text, "nativeMotorStops=1 ");
     }
 
     [TestMethod]

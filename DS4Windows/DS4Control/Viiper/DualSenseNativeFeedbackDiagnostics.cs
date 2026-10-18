@@ -30,7 +30,8 @@ internal sealed class DualSenseNativeFeedbackDiagnostics
             smallMotor = report[3];
             largeMotor = report[4];
             power = report[37];
-            if ((flag0 & 3) == 3) rumbleReports++;
+            if ((flag0 & 2) != 0 && ((flag0 & 1) != 0 || (report[39] & 4) != 0))
+                rumbleReports++;
             if ((flag0 & 0x0C) != 0) triggerReports++;
             if (IsExplicitMotorStop(report))
             {
