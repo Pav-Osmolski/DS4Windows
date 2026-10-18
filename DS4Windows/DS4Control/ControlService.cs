@@ -6964,6 +6964,7 @@ namespace DS4Windows
         {
             private readonly ControlService service;
             private string lastPrepareDiagnostic = "never-entered";
+            private string profileDiagnostic = "not-selected";
 
             internal Switch2ControlServiceProfileStage(ControlService service)
             {
@@ -6976,6 +6977,7 @@ namespace DS4Windows
                 out ISwitch2ControlServiceReversibleProfileStageInverse inverse)
             {
                 lastPrepareDiagnostic = "entered";
+                profileDiagnostic = $"slot={request.Slot + 1}";
                 inverse = null;
                 if (!Monitor.IsEntered(
                         service.switch2RuntimeRegistrationService.
@@ -7018,6 +7020,8 @@ namespace DS4Windows
                     bool keepsOutput = handoff?.MatchesSuccessor(slot, device) == true;
                     bool useAutoProfile = useTempProfile[slot] || keepsOutput;
                     bool profileLoaded = useAutoProfile;
+                    if (useAutoProfile)
+                        profileDiagnostic += keepsOutput ? ";source=handoff" : ";source=temporary";
                     lastPrepareDiagnostic = "profile-selection";
                     if (keepsOutput)
                     {
@@ -7041,8 +7045,15 @@ namespace DS4Windows
                         }
 
                         lastPrepareDiagnostic = "profile-loading";
-                        profileLoaded = LoadProfile(slot, false, service,
-                            false, false);
+                        profileLoaded = Switch2ActivationProfileLoader.TryLoad(slot, service,
+                            out profileDiagnostic);
+                        if (!profileLoaded)
+                        {
+                            lastPrepareDiagnostic = "profile-load-rejected";
+                            service.LogDebug($"Switch 2 profile activation failed: {profileDiagnostic}. Repair the selected profile before reconnecting.", true);
+                            return Switch2ControlServiceReversibleStageResult.Uncertain(
+                                Switch2ControlServiceReversibleStageFailureKind.ProfileSetupRejected);
+                        }
                     }
 
                     if (profileLoaded)
@@ -7082,10 +7093,12 @@ namespace DS4Windows
                     retained.PreparedOutput = service.outputDevices[slot];
                     bool virtualRequired = profileLoaded &&
                         !getDInputOnly(slot);
-                    if (!profileLoaded || virtualRequired &&
+                    if (virtualRequired &&
                         (retained.PreparedOutput == null ||
                             useDInputOnly[slot]))
                     {
+                        lastPrepareDiagnostic = "virtual-output-unavailable";
+                        service.LogDebug($"Switch 2 slot #{slot + 1} loaded its profile but could not activate the requested {Global.OutContType[slot]} virtual controller. Check the preceding output/backend errors.", true);
                         return Switch2ControlServiceReversibleStageResult.
                             Uncertain(
                                 Switch2ControlServiceReversibleStageFailureKind.
@@ -7108,7 +7121,7 @@ namespace DS4Windows
             }
 
             string ISwitch2ControlServiceProfileStageDiagnostics.
-                LastPrepareDiagnostic => lastPrepareDiagnostic;
+                LastPrepareDiagnostic => $"{lastPrepareDiagnostic};{profileDiagnostic}";
         }
 
         private sealed class Switch2ControlServiceProfileStageInverse :
