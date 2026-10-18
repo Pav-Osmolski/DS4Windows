@@ -17,45 +17,29 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using DS4WinWPF.DS4Forms.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace DS4WinWPF.DS4Forms
+namespace DS4WinWPF.DS4Forms;
+
+public partial class ChangelogWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for ChangelogWindow.xaml
-    /// </summary>
-    public partial class ChangelogWindow : Window
+    private readonly ChangelogViewModel changelogVM = new();
+
+    public ChangelogWindow()
     {
-        private ChangelogViewModel changelogVM;
+        InitializeComponent();
+        DataContext = changelogVM;
+        Loaded += async (_, _) => await changelogVM.DisplayChangelog();
+    }
 
-        public ChangelogWindow()
-        {
-            InitializeComponent();
+    private async void RetryBtn_Click(object sender, RoutedEventArgs e) => await changelogVM.DisplayChangelog();
 
-            changelogVM = new ChangelogViewModel();
+    private void ReleasesLink_Click(object sender, RoutedEventArgs e) =>
+        DS4Windows.Util.StartProcessHelper("https://github.com/Pav-Osmolski/DS4Windows/releases");
 
-            DataContext = changelogVM;
-
-            Task.Run(async () => await Dispatcher.InvokeAsync(async () => await changelogVM.DisplayChangelog()));
-        }
-
-        private void CloseBtn_Click(object sender, RoutedEventArgs e)
-        {
-            DataContext = null;
-
-            Close();
-        }
+    private void CloseBtn_Click(object sender, RoutedEventArgs e)
+    {
+        DataContext = null;
+        Close();
     }
 }
