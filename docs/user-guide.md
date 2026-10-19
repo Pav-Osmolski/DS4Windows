@@ -277,7 +277,7 @@ In **Appearance > Sidebar icon**, choose **Blue Tile**, **Midnight Circle**,
 **Blue Frame**, **Controller** or **Angular Badge** using the image previews.
 Blue Tile is first and is the default for new and existing settings. The choice
 applies immediately and is saved with your app settings. The sidebar icon keeps
-its 60 × 60 size as Windows display scaling changes.
+its 44 × 44 size as Windows display scaling changes.
 
 Search settings to find matching groups across all sections. Use **Ctrl+F** to
 focus the search; **Clear**, or **Escape** while typing, returns to the selected

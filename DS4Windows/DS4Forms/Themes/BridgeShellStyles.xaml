@@ -608,8 +608,8 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
-                                    <StackPanel Orientation="Horizontal" Margin="4,0,0,20">
-                                        <Image x:Name="SidebarBrandIconImage" Width="60" Height="60" Margin="0,0,10,0"
+                                    <StackPanel Orientation="Horizontal" Height="60" Margin="4,0,0,20">
+                                        <Image x:Name="SidebarBrandIconImage" Width="44" Height="44" Margin="22,0,4,0" VerticalAlignment="Center"
                                                Source="{DynamicResource SidebarBrandIcon}"
                                                Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"
                                                UseLayoutRounding="True" SnapsToDevicePixels="True"

@@ -119,7 +119,7 @@ of 5.0.34's .NET 8 build does not qualify this migration.
    Check resizing, links, numeric controls and theme switching.
    In **Settings > Appearance > Sidebar icon**, select each of the five icons,
    switch themes and move the window between differently scaled displays.
-   Confirm the 60 × 60 layout stays sharp, then restart and verify the choice.
+   Confirm the 44 × 44 layout stays sharp, then restart and verify the choice.
    Existing settings without a choice should start with **Blue Tile**, first
    in the list; the tray icon setting remains separate.
 3. Load an existing profile, change a harmless setting, save and reopen it.

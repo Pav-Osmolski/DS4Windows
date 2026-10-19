@@ -117,7 +117,7 @@ public sealed class SidebarIconTests
     [TestMethod]
     [DataRow("DarkTheme")]
     [DataRow("DefaultTheme")]
-    public void ActualSidebarUpdatesKeepsSixtyDipSizeAndSurvivesThemeChanges(string theme)
+    public void ActualSidebarUpdatesKeepsCompactLayoutAndSurvivesThemeChanges(string theme)
     {
         HeadlessWpfDispatcher.Invoke(() =>
         {
@@ -145,11 +145,14 @@ public sealed class SidebarIconTests
                 SidebarIconCatalog.Apply(resources, choice.Value);
                 Layout(tabs);
                 Assert.AreSame(choice.Image, icon.Source, "Changing the resource must update the live template.");
-                Assert.AreEqual(60d, icon.ActualWidth);
-                Assert.AreEqual(60d, icon.ActualHeight);
+                Assert.AreEqual(44d, icon.ActualWidth);
+                Assert.AreEqual(44d, icon.ActualHeight);
+                Assert.AreEqual(60d, ((Panel)icon.Parent).ActualHeight, "Keep the header and content below it in place.");
                 var title = ((Panel)icon.Parent).Children.OfType<StackPanel>().Single();
+                Assert.AreEqual(92d, title.TranslatePoint(new Point(), tabs).X, "Keep the title at its existing horizontal position.");
+                Assert.AreEqual(icon.TranslatePoint(new Point(), tabs).Y + icon.ActualHeight / 2, title.TranslatePoint(new Point(), tabs).Y + title.ActualHeight / 2, 0.01d, "Center the icon with both title lines.");
                 Assert.IsTrue(title.TranslatePoint(new Point(), tabs).X + title.ActualWidth <= 238,
-                    "The larger icon must leave room for the application name.");
+                    "The compact icon must leave room for the application name.");
                 foreach (double scale in new[] { 1d, 1.5d, 2d, 3d }) Save(tabs, theme, choice.Value, scale);
                 resources.MergedDictionaries[0] = Theme(theme == "DarkTheme" ? "DefaultTheme" : "DarkTheme");
                 Layout(tabs);

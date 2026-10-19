@@ -7,7 +7,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Added
 
-- Choose the sidebar's icon in **Settings > Appearance > Sidebar icon**: **Blue Tile** (first and default), **Midnight Circle**, **Blue Frame**, **Controller** or **Angular Badge**. Changes apply immediately and the choice is saved. The transparent artwork uses a 60 × 60 device-independent-pixel layout for display scaling ([PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56)).
+- Choose the sidebar's icon in **Settings > Appearance > Sidebar icon**: **Blue Tile** (first and default), **Midnight Circle**, **Blue Frame**, **Controller** or **Angular Badge**. Changes apply immediately and the choice is saved. The transparent artwork uses a 44 × 44 device-independent-pixel layout for display scaling ([PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56)).
 
 ### Changed
 
