@@ -3,7 +3,8 @@
 [Documentation index](../README.md) · [Development](../development.md)
 
 This record covers the migration from main `4c9a85b` (.NET 8, DS4Windows
-5.0.34). It does not qualify controller hardware or a later release.
+5.0.34) in [PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56).
+It does not qualify controller hardware or a later release.
 
 ## Build inputs and scope
 
@@ -53,6 +54,9 @@ Local Windows 11 x64 checks:
 | Localization/package unit suite | 33 passed; 1 environment-dependent test skipped |
 | Text encoding self-tests and scan | Passed |
 | Application NuGet audit, including transitive dependencies | No known vulnerabilities reported |
+| Self-contained app, installer hosts, MSI and EXE bundle | Built; payload/policy validation passed |
+| Built installer offline layout | Passed without installation |
+| Packaged translation loading from package and outside directories | Both cases passed |
 
 The existing CI workflow uses `global.json` and performs its own clean restore,
 both complete test suites, portable packaging, translation probing, installer

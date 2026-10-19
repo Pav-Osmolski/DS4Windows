@@ -3,6 +3,12 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Changed
+
+- Move the application, installer hosts and diagnostic tools to **.NET 10 LTS**, pin SDK **10.0.402**, and refresh dependency locks. Packages include their runtime; no separate .NET installation or controller-driver update is required. Add the running runtime version to saved and copied startup logs and remove unused .NET 8 installation notices ([PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56)). See the [migration validation and Windows compatibility notes](docs/validation/2026-10-19-net10-migration.md).
+
 ## [5.0.34](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.34) - 2026-10-19
 
 ### Fixed
