@@ -5,8 +5,8 @@
 ## Build on Windows
 
 Use Windows x64, Git and the **exact SDK declared in `global.json`** (currently
-8.0.426). Automatic roll-forward and prerelease selection are disabled. Install
-that SDK before running the commands below; a different .NET 8 SDK is not an
+10.0.402). Automatic roll-forward and prerelease selection are disabled. Install
+that SDK before running the commands below; a different .NET 10 SDK is not an
 interchangeable build input. Python 3.10 or newer is used by packaging scripts.
 The current VIIPER distribution targets Windows x64 even though legacy x86
 project configurations remain in the solution.
@@ -42,6 +42,27 @@ of creating competing application dispatchers.
 
 Building does not install drivers or establish controller compatibility. Use a
 supported matching package for hardware testing.
+
+## .NET 10 compatibility
+
+The application, tests, installer hosts and diagnostic tools target .NET 10.
+Published x64 packages include the runtime; users do not need to install a
+separate .NET Desktop Runtime. Startup logs and **Log > Copy Text** identify
+the runtime actually in use.
+
+The application's Windows API target remains `windows10.0.19041.0`. This is a
+compile-time API baseline, not a statement that Microsoft supports every Windows
+10 edition. Check Microsoft's [supported Windows versions](https://learn.microsoft.com/en-us/dotnet/core/install/windows#supported-versions)
+and [.NET 10 OS matrix](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md).
+Windows 10 Home/Pro 22H2 are outside that matrix; selected Enterprise/LTSC
+versions remain listed. Testing a build successfully on an edition does not
+extend Microsoft's support lifecycle.
+
+See the [migration validation record](validation/2026-10-19-net10-migration.md)
+for automated evidence, compatibility changes and the Windows 10/11 hardware
+acceptance checks. Runtime migrations need real USB/Bluetooth, game feedback and
+audio testing in addition to the automated suites. Do not infer lower latency
+from a newer runtime alone.
 
 ## Publish and package
 

@@ -6,8 +6,8 @@ controller service, or contacts hardware. No running installation is modified.
 
 ```powershell
 dotnet build utils/SatelliteResourceProbe/SatelliteResourceProbe.csproj -c Release
-./utils/SatelliteResourceProbe/Run-Probe.ps1 -SourceBuild ./DS4Windows/bin/x64/Release/net8.0-windows10.0.19041.0
-./utils/SatelliteResourceProbe/Run-Probe.ps1 -SourceBuild ./DS4Windows/bin/x64/Release/net8.0-windows10.0.19041.0 -StandardLayout
+./utils/SatelliteResourceProbe/Run-Probe.ps1 -SourceBuild ./DS4Windows/bin/x64/Release/net10.0-windows10.0.19041.0
+./utils/SatelliteResourceProbe/Run-Probe.ps1 -SourceBuild ./DS4Windows/bin/x64/Release/net10.0-windows10.0.19041.0 -StandardLayout
 python utils/test-localization-package.py
 ```
 

@@ -108,7 +108,7 @@ the new native layouts, low-latency reception and the serial-override limitation
 - Full unit/regression suite.
 - WiX MSI ICE validation.
 - Burn/bootstrapper and setup-action compilation.
-- Self-contained .NET 8 publication for both installer hosts.
+- Self-contained .NET 10 publication for both installer hosts.
 - Real MSI install, repair, and uninstall execution on the Windows CI runner.
 - Content-addressed payload manifest and hash validation.
 - Fail-fast equality between `DS4Windows.release` and the requested package

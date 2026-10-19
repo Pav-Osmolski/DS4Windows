@@ -416,6 +416,7 @@ namespace DS4WinWPF
             Logger logger = logHolder.Logger;
             string version = DS4Windows.Global.exeDisplayVersion;
             logger.Info($"DS4Windows version {version}");
+            logger.Info($".NET runtime: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
             logger.Info($"DS4Windows exe file: {DS4Windows.Global.exeFileName}");
             logger.Info($"DS4Windows Assembly Architecture: {(Environment.Is64BitProcess ? "x64" : "x86")}");
             logger.Info(DS4Windows.InstallationModeInfo.Read());

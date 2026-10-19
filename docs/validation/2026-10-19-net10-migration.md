@@ -1,0 +1,88 @@
+# .NET 10 migration validation - 19 October 2026
+
+[Documentation index](../README.md) · [Development](../development.md)
+
+This record covers the migration from main `4c9a85b` (.NET 8, DS4Windows
+5.0.34). It does not qualify controller hardware or a later release.
+
+## Build inputs and scope
+
+- Pin SDK **10.0.402**, which publishes runtime **10.0.13**. Verify the SDK
+  archive's SHA-512 against Microsoft's [release metadata](https://builds.dotnet.microsoft.com/dotnet/release-metadata/10.0/releases.json)
+  before use. Keep exact SDK selection and locked dependency restore.
+- Retarget all 14 C# projects, including installer hosts, tests and diagnostic
+  tools. Preserve the application's `windows10.0.19041.0` API baseline.
+- Keep x64 packages self-contained. Keep the existing workstation/concurrent GC
+  settings, controller protocols, polling policy, VIIPER **0.1.12** and USB/IP
+  **0.9.8.1**. No driver update is introduced by this migration.
+- Retain direct application/library versions. Refresh all affected dependency
+  locks for the new framework. .NET 10 prunes transitive framework packages;
+  installer single-file tooling follows the SDK's ILLink **10.0.13**.
+- Remove unused .NET 8 installation checks and obsolete download notices.
+  Record the running runtime version in both saved and copyable startup logs.
+
+## Compatibility review
+
+- .NET 10 adds Windows Forms `ContextMenu` and `MenuItem` types. Profile Editor
+  explicitly selects its existing WPF controls to avoid ambiguous names; menu
+  behaviour is unchanged. See Microsoft's [breaking changes](https://learn.microsoft.com/en-us/dotnet/core/compatibility/10).
+- Match `Marshal.QueryInterface` calls to the current `in Guid` signature;
+  retain the existing native WinRT identity/lifetime test.
+- WPF now rejects some [invalid dynamic-resource types](https://learn.microsoft.com/en-us/dotnet/core/compatibility/wpf/10.0/dynamicresource-crash)
+  and [empty grid definitions](https://learn.microsoft.com/en-us/dotnet/core/compatibility/wpf/10.0/empty-grid-definitions).
+  Build and exercise the real light/dark resources and layout tests.
+- The app remains a normal multi-file publish. The installer hosts remain
+  single-file/self-extracting; review the changed [native-library search rules](https://learn.microsoft.com/en-us/dotnet/core/compatibility/interop/10.0/native-library-search)
+  and exercise the built bundle's offline layout in addition to MSI lifecycle
+  checks on an isolated CI machine.
+- .NET 10 changes [XmlSerializer's handling of obsolete properties](https://learn.microsoft.com/en-us/dotnet/core/compatibility/serialization/10/xmlserializer-obsolete-properties).
+  The profile DTOs have no such attributes; retain the full profile/settings
+  round-trip suite as the gate.
+
+## Automated evidence
+
+Local Windows 11 x64 checks:
+
+| Check | Result |
+| --- | --- |
+| Application suite on .NET 10 | 7,593 passed; 12 explicit opt-in tests skipped |
+| Standalone hardware-verifier unit suite | 75 passed |
+| Ten diagnostic-tool projects | Built successfully |
+| Light/dark layout and related focused regressions | 170 passed; rendered theme output inspected |
+| Locked restores | Application, tests, tools and installer projects passed |
+| Localization/package unit suite | 33 passed; 1 environment-dependent test skipped |
+| Text encoding self-tests and scan | Passed |
+| Application NuGet audit, including transitive dependencies | No known vulnerabilities reported |
+
+The existing CI workflow uses `global.json` and performs its own clean restore,
+both complete test suites, portable packaging, translation probing, installer
+layout, MSI install/repair/uninstall and upgrade/profile-preservation checks.
+Consult the migration PR's checks for their current status. CI runs on Windows
+Server 2022; passing it does not replace Windows 10/11 desktop testing.
+
+## Desktop and hardware acceptance before release
+
+These checks still require human testing of the .NET 10 package. Earlier testing
+of 5.0.34's .NET 8 build does not qualify this migration.
+
+1. Close the existing app, games and VIIPER. Use a separate extracted test
+   package and a copy of your profiles. Confirm **Log > Copy Text** shows
+   `.NET runtime: .NET 10...`.
+2. On Windows 11 x64 and an explicitly recorded Windows 10 x64 edition/build,
+   open Settings, Profile Editor, Log and Changelog in light and dark themes.
+   Check resizing, links, numeric controls and theme switching.
+3. Load an existing profile, change a harmless setting, save and reopen it.
+   Confirm mappings, gyro and polling selections remain correct.
+4. With a DualSense over USB, emulate DualSense and use **Test Heavy** and
+   **Test Light**. Check native vibration/triggers in DEATHLOOP and vibration
+   in GTA V Enhanced. Repeat over Bluetooth, including disconnect/reconnect.
+5. Check controller speaker output and Audio Haptics with a familiar sound;
+   try both system and application capture, plus custom frequency filters.
+   Confirm starting/stopping capture and exiting the game remain responsive.
+6. On a disposable test machine/VM, install, upgrade, repair and uninstall the
+   test installer. Confirm it needs no separate .NET runtime and preserves
+   saved profiles. Avoid uninstall experiments on a working setup.
+
+Record OS edition/build, transport, controller, test-build identity and the full
+copied log with the results. Windows 10 support limits are described in
+[Development](../development.md#net-10-compatibility).

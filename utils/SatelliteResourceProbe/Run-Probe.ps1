@@ -6,7 +6,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $sourceRoot = (Resolve-Path -LiteralPath $SourceBuild).Path
 $repositoryRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '../..')).Path
-$probeBuild = Join-Path $PSScriptRoot 'bin/Release/net8.0-windows'
+$probeBuild = Join-Path $PSScriptRoot 'bin/Release/net10.0-windows'
 $fixtureRoot = Join-Path $repositoryRoot ('artifacts/issue60-' + [Guid]::NewGuid().ToString('N'))
 $packageRoot = Join-Path $fixtureRoot 'package'
 $outsideRoot = Join-Path $fixtureRoot 'outside'

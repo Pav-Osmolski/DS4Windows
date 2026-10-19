@@ -82,7 +82,7 @@ manifests justify additional ecosystems.
 
 ## SDK and dependency locks
 
-Local builds and both workflows select the reviewed **8.0.426** SDK, with
+Local builds and both workflows select the reviewed **10.0.402** SDK, with
 prereleases and automatic roll-forward disabled. SDK servicing updates therefore
 arrive as reviewable Dependabot PRs rather than silently changing the compiler
 and self-contained runtime inputs. See Microsoft's
