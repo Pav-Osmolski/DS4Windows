@@ -105,7 +105,7 @@ comparison is a prerequisite for the investigation.
 
 The candidate bundles VIIPER `0.1.11-issue47-cadence1` from
 [VIIPER PR #6](https://github.com/Pav-Osmolski/VIIPER/pull/6), commit
-`e49a05034296d9fcf27785ba7785f8cc9b667c97`. Native HID output and native output
+`e83cd10d2e4383be8679f4363a85341b3a4080ee`. Native HID output and native output
 SET_REPORT use one bounded, ordered service lane derived from the advertised
 output endpoint interval and USB speed. Input, enumeration and ISO audio keep
 independent paths. Timing tests cover 125/250/500/1000 Hz, copied reports, final
