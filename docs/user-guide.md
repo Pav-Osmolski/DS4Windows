@@ -113,7 +113,7 @@ Audio Haptics is separate from game-authored native DualSense haptics.
 
 ## Audio Haptics
 
-![Audio Haptics controls](images/tour/audio-haptics.png)
+![Audio Haptics controls](images/site/audio-haptics.png)
 
 ![Audio Haptics source and response settings](images/audio-haptics.png)
 
@@ -171,7 +171,7 @@ are not confused. See [compatibility](controller-compatibility.md) for limitatio
 
 ## Trigger Lab
 
-![Adaptive trigger controls](images/tour/trigger-lab.png)
+![Adaptive trigger controls](images/site/trigger-lab.png)
 
 Trigger Lab designs persistent adaptive-trigger effects for physical
 DualSense/Edge controllers. Choose a connected controller on the main page, or
@@ -257,7 +257,7 @@ diagnose it instead of repeatedly adding more outputs.
 
 ## Settings
 
-![Settings: General section](images/tour/settings.png)
+![Settings: General section](images/site/settings.png)
 
 The image shows the General section of the redesigned Settings page. The checked
 options are illustrative; your saved preferences may differ.
@@ -299,7 +299,7 @@ Run at Startup and Start Minimized are separate choices.
 
 ## Log and diagnostics
 
-![Startup log with deployment mode and backend verification](images/tour/log.png)
+![Startup log with deployment mode and backend verification](images/site/log.png)
 
 The Log page shows startup, controller, profile and backend events, including
 installed/portable deployment mode, USB/IP status and detected driver versions.

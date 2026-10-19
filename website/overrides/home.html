@@ -1,0 +1,68 @@
+{% extends "main.html" %}
+{% block extrahead %}
+<meta property="og:type" content="website">
+<meta property="og:title" content="DS4Windows — Your controller. Your way.">
+<meta property="og:description" content="Remapping, gyro aiming, haptics and per-game profiles. Pav-Osmolski's actively maintained DS4Windows fork.">
+<meta property="og:url" content="{{ config.site_url }}">
+<meta property="og:image" content="{{ config.site_url }}assets/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+{% endblock %}
+{% block content %}
+<div class="site-home">
+  <section class="hero" aria-labelledby="hero-title">
+    <img class="hero-art" src="{{ 'assets/hero-background.webp' | url }}" alt="" fetchpriority="high" width="1774" height="887">
+    <div class="hero-copy">
+      <a class="release-pill" href="https://github.com/Pav-Osmolski/DS4Windows/releases/latest"><span class="status-dot"></span> Version {{ page.meta.release_version }} <span aria-hidden="true">↗</span></a>
+      <p class="eyebrow">PAV-OSMOLSKI / DS4WINDOWS</p>
+      <h1 id="hero-title">Your controller.<br><span>Your way.</span></h1>
+      <p class="hero-lead">Make your favourite controller feel at home on Windows.</p>
+      <p class="hero-description">Remap your controls. Aim with gyro. Shape the feedback. Build a profile for the way you play.</p>
+      <div class="hero-actions">
+        <a class="cta primary" href="https://github.com/Pav-Osmolski/DS4Windows/releases/latest">Download for Windows <span aria-hidden="true">↓</span></a>
+        <a class="cta secondary" href="{{ 'docs/getting-started/' | url }}">Get started <span aria-hidden="true">→</span></a>
+      </div>
+      <p class="hero-fine">Free & open source · Windows x64 · .NET runtime included</p>
+    </div>
+  </section>
+
+  <div class="family-strip" aria-label="Supported controller families">
+    <span class="family-label">A familiar controller.<br>A new set of possibilities.</span>
+    <span>DualShock 3 / 4</span><span>DualSense / Edge</span><span>Switch Pro / Joy-Con</span><span>Switch 2 Pro / Joy-Con 2</span>
+  </div>
+
+  <section class="section introduction" aria-labelledby="intro-title">
+    <div><p class="eyebrow">CONTROL THAT FITS YOU</p><h2 id="intro-title">More than a different<br>button layout.</h2></div>
+    <div><p>This fork continues DS4Windows development with a focus on clearer controls, reliable feedback and ongoing maintenance.</p><p>Keep the hardware you enjoy, then choose the controller your game sees. Features depend on your physical controller, connection and game.</p><a class="text-link" href="{{ 'docs/controller-compatibility/' | url }}">Find your controller and its capabilities <span aria-hidden="true">↗</span></a></div>
+  </section>
+
+  <section class="feature-story" aria-labelledby="profiles-title">
+    <div class="story-copy"><p class="eyebrow">01 / MAKE IT YOURS</p><h2 id="profiles-title">One controller.<br>A profile for every game.</h2><p>Map buttons, sticks and touchpad inputs to gamepad, keyboard or mouse actions. Fine-tune response curves, add macros and switch profiles automatically when a game opens.</p><ul class="plain-list"><li>Button and stick remapping</li><li>Gyro aiming and flick-stick configuration</li><li>Per-game profiles and automatic switching</li></ul><a class="text-link" href="{{ 'docs/profile-editor/' | url }}">Explore the Profile Editor <span aria-hidden="true">→</span></a></div>
+    <figure class="app-shot"><img src="{{ 'docs/images/site/profile-editor.png' | url }}" alt="DS4Windows Profile Editor with controller mappings and configuration categories" loading="lazy" width="1500" height="1000"><figcaption>The Profile Editor brings mappings and controller behaviour together.</figcaption></figure>
+  </section>
+
+  <section class="feature-story reverse" aria-labelledby="feedback-title">
+    <div class="story-copy"><p class="eyebrow">02 / FEEL THE MOMENT</p><h2 id="feedback-title">Bring the game<br>into your hands.</h2><p>Receive native DualSense haptics and adaptive-trigger feedback in supported games. Or turn system and application audio into vibration with Audio Haptics.</p><p>Adjust intensity and frequency filters, and use Trigger Lab to explore linked or independent trigger effects.</p><a class="text-link" href="{{ 'docs/controller-audio/' | url }}">Understand game feedback and audio <span aria-hidden="true">→</span></a><a class="text-link" href="{{ 'docs/user-guide/#audio-haptics' | url }}">Tune Audio Haptics <span aria-hidden="true">→</span></a></div>
+    <figure class="app-shot"><img src="{{ 'docs/images/site/audio-haptics.png' | url }}" alt="Audio Haptics page with audio source, controller output and response controls" loading="lazy" width="1500" height="1000"><figcaption>Native game feedback and audio-derived vibration are separate features. Choose what suits your game.</figcaption></figure>
+  </section>
+
+  <section class="feature-story" aria-labelledby="interface-title">
+    <div class="story-copy"><p class="eyebrow">03 / FIND YOUR SETTINGS</p><h2 id="interface-title">Plenty of options.<br>A clearer place for them.</h2><p>Search Settings, check live controller readings and manage your output slots. Choose a light or dark theme and a sidebar icon that feels like yours.</p><p>When something goes wrong, the Log page puts copying, exporting, verbose logging and stored-log management in one place.</p><a class="text-link" href="{{ 'docs/user-guide/' | url }}">Take a tour of the app <span aria-hidden="true">→</span></a><a class="text-link" href="{{ 'docs/screenshots/' | url }}">Browse fresh screenshots <span aria-hidden="true">→</span></a></div>
+    <figure class="app-shot"><img src="{{ 'docs/images/site/settings.png' | url }}" alt="DS4Windows Settings organised into General, Appearance, Controllers, Updates and tools, Integrations and Advanced" loading="lazy" width="1500" height="1000"><figcaption>Settings grouped by purpose, with search across categories.</figcaption></figure>
+  </section>
+
+  <section class="maintenance section" aria-labelledby="maintenance-title">
+    <div><p class="eyebrow">CONTINUING THE PROJECT</p><h2 id="maintenance-title">Active maintenance.<br>Visible progress.</h2><p>Follow the changes, read the source and see how releases are checked. Improvements are documented, with issue reports and upstream work credited.</p><a class="text-link" href="{{ 'CHANGELOG/' | url }}">Read the changelog <span aria-hidden="true">↗</span></a></div>
+    <div class="maintenance-details"><article><span class="detail-number">01</span><div><h3>Reviewed releases</h3><p>Automated application tests, packaging checks and installer upgrade tests help keep changes verifiable.</p></div></article><article><span class="detail-number">02</span><div><h3>A matching backend</h3><p>Release packages include the matching VIIPER backend and USB/IP setup, with startup checks and useful diagnostics.</p></div></article><article><span class="detail-number">03</span><div><h3>Open build records</h3><p>Downloads include matching source archives, checksums and build records. Current Windows packages are unsigned.</p></div></article></div>
+  </section>
+
+  <section class="section help-section" aria-labelledby="help-title"><p class="eyebrow">A GOOD PLACE TO START</p><h2 id="help-title">Less searching. More playing.</h2><div class="guide-grid">
+    <a href="{{ 'docs/getting-started/' | url }}"><span class="guide-icon" aria-hidden="true">↗</span><h3>First-time setup</h3><p>Download, connect a controller and choose the output your game needs.</p><span class="guide-bottom">Start here →</span></a>
+    <a href="{{ 'docs/getting-started/#moving-from-another-fork' | url }}"><span class="guide-icon" aria-hidden="true">⇄</span><h3>Moving from another fork?</h3><p>Back up your profiles and make a clean move without mixing application files.</p><span class="guide-bottom">Migration guide →</span></a>
+    <a href="{{ 'docs/troubleshooting/' | url }}"><span class="guide-icon" aria-hidden="true">?</span><h3>Something not working?</h3><p>Find help with detection, double input, feedback and updates.</p><span class="guide-bottom">Troubleshoot →</span></a>
+  </div></section>
+
+  <section class="download-band" aria-labelledby="download-title"><div><p class="eyebrow">READY WHEN YOU ARE</p><h2 id="download-title">Give your controller<br>a little more freedom.</h2><p>Download the x64 installer, or choose the portable ZIP.</p></div><div><a class="cta primary" href="https://github.com/Pav-Osmolski/DS4Windows/releases/latest">Get DS4Windows <span aria-hidden="true">↓</span></a><a class="text-link" href="{{ 'docs/getting-started/#what-you-need' | url }}">Check requirements first →</a></div></section>
+
+  <section class="community-note"><p>Built on a community's work.</p><p>This independent fork builds on hbashton's DS4Windows and the wider DS4Windows community. Special appreciation goes to Nefarius for foundational Windows controller tools, including HidHide.</p><div><a href="{{ 'contributors/' | url }}">Credits & contributors</a><a href="https://ko-fi.com/devilhood42">Support this fork</a><a href="https://github.com/nefarius">Nefarius & his projects</a><a href="https://www.reddit.com/r/DS4Windows/">Community</a></div></section>
+</div>
+{% endblock %}
