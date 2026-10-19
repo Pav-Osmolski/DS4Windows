@@ -17,38 +17,56 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Windows.Documents;
-using HttpProgress;
-using System.Text.Json;
 using DS4Windows;
-using MarkdownEngine = MdXaml.Markdown;
 
-namespace DS4WinWPF.DS4Forms.ViewModels
+namespace DS4WinWPF.DS4Forms.ViewModels;
+
+public class ChangelogViewModel : INotifyPropertyChanged
 {
-    public class ChangelogViewModel
+    private readonly Func<Task<string>> load;
+    public ChangelogViewModel() : this(() => Changelog.GetChangelogMarkdown(true)) { }
+    internal ChangelogViewModel(Func<Task<string>> load) => this.load = load;
+
+    public string Markdown { get; private set; } = string.Empty;
+    public bool IsLoading { get; private set; }
+    public bool HasError { get; private set; }
+    public bool ShowStatus => IsLoading || HasError;
+    public string StatusText { get; private set; } = "Loading release notes...";
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    public async Task DisplayChangelog()
     {
-        private string markdown;
-
-        public string Markdown
+        if (IsLoading) return;
+        IsLoading = true;
+        HasError = false;
+        StatusText = "Loading release notes...";
+        Notify();
+        try
         {
-            get => markdown;
-            set
-            {
-                markdown = value;
-                MarkdownChanged?.Invoke(this, EventArgs.Empty);
-            }
+            string notes = await load();
+            if (string.IsNullOrWhiteSpace(notes))
+                throw new InvalidOperationException("No release notes were returned.");
+            Markdown = notes;
+            StatusText = string.Empty;
         }
-        public event EventHandler MarkdownChanged;
-
-        public async Task DisplayChangelog()
+        catch (Exception error)
         {
-            var changelog = await Changelog.GetChangelogMarkdown(true);
-            Markdown = changelog;
+            HasError = true;
+            StatusText = "Release notes could not be loaded. Check your connection and try again, or view releases on GitHub.";
+            NLog.LogManager.GetCurrentClassLogger().Warn(error, "Could not load the changelog.");
         }
+        finally
+        {
+            IsLoading = false;
+            Notify();
+        }
+    }
+
+    private void Notify()
+    {
+        foreach (string name in new[] { nameof(Markdown), nameof(IsLoading), nameof(HasError), nameof(ShowStatus), nameof(StatusText) })
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
