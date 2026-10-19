@@ -6,7 +6,7 @@ Create or select a saved profile on **Profiles**, or choose **Edit** for a devic
 on **Controllers**. Settings and preview availability depend on the selected
 physical controller and virtual output.
 
-![Profile Editor showing DualSense button mappings](images/tour/profile-editor.png)
+![Profile Editor showing DualSense button mappings](images/site/profile-editor.png)
 
 ## Saving and previewing
 

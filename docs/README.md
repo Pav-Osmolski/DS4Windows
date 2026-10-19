@@ -12,9 +12,12 @@ are examples, not recommended settings for every controller.
 | Choose a physical controller and virtual output | [Compatibility and feature limits](controller-compatibility.md) |
 | Fix detection, double input, missing feedback or updates | [Troubleshooting](troubleshooting.md) |
 | Collect information for an issue | [Log and diagnostics](user-guide.md#log-and-diagnostics), including the [XInput controller test](user-guide.md#xinput-controller-test) |
-| Upgrade the bundled backend | [USB/IP upgrade](usbip-upgrade.md): matching usbip-win2 0.9.8.1 / VIIPER 0.1.11 and restart requirements |
+| Upgrade the bundled backend | [USB/IP upgrade](usbip-upgrade.md): matching usbip-win2 0.9.8.1 / VIIPER 0.1.12 and restart requirements |
 
 ## Explore the app
+
+See the [fresh screenshot gallery](screenshots.md) for Profile Editor, Audio
+Haptics, Trigger Lab, Appearance and the Log page.
 
 ![DS4Windows overview](images/tour/overview.png)
 

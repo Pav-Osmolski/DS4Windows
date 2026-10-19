@@ -4,7 +4,10 @@
 
 ## What you need
 
-- Windows 10 or Windows 11 **x64**. The VIIPER packages do not support x86 Windows.
+- Windows **x64**, with a Windows edition supported by the bundled .NET 10
+  runtime. Windows 11 is the current desktop starting point; check the
+  [Windows 10 edition limits](development.md#net-10-compatibility) before using
+  Windows 10. The VIIPER packages do not support x86 Windows.
 - A supported controller and a USB connection or suitable Bluetooth adapter.
 - The [Microsoft Visual C++ x64 runtime](https://aka.ms/vs/17/release/vc_redist.x64.exe).
 - Administrator permission for driver installation and repair.
