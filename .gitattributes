@@ -80,3 +80,8 @@ extras/xbox-one-authorized-persona.json -text
 extras/VIIPER-0.1.11-LICENSES.txt -text whitespace=cr-at-eol,-blank-at-eof
 extras/VIIPER-0.1.11-BUILD-NOTES.txt -text whitespace=cr-at-eol
 extras/VIIPER-0.1.11-BUILD-INFO.json -text whitespace=cr-at-eol
+
+# Immutable paired issue #47 candidate inputs.
+extras/VIIPER-0.1.11-issue47-cadence1-LICENSES.txt -text whitespace=cr-at-eol,-blank-at-eof
+extras/VIIPER-0.1.11-issue47-cadence1-BUILD-NOTES.txt -text whitespace=cr-at-eol
+extras/VIIPER-0.1.11-issue47-cadence1-BUILD-INFO.json -text whitespace=cr-at-eol

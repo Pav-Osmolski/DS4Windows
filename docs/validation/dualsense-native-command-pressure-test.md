@@ -10,7 +10,10 @@ reports are byte-identical, and their maxima do not timestamp every symptom.
 
 1. Close the game and DS4Windows. Extract the complete candidate portable ZIP
    into a separate folder and run its `DS4Windows.exe`. Check that the first log
-   line says **5.0.33-issue47-native-pressure1** so you test the correct build.
+   line says **5.0.33-issue47-paired2** so you test the correct build.
+   Confirm the log also says **VIIPER: supported version 0.1.11-issue47-cadence1**
+   and **selected executable verified**. Allow the bundled backend update if
+   prompted; an old VIIPER process is not the paired candidate.
    Keep your normal app folder and profiles as a backup. If the candidate starts
    with fresh settings, import a copy of the profile used for the previous test.
 2. Keep **Emulated Controller: DualSense**, game feedback enabled, Audio Haptics
@@ -31,8 +34,9 @@ reports are byte-identical, and their maxima do not timestamp every symptom.
 Compare the same driving sequence with released 5.0.33 if possible. If neither
 build reproduces the problem, report that as a compatibility check. The
 DualSense Tester webpage can check basic rumble and triggers, but GTA V Enhanced
-is needed to check the reported command-load problem. No driver update is
-required for this candidate.
+is needed to check the reported command-load problem. This candidate updates the VIIPER executable; USB/IP and other driver versions
+are unchanged. VIIPER is shared across app copies. To return to the released
+build, close the candidate and let the released app restore its matching backend.
 
 If you do not own GTA V Enhanced, use the familiar DEATHLOOP intro and the
 profile editor's **Test Heavy** and **Test Light** on both connections as a
@@ -72,8 +76,8 @@ They use synthetic I/O; hardware acceptance requires the comparison above.
 
 ## Additional checks on the updated branch
 
-These changes follow the public `5.0.33-issue47-native-pressure1` ZIP and are not
-included in that download. They will accompany the next candidate.
+The `5.0.33-issue47-paired2` candidate adds these changes after the first public
+`5.0.33-issue47-native-pressure1` ZIP. The old ZIP remains unchanged.
 
 - Open **Profile Editor > Advanced > Controller polling**. DualSense/Edge and
   Nintendo controllers should explain that DS4Windows does not offer an
@@ -96,3 +100,15 @@ following silent carriers after a trigger-only command. Automated tests cover
 this transition and the later explicit release; game feel still needs hardware
 confirmation. Existing test-build logs remain useful and no new profile
 comparison is a prerequisite for the investigation.
+
+## Paired VIIPER change
+
+The candidate bundles VIIPER `0.1.11-issue47-cadence1` from
+[VIIPER PR #6](https://github.com/Pav-Osmolski/VIIPER/pull/6), commit
+`e49a05034296d9fcf27785ba7785f8cc9b667c97`. Native HID output and native output
+SET_REPORT use one bounded, ordered service lane derived from the advertised
+output endpoint interval and USB speed. Input, enumeration and ISO audio keep
+independent paths. Timing tests cover 125/250/500/1000 Hz, copied reports, final
+stops, cancellation/reset and real queue-full failures. Neither the tests nor
+Pawel's USB descriptor discovery alone confirm the remaining gameplay symptoms
+are resolved. The issue stays open pending that confirmation.

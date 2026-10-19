@@ -1,0 +1,50 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.11-issue47-cadence1
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: e49a05034296d9fcf27785ba7785f8cc9b667c97
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: e49a05034296d9fcf27785ba7785f8cc9b667c97
+Embedded build date: 2026-10-19T09:46:39Z
+Embedded VCS revision: e49a05034296d9fcf27785ba7785f8cc9b667c97
+Embedded VCS time: 2026-10-19T09:46:00Z
+Embedded VCS modified: false
+PE file version: 0.1.11.0
+PE product version: 0.1.11-issue47-cadence1
+Binary: VIIPER-0.1.11-issue47-cadence1-x64.exe
+Binary SHA-256: A157172C25A520B413627118AE2573F7DA65A5AD3100041F46AD4139B4E23312
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.11-issue47-cadence1-LICENSES.txt
+License notice SHA-256: 9B743F5409740A47BEEA9EFA11E5B3FC711A7E60C712D893D118F6F312DCB06E
+
+VIIPER issue #47 test candidate (unsigned; hardware validation pending)
+
+Version: v0.1.11-issue47-cadence1
+Source: https://github.com/Pav-Osmolski/VIIPER
+Pull request: https://github.com/Pav-Osmolski/VIIPER/pull/6
+Source commit: e49a05034296d9fcf27785ba7785f8cc9b667c97
+Toolchain: Go 1.27.2 windows/amd64
+Build: CGO_ENABLED=0; -tags release; -trimpath; -ldflags -s -w
+Embedded VCS modified: false
+PE file version: 0.1.11.0
+PE product version: 0.1.11-issue47-cadence1
+Binary: VIIPER-0.1.11-issue47-cadence1-x64.exe
+Binary SHA-256: A157172C25A520B413627118AE2573F7DA65A5AD3100041F46AD4139B4E23312
+Source archive: VIIPER-0.1.11-issue47-cadence1-SOURCE.zip
+Source archive SHA-256: 10E185E1F9318D1366468C676FFF7D88BE01CD10EC28361AE5EBF35152265553
+License notice: VIIPER-0.1.11-issue47-cadence1-LICENSES.txt
+License notice SHA-256: 9B743F5409740A47BEEA9EFA11E5B3FC711A7E60C712D893D118F6F312DCB06E
+Build date: 2026-10-19T09:46:39Z
+
+The complete Go suite passed on Windows. Native-output tests additionally cover
+125/250/500/1000 Hz descriptor timing, order, copied payloads, explicit stops,
+independent input, unlink/reset and full-queue failures. These software checks
+do not establish a hardware/game-feel resolution. No stable release is replaced.
+
+Third-party module versions and checksums exactly match the previously verified
+0.1.11 release graph. Complete existing dependency grants are retained; only the
+VIIPER self-version label is changed in the combined notices. The companion
+SOURCE.zip is git archive of the clean commit above. Its Git ZIP comment and
+all entries can be checked against that commit. BUILD-INFO.json contains the
+embedded Go receipt, binary/source hashes and license-file checksums.

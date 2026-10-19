@@ -105,7 +105,7 @@ namespace DS4Windows
             this.stagingParent = FullLocalPath(stagingParent);
             this.fileName = fileName;
             this.maximumBytes = maximumBytes;
-            DownloadUri = new Uri("https://github.com/hbashton/VIIPER/releases/download/" +
+            DownloadUri = new Uri("https://github.com/Pav-Osmolski/VIIPER/releases/download/" +
                 Uri.EscapeDataString(releaseTag) + "/" + Uri.EscapeDataString(fileName));
         }
 
