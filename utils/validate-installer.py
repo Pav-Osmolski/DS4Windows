@@ -21,12 +21,12 @@ REQUIRED_PUBLISH_FILES = {
     "extras/XBOX-ONE-PERSONA-NOTICE.md",
     "DS4Windows.release",
     "extras/install-viiper-backend.ps1",
-    "extras/VIIPER-0.1.11-x64.exe",
-    "extras/VIIPER-0.1.11-x64.exe.sha256",
-    "extras/VIIPER-0.1.11-LICENSES.txt",
-    "extras/VIIPER-0.1.11-PROVENANCE.txt",
-    "extras/VIIPER-0.1.11-BUILD-NOTES.txt",
-    "extras/VIIPER-0.1.11-SOURCE.zip",
+    "extras/VIIPER-0.1.12-x64.exe",
+    "extras/VIIPER-0.1.12-x64.exe.sha256",
+    "extras/VIIPER-0.1.12-LICENSES.txt",
+    "extras/VIIPER-0.1.12-PROVENANCE.txt",
+    "extras/VIIPER-0.1.12-BUILD-NOTES.txt",
+    "extras/VIIPER-0.1.12-SOURCE.zip",
     "extras/LICENSE.txt",
     "extras/VIIPER-SYSTRAY-NOTICE.md",
     "extras/VIIPER-SYSTRAY-LICENSE.txt",
@@ -37,34 +37,34 @@ REQUIRED_PUBLISH_FILES = {
 }
 
 VIIPER_RELEASE = {
-    "Version": "v0.1.11",
+    "Version": "v0.1.12",
     "Source": "https://github.com/Pav-Osmolski/VIIPER",
-    "Source commit": "ab35e7f0cefd4e7145ac6638ee44fb40483634f0",
+    "Source commit": "46390f60f043da201d5a3adeaf950834c3f2135c",
     "Toolchain": "Go 1.27.2 windows/amd64",
     "Build": "GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release",
-    "Embedded commit": "ab35e7f",
-    "Embedded build date": "2026-10-15T10:40:12Z",
-    "Embedded VCS revision": "ab35e7f0cefd4e7145ac6638ee44fb40483634f0",
-    "Embedded VCS time": "2026-10-15T10:36:31Z",
+    "Embedded commit": "46390f60f043da201d5a3adeaf950834c3f2135c",
+    "Embedded build date": "2026-10-19T12:17:19Z",
+    "Embedded VCS revision": "46390f60f043da201d5a3adeaf950834c3f2135c",
+    "Embedded VCS time": "2026-10-19T12:13:47Z",
     "Embedded VCS modified": "false",
-    "PE file version": "0.1.11.0",
-    "PE product version": "0.1.11",
-    "Binary": "VIIPER-0.1.11-x64.exe",
-    "Binary SHA-256": "949022AC8E30CABD2B06EBF92D38E34A2400BE6C31B417A53745BEE697A9C7A7",
+    "PE file version": "0.1.12.0",
+    "PE product version": "0.1.12",
+    "Binary": "VIIPER-0.1.12-x64.exe",
+    "Binary SHA-256": "FA1716E581E7A9E85ED593B7573D51221A223D6A0F291D1DD9A2BB4F6E77C785",
     "Authenticode status at packaging": "NotSigned",
-    "License notice": "VIIPER-0.1.11-LICENSES.txt",
-    "License notice SHA-256": "535295E2144BDB53E5F6E48F04C41AD9DCAB6F2DCA20D84158A0CB8F6880616D"
+    "License notice": "VIIPER-0.1.12-LICENSES.txt",
+    "License notice SHA-256": "EE49B79156A9A982BF8BCB13CFBC794CCD4E18EB93D76797A3D085CE4C40B486"
 }
 # Preserve the strict machine-readable provenance tuple and independently bind
 # the complete, unabridged build notes and license documents to this artifact.
 VIIPER_NOTICE_HASHES = {
-    "VIIPER-0.1.11-BUILD-NOTES.txt": "63A355D4EE44EC131A094ED22EF2E45BDF981F97293E8CE5D912AADA1F5DFBBC",
+    "VIIPER-0.1.12-BUILD-NOTES.txt": "6667D707CEA22329762EB4103C404CD2E511305775BA3BA0663BC7435C22C29F",
     "LICENSE.txt": "F24EE094842DC3347A7A06B71373573CE18F6DCB935C81E95623723EE22E6CA6",
     "VIIPER-SYSTRAY-NOTICE.md": "6126849BBF404E8172729DAF992DDF7BE43C84F30721883F51C0FA52CC4CD192",
     "VIIPER-SYSTRAY-LICENSE.txt": "05C55BD8834035C143C17AA218BFF08E22B7A66C5603CBA8F070DCAAFC974B8F",
     "VIIPER-WDL-NOTICE.txt": "2485006947F464C2A69E9F863D50529261FB684A7AC5E6BAE0D03BFE65F9E025"
 }
-VIIPER_INFRASTRUCTURE_MARKER = "VIIPER-0.1.11+USBIP-0.9.8.1"
+VIIPER_INFRASTRUCTURE_MARKER = "VIIPER-0.1.12+USBIP-0.9.8.1"
 
 
 def parse_unique_provenance(source: str) -> dict[str, str]:
@@ -672,7 +672,7 @@ def main() -> int:
         "Commit-InfrastructureReadiness",
         "Test-RecognizedProductExecutable",
         '$script:InstallerLogRoot = Assert-SafeManagedDirectory',
-        '"VIIPER-0.1.11-x64.exe"',
+        '"VIIPER-0.1.12-x64.exe"',
         '[Version]"0.9.8.1"',
         '"USBip-0.9.8.1-x64.exe"',
         'Start-AndVerifyViiper',
@@ -786,10 +786,10 @@ def main() -> int:
         r'ExpectedViiperHash\s*=\s*"([0-9A-F]{64})"', probe
     )
     actual_viiper_hash = sha256(
-        args.publish_root / "extras" / "VIIPER-0.1.11-x64.exe"
+        args.publish_root / "extras" / "VIIPER-0.1.12-x64.exe"
     )
     sidecar_hash = (
-        args.publish_root / "extras" / "VIIPER-0.1.11-x64.exe.sha256"
+        args.publish_root / "extras" / "VIIPER-0.1.12-x64.exe.sha256"
     ).read_text(encoding="utf-8").split()[0].upper()
     if sidecar_hash != actual_viiper_hash:
         raise SystemExit("Packaged VIIPER hash sidecar is stale.")
@@ -797,10 +797,10 @@ def main() -> int:
         raise SystemExit("Bootstrapper VIIPER identity does not match its packaged binary.")
 
     viiper_provenance = (
-        args.publish_root / "extras" / "VIIPER-0.1.11-PROVENANCE.txt"
+        args.publish_root / "extras" / "VIIPER-0.1.12-PROVENANCE.txt"
     ).read_text(encoding="utf-8")
     viiper_license_hash = sha256(
-        args.publish_root / "extras" / "VIIPER-0.1.11-LICENSES.txt"
+        args.publish_root / "extras" / "VIIPER-0.1.12-LICENSES.txt"
     )
     provenance_fields = parse_unique_provenance(viiper_provenance)
     if provenance_fields != VIIPER_RELEASE:
@@ -820,15 +820,15 @@ def main() -> int:
         if sha256(args.publish_root / "extras" / name) != expected_notice_hash:
             raise SystemExit("Packaged VIIPER notice does not match its pinned hash: " + name)
 
-    broker_source = args.publish_root / "extras" / "VIIPER-0.1.11-SOURCE.zip"
-    if sha256(broker_source) != "891764F0C7D3C4B48B1848FA836052226E7185F3D6D4DF0AAC025D1C76370136":
+    broker_source = args.publish_root / "extras" / "VIIPER-0.1.12-SOURCE.zip"
+    if sha256(broker_source) != "54DAAB83C3CA2EF08B0F5DC64C92E28996DFE7C1897DA53A5CDAEE0449E5EDF2":
         raise SystemExit("Bundled VIIPER corresponding source hash mismatch.")
     with zipfile.ZipFile(broker_source) as source_zip:
         if source_zip.comment.decode("ascii") != VIIPER_RELEASE["Source commit"]:
             raise SystemExit("Bundled VIIPER source commit mismatch.")
 
     functional_version_contracts = [
-        (probe, r'ExpectedViiperVersion\s*=\s*"([^"]+)"', "0.1.11", "probe version"),
+        (probe, r'ExpectedViiperVersion\s*=\s*"([^"]+)"', "0.1.12", "probe version"),
         (probe, r'ExpectedMarker\s*=\s*"([^"]+)"', VIIPER_INFRASTRUCTURE_MARKER, "probe marker"),
         (backend_script, r'\$script:InfrastructureVersion\s*=\s*"([^"]+)"', VIIPER_INFRASTRUCTURE_MARKER, "backend marker"),
         (setup_actions, r'InfrastructureVersion\s*=\s*\r?\n?\s*"([^"]+)"', VIIPER_INFRASTRUCTURE_MARKER, "setup marker"),

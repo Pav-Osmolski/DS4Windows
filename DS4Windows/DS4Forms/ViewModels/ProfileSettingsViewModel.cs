@@ -132,6 +132,42 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public bool ShowControllerAudioSettings =>
             controllerUiCapabilities.ShowControllerAudioSettings;
 
+        public bool CanConfigureBluetoothPolling =>
+            controllerUiCapabilities.CanConfigureBluetoothPolling;
+
+        public string BluetoothPollingDescription =>
+            controllerUiCapabilities.BluetoothPollingDescription;
+
+        public bool ShowUsbPollingDetails =>
+            controllerUiCapabilities.ConnectionType == ConnectionType.USB;
+
+        private string usbPollingDescription = "USB endpoint intervals: not available.";
+        public string UsbPollingDescription => usbPollingDescription;
+        public event EventHandler UsbPollingDescriptionChanged;
+
+        private async System.Threading.Tasks.Task RefreshUsbPollingAsync(
+            string path, int? vendorId, int? productId)
+        {
+            if (!ShowUsbPollingDetails || string.IsNullOrEmpty(path) ||
+                vendorId == null || productId == null) return;
+            usbPollingDescription = "Reading advertised USB endpoint intervals...";
+            var timings = await System.Threading.Tasks.Task.Run(() =>
+                UsbEndpointTimingProbe.Detect(path, vendorId.Value,
+                    productId.Value)).ConfigureAwait(false);
+            string details = timings.Count == 0 ?
+                "USB endpoint intervals: unknown. Windows did not provide an unambiguous HID descriptor; no rate has been assumed." :
+                "Advertised USB intervals: " + string.Join("; ", timings.Select(t =>
+                    $"{((t.Address & 0x80) != 0 ? "input" : "output")} {1000 / t.Interval.TotalMilliseconds:0.##} Hz ({t.Interval.TotalMilliseconds:0.###} ms)")) +
+                ". Input and output are independent; actual delivery timing may vary.";
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher == null || dispatcher.HasShutdownStarted) return;
+            await dispatcher.InvokeAsync(() =>
+            {
+                usbPollingDescription = details;
+                UsbPollingDescriptionChanged?.Invoke(this, EventArgs.Empty);
+            });
+        }
+
         public bool ShowDualSenseHardwareControls =>
             controllerUiCapabilities.ShowDualSenseHardwareControls;
 
@@ -1163,6 +1199,22 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
         }
         public event EventHandler IdleDisconnectChanged;
+
+        private bool tempAutomaticBTPollRate;
+        public bool TempAutomaticBTPollRate
+        {
+            get => tempAutomaticBTPollRate;
+            set
+            {
+                if (tempAutomaticBTPollRate == value) return;
+                tempAutomaticBTPollRate = value;
+                TempAutomaticBTPollRateChanged?.Invoke(this, EventArgs.Empty);
+                CanEditManualBTPollRateChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler TempAutomaticBTPollRateChanged;
+        public bool CanEditManualBTPollRate => !tempAutomaticBTPollRate;
+        public event EventHandler CanEditManualBTPollRateChanged;
 
         private int tempBtPollRate;
         public int TempBTPollRateIndex
@@ -4321,7 +4373,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             InputDeviceType? physicalControllerType = null,
             ConnectionType? physicalControllerConnection = null,
             int? physicalControllerVendorId = null,
-            int? physicalControllerProductId = null)
+            int? physicalControllerProductId = null,
+            string physicalControllerPath = null)
         {
             this.device = device;
             Switch2AimSetup = new(this, device);
@@ -4351,6 +4404,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             tempControllerIndex = ControllerTypeIndex;
             Global.outDevTypeTemp[device] = OutContType.ViiperX360;
             tempBtPollRate = Global.BTPollRate[device];
+            TempAutomaticBTPollRate = Global.AutomaticBTPollRate[device];
 
             outputMouseSpeed = CalculateOutputMouseSpeed(ButtonMouseSensitivity);
             mouseOffsetSpeed = RawButtonMouseOffset * outputMouseSpeed;
@@ -4375,6 +4429,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
             SetupEvents();
             _ = RefreshAudioEndpointChoicesAsync();
+            _ = RefreshUsbPollingAsync(physicalControllerPath,
+                physicalControllerVendorId, physicalControllerProductId);
         }
 
         private async System.Threading.Tasks.Task RefreshAudioEndpointChoicesAsync()
@@ -4937,6 +4993,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             tempControllerIndex = ControllerTypeIndex;
             Global.outDevTypeTemp[device] = Global.OutContType[device];
             tempBtPollRate = Global.BTPollRate[device];
+            TempAutomaticBTPollRate = Global.AutomaticBTPollRate[device];
             outputMouseSpeed = CalculateOutputMouseSpeed(ButtonMouseSensitivity);
             mouseOffsetSpeed = RawButtonMouseOffset * outputMouseSpeed;
             gyroMouseSmoothMethodIndex = FindGyroMouseSmoothMethodIndex();

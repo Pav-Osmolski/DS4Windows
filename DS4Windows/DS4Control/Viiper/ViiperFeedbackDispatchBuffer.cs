@@ -16,7 +16,7 @@ namespace DS4Windows
 {
     internal readonly record struct ViiperNativeCommandContext(
         object Target, long BindingRevision, long ProfileRevision,
-        long PendingBoundaryRevision);
+        long PendingBoundaryRevision, long RepeatBoundaryRevision = 0);
 
     // Eligibility metadata only. This never turns translated Nintendo feedback
     // into a raw Sony command or changes its existing real-time age/overflow policy.
@@ -91,6 +91,7 @@ namespace DS4Windows
         private long orderedControlMaximumQueueAgeTicks;
         private long controlAdmissionRevision;
         private long pendingBoundaryRevision;
+        private long nativeRepeatBoundaryRevision;
         private long repeatableNativeTailRevision;
 
         internal ViiperFeedbackDispatchBuffer(int speakerCapacity,
@@ -230,6 +231,11 @@ namespace DS4Windows
         internal long PendingBoundaryRevision
         {
             get { lock (syncRoot) return pendingBoundaryRevision; }
+        }
+
+        internal long NativeRepeatBoundaryRevision
+        {
+            get { lock (syncRoot) return nativeRepeatBoundaryRevision; }
         }
         internal double OrderedControlMaximumQueueAgeMilliseconds =>
             StopwatchTicksToMilliseconds(
@@ -408,7 +414,8 @@ namespace DS4Windows
                     return false;
                 bool repeatable = nativeCommand && nativeContext.Target != null &&
                     nativeContext.PendingBoundaryRevision == pendingBoundaryRevision &&
-                    (DualSenseNativeFeedbackRepeatPolicy.IsRepeatable(source.AsSpan(0, length)) ||
+                    (DualSenseNativeFeedbackRepeatPolicy.IsRepeatable(source.AsSpan(0, length),
+                        allowPowerState: nativeContext.Target is InputDevices.DualSenseDevice) ||
                      nativeContext.Target is InputDevices.DualSenseDevice usb &&
                      usb.ConnectionType == ConnectionType.USB &&
                      DualSenseNativeUsbStatePolicy.ClassifyEnvelope(source.AsSpan(0, length)) !=
@@ -554,6 +561,7 @@ namespace DS4Windows
                 previous.BindingRevision == context.BindingRevision &&
                 previous.ProfileRevision == context.ProfileRevision &&
                 previous.PendingBoundaryRevision == context.PendingBoundaryRevision &&
+                previous.RepeatBoundaryRevision == context.RepeatBoundaryRevision &&
                 source.AsSpan(0, length).SequenceEqual(orderedControlSlots[tail].AsSpan(0, length));
         }
 
@@ -596,7 +604,11 @@ namespace DS4Windows
 
         internal void InvalidateNativeRepeat()
         {
-            lock (syncRoot) repeatableNativeTailRevision = 0;
+            lock (syncRoot)
+            {
+                repeatableNativeTailRevision = 0;
+                nativeRepeatBoundaryRevision++;
+            }
         }
 
         internal bool TryPeekNativeCommand(byte[] destination, out int length,

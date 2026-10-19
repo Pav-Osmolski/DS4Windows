@@ -281,8 +281,8 @@ jobs:
         $records = Join-Path $env:RUNNER_TEMP 'ds4windows-release-records'
         New-Item -ItemType Directory -Path $records | Out-Null
         $publish = (Resolve-Path '.\bin\x64\Release\DS4Windows').Path
-        $provenance = Get-Content -LiteralPath (Join-Path $publish 'extras\VIIPER-0.1.11-PROVENANCE.txt') -Raw
-        $buildNotes = Get-Content -LiteralPath (Join-Path $publish 'extras\VIIPER-0.1.11-BUILD-NOTES.txt') -Raw
+        $provenance = Get-Content -LiteralPath (Join-Path $publish 'extras\VIIPER-0.1.12-PROVENANCE.txt') -Raw
+        $buildNotes = Get-Content -LiteralPath (Join-Path $publish 'extras\VIIPER-0.1.12-BUILD-NOTES.txt') -Raw
         function Read-RecordField([string]$text, [string]$name, [string]$pattern) {
           $match = [regex]::Match($text, '(?m)^' + [regex]::Escape($name) + ': (' + $pattern + ')\r?$')
           if (-not $match.Success) { throw "Missing or invalid provenance field: $name" }
@@ -324,8 +324,8 @@ jobs:
         if ((Get-FileHash -LiteralPath $brokerSource -Algorithm SHA256).Hash -cne $brokerSourceHash) {
           throw 'VIIPER source archive differs from the recorded corresponding-source archive.'
         }
-        $noticeNames = @('VIIPER-0.1.11-LICENSES.txt', 'VIIPER-0.1.11-PROVENANCE.txt',
-          'VIIPER-0.1.11-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md', 'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')
+        $noticeNames = @('VIIPER-0.1.12-LICENSES.txt', 'VIIPER-0.1.12-PROVENANCE.txt',
+          'VIIPER-0.1.12-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md', 'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')
         $infoDirectory = Join-Path $records 'release-info'
         New-Item -ItemType Directory -Path $infoDirectory | Out-Null
         foreach ($name in $noticeNames) { Copy-Item -LiteralPath (Join-Path $publish "extras\$name") -Destination $infoDirectory }
@@ -470,8 +470,8 @@ jobs:
           "DS4Windows-$($env:RELEASE_TAG)-SOURCE.zip", $receipt.brokerSourceName, 'SHA256SUMS.txt')) {
           if (-not $seen.Contains($required)) { throw "Incomplete RC receipt: $required" }
         }
-        $noticeNames = @('VIIPER-0.1.11-LICENSES.txt', 'VIIPER-0.1.11-PROVENANCE.txt',
-          'VIIPER-0.1.11-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md',
+        $noticeNames = @('VIIPER-0.1.12-LICENSES.txt', 'VIIPER-0.1.12-PROVENANCE.txt',
+          'VIIPER-0.1.12-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md',
           'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt', 'SOURCE-REVISIONS.txt')
         if ($null -ne $receipt.releaseInfo) {
           $infoName = "DS4Windows-$($env:RELEASE_TAG)-RELEASE-INFO.zip"

@@ -2205,8 +2205,9 @@ namespace DS4WindowsTests
             Assert.AreEqual((byte)0xF7, pendingExact[14]);
 
             // The exact command/cache retains game mode even for zero motors.
-            // Only subsequent steady carriers apply the proven zero-pair guard,
-            // so they cannot repeatedly switch the speaker away from PCM.
+            // This full template also selects improved rumble (flag2/04),
+            // so its zero pair is an explicit emulation stop. The following
+            // carrier may release the selector after that stop is accepted.
             byte[] steadyCarrier = (byte[])cached.Clone();
             DualSenseBluetoothAudioReportPatcher.PatchForPresentation(
                 steadyCarrier, cached, long.MaxValue, 0);
@@ -2215,7 +2216,7 @@ namespace DS4WindowsTests
             Assert.AreEqual((byte)0, steadyCarrier[15]);
             Assert.AreEqual((byte)0, steadyCarrier[16]);
             Assert.AreEqual(cached[51], steadyCarrier[51],
-                "The zero-pair guard must not change independent flag2 fields.");
+                "Preserving the selector must not change independent flag2 fields.");
             Assert.AreEqual((byte)0xF2, cached[13],
                 "Physical presentation cannot mutate the retained native cache.");
         }

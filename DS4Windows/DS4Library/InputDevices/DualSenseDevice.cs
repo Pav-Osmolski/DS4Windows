@@ -879,6 +879,9 @@ namespace DS4Windows.InputDevices
             CreateFixedByteBuffers(PhysicalOutputCommandCapacity, USB_OUTPUT_CHANGE_LENGTH);
         private readonly byte[] physicalOutputUnderlayBuffer = new byte[USB_OUTPUT_CHANGE_LENGTH];
         private readonly byte[] physicalOutputTriggerLabMasks = new byte[PhysicalOutputCommandCapacity];
+        private readonly DualSenseNativeRepeatContext[] physicalOutputRepeatContexts =
+            new DualSenseNativeRepeatContext[PhysicalOutputCommandCapacity];
+        private readonly long[] physicalOutputRepeatLocalGenerations = new long[PhysicalOutputCommandCapacity];
         private byte physicalOutputTriggerLabMask;
         private readonly long[] physicalOutputCommandRevisions =
             new long[PhysicalOutputCommandCapacity];
@@ -3305,6 +3308,7 @@ namespace DS4Windows.InputDevices
                 {
                     physicalOutputCommandHead = 0;
                     physicalOutputCommandCount = 0;
+                    Array.Clear(physicalOutputRepeatContexts, 0, physicalOutputRepeatContexts.Length);
                     Array.Clear(physicalOutputCommandQueuedAt, 0, physicalOutputCommandQueuedAt.Length);
                     Array.Clear(physicalOutputCommandRevisions, 0,
                         physicalOutputCommandRevisions.Length);
@@ -3829,10 +3833,43 @@ namespace DS4Windows.InputDevices
 
         private bool TryQueuePhysicalOutputCommand(byte[] report, int offset,
             out long nativeOutputRevision, byte[] nativeUnderlay, int nativeUnderlayOffset,
-            byte preparedTriggerLabValidity)
+            byte preparedTriggerLabValidity, DualSenseNativeRepeatContext repeatContext)
         {
             lock (physicalOutputCommandLock)
             {
+                ReadOnlySpan<byte> original = new(nativeUnderlay ?? report,
+                    nativeUnderlay == null ? offset : nativeUnderlayOffset, USB_OUTPUT_CHANGE_LENGTH);
+                long localGeneration = Volatile.Read(ref physicalOutputRequestedGeneration);
+                // The owner can already be writing/retrying the head outside
+                // this lock. Only an untouched tail behind it may be shared.
+                // Keep the first command's revision and age; a repeat cannot
+                // postpone a stop or turn a claimed write into mutable state.
+                if (physicalOutputCommandCount > 1 &&
+                    ReferenceEquals(repeatContext.Command.Target, this) &&
+                    repeatContext.Producer != null &&
+                    DualSenseNativeFeedbackRepeatPolicy.IsRepeatableReport(original, allowPowerState: true))
+                {
+                    int pendingTail = (physicalOutputCommandHead + physicalOutputCommandCount - 1) %
+                        PhysicalOutputCommandCapacity;
+                    DualSenseNativeRepeatContext previous = physicalOutputRepeatContexts[pendingTail];
+                    if (ReferenceEquals(previous.Producer, repeatContext.Producer) &&
+                        ReferenceEquals(previous.Command.Target, repeatContext.Command.Target) &&
+                        previous.StreamGeneration == repeatContext.StreamGeneration &&
+                        previous.Command.BindingRevision == repeatContext.Command.BindingRevision &&
+                        previous.Command.ProfileRevision == repeatContext.Command.ProfileRevision &&
+                        previous.Command.PendingBoundaryRevision == repeatContext.Command.PendingBoundaryRevision &&
+                        previous.Command.RepeatBoundaryRevision == repeatContext.Command.RepeatBoundaryRevision &&
+                        physicalOutputRepeatLocalGenerations[pendingTail] == localGeneration &&
+                        physicalOutputTriggerLabMasks[pendingTail] == preparedTriggerLabValidity &&
+                        original.SequenceEqual(physicalOutputUnderlaySlots[pendingTail]) &&
+                        new ReadOnlySpan<byte>(report, offset, USB_OUTPUT_CHANGE_LENGTH).
+                            SequenceEqual(physicalOutputCommandSlots[pendingTail]))
+                    {
+                        nativeOutputRevision = physicalOutputCommandRevisions[pendingTail];
+                        nativeFeedbackDiagnostics.SuppressPendingRepeat();
+                        return true;
+                    }
+                }
                 if (physicalOutputCommandCount >=
                     PhysicalOutputCommandCapacity)
                 {
@@ -3854,6 +3891,8 @@ namespace DS4Windows.InputDevices
                 Buffer.BlockCopy(nativeUnderlay ?? report, nativeUnderlay == null ? offset : nativeUnderlayOffset,
                     physicalOutputUnderlaySlots[tail], 0, USB_OUTPUT_CHANGE_LENGTH);
                 physicalOutputTriggerLabMasks[tail] = preparedTriggerLabValidity;
+                physicalOutputRepeatContexts[tail] = repeatContext;
+                physicalOutputRepeatLocalGenerations[tail] = localGeneration;
                 physicalOutputCommandRevisions[tail] =
                     nativeOutputRevision;
                 physicalOutputCommandQueuedAt[tail] = Stopwatch.GetTimestamp();
@@ -3955,6 +3994,7 @@ namespace DS4Windows.InputDevices
 
                 physicalOutputCommandRevisions[
                     physicalOutputCommandHead] = 0;
+                physicalOutputRepeatContexts[physicalOutputCommandHead] = default;
                 physicalOutputCommandHead =
                     (physicalOutputCommandHead + 1) %
                         PhysicalOutputCommandCapacity;
@@ -6218,7 +6258,7 @@ namespace DS4Windows.InputDevices
 
         internal bool WriteRawOutputReportFromGame(byte[] report, int offset,
             int length, out long nativeOutputRevision, byte[] nativeUnderlay = null, int nativeUnderlayOffset = 0,
-            byte preparedTriggerLabValidity = 0)
+            byte preparedTriggerLabValidity = 0, DualSenseNativeRepeatContext repeatContext = default)
         {
             nativeOutputRevision = 0;
             if (report == null ||
@@ -6234,7 +6274,7 @@ namespace DS4Windows.InputDevices
             }
 
             return TryQueuePhysicalOutputCommand(report, offset,
-                out nativeOutputRevision, nativeUnderlay, nativeUnderlayOffset, preparedTriggerLabValidity);
+                out nativeOutputRevision, nativeUnderlay, nativeUnderlayOffset, preparedTriggerLabValidity, repeatContext);
         }
 
         internal bool RequestNativeGameLedOwnershipRelease(

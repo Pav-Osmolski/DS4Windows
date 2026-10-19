@@ -9,6 +9,55 @@ namespace DS4WindowsTests
     public class ControllerUiCapabilityPolicyTests
     {
         [TestMethod]
+        public void BluetoothPollingOnlyOffersImplementedControllerCommands()
+        {
+            Assert.IsTrue(ControllerUiCapabilities.For(null).
+                CanConfigureBluetoothPolling,
+                "Offline profiles must retain the DS4-compatible rate setting.");
+            foreach (InputDeviceType type in Enum.GetValues<InputDeviceType>())
+            {
+                var capabilities = ControllerUiCapabilities.For(type);
+                Assert.AreEqual(type == InputDeviceType.DS4,
+                    capabilities.CanConfigureBluetoothPolling,
+                    $"{type} must not advertise a polling command its backend does not implement.");
+            }
+        }
+
+        [TestMethod]
+        [DataRow(0x054C, 0x05C4, true)]
+        [DataRow(0x054C, 0x09CC, true)]
+        [DataRow(0x054C, 0x1234, false)]
+        [DataRow(0x1234, 0x09CC, false)]
+        public void BluetoothPollingDoesNotMistakeCompatibleIdsForVerifiedHardware(
+            int vendorId, int productId, bool recognized)
+        {
+            var capabilities = ControllerUiCapabilities.For(InputDeviceType.DS4,
+                ConnectionType.BT, vendorId, productId);
+            Assert.IsTrue(capabilities.CanConfigureBluetoothPolling,
+                "Keep existing interval requests available to DS4-compatible controllers.");
+            Assert.AreEqual(recognized,
+                capabilities.HasRecognizedBluetoothPollingIdentity);
+            StringAssert.Contains(capabilities.BluetoothPollingDescription,
+                recognized ? "do not verify genuine hardware" : "may ignore");
+        }
+
+        [TestMethod]
+        public void BluetoothPollingKeepsUsbProfileEditingSeparateFromUsbTiming()
+        {
+            var capabilities = ControllerUiCapabilities.For(InputDeviceType.DS4,
+                ConnectionType.USB, 0x054C, 0x09CC);
+            Assert.IsTrue(capabilities.CanConfigureBluetoothPolling);
+            StringAssert.Contains(capabilities.BluetoothPollingDescription,
+                "does not change USB polling");
+
+            var dualSense = ControllerUiCapabilities.For(InputDeviceType.DualSense,
+                ConnectionType.BT, 0x054C, 0x0CE6);
+            Assert.IsFalse(dualSense.CanConfigureBluetoothPolling);
+            StringAssert.Contains(dualSense.BluetoothPollingDescription,
+                "does not implement an adjustable input rate");
+        }
+
+        [TestMethod]
         public void DualShock4UsesDs4ArtworkAndHidesDualSenseHardware()
         {
             ControllerUiCapabilities capabilities =

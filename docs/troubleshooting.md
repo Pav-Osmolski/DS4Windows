@@ -129,10 +129,15 @@ radio write or actuator effect has completed. Timings are lifetime maxima for
 the physical device; they are not vibration-strength measurements. Profile
 and other local overrides can affect the final output.
 
-Only consecutive identical, unclaimed, recognized USB state reports can be
-suppressed. Alternating rumble/trigger commands, distinct values, stops, media,
-unknown commands and ownership changes retain their order. This release adds
-diagnostics and a narrow redundancy reduction; it does **not** confirm a full
+Only consecutive identical, unclaimed, recognized state reports can be
+suppressed. The native-command pressure candidate extends this to documented
+DualSense power settings on USB and Bluetooth and to the physical-output queue.
+`nativePhysicalPendingRepeats` counts redundant pending occurrences shared in
+that queue; `nativeRepeatsSuppressed` counts sharing in the earlier VIIPER queue.
+Neither counter counts discarded distinct effects. Alternating rumble/trigger
+commands, changed values, final stops, media, unknown commands and ownership
+changes retain their order. See the [candidate test instructions](validation/dualsense-native-command-pressure-test.md).
+These changes reduce redundant traffic; they do **not** confirm a full
 fix for [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47) or the
 related upstream [issue #119](https://github.com/hbashton/DS4Windows/issues/119).
 
