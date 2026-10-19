@@ -132,3 +132,12 @@ play with full graphics and ray tracing. GTA V USB recorded an early physical
 queue-age maximum of 228.41 ms that did not rise afterward; no admission or
 physical write retries were reported. This transient remains part of the final
 review. These results do not establish resolution on the reporter's setup.
+
+## Reporter confirmation after release
+
+On 2026-10-19, [@Jobima1st confirmed in issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47#issuecomment-6274412583)
+that the haptic problems were fixed over both USB and Bluetooth. This confirms
+the result on the original reporter's setup, in addition to Pawel's gameplay
+tests described above. The issue is now closed. Earlier pending-confirmation
+statements in this record describe the investigation at that time; they have
+been superseded by this follow-up.
