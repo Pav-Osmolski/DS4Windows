@@ -198,9 +198,10 @@ public class DualSenseBluetoothNativeCadenceTests
     }
 
     [TestMethod]
-    [DataRow(100, 320)]
-    [DataRow(200, 120)]
-    public void ActualHelperPacedNativeSourceDoesNotAccumulateAMediaRateBacklog(int sourceHz, int commands)
+    [DataRow(100, 320, false)]
+    [DataRow(200, 120, false)]
+    [DataRow(200, 120, true)]
+    public void ActualHelperPacedNativeSourceDoesNotAccumulateAMediaRateBacklog(int sourceHz, int commands, bool pauseNativeSource)
     {
         using var fixture = new Fixture(realtimeCapacity: 16);
         object host = GetHost(fixture);
@@ -228,6 +229,23 @@ public class DualSenseBluetoothNativeCadenceTests
         }
 
         RefillMedia();
+        int feedMedia = 1;
+        Exception mediaFeedError = null;
+        Action refillAfterSubmission = null;
+        refillAfterSubmission = () =>
+        {
+            if (Volatile.Read(ref feedMedia) == 0) return;
+            try
+            {
+                // Run the synthetic media source on the presenter thread, after
+                // this report has already captured its PCM. Native source timing
+                // cannot starve either input between the two refill operations.
+                RefillMedia();
+                fixture.Native.DuringSubmit = refillAfterSubmission;
+            }
+            catch (Exception error) { mediaFeedError = error; }
+        };
+        fixture.Native.DuringSubmit = refillAfterSubmission;
         fixture.StartAcknowledgements();
         fixture.StartIdle();
         long interval = Stopwatch.Frequency / sourceHz;
@@ -235,15 +253,20 @@ public class DualSenseBluetoothNativeCadenceTests
         long abortAt = nextSource + Stopwatch.Frequency * 12;
         for (int index = 0; index < commands; index++)
         {
+            if (pauseNativeSource && index == commands / 2)
+            {
+                int mediaBeforePause = fixture.Native.Reports.Count(report => report[0] == 0x36);
+                Assert.IsTrue(SpinWait.SpinUntil(() =>
+                    fixture.Native.Reports.Count(report => report[0] == 0x36) >= mediaBeforePause + 20, 3000),
+                    "The independent media source must keep feeding beyond the 16-frame buffer while native input is paused.");
+            }
             while (Stopwatch.GetTimestamp() < nextSource)
             {
-                RefillMedia();
                 Thread.Sleep(1);
             }
             while (fixture.NativeOwnershipSnapshot().Admissions >= 32)
             {
                 highWater = 32;
-                RefillMedia();
                 Assert.IsTrue(Stopwatch.GetTimestamp() < abortAt,
                     $"Native credits did not return at source {index}/{commands}; {DescribeHost(host, fixture)}");
                 Thread.Sleep(1);
@@ -253,14 +276,16 @@ public class DualSenseBluetoothNativeCadenceTests
             fixture.ReceiveNativeCommand(command);
             expected.Add(command);
             highWater = Math.Max(highWater, fixture.NativeOwnershipSnapshot().Admissions);
-            RefillMedia();
             // A late source wake reanchors; it never invents a catch-up burst.
             nextSource += interval;
             if (nextSource < Stopwatch.GetTimestamp())
                 nextSource = Stopwatch.GetTimestamp() + interval;
         }
-        _ = SpinWait.SpinUntil(() => fixture.NativeOwnershipSnapshot().Admissions == 0 && pcm.Count == 0, 3000);
+        Volatile.Write(ref feedMedia, 0);
+        bool drained = SpinWait.SpinUntil(() => fixture.NativeOwnershipSnapshot().Admissions == 0 && pcm.Count == 0, 3000);
         fixture.Stop();
+        Assert.IsNull(mediaFeedError, mediaFeedError?.ToString());
+        Assert.IsTrue(drained, "All finite PCM and native commands must finish before checking their exact sequence.");
         byte[][] reports = fixture.Native.Reports.ToArray();
         byte[][] media = reports.Where(report => report[0] == 0x36).ToArray();
         byte[][] native = reports.Where(report => (report[StateOffset(report)] & 4) != 0).ToArray();

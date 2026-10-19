@@ -79,6 +79,8 @@ jobs:
           dotnet restore .\utils\Switch2UsbHardwareVerify.Tests\Switch2UsbHardwareVerify.Tests.csproj
 
       - name: Run tests (x64)
+        env:
+          DS4W_SIDEBAR_ICON_ARTIFACTS: ${{ github.workspace }}/TestResults/sidebar-icons
         # Keep the complete suite, including profile/settings round trips, as
         # the release gate. Hardware-dependent tests retain explicit opt-in gates.
         run: dotnet test .\DS4WindowsTests\DS4WindowsTests.csproj -c Release -p:Platform=x64 --no-restore --verbosity minimal --logger "trx" --results-directory TestResults/main --blame-hang-timeout 5m

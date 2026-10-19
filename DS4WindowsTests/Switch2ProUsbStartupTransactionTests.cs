@@ -1,4 +1,5 @@
 using DS4Windows.Switch2;
+using System.Runtime.CompilerServices;
 
 namespace DS4WinWPF.DS4WindowsTests;
 
@@ -416,32 +417,35 @@ public sealed class Switch2ProUsbStartupTransactionTests
             Assert.IsTrue(transaction.TryAdvance(0, 0, out _));
         }
 
-        bool valid = true;
-        for (int warmup = 0; warmup < 1_000; warmup++)
-        {
-            valid &= transaction.State ==
-                Switch2ProUsbStartupTransactionState.Completed;
-            valid &= transaction.NextStep == Switch2ProUsbStartupStep.Invalid;
-            valid &= transaction.InputRateStatus ==
-                Switch2ProUsbStartupInputRateStatus.RequiresMeasurement;
-            valid &= transaction.TryAdvance(0, 0, out _);
-        }
-
+        bool valid = RunCompletedSteadyState(transaction, 1_000);
         long before = GC.GetAllocatedBytesForCurrentThread();
-        for (int iteration = 0; iteration < 20_000; iteration++)
-        {
-            valid &= transaction.State ==
-                Switch2ProUsbStartupTransactionState.Completed;
-            valid &= transaction.NextStep == Switch2ProUsbStartupStep.Invalid;
-            valid &= transaction.InputRateStatus ==
-                Switch2ProUsbStartupInputRateStatus.RequiresMeasurement;
-            valid &= transaction.TryAdvance(0, 0, out _);
-        }
+        valid &= RunCompletedSteadyState(transaction, 20_000);
         long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
 
         Assert.IsTrue(valid);
         Assert.AreEqual(0L, allocated);
         Assert.AreEqual(5, lease.ExecutionCount);
+    }
+
+    // Warm and measure the same optimized test-driver loop. Separate loops in
+    // the test let .NET 10 enter its first OSR/PGO path inside the counters,
+    // changing the inlined Monitor path after the apparent warmup.
+    // Production methods retain the normal runtime policy and the limit is zero.
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
+    private static bool RunCompletedSteadyState(
+        Switch2ProUsbStartupTransaction transaction, int iterations)
+    {
+        bool valid = true;
+        for (int iteration = 0; iteration < iterations; iteration++)
+        {
+            valid &= transaction.State ==
+                Switch2ProUsbStartupTransactionState.Completed;
+            valid &= transaction.NextStep == Switch2ProUsbStartupStep.Invalid;
+            valid &= transaction.InputRateStatus ==
+                Switch2ProUsbStartupInputRateStatus.RequiresMeasurement;
+            valid &= transaction.TryAdvance(0, 0, out _);
+        }
+        return valid;
     }
 
     private static void AssertUnsafeCompletion(FakeCommandMode mode,

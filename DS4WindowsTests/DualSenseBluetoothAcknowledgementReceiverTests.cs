@@ -197,6 +197,9 @@ public sealed class DualSenseBluetoothAcknowledgementReceiverTests
     [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
+    // Warm the optimized measurement driver, while the production receiver
+    // retains normal tiering and the strict zero/positive allocation controls.
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
     public void ActualFramedAckReceiverAllocatesZeroAfterWarmupWithPositiveControl(bool positiveControl)
     {
         using Fixture f = new();

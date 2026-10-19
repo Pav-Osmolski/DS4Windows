@@ -336,9 +336,9 @@ Only after separate authorization, the exact built executable invocation is
 one of these:
 
 ```powershell
-.\utils\Switch2UsbHardwareVerify\bin\x64\Release\net8.0-windows10.0.19041.0\Switch2UsbHardwareVerify.exe
-.\utils\Switch2UsbHardwareVerify\bin\x64\Release\net8.0-windows10.0.19041.0\Switch2UsbHardwareVerify.exe --output .\switch2-usb-result.json
-.\utils\Switch2UsbHardwareVerify\bin\x64\Release\net8.0-windows10.0.19041.0\Switch2UsbHardwareVerify.exe --capture-startup-evidence --output .\switch2-usb-startup-private.json
+.\utils\Switch2UsbHardwareVerify\bin\x64\Release\net10.0-windows10.0.19041.0\Switch2UsbHardwareVerify.exe
+.\utils\Switch2UsbHardwareVerify\bin\x64\Release\net10.0-windows10.0.19041.0\Switch2UsbHardwareVerify.exe --output .\switch2-usb-result.json
+.\utils\Switch2UsbHardwareVerify\bin\x64\Release\net10.0-windows10.0.19041.0\Switch2UsbHardwareVerify.exe --capture-startup-evidence --output .\switch2-usb-startup-private.json
 ```
 
 The third form was run only from the authorized Desktop portable lab on

@@ -116,6 +116,7 @@ public sealed class DualSenseBluetoothNativeBackpressureTests
     [TestMethod]
     [DataRow(false)]
     [DataRow(true)]
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
     public void WarmedNativeBusyRetryPreservesStrictAllocationGate(bool positiveControl)
     {
         using Fixture fixture = new();

@@ -25,5 +25,5 @@ References consulted, without copying their implementation:
   `docs/investigations/wgi-silent-sink-2026-04/finding.md`. Their ROOT/UMDF2
   findings are not assumed to describe this USB/IP-backed GIP device.
 
-Publish with .NET 8 for win-x64 into a new Desktop lab subdirectory, then run
+Publish with .NET 10 for win-x64 into a new Desktop lab subdirectory, then run
 the executable. This utility is not part of the production application package.

@@ -1,6 +1,7 @@
 using DS4Windows.InputDevices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -187,6 +188,9 @@ namespace DS4Windows.Tests
         }
 
         [TestMethod]
+        // Compile the measuring test driver before warmup so its first OSR/PGO
+        // transition cannot occur inside the strict counter window.
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
         public void SaturatedFailureAndResetStorageAllocatesZeroAfterWarmup()
         {
             var payloads = new DualSenseBluetoothAudioPacerPayloadPool(7,

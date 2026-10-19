@@ -301,7 +301,7 @@ public class PortableBrokerIntegrationTests
     public void DirectPortableUpdaterLaunchRequiresPreparedProtocolAndNeverUsesLegacyProcessPath()
     {
         string launch = Section(Read("DS4Forms", "ViewModels", "MainWindowsViewModel.cs"),
-            "public bool LauchDS4Updater(", "public bool IsNET8Available()");
+            "public bool LauchDS4Updater(", "\n    }\n}");
         StringAssert.Contains(System.Text.RegularExpressions.Regex.Replace(launch, @"\s+", " "),
             "if (PortableLabContext.IsActive) return false;");
         StringAssert.Contains(launch, "return PortableUpdaterBootstrap.Launch(preparedPortableUpdater,");
