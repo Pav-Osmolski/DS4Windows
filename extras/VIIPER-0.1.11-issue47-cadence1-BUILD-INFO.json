@@ -1,15 +1,15 @@
 {
   "SchemaVersion": 1,
-  "SourceCommit": "e83cd10d2e4383be8679f4363a85341b3a4080ee",
+  "SourceCommit": "0df479acefe2d457b4ec3bff66032670d0ec2c4e",
   "Version": "v0.1.11-issue47-cadence1",
   "ProductVersion": "0.1.11-issue47-cadence1",
   "FileVersion": "0.1.11.0",
-  "BuildDate": "2026-10-19T09:59:31Z",
+  "BuildDate": "2026-10-19T10:09:05Z",
   "BuildEnvironment": "Local Windows candidate; not a stable release",
   "Binary": {
     "Name": "VIIPER-0.1.11-issue47-cadence1-x64.exe",
     "Size": 9477120,
-    "Sha256": "FBB3357BFAD06A9CADB5078D5C539E9CAEA50EBE643324C4D34B7E0D1ED559A8"
+    "Sha256": "0960D3632934DD58A6B347347031DF7D36C75B560E3162C9BD0FE1851D5539EA"
   },
   "LicenseFiles": [
     {
@@ -35,14 +35,14 @@
   ],
   "SourceArchive": {
     "Name": "VIIPER-0.1.11-issue47-cadence1-SOURCE.zip",
-    "Sha256": "004EDD585D7CB4729E55CE65EC2D4D3B8F3CEB6587CF94324135E9762774F45A"
+    "Sha256": "9D1E21A1B4AE2067613CB99DB5AA563E2D97FAADF9DA928B8E02C17F63F45C28"
   },
   "GoBuildInfo": {
     "GoVersion": "go1.27.2",
     "Path": "github.com/Alia5/VIIPER/cmd/viiper",
     "Main": {
       "Path": "github.com/Alia5/VIIPER",
-      "Version": "v0.1.12-0.20261019095929-e83cd10d2e43"
+      "Version": "v0.1.12-0.20261019100735-0df479acefe2"
     },
     "Deps": [
       {
@@ -130,11 +130,11 @@
       },
       {
         "Key": "vcs.revision",
-        "Value": "e83cd10d2e4383be8679f4363a85341b3a4080ee"
+        "Value": "0df479acefe2d457b4ec3bff66032670d0ec2c4e"
       },
       {
         "Key": "vcs.time",
-        "Value": "2026-10-19T09:59:29Z"
+        "Value": "2026-10-19T10:07:35Z"
       },
       {
         "Key": "vcs.modified",
