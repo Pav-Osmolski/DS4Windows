@@ -1,5 +1,6 @@
 using DS4Windows.InputDevices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Runtime.CompilerServices;
 
 namespace DS4Windows.Tests
 {
@@ -77,6 +78,9 @@ namespace DS4Windows.Tests
         }
 
         [TestMethod]
+        // Keep the measuring driver optimized before warmup, like the other
+        // steady-state gates, without changing production tiering or the limit.
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
         public void WarmCompletionLeaseCycleAllocatesZero()
         {
             object stateLock = new object();
