@@ -226,6 +226,38 @@ public class DualSenseBluetoothNativeRumbleModeTests
         AssertRumble(fixture.Native.Reports.Single(), command, "initial idle acceptance");
     }
 
+    [TestMethod]
+    public void TriggerOnlyDisableAudioCommandKeepsItsModeOnFollowingSilentCarriersUntilExplicitRelease()
+    {
+        using var fixture = new Fixture();
+        StartRumble(fixture, Rumble(false, 76, 43));
+        byte[] trigger = new byte[48];
+        trigger[0] = 2;
+        trigger[1] = 0x0E; // GTA-shaped trigger update, with audio haptics disabled.
+        trigger[2] = 0x40;
+        trigger[11] = trigger[22] = 0x21;
+        fixture.ReceiveNativeCommand(trigger);
+        Assert.IsTrue(SpinWait.SpinUntil(() => fixture.NativeOwnershipSnapshot().Admissions == 0, 2000));
+        fixture.QueueSpeakerReports(8);
+        WaitMedia(fixture, 8);
+        foreach (var media in fixture.Native.Reports.Where(r => r[0] == 0x36))
+        {
+            Assert.AreEqual(2, media[13] & 3,
+                "A silent carrier must not turn the game's disable-audio command into an audio-mode release.");
+            Assert.AreEqual(0, media[15]);
+            Assert.AreEqual(0, media[16]);
+            Assert.AreEqual(0, media[13] & 0x0C, "Trigger strobes are still one-shot.");
+        }
+        byte[] release = new byte[48]; release[0] = 2;
+        fixture.ReceiveNativeCommand(release);
+        Assert.IsTrue(SpinWait.SpinUntil(() => fixture.NativeOwnershipSnapshot().Admissions == 0, 2000));
+        fixture.QueueSpeakerReports(8);
+        WaitMedia(fixture, 16);
+        fixture.Stop();
+        foreach (var media in fixture.Native.Reports.Where(r => r[0] == 0x36).Skip(8))
+            Assert.AreEqual(0, media[13] & 3, "An explicit game release must still return to audio mode.");
+    }
+
     private static void WaitMedia(Fixture fixture, int count) =>
         Assert.IsTrue(SpinWait.SpinUntil(() => fixture.Native.Reports.Count(r => r[0] == 0x36) >= count, 2000));
 

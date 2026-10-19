@@ -3,6 +3,17 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Changed
+
+- Make Profile Editor's **Controller polling** section describe Bluetooth rate support for the selected physical controller. Preserve DS4-compatible selections, identify unverified controller identities, and explain when adjustable reporting is unsupported ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
+- Detect advertised physical USB HID input/output intervals from the active configuration, negotiated speed and open pipes. Match composite HID interfaces separately from audio, and show unknown when detection is unavailable instead of assuming a controller model's rate ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
+
+### Fixed
+
+- Preserve game-selected Bluetooth rumble mode on subsequent silent carriers after trigger-only updates, while still respecting explicit emulation stops ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54), [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47)). Hardware confirmation of the remaining reported feedback symptoms is pending.
+
 ## [5.0.33](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.33) - 2026-10-18
 
 ### Added

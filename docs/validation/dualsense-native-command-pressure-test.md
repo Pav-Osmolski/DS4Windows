@@ -69,3 +69,30 @@ Automated tests exercise 10,000 repeat admissions, improved/compatible rumble,
 power-value bounds, real VIIPER-to-physical admission, full-queue retry, original
 receipt/age, ownership barriers, unknown extensions and final-stop delivery.
 They use synthetic I/O; hardware acceptance requires the comparison above.
+
+## Additional checks on the updated branch
+
+These changes follow the public `5.0.33-issue47-native-pressure1` ZIP and are not
+included in that download. They will accompany the next candidate.
+
+- Open **Profile Editor > Advanced > Controller polling**. DualSense/Edge and
+  Nintendo controllers should explain that DS4Windows does not offer an
+  adjustable Bluetooth input rate for their backends. No ineffective DS4 rate
+  dropdown should be shown for those devices.
+- A DS4-compatible controller retains its saved interval. Unrecognized identities
+  explain that the requested rate is unverified and may be ignored; recognized
+  Sony IDs are not presented as proof of genuine hardware or an accepted rate.
+- For USB, check the advertised input and output intervals independently. The
+  lookup uses the physical HID interface, negotiated speed and active pipes,
+  including through hubs. Failure must show unknown, without assuming a rate.
+  Reopen the editor after changing connection. This feature neither overclocks
+  USB nor applies the Bluetooth selection to USB.
+- A read-only check of Pawel's USB DualSense on 2026-10-19 resolved its HID input
+  and output endpoints at 250 Hz (4 ms) each, separate from its audio interfaces.
+  This checks discovery on that device, not every clone or host-controller path.
+
+The branch also preserves native Bluetooth disable-audio/rumble-decay mode on
+following silent carriers after a trigger-only command. Automated tests cover
+this transition and the later explicit release; game feel still needs hardware
+confirmation. Existing test-build logs remain useful and no new profile
+comparison is a prerequisite for the investigation.

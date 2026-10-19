@@ -25,6 +25,40 @@ Bluetooth adapter or game. Device Options are under **Settings → Controllers**
 See [Nintendo setup](nintendo-options.md) and [Moonlight/Sunshine](moonlight-support.md)
 for their distinct connection procedures.
 
+## Controller polling
+
+**Profile Editor → Advanced → Controller polling** shows whether DS4Windows can
+request a different input reporting rate for the selected physical controller.
+Currently this is implemented for the DualShock 4 protocol. Saving the profile
+applies the selection on Bluetooth; it does not change USB polling. Offline
+profiles can still configure and retain this value for a compatible controller.
+Existing profile selections and the 250 Hz (4 ms) default are preserved.
+
+DualSense/Edge and Nintendo controllers use their backend's automatic reporting
+behaviour; this setting does not add a configurable rate to those controllers.
+
+Supported intervals cannot be reliably queried from every controller. Recognized
+Sony DS4 IDs identify a known protocol, but copies can reuse those IDs. For an
+unrecognized DS4-compatible identity the page marks the rates as unverified: the
+controller may ignore a request. Even a recognized ID does not prove genuine
+hardware or confirm that a requested rate was accepted. A measured arrival rate
+can also vary with Bluetooth interference and host scheduling, so it is not a
+reliable list of supported rates.
+
+For a connected USB controller, the same section reads the physical device's
+active configuration and negotiated speed through its parent USB hub. It shows
+advertised HID interrupt input/output intervals separately, without guessing from
+the controller name or applying an overclock. Composite devices are matched to
+the HID interface rather than their audio endpoints. Ambiguous, inaccessible or
+malformed descriptors display **unknown**. Reopening the editor after reconnecting
+reads the current connection again. These are advertised intervals, not measured
+arrival rates or proof that all alternative rates are supported. Driver filters
+and host scheduling may change the rate actually observed.
+
+Input reporting and feedback output have separate timing requirements. This
+selection does not set VIIPER's virtual USB output interval or the Bluetooth
+speaker/haptics packet cadence.
+
 ## Choose the controller the game should see
 
 Open **Profile Editor → Advanced → Output** and choose **Emulated Controller**.

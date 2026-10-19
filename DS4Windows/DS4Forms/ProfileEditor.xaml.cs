@@ -127,7 +127,8 @@ namespace DS4WinWPF.DS4Forms
                 physicalController?.DeviceType,
                 physicalController?.ConnectionType,
                 physicalController?.HidDevice?.Attributes?.VendorId,
-                physicalController?.HidDevice?.Attributes?.ProductId);
+                physicalController?.HidDevice?.Attributes?.ProductId,
+                physicalController?.HidDevice?.DevicePath);
             picBoxHover.Visibility = Visibility.Hidden;
             picBoxHover2.Visibility = Visibility.Hidden;
 

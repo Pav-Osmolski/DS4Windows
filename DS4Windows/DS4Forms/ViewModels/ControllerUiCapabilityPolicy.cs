@@ -69,6 +69,41 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         internal bool IsPlayStationController { get; }
         internal bool IsDualShock4 => DeviceType == InputDeviceType.DS4;
         internal bool IsDualSense => DeviceType == InputDeviceType.DualSense;
+
+        // The DS4 protocol carries an input-report interval request. Other
+        // backends do not implement this command; never advertise a generic
+        // host-side throttle as a change to the controller's reporting rate.
+        // Offline profiles retain their existing DS4-compatible interval.
+        internal bool CanConfigureBluetoothPolling =>
+            DeviceType == null || IsDualShock4;
+        internal bool HasRecognizedBluetoothPollingIdentity =>
+            IsDualShock4 && VendorId == 0x054C &&
+            ProductId is 0x05C4 or 0x09CC;
+        internal string BluetoothPollingDescription
+        {
+            get
+            {
+                if (DeviceType == null)
+                {
+                    return "Choose the Bluetooth input reporting rate for compatible controllers. Currently adjustable for DualShock 4; applies when the profile is saved.";
+                }
+
+                if (!IsDualShock4)
+                {
+                    return $"{ControllerName}: Bluetooth reporting is managed automatically. DS4Windows does not implement an adjustable input rate for this controller.";
+                }
+
+                string identity = HasRecognizedBluetoothPollingIdentity ?
+                    "Recognized DualShock 4 identity. The selected rate is requested from the controller; device IDs do not verify genuine hardware or confirm the accepted rate." :
+                    "Unverified DS4-compatible controller. Its supported rates cannot be queried; it may ignore the selected rate.";
+                string connection = ConnectionType != null &&
+                    ConnectionType != DS4Windows.ConnectionType.BT ?
+                    " Applies when this profile is used over Bluetooth; it does not change USB polling." :
+                    " Applies when the profile is saved.";
+                return identity + connection;
+            }
+        }
+
         internal bool IsSwitch2 => DeviceType is
                 InputDeviceType.Switch2Pro or
                 InputDeviceType.Switch2JoyConLeft or
