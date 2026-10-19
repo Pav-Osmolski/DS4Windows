@@ -80,13 +80,25 @@ It does not qualify controller hardware or a later release.
   control on the same workload. Keep the original 1,000 measured frames and
   zero-byte assertion; do not claim an object trace for the original CI event.
 
+- Hosted run `39291077961` failed the paced native-source fixture's exact PCM
+  comparison (expected 29, received synthesized zero), while the parallel PR
+  run passed. The fixture refilled both media inputs on its native-source
+  thread despite claiming continuous independent media. No production failure
+  trace was captured. An added pause extending beyond the 16-frame buffer
+  deterministically failed the old fixture's continuous-media prerequisite.
+  Feed synthetic media from its existing HID-submission callback instead, so
+  native-source scheduling cannot interrupt a refill between the two inputs.
+  The new pause case then passes, as do the original 100/200 Hz cases. Retain
+  exact PCM/zero-boundary comparisons, command ordering and backlog limits;
+  additionally require a successful final drain. No production code changes.
+
 ## Automated evidence
 
 Local Windows 11 x64 checks:
 
 | Check | Result |
 | --- | --- |
-| Application suite on .NET 10, including sidebar choices | 7,609 passed; 12 explicit opt-in tests skipped |
+| Application suite on .NET 10, including sidebar choices | 7,610 passed; 12 explicit opt-in tests skipped |
 | Standalone hardware-verifier unit suite | 75 passed |
 | Ten diagnostic-tool projects | Built successfully |
 | Light/dark layout and related focused regressions | 170 passed; rendered theme output inspected |
