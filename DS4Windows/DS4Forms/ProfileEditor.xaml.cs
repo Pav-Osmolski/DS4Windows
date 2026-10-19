@@ -2250,6 +2250,7 @@ namespace DS4WinWPF.DS4Forms
         private void SetLateProperties(bool fullSave = true)
         {
             Global.BTPollRate[deviceNum] = profileSettingsVM.TempBTPollRateIndex;
+            Global.AutomaticBTPollRate[deviceNum] = profileSettingsVM.TempAutomaticBTPollRate;
             Global.OutContType[deviceNum] = profileSettingsVM.TempConType;
             if (fullSave)
             {

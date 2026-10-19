@@ -112,3 +112,23 @@ independent paths. Timing tests cover 125/250/500/1000 Hz, copied reports, final
 stops, cancellation/reset and real queue-full failures. Neither the tests nor
 Pawel's USB descriptor discovery alone confirm the remaining gameplay symptoms
 are resolved. The issue stays open pending that confirmation.
+
+## Automatic and manual Bluetooth input rate (later branch change)
+
+This addition follows the published paired2 ZIP; that download is unchanged.
+On DS4-compatible hardware (or while editing offline), new profiles enable
+**Automatic Bluetooth input rate**. It requests the existing conservative
+250 Hz (4 ms) interval, without probing or claiming hardware rate detection.
+Turn Automatic off to enable the manual rate list. Saving/reopening must retain
+both the mode and the manual selection; switching back to Automatic must not
+erase that selection. Older profiles with an explicit rate remain manual.
+DualSense/Edge and Nintendo retain their managed timing and do not gain an
+unsupported manual-rate control. USB intervals and VIIPER feedback pacing are
+independent of this input-only setting.
+
+Pawel confirmed normal gameplay with paired2 in DEATHLOOP and GTA V Enhanced
+on both USB and Bluetooth on 2026-10-19, including extended GTA V Bluetooth
+play with full graphics and ray tracing. GTA V USB recorded an early physical
+queue-age maximum of 228.41 ms that did not rise afterward; no admission or
+physical write retries were reported. This transient remains part of the final
+review. These results do not establish resolution on the reporter's setup.

@@ -85,7 +85,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 if (DeviceType == null)
                 {
-                    return "Choose the Bluetooth input reporting rate for compatible controllers. Currently adjustable for DualShock 4; applies when the profile is saved.";
+                    return "Automatic uses the conservative 250 Hz (4 ms) input interval for DS4-compatible Bluetooth controllers. Turn it off to request a manual rate. Other controllers retain their managed timing; applies when the profile is saved.";
                 }
 
                 if (!IsDualShock4)
@@ -100,7 +100,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     ConnectionType != DS4Windows.ConnectionType.BT ?
                     " Applies when this profile is used over Bluetooth; it does not change USB polling." :
                     " Applies when the profile is saved.";
-                return identity + connection;
+                return "Automatic requests 250 Hz (4 ms); turn it off to choose a manual input rate. Supported rates cannot be detected automatically. " + identity + connection;
             }
         }
 

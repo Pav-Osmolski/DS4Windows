@@ -32,7 +32,12 @@ request a different input reporting rate for the selected physical controller.
 Currently this is implemented for the DualShock 4 protocol. Saving the profile
 applies the selection on Bluetooth; it does not change USB polling. Offline
 profiles can still configure and retain this value for a compatible controller.
-Existing profile selections and the 250 Hz (4 ms) default are preserved.
+**Automatic Bluetooth input rate** is enabled for new profiles and uses the
+conservative DS4-compatible 250 Hz (4 ms) request. This is a default policy, not
+a probe of the controller's supported rates. Turn Automatic off to request a
+manual rate; switching it on retains the manual choice for later use. Existing
+profiles with an explicit rate keep that manual selection. Changes take effect
+when the profile is saved. This setting does not change VIIPER feedback pacing.
 
 DualSense/Edge and Nintendo controllers use their backend's automatic reporting
 behaviour; this setting does not add a configurable rate to those controllers.

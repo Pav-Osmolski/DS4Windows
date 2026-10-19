@@ -1200,6 +1200,22 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
         public event EventHandler IdleDisconnectChanged;
 
+        private bool tempAutomaticBTPollRate;
+        public bool TempAutomaticBTPollRate
+        {
+            get => tempAutomaticBTPollRate;
+            set
+            {
+                if (tempAutomaticBTPollRate == value) return;
+                tempAutomaticBTPollRate = value;
+                TempAutomaticBTPollRateChanged?.Invoke(this, EventArgs.Empty);
+                CanEditManualBTPollRateChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler TempAutomaticBTPollRateChanged;
+        public bool CanEditManualBTPollRate => !tempAutomaticBTPollRate;
+        public event EventHandler CanEditManualBTPollRateChanged;
+
         private int tempBtPollRate;
         public int TempBTPollRateIndex
         {
@@ -4388,6 +4404,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             tempControllerIndex = ControllerTypeIndex;
             Global.outDevTypeTemp[device] = OutContType.ViiperX360;
             tempBtPollRate = Global.BTPollRate[device];
+            TempAutomaticBTPollRate = Global.AutomaticBTPollRate[device];
 
             outputMouseSpeed = CalculateOutputMouseSpeed(ButtonMouseSensitivity);
             mouseOffsetSpeed = RawButtonMouseOffset * outputMouseSpeed;
@@ -4976,6 +4993,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             tempControllerIndex = ControllerTypeIndex;
             Global.outDevTypeTemp[device] = Global.OutContType[device];
             tempBtPollRate = Global.BTPollRate[device];
+            TempAutomaticBTPollRate = Global.AutomaticBTPollRate[device];
             outputMouseSpeed = CalculateOutputMouseSpeed(ButtonMouseSensitivity);
             mouseOffsetSpeed = RawButtonMouseOffset * outputMouseSpeed;
             gyroMouseSmoothMethodIndex = FindGyroMouseSmoothMethodIndex();

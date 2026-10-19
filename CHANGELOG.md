@@ -7,6 +7,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Changed
 
+- Add an **Automatic Bluetooth input rate** default and an optional manual override for DS4-compatible controllers. Preserve existing profiles' explicit rates and retain the manual choice when Automatic is enabled; controllers without an implemented adjustable rate keep their managed timing ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
 - Pair the issue #47 test candidate with VIIPER `0.1.11-issue47-cadence1`, which services native DualSense output on its advertised output endpoint clock while keeping input and audio independent. This is an unsigned test backend; gameplay confirmation is pending ([DS4Windows #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54), [VIIPER #6](https://github.com/Pav-Osmolski/VIIPER/pull/6)).
 - Make Profile Editor's **Controller polling** section describe Bluetooth rate support for the selected physical controller. Preserve DS4-compatible selections, identify unverified controller identities, and explain when adjustable reporting is unsupported ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
 - Detect advertised physical USB HID input/output intervals from the active configuration, negotiated speed and open pipes. Match composite HID interfaces separately from audio, and show unknown when detection is unavailable instead of assuming a controller model's rate ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).

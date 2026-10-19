@@ -3610,27 +3610,30 @@
                                         <TextBlock Text="Controller polling" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                                         <TextBlock Text="{Binding BluetoothPollingDescription}" Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap"/>
                                         <TextBlock Text="{Binding UsbPollingDescription}" Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap" Visibility="{Binding ShowUsbPollingDetails, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center" Visibility="{Binding CanConfigureBluetoothPolling, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <Label Content="Input reporting rate:" ToolTip="{Binding BluetoothPollingDescription}" VerticalAlignment="Center" Padding="0" Margin="0,0,10,0"/>
-                                            <ComboBox x:Name="btPollRateCombo" SelectedIndex="{Binding TempBTPollRateIndex,FallbackValue=4}" MinWidth="140" ToolTip="{Binding BluetoothPollingDescription}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center">
-                                                <ComboBoxItem Content="Max (1 ms)"/>
-                                                <ComboBoxItem Content="1000 Hz (1 ms)"/>
-                                                <ComboBoxItem Content="500 Hz (2 ms)"/>
-                                                <ComboBoxItem Content="333 Hz (3 ms)"/>
-                                                <ComboBoxItem Content="250 Hz (4 ms)"/>
-                                                <ComboBoxItem Content="200 Hz (5 ms)"/>
-                                                <ComboBoxItem Content="166 Hz (6 ms)"/>
-                                                <ComboBoxItem Content="142 Hz (7 ms)"/>
-                                                <ComboBoxItem Content="125 Hz (8 ms)"/>
-                                                <ComboBoxItem Content="111 Hz (9 ms)"/>
-                                                <ComboBoxItem Content="100 Hz (10 ms)"/>
-                                                <ComboBoxItem Content="90 Hz (11 ms)"/>
-                                                <ComboBoxItem Content="83 Hz (12 ms)"/>
-                                                <ComboBoxItem Content="76 Hz (13 ms)"/>
-                                                <ComboBoxItem Content="71 Hz (14 ms)"/>
-                                                <ComboBoxItem Content="66 Hz (15 ms)"/>
-                                                <ComboBoxItem Content="62 Hz (16 ms)"/>
-                                            </ComboBox>
+                                        <StackPanel Visibility="{Binding CanConfigureBluetoothPolling, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <CheckBox Content="Automatic Bluetooth input rate (recommended)" IsChecked="{Binding TempAutomaticBTPollRate}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0,0,0,12"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center" IsEnabled="{Binding CanEditManualBTPollRate}">
+                                                <Label Content="Input reporting rate:" ToolTip="{Binding BluetoothPollingDescription}" VerticalAlignment="Center" Padding="0" Margin="0,0,10,0"/>
+                                                <ComboBox x:Name="btPollRateCombo" SelectedIndex="{Binding TempBTPollRateIndex,FallbackValue=4}" MinWidth="140" ToolTip="{Binding BluetoothPollingDescription}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center">
+                                                    <ComboBoxItem Content="Max (1 ms)"/>
+                                                    <ComboBoxItem Content="1000 Hz (1 ms)"/>
+                                                    <ComboBoxItem Content="500 Hz (2 ms)"/>
+                                                    <ComboBoxItem Content="333 Hz (3 ms)"/>
+                                                    <ComboBoxItem Content="250 Hz (4 ms)"/>
+                                                    <ComboBoxItem Content="200 Hz (5 ms)"/>
+                                                    <ComboBoxItem Content="166 Hz (6 ms)"/>
+                                                    <ComboBoxItem Content="142 Hz (7 ms)"/>
+                                                    <ComboBoxItem Content="125 Hz (8 ms)"/>
+                                                    <ComboBoxItem Content="111 Hz (9 ms)"/>
+                                                    <ComboBoxItem Content="100 Hz (10 ms)"/>
+                                                    <ComboBoxItem Content="90 Hz (11 ms)"/>
+                                                    <ComboBoxItem Content="83 Hz (12 ms)"/>
+                                                    <ComboBoxItem Content="76 Hz (13 ms)"/>
+                                                    <ComboBoxItem Content="71 Hz (14 ms)"/>
+                                                    <ComboBoxItem Content="66 Hz (15 ms)"/>
+                                                    <ComboBoxItem Content="62 Hz (16 ms)"/>
+                                                </ComboBox>
+                                            </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
