@@ -278,6 +278,11 @@ focus the search; **Clear**, or **Escape** while typing, returns to the selected
 section. Searching keeps your edits. The app remembers the last selected section
 when you close it normally.
 
+Open **Settings > Updates & tools > Changelog** to read release history in the
+app. The reader follows your theme, separates release headings, and fits images
+to the reading area as you resize the window. If notes cannot be loaded, use
+**Try again** or **View releases on GitHub**.
+
 Language changes show a restart reminder. A custom executable name shows a
 re-launch reminder with the filename to open. Theme and tray icon changes apply
 immediately.

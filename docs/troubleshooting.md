@@ -36,8 +36,15 @@ controller could not activate. Include the preceding VIIPER/output errors in
 your report. This is separate from Bluetooth association; the association is
 preserved. Wake and retry after correcting the cause and completing cleanup.
 
-When reporting [issue #48](https://github.com/Pav-Osmolski/DS4Windows/issues/48),
-include the full log from startup through failure, app version, the affected
+If you migrated from another fork or merged an old backup, first review the
+[migration guidance](getting-started.md#moving-from-another-fork). In
+[issue #48](https://github.com/Pav-Osmolski/DS4Windows/issues/48#issuecomment-6252913392),
+the reporter resolved their problem with a clean install after mixing very old
+settings; the exact conflicting configuration could not be reproduced. The
+profile-loading safeguards above remain useful independently of that report.
+
+For a new activation-failure report, include the full log from startup through
+failure, app version, the affected
 Joy-Con half, selected profile and whether **Link profile** or automatic
 profiles are enabled. Test each half alone, both connection orders, and a few
 sleep/wake reconnects. Share successful results too. A full log is always best:
@@ -122,10 +129,15 @@ radio write or actuator effect has completed. Timings are lifetime maxima for
 the physical device; they are not vibration-strength measurements. Profile
 and other local overrides can affect the final output.
 
-Only consecutive identical, unclaimed, recognized USB state reports can be
-suppressed. Alternating rumble/trigger commands, distinct values, stops, media,
-unknown commands and ownership changes retain their order. This release adds
-diagnostics and a narrow redundancy reduction; it does **not** confirm a full
+Only consecutive identical, unclaimed, recognized state reports can be
+suppressed. The native-command pressure candidate extends this to documented
+DualSense power settings on USB and Bluetooth and to the physical-output queue.
+`nativePhysicalPendingRepeats` counts redundant pending occurrences shared in
+that queue; `nativeRepeatsSuppressed` counts sharing in the earlier VIIPER queue.
+Neither counter counts discarded distinct effects. Alternating rumble/trigger
+commands, changed values, final stops, media, unknown commands and ownership
+changes retain their order. See the [candidate test instructions](validation/dualsense-native-command-pressure-test.md).
+These changes reduce redundant traffic; they do **not** confirm a full
 fix for [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47) or the
 related upstream [issue #119](https://github.com/hbashton/DS4Windows/issues/119).
 

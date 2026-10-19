@@ -6557,7 +6557,8 @@ namespace DS4Windows
                     IsUnsupportedEdgeNativeOutput(viiperType, feedback, length,
                         target.SubType == DualSenseDevice.DeviceSubType.DSEdge)) return false;
                 context = new(target, Interlocked.Read(ref physicalControllerBindingRevision),
-                    Global.ReadProfileSwitchRevision(deviceIndex), feedbackDispatchBuffer.PendingBoundaryRevision);
+                    Global.ReadProfileSwitchRevision(deviceIndex), feedbackDispatchBuffer.PendingBoundaryRevision,
+                    feedbackDispatchBuffer.NativeRepeatBoundaryRevision);
                 return true;
             }
         }
@@ -6685,7 +6686,9 @@ namespace DS4Windows
                     deviceIndex, nativeOutputScratch);
                 if (!target.WriteRawOutputReportFromGame(nativeOutputScratch, 0,
                     DualSenseNativeOutputReportLength, out revision, feedback,
-                    DualSenseNativeOutputReportOffset, triggerLabValidity)) return false;
+                    DualSenseNativeOutputReportOffset, triggerLabValidity,
+                    DualSenseNativeFeedbackRepeatPolicy.IsRepeatable(feedback.AsSpan(0, length), allowPowerState: true)
+                        ? new DualSenseNativeRepeatContext(this, sourceGeneration, context) : default)) return false;
             }
             // Foreground/process diagnostics must not extend the short physical
             // target admission boundary or prevent a stop from sealing it.

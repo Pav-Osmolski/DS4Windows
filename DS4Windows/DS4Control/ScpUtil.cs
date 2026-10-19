@@ -2954,9 +2954,10 @@ namespace DS4Windows
         }
 
         public static int[] BTPollRate => m_Config.btPollRate;
+        public static bool[] AutomaticBTPollRate => m_Config.automaticBTPollRate;
         public static int getBTPollRate(int index)
         {
-            return m_Config.btPollRate[index];
+            return m_Config.GetEffectiveBTPollRate(index);
         }
 
         // Start of DualSense specific profile settings
@@ -4432,6 +4433,11 @@ namespace DS4Windows
         public bool[] doubleTap = new bool[Global.TEST_PROFILE_ITEM_COUNT] { false, false, false, false, false, false, false, false, false };
         public int[] scrollSensitivity = new int[Global.TEST_PROFILE_ITEM_COUNT] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public int[] touchpadInvert = new int[Global.TEST_PROFILE_ITEM_COUNT] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public bool[] automaticBTPollRate = Enumerable.Repeat(true, Global.TEST_PROFILE_ITEM_COUNT).ToArray();
+
+        public int GetEffectiveBTPollRate(int index) => automaticBTPollRate[index]
+            ? DEFAULT_DS4_BT_POLL_RATE : Math.Clamp(btPollRate[index], 0, 16);
+
         public int[] btPollRate = new int[Global.TEST_PROFILE_ITEM_COUNT]
         { DEFAULT_DS4_BT_POLL_RATE, DEFAULT_DS4_BT_POLL_RATE, DEFAULT_DS4_BT_POLL_RATE,
           DEFAULT_DS4_BT_POLL_RATE, DEFAULT_DS4_BT_POLL_RATE, DEFAULT_DS4_BT_POLL_RATE,
@@ -5966,6 +5972,7 @@ namespace DS4Windows
 
                 XmlNode xmlProfileActions = m_Xdoc.CreateNode(XmlNodeType.Element, "ProfileActions", null); xmlProfileActions.InnerText = string.Join("/", profileActions[device]); rootElement.AppendChild(xmlProfileActions);
                 XmlNode xmlBTPollRate = m_Xdoc.CreateNode(XmlNodeType.Element, "BTPollRate", null); xmlBTPollRate.InnerText = btPollRate[device].ToString(); rootElement.AppendChild(xmlBTPollRate);
+                XmlNode xmlAutomaticBTPollRate = m_Xdoc.CreateNode(XmlNodeType.Element, "AutomaticBTPollRate", null); xmlAutomaticBTPollRate.InnerText = automaticBTPollRate[device].ToString(); rootElement.AppendChild(xmlAutomaticBTPollRate);
 
                 XmlNode xmlLsOutputCurveMode = m_Xdoc.CreateNode(XmlNodeType.Element, "LSOutputCurveMode", null); xmlLsOutputCurveMode.InnerText = stickOutputCurveString(getLsOutCurveMode(device)); rootElement.AppendChild(xmlLsOutputCurveMode);
                 XmlNode xmlLsOutputCurveCustom = m_Xdoc.CreateNode(XmlNodeType.Element, "LSOutputCurveCustom", null); xmlLsOutputCurveCustom.InnerText = lsOutBezierCurveObj[device].ToString(); rootElement.AppendChild(xmlLsOutputCurveCustom);
@@ -8406,6 +8413,13 @@ namespace DS4Windows
                     btPollRate[device] = (temp >= 0 && temp <= 16) ? temp : 4;
                 }
                 catch { btPollRate[device] = 4; missingSetting = true; }
+                // Existing profiles keep their explicit interval; profiles without
+                // a rate setting use the conservative automatic default.
+                automaticBTPollRate[device] =
+                    m_Xdoc.SelectSingleNode("/" + rootname + "/BTPollRate") == null;
+                XmlNode automaticBtNode = m_Xdoc.SelectSingleNode("/" + rootname + "/AutomaticBTPollRate");
+                if (automaticBtNode != null && bool.TryParse(automaticBtNode.InnerText, out bool automaticBt))
+                    automaticBTPollRate[device] = automaticBt;
 
                 // Note! xxOutputCurveCustom property needs to be read before xxOutputCurveMode property in case the curveMode is value 6
                 try { Item = m_Xdoc.SelectSingleNode("/" + rootname + "/LSOutputCurveCustom"); lsOutBezierCurveObj[device].CustomDefinition = Item.InnerText; }
@@ -11298,6 +11312,7 @@ namespace DS4Windows
             scrollSensitivity[device] = 0;
             touchpadInvert[device] = 0;
             btPollRate[device] = DEFAULT_DS4_BT_POLL_RATE;
+            automaticBTPollRate[device] = true;
 
             lsOutputSettings[device].ResetSettings();
             rsOutputSettings[device].ResetSettings();

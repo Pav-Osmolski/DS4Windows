@@ -9,6 +9,7 @@ internal sealed class DualSenseNativeFeedbackDiagnostics
 {
     private readonly object sync = new();
     private long accepted, attempts, retries, completed, rejected;
+    private long pendingRepeats;
     private long highWater, queueMax, ownerMax, completionMax;
     private long rumbleReports, triggerReports, stopReports;
     private long lastStopRevision, lastStopCompletedRevision, lastStopCompletionAge;
@@ -17,6 +18,11 @@ internal sealed class DualSenseNativeFeedbackDiagnostics
     internal void RejectAdmission()
     {
         lock (sync) rejected++;
+    }
+
+    internal void SuppressPendingRepeat()
+    {
+        lock (sync) pendingRepeats++;
     }
 
     internal void Admit(ReadOnlySpan<byte> report, long revision, int depth)
@@ -69,7 +75,7 @@ internal sealed class DualSenseNativeFeedbackDiagnostics
 
     internal Snapshot Capture()
     {
-        lock (sync) return new(accepted, attempts, retries, completed, rejected, highWater, queueMax, ownerMax, completionMax, rumbleReports, triggerReports, stopReports, lastStopRevision, lastStopCompletedRevision, lastStopCompletionAge, flag0, flag1, smallMotor, largeMotor, power);
+        lock (sync) return new(accepted, attempts, retries, completed, rejected, highWater, queueMax, ownerMax, completionMax, rumbleReports, triggerReports, stopReports, lastStopRevision, lastStopCompletedRevision, lastStopCompletionAge, flag0, flag1, smallMotor, largeMotor, power, pendingRepeats);
     }
 
     internal string Format(int pending, long headAgeTicks, bool usb) =>
@@ -95,11 +101,12 @@ internal sealed class DualSenseNativeFeedbackDiagnostics
         byte flag1,
         byte smallMotor,
         byte largeMotor,
-        byte power)
+        byte power,
+        long pendingRepeats)
     {
         internal string Format(int pending, long headAgeTicks, bool usb) =>
             FormattableString.Invariant(
-                $"nativePhysicalAccepted={accepted} nativePhysicalPending={pending} nativePhysicalHighWater={highWater} nativePhysicalAdmissionRetries={rejected} nativePhysicalAttempts={attempts} nativePhysicalRetries={retries} nativePhysicalCompleted={completed} nativePhysicalHeadAgeMs={Ms(headAgeTicks):F2} nativePhysicalQueueAgeMaxMs={Ms(queueMax):F2} nativePhysicalOwnerMaxMs={Ms(ownerMax):F2} nativePhysicalCompletionAgeMaxMs={Ms(completionMax):F2} nativePhysicalCompletionScope={(usb ? "USB-write" : "BT-owner-handoff")} nativeRumbleReports={rumbleReports} nativeTriggerReports={triggerReports} nativeMotorStops={stopReports} nativeLastStopRevision={lastStopRevision} nativeLastStopCompletedRevision={lastStopCompletedRevision} nativeLastStopCompletionAgeMs={Ms(lastStopCompletionAge):F2} nativeLastFlags=0x{flag0:X2}/0x{flag1:X2} nativeLastMotors={smallMotor}/{largeMotor} nativeLastPower=0x{power:X2}");
+                $"nativePhysicalAccepted={accepted} nativePhysicalPending={pending} nativePhysicalPendingRepeats={pendingRepeats} nativePhysicalHighWater={highWater} nativePhysicalAdmissionRetries={rejected} nativePhysicalAttempts={attempts} nativePhysicalRetries={retries} nativePhysicalCompleted={completed} nativePhysicalHeadAgeMs={Ms(headAgeTicks):F2} nativePhysicalQueueAgeMaxMs={Ms(queueMax):F2} nativePhysicalOwnerMaxMs={Ms(ownerMax):F2} nativePhysicalCompletionAgeMaxMs={Ms(completionMax):F2} nativePhysicalCompletionScope={(usb ? "USB-write" : "BT-owner-handoff")} nativeRumbleReports={rumbleReports} nativeTriggerReports={triggerReports} nativeMotorStops={stopReports} nativeLastStopRevision={lastStopRevision} nativeLastStopCompletedRevision={lastStopCompletedRevision} nativeLastStopCompletionAgeMs={Ms(lastStopCompletionAge):F2} nativeLastFlags=0x{flag0:X2}/0x{flag1:X2} nativeLastMotors={smallMotor}/{largeMotor} nativeLastPower=0x{power:X2}");
     }
 
     private static double Ms(long ticks) => Math.Max(0, ticks) * 1000.0 / Stopwatch.Frequency;

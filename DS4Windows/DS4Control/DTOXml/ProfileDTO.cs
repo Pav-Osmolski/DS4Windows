@@ -1895,12 +1895,26 @@ namespace DS4WinWPF.DS4Control.DTOXml
             get; set;
         }
 
+        private bool _btPollRateSpecified;
+        private bool? _automaticBTPollRate;
+
+        [XmlElement("AutomaticBTPollRate")]
+        public bool AutomaticBTPollRate
+        {
+            get => _automaticBTPollRate ?? !_btPollRateSpecified;
+            set => _automaticBTPollRate = value;
+        }
+
         private int _bTPollRate = BackingStore.DEFAULT_DS4_BT_POLL_RATE;
         [XmlElement("BTPollRate")]
         public int BTPollRateString
         {
             get => _bTPollRate;
-            set => _bTPollRate = Math.Clamp(value, 1, 16);
+            set
+            {
+                _bTPollRate = Math.Clamp(value, 0, 16);
+                _btPollRateSpecified = true;
+            }
         }
 
         [XmlElement("LSOutputCurveMode")]
@@ -2658,6 +2672,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             _gyroMouseJitterCompensation = source.gyroMouseInfo[deviceIndex].jitterCompensation;
             _gyroMouseToggle = source.gyroMouseToggle[deviceIndex];
             _bTPollRate = source.btPollRate[deviceIndex];
+            AutomaticBTPollRate = source.automaticBTPollRate[deviceIndex];
 
             LSOutputCurveCustom = source.lsOutBezierCurveObj[deviceIndex].CustomDefinition;
             LSOutputCurveMode = source.stickOutputCurveString(source.getLsOutCurveMode(deviceIndex));
@@ -3561,6 +3576,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.gyroMouseInfo[deviceIndex].jitterCompensation = _gyroMouseJitterCompensation;
             destination.gyroMouseToggle[deviceIndex] = _gyroMouseToggle;
             destination.btPollRate[deviceIndex] = _bTPollRate;
+            destination.automaticBTPollRate[deviceIndex] = AutomaticBTPollRate;
 
             destination.lsOutBezierCurveObj[deviceIndex].CustomDefinition = LSOutputCurveCustom;
             destination.setLsOutCurveMode(deviceIndex, destination.stickOutputCurveId(LSOutputCurveMode));

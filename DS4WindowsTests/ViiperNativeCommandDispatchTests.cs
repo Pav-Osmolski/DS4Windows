@@ -275,6 +275,47 @@ public sealed class ViiperNativeCommandDispatchTests
     }
 
     [TestMethod]
+    public void RetainedNativeIngressSharesPhysicalPendingRepeatsButNotUnknownExtensionsOrChangedEffects()
+    {
+        using var fixture = new AdmissionFixture();
+        byte[] pulse = Envelope(Burst(false, 2)[0]);
+        pulse[28 + 2] = 0x44;
+        byte[] head = (byte[])pulse.Clone(); head[28 + 3] = 30;
+        Assert.IsTrue(fixture.Output.TryCaptureNativeCommandContext(pulse, pulse.Length, 0, out var context));
+        Assert.IsTrue(fixture.Output.TryApplyRetainedNativeCommand(head, head.Length, 0, 0, context, new byte[48]));
+        for (int i = 0; i < 1000; i++) Assert.IsTrue(
+            fixture.Output.TryApplyRetainedNativeCommand(pulse, pulse.Length, 0, 0, context, new byte[48]));
+        StringAssert.Contains(fixture.Device.FormatNativeFeedbackHealth(), "nativePhysicalPendingRepeats=999 ");
+        // An unknown nonzero extension fences folding even when the native
+        // prefix matches. Actual media packets use a separate dispatch path.
+        byte[] media = new byte[474]; pulse.CopyTo(media, 0); media[473] = 1;
+        Assert.IsTrue(fixture.Output.TryApplyRetainedNativeCommand(media, media.Length, 0, 0, context, new byte[48]));
+        byte[] stop = (byte[])pulse.Clone(); stop[28 + 3] = stop[28 + 4] = 0;
+        Assert.IsTrue(fixture.Output.TryApplyRetainedNativeCommand(stop, stop.Length, 0, 0, context, new byte[48]));
+        fixture.DrainPhysicalQueue();
+        CollectionAssert.AreEqual(new byte[] { 30, 90, 90, 0 }, fixture.Reports.Select(r => r[3]).ToArray());
+    }
+
+    [TestMethod]
+    public void MediaBoundaryCapturedBeforeDispatchSurvivesUntilPhysicalAdmission()
+    {
+        using var fixture = new AdmissionFixture();
+        byte[] pulse = Envelope(Burst(false, 2)[0]); pulse[28 + 2] = 0x44;
+        Assert.IsTrue(fixture.Output.TryCaptureNativeCommandContext(pulse, pulse.Length, 0, out var before));
+        fixture.Buffer.InvalidateNativeRepeat();
+        Assert.IsTrue(fixture.Output.TryCaptureNativeCommandContext(pulse, pulse.Length, 0, out var after));
+        Assert.AreNotEqual(before.RepeatBoundaryRevision, after.RepeatBoundaryRevision);
+        // Both admissions happen after the reader observed the media boundary.
+        // Using the dispatch-time epoch would incorrectly erase the boundary.
+        Assert.IsTrue(fixture.Output.TryApplyRetainedNativeCommand(pulse, pulse.Length, 0, 0, before, new byte[48]));
+        Assert.IsTrue(fixture.Output.TryApplyRetainedNativeCommand(pulse, pulse.Length, 0, 0, before, new byte[48]));
+        Assert.IsTrue(fixture.Output.TryApplyRetainedNativeCommand(pulse, pulse.Length, 0, 0, after, new byte[48]));
+        fixture.DrainPhysicalQueue();
+        Assert.AreEqual(3, fixture.Reports.Count);
+        StringAssert.Contains(fixture.Device.FormatNativeFeedbackHealth(), "nativePhysicalPendingRepeats=0 ");
+    }
+
+    [TestMethod]
     public void FullPhysicalOwnerRetainsCommandUntilOneExactAdmissionWithoutScalarFallback()
     {
         using var fixture = new AdmissionFixture();

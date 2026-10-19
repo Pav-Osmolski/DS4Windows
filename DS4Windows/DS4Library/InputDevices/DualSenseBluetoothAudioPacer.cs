@@ -7307,7 +7307,15 @@ namespace DS4Windows.InputDevices
                 bool activeRegularRumble =
                     queuedReport[StateFlag0Offset + 2] != 0 ||
                     queuedReport[StateFlag0Offset + 3] != 0;
-                if (!activeRegularRumble)
+                // 02 without a compatible/improved-emulation bit is a
+                // distinct game-authored state: leave audio haptics disabled
+                // while the existing rumble decays. Trigger updates such as
+                // 0E use this contract too. Zero amplitude placeholders do
+                // not authorize converting it to 00 (return to audio).
+                bool selectedRumbleEmulation =
+                    (queuedReport[StateFlag0Offset] & 0x01) != 0 ||
+                    (queuedReport[StateFlag0Offset + 38] & 0x04) != 0;
+                if (!activeRegularRumble && selectedRumbleEmulation)
                 {
                     queuedReport[StateFlag0Offset] &= unchecked(
                         (byte)~MainMotorSecondValidity);

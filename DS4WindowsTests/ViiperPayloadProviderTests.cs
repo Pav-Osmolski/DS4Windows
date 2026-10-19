@@ -51,7 +51,7 @@ public class ViiperPayloadProviderTests
         {
             requests++;
             Assert.AreEqual(HttpMethod.Get, request.Method);
-            Assert.AreEqual("https://github.com/hbashton/VIIPER/releases/download/" + Tag + "/" + Name,
+            Assert.AreEqual("https://github.com/Pav-Osmolski/VIIPER/releases/download/" + Tag + "/" + Name,
                 request.RequestUri.AbsoluteUri);
             return Task.FromResult(Ok());
         });
@@ -222,7 +222,7 @@ public class ViiperPayloadProviderTests
     public void ProductionIdentityIsExactlyCompiledVersionNotLatest()
     {
         var provider = new ViiperPayloadProvider();
-        Assert.AreEqual("https://github.com/hbashton/VIIPER/releases/download/" +
+        Assert.AreEqual("https://github.com/Pav-Osmolski/VIIPER/releases/download/" +
             ViiperSetupManager.SupportedViiperReleaseTag + "/" + ViiperSetupManager.BundledViiperName,
             provider.DownloadUri.AbsoluteUri);
         Assert.AreEqual(32L * 1024 * 1024, ViiperPayloadProvider.MaximumPayloadBytes);

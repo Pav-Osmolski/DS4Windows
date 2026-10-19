@@ -44,10 +44,33 @@ instead; you do not need to uninstall a working installation first.
 4. **Run this fork's x64 Setup EXE** and follow the USB/IP replacement and
    restart instructions below. Portable users must also complete driver
    setup when prompted.
-5. Restore only your user profiles and settings if needed. Do not copy old
-   executables, DLLs, runtimes, updater files, VIIPER, or driver installers
-   into the new installation. Test your controller before enabling startup
-   for the new copy.
+5. **Test with fresh settings before restoring a backup.** Reinstalling the
+   program or extracting a new portable folder can still reuse settings in
+   `%APPDATA%\DS4Windows`. If the new copy picks up old settings, close it
+   and rename that settings folder to a backup name instead of deleting it.
+   Keep old portable configuration files in the backed-up application folder;
+   do not copy them into the fresh installation for this first test.
+6. **Restore profiles gradually.** Start with the individual profile XML files
+   from the backup's `Profiles` folder, select a profile in Controllers, and
+   test it. `Profiles.xml` beside the app or in its settings folder is an
+   application-settings file, not the folder containing your individual profiles.
+   Avoid merging whole configuration folders from different forks or very old
+   backups. Re-create application settings, linked profiles, Auto Profiles and
+   permanent Output Slots assignments as needed, testing after each change.
+7. Test each controller alone, then together, including connecting Joy-Cons
+   after another physical controller is already recognized. Enable startup
+   for the new copy once the setup works.
+
+Do not restore old executables, DLLs, runtimes, updater files, VIIPER or driver
+installers over the new installation. Keep your backup until you are satisfied
+with the restored profiles and settings.
+
+In [issue #48](https://github.com/Pav-Osmolski/DS4Windows/issues/48#issuecomment-6252913392),
+a user reported Joy-Con 2 slot-activation failures after merging very old
+backups and confirmed that a clean install allowed the Joy-Cons to connect
+after a DualSense Edge. The exact conflicting configuration was no longer
+reproducible. This is a reason to test migrations with fresh settings, not a
+requirement to reset settings for routine updates of this fork.
 
 #### Existing USB/IP drivers
 
