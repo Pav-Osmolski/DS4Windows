@@ -1,20 +1,21 @@
 {
   "SchemaVersion": 1,
-  "SourceCommit": "0df479acefe2d457b4ec3bff66032670d0ec2c4e",
-  "Version": "v0.1.11-issue47-cadence1",
-  "ProductVersion": "0.1.11-issue47-cadence1",
-  "FileVersion": "0.1.11.0",
-  "BuildDate": "2026-10-19T10:09:05Z",
-  "BuildEnvironment": "Local Windows candidate; not a stable release",
+  "SourceCommit": "46390f60f043da201d5a3adeaf950834c3f2135c",
+  "Version": "v0.1.12",
+  "ProductVersion": "0.1.12",
+  "FileVersion": "0.1.12.0",
+  "BuildDate": "2026-10-19T12:17:19Z",
+  "GitHubRunId": "39250438513",
+  "GitHubRunAttempt": "1",
   "Binary": {
-    "Name": "VIIPER-0.1.11-issue47-cadence1-x64.exe",
+    "Name": "VIIPER-0.1.12-x64.exe",
     "Size": 9477120,
-    "Sha256": "0960D3632934DD58A6B347347031DF7D36C75B560E3162C9BD0FE1851D5539EA"
+    "Sha256": "FA1716E581E7A9E85ED593B7573D51221A223D6A0F291D1DD9A2BB4F6E77C785"
   },
   "LicenseFiles": [
     {
-      "Name": "VIIPER-0.1.11-issue47-cadence1-LICENSES.txt",
-      "Sha256": "9B743F5409740A47BEEA9EFA11E5B3FC711A7E60C712D893D118F6F312DCB06E"
+      "Name": "VIIPER-0.1.12-LICENSES.txt",
+      "Sha256": "EE49B79156A9A982BF8BCB13CFBC794CCD4E18EB93D76797A3D085CE4C40B486"
     },
     {
       "Name": "LICENSE.txt",
@@ -33,16 +34,12 @@
       "Sha256": "2485006947F464C2A69E9F863D50529261FB684A7AC5E6BAE0D03BFE65F9E025"
     }
   ],
-  "SourceArchive": {
-    "Name": "VIIPER-0.1.11-issue47-cadence1-SOURCE.zip",
-    "Sha256": "9D1E21A1B4AE2067613CB99DB5AA563E2D97FAADF9DA928B8E02C17F63F45C28"
-  },
   "GoBuildInfo": {
     "GoVersion": "go1.27.2",
     "Path": "github.com/Alia5/VIIPER/cmd/viiper",
     "Main": {
       "Path": "github.com/Alia5/VIIPER",
-      "Version": "v0.1.12-0.20261019100735-0df479acefe2"
+      "Version": "v0.1.12"
     },
     "Deps": [
       {
@@ -130,16 +127,64 @@
       },
       {
         "Key": "vcs.revision",
-        "Value": "0df479acefe2d457b4ec3bff66032670d0ec2c4e"
+        "Value": "46390f60f043da201d5a3adeaf950834c3f2135c"
       },
       {
         "Key": "vcs.time",
-        "Value": "2026-10-19T10:07:35Z"
+        "Value": "2026-10-19T12:13:47Z"
       },
       {
         "Key": "vcs.modified",
         "Value": "false"
       }
     ]
+  },
+  "HelpOnlyOutput": [
+    "Usage: VIIPER <command> [flags]",
+    "",
+    "Virtual Input over IP EmulatoR",
+    "",
+    "    Version: v0.1.12 (46390f6)",
+    "             2026-10-19T12:17:19Z",
+    "    Source:  https://github.com/hbashton/VIIPER",
+    "    License: GPLv3",
+    "",
+    "Flags:",
+    "  -h, --help                    Show context-sensitive help.",
+    "      --config=STRING           Path to configuration file (json|yaml|toml)",
+    "                                ($VIIPER_CONFIG)",
+    "      --config-only             Load only the explicit absolute --config file;",
+    "                                never search default locations",
+    "      --update-notify=\"none\"    Deprecated and ignored; built-in self-updates",
+    "                                have been removed ($VIIPER_UPDATE_NOTIFY)",
+    "      --log.level=\"info\"        Log level: trace, debug, info, warn, error",
+    "                                ($VIIPER_LOG_LEVEL)",
+    "      --log.file=STRING         Log file path (default: none; logs only to",
+    "                                console) ($VIIPER_LOG_FILE)",
+    "      --log.raw-file=STRING     Raw packet log file path (default: none)",
+    "                                ($VIIPER_LOG_RAW_FILE)",
+    "",
+    "Commands:",
+    "  server [flags]",
+    "    Start the VIIPER USB-IP server",
+    "",
+    "  proxy --upstream-addr=STRING [flags]",
+    "    Start the VIIPER USB-IP proxy",
+    "",
+    "  config init <command> [flags]",
+    "    Generate a configuration template",
+    "",
+    "  install [flags]",
+    "    Add the current VIIPER executable to system startup and runs it (creates a",
+    "    Systemd service on Linux)",
+    "",
+    "  uninstall [flags]",
+    "    Remove any VIIPER system startup configuration / Systemd service",
+    "",
+    "Run \"VIIPER <command> --help\" for more information on a command."
+  ],
+  "SourceArchive": {
+    "Name": "VIIPER-0.1.12-SOURCE.zip",
+    "Sha256": "54DAAB83C3CA2EF08B0F5DC64C92E28996DFE7C1897DA53A5CDAEE0449E5EDF2"
   }
 }
