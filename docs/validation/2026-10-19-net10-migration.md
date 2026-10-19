@@ -72,6 +72,13 @@ It does not qualify controller hardware or a later release.
   production allocation. Apply the same pre-optimized measuring-driver policy
   to that warmed gate, retaining its existing no-GC scope, exact zero check and
   real-allocation positive control. Require fresh full CI on the final revision.
+- The next PR runner reported 3,840 counter bytes in the nominal speaker-frame
+  gate while the parallel branch suite passed. That gate had only two warmup
+  calls and omitted the bounded scope already used by other resampler gates.
+  Pre-optimize its measuring driver and wrap only the measured counter pair in
+  the existing strict scope. Add a non-inlined real heap-allocation positive
+  control on the same workload. Keep the original 1,000 measured frames and
+  zero-byte assertion; do not claim an object trace for the original CI event.
 
 ## Automated evidence
 
@@ -79,7 +86,7 @@ Local Windows 11 x64 checks:
 
 | Check | Result |
 | --- | --- |
-| Application suite on .NET 10, including sidebar choices | 7,608 passed; 12 explicit opt-in tests skipped |
+| Application suite on .NET 10, including sidebar choices | 7,609 passed; 12 explicit opt-in tests skipped |
 | Standalone hardware-verifier unit suite | 75 passed |
 | Ten diagnostic-tool projects | Built successfully |
 | Light/dark layout and related focused regressions | 170 passed; rendered theme output inspected |

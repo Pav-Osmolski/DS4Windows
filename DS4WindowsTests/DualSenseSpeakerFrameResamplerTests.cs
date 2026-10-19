@@ -3,6 +3,7 @@ using DS4WindowsTests;
 using NAudio.Dsp;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace DS4Windows.Tests
 {
@@ -480,7 +481,10 @@ namespace DS4Windows.Tests
         }
 
         [TestMethod]
-        public void NominalFrameHotPathDoesNotAllocateAfterWarmup()
+        [DataRow(false)]
+        [DataRow(true)]
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.AggressiveOptimization)]
+        public void NominalFrameHotPathDoesNotAllocateAfterWarmup(bool positiveControl)
         {
             float[] source = new float[
                 DualSenseSpeakerFrameResampler.MaximumInputFrames * 2];
@@ -490,16 +494,27 @@ namespace DS4Windows.Tests
 
             ConvertOneOutputFrame(converter, source, output);
             ConvertOneOutputFrame(converter, source, output);
-            long before = GC.GetAllocatedBytesForCurrentThread();
-            for (int iteration = 0; iteration < 1000; iteration++)
+            long allocated;
+            // Match the other resampler gates: isolate the warmed counter pair
+            // from allocation-context repair, while retaining a real heap control.
+            using (StrictAllocationMeasurementScope.Begin())
             {
-                ConvertOneOutputFrame(converter, source, output);
+                long before = GC.GetAllocatedBytesForCurrentThread();
+                for (int iteration = 0; iteration < 1000; iteration++)
+                {
+                    ConvertOneOutputFrame(converter, source, output);
+                }
+                if (positiveControl) GC.KeepAlive(AllocateNominalFramePositiveControl());
+                allocated = GC.GetAllocatedBytesForCurrentThread() - before;
             }
-            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
 
-            Assert.AreEqual(0L, allocated,
-                "The fixed-frame realtime path allocated after warmup.");
+            if (positiveControl) Assert.IsTrue(allocated >= 128);
+            else Assert.AreEqual(0L, allocated,
+                    "The fixed-frame realtime path allocated after warmup.");
         }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static byte[] AllocateNominalFramePositiveControl() => new byte[128];
 
         [TestMethod]
         public void ResetRestartsFramePhaseDeterministically()
