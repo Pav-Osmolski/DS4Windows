@@ -4,7 +4,8 @@
 
 This record covers the migration from main `4c9a85b` (.NET 8, DS4Windows
 5.0.34) in [PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56).
-It does not qualify controller hardware or a later release.
+It records automated evidence and maintainer acceptance for the migration; it
+does not establish compatibility with every controller or Windows edition.
 
 ## Build inputs and scope
 
@@ -127,10 +128,18 @@ Consult the migration PR's checks for their current status. CI runs on Windows
 Server 2022; passing it does not replace Windows 10/11 desktop testing.
 The test-results artifact also includes the sidebar's light/dark scale renders.
 
-## Desktop and hardware acceptance before release
+## Desktop and hardware acceptance
 
-These checks still require human testing of the .NET 10 package. Earlier testing
-of 5.0.34's .NET 8 build does not qualify this migration.
+On 19 October 2026, the maintainer reported that the updated PR #56 test build
+was working correctly and approved merging and releasing it as 5.0.35. No
+separate Windows 10 edition/build result was supplied; do not infer exhaustive
+Windows 10 or hardware coverage from that acceptance. Both final hosted
+workflows passed, including installer lifecycle and legacy upgrade/profile
+preservation checks.
+
+The following checklist remains available for future regression testing of the
+.NET 10 package. Earlier testing of 5.0.34's .NET 8 build alone does not qualify
+this migration.
 
 1. Close the existing app, games and VIIPER. Use a separate extracted test
    package and a copy of your profiles. Confirm **Log > Copy Text** shows
