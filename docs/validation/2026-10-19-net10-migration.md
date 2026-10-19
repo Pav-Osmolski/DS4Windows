@@ -39,6 +39,18 @@ It does not qualify controller hardware or a later release.
 - .NET 10 changes [XmlSerializer's handling of obsolete properties](https://learn.microsoft.com/en-us/dotnet/core/compatibility/serialization/10/xmlserializer-obsolete-properties).
   The profile DTOs have no such attributes; retain the full profile/settings
   round-trip suite as the gate.
+- Both initial hosted CI runs exposed 24 bytes across 20,000 calls in the
+  completed Switch 2 USB startup transaction allocation test, despite the first
+  local full suite passing. A cold focused run reproduced it. A no-GC measurement
+  scope alone still failed, so this was not resolved as GC accounting noise.
+  JIT disassembly showed a Tier1-OSR transition inside the measured loop, with
+  inlined Monitor paths. Separate diagnostic child processes disabling tiering,
+  OSR or PGO each passed. Warm and measure the same optimized, non-inlined
+  **test-driver** helper so that transition does not first occur in the measured
+  loop. Retain the 1,000-call warmup, 20,000-call measurement and exact zero-byte
+  assertion. Production methods, runtime/JIT/GC settings and controller behaviour
+  are unchanged. Diagnostic runs are attribution evidence, not release gates;
+  ordinary default-runtime focused and full-suite runs remain required.
 
 ## Automated evidence
 
