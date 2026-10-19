@@ -1218,6 +1218,8 @@ namespace DS4WinWPF
         public void ChangeTheme(DS4Windows.AppThemeChoice themeChoice,
             bool fireChanged = true)
         {
+            DS4Forms.SidebarIconCatalog.Apply(Application.Current.Resources,
+                DS4Windows.Global.UseSidebarIcon);
             if (themeChoice == DS4Windows.AppThemeChoice.Default)
             {
                 Application.Current.Resources.MergedDictionaries.Clear();

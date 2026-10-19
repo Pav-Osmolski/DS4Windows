@@ -267,11 +267,17 @@ Settings fills the available window width and groups related options into cards.
 | Section | What you can change |
 | --- | --- |
 | General | Startup, window behavior, notifications and latency warnings |
-| Appearance | App theme, tray icon and language |
+| Appearance | App theme, sidebar icon, tray icon and language |
 | Controllers | VIIPER setup, HidHide, Steam Input recovery, device options and swipe profiles; optional Nintendo pairing |
 | Updates & tools | Update checks, profile folder, diagnostic utilities, verbose logging and optional profile-editor timing logs (off by default) |
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
+
+In **Appearance > Sidebar icon**, choose **Blue Tile**, **Midnight Circle**,
+**Blue Frame**, **Controller** or **Angular Badge** using the image previews.
+Blue Tile is first and is the default for new and existing settings. The choice
+applies immediately and is saved with your app settings. The sidebar icon keeps
+its 60 × 60 size as Windows display scaling changes.
 
 Search settings to find matching groups across all sections. Use **Ctrl+F** to
 focus the search; **Clear**, or **Escape** while typing, returns to the selected

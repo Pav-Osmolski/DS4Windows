@@ -51,6 +51,20 @@ It does not qualify controller hardware or a later release.
   assertion. Production methods, runtime/JIT/GC settings and controller behaviour
   are unchanged. Diagnostic runs are attribution evidence, not release gates;
   ordinary default-runtime focused and full-suite runs remain required.
+- The subsequent full run also reproduced a 24-byte failure in the Bluetooth
+  pacer saturated failure/reset storage test. A cold focused run reproduced it
+  with a Tier1-OSR transition; separate no-OSR/no-PGO diagnostic processes passed.
+  Optimizing only its cycle helper did not fix this case. Compile the saturated
+  measuring test driver before its warmup instead, preventing OSR inside its
+  counters. Keep the original warmup size, measured count, ownership checks and
+  exact zero-byte limit. Its ordinary focused run then passed alongside the
+  startup transaction and measurement-scope positive-control tests.
+- A later full run exposed the same 24-byte cold-window observation in the
+  pacer's completion-lease cycle gate. Its isolated default-runtime run passed,
+  so the full-suite event has no captured object-allocation trace. Use the same
+  pre-optimized measuring-driver policy for that warmed test too, retaining
+  its zero-byte limit and all ownership assertions. The final full-suite and
+  independent CI runs must pass with normal production runtime settings.
 
 ## Automated evidence
 
@@ -58,10 +72,11 @@ Local Windows 11 x64 checks:
 
 | Check | Result |
 | --- | --- |
-| Application suite on .NET 10 | 7,593 passed; 12 explicit opt-in tests skipped |
+| Application suite on .NET 10, including sidebar choices | 7,608 passed; 12 explicit opt-in tests skipped |
 | Standalone hardware-verifier unit suite | 75 passed |
 | Ten diagnostic-tool projects | Built successfully |
 | Light/dark layout and related focused regressions | 170 passed; rendered theme output inspected |
+| Sidebar icon persistence, defaults, picker and real shell layout | 15 passed; light/dark renders inspected at 100/150/200/300% |
 | Locked restores | Application, tests, tools and installer projects passed |
 | Localization/package unit suite | 33 passed; 1 environment-dependent test skipped |
 | Text encoding self-tests and scan | Passed |
@@ -75,6 +90,7 @@ both complete test suites, portable packaging, translation probing, installer
 layout, MSI install/repair/uninstall and upgrade/profile-preservation checks.
 Consult the migration PR's checks for their current status. CI runs on Windows
 Server 2022; passing it does not replace Windows 10/11 desktop testing.
+The test-results artifact also includes the sidebar's light/dark scale renders.
 
 ## Desktop and hardware acceptance before release
 
@@ -87,6 +103,11 @@ of 5.0.34's .NET 8 build does not qualify this migration.
 2. On Windows 11 x64 and an explicitly recorded Windows 10 x64 edition/build,
    open Settings, Profile Editor, Log and Changelog in light and dark themes.
    Check resizing, links, numeric controls and theme switching.
+   In **Settings > Appearance > Sidebar icon**, select each of the five icons,
+   switch themes and move the window between differently scaled displays.
+   Confirm the 60 × 60 layout stays sharp, then restart and verify the choice.
+   Existing settings without a choice should start with **Blue Tile**, first
+   in the list; the tray icon setting remains separate.
 3. Load an existing profile, change a harmless setting, save and reopen it.
    Confirm mappings, gyro and polling selections remain correct.
 4. With a DualSense over USB, emulate DualSense and use **Test Heavy** and

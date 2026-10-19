@@ -5,6 +5,10 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+### Added
+
+- Choose the sidebar's icon in **Settings > Appearance > Sidebar icon**: **Blue Tile** (first and default), **Midnight Circle**, **Blue Frame**, **Controller** or **Angular Badge**. Changes apply immediately and the choice is saved. The transparent artwork uses a 60 × 60 device-independent-pixel layout for display scaling ([PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56)).
+
 ### Changed
 
 - Move the application, installer hosts and diagnostic tools to **.NET 10 LTS**, pin SDK **10.0.402**, and refresh dependency locks. Packages include their runtime; no separate .NET installation or controller-driver update is required. Add the running runtime version to saved and copied startup logs and remove unused .NET 8 installation notices ([PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56)). See the [migration validation and Windows compatibility notes](docs/validation/2026-10-19-net10-migration.md).

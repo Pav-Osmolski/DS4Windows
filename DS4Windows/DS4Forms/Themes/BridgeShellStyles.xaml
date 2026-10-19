@@ -9,6 +9,8 @@
         working without rebuilding any views.
     -->
 
+    <BitmapImage x:Key="SidebarBrandIcon" UriSource="/DS4Windows;component/Resources/Branding/blue-tile.png" />
+
     <Style x:Key="BridgeCardStyle" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
@@ -607,9 +609,11 @@
                                     </Grid.RowDefinitions>
 
                                     <StackPanel Orientation="Horizontal" Margin="4,0,0,20">
-                                        <Image Width="30" Height="30" Margin="0,0,10,0"
-                                               Source="/DS4Windows;component/Resources/DS4Windows-sidebar.png"
-                                               Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                                        <Image x:Name="SidebarBrandIconImage" Width="60" Height="60" Margin="0,0,10,0"
+                                               Source="{DynamicResource SidebarBrandIcon}"
+                                               Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"
+                                               UseLayoutRounding="True" SnapsToDevicePixels="True"
+                                               AutomationProperties.Name="DS4Windows sidebar icon" />
                                         <StackPanel VerticalAlignment="Center">
                                             <TextBlock Text="DS4Windows" FontSize="17" FontWeight="SemiBold"
                                                        Foreground="{DynamicResource ForegroundColor}" />
