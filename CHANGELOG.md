@@ -3,18 +3,25 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## Unreleased
-
-### Changed
-
-- Add an **Automatic Bluetooth input rate** default and an optional manual override for DS4-compatible controllers. Preserve existing profiles' explicit rates and retain the manual choice when Automatic is enabled; controllers without an implemented adjustable rate keep their managed timing ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
-- Pair the issue #47 test candidate with VIIPER `0.1.11-issue47-cadence1`, which services native DualSense output on its advertised output endpoint clock while keeping input and audio independent. This is an unsigned test backend; gameplay confirmation is pending ([DS4Windows #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54), [VIIPER #6](https://github.com/Pav-Osmolski/VIIPER/pull/6)).
-- Make Profile Editor's **Controller polling** section describe Bluetooth rate support for the selected physical controller. Preserve DS4-compatible selections, identify unverified controller identities, and explain when adjustable reporting is unsupported ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
-- Detect advertised physical USB HID input/output intervals from the active configuration, negotiated speed and open pipes. Match composite HID interfaces separately from audio, and show unknown when detection is unavailable instead of assuming a controller model's rate ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
+## [5.0.34](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.34) - 2026-10-19
 
 ### Fixed
 
-- Preserve game-selected Bluetooth rumble mode on subsequent silent carriers after trigger-only updates, while still respecting explicit emulation stops ([#54](https://github.com/Pav-Osmolski/DS4Windows/pull/54), [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47)). Hardware confirmation of the remaining reported feedback symptoms is pending.
+- Improve DualSense game feedback over USB and Bluetooth: pace native output commands in VIIPER using its advertised HID output interval, reduce redundant consecutive pending state updates in DS4Windows, and preserve the game's Bluetooth rumble mode across trigger-only updates. Distinct effects, final stops and command ordering remain intact. Maintainer testing confirmed normal gameplay in DEATHLOOP and GTA V Enhanced over both connections, including extended Bluetooth play. Thanks to [@Jobima1st](https://github.com/Jobima1st) for the reports and logs ([DS4Windows PR #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54), [VIIPER PR #6](https://github.com/Pav-Osmolski/VIIPER/pull/6), [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), [upstream issue #119](https://github.com/hbashton/DS4Windows/issues/119)).
+- Overhaul the in-app changelog and update-notes reader: clearer release spacing, theme-aware tables, readable links/code/quotes, images constrained to the window, and loading/error/retry states. Add a GitHub releases shortcut and improve window sizing and footer layout ([PR #53](https://github.com/Pav-Osmolski/DS4Windows/pull/53)).
+- Refine Profile Editor > Nintendo Options > Feel game feedback: centre % and ms with a consistent 3px gap, keep fields and units together when wrapping, and align checkbox groups and numeric fields ([PR #53](https://github.com/Pav-Osmolski/DS4Windows/pull/53)).
+
+### Added
+
+- Add capability-aware **Controller polling** information. New DS4-compatible profiles use Automatic Bluetooth input rate, with an optional manual override; existing profiles keep their chosen rate. Automatic uses the conservative 250 Hz (4 ms) DS4 request without probing unsupported rates. DualSense/Edge and Nintendo retain their managed timing. Unverified DS4-compatible identities are identified, and device IDs are not presented as proof of genuine hardware or an accepted rate ([PR #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
+- Detect advertised physical USB HID input/output intervals separately using the selected interface, negotiated speed and active pipes. Exclude audio endpoints and show unknown when detection is unavailable. This does not overclock USB or alter VIIPER's separate feedback pacing ([PR #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
+
+### Changed
+
+- Bundle verified VIIPER **0.1.12**, with its matching source, complete notices and build records. USB/IP remains **0.9.8.1**; no driver version change is required ([VIIPER PR #6](https://github.com/Pav-Osmolski/VIIPER/pull/6), [DS4Windows PR #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54)).
+- Update the pinned .NET SDK to **8.0.426**, refresh installer dependency locks and update development documentation ([PR #55](https://github.com/Pav-Osmolski/DS4Windows/pull/55)).
+
+Close games, DS4Windows and VIIPER before updating, and allow the bundled backend update. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
 
 ## [5.0.33](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.33) - 2026-10-18
 
