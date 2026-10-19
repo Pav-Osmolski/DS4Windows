@@ -65,6 +65,13 @@ It does not qualify controller hardware or a later release.
   pre-optimized measuring-driver policy for that warmed test too, retaining
   its zero-byte limit and all ownership assertions. The final full-suite and
   independent CI runs must pass with normal production runtime settings.
+- The parallel branch run of `a509bf3` reported 98,352 counter bytes in the
+  framed acknowledgement receiver's zero-allocation test, while the PR run and
+  both fresh local diagnostic processes passed its zero/positive rows. No object
+  trace was captured for that hosted event; it is not attributed as a new
+  production allocation. Apply the same pre-optimized measuring-driver policy
+  to that warmed gate, retaining its existing no-GC scope, exact zero check and
+  real-allocation positive control. Require fresh full CI on the final revision.
 
 ## Automated evidence
 
