@@ -149,7 +149,10 @@ public sealed class SidebarIconTests
                 Assert.AreEqual(44d, icon.ActualHeight);
                 Assert.AreEqual(60d, ((Panel)icon.Parent).ActualHeight, "Keep the header and content below it in place.");
                 var title = ((Panel)icon.Parent).Children.OfType<StackPanel>().Single();
-                Assert.AreEqual(92d, title.TranslatePoint(new Point(), tabs).X, "Keep the title at its existing horizontal position.");
+                var header = (Panel)icon.Parent;
+                var headerArea = (FrameworkElement)header.Parent;
+                Assert.AreEqual(headerArea.ActualWidth / 2, header.TranslatePoint(new Point(), headerArea).X + header.ActualWidth / 2, 0.5d,
+                    "Center the logo and title as one group within the sidebar.");
                 Assert.AreEqual(icon.TranslatePoint(new Point(), tabs).Y + icon.ActualHeight / 2, title.TranslatePoint(new Point(), tabs).Y + title.ActualHeight / 2, 0.01d, "Center the icon with both title lines.");
                 Assert.IsTrue(title.TranslatePoint(new Point(), tabs).X + title.ActualWidth <= 238,
                     "The compact icon must leave room for the application name.");
