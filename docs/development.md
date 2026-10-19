@@ -5,7 +5,7 @@
 ## Build on Windows
 
 Use Windows x64, Git and the **exact SDK declared in `global.json`** (currently
-8.0.425). Automatic roll-forward and prerelease selection are disabled. Install
+8.0.426). Automatic roll-forward and prerelease selection are disabled. Install
 that SDK before running the commands below; a different .NET 8 SDK is not an
 interchangeable build input. Python 3.10 or newer is used by packaging scripts.
 The current VIIPER distribution targets Windows x64 even though legacy x86
