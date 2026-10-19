@@ -92,6 +92,15 @@ It does not qualify controller hardware or a later release.
   exact PCM/zero-boundary comparisons, command ordering and backlog limits;
   additionally require a successful final drain. No production code changes.
 
+- The follow-up branch runner `39298056566` passed cadence but measured 24
+  bytes in the warmed native-busy retry allocation gate; the PR suite passed.
+  A cold local run reproduced the 24-byte failure, while a separate diagnostic
+  child process with OSR disabled passed both zero and positive-control rows.
+  Apply the existing pre-optimized measuring-driver policy to this test method
+  as well. Preserve its 2,000 warmup calls, 20,000 measured retries, bounded
+  measurement scope, exact zero-byte assertion and real-allocation control.
+  No object-allocation trace was captured and no production JIT setting changes.
+
 ## Automated evidence
 
 Local Windows 11 x64 checks:
