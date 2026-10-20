@@ -328,7 +328,7 @@ it does not upload a log or create a report automatically.
 **30 days**. The preference persists across restarts. Archives also rotate daily
 or at 10 MB and are capped at 20 files, so busy sessions may retain less history.
 Cleanup runs after saved settings load and when you change retention; normal
-archive rotation also enforces the file-count limit.
+archive rotation also enforces the limits.
 
 **Clear stored logs** asks before deleting DS4Windows archives and saved startup
 failure reports in the active Logs folder. It keeps the current session log,

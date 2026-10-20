@@ -135,12 +135,12 @@ public sealed class StoredLogManagerTests
         factory.Configuration = config;
         var logger = factory.GetLogger("session-continuity-test");
         logger.Info("startup header");
-        factory.Flush();
-        StoredLogManager.Cleanup(fixture.Root, 30, DateTime.UtcNow);
+        LoggerHolder.ApplyRetention(target, factory, fixture.Root, 30, DateTime.UtcNow);
         logger.Info("controller connected");
         factory.Flush();
-        StoredLogManager.Cleanup(fixture.Root, 7, DateTime.UtcNow);
-        Assert.AreEqual(0, target.MaxArchiveDays, "Age retention is managed without reconfiguring the active target.");
+        LoggerHolder.ApplyRetention(target, factory, fixture.Root, 7, DateTime.UtcNow);
+        Assert.AreEqual(7, target.MaxArchiveDays, "NLog must retain age cleanup for sessions left running across rotations.");
+        Assert.IsFalse(target.ArchiveOldFileOnStartup);
         logger.Info("session continues after retention change");
         factory.Flush();
         Assert.AreEqual(1, Directory.GetFiles(fixture.Root, "ds4windows_log_*.txt").Length,
