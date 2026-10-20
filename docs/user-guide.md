@@ -366,6 +366,23 @@ controllers, trigger rumble or measure latency. If Windows XInput is unavailable
 the window explains the error; close and reopen it to retry. Close the window
 when finished.
 
+## Hotkeys and About
+
+Open **Hotkeys/About** at the bottom of the main window. The About page shows
+this fork's version and links to the website, setup guide, source and issue
+tracker. Hotkeys groups connection shortcuts, touchpad gestures and mapping
+terms, with notes about the settings they require.
+
+Shortcuts depend on the controller and active profile. For example, PS + Options
+requires the **Disconnect Controller** Special Action to be assigned and enabled.
+Holding PS to switch off a supported PlayStation controller is a hardware
+shortcut; see [PlayStation's controller help](https://controller.dl.playstation.net/controller/lang/gb/index.html).
+
+Credits acknowledges the community and supporting projects. License includes
+the full bundled GNU GPL v3 text, and Extras links to component projects and
+third-party notices. All pages scroll within the window; press **Escape** or
+choose **Close** to return to DS4Windows.
+
 ## Native feedback and feature limits
 
 See [Controller audio and game feedback](controller-audio.md) for setup and

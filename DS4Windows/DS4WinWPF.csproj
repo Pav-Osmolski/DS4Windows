@@ -399,6 +399,8 @@
 	<ItemGroup>
 
 		<Resource Include="Resources\Branding\*.png" />
+		<Resource Include="Resources\About\*.png" />
+		<EmbeddedResource Include="..\COPYING" LogicalName="DS4Windows.License.txt" />
 		<Resource Include="Resources\DS4 Config_white.png" />
 		<Resource Include="Resources\newprofile_white.png" />
 		<Resource Include="Resources\copy_white.png" />
