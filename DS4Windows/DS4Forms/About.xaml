@@ -136,7 +136,7 @@
         </Grid>
         <TabControl x:Name="aboutTabs" Grid.Row="1" Style="{StaticResource AboutTabs}" SelectedIndex="0" SelectionChanged="AboutTabs_SelectionChanged">
             <TabItem Header="_About">
-                <ScrollViewer x:Name="aboutScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
+                <ScrollViewer x:Name="aboutScroll" Focusable="True" IsTabStop="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
                     <StackPanel>
                         <Border x:Name="aboutHero" CornerRadius="8" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" Margin="0,0,0,20">
                             <Border.Background><ImageBrush ImageSource="{StaticResource AboutBanner}" Stretch="UniformToFill"/></Border.Background>
@@ -176,7 +176,7 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="_Hotkeys">
-                <ScrollViewer x:Name="hotkeysScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
+                <ScrollViewer x:Name="hotkeysScroll" Focusable="True" IsTabStop="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
                     <StackPanel>
                         <TextBlock Text="Shortcuts and gestures" Style="{StaticResource AboutHeading}"/>
                         <TextBlock Text="Shortcuts depend on your controller and active profile. Enable optional gestures in the Profile Editor and check Special Actions for your own button combinations." Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
@@ -296,7 +296,7 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="_Credits">
-                <ScrollViewer x:Name="creditsScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
+                <ScrollViewer x:Name="creditsScroll" Focusable="True" IsTabStop="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
                     <StackPanel>
                         <TextBlock Text="Built on a community's work." Style="{StaticResource AboutHeading}"/>
                         <TextBlock Text="Thank you to the maintainers, contributors, researchers and users who have helped DS4Windows and its supporting projects grow." Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
@@ -343,7 +343,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="_Extras">
-                <ScrollViewer x:Name="extrasScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
+                <ScrollViewer x:Name="extrasScroll" Focusable="True" IsTabStop="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
                     <StackPanel>
                         <TextBlock Text="Supporting projects and libraries" Style="{StaticResource AboutHeading}"/>
                         <TextBlock Text="These projects help power DS4Windows. Install or repair bundled components through Setup or Settings so their versions stay matched." Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
