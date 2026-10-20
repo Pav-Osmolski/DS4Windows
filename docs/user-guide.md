@@ -216,8 +216,9 @@ For example, to use a gyro profile only in one game:
    add it from the available program sources. A launcher and the game itself
    may be different executables.
 3. Select the entry, choose the profile for the intended controller slot (or All
-   when that is intended), and Save. The read-only checkbox marks an existing
-   saved rule; it is not an enable switch.
+   when that is intended), leave **Rule enabled** checked, and select **Save rule**.
+   Newly discovered programs show **Not saved** until you save them. Saved rules
+   show **Enabled** or **Disabled**.
 4. Launch/focus the game and confirm the active profile on Controllers.
 
 For a window-title rule, use **Add Programs → Add Window Title Rule**, enter the
@@ -228,9 +229,23 @@ it does not change their matching configuration.
 The **Device** choice restricts a rule to a controller family. For a matching
 application/window, a matching device-specific rule takes priority over an Any
 rule; the first matching rule within each group is used. Use the entry's context
-menu **Move Up/Move Down** to order overlapping rules. A `(none)` profile does
-not request a profile switch for that controller. Remove a saved rule when you
-no longer want it to match.
+menu or the visible **Move up/Move down** buttons to order overlapping rules.
+Clear the search first so the full priority order is visible. A `(none)` profile
+does not request a profile switch for that controller.
+
+To pause a rule without losing its settings, clear **Rule enabled** and select
+**Save rule**. **Delete** removes the selected program and its saved rule; deleting
+a saved rule asks for confirmation and keeps the controller profiles themselves.
+**Clear unsaved programs** removes discoveries that have not been saved, keeping
+saved rules. Editing a saved rule takes effect when you select **Save rule**.
+**Duplicate** creates an unsaved copy for you to edit and save; it does not save
+changes to the original rule.
+
+Start Menu, Steam and directory discovery show progress and a **Cancel** button
+while keeping the page visible. Cancel leaves existing rules intact and adds no
+partial results. Completion shows how many programs were added, already listed
+or skipped. Start Menu discovery imports executable shortcut targets; for an app
+without one, use **Browse for Other Programs** or **Add Window Title Rule**.
 
 **Revert to default profile on unknown** determines whether to return to the
 default when no known rule matches. Leave the temporary-stop option off unless

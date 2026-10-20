@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -46,20 +46,17 @@ namespace DS4WinWPF.DS4Control.DTOXml
                     Title = entity.Title,
                     Device = entity.DeviceOption,
                     ApplyToAllControllers = entity.ApplyToAllControllers,
+                    Enabled = entity.Enabled,
                     Controller1 = entity.ProfileNames[0],
                     Controller2 = entity.ProfileNames[1],
                     Controller3 = entity.ProfileNames[2],
+                    Controller4 = entity.ProfileNames[3],
+                    Controller5 = entity.ProfileNames[4],
+                    Controller6 = entity.ProfileNames[5],
+                    Controller7 = entity.ProfileNames[6],
+                    Controller8 = entity.ProfileNames[7],
                     TurnOff = entity.Turnoff,
                 };
-
-                if (ControlService.USING_MAX_CONTROLLERS)
-                {
-                    temp.Controller4 = entity.ProfileNames[3];
-                    temp.Controller5 = entity.ProfileNames[4];
-                    temp.Controller6 = entity.ProfileNames[5];
-                    temp.Controller7 = entity.ProfileNames[6];
-                    temp.Controller8 = entity.ProfileNames[7];
-                }
 
                 programEntries.Add(temp);
             }
@@ -72,20 +69,17 @@ namespace DS4WinWPF.DS4Control.DTOXml
                 AutoProfileEntity autoprof = new AutoProfileEntity(serializier.Path, serializier.Title);
                 autoprof.DeviceOption = serializier.Device;
                 autoprof.ApplyToAllControllers = serializier.ApplyToAllControllers;
+                autoprof.Enabled = serializier.Enabled;
 
                 autoprof.ProfileNames[0] = serializier.Controller1;
                 autoprof.ProfileNames[1] = serializier.Controller2;
                 autoprof.ProfileNames[2] = serializier.Controller3;
                 autoprof.ProfileNames[3] = serializier.Controller4;
 
-                if (ControlService.CURRENT_DS4_CONTROLLER_LIMIT >=
-                    ControlService.MAX_DS4_CONTROLLER_COUNT)
-                {
-                    autoprof.ProfileNames[4] = serializier.Controller5;
-                    autoprof.ProfileNames[5] = serializier.Controller6;
-                    autoprof.ProfileNames[6] = serializier.Controller7;
-                    autoprof.ProfileNames[7] = serializier.Controller8;
-                }
+                autoprof.ProfileNames[4] = serializier.Controller5;
+                autoprof.ProfileNames[5] = serializier.Controller6;
+                autoprof.ProfileNames[6] = serializier.Controller7;
+                autoprof.ProfileNames[7] = serializier.Controller8;
 
                 autoprof.Turnoff = serializier.TurnOff;
                 destination.AutoProfileColl.Add(autoprof);
@@ -95,6 +89,10 @@ namespace DS4WinWPF.DS4Control.DTOXml
 
     public class AutoProfileEntrySerializer
     {
+        [XmlAttribute("enabled")]
+        public bool Enabled { get; set; } = true;
+        public bool ShouldSerializeEnabled() => !Enabled;
+
         [XmlAttribute("path")]
         public string Path
         {

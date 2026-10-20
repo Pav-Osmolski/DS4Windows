@@ -98,6 +98,7 @@ namespace DS4WindowsTests
                     BindingWindowLiveInputLayoutTests.ValidateRenderedBindingWindows(
                         application, resultsDirectory, renderedFiles);
                     ThemeConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
+                    AutoProfileLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                 }
                 catch (Exception ex)
                 {
@@ -112,7 +113,7 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(18, renderedFiles.Count);
+            Assert.AreEqual(22, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

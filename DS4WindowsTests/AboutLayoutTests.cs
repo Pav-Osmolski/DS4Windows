@@ -61,9 +61,11 @@ public sealed class AboutLayoutTests
                         surface.UpdateLayout();
                         tabs.SelectedIndex = index;
                         surface.UpdateLayout();
+                        Assert.IsTrue(scroll.Focusable && scroll.IsTabStop, "The scroll container must receive initial focus before any links.");
+                        Assert.AreEqual(0d, scroll.VerticalOffset, 0.1, "The first layout must already be at the top, before idle callbacks can hide a flash.");
                         surface.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() => { }));
                         surface.UpdateLayout();
-                        Assert.AreEqual(0d, scroll.VerticalOffset, 0.1, "Selecting a page must reset its reading position.");
+                        Assert.AreEqual(0d, scroll.VerticalOffset, 0.1, "Idle processing must not move the page.");
                     }
                     foreach (var button in Descendants(page).OfType<Button>())
                     {

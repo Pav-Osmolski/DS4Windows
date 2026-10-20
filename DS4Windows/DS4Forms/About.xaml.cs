@@ -23,7 +23,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace DS4WinWPF.DS4Forms
 {
@@ -51,13 +50,15 @@ namespace DS4WinWPF.DS4Forms
         private void AboutTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source != sender || sender is not TabControl tabs) return;
-            // TabControl restores focus and can bring a link near the end into view.
-            // Reset after that layout/focus work so newly selected pages start at the top.
-            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+            // Each page's scroll container is the first keyboard stop. WPF can
+            // focus that container without bringing a link at the end into view.
+            // Reset synchronously, before layout/render; never correct a visible frame.
+            if (tabs.SelectedContent is ScrollViewer scroll)
             {
-                if (tabs.SelectedContent is ScrollViewer scroll) scroll.ScrollToTop();
-                else if (tabs.SelectedIndex == 3) licenseText?.ScrollToHome();
-            }));
+                scroll.ScrollToTop();
+                scroll.UpdateLayout();
+            }
+            else if (tabs.SelectedIndex == 3) licenseText?.ScrollToHome();
         }
 
         private void FitToWorkArea()

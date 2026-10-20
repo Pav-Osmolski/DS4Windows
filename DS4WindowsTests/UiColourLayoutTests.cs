@@ -89,7 +89,8 @@ public sealed class UiColourLayoutTests
                 source.Descendants(wpf + "Style").Where(e => (string)e.Attribute(x + "Key") is "AutoProfileMenuItemStyle" or "AutoProfileMenuStyle").Select(e => new XElement(e)));
             var resources = (ResourceDictionary)XamlReader.Parse(dictionary.ToString());
             var menu = new ContextMenu { Resources = resources, Style = (Style)resources["AutoProfileMenuStyle"] };
-            var actualMenu = source.Descendants(wpf + "ContextMenu").Single(e => (string)e.Attribute("Style") == "{StaticResource AutoProfileMenuStyle}");
+            var actualMenu = source.Descendants(wpf + "Button").Single(e => (string)e.Attribute(x + "Name") == "addProgramsBtn")
+                .Descendants(wpf + "ContextMenu").Single();
             foreach (var entry in actualMenu.Elements())
             {
                 if (entry.Name == wpf + "Separator") menu.Items.Add(new Separator());

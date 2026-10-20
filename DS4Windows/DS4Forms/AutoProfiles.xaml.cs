@@ -32,6 +32,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Threading;
 using Ookii.Dialogs.Wpf;
 using DS4WinWPF.DS4Forms.ViewModels;
 using Microsoft.Win32;
@@ -52,6 +53,7 @@ namespace DS4WinWPF.DS4Forms
         private ProfileList profileList;
         private ListCollectionView autoProfilesCollectionView;
         private bool autoDebug;
+        private CancellationTokenSource scanCancellation;
 
         public AutoProfileHolder AutoProfileHolder { get => autoProfileHolder;
             set => autoProfileHolder = value; }
@@ -59,11 +61,13 @@ namespace DS4WinWPF.DS4Forms
         public bool AutoDebug { get => autoDebug; }
         public event EventHandler AutoDebugChanged;
 
-        public AutoProfiles()
+        public AutoProfiles() : this(null) { }
+
+        internal AutoProfiles(AutoProfileHolder holder)
         {
             InitializeComponent();
 
-            if (!File.Exists(DS4Windows.Global.appdatapath + @"\Auto Profiles.xml"))
+            if (holder == null && !File.Exists(DS4Windows.Global.appdatapath + @"\Auto Profiles.xml"))
                 DS4Windows.Global.CreateAutoProfiles(m_Profile);
 
             //LoadP();
@@ -78,7 +82,7 @@ namespace DS4WinWPF.DS4Forms
             else
                 addProgramsBtn.ContextMenu.Items.Remove(steamMenuItem);
 
-            autoProfileHolder = new AutoProfileHolder();
+            autoProfileHolder = holder ?? new AutoProfileHolder();
 
             int currentRowCount = autoProfilesGrid.RowDefinitions.Count;
             if (currentRowCount > DS4Windows.ControlService.CURRENT_DS4_CONTROLLER_LIMIT)
@@ -102,19 +106,18 @@ namespace DS4WinWPF.DS4Forms
             
             revertDefaultProfileOnUnknownCk.DataContext = autoProfVM;
 
-            autoProfVM.SearchFinished += AutoProfVM_SearchFinished;
             autoProfVM.CurrentItemChange += AutoProfVM_CurrentItemChange;
+            autoProfVM.ProgramColl.CollectionChanged += (_, _) => UpdateRuleActions();
 
             //autoProfilesGrid.DataContext = autoProfVM;
             outerEditControlsPanel.DataContext = autoProfVM;
             editControlsPanel.DataContext = autoProfVM.SelectedItem;
             this.profileList = profileList;
 
-            // Sort auto profile list by application file name
+            // Display the actual persisted priority; sorting would hide moves.
             autoProfilesCollectionView.SortDescriptions.Clear();
-            autoProfilesCollectionView.SortDescriptions.Add(
-                new SortDescription("Filename", ListSortDirection.Ascending));
             autoProfilesCollectionView.Refresh();
+            UpdateRuleActions();
 
             sidebarScrollViewer.ScrollToTop();
         }
@@ -243,7 +246,7 @@ namespace DS4WinWPF.DS4Forms
                 }
 
                 editControlsPanel.DataContext = item;
-                editControlsPanel.IsEnabled = true;
+                editControlsPanel.IsEnabled = scanCancellation == null;
             }
             else
             {
@@ -259,53 +262,70 @@ namespace DS4WinWPF.DS4Forms
                 cont7AutoProf.SelectedIndex = 0;
                 cont8AutoProf.SelectedIndex = 0;
             }
+            UpdateRuleActions();
         }
 
-        private void AutoProfVM_SearchFinished(object sender, EventArgs e)
+        private async Task RunProgramScanAsync(string label,
+            Func<CancellationToken, IProgress<ProgramScanProgress>, Task<ProgramScanResult>> scan)
         {
-            IsEnabled = true;
+            if (scanCancellation != null) return;
+            using var cancellation = new CancellationTokenSource();
+            scanCancellation = cancellation;
+            scanStatusPanel.Visibility = Visibility.Visible;
+            scanProgress.Visibility = cancelScanBtn.Visibility = Visibility.Visible;
+            scanStatusText.Text = label;
+            scanLocationText.Text = "Looking for programs…";
+            addProgramsBtn.IsEnabled = hideUncheckedBtn.IsEnabled = editControlsPanel.IsEnabled = false;
+            UpdateRuleActions();
+            var progress = new Progress<ProgramScanProgress>(state =>
+            {
+                if (scanCancellation != cancellation) return;
+                scanStatusText.Text = $"{label} · {state.Checked:N0} checked · {state.Found:N0} found";
+                scanLocationText.Text = state.Location;
+            });
+            try
+            {
+                ProgramScanResult result = await scan(cancellation.Token, progress);
+                scanStatusText.Text = $"Added {result.Added:N0} program(s). {result.Programs.Count - result.Added:N0} already listed. {result.Skipped:N0} unavailable or unsupported item(s) skipped.";
+                scanLocationText.Text = result.Programs.Count == 0
+                    ? "No executable programs found. Try Browse for Other Programs or Add Window Title Rule."
+                    : result.Added == 0 ? "All discovered programs are already listed. Use search to find and configure them."
+                    : "Choose a program, configure its profiles, then Save rule. Only enabled, saved rules are applied.";
+            }
+            catch (OperationCanceledException)
+            {
+                scanStatusText.Text = "Scan cancelled. No programs were added.";
+                scanLocationText.Text = "Your existing rules have been kept.";
+            }
+            catch (Exception error)
+            {
+                scanStatusText.Text = "Could not finish scanning programs.";
+                scanLocationText.Text = error.Message;
+            }
+            finally
+            {
+                scanCancellation = null;
+                scanProgress.Visibility = cancelScanBtn.Visibility = Visibility.Collapsed;
+                addProgramsBtn.IsEnabled = hideUncheckedBtn.IsEnabled = true;
+                editControlsPanel.IsEnabled = autoProfVM.SelectedItem != null;
+                UpdateRuleActions();
+            }
         }
 
-        private void SteamMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            this.IsEnabled = false;
-            steamMenuItem.Visibility = Visibility.Collapsed;
-            programListLV.ItemsSource = null;
-            autoProfVM.SearchFinished += AppsSearchFinished;
-            autoProfVM.AddProgramsFromSteam(steamgamesdir);
-        }
+        private async void SteamMenuItem_Click(object sender, RoutedEventArgs e) =>
+            await RunProgramScanAsync("Scanning Steam games", (token, progress) => autoProfVM.AddProgramsFromDir(steamgamesdir, token, progress));
 
-        private void BrowseProgsMenuItem_Click(object sender, RoutedEventArgs e)
+        private async void BrowseProgsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            this.IsEnabled = false;
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+            var dialog = new VistaFolderBrowserDialog();
             if (dialog.ShowDialog() == true)
-            {
-                //browseProgsMenuItem.Visibility = Visibility.Collapsed;
-                programListLV.ItemsSource = null;
-                autoProfVM.SearchFinished += AppsSearchFinished;
-                autoProfVM.AddProgramsFromDir(dialog.SelectedPath);
-            }
-            else
-            {
-                this.IsEnabled = true;
-            }
+                await RunProgramScanAsync("Scanning directory", (token, progress) => autoProfVM.AddProgramsFromDir(dialog.SelectedPath, token, progress));
         }
 
-        private void StartMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            this.IsEnabled = false;
-            startMenuItem.Visibility = Visibility.Collapsed;
-            programListLV.ItemsSource = null;
-            autoProfVM.SearchFinished += AppsSearchFinished;
-            autoProfVM.AddProgramsFromStartMenu();
-        }
+        private async void StartMenuItem_Click(object sender, RoutedEventArgs e) =>
+            await RunProgramScanAsync("Scanning Start Menu", (token, progress) => autoProfVM.AddProgramsFromStartMenu(token, progress));
 
-        private void AppsSearchFinished(object sender, EventArgs e)
-        {
-            autoProfVM.SearchFinished -= AppsSearchFinished;
-            programListLV.ItemsSource = autoProfilesCollectionView;
-        }
+        private void CancelScanBtn_Click(object sender, RoutedEventArgs e) => scanCancellation?.Cancel();
 
         private void AddProgramsBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -316,12 +336,8 @@ namespace DS4WinWPF.DS4Forms
 
         private void HideUncheckedBtn_Click(object sender, RoutedEventArgs e)
         {
-            programListLV.ItemsSource = null;
             autoProfVM.RemoveUnchecked();
-            steamMenuItem.Visibility = Visibility.Visible;
-            startMenuItem.Visibility = Visibility.Visible;
-            browseProgsMenuItem.Visibility = Visibility.Visible;
-            programListLV.ItemsSource = autoProfilesCollectionView;
+            UpdateRuleActions();
         }
 
         private void ShowAutoDebugCk_Click(object sender, RoutedEventArgs e)
@@ -359,6 +375,7 @@ namespace DS4WinWPF.DS4Forms
                     ? Visibility.Collapsed
                     : Visibility.Visible;
             autoProfilesCollectionView?.Refresh();
+            UpdateRuleActions();
         }
 
         private void ClearAutoProfilesSearchBtn_Click(object sender, RoutedEventArgs e)
@@ -371,11 +388,28 @@ namespace DS4WinWPF.DS4Forms
         {
             if (autoProfVM.SelectedItem != null)
             {
-                editControlsPanel.DataContext = null;
-                autoProfVM.AddExeToHIDHideWhenSaving(autoProfVM.SelectedItem, false);
-                autoProfVM.RemoveAutoProfileEntry(autoProfVM.SelectedItem);
-                autoProfVM.AutoProfileHolder.Save(DS4Windows.Global.appdatapath + @"\Auto Profiles.xml");
-                autoProfVM.SelectedItem = null;
+                ProgramItem item = autoProfVM.SelectedItem;
+                bool saved = item.MatchedAutoProfile != null;
+                if (saved && MessageBox.Show("Delete this saved rule? Your controller profiles will be kept.",
+                    "Delete Auto Profile rule", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
+                bool removeHidHide = item.MatchedAutoProfile?.Turnoff == true;
+                autoProfVM.RemoveAutoProfileEntry(item);
+                if (removeHidHide) autoProfVM.AddExeToHIDHideWhenSaving(item, HasEnabledTurnoffRule(item.Path));
+                SaveRules();
+                UpdateRuleActions();
+            }
+        }
+
+        private bool HasEnabledTurnoffRule(string path) => autoProfileHolder.AutoProfileColl.Any(rule =>
+            rule.Enabled && rule.Turnoff && string.Equals(rule.Path, path, StringComparison.OrdinalIgnoreCase));
+
+        private void SaveRules()
+        {
+            if (!autoProfileHolder.Save(m_Profile))
+            {
+                scanStatusPanel.Visibility = Visibility.Visible;
+                scanStatusText.Text = "Could not save Auto Profiles.";
+                scanLocationText.Text = "Check that the settings folder is writable, then try Save rule again.";
             }
         }
 
@@ -383,6 +417,13 @@ namespace DS4WinWPF.DS4Forms
         {
             if (autoProfVM.SelectedItem != null)
             {
+                if (string.IsNullOrWhiteSpace(autoProfVM.SelectedItem.Path) && string.IsNullOrWhiteSpace(autoProfVM.SelectedItem.Title))
+                {
+                    scanStatusPanel.Visibility = Visibility.Visible;
+                    scanStatusText.Text = "Enter a program path or window title before saving this rule.";
+                    scanLocationText.Text = "Blank rules cannot match a program.";
+                    return;
+                }
                 if (autoProfVM.SelectedItem.MatchedAutoProfile == null)
                 {
                     autoProfVM.CreateAutoProfileEntry(autoProfVM.SelectedItem);
@@ -392,8 +433,10 @@ namespace DS4WinWPF.DS4Forms
                     autoProfVM.PersistAutoProfileEntry(autoProfVM.SelectedItem);
                 }
 
-                autoProfVM.AddExeToHIDHideWhenSaving(autoProfVM.SelectedItem, autoProfVM.SelectedItem.Turnoff);
-                autoProfVM.AutoProfileHolder.Save(DS4Windows.Global.appdatapath + @"\Auto Profiles.xml");
+                autoProfVM.SelectedItem.RefreshState();
+                autoProfVM.AddExeToHIDHideWhenSaving(autoProfVM.SelectedItem, HasEnabledTurnoffRule(autoProfVM.SelectedItem.Path));
+                SaveRules();
+                UpdateRuleActions();
             }
         }
 
@@ -402,7 +445,6 @@ namespace DS4WinWPF.DS4Forms
             if (autoProfVM.SelectedItem != null)
             {
                 ProgramItem duplicateItem = autoProfVM.DuplicateAutoProfileEntry(autoProfVM.SelectedItem);
-                autoProfVM.AutoProfileHolder.Save(DS4Windows.Global.appdatapath + @"\Auto Profiles.xml");
 
                 if (duplicateItem != null)
                 {
@@ -414,24 +456,14 @@ namespace DS4WinWPF.DS4Forms
 
         private void BrowseAddProgMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            this.IsEnabled = false;
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Multiselect = false;
-            dialog.AddExtension = true;
-            dialog.DefaultExt = ".exe";
-            dialog.Filter = "Program (*.exe)|*.exe";
-            dialog.Title = "Select Program";
-
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            var dialog = new OpenFileDialog { Multiselect = false, AddExtension = true, DefaultExt = ".exe",
+                Filter = "Program (*.exe)|*.exe", Title = "Select Program",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) };
             if (dialog.ShowDialog() == true)
             {
-                programListLV.ItemsSource = null;
-                autoProfVM.SearchFinished += AppsSearchFinished;
-                autoProfVM.AddProgramExeLocation(dialog.FileName);
-            }
-            else
-            {
-                this.IsEnabled = true;
+                ProgramItem item = autoProfVM.AddProgramExeLocation(dialog.FileName);
+                programListLV.SelectedItem = item;
+                programListLV.ScrollIntoView(item);
             }
         }
 
@@ -442,13 +474,35 @@ namespace DS4WinWPF.DS4Forms
             programListLV.ScrollIntoView(autoProfVM.SelectedItem);
         }
 
+        private void UpdateRuleActions()
+        {
+            if (autoProfVM == null || moveRuleUpBtn == null) return;
+            int index = autoProfVM.ProgramColl.IndexOf(autoProfVM.SelectedItem);
+            bool canMove = scanCancellation == null && string.IsNullOrWhiteSpace(autoProfilesSearchTextBox.Text);
+            moveRuleUpBtn.IsEnabled = MoveUp.IsEnabled = canMove && index > 0;
+            moveRuleDownBtn.IsEnabled = MoveDown.IsEnabled = canMove && index >= 0 && index < autoProfVM.ProgramColl.Count - 1;
+        }
+
+        private void ProgramListLV_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton != MouseButton.Right) return;
+            if (ItemsControl.ContainerFromElement(programListLV, e.OriginalSource as DependencyObject) is ListViewItem item)
+                programListLV.SelectedItem = item.Content;
+            UpdateRuleActions();
+        }
+
         private void MoveUpDownAutoBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (autoProfVM.SelectedItem != null && sender != null)
+            if (scanCancellation != null || !string.IsNullOrWhiteSpace(autoProfilesSearchTextBox.Text)) return;
+            int direction = sender == MoveUp || sender == moveRuleUpBtn ? -1 : 1;
+            var item = autoProfVM.SelectedItem;
+            if (item != null && autoProfVM.MoveItemUpDown(item, direction))
             {
-                if(autoProfVM.MoveItemUpDown(autoProfVM.SelectedItem, ((sender as MenuItem).Name == "MoveUp") ? -1 : 1))
-                    autoProfVM.AutoProfileHolder.Save(DS4Windows.Global.appdatapath + @"\Auto Profiles.xml");
+                SaveRules();
+                programListLV.SelectedItem = item;
+                programListLV.ScrollIntoView(item);
             }
+            UpdateRuleActions();
         }
     }
 }

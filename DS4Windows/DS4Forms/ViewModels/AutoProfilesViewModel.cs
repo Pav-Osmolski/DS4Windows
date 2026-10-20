@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -21,18 +21,16 @@ using DS4WinWPF.DS4Forms.ViewModels.Util;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace DS4WinWPF.DS4Forms.ViewModels
 {
@@ -66,7 +64,6 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public delegate void CurrentItemChangeHandler(AutoProfilesViewModel sender, ProgramItem item);
         public event CurrentItemChangeHandler CurrentItemChange;
 
-        public event EventHandler SearchFinished;
         public delegate void AutoProfileStateHandler(AutoProfilesViewModel sender, bool state);
         public event AutoProfileStateHandler AutoProfileSystemChange;
 
@@ -114,7 +111,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public AutoProfilesViewModel(AutoProfileHolder autoProfileHolder, ProfileList profileList)
         {
             programColl = new ObservableCollection<ProgramItem>();
-            existingapps = new HashSet<string>();
+            existingapps = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             this.autoProfileHolder = autoProfileHolder;
             this.profileList = profileList;
             PopulateCurrentEntries();
@@ -136,58 +133,37 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public void RemoveUnchecked()
         {
             AutoProfileSystemChange?.Invoke(this, false);
-            programColl.Clear();
+            foreach (var item in programColl.Where(row => row.MatchedAutoProfile == null).ToArray()) RemoveAutoProfileEntry(item);
+            AutoProfileSystemChange?.Invoke(this, true);
+        }
+
+        internal Task<ProgramScanResult> AddProgramsFromStartMenu(CancellationToken token, IProgress<ProgramScanProgress> progress) =>
+            AddScannedProgramsAsync(ProgramScanner.StartMenuAsync(token, progress), token);
+
+        internal Task<ProgramScanResult> AddProgramsFromDir(string location, CancellationToken token, IProgress<ProgramScanProgress> progress) =>
+            AddScannedProgramsAsync(Task.Run(() => ProgramScanner.Directory(location, token, progress), token), token);
+
+        private async Task<ProgramScanResult> AddScannedProgramsAsync(Task<ProgramScanResult> scan, CancellationToken token)
+        {
+            ProgramScanResult result = await scan.WaitAsync(token);
+            token.ThrowIfCancellationRequested();
+            int added = 0;
+            // Resume on the UI dispatcher. Background discovery never touches either collection.
             existingapps.Clear();
-            PopulateCurrentEntries();
-            AutoProfileSystemChange?.Invoke(this, true);
+            foreach (var item in programColl)
+                if (!string.IsNullOrEmpty(item.Path)) existingapps.Add(item.Path);
+            foreach (string path in result.Programs)
+                if (existingapps.Add(path)) { programColl.Add(new ProgramItem(path)); added++; }
+            return result with { Added = added };
         }
 
-        public async void AddProgramsFromStartMenu()
+        internal ProgramItem AddProgramExeLocation(string path)
         {
-            AutoProfileSystemChange?.Invoke(this, false);
-            await Task.Run(() =>
-            {
-                AddFromStartMenu(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu) + "\\Programs");
-            });
-
-            SearchFinished?.Invoke(this, EventArgs.Empty);
-            AutoProfileSystemChange?.Invoke(this, true);
-        }
-
-        public async void AddProgramsFromSteam(string location)
-        {
-            AutoProfileSystemChange?.Invoke(this, false);
-            await Task.Run(() =>
-            {
-                AddAppsFromLocation(location);
-            });
-
-            SearchFinished?.Invoke(this, EventArgs.Empty);
-            AutoProfileSystemChange?.Invoke(this, true);
-        }
-
-        public async void AddProgramsFromDir(string location)
-        {
-            AutoProfileSystemChange?.Invoke(this, false);
-            await Task.Run(() =>
-            {
-                AddAppsFromLocation(location);
-            });
-
-            SearchFinished?.Invoke(this, EventArgs.Empty);
-            AutoProfileSystemChange?.Invoke(this, true);
-        }
-
-        public async void AddProgramExeLocation(string location)
-        {
-            AutoProfileSystemChange?.Invoke(this, false);
-            await Task.Run(() =>
-            {
-                AddAppExeLocation(location);
-            });
-
-            SearchFinished?.Invoke(this, EventArgs.Empty);
-            AutoProfileSystemChange?.Invoke(this, true);
+            ProgramItem item = new(path);
+            programColl.Add(item);
+            existingapps.Add(path);
+            SelectedItem = item;
+            return item;
         }
 
         public void AddWindowTitleRule()
@@ -198,65 +174,13 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             SelectedIndex = programColl.IndexOf(item);
         }
 
-        private void AddFromStartMenu(string path)
-        {
-            List<string> lnkpaths = new List<string>();
-            lnkpaths.AddRange(Directory.GetFiles(path, "*.lnk", SearchOption.AllDirectories));
-            lnkpaths.AddRange(Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu) + "\\Programs", "*.lnk", SearchOption.AllDirectories));
-            List<string> exepaths = new List<string>();
-            foreach(string link in lnkpaths)
-            {
-                string target = GetTargetPath(link);
-                exepaths.Add(target);
-            }
-
-            ScanApps(exepaths);
-        }
-
-        private void AddAppsFromLocation(string path)
-        {
-            List<string> exepaths = new List<string>();
-            exepaths.AddRange(Directory.GetFiles(path, "*.exe", SearchOption.AllDirectories));
-            ScanApps(exepaths);
-        }
-
-        private void AddAppExeLocation(string path)
-        {
-            List<string> exepaths = new List<string>();
-            exepaths.Add(path);
-            ScanApps(exepaths, checkexisting: false, skipsetupapps: false);
-        }
-
-        private void ScanApps(List<string> exepaths, bool checkexisting = true,
-            bool skipsetupapps = true)
-        {
-            foreach (string target in exepaths)
-            {
-                bool skip = !File.Exists(target) || Path.GetExtension(target).ToLower() != ".exe";
-                skip = skip || (skipsetupapps && (target.Contains("etup") || target.Contains("dotnet") || target.Contains("SETUP")
-                    || target.Contains("edist") || target.Contains("nstall") || string.IsNullOrEmpty(target)));
-                skip = skip || (checkexisting && existingapps.Contains(target));
-                if (!skip)
-                {
-                    ProgramItem item = new ProgramItem(target);
-                    /*if (autoProfileHolder.AutoProfileDict.TryGetValue(target, out AutoProfileEntity autoEntity))
-                    {
-                        item.MatchedAutoProfile = autoEntity;
-                    }
-                    */
-
-                    programColl.Add(item);
-                    existingapps.Add(target);
-                }
-            }
-        }
-
         public void CreateAutoProfileEntry(ProgramItem item)
         {
             if (item.MatchedAutoProfile == null)
             {
                 AutoProfileEntity tempEntry = new AutoProfileEntity(item.Path, item.Title);
                 tempEntry.Turnoff = item.Turnoff;
+                tempEntry.Enabled = item.Enabled;
                 tempEntry.DeviceOption = item.DeviceOption;
                 tempEntry.ApplyToAllControllers = item.ApplyToAllControllers;
                 int tempindex = item.SelectedIndexCon1;
@@ -295,7 +219,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 }
 
                 item.MatchedAutoProfile = tempEntry;
-                autoProfileHolder.AutoProfileColl.Add(item.MatchedAutoProfile);
+                int index = programColl.Take(programColl.IndexOf(item)).Count(row => row.MatchedAutoProfile != null);
+                autoProfileHolder.AutoProfileColl.Insert(index, item.MatchedAutoProfile);
             }
         }
 
@@ -304,6 +229,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             if (item.MatchedAutoProfile != null)
             {
                 AutoProfileEntity tempEntry = item.MatchedAutoProfile;
+                tempEntry.Path = item.Path;
+                tempEntry.Title = item.Title;
+                tempEntry.Turnoff = item.Turnoff;
+                tempEntry.Enabled = item.Enabled;
                 tempEntry.DeviceOption = item.DeviceOption;
                 tempEntry.ApplyToAllControllers = item.ApplyToAllControllers;
                 int tempindex = item.SelectedIndexCon1;
@@ -341,81 +270,37 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                         AutoProfileEntity.NONE_STRING;
                 }
             }
+            item.RefreshState();
         }
 
         public ProgramItem DuplicateAutoProfileEntry(ProgramItem item)
         {
-            if (item == null)
+            if (item == null) return null;
+            // Duplicating is an edit operation, not an implicit Save of the source rule.
+            var duplicate = new ProgramItem(item.Path)
             {
-                return null;
-            }
-
-            if (item.MatchedAutoProfile == null)
-            {
-                CreateAutoProfileEntry(item);
-            }
-            else
-            {
-                PersistAutoProfileEntry(item);
-            }
-
-            AutoProfileEntity source = item.MatchedAutoProfile;
-            AutoProfileEntity duplicate = new AutoProfileEntity(source.Path, source.Title)
-            {
-                Turnoff = source.Turnoff,
-                DeviceOption = source.DeviceOption,
-                ApplyToAllControllers = source.ApplyToAllControllers,
+                Title = item.Title, Enabled = item.Enabled, Turnoff = item.Turnoff,
+                DeviceOption = item.DeviceOption, ApplyToAllControllers = item.ApplyToAllControllers,
+                SelectedIndexCon1 = item.SelectedIndexCon1, SelectedIndexCon2 = item.SelectedIndexCon2,
+                SelectedIndexCon3 = item.SelectedIndexCon3, SelectedIndexCon4 = item.SelectedIndexCon4,
+                SelectedIndexCon5 = item.SelectedIndexCon5, SelectedIndexCon6 = item.SelectedIndexCon6,
+                SelectedIndexCon7 = item.SelectedIndexCon7, SelectedIndexCon8 = item.SelectedIndexCon8
             };
-            source.EnsureProfileNames();
-            duplicate.EnsureProfileNames();
-            Array.Copy(source.ProfileNames, duplicate.ProfileNames,
-                Math.Min(source.ProfileNames.Length, duplicate.ProfileNames.Length));
-
-            ProgramItem duplicateItem = new ProgramItem(duplicate.Path, duplicate);
-            int sourceProfileIndex = autoProfileHolder.AutoProfileColl.IndexOf(source);
-            int duplicateProfileIndex = sourceProfileIndex + 1;
-            if (duplicateProfileIndex > 0 && duplicateProfileIndex <= autoProfileHolder.AutoProfileColl.Count)
-            {
-                autoProfileHolder.AutoProfileColl.Insert(duplicateProfileIndex, duplicate);
-            }
-            else
-            {
-                autoProfileHolder.AutoProfileColl.Add(duplicate);
-            }
-
-            int insertIndex = programColl.IndexOf(item) + 1;
-            if (insertIndex > 0 && insertIndex <= programColl.Count)
-            {
-                programColl.Insert(insertIndex, duplicateItem);
-            }
-            else
-            {
-                programColl.Add(duplicateItem);
-            }
-
-            SelectedItem = duplicateItem;
-            SelectedIndex = programColl.IndexOf(duplicateItem);
-            return duplicateItem;
+            programColl.Insert(programColl.IndexOf(item) + 1, duplicate);
+            if (!string.IsNullOrEmpty(item.Path)) existingapps.Add(item.Path);
+            SelectedItem = duplicate;
+            SelectedIndex = programColl.IndexOf(duplicate);
+            return duplicate;
         }
 
         public void RemoveAutoProfileEntry(ProgramItem item)
         {
-            if (item?.MatchedAutoProfile != null)
-            {
-                autoProfileHolder.AutoProfileColl.Remove(item.MatchedAutoProfile);
-                item.MatchedAutoProfile = null;
-            }
-        }
-
-        private string GetTargetPath(string filePath)
-        {
-            string targetPath = ResolveMsiShortcut(filePath);
-            if (targetPath == null)
-            {
-                targetPath = ResolveShortcut(filePath);
-            }
-
-            return targetPath;
+            if (item == null) return;
+            if (item.MatchedAutoProfile != null) autoProfileHolder.AutoProfileColl.Remove(item.MatchedAutoProfile);
+            programColl.Remove(item);
+            existingapps.Clear();
+            foreach (var remaining in programColl) if (!string.IsNullOrEmpty(remaining.Path)) existingapps.Add(remaining.Path);
+            if (SelectedItem == item) SelectedItem = null;
         }
 
         public string ResolveShortcutAndArgument(string filePath)
@@ -449,7 +334,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             StringBuilder feature = new StringBuilder(NativeMethods2.MaxFeatureLength + 1);
             StringBuilder component = new StringBuilder(NativeMethods2.MaxGuidLength + 1);
 
-            NativeMethods2.MsiGetShortcutTarget(file, product, feature, component);
+            if (NativeMethods2.MsiGetShortcutTarget(file, product, feature, component) != 0) return null;
 
             int pathLength = NativeMethods2.MaxPathLength;
             StringBuilder path = new StringBuilder(pathLength);
@@ -492,34 +377,25 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public bool MoveItemUpDown(ProgramItem item, int moveDirection)
         {
-            // Move autoprofile item up (-1) or down (1) both in listView (programColl) and in autoProfileHolder data structure (will be written into AutoProfiles.xml file)
-            bool itemMoved = true;
-            int oldIdx = programColl.IndexOf(item);
-            int oldProfileIdx = item?.MatchedAutoProfile != null ?
-                autoProfileHolder.AutoProfileColl.IndexOf(item.MatchedAutoProfile) : -1;
-
-            if (moveDirection == -1 && oldIdx > 0 && oldProfileIdx > 0)
+            int oldIndex = programColl.IndexOf(item);
+            int newIndex = oldIndex + moveDirection;
+            if (Math.Abs(moveDirection) != 1 || oldIndex < 0 || newIndex < 0 || newIndex >= programColl.Count) return false;
+            programColl.Move(oldIndex, newIndex);
+            // Unsaved discoveries can be moved too. Saved rules retain the visible relative priority.
+            var rules = programColl.Where(row => row.MatchedAutoProfile != null).Select(row => row.MatchedAutoProfile).ToArray();
+            for (int i = 0; i < rules.Length; i++)
             {
-                programColl.Move(oldIdx, oldIdx - 1);
-                autoProfileHolder.AutoProfileColl.Move(oldProfileIdx, oldProfileIdx - 1);
+                int current = autoProfileHolder.AutoProfileColl.IndexOf(rules[i]);
+                if (current != i) autoProfileHolder.AutoProfileColl.Move(current, i);
             }
-            else if (moveDirection == 1 && oldIdx >= 0 && oldIdx < programColl.Count - 1 &&
-                oldProfileIdx >= 0 && oldProfileIdx < autoProfileHolder.AutoProfileColl.Count - 1)
-            {    
-                programColl.Move(oldIdx, oldIdx + 1);
-                autoProfileHolder.AutoProfileColl.Move(oldProfileIdx, oldProfileIdx + 1);
-            }
-            else
-                itemMoved = false;
-
-            return itemMoved;
+            return true;
         }
-        
+
         public void AddExeToHIDHideWhenSaving(ProgramItem autoProf, bool addExe)
         {
             if (Path.GetExtension(autoProf.Path).Equals(".exe", StringComparison.OrdinalIgnoreCase)) //Filter out autoprofiles that do not lead to EXEs.
             {
-                App.rootHub.CheckHidHidePresence(autoProf.Path, autoProf.Filename, addExe);
+                if (App.rootHub != null) App.rootHub.CheckHidHidePresence(autoProf.Path, autoProf.Filename, addExe);
             }
         }
     }
@@ -532,7 +408,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private string title;
         private string title_lowercase;
         private AutoProfileEntity matchedAutoProfile;
-        private ImageSource exeicon;
+
         private bool turnoff;
         private AutoProfileDeviceOption deviceOption = AutoProfileDeviceOption.Any;
         private bool applyToAllControllers;
@@ -541,11 +417,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             set
             {
                 if (path == value) return;
-                path = value;
-                if (matchedAutoProfile != null)
-                {
-                    matchedAutoProfile.Path = value;
-                }
+                path = value ?? string.Empty;
+                filename = System.IO.Path.GetFileNameWithoutExtension(path);
+                FilenameChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -554,10 +428,6 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 if (title == value) return;
                 title = value;
-                if (matchedAutoProfile != null)
-                {
-                    matchedAutoProfile.Title = value;
-                }
 
                 TitleChanged?.Invoke(this, EventArgs.Empty);
                 FilenameChanged?.Invoke(this, EventArgs.Empty);
@@ -573,6 +443,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 matchedAutoProfile = value;
                 if (matchedAutoProfile != null)
                 {
+                    enabled = matchedAutoProfile.Enabled;
+                    turnoff = matchedAutoProfile.Turnoff;
                     title = matchedAutoProfile.Title ?? string.Empty;
                     title_lowercase = title.ToLower();
                     deviceOption = matchedAutoProfile.DeviceOption;
@@ -598,27 +470,21 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
         }
         public event EventHandler FilenameChanged;
-        public ImageSource Exeicon { get => exeicon; }
+        public ImageSource Exeicon => null;
+
+        private bool enabled = true;
+        public bool Enabled { get => enabled; set { enabled = value; EnabledChanged?.Invoke(this, EventArgs.Empty); } }
+        public event EventHandler EnabledChanged;
+        public string StateText => matchedAutoProfile == null ? "Not saved" : matchedAutoProfile.Enabled ? "Enabled" : "Disabled";
+        public event EventHandler StateTextChanged;
+        public void RefreshState() => StateTextChanged?.Invoke(this, EventArgs.Empty);
 
         public bool Turnoff
         {
-            get
-            {
-                bool result = turnoff;
-                if (matchedAutoProfile != null)
-                {
-                    result = matchedAutoProfile.Turnoff;
-                }
-
-                return result;
-            }
+            get => turnoff;
             set
             {
                 turnoff = value;
-                if (matchedAutoProfile != null)
-                {
-                    matchedAutoProfile.Turnoff = value;
-                }
 
                 TurnoffChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -627,23 +493,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public AutoProfileDeviceOption DeviceOption
         {
-            get
-            {
-                AutoProfileDeviceOption result = deviceOption;
-                if (matchedAutoProfile != null)
-                {
-                    result = matchedAutoProfile.DeviceOption;
-                }
-
-                return result;
-            }
+            get => deviceOption;
             set
             {
                 deviceOption = value;
-                if (matchedAutoProfile != null)
-                {
-                    matchedAutoProfile.DeviceOption = value;
-                }
 
                 DeviceOptionChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -652,23 +505,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public bool ApplyToAllControllers
         {
-            get
-            {
-                bool result = applyToAllControllers;
-                if (matchedAutoProfile != null)
-                {
-                    result = matchedAutoProfile.ApplyToAllControllers;
-                }
-
-                return result;
-            }
+            get => applyToAllControllers;
             set
             {
                 applyToAllControllers = value;
-                if (matchedAutoProfile != null)
-                {
-                    matchedAutoProfile.ApplyToAllControllers = value;
-                }
 
                 ApplyToAllControllersChanged?.Invoke(this, EventArgs.Empty);
                 ControllerSpecificProfilesVisibleChanged?.Invoke(this, EventArgs.Empty);
@@ -812,6 +652,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             this.matchedAutoProfile = autoProfileEntity;
             if (autoProfileEntity != null)
             {
+                enabled = autoProfileEntity.Enabled;
                 title = autoProfileEntity.Title;
                 title_lowercase = title.ToLower();
                 turnoff = autoProfileEntity.Turnoff;
@@ -819,16 +660,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 applyToAllControllers = autoProfileEntity.ApplyToAllControllers;
             }
 
-            if (File.Exists(path))
-            {
-                using (Icon ico = Icon.ExtractAssociatedIcon(path))
-                {
-                    exeicon = Imaging.CreateBitmapSourceFromHIcon(ico.Handle, Int32Rect.Empty,
-                        BitmapSizeOptions.FromEmptyOptions());
-                    exeicon.Freeze();
-                }
-            }
-
+            // Shell icon extraction can block for seconds on a single executable.
+            // Discovery rows use the application's neutral icon instead.
             MatchedAutoProfileChanged += ProgramItem_MatchedAutoProfileChanged;
         }
 
@@ -847,6 +680,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
 
             ExistsChanged?.Invoke(this, EventArgs.Empty);
+            RefreshState();
         }
     }
 
