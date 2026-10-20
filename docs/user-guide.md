@@ -7,13 +7,13 @@ selected by your profile. Available settings depend on the controller and connec
 
 ## Overview
 
-![Overview dashboard](images/tour/overview.png)
+![Overview dashboard](images/site/overview.webp)
 
 Start here for a summary of your connected controller, active profile and backend status.
 
 ## Controllers
 
-![Connected controllers and profile controls](images/tour/controllers.png)
+![Connected controllers and profile controls](images/site/controllers.webp)
 
 The Controllers page shows connected devices, battery, connection and selected
 profile. Use the profile selector to choose a saved profile, and Edit to change
@@ -27,7 +27,7 @@ are available in **Settings → Controllers**; see [Nintendo setup and options](
 
 ## Profiles
 
-![Saved profiles](images/tour/profiles.png)
+![Saved profiles](images/site/profiles.webp)
 
 Create a profile from a preset, then choose the output device the game expects.
 Xbox 360 is a useful starting point for XInput games. Choose DualShock 4 or
@@ -60,7 +60,7 @@ The [Profile Editor guide](profile-editor.md) explains each page and common setu
 tasks. Use [Nintendo Options](nintendo-options.md) and
 [Controller audio](controller-audio.md) for hardware-specific features.
 
-![Profile editor and mapping navigation](images/tour/profile-editor.png)
+![Profile editor and mapping navigation](images/site/profile-editor.webp)
 
 | Page | Purpose |
 | --- | --- |
@@ -82,6 +82,8 @@ that action in this profile. Select a row before choosing **Edit Action** or
 an export. Long names and triggers wrap, and narrow windows allow horizontal
 scrolling. Trigger Lab protection notices remain visible above the list.
 
+![Special Actions with an enabled controller-disconnect shortcut](images/site/special-actions.webp)
+
 Axis Config separates **Left stick**, **Right stick**, **Triggers** and **Motion
 axes**. Stick pages group dead zones, response shaping, outer-stick actions and
 calibration, with optional delta acceleration and flick-stick settings. Lightbar
@@ -89,6 +91,8 @@ groups profile colors, battery alerts, charging and rainbow brightness. Touchpad
 and Gyro keep their output-mode selectors, with focused cards for the selected
 mode, activation, smoothing and calibration. Changing sections preserves unsaved
 edits; use **Apply** or **Save** to write them as usual.
+
+![Axis Config with left-stick dead zones, sensitivity and live controller readings](images/site/axis-config.webp)
 
 Controller Readings groups live status, sticks, triggers, motion sensors and the
 first touchpad contact into cards that wrap to the available width. **Input** is
@@ -102,7 +106,7 @@ Sensor bars are read-only; configure behavior on the other editor pages.
 The controller diagram follows the selected controller layout; this example
 shows a DualShock 4 layout, while the earlier image shows a DualSense.
 
-![Button remapping dialog](images/tour/remapping-dialog.png)
+![Button remapping dialog](images/site/remapping-dialog.webp)
 
 Select a mapped control to open the remapping dialog and choose its action.
 
@@ -113,9 +117,7 @@ Audio Haptics is separate from game-authored native DualSense haptics.
 
 ## Audio Haptics
 
-![Audio Haptics controls](images/site/audio-haptics.png)
-
-![Audio Haptics source and response settings](images/audio-haptics.png)
+![Audio Haptics controls](images/site/audio-haptics.webp)
 
 Audio Haptics creates feedback from sound; it is separate from native,
 game-authored haptics. Use it on the main page for the selected controller, or
@@ -171,7 +173,7 @@ are not confused. See [compatibility](controller-compatibility.md) for limitatio
 
 ## Trigger Lab
 
-![Adaptive trigger controls](images/site/trigger-lab.png)
+![Adaptive trigger controls](images/site/trigger-lab.webp)
 
 Trigger Lab designs persistent adaptive-trigger effects for physical
 DualSense/Edge controllers. Choose a connected controller on the main page, or
@@ -202,7 +204,7 @@ combining them, and check Special Actions protection notices for conflicts.
 
 ## Auto Profiles
 
-![Application and window title profile rules](images/tour/auto-profiles.png)
+![Application and window title profile rules](images/site/auto-profiles.webp)
 
 Auto Profiles selects saved profiles when the matching application/window is
 active. First verify the intended profile works when selected manually.
@@ -238,7 +240,7 @@ Auto Profiles debug messages help identify a match; disable them after diagnosis
 
 ## Output Slots
 
-![Output Slots with automatic column fitting and clear reservations](images/tour/output-slots.png)
+![Output Slots with automatic column fitting and clear reservations](images/site/output-slots.webp)
 
 Use this page to see which physical controller feeds each virtual output slot.
 **Slot** is DS4Windows' output slot number, not a game-reported XInput index.
@@ -257,7 +259,7 @@ diagnose it instead of repeatedly adding more outputs.
 
 ## Settings
 
-![Settings: General section](images/site/settings.png)
+![Settings: General section](images/site/settings.webp)
 
 The image shows the General section of the redesigned Settings page. The checked
 options are illustrative; your saved preferences may differ.
@@ -299,7 +301,7 @@ Run at Startup and Start Minimized are separate choices.
 
 ## Log and diagnostics
 
-![Startup log with deployment mode and backend verification](images/site/log.png)
+![Log page with startup entries, backend verification and log-management controls](images/site/log.webp)
 
 The Log page shows startup, controller, profile and backend events, including
 installed/portable deployment mode, USB/IP status and detected driver versions.

@@ -19,7 +19,7 @@ are examples, not recommended settings for every controller.
 See the [fresh screenshot gallery](screenshots.md) for Profile Editor, Audio
 Haptics, Trigger Lab, Appearance and the Log page.
 
-![DS4Windows overview](images/tour/overview.png)
+![DS4Windows overview](images/site/overview.webp)
 
 The [illustrated user guide](user-guide.md) covers the app's pages:
 [Overview](user-guide.md#overview), [Controllers](user-guide.md#controllers),

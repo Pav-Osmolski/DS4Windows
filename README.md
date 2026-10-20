@@ -12,7 +12,7 @@ Controller remapping, advanced feedback, and per-game profiles for Windows.
 
 ![DS4Windows VIIPER](docs/images/promo/DS4Windows.webp)
 
-<img src="docs/images/tour/overview.png" width="1000" alt="DS4Windows overview with a connected controller and profile controls">
+<img src="docs/images/site/overview.webp" width="1000" alt="DS4Windows overview with a connected controller and profile controls">
 
 </div>
 

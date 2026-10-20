@@ -14,7 +14,8 @@ Final prompt:
 `blue-tile.webp` is a small web export of the supplied Blue Tile sidebar icon;
 the application's original PNG is unchanged.
 
-Fresh screenshots in `docs/images/site/` were captured from the running .NET 10
-PR #56 test build on 19 October 2026. No controller settings were changed. The
-Log screenshot was captured after the maintainer cleared the visible list.
-Screenshots are actual application captures, not generated UI illustrations.
+Screenshots in `docs/images/site/` are actual application captures, not generated
+UI illustrations. The initial captures came from the .NET 10 PR #56 test build
+on 19 October 2026. Pav-Osmolski supplied refreshed WebP captures and the
+Special Actions and Axis Config screenshots on 20 October 2026. The current
+Settings capture shows General; the Log capture includes startup entries.
