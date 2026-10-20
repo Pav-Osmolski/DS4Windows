@@ -165,6 +165,97 @@ public sealed class SidebarIconTests
         });
     }
 
+    [TestMethod]
+    [DataRow(0d)]
+    [DataRow(137d)]
+    [DataRow(360d)]
+    public void HueRoundTripsWithIconAndTraySettings(double hue)
+    {
+        var dto = new AppSettingsDTO();
+        dto.MapFrom(new BackingStore { sidebarIconHue = hue, sidebarIcon = SidebarIconChoice.AngularBadge, useIconChoice = TrayIconChoice.White });
+        var serializer = new XmlSerializer(typeof(AppSettingsDTO));
+        using var writer = new StringWriter();
+        serializer.Serialize(writer, dto);
+        using var reader = new StringReader(writer.ToString());
+        var destination = new BackingStore();
+        ((AppSettingsDTO)serializer.Deserialize(reader)).MapTo(destination);
+        Assert.AreEqual(hue, destination.sidebarIconHue);
+        Assert.AreEqual(SidebarIconChoice.AngularBadge, destination.sidebarIcon);
+        Assert.AreEqual(TrayIconChoice.White, destination.useIconChoice);
+    }
+
+    [TestMethod]
+    public void HueRotationPreservesTransparencyAndNeutralColours()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            byte[] pixels = [0, 0, 255, 128, 255, 255, 255, 255, 100, 100, 100, 255, 9, 8, 7, 0];
+            var source = BitmapSource.Create(4, 1, 96, 96, PixelFormats.Bgra32, null, pixels, 16);
+            byte[] shifted = new byte[16];
+            SidebarIconCatalog.RotateHue(source, 120).CopyPixels(shifted, 16, 0);
+            CollectionAssert.AreEqual(new byte[] { 0, 255, 0, 128, 255, 255, 255, 255, 100, 100, 100, 255, 9, 8, 7, 0 }, shifted);
+            SidebarIconCatalog.RotateHue(source, 360).CopyPixels(shifted, 16, 0);
+            CollectionAssert.AreEqual(pixels, shifted);
+        });
+    }
+
+    [TestMethod]
+    public void ActualHueSliderUpdatesSavedValueAndAllPreviewsThenResets()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            double previousHue = Global.SidebarIconHue;
+            try
+            {
+                Global.SidebarIconHue = 0;
+                var resources = new ResourceDictionary();
+                resources.MergedDictionaries.Add(Theme("DarkTheme"));
+                SidebarIconCatalog.Apply(resources, SidebarIconChoice.BlueTile);
+                var original = SidebarIconCatalog.Choices.Select(c => c.Image).ToArray();
+                XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
+                XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
+                var markup = new XElement(XDocument.Load(SourcePath()).Descendants(wpf + "Slider")
+                    .Single(e => (string)e.Attribute(x + "Name") == "sidebarHueSlider"));
+                markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
+                var slider = (Slider)XamlReader.Parse(markup.ToString());
+                var model = (SettingsViewModel)RuntimeHelpers.GetUninitializedObject(typeof(SettingsViewModel));
+                model.SidebarIconHueChanged += (_, _) => SidebarIconCatalog.Apply(resources, SidebarIconChoice.BlueTile, model.SidebarIconHue);
+                slider.DataContext = model;
+                var comboMarkup = new XElement(XDocument.Load(SourcePath()).Descendants(wpf + "ComboBox")
+                    .Single(e => (string)e.Attribute(x + "Name") == "sidebarIconCombo"));
+                comboMarkup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
+                var combo = (ComboBox)XamlReader.Parse(comboMarkup.ToString());
+                combo.Resources.MergedDictionaries.Add(Theme("DarkTheme"));
+                combo.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative) });
+                combo.DataContext = model;
+                combo.Measure(new Size(220, 60)); combo.Arrange(new Rect(0, 0, 220, 60)); combo.UpdateLayout();
+                var preview = Visuals(combo).OfType<Image>().Single();
+                slider.Measure(new Size(300, 40));
+                System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Background);
+                slider.SetCurrentValue(Slider.ValueProperty, 120d);
+                System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Background);
+                Assert.AreEqual(120d, slider.Value, $"binding={slider.GetBindingExpression(Slider.ValueProperty)?.Status}; error={slider.GetBindingExpression(Slider.ValueProperty)?.HasError}; max={slider.Maximum}");
+                Assert.AreEqual(120d, Global.SidebarIconHue);
+                for (int i = 0; i < original.Length; i++) Assert.AreNotSame(original[i], SidebarIconCatalog.Choices[i].Image);
+                Assert.AreSame(SidebarIconCatalog.Choices[0].Image, resources[SidebarIconCatalog.ResourceKey]);
+                Assert.AreSame(SidebarIconCatalog.Choices[model.SidebarIconIndex].Image, preview.Source, "The visible dropdown preview must update without changing selection.");
+                model.SidebarIconHue = 0;
+                slider.GetBindingExpression(Slider.ValueProperty)!.UpdateTarget();
+                Assert.AreEqual(0d, slider.Value);
+                for (int i = 0; i < original.Length; i++) Assert.AreSame(original[i], SidebarIconCatalog.Choices[i].Image);
+                Assert.AreEqual(0d, SidebarIconPolicy.NormalizeHue(double.NaN));
+                Assert.AreEqual(0d, SidebarIconPolicy.NormalizeHue(double.PositiveInfinity));
+                Assert.AreEqual(0d, SidebarIconPolicy.NormalizeHue(-1));
+                Assert.AreEqual(360d, SidebarIconPolicy.NormalizeHue(361));
+            }
+            finally
+            {
+                Global.SidebarIconHue = previousHue;
+                SidebarIconCatalog.Apply(new ResourceDictionary(), Global.UseSidebarIcon, previousHue);
+            }
+        });
+    }
+
     private static ResourceDictionary Theme(string name) => new()
     {
         Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{name}.xaml", UriKind.Relative),

@@ -1219,7 +1219,7 @@ namespace DS4WinWPF
             bool fireChanged = true)
         {
             DS4Forms.SidebarIconCatalog.Apply(Application.Current.Resources,
-                DS4Windows.Global.UseSidebarIcon);
+                DS4Windows.Global.UseSidebarIcon, DS4Windows.Global.SidebarIconHue);
             if (themeChoice == DS4Windows.AppThemeChoice.Default)
             {
                 Application.Current.Resources.MergedDictionaries.Clear();

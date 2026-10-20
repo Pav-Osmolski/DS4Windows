@@ -13,6 +13,9 @@ public enum SidebarIconChoice
 
 internal static class SidebarIconPolicy
 {
+    internal static double NormalizeHue(double value) =>
+        double.IsFinite(value) ? Math.Clamp(value, 0, 360) : 0;
+
     internal static SidebarIconChoice Normalize(SidebarIconChoice value) =>
         Enum.IsDefined(value) ? value : SidebarIconChoice.BlueTile;
 
