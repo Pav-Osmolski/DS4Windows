@@ -225,8 +225,10 @@ public sealed class SidebarIconTests
                     .Single(e => (string)e.Attribute(x + "Name") == "sidebarIconCombo"));
                 comboMarkup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
                 var combo = (ComboBox)XamlReader.Parse(comboMarkup.ToString());
-                combo.Resources.MergedDictionaries.Add(Theme("DarkTheme"));
-                combo.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative) });
+                var bridge = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "Themes", "BridgeShellStyles.xaml")).Root;
+                bridge.AddFirst(new XElement(wpf + "ResourceDictionary.MergedDictionaries",
+                    new XElement(wpf + "ResourceDictionary", new XAttribute("Source", "/DS4Windows;component/DS4Forms/Themes/DarkTheme.xaml"))));
+                combo.Resources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Parse(bridge.ToString()));
                 combo.DataContext = model;
                 combo.Measure(new Size(220, 60)); combo.Arrange(new Rect(0, 0, 220, 60)); combo.UpdateLayout();
                 var preview = Visuals(combo).OfType<Image>().Single();

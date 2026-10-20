@@ -3,6 +3,20 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Added
+
+- Adjust the sidebar icon's hue in **Settings > Appearance > Sidebar icon**. The icon and dropdown previews update while dragging; the hue is saved, and **Reset** restores the original artwork. Transparency and neutral colours are preserved ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+
+### Fixed
+
+- Centre the button-mapping dialog's RGB sliders inside equal, aligned channel backgrounds in both themes. Remove the Add Programs popup's outer item gaps and follow the current light/dark theme ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+
+### Changed
+
+- Replace the Angular Badge sidebar icon with the updated maintainer-supplied transparent artwork ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+
 ## [5.0.35](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.35) - 2026-10-19
 
 ### Added
