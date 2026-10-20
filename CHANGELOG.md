@@ -7,7 +7,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Improved
 
-- Redesign Hotkeys/About with an artwork-led About page, grouped shortcut explanations, consistent theme-aware cards and tabs, and accessible credits/component links. Adapt the maintainer-provided promotional artwork into a decorative banner with sharp live text. Keep the complete GPL licence embedded directly from `COPYING`, add a persistent Close button/Escape action, and fit the dialog to the owner's scaled monitor work area.
+- Redesign Hotkeys/About with an artwork-led About page, grouped shortcut explanations, consistent theme-aware cards and tabs, and accessible credits/component links. Adapt the maintainer-provided promotional artwork into a decorative banner with sharp live text. Keep the complete GPL licence embedded directly from `COPYING`, add a persistent Close button/Escape action, and fit the dialog to the owner's scaled monitor work area. ([PR #61](https://github.com/Pav-Osmolski/DS4Windows/pull/61))
 
 ## [5.0.37](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.37) - 2026-10-20
 
