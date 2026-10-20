@@ -107,6 +107,7 @@
                         <CollectionViewSource x:Key="profileCollection" Source="{Binding ProfileList.ProfileListCol,Mode=OneWay}" />
                     </StackPanel.Resources>
 
+                    <TextBlock Text="Rule editor" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" Margin="0,0,0,12"/>
                     <StackPanel x:Name="editControlsPanel" IsEnabled="False">
                         <UniformGrid Columns="3" Height="34" Margin="0,0,0,10">
                             <Button x:Name="removeAutoBtn" Content="Delete" Margin="0,0,6,0"
@@ -317,9 +318,11 @@
                                       DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue"
                                       SelectedValue="{Binding DeviceOption}" />
                         </Grid>
+                        <TextBlock Text="Program path" Foreground="{DynamicResource MutedForegroundColor}" FontSize="12" Margin="0,4,0,4"/>
                         <TextBox Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}" Margin="{StaticResource spaceMargin}" ToolTip="{lex:Loc AutoProfPathTip}"
                                  TextWrapping="Wrap" AcceptsReturn="False" VerticalScrollBarVisibility="Auto" MaxHeight="90"/>
 
+                        <TextBlock Text="Window title" Foreground="{DynamicResource MutedForegroundColor}" FontSize="12" Margin="0,4,0,4"/>
                         <Grid x:Name="ruleTitleField" Margin="0">
                             <TextBox x:Name="mainTxtBox" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                                      VerticalContentAlignment="Center" ToolTip="{lex:Loc AutoProfTitleTip}" />

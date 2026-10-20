@@ -101,9 +101,10 @@ internal static class AutoProfileLayoutValidation
         using (var context = drawing.RenderOpen())
         {
             context.DrawRectangle((Brush)page.FindResource("BackgroundColor"), null, new Rect(0, 0, 1180, 860));
-            context.DrawRectangle(new VisualBrush(page), null, new Rect(0, 0, 1180, 860));
         }
-        var bitmap = new RenderTargetBitmap(1180, 860, 96, 96, PixelFormats.Pbgra32); bitmap.Render(drawing);
+        var bitmap = new RenderTargetBitmap(1180, 860, 96, 96, PixelFormats.Pbgra32);
+        bitmap.Render(drawing);
+        bitmap.Render(page);
         var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
         string path = Path.Combine(directory, name);
         using var file = File.Create(path); encoder.Save(file); renderedFiles.Add(path);
