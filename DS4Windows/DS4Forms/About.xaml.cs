@@ -23,6 +23,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace DS4WinWPF.DS4Forms
 {
@@ -45,6 +46,18 @@ namespace DS4WinWPF.DS4Forms
                 ?? throw new InvalidOperationException("The bundled GNU GPL licence is missing.");
             using var reader = new StreamReader(stream);
             return reader.ReadToEnd();
+        }
+
+        private void AboutTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source != sender || sender is not TabControl tabs) return;
+            // TabControl restores focus and can bring a link near the end into view.
+            // Reset after that layout/focus work so newly selected pages start at the top.
+            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+            {
+                if (tabs.SelectedContent is ScrollViewer scroll) scroll.ScrollToTop();
+                else if (tabs.SelectedIndex == 3) licenseText?.ScrollToHome();
+            }));
         }
 
         private void FitToWorkArea()

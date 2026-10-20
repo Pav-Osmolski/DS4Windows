@@ -1,8 +1,10 @@
 using System.Runtime.CompilerServices;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using DS4WinWPF.DS4Forms;
 
 namespace DS4WindowsTests;
@@ -40,6 +42,8 @@ public sealed class AboutLayoutTests
                     surface.Measure(new Size(width, height));
                     surface.Arrange(new Rect(0, 0, width, height));
                     surface.UpdateLayout();
+                    surface.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() => { }));
+                    surface.UpdateLayout();
                     Assert.IsFalse(window.IsVisible, "Layout checks must not open a desktop window.");
                     FrameworkElement page = (FrameworkElement)((TabItem)tabs.Items[index]).Content;
                     Assert.IsTrue(page.ActualHeight > 20, "The page must retain a usable reading area.");
@@ -51,6 +55,27 @@ public sealed class AboutLayoutTests
                         Assert.AreEqual(scroll.ScrollableHeight, scroll.VerticalOffset, 0.1);
                         scroll.ScrollToTop();
                         surface.UpdateLayout();
+                        scroll.ScrollToEnd();
+                        surface.UpdateLayout();
+                        tabs.SelectedIndex = (index + 1) % tabs.Items.Count;
+                        surface.UpdateLayout();
+                        tabs.SelectedIndex = index;
+                        surface.UpdateLayout();
+                        surface.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() => { }));
+                        surface.UpdateLayout();
+                        Assert.AreEqual(0d, scroll.VerticalOffset, 0.1, "Selecting a page must reset its reading position.");
+                    }
+                    foreach (var button in Descendants(page).OfType<Button>())
+                    {
+                        var chrome = button.Template.FindName("ButtonSurface", button) as Border;
+                        if (chrome == null) continue;
+                        var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!;
+                        button.SetValue(hoverKey, true);
+                        Assert.AreEqual(((SolidColorBrush)dictionary["NavigationSelectionColor"]).Color, ((SolidColorBrush)chrome.Background).Color);
+                        Assert.AreEqual(((SolidColorBrush)dictionary["ForegroundColor"]).Color, ((SolidColorBrush)button.Foreground).Color);
+                        Assert.AreEqual(((SolidColorBrush)dictionary["AccentColor"]).Color, ((SolidColorBrush)chrome.BorderBrush).Color);
+                        button.SetValue(hoverKey, false);
+                        Assert.AreEqual(((SolidColorBrush)dictionary["RaisedBackgroundColor"]).Color, ((SolidColorBrush)chrome.Background).Color);
                     }
                     var firstCard = Descendants(page).OfType<Border>().FirstOrDefault(b => b.CornerRadius.TopLeft == 8);
                     if (firstCard != null && index != 0)
@@ -66,6 +91,19 @@ public sealed class AboutLayoutTests
                             var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
                             using var file = File.Create(Path.Combine(output, $"about-{theme}-{index}-{scale * 100:0}{(width < 900 ? "-compact" : "")}.png"));
                             encoder.Save(file);
+                        }
+                        if (index == 2)
+                        {
+                            var link = Descendants(page).OfType<Button>().First();
+                            var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!;
+                            link.SetValue(hoverKey, true);
+                            surface.UpdateLayout();
+                            var bitmap = new RenderTargetBitmap((int)width, (int)height, 96, 96, PixelFormats.Pbgra32);
+                            bitmap.Render(surface);
+                            var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                            using var file = File.Create(Path.Combine(output, $"hover-{theme}{(width < 900 ? "-compact" : "")}.png"));
+                            encoder.Save(file);
+                            link.SetValue(hoverKey, false);
                         }
                     }
                 }
