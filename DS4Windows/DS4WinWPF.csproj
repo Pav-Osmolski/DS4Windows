@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+		<TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<Platforms>x64;x86</Platforms>
 		<RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
@@ -22,10 +22,10 @@
 		     a SustainedLowLatency lease in the process. -->
 		<ServerGarbageCollection>false</ServerGarbageCollection>
 		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
-		<AssemblyVersion>5.0.34.0</AssemblyVersion>
-		<FileVersion>5.0.34.0</FileVersion>
-		<Version>5.0.34</Version>
-		<InformationalVersion>5.0.34</InformationalVersion>
+		<AssemblyVersion>5.0.36.0</AssemblyVersion>
+		<FileVersion>5.0.36.0</FileVersion>
+		<Version>5.0.36</Version>
+		<InformationalVersion>5.0.36</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
@@ -398,7 +398,7 @@
 
 	<ItemGroup>
 
-		<Resource Include="Resources\DS4Windows-sidebar.png" />
+		<Resource Include="Resources\Branding\*.png" />
 		<Resource Include="Resources\DS4 Config_white.png" />
 		<Resource Include="Resources\newprofile_white.png" />
 		<Resource Include="Resources\copy_white.png" />

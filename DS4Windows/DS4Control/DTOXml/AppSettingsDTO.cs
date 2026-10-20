@@ -544,6 +544,18 @@ namespace DS4WinWPF.DS4Control.DTOXml
         }
 
         [XmlIgnore]
+        public SidebarIconChoice SidebarIcon { get; private set; } = SidebarIconChoice.BlueTile;
+
+        public double SidebarIconHue { get; set; }
+
+        [XmlElement("SidebarIcon")]
+        public string SidebarIconString
+        {
+            get => SidebarIcon.ToString();
+            set => SidebarIcon = SidebarIconPolicy.Parse(value);
+        }
+
+        [XmlIgnore]
         public AppThemeChoice AppTheme
         {
             get; set;
@@ -976,6 +988,8 @@ namespace DS4WinWPF.DS4Control.DTOXml
             FlashWhenLate = source.flashWhenLate;
             FlashWhenLateAt = source.flashWhenLateAt;
             AppIcon = source.useIconChoice;
+            SidebarIcon = SidebarIconPolicy.Normalize(source.sidebarIcon);
+            SidebarIconHue = SidebarIconPolicy.NormalizeHue(source.sidebarIconHue);
             AppTheme = source.useCurrentTheme;
             UseOSCServer = source.useOSCServ;
             OSCServerPort = source.oscServPort;
@@ -1093,6 +1107,8 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.flashWhenLate = FlashWhenLate;
             destination.flashWhenLateAt = FlashWhenLateAt;
             destination.useIconChoice = AppIcon;
+            destination.sidebarIcon = SidebarIconPolicy.Normalize(SidebarIcon);
+            destination.sidebarIconHue = SidebarIconPolicy.NormalizeHue(SidebarIconHue);
             destination.useCurrentTheme = AppTheme;
             destination.useOSCServ = UseOSCServer;
             destination.oscServPort = OSCServerPort;

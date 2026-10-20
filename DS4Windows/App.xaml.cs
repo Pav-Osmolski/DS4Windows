@@ -416,6 +416,7 @@ namespace DS4WinWPF
             Logger logger = logHolder.Logger;
             string version = DS4Windows.Global.exeDisplayVersion;
             logger.Info($"DS4Windows version {version}");
+            logger.Info($".NET runtime: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
             logger.Info($"DS4Windows exe file: {DS4Windows.Global.exeFileName}");
             logger.Info($"DS4Windows Assembly Architecture: {(Environment.Is64BitProcess ? "x64" : "x86")}");
             logger.Info(DS4Windows.InstallationModeInfo.Read());
@@ -1217,6 +1218,8 @@ namespace DS4WinWPF
         public void ChangeTheme(DS4Windows.AppThemeChoice themeChoice,
             bool fireChanged = true)
         {
+            DS4Forms.SidebarIconCatalog.Apply(Application.Current.Resources,
+                DS4Windows.Global.UseSidebarIcon, DS4Windows.Global.SidebarIconHue);
             if (themeChoice == DS4Windows.AppThemeChoice.Default)
             {
                 Application.Current.Resources.MergedDictionaries.Clear();

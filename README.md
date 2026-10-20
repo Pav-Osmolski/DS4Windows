@@ -4,7 +4,7 @@
 
 Controller remapping, advanced feedback, and per-game profiles for Windows.
 
-[**Download**](https://github.com/Pav-Osmolski/DS4Windows/releases) · [Documentation](docs/README.md) · [Changelog](CHANGELOG.md) · [Community](https://www.reddit.com/r/DS4Windows/) · [Support on Ko-fi](https://ko-fi.com/devilhood42)
+[**Website**](https://pav-osmolski.github.io/DS4Windows/) · [**Download**](https://github.com/Pav-Osmolski/DS4Windows/releases) · [Documentation](docs/README.md) · [Changelog](CHANGELOG.md) · [Community](https://www.reddit.com/r/DS4Windows/) · [Support on Ko-fi](https://ko-fi.com/devilhood42)
 
 [![Releases](https://img.shields.io/github/v/release/Pav-Osmolski/DS4Windows?logo=github&label=release)](https://github.com/Pav-Osmolski/DS4Windows/releases)
 [![Main build](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml?query=branch%3Amain)
@@ -12,7 +12,7 @@ Controller remapping, advanced feedback, and per-game profiles for Windows.
 
 ![DS4Windows VIIPER](docs/images/promo/DS4Windows.webp)
 
-<img src="docs/images/tour/overview.png" width="1000" alt="DS4Windows overview with a connected controller and profile controls">
+<img src="docs/images/site/overview.webp" width="1000" alt="DS4Windows overview with a connected controller and profile controls">
 
 </div>
 
@@ -49,7 +49,7 @@ controller, connection, and game.
 
 ## Get started
 
-**Moving from another DS4Windows fork, including hbashton's?** Back up your
+**Moving from another DS4Windows distribution, including forks by schmaldeo or hbashton?** Back up your
 profiles and settings, disable the old copy's startup entry, and uninstall the
 old installed app or retire its portable folder before using this fork.
 

@@ -1,12 +1,12 @@
 {
   "version": 1,
   "dependencies": {
-    "net8.0-windows7.0": {
+    "net10.0-windows7.0": {
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[8.0.32, )",
-        "resolved": "8.0.32",
-        "contentHash": "FQXkG87JK9+SEbF6vRcWmevk0Pjqgehhz+9e1hHATDh7U8EvgmVQQcEUJTXj1IKi8VqLrdi/c1QHOpVjZcd9ng=="
+        "requested": "[10.0.13, )",
+        "resolved": "10.0.13",
+        "contentHash": "40yrBMsLEcjixBR4G+FiUaBPvxXIPSKJ2OgSrbOZcmSDBda4Sb0k7BWrfDpIvn3IvvDzwOL/tEPa6gDQfh6aRw=="
       },
       "System.Management": {
         "type": "Direct",
@@ -23,7 +23,7 @@
         "contentHash": "Kk3yEavoGHXCAFTLLegxztgSdj24JrkAHelwgWnu+YMFxezcU2DbABEOOIMdy04PExUtKQtlazaKqo0qSa1X6A=="
       }
     },
-    "net8.0-windows7.0/win-x64": {
+    "net10.0-windows7.0/win-x64": {
       "System.Management": {
         "type": "Direct",
         "requested": "[10.0.12, )",

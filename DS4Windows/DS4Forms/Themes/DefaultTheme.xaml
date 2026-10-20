@@ -9,6 +9,8 @@
     <Style x:Key="ProfileGreenChannelStyle" TargetType="Border"><Setter Property="Background" Value="#FFE7F5EB" /></Style>
     <Style x:Key="ProfileBlueChannelStyle" TargetType="Border"><Setter Property="Background" Value="#FFE5EEFF" /></Style>
 
+    <SolidColorBrush x:Key="MenuSeparatorColor" Color="#FFC8C8C8" />
+
     <!-- Brushes -->
     <SolidColorBrush x:Key="ForegroundColor" Color="{x:Static SystemColors.ActiveCaptionTextColor}" />
     <SolidColorBrush x:Key="SecondaryColor" Color="{x:Static SystemColors.ControlColor}"  />

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block extrahead %}
+{% if page and page.meta and page.meta.search and page.meta.search.exclude %}
+<meta name="robots" content="noindex,follow">
+{% endif %}
+{% endblock %}

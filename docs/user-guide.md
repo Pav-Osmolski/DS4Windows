@@ -7,13 +7,13 @@ selected by your profile. Available settings depend on the controller and connec
 
 ## Overview
 
-![Overview dashboard](images/tour/overview.png)
+![Overview dashboard](images/site/overview.webp)
 
 Start here for a summary of your connected controller, active profile and backend status.
 
 ## Controllers
 
-![Connected controllers and profile controls](images/tour/controllers.png)
+![Connected controllers and profile controls](images/site/controllers.webp)
 
 The Controllers page shows connected devices, battery, connection and selected
 profile. Use the profile selector to choose a saved profile, and Edit to change
@@ -27,7 +27,7 @@ are available in **Settings → Controllers**; see [Nintendo setup and options](
 
 ## Profiles
 
-![Saved profiles](images/tour/profiles.png)
+![Saved profiles](images/site/profiles.webp)
 
 Create a profile from a preset, then choose the output device the game expects.
 Xbox 360 is a useful starting point for XInput games. Choose DualShock 4 or
@@ -60,7 +60,7 @@ The [Profile Editor guide](profile-editor.md) explains each page and common setu
 tasks. Use [Nintendo Options](nintendo-options.md) and
 [Controller audio](controller-audio.md) for hardware-specific features.
 
-![Profile editor and mapping navigation](images/tour/profile-editor.png)
+![Profile editor and mapping navigation](images/site/profile-editor.webp)
 
 | Page | Purpose |
 | --- | --- |
@@ -82,6 +82,8 @@ that action in this profile. Select a row before choosing **Edit Action** or
 an export. Long names and triggers wrap, and narrow windows allow horizontal
 scrolling. Trigger Lab protection notices remain visible above the list.
 
+![Special Actions with an enabled controller-disconnect shortcut](images/site/special-actions.webp)
+
 Axis Config separates **Left stick**, **Right stick**, **Triggers** and **Motion
 axes**. Stick pages group dead zones, response shaping, outer-stick actions and
 calibration, with optional delta acceleration and flick-stick settings. Lightbar
@@ -89,6 +91,8 @@ groups profile colors, battery alerts, charging and rainbow brightness. Touchpad
 and Gyro keep their output-mode selectors, with focused cards for the selected
 mode, activation, smoothing and calibration. Changing sections preserves unsaved
 edits; use **Apply** or **Save** to write them as usual.
+
+![Axis Config with left-stick dead zones, sensitivity and live controller readings](images/site/axis-config.webp)
 
 Controller Readings groups live status, sticks, triggers, motion sensors and the
 first touchpad contact into cards that wrap to the available width. **Input** is
@@ -102,7 +106,7 @@ Sensor bars are read-only; configure behavior on the other editor pages.
 The controller diagram follows the selected controller layout; this example
 shows a DualShock 4 layout, while the earlier image shows a DualSense.
 
-![Button remapping dialog](images/tour/remapping-dialog.png)
+![Button remapping dialog](images/site/remapping-dialog.webp)
 
 Select a mapped control to open the remapping dialog and choose its action.
 
@@ -113,9 +117,7 @@ Audio Haptics is separate from game-authored native DualSense haptics.
 
 ## Audio Haptics
 
-![Audio Haptics controls](images/tour/audio-haptics.png)
-
-![Audio Haptics source and response settings](images/audio-haptics.png)
+![Audio Haptics controls](images/site/audio-haptics.webp)
 
 Audio Haptics creates feedback from sound; it is separate from native,
 game-authored haptics. Use it on the main page for the selected controller, or
@@ -171,7 +173,7 @@ are not confused. See [compatibility](controller-compatibility.md) for limitatio
 
 ## Trigger Lab
 
-![Adaptive trigger controls](images/tour/trigger-lab.png)
+![Adaptive trigger controls](images/site/trigger-lab.webp)
 
 Trigger Lab designs persistent adaptive-trigger effects for physical
 DualSense/Edge controllers. Choose a connected controller on the main page, or
@@ -202,7 +204,7 @@ combining them, and check Special Actions protection notices for conflicts.
 
 ## Auto Profiles
 
-![Application and window title profile rules](images/tour/auto-profiles.png)
+![Application and window title profile rules](images/site/auto-profiles.webp)
 
 Auto Profiles selects saved profiles when the matching application/window is
 active. First verify the intended profile works when selected manually.
@@ -238,7 +240,7 @@ Auto Profiles debug messages help identify a match; disable them after diagnosis
 
 ## Output Slots
 
-![Output Slots with automatic column fitting and clear reservations](images/tour/output-slots.png)
+![Output Slots with automatic column fitting and clear reservations](images/site/output-slots.webp)
 
 Use this page to see which physical controller feeds each virtual output slot.
 **Slot** is DS4Windows' output slot number, not a game-reported XInput index.
@@ -257,7 +259,7 @@ diagnose it instead of repeatedly adding more outputs.
 
 ## Settings
 
-![Settings: General section](images/tour/settings.png)
+![Settings: General section](images/site/settings.webp)
 
 The image shows the General section of the redesigned Settings page. The checked
 options are illustrative; your saved preferences may differ.
@@ -267,11 +269,20 @@ Settings fills the available window width and groups related options into cards.
 | Section | What you can change |
 | --- | --- |
 | General | Startup, window behavior, notifications and latency warnings |
-| Appearance | App theme, tray icon and language |
+| Appearance | App theme, sidebar icon, tray icon and language |
 | Controllers | VIIPER setup, HidHide, Steam Input recovery, device options and swipe profiles; optional Nintendo pairing |
 | Updates & tools | Update checks, profile folder, diagnostic utilities, verbose logging and optional profile-editor timing logs (off by default) |
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
+
+In **Appearance > Sidebar icon**, choose **Blue Tile**, **Midnight Circle**,
+**Blue Frame**, **Controller** or **Angular Badge** using the image previews.
+Blue Tile is first and is the default for new and existing settings. The choice
+applies immediately and is saved with your app settings. The sidebar icon keeps
+its 44 × 44 size as Windows display scaling changes. Use the **Hue** slider to
+shift its colours from 0 to 360 degrees. The sidebar and dropdown previews update
+as you drag, and the hue is saved with your app settings. **Reset** returns to
+the original artwork; transparency and neutral colours are preserved.
 
 Search settings to find matching groups across all sections. Use **Ctrl+F** to
 focus the search; **Clear**, or **Escape** while typing, returns to the selected
@@ -293,15 +304,19 @@ Run at Startup and Start Minimized are separate choices.
 
 ## Log and diagnostics
 
-![Startup log with deployment mode and backend verification](images/tour/log.png)
+![Log page with startup entries, backend verification and log-management controls](images/site/log.webp)
 
 The Log page shows startup, controller, profile and backend events, including
 installed/portable deployment mode, USB/IP status and detected driver versions.
 **Copy Text** copies the retained latest 1,000 entries with timestamps, including
 entries outside the current viewport. **Export** writes the same snapshot to a
 text file. **Clear visible list** clears only this view; saved files remain.
-Use **Open log folder** to find the active session and older saved logs. If the
-startup has scrolled beyond the 1,000-entry limit, attach the saved log as well.
+Use **Open log folder** to find the active session and older saved logs. The
+current run writes to `ds4windows_log.txt`; the previous session is archived at
+startup. The startup header stays with the rest of the session, including after
+changing retention. Daily or 10 MB rotation can still split a long session.
+`startup_failure.log` is a separate report written when an unhandled error occurs.
+If startup has scrolled beyond the 1,000-entry limit, attach the saved log as well.
 
 **Verbose logging** is available directly on the Log page and stays in sync
 with the existing Settings control. Enable it, restart DS4Windows to include

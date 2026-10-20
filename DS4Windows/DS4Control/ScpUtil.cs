@@ -2154,6 +2154,18 @@ namespace DS4Windows
             }
         }
 
+        public static SidebarIconChoice UseSidebarIcon
+        {
+            get => SidebarIconPolicy.Normalize(m_Config.sidebarIcon);
+            set => m_Config.sidebarIcon = SidebarIconPolicy.Normalize(value);
+        }
+
+        public static double SidebarIconHue
+        {
+            get => SidebarIconPolicy.NormalizeHue(m_Config.sidebarIconHue);
+            set => m_Config.sidebarIconHue = SidebarIconPolicy.NormalizeHue(value);
+        }
+
         private static long trayIconPolicyRevision;
         internal static long TrayIconPolicyRevision => Interlocked.Read(ref trayIconPolicyRevision);
 
@@ -5077,6 +5089,8 @@ namespace DS4Windows
         public string lastSettingsSection = "General";
         public bool downloadLang = true;
         public TrayIconChoice useIconChoice;
+        public SidebarIconChoice sidebarIcon = SidebarIconChoice.BlueTile;
+        public double sidebarIconHue;
         public const bool DEFAULT_FLASH_WHEN_LATE = true;
         public bool flashWhenLate = DEFAULT_FLASH_WHEN_LATE;
 
@@ -9689,6 +9703,13 @@ namespace DS4Windows
                         catch { missingSetting = true; }
                     }
 
+                    sidebarIconHue = double.TryParse(m_Xdoc.SelectSingleNode("/Profile/SidebarIconHue")?.InnerText,
+                        NumberStyles.Float, CultureInfo.InvariantCulture, out double savedHue)
+                        ? SidebarIconPolicy.NormalizeHue(savedHue) : 0;
+
+                    sidebarIcon = SidebarIconPolicy.Parse(
+                        m_Xdoc.SelectSingleNode("/Profile/SidebarIcon")?.InnerText);
+
                     try
                     {
                         Item = m_Xdoc.SelectSingleNode("/Profile/AppTheme");
@@ -10031,6 +10052,8 @@ namespace DS4Windows
             XmlNode xmlFlashWhenLate = m_Xdoc.CreateNode(XmlNodeType.Element, "FlashWhenLate", null); xmlFlashWhenLate.InnerText = flashWhenLate.ToString(); rootElement.AppendChild(xmlFlashWhenLate);
             XmlNode xmlFlashWhenLateAt = m_Xdoc.CreateNode(XmlNodeType.Element, "FlashWhenLateAt", null); xmlFlashWhenLateAt.InnerText = flashWhenLateAt.ToString(); rootElement.AppendChild(xmlFlashWhenLateAt);
             XmlNode xmlAppIconChoice = m_Xdoc.CreateNode(XmlNodeType.Element, "AppIcon", null); xmlAppIconChoice.InnerText = useIconChoice.ToString(); rootElement.AppendChild(xmlAppIconChoice);
+            XmlNode xmlSidebarHue = m_Xdoc.CreateNode(XmlNodeType.Element, "SidebarIconHue", null); xmlSidebarHue.InnerText = SidebarIconPolicy.NormalizeHue(sidebarIconHue).ToString(CultureInfo.InvariantCulture); rootElement.AppendChild(xmlSidebarHue);
+            XmlNode xmlSidebarIcon = m_Xdoc.CreateNode(XmlNodeType.Element, "SidebarIcon", null); xmlSidebarIcon.InnerText = SidebarIconPolicy.Normalize(sidebarIcon).ToString(); rootElement.AppendChild(xmlSidebarIcon);
             XmlNode xmlAppThemeChoice = m_Xdoc.CreateNode(XmlNodeType.Element, "AppTheme", null); xmlAppThemeChoice.InnerText = useCurrentTheme.ToString(); rootElement.AppendChild(xmlAppThemeChoice);
             XmlNode xmlUseOSCServ = m_Xdoc.CreateNode(XmlNodeType.Element, "UseOSCServer", null); xmlUseOSCServ.InnerText = useOSCServ.ToString(); rootElement.AppendChild(xmlUseOSCServ);
             XmlNode xmlOSCServPort = m_Xdoc.CreateNode(XmlNodeType.Element, "OSCServerPort", null); xmlOSCServPort.InnerText = oscServPort.ToString(); rootElement.AppendChild(xmlOSCServPort);

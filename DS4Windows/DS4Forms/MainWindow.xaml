@@ -693,7 +693,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </StackPanel.Style>
-                                <TextBlock Text="Personalize the interface, tray icon and language." Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,0,0,16" />
+                                <TextBlock Text="Personalize the interface, sidebar icon, tray icon and language." Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,0,0,16" />
                                 <Border Style="{DynamicResource BridgeCardStyle}">
                                     <StackPanel>
                                         <TextBlock Text="Theme and tray icon" Style="{DynamicResource BridgeSectionTitleStyle}" />
@@ -723,6 +723,44 @@
                                                 <ComboBoxItem Content="{lex:Loc Black}" />
                                                 <ComboBoxItem Content="{lex:Loc Battery}" />
                                             </ComboBox>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Sidebar icon" Style="{DynamicResource BridgeSectionTitleStyle}" />
+                                        <TextBlock Text="Choose the icon at the top of the sidebar. Changes apply immediately." Style="{DynamicResource BridgeSectionDescriptionStyle}" />
+                                        <Grid Margin="{StaticResource spaceMargin}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Label Content="Icon:" VerticalAlignment="Center" Padding="0" Margin="0,0,16,0" />
+                                            <ComboBox x:Name="sidebarIconCombo" Grid.Column="1" Width="220"
+                                                      ItemsSource="{Binding SidebarIconChoices}"
+                                                      SelectedIndex="{Binding SidebarIconIndex, Mode=TwoWay}"
+                                                      TextSearch.TextPath="Name"
+                                                      AutomationProperties.Name="Sidebar icon"
+                                                      Style="{DynamicResource BridgeSettingsComboBoxStyle}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Image Source="{Binding Image}" Width="24" Height="24" Margin="0,0,8,0" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </Grid>
+                                        <Grid Margin="0,0,0,8">
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                            <Label Content="Hue:" Padding="0" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                                            <Slider x:Name="sidebarHueSlider" Grid.Column="1" Minimum="0" Maximum="360" TickFrequency="1" IsSnapToTickEnabled="True"
+                                                    Value="{Binding SidebarIconHue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    VerticalAlignment="Center" Margin="0,0,12,0" AutomationProperties.Name="Sidebar icon hue"
+                                                    ToolTip="Shift the icon's colours. 0 degrees keeps the original artwork."/>
+                                            <TextBlock Grid.Column="2" Text="{Binding SidebarIconHue, StringFormat={}{0:0}°}" Width="40" VerticalAlignment="Center"/>
+                                            <Button Grid.Column="3" Content="Reset" Click="ResetSidebarHueBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
                                         </Grid>
                                     </StackPanel>
                                 </Border>

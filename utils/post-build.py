@@ -162,7 +162,7 @@ if len({path.casefold() for path in managed_files}) != len(managed_files):
 manifest_path.write_text("\n".join(managed_files) + "\n", encoding="utf-8")
 
 
-# rename target dir (net8.0-windows) to DS4Windows
+# Rename the target framework output directory to DS4Windows.
 renamed_dir = target_dir.parent / "DS4Windows"
 if renamed_dir.exists():
     if is_reparse_point(renamed_dir):

@@ -21,7 +21,7 @@ retains ThroughputOptimized when available. Windows 10 and rejected requests
 continue with Windows-selected parameters. Acceptance is logged once per open;
 it does not prove a particular negotiated interval or end-to-end latency.
 
-The .NET 8 projection requires `IWinRTObject.NativeObject.GetRef()`, not
+The modern .NET projection requires `IWinRTObject.NativeObject.GetRef()`, not
 `Marshal.GetIUnknownForObject`: the latter returns a CLR wrapper around the
 projection rather than the native Windows object used to query Device6. The
 owned GetRef is released in the existing finally; NativeObject.ThisPtr is

@@ -6,7 +6,7 @@ Create or select a saved profile on **Profiles**, or choose **Edit** for a devic
 on **Controllers**. Settings and preview availability depend on the selected
 physical controller and virtual output.
 
-![Profile Editor showing DualSense button mappings](images/tour/profile-editor.png)
+![Profile Editor showing DualSense button mappings](images/site/profile-editor.webp)
 
 ## Saving and previewing
 
@@ -29,7 +29,7 @@ unsaved Overview changes.
    activation condition is met.
 4. Save, then test the result in the target game or application.
 
-![Button remapping dialog](images/tour/remapping-dialog.png)
+![Button remapping dialog](images/site/remapping-dialog.webp)
 
 **Show live preview** helps identify the control being pressed. A different
 diagram layout changes how controls are presented; choose the virtual controller
@@ -37,6 +37,8 @@ in **Advanced → Output**. For conflicting mouse mappings, use the
 [mouse-click troubleshooting guide](troubleshooting-mouse-clicks.md).
 
 ## Special Actions
+
+![Special Actions with an enabled controller-disconnect shortcut](images/site/special-actions.webp)
 
 Special Actions trigger behaviour from a button combination: macros, program
 launches, profile shifts and Bluetooth disconnects are examples.
@@ -67,6 +69,8 @@ Output after changing its dead zone. Choose the readout controller under
 **Advanced → Input** when editing with multiple connected devices.
 
 ## Axis Config
+
+![Axis Config with left-stick settings and live controller readings](images/site/axis-config.webp)
 
 Choose **Left stick**, **Right stick**, **Triggers** or **Motion axes**. Begin with
 the normal output mode before tuning response.

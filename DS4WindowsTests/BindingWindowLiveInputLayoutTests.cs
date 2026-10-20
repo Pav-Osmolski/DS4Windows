@@ -301,7 +301,8 @@ public sealed class BindingWindowLiveInputLayoutTests
                     Assert.AreEqual(0d, editor.ScrollableWidth, 1);
                 }
                 var channels = (Grid)window.FindName("bindingRgbChannels");
-                Border[] surfaces = channels.Children.OfType<Border>().ToArray();
+                Border[] surfaces = channels.Children.OfType<Grid>()
+                    .SelectMany(row => row.Children.OfType<Border>()).ToArray();
                 Assert.AreEqual(3, surfaces.Length);
                 foreach (Border surface in surfaces)
                 {

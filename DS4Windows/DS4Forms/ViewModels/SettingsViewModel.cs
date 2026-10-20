@@ -282,6 +282,33 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
         public event EventHandler IconChoiceIndexChanged;
 
+        public IReadOnlyList<SidebarIconOption> SidebarIconChoices => SidebarIconCatalog.Choices;
+
+        public int SidebarIconIndex
+        {
+            get => (int)Global.UseSidebarIcon;
+            set
+            {
+                if (value < 0 || value >= SidebarIconChoices.Count || value == SidebarIconIndex) return;
+                Global.UseSidebarIcon = SidebarIconChoices[value].Value;
+                SidebarIconIndexChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler SidebarIconIndexChanged;
+
+        public double SidebarIconHue
+        {
+            get => Global.SidebarIconHue;
+            set
+            {
+                double hue = SidebarIconPolicy.NormalizeHue(value);
+                if (hue == Global.SidebarIconHue) return;
+                Global.SidebarIconHue = hue;
+                SidebarIconHueChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler SidebarIconHueChanged;
+
         public int AppChoiceIndex
         {
             get => (int)DS4Windows.Global.UseCurrentTheme;

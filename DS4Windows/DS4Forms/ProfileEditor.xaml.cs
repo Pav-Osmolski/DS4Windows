@@ -21,6 +21,8 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
+using ContextMenu = System.Windows.Controls.ContextMenu;
+using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;

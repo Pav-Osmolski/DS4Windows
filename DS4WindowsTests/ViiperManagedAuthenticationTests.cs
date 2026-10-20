@@ -180,17 +180,19 @@ public sealed class ViiperManagedAuthenticationTests
         for (int index = 0; index < 1100; index++) writer.Write(payload, 0, payload.Length);
         wire.Position = 0;
         using var reader = new ViiperEncryptedStream(wire, Key(), ViiperConnectionRole.Server, ViiperCipherImplementation.Managed);
-        if (reading) for (int index = 0; index < 100; index++) reader.Read(payload, 0, payload.Length);
+        if (reading) for (int index = 0; index < 100; index++) Assert.AreEqual(payload.Length, reader.Read(payload, 0, payload.Length));
         else wire.SetLength(0);
+        int totalRead = 0;
         long started = System.Diagnostics.Stopwatch.GetTimestamp();
         long before = GC.GetAllocatedBytesForCurrentThread();
         for (int index = 0; index < 1000; index++)
         {
-            if (reading) reader.Read(payload, 0, payload.Length);
+            if (reading) totalRead += reader.Read(payload, 0, payload.Length);
             else writer.Write(payload, 0, payload.Length);
         }
         long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
         double elapsedMilliseconds = System.Diagnostics.Stopwatch.GetElapsedTime(started).TotalMilliseconds;
+        if (reading) Assert.AreEqual(1000 * payload.Length, totalRead, "Every warmed read must return the complete payload.");
         Console.WriteLine($"Forced managed {(reading ? "read" : "write")}: {allocated} bytes / 1000 warmed 24-byte records " +
             $"({allocated / 1000.0:F2} bytes/record); {elapsedMilliseconds:F3} ms elapsed. " +
             "In-process diagnostic only, not controller latency or a cross-machine benchmark.");

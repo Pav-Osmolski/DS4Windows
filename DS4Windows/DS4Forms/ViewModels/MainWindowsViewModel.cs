@@ -1328,9 +1328,5 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             return launch;
         }
 
-        public bool IsNET8Available()
-        {
-            return DS4Windows.Util.IsNet8DesktopRuntimeAvailable();
-        }
     }
 }

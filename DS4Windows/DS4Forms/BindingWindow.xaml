@@ -13,7 +13,7 @@
         Title="Select action" Height="540" Width="1020" Closing="Window_Closing"
         Style="{DynamicResource WindowStyle}">
     <Window.Resources>
-        <Style x:Key="BindingRgbSliderStyle" TargetType="Slider">
+        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider">
             <Setter Property="Height" Value="28"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -112,24 +112,35 @@
                                 <TabItem Header="{lex:Loc SolidColor}" Visibility="Collapsed">
                                     <StackPanel>
                                         <CheckBox Content="{lex:Loc BindingWin.ChangeLight}" IsChecked="{Binding UseExtrasColor}" Margin="{StaticResource spaceMargin}" />
-                                        <Grid x:Name="bindingRgbChannels" Margin="0,2">
-                                            <Grid.ColumnDefinitions><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <Grid x:Name="bindingRgbChannels">
                                             <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-                                            <TextBlock Text="R" VerticalAlignment="Center"/>
-                                            <Border Grid.Column="1" Height="36" Padding="8,0" Margin="0,2" CornerRadius="4">
-                                                <Border.Background><SolidColorBrush Color="{Binding ExtrasColorRString, FallbackValue=Red}" Opacity="0.25"/></Border.Background>
-                                                <Slider Style="{StaticResource BindingRgbSliderStyle}" VerticalAlignment="Center" Value="{Binding ExtrasColorR}" Minimum="0" Maximum="255" ToolTip="{Binding ExtrasColorR}" AutomationProperties.Name="Red"/>
-                                            </Border>
-                                            <TextBlock Grid.Row="1" Text="G" VerticalAlignment="Center"/>
-                                            <Border Grid.Row="1" Grid.Column="1" Height="36" Padding="8,0" Margin="0,2" CornerRadius="4">
-                                                <Border.Background><SolidColorBrush Color="{Binding ExtrasColorGString, FallbackValue=Lime}" Opacity="0.25"/></Border.Background>
-                                                <Slider Style="{StaticResource BindingRgbSliderStyle}" VerticalAlignment="Center" Value="{Binding ExtrasColorG}" Minimum="0" Maximum="255" ToolTip="{Binding ExtrasColorG}" AutomationProperties.Name="Green"/>
-                                            </Border>
-                                            <TextBlock Grid.Row="2" Text="B" VerticalAlignment="Center"/>
-                                            <Border Grid.Row="2" Grid.Column="1" Height="36" Padding="8,0" Margin="0,2" CornerRadius="4">
-                                                <Border.Background><SolidColorBrush Color="{Binding ExtrasColorBString, FallbackValue=Blue}" Opacity="0.25"/></Border.Background>
-                                                <Slider Style="{StaticResource BindingRgbSliderStyle}" VerticalAlignment="Center" Value="{Binding ExtrasColorB}" Minimum="0" Maximum="255" ToolTip="{Binding ExtrasColorB}" AutomationProperties.Name="Blue"/>
-                                            </Border>
+                                            <Grid Grid.Row="0" Margin="0,0,0,4" UseLayoutRounding="True">
+                                                <Grid.ColumnDefinitions><ColumnDefinition Width="18"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                                <Label Content="R" Padding="0" VerticalAlignment="Center"/>
+                                                <Border Grid.Column="1" Tag="{Binding ExtrasColorRString, FallbackValue=Red}"
+                                                        Style="{DynamicResource ProfileRedChannelStyle}" Height="36" Padding="6,4" CornerRadius="3">
+                                                    <Slider AutomationProperties.Name="Red" Value="{Binding ExtrasColorR}" Minimum="0" Maximum="255" ToolTip="{Binding ExtrasColorR}"
+                                                            Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Margin="0" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
+                                            <Grid Grid.Row="1" Margin="0,0,0,4" UseLayoutRounding="True">
+                                                <Grid.ColumnDefinitions><ColumnDefinition Width="18"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                                <Label Content="G" Padding="0" VerticalAlignment="Center"/>
+                                                <Border Grid.Column="1" Tag="{Binding ExtrasColorGString, FallbackValue=Lime}"
+                                                        Style="{DynamicResource ProfileGreenChannelStyle}" Height="36" Padding="6,4" CornerRadius="3">
+                                                    <Slider AutomationProperties.Name="Green" Value="{Binding ExtrasColorG}" Minimum="0" Maximum="255" ToolTip="{Binding ExtrasColorG}"
+                                                            Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Margin="0" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
+                                            <Grid Grid.Row="2" Margin="0,0,0,4" UseLayoutRounding="True">
+                                                <Grid.ColumnDefinitions><ColumnDefinition Width="18"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                                <Label Content="B" Padding="0" VerticalAlignment="Center"/>
+                                                <Border Grid.Column="1" Tag="{Binding ExtrasColorBString, FallbackValue=Blue}"
+                                                        Style="{DynamicResource ProfileBlueChannelStyle}" Height="36" Padding="6,4" CornerRadius="3">
+                                                    <Slider AutomationProperties.Name="Blue" Value="{Binding ExtrasColorB}" Minimum="0" Maximum="255" ToolTip="{Binding ExtrasColorB}"
+                                                            Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Margin="0" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
                                         </Grid>
                                         <Button x:Name="extrasColorChoosebtn" Width="20" Height="20" Background="{Binding ExtrasColorString}" HorizontalAlignment="Right" Margin="0,10,10,0" Click="ExtrasColorChoosebtn_Click" />
                                     </StackPanel>

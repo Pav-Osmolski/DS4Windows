@@ -2,7 +2,7 @@
 param(
     [Parameter(Mandatory = $true)]
     [string]$PublishRoot,
-    [string]$ProductVersion = "5.0.34.0",
+    [string]$ProductVersion = "5.0.36.0",
     [string]$DisplayVersion = "5.0.15",
     [string]$BundleVersion,
     [string]$OutputDirectory,

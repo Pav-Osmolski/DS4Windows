@@ -71,7 +71,7 @@ internal sealed class Switch2BluetoothThroughputPreference : IDisposable
         {
             unknown = AcquireNativeReference(device);
             Guid device6Id = Device6Interface;
-            if (Marshal.QueryInterface(unknown, ref device6Id, out device6) < 0 ||
+            if (Marshal.QueryInterface(unknown, in device6Id, out device6) < 0 ||
                 device6 == 0)
             {
                 return false;
@@ -139,7 +139,7 @@ internal sealed class Switch2BluetoothThroughputPreference : IDisposable
         CloseAndRelease(ref detached);
     }
 
-    // .NET 8 projects WinRT through ComWrappers. GetIUnknownForObject creates
+    // Modern .NET projects WinRT through ComWrappers. GetIUnknownForObject creates
     // a CLR wrapper around that projection, not the native Windows device.
     // GetRef adds our own reference, balanced by Release in TryAcquire's
     // finally; releasing NativeObject.ThisPtr would steal the projection's ref.
@@ -159,7 +159,7 @@ internal sealed class Switch2BluetoothThroughputPreference : IDisposable
         try
         {
             Guid closableId = ClosableInterface;
-            if (Marshal.QueryInterface(detached, ref closableId,
+            if (Marshal.QueryInterface(detached, in closableId,
                     out closable) >= 0 && closable != 0)
             {
                 GetHResultDelegate close = GetVtableDelegate<

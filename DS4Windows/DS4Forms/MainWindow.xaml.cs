@@ -542,6 +542,8 @@ namespace DS4WinWPF.DS4Forms
             trayIconVM.RequestOpen += TrayIconVM_RequestOpen;
             trayIconVM.RequestServiceChange += TrayIconVM_RequestServiceChange;
             settingsWrapVM.IconChoiceIndexChanged += SettingsWrapVM_IconChoiceIndexChanged;
+            settingsWrapVM.SidebarIconIndexChanged += SettingsWrapVM_SidebarIconIndexChanged;
+            settingsWrapVM.SidebarIconHueChanged += SettingsWrapVM_SidebarIconIndexChanged;
             settingsWrapVM.AppChoiceIndexChanged += SettingsWrapVM_AppChoiceIndexChanged;
 
             autoProfControl.AutoDebugChanged += AutoProfControl_AutoDebugChanged;
@@ -580,6 +582,13 @@ namespace DS4WinWPF.DS4Forms
                 AppLogger.LogToGui(@"Could not connect to Windows Management Instrumentation service.
 Suspend support not enabled.", true);
             }
+        }
+
+        private void ResetSidebarHueBtn_Click(object sender, RoutedEventArgs e) => settingsWrapVM.SidebarIconHue = 0;
+
+        private void SettingsWrapVM_SidebarIconIndexChanged(object sender, EventArgs e)
+        {
+            SidebarIconCatalog.Apply(Application.Current.Resources, Global.UseSidebarIcon, Global.SidebarIconHue);
         }
 
         private void SettingsWrapVM_AppChoiceIndexChanged(object sender, EventArgs e)

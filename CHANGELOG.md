@@ -3,11 +3,38 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.36](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.36) - 2026-10-20
+
+### Added
+
+- Launch the [DS4Windows website](https://pav-osmolski.github.io/DS4Windows/) with searchable setup and troubleshooting guides, light/dark reading themes and refreshed screenshots, including Special Actions and Axis Config ([PR #57](https://github.com/Pav-Osmolski/DS4Windows/pull/57)).
+- Adjust the sidebar icon's hue in **Settings > Appearance > Sidebar icon**. The icon and dropdown previews update while dragging; the hue is saved, and **Reset** restores the original artwork. Transparency and neutral colours are preserved ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+
+### Fixed
+
+- Centre the button-mapping dialog's RGB sliders inside equal, aligned channel backgrounds in both themes. Remove the Add Programs popup's outer item gaps, follow the current light/dark theme, use a full-width separator in both themes and style its separator separately so opening the menu does not crash ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+
+- Keep the startup header and session in one active log when loading or changing retention. Avoid repeating startup rollover while preserving retention cleanup and daily/size rotation ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+
+### Changed
+
+- Replace the Angular Badge sidebar icon with the updated maintainer-supplied transparent artwork ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+
+## [5.0.35](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.35) - 2026-10-19
+
+### Added
+
+- Choose the sidebar's icon in **Settings > Appearance > Sidebar icon**: **Blue Tile** (first and default), **Midnight Circle**, **Blue Frame**, **Controller** or **Angular Badge**. Changes apply immediately and the choice is saved. The transparent artwork uses a 44 × 44 device-independent-pixel layout for display scaling ([PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56)).
+
+### Changed
+
+- Move the application, installer hosts and diagnostic tools to **.NET 10 LTS**, pin SDK **10.0.402**, and refresh dependency locks. Packages include their runtime; no separate .NET installation or controller-driver update is required. Add the running runtime version to saved and copied startup logs and remove unused .NET 8 installation notices ([PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56)). See the [migration validation and Windows compatibility notes](docs/validation/2026-10-19-net10-migration.md).
+
 ## [5.0.34](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.34) - 2026-10-19
 
 ### Fixed
 
-- Improve DualSense game feedback over USB and Bluetooth: pace native output commands in VIIPER using its advertised HID output interval, reduce redundant consecutive pending state updates in DS4Windows, and preserve the game's Bluetooth rumble mode across trigger-only updates. Distinct effects, final stops and command ordering remain intact. Maintainer testing confirmed normal gameplay in DEATHLOOP and GTA V Enhanced over both connections, including extended Bluetooth play. Thanks to [@Jobima1st](https://github.com/Jobima1st) for the reports and logs ([DS4Windows PR #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54), [VIIPER PR #6](https://github.com/Pav-Osmolski/VIIPER/pull/6), [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), [upstream issue #119](https://github.com/hbashton/DS4Windows/issues/119)).
+- Improve DualSense game feedback over USB and Bluetooth: pace native output commands in VIIPER using its advertised HID output interval, reduce redundant consecutive pending state updates in DS4Windows, and preserve the game's Bluetooth rumble mode across trigger-only updates. Distinct effects, final stops and command ordering remain intact. Maintainer testing confirmed normal gameplay in DEATHLOOP and GTA V Enhanced over both connections, including extended Bluetooth play. On 2026-10-19, [the original reporter also confirmed that the haptic problems were fixed over USB and Bluetooth](https://github.com/Pav-Osmolski/DS4Windows/issues/47#issuecomment-6274412583). Thanks to [@Jobima1st](https://github.com/Jobima1st) for the reports and logs ([DS4Windows PR #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54), [VIIPER PR #6](https://github.com/Pav-Osmolski/VIIPER/pull/6), [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), [upstream issue #119](https://github.com/hbashton/DS4Windows/issues/119)).
 - Overhaul the in-app changelog and update-notes reader: clearer release spacing, theme-aware tables, readable links/code/quotes, images constrained to the window, and loading/error/retry states. Add a GitHub releases shortcut and improve window sizing and footer layout ([PR #53](https://github.com/Pav-Osmolski/DS4Windows/pull/53)).
 - Refine Profile Editor > Nintendo Options > Feel game feedback: centre % and ms with a consistent 3px gap, keep fields and units together when wrapping, and align checkbox groups and numeric fields ([PR #53](https://github.com/Pav-Osmolski/DS4Windows/pull/53)).
 

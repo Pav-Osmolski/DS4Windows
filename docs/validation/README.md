@@ -5,6 +5,7 @@ investigations and remaining acceptance limits. They do not establish the status
 of a newer release. Release history is in [CHANGELOG.md](../../CHANGELOG.md).
 
 - [Profile Editor field alignment](profile-editor-field-alignment.md)
+- [.NET 10 migration - 19 October 2026](2026-10-19-net10-migration.md)
 - [Stick-based gyro activation](stick-based-gyro-activation.md)
 - [DualSense indicator LEDs and Passthru](dualsense-indicator-leds.md)
 

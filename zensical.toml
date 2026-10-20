@@ -1,0 +1,85 @@
+[project]
+site_name = "DS4Windows"
+site_url = "https://pav-osmolski.github.io/DS4Windows/"
+site_description = "Your controller. Your way. Remapping, gyro aiming, haptics and per-game profiles. Explore Pav-Osmolski's actively maintained DS4Windows fork."
+site_author = "Pav-Osmolski"
+docs_dir = ".pages/docs"
+site_dir = ".pages/site"
+repo_url = "https://github.com/Pav-Osmolski/DS4Windows"
+repo_name = "Pav-Osmolski/DS4Windows"
+copyright = "Free and open source. Built on the work of the DS4Windows community."
+extra_css = ["assets/site.css"]
+nav = [
+  { "Home" = "index.md" },
+  { "Get started" = [
+    { "Installation & first connection" = "docs/getting-started.md" },
+    { "Controllers & compatibility" = "docs/controller-compatibility.md" },
+    { "Tour the app" = "docs/user-guide.md" },
+    { "Screenshots" = "docs/screenshots.md" },
+  ] },
+  { "Guides" = [
+    { "All guides" = "docs/README.md" },
+    { "Profile Editor" = "docs/profile-editor.md" },
+    { "Audio & native game feedback" = "docs/controller-audio.md" },
+    { "Nintendo controllers" = "docs/nintendo-options.md" },
+    { "Flick stick" = "docs/flick-stick-calibration.md" },
+    { "Integrations" = "docs/integrations.md" },
+    { "Moonlight & Sunshine" = "docs/moonlight-support.md" },
+    { "DSX game mods" = "docs/DSX-game-mod-support.md" },
+    { "Swipe profiles" = "docs/swipe-profiles.md" },
+  ] },
+  { "Help" = [
+    { "Troubleshooting" = "docs/troubleshooting.md" },
+    { "Mouse mappings" = "docs/troubleshooting-mouse-clicks.md" },
+    { "USB/IP upgrades" = "docs/usbip-upgrade.md" },
+    { "Report an issue" = "https://github.com/Pav-Osmolski/DS4Windows/issues/new/choose" },
+  ] },
+  { "Project" = [
+    { "What's new" = "CHANGELOG.md" },
+    { "Credits & contributors" = "contributors.md" },
+    { "Contributing" = "contributing.md" },
+    { "Development" = "docs/development.md" },
+    { "Roadmap" = "docs/roadmap.md" },
+    { "Technical reference" = "docs/reference.md" },
+  ] },
+]
+
+[project.theme]
+custom_dir = "website/overrides"
+logo = "assets/blue-tile.webp"
+favicon = "assets/blue-tile.webp"
+language = "en"
+features = ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.path", "navigation.top", "navigation.footer", "search.highlight", "content.code.copy"]
+font = false
+
+[[project.theme.palette]]
+scheme = "slate"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+scheme = "default"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to dark mode"
+
+[project.markdown_extensions]
+tables = {}
+fenced_code = {}
+attr_list = {}
+md_in_html = {}
+admonition = {}
+toc.permalink = true
+pymdownx.details = {}
+pymdownx.superfences = {}
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/Pav-Osmolski/DS4Windows"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/reddit"
+link = "https://www.reddit.com/r/DS4Windows/"
