@@ -49,7 +49,7 @@ controller, connection, and game.
 
 ## Get started
 
-**Moving from another DS4Windows fork, including hbashton's?** Back up your
+**Moving from another DS4Windows distribution, including forks by schmaldeo or hbashton?** Back up your
 profiles and settings, disable the old copy's startup entry, and uninstall the
 old installed app or retire its portable folder before using this fork.
 

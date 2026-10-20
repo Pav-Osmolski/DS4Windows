@@ -26,9 +26,10 @@ this fork currently publishes unsigned builds.
 
 ### Moving from another fork
 
-If you are moving from another DS4Windows distribution, including hbashton's
-fork, start with a clean set of application files and the matching bundled
-backend. Different releases may use different VIIPER and USB/IP versions.
+If you are moving from another DS4Windows distribution, including forks by
+schmaldeo or hbashton, start with a clean set of application files and the
+matching bundled backend. Different releases may use different VIIPER and USB/IP
+versions.
 For a routine update of **this fork**, follow
 [Update without losing your profiles](#update-without-losing-your-profiles)
 instead; you do not need to uninstall a working installation first.
@@ -72,8 +73,8 @@ In [issue #48](https://github.com/Pav-Osmolski/DS4Windows/issues/48#issuecomment
 a user reported Joy-Con 2 slot-activation failures after merging very old
 backups and confirmed that a clean install allowed the Joy-Cons to connect
 after a DualSense Edge. The exact conflicting configuration was no longer
-reproducible. This is a reason to test migrations with fresh settings, not a
-requirement to reset settings for routine updates of this fork.
+reproducible. This is a good reason to test with fresh settings after migrating
+from another fork.
 
 #### Existing USB/IP drivers
 
@@ -187,11 +188,6 @@ Current fork builds check this repository and use the matching fork DS4Updater
 (2.0.9 or newer) for supported installed/portable updates. Configure checks under
 **Settings → Updates & tools**, or install manually from
 [Pav-Osmolski/DS4Windows Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
-
-**Older RC4.6.7 builds need one manual upgrade:** they still check hbashton's
-upstream releases. Replacing DS4Updater alone does not change that old app's
-release source. After installing a current fork build, later update checks use
-this fork.
 
 ## If something isn't working
 
