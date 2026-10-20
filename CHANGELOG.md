@@ -3,15 +3,16 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## Unreleased
+## [5.0.36](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.36) - 2026-10-20
 
 ### Added
 
+- Launch the [DS4Windows website](https://pav-osmolski.github.io/DS4Windows/) with searchable setup and troubleshooting guides, light/dark reading themes and refreshed screenshots, including Special Actions and Axis Config ([PR #57](https://github.com/Pav-Osmolski/DS4Windows/pull/57)).
 - Adjust the sidebar icon's hue in **Settings > Appearance > Sidebar icon**. The icon and dropdown previews update while dragging; the hue is saved, and **Reset** restores the original artwork. Transparency and neutral colours are preserved ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
 
 ### Fixed
 
-- Centre the button-mapping dialog's RGB sliders inside equal, aligned channel backgrounds in both themes. Remove the Add Programs popup's outer item gaps and follow the current light/dark theme ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+- Centre the button-mapping dialog's RGB sliders inside equal, aligned channel backgrounds in both themes. Remove the Add Programs popup's outer item gaps, follow the current light/dark theme and style its separator separately so opening the menu does not crash ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
 
 - Keep the startup header and session in one active log when loading or changing retention. Avoid repeating startup rollover while preserving retention cleanup and daily/size rotation ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
 
