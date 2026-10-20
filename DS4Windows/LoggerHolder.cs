@@ -32,7 +32,6 @@ namespace DS4WinWPF
         private Logger logger;// = LogManager.GetCurrentClassLogger();
         public Logger Logger { get => logger; }
         internal string LogDirectory { get; }
-        private FileTarget configuredFileTarget;
         private ReaderWriterLockSlim logLock = new ReaderWriterLockSlim();
 
         public LoggerHolder(DS4Windows.ControlService service)
@@ -52,11 +51,7 @@ namespace DS4WinWPF
                 };
                 configuration.AddRule(LogLevel.Info, LogLevel.Fatal, fileTarget);
             }
-            configuredFileTarget = fileTarget;
             ConfigureArchiveLimits(fileTarget);
-            // Settings load after logger bootstrap. Defer age-based deletion
-            // until the user's saved retention preference has been read.
-            fileTarget.MaxArchiveDays = 0;
             fileTarget.FileName = Path.Combine(logDirectory, "ds4windows_log.txt");
             fileTarget.ArchiveFileName = Path.Combine(logDirectory, "ds4windows_log_{#}.txt");
             LogManager.Configuration = configuration;
@@ -81,6 +76,10 @@ namespace DS4WinWPF
 
         internal static void ConfigureArchiveLimits(FileTarget target)
         {
+            // Age cleanup runs through StoredLogManager after settings load.
+            // Changing NLog MaxArchiveDays on an active target resets its archive
+            // state and repeats ArchiveOldFileOnStartup, splitting the session.
+            target.MaxArchiveDays = 0;
             target.MaxArchiveFiles = StoredLogManager.MaximumArchiveFiles;
             target.ArchiveAboveSize = StoredLogManager.ArchiveBytes;
             target.ArchiveEvery = FileArchivePeriod.Day;
@@ -93,7 +92,6 @@ namespace DS4WinWPF
         internal StoredLogCleanupResult ApplyRetention()
         {
             int days = Global.LogRetentionDays;
-            configuredFileTarget.MaxArchiveDays = days;
             return StoredLogManager.Cleanup(LogDirectory, days, DateTime.UtcNow);
         }
 

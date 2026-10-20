@@ -72,7 +72,11 @@ public sealed class UiColourLayoutTests
     }
 
     [TestMethod]
-    public void AddProgramsPopupUsesCurrentThemeAndHasNoOuterItemPadding()
+    [DataRow("DarkTheme", false)]
+    [DataRow("DarkTheme", true)]
+    [DataRow("DefaultTheme", false)]
+    [DataRow("DefaultTheme", true)]
+    public void AddProgramsPopupUsesCurrentThemeAndHasNoOuterItemPadding(string theme, bool hideSteam)
     {
         HeadlessWpfDispatcher.Invoke(() =>
         {
@@ -81,16 +85,37 @@ public sealed class UiColourLayoutTests
             var source = XDocument.Load(Source("AutoProfiles.xaml"));
             var dictionary = new XElement(wpf + "ResourceDictionary", new XAttribute(XNamespace.Xmlns + "x", x),
                 new XElement(wpf + "ResourceDictionary.MergedDictionaries", new XElement(wpf + "ResourceDictionary",
-                    new XAttribute("Source", "/DS4Windows;component/DS4Forms/Themes/DarkTheme.xaml"))),
+                    new XAttribute("Source", $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))),
                 source.Descendants(wpf + "Style").Where(e => (string)e.Attribute(x + "Key") is "AutoProfileMenuItemStyle" or "AutoProfileMenuStyle").Select(e => new XElement(e)));
             var resources = (ResourceDictionary)XamlReader.Parse(dictionary.ToString());
             var menu = new ContextMenu { Resources = resources, Style = (Style)resources["AutoProfileMenuStyle"] };
-            menu.Items.Add(new MenuItem { Header = "Add Directory" });
+            var actualMenu = source.Descendants(wpf + "ContextMenu").Single(e => (string)e.Attribute("Style") == "{StaticResource AutoProfileMenuStyle}");
+            foreach (var entry in actualMenu.Elements())
+            {
+                if (entry.Name == wpf + "Separator") menu.Items.Add(new Separator());
+                else if (entry.Name == wpf + "MenuItem") menu.Items.Add(new MenuItem
+                {
+                    Header = (string)entry.Attribute("Header"),
+                    Visibility = hideSteam && (string)entry.Attribute(x + "Name") == "steamMenuItem" ? Visibility.Collapsed : Visibility.Visible
+                });
+            }
+            Assert.AreEqual(6, menu.Items.Count);
+            menu.ApplyTemplate();
+            menu.Measure(new Size(500, 500));
+            menu.Arrange(new Rect(new Point(), menu.DesiredSize));
+            menu.UpdateLayout();
+            Assert.IsTrue(menu.ActualHeight > 0);
+            foreach (var item in menu.Items.OfType<MenuItem>()) Assert.AreEqual(typeof(MenuItem), item.Style.TargetType);
+            var separator = menu.Items.OfType<Separator>().Single();
+            Assert.AreEqual(typeof(Separator), separator.Style.TargetType);
             Assert.AreEqual(new Thickness(0), menu.Padding);
             Assert.AreEqual(new Thickness(1), menu.BorderThickness);
-            var dark = ((SolidColorBrush)menu.Background).Color;
-            resources.MergedDictionaries[0] = new ResourceDictionary { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/DefaultTheme.xaml", UriKind.Relative) };
-            Assert.AreNotEqual(dark, ((SolidColorBrush)menu.Background).Color);
+            var initialColour = ((SolidColorBrush)menu.Background).Color;
+            string nextTheme = theme == "DarkTheme" ? "DefaultTheme" : "DarkTheme";
+            resources.MergedDictionaries[0] = new ResourceDictionary { Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{nextTheme}.xaml", UriKind.Relative) };
+            Assert.AreNotEqual(initialColour, ((SolidColorBrush)menu.Background).Color);
+            menu.Measure(new Size(500, 500));
+            menu.UpdateLayout();
             Assert.AreEqual(((SolidColorBrush)resources["CardBackgroundColor"]).Color, ((SolidColorBrush)menu.Background).Color);
             Assert.AreEqual(((SolidColorBrush)resources["ForegroundColor"]).Color, ((SolidColorBrush)menu.Foreground).Color);
         });

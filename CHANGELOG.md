@@ -13,6 +13,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Centre the button-mapping dialog's RGB sliders inside equal, aligned channel backgrounds in both themes. Remove the Add Programs popup's outer item gaps and follow the current light/dark theme ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
 
+- Keep the startup header and session in one active log when loading or changing retention. Avoid resetting NLog's startup archive state while preserving retention cleanup and daily/size rotation ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+
 ### Changed
 
 - Replace the Angular Badge sidebar icon with the updated maintainer-supplied transparent artwork ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).

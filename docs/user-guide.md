@@ -311,8 +311,12 @@ installed/portable deployment mode, USB/IP status and detected driver versions.
 **Copy Text** copies the retained latest 1,000 entries with timestamps, including
 entries outside the current viewport. **Export** writes the same snapshot to a
 text file. **Clear visible list** clears only this view; saved files remain.
-Use **Open log folder** to find the active session and older saved logs. If the
-startup has scrolled beyond the 1,000-entry limit, attach the saved log as well.
+Use **Open log folder** to find the active session and older saved logs. The
+current run writes to `ds4windows_log.txt`; the previous session is archived at
+startup. The startup header stays with the rest of the session, including after
+changing retention. Daily or 10 MB rotation can still split a long session.
+`startup_failure.log` is a separate report written when an unhandled error occurs.
+If startup has scrolled beyond the 1,000-entry limit, attach the saved log as well.
 
 **Verbose logging** is available directly on the Log page and stays in sync
 with the existing Settings control. Enable it, restart DS4Windows to include
@@ -324,7 +328,7 @@ it does not upload a log or create a report automatically.
 **30 days**. The preference persists across restarts. Archives also rotate daily
 or at 10 MB and are capped at 20 files, so busy sessions may retain less history.
 Cleanup runs after saved settings load and when you change retention; normal
-archive rotation also enforces the limits.
+archive rotation also enforces the file-count limit.
 
 **Clear stored logs** asks before deleting DS4Windows archives and saved startup
 failure reports in the active Logs folder. It keeps the current session log,
