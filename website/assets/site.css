@@ -7,3 +7,69 @@ body:has(.site-home) .md-main__inner{margin-top:0}body:has(.site-home) .md-conte
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
 
 @media(max-width:650px){.hero-art{mask-image:linear-gradient(180deg,transparent 0%,#000 55%);opacity:.65}.hero .hero-description{max-width:17rem}.hero{min-height:34rem}}
+
+/* The custom homepage follows the reading theme. Keep these overrides scoped
+   to light mode so the original dark presentation and guide pages stay intact. */
+[data-md-color-scheme=default] .site-home {
+  --site-muted: #40526a;
+  --site-blue: #0864c6;
+  color: #17243a;
+  background: #f7f9fd;
+}
+[data-md-color-scheme=default]:has(.site-home) .md-header .md-search__button { color: #e9f0fb; background: #ffffff14; }
+[data-md-color-scheme=default]:has(.site-home) .md-header .md-search__button:hover { background: #ffffff24; }
+[data-md-color-scheme=default]:has(.site-home) .md-header .md-search__button::before { background: currentColor; }
+[data-md-color-scheme=default]:has(.site-home) .md-header .md-search__button::after { background: #ffffff14; }
+[data-md-color-scheme=default] .site-home :is(h1, h2, h3) { color: #17243a; }
+[data-md-color-scheme=default] .site-home :is(.eyebrow, .text-link, .guide-icon, .guide-bottom, .detail-number, .community-note a) { color: var(--site-blue); }
+[data-md-color-scheme=default] .site-home .hero {
+  background: radial-gradient(ellipse at 76% 60%, #d6e6fc, #edf3fc 45%, #f7f9fd 75%);
+  border-color: #ccd8e8;
+}
+[data-md-color-scheme=default] .site-home .hero-art {
+  mask-image: linear-gradient(90deg, transparent 0%, transparent 48%, #000 80%);
+}
+[data-md-color-scheme=default] .site-home .hero h1 span { color: #0864c6; }
+[data-md-color-scheme=default] .site-home .hero-lead { color: #334b6b; }
+[data-md-color-scheme=default] .site-home :is(.hero-fine, .family-label) { color: #40526a; }
+[data-md-color-scheme=default] .site-home .release-pill {
+  color: #234b79 !important;
+  background: #ffffffeb;
+  border-color: #becfe5;
+}
+[data-md-color-scheme=default] .site-home .status-dot { background: #18774c; box-shadow: none; }
+[data-md-color-scheme=default] .site-home .cta.primary { background: #0864c6; border-color: #0864c6; }
+[data-md-color-scheme=default] .site-home .cta.primary:hover { background: #064f9e; }
+[data-md-color-scheme=default] .site-home .cta.secondary {
+  color: #234b79 !important;
+  background: #ffffffeb;
+  border-color: #aabfd9;
+}
+[data-md-color-scheme=default] .site-home .cta.secondary:hover { background: #e5eefb; }
+[data-md-color-scheme=default] .site-home :is(.family-strip, .community-note) { border-color: #ccd8e8; }
+[data-md-color-scheme=default] .site-home :is(.family-strip, .plain-list, .community-note > p:first-child) { color: #334b6b; }
+[data-md-color-scheme=default] .site-home .plain-list li::marker { color: var(--site-blue); }
+[data-md-color-scheme=default] .site-home .app-shot {
+  background: linear-gradient(135deg, #e4edfa, #fff);
+  border-color: #bdcde2;
+  box-shadow: 0 20px 60px #18365b14;
+}
+[data-md-color-scheme=default] .site-home .app-shot img { border-color: #bdcde2; }
+[data-md-color-scheme=default] .site-home .app-shot figcaption { color: #475b75; }
+[data-md-color-scheme=default] .site-home .maintenance { background: #edf2fa; border-color: #ccd8e8; }
+[data-md-color-scheme=default] .site-home .maintenance-details article { border-color: #ccd8e8; }
+[data-md-color-scheme=default] .site-home .guide-grid > a { background: #fff; border-color: #ccd8e8; color: #17243a; }
+[data-md-color-scheme=default] .site-home .guide-grid > a:hover { background: #edf3fc; border-color: #0864c6; }
+[data-md-color-scheme=default] .site-home .download-band {
+  background: radial-gradient(ellipse at 85% 60%, #d8e8ff, #edf3fc 70%);
+  border-color: #bdcde2;
+}
+@media (max-width: 900px) {
+  [data-md-color-scheme=default] .site-home .hero-art { opacity: .12; }
+}
+@media (max-width: 650px) {
+  [data-md-color-scheme=default] .site-home .hero-art {
+    opacity: .12;
+    mask-image: linear-gradient(180deg, transparent 0%, #000 70%);
+  }
+}
