@@ -419,6 +419,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 if (path == value) return;
                 path = value ?? string.Empty;
                 filename = System.IO.Path.GetFileNameWithoutExtension(path);
+                iconRequested = false;
+                exeicon = null;
+                ExeiconChanged?.Invoke(this, EventArgs.Empty);
                 FilenameChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -470,7 +473,35 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
         }
         public event EventHandler FilenameChanged;
-        public ImageSource Exeicon => null;
+        private ImageSource exeicon;
+        private bool iconRequested;
+        public event EventHandler ExeiconChanged;
+        // WPF only requests this binding for realised rows. Discovery never waits for icons.
+        public ImageSource Exeicon
+        {
+            get
+            {
+                if (!iconRequested)
+                {
+                    iconRequested = true;
+                    _ = LoadIconAsync(path);
+                }
+                return exeicon;
+            }
+        }
+
+        private async Task LoadIconAsync(string requestedPath)
+        {
+            var dispatcher = System.Windows.Threading.Dispatcher.CurrentDispatcher;
+            var icon = await ProgramIconLoader.LoadAsync(requestedPath).ConfigureAwait(false);
+            if (dispatcher.HasShutdownStarted || dispatcher.HasShutdownFinished) return;
+            await dispatcher.InvokeAsync(() =>
+            {
+                if (!string.Equals(path, requestedPath, StringComparison.OrdinalIgnoreCase)) return;
+                exeicon = icon;
+                ExeiconChanged?.Invoke(this, EventArgs.Empty);
+            });
+        }
 
         private bool enabled = true;
         public bool Enabled { get => enabled; set { enabled = value; EnabledChanged?.Invoke(this, EventArgs.Empty); } }
@@ -660,8 +691,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 applyToAllControllers = autoProfileEntity.ApplyToAllControllers;
             }
 
-            // Shell icon extraction can block for seconds on a single executable.
-            // Discovery rows use the application's neutral icon instead.
+            // Icon loading begins only when a displayed row requests its image binding.
             MatchedAutoProfileChanged += ProgramItem_MatchedAutoProfileChanged;
         }
 

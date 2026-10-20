@@ -15,6 +15,36 @@ public sealed class AutoProfileWorkflowTests
     public TestContext TestContext { get; set; }
 
     [TestMethod]
+    public async Task VisibleProgramIconsLoadInBackgroundAndAreSharedAndFrozen()
+    {
+        string executable = Environment.ProcessPath!;
+        var first = ProgramIconLoader.LoadAsync(executable);
+        Assert.AreSame(first, ProgramIconLoader.LoadAsync(executable.ToUpperInvariant()), "Repeated visible rows must share extraction work.");
+        var icon = await first.WaitAsync(TimeSpan.FromSeconds(15));
+        Assert.IsNotNull(icon, "The test host executable must supply an associated icon.");
+        Assert.IsTrue(icon.IsFrozen, "Background icons must be safe to bind on the UI thread.");
+        Assert.IsNull(await ProgramIconLoader.LoadAsync(@"C:\Missing-icon-test\absent.exe"));
+        Assert.IsNull(await ProgramIconLoader.LoadAsync(@"\\offline\share\game.exe"));
+        Assert.IsNull(await ProgramIconLoader.LoadAsync(""));
+
+        ProgramItem item = null;
+        var changed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            item = new ProgramItem(executable);
+            item.ExeiconChanged += (_, _) => { if (item.Exeicon != null) changed.TrySetResult(); };
+            _ = item.Exeicon;
+        });
+        await changed.Task.WaitAsync(TimeSpan.FromSeconds(15));
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            Assert.AreSame(icon, item.Exeicon);
+            item.Path = "";
+            Assert.IsNull(item.Exeicon, "Changing a rule path must clear its previous executable icon.");
+        });
+    }
+
+    [TestMethod]
     public async Task DirectoryDiscoveryAddsOneExeWithoutReadingItsIconAndDeduplicates()
     {
         using var files = new Files();

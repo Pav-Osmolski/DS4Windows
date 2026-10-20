@@ -10,8 +10,9 @@ archives, checksums, and build records are available on [Releases](https://githu
 The Auto Profiles and Hotkeys/About refinements below are part of [PR #62](https://github.com/Pav-Osmolski/DS4Windows/pull/62).
 
 - Prevent Hotkeys/About from focusing a link at the bottom when changing tabs. Give each page's scroll container an initial keyboard stop and reset its position before rendering, replacing the delayed correction that caused a visible jump.
-- Rework Auto Profiles discovery with visible progress, cancellation, duplicate handling and completion/error messages. Scan executable paths without synchronous shell icon extraction, and resolve Start Menu shortcut targets on a dedicated background apartment without Windows Installer probes.
+- Rework Auto Profiles discovery with visible progress, cancellation, duplicate handling and completion/error messages. Load executable icons for displayed rows in the background, with cached results and a fallback icon. Resolve Start Menu shortcut targets on a dedicated background apartment without Windows Installer probes.
 - Separate saving, enabling/disabling and deleting Auto Profile rules. Delete removes saved and unsaved rows; Rule enabled preserves a rule while pausing it; edits apply on Save rule. Display rule priority instead of alphabetical sorting, make moves work for unsaved rows too, and select the right-clicked row before showing move actions.
+- Align Auto Profiles toolbar button heights and give the rule editor consistent scrollbar clearance in both themes.
 - Centre the Auto Profiles sidebar divider between the title field and global options, using a one-logical-pixel line (two physical pixels at 200% scaling). Preserve all controller assignments and write Auto Profiles configuration atomically.
 
 ## [5.0.38](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.38) - 2026-10-20

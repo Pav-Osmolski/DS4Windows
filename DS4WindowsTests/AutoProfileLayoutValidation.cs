@@ -34,6 +34,26 @@ internal static class AutoProfileLayoutValidation
                 var list = (ListView)page.FindName("programListLV");
                 list.SelectedItem = draft;
                 Layout(page);
+                var toolbar = new[] { "addProgramsBtn", "hideUncheckedBtn", "moveRuleUpBtn", "moveRuleDownBtn" }
+                    .Select(name => (Button)page.FindName(name)).ToArray();
+                foreach (var button in toolbar)
+                {
+                    Assert.AreEqual(toolbar[0].ActualHeight, button.ActualHeight, 0.01, "Toolbar buttons must share a height in both themes.");
+                    Assert.AreEqual(toolbar[0].TranslatePoint(new Point(), page).Y, button.TranslatePoint(new Point(), page).Y, 0.01);
+                }
+                page.Measure(new Size(940, 860)); page.Arrange(new Rect(0, 0, 940, 860)); page.UpdateLayout();
+                foreach (var button in toolbar)
+                    Assert.AreEqual(toolbar[0].ActualHeight, button.ActualHeight, 0.01, "Wrapping must preserve toolbar button heights.");
+                Layout(page);
+                page.Measure(new Size(1180, 540)); page.Arrange(new Rect(0, 0, 1180, 540)); page.UpdateLayout();
+                var editorScroll = (ScrollViewer)page.FindName("sidebarScrollViewer");
+                var editorContent = (StackPanel)page.FindName("outerEditControlsPanel");
+                var scrollbar = (System.Windows.Controls.Primitives.ScrollBar)editorScroll.Template.FindName("PART_VerticalScrollBar", editorScroll);
+                Assert.AreEqual(Visibility.Visible, scrollbar.Visibility);
+                double contentRight = editorContent.TranslatePoint(new Point(editorContent.ActualWidth, 0), page).X;
+                double scrollbarLeft = scrollbar.TranslatePoint(new Point(), page).X;
+                Assert.AreEqual(8d, scrollbarLeft - contentRight, 0.01, "Editor content must have an eight-DIP gutter beside the scrollbar in both themes.");
+                Layout(page);
                 Assert.AreSame(saved, list.Items[0], "Alphabetical sorting must not override rule priority.");
                 vm.MoveItemUpDown(draft, -1);
                 Assert.AreSame(draft, list.Items[0]);
@@ -53,6 +73,12 @@ internal static class AutoProfileLayoutValidation
                 Assert.IsFalse(((Button)page.FindName("moveRuleDownBtn")).IsEnabled, "Hidden rows must not make reordering appear ineffective.");
                 search.Clear();
                 Assert.IsTrue(((Button)page.FindName("removeAutoBtn")).IsEnabled, "Unsaved programs must be removable.");
+                saved.Path = Environment.ProcessPath!;
+                var executableIcon = ProgramIconLoader.LoadAsync(saved.Path).GetAwaiter().GetResult();
+                _ = saved.Exeicon;
+                page.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new Action(() => { }));
+                Layout(page);
+                Assert.IsTrue(Visuals(list).OfType<Image>().Any(image => ReferenceEquals(image.Source, executableIcon)), "A realised row must update its bound executable icon.");
                 var sidebar = (ScrollViewer)page.FindName("sidebarScrollViewer");
                 sidebar.ScrollToEnd(); Layout(page);
                 var title = (TextBox)page.FindName("mainTxtBox");
@@ -89,6 +115,13 @@ internal static class AutoProfileLayoutValidation
             foreach (var item in original) application.Resources.MergedDictionaries.Add(item);
             SynchronizationContext.SetSynchronizationContext(context);
         }
+    }
+
+    private static IEnumerable<DependencyObject> Visuals(DependencyObject root)
+    {
+        yield return root;
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+            foreach (var child in Visuals(VisualTreeHelper.GetChild(root, i))) yield return child;
     }
 
     private static void Layout(FrameworkElement page)
