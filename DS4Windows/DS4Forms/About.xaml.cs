@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -17,102 +17,76 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using DS4Windows;
+using System;
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace DS4WinWPF.DS4Forms
 {
-    /// <summary>
-    /// Interaction logic for About.xaml
-    /// </summary>
     public partial class About : Window
     {
         public About()
         {
             InitializeComponent();
-
-            string version = $"{Global.exeDisplayVersion})";
-            headerLb.Content += version;
+            string version = string.IsNullOrWhiteSpace(Global.exeDisplayVersion)
+                ? typeof(About).Assembly.GetName().Version?.ToString(3)
+                : Global.exeDisplayVersion;
+            versionText.Text = $"Version {version}";
+            licenseText.Text = LoadLicenseText();
+            SourceInitialized += (_, _) => FitToWorkArea();
         }
 
-
-        private void SiteLink_Click(object sender, RoutedEventArgs e)
+        internal static string LoadLicenseText()
         {
-            Util.StartProcessHelper("https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/README.md");
+            using Stream stream = typeof(About).Assembly.GetManifestResourceStream("DS4Windows.License.txt")
+                ?? throw new InvalidOperationException("The bundled GNU GPL licence is missing.");
+            using var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
         }
 
-        private void SourceLink_Click(object sender, RoutedEventArgs e)
+        private void AboutTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Util.StartProcessHelper("https://github.com/Pav-Osmolski/DS4Windows");
+            if (e.Source != sender || sender is not TabControl tabs) return;
+            // TabControl restores focus and can bring a link near the end into view.
+            // Reset after that layout/focus work so newly selected pages start at the top.
+            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(() =>
+            {
+                if (tabs.SelectedContent is ScrollViewer scroll) scroll.ScrollToTop();
+                else if (tabs.SelectedIndex == 3) licenseText?.ScrollToHome();
+            }));
         }
 
-        private void HbashtonLink_Click(object sender, RoutedEventArgs e)
+        private void FitToWorkArea()
         {
-            Util.StartProcessHelper("https://github.com/hbashton/DS4Windows");
+            Window target = Owner ?? this;
+            var working = System.Windows.Forms.Screen.FromHandle(new WindowInteropHelper(target).Handle).WorkingArea;
+            Matrix fromDevice = PresentationSource.FromVisual(target)?.CompositionTarget?.TransformFromDevice ?? Matrix.Identity;
+            Point origin = fromDevice.Transform(new Point(working.Left, working.Top));
+            Vector size = fromDevice.Transform(new Vector(working.Width, working.Height));
+            Size bounds = GetWindowSize(size.X, size.Y);
+            MinWidth = Math.Min(620, bounds.Width);
+            MinHeight = Math.Min(480, bounds.Height);
+            Width = bounds.Width;
+            Height = bounds.Height;
+            Left = origin.X + (size.X - Width) / 2;
+            Top = origin.Y + (size.Y - Height) / 2;
         }
 
-        private void Ryochan7Link_Click(object sender, RoutedEventArgs e)
+        internal static Size GetWindowSize(double workWidth, double workHeight) => new(
+            Math.Min(960, Math.Max(1, workWidth - 24)),
+            Math.Min(780, Math.Max(1, workHeight - 24)));
+
+        private void Link_Click(object sender, RoutedEventArgs e)
         {
-            Util.StartProcessHelper("https://github.com/Ryochan7");
+            if (sender is Button { Tag: string url } && Uri.TryCreate(url, UriKind.Absolute, out var uri) &&
+                (uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp))
+                Util.StartProcessHelper(uri.AbsoluteUri);
         }
 
-        private void Jays2KingsLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://github.com/Jays2Kings/");
-        }
-
-        private void InhexSTERLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://code.google.com/p/ds4-tool/");
-        }
-
-        private void ElectrobrainsLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://code.google.com/r/brianfundakowskifeldman-ds4windows/");
-        }
-
-        private void HidHideLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://github.com/nefarius/HidHide/");
-        }
-
-        private void NefariusLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://github.com/nefarius");
-        }
-
-        private void NefariusSupportLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://docs.nefarius.at/Donations/");
-        }
-
-        private void Crc32Link_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://github.com/dariogriffo/Crc32");
-        }
-
-        private void OneEuroLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("http://cristal.univ-lille.fr/~casiez/1euro/");
-        }
-
-        private void FakerInputLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://github.com/Ryochan7/FakerInput/");
-        }
-
-        private void HNotifyIconLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://github.com/HavenDV/H.NotifyIcon/");
-        }
-
-        private void VJoyInterfaceLink_Click(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://github.com/shauleiz/vJoy/tree/master/apps/common/vJoyInterfaceCS");
-        }
-
-        private void ContributorsLink_OnClick(object sender, RoutedEventArgs e)
-        {
-            Util.StartProcessHelper("https://github.com/Pav-Osmolski/DS4Windows/blob/main/contributors.md");
-        }
+        private void Close_Click(object sender, RoutedEventArgs e) => Close();
     }
 }
