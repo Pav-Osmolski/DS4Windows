@@ -3,6 +3,20 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.37](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.37) - 2026-10-20
+
+### Fixed
+
+- Make the observed physical report interval in Controller Readings easier to read: show exactly two decimal places in each supplied translation and refresh the number every 250 ms (four times per second). Refresh immediately when switching controllers or reopening the readings page. Controller sampling, live plots, warning detection and internal measurement precision retain their existing behaviour. Thanks to [@Basfet](https://github.com/Basfet) for reporting this ([PR #60](https://github.com/Pav-Osmolski/DS4Windows/pull/60), [issue #59](https://github.com/Pav-Osmolski/DS4Windows/issues/59)).
+
+### Documentation
+
+- Give the website homepage a complete light palette while preserving its dark presentation. Refine migration guidance and record the maintainer's and original reporter's confirmation of the released DualSense USB/Bluetooth haptics fix in troubleshooting and the historical validation record.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
 ## [5.0.36](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.36) - 2026-10-20
 
 ### Added
