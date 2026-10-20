@@ -2965,7 +2965,6 @@ namespace DS4Windows
                         $"speakerWriteFailures={device.BluetoothCombinedSpeakerWriteFailures} " +
                         $"hapticsPairedWrites={device.BluetoothCombinedHapticsPairedWrites} " +
                         $"speakerFallbackWrites={device.BluetoothCombinedSpeakerFallbackWrites} " +
-                        $"staleHapticsSilenced={device.BluetoothCombinedSpeakerStaleHapticsSilenced} " +
                         $"status={device.LastBluetoothHapticsWriteStatus}",
                         false);
                 }

@@ -806,7 +806,6 @@ namespace DS4Windows.InputDevices
         private long bluetoothSpeakerFramesDropped;
         private long bluetoothCombinedSpeakerReportsWritten;
         private long bluetoothCombinedSpeakerWriteFailures;
-        private long bluetoothCombinedSpeakerStaleHapticsSilenced;
         private readonly object bluetoothSpeakerClockClaimLock = new object();
         private long bluetoothSpeakerClockLeaseExpiryTimestamp;
         private long bluetoothSpeakerClockActiveClaim;
@@ -1044,8 +1043,6 @@ namespace DS4Windows.InputDevices
                 }
             }
         }
-        public long BluetoothCombinedSpeakerStaleHapticsSilenced =>
-            Interlocked.Read(ref bluetoothCombinedSpeakerStaleHapticsSilenced);
         public long BluetoothCombinedHapticsPairedWrites =>
             Interlocked.Read(ref bluetoothCombinedHapticsPairedWrites);
         public long BluetoothCombinedSpeakerFallbackWrites =>

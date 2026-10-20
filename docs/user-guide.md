@@ -279,7 +279,10 @@ In **Appearance > Sidebar icon**, choose **Blue Tile**, **Midnight Circle**,
 **Blue Frame**, **Controller** or **Angular Badge** using the image previews.
 Blue Tile is first and is the default for new and existing settings. The choice
 applies immediately and is saved with your app settings. The sidebar icon keeps
-its 44 × 44 size as Windows display scaling changes.
+its 44 × 44 size as Windows display scaling changes. Use the **Hue** slider to
+shift its colours from 0 to 360 degrees. The sidebar and dropdown previews update
+as you drag, and the hue is saved with your app settings. **Reset** returns to
+the original artwork; transparency and neutral colours are preserved.
 
 Search settings to find matching groups across all sections. Use **Ctrl+F** to
 focus the search; **Clear**, or **Escape** while typing, returns to the selected
@@ -308,8 +311,12 @@ installed/portable deployment mode, USB/IP status and detected driver versions.
 **Copy Text** copies the retained latest 1,000 entries with timestamps, including
 entries outside the current viewport. **Export** writes the same snapshot to a
 text file. **Clear visible list** clears only this view; saved files remain.
-Use **Open log folder** to find the active session and older saved logs. If the
-startup has scrolled beyond the 1,000-entry limit, attach the saved log as well.
+Use **Open log folder** to find the active session and older saved logs. The
+current run writes to `ds4windows_log.txt`; the previous session is archived at
+startup. The startup header stays with the rest of the session, including after
+changing retention. Daily or 10 MB rotation can still split a long session.
+`startup_failure.log` is a separate report written when an unhandled error occurs.
+If startup has scrolled beyond the 1,000-entry limit, attach the saved log as well.
 
 **Verbose logging** is available directly on the Log page and stays in sync
 with the existing Settings control. Enable it, restart DS4Windows to include

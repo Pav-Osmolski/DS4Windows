@@ -127,7 +127,7 @@ public sealed class ViiperAuthenticationV2Tests
         for (int i = 0; i < 1100; i++) writer.Write(report, 0, report.Length);
         wire.Position = 0;
         using ViiperEncryptedStream reader = new(wire, Key(), ViiperConnectionRole.Client);
-        for (int i = 0; i < 100; i++) reader.Read(report, 0, report.Length);
+        for (int i = 0; i < 100; i++) Assert.AreEqual(report.Length, reader.Read(report, 0, report.Length));
         long before = GC.GetAllocatedBytesForCurrentThread();
         int total = 0;
         for (int i = 0; i < 1000; i++) total += reader.Read(report, 0, report.Length);

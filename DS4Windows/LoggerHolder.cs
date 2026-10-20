@@ -54,9 +54,6 @@ namespace DS4WinWPF
             }
             configuredFileTarget = fileTarget;
             ConfigureArchiveLimits(fileTarget);
-            // Settings load after logger bootstrap. Defer age-based deletion
-            // until the user's saved retention preference has been read.
-            fileTarget.MaxArchiveDays = 0;
             fileTarget.FileName = Path.Combine(logDirectory, "ds4windows_log.txt");
             fileTarget.ArchiveFileName = Path.Combine(logDirectory, "ds4windows_log_{#}.txt");
             LogManager.Configuration = configuration;
@@ -81,6 +78,8 @@ namespace DS4WinWPF
 
         internal static void ConfigureArchiveLimits(FileTarget target)
         {
+            // Defer age cleanup until the saved retention preference is loaded.
+            target.MaxArchiveDays = 0;
             target.MaxArchiveFiles = StoredLogManager.MaximumArchiveFiles;
             target.ArchiveAboveSize = StoredLogManager.ArchiveBytes;
             target.ArchiveEvery = FileArchivePeriod.Day;
@@ -90,11 +89,21 @@ namespace DS4WinWPF
             target.Encoding = new System.Text.UTF8Encoding(false);
         }
 
-        internal StoredLogCleanupResult ApplyRetention()
+        internal StoredLogCleanupResult ApplyRetention() => ApplyRetention(
+            configuredFileTarget, LogManager.LogFactory, LogDirectory,
+            Global.LogRetentionDays, DateTime.UtcNow);
+
+        internal static StoredLogCleanupResult ApplyRetention(FileTarget target,
+            LogFactory factory, string directory, int days, DateTime utcNow)
         {
-            int days = Global.LogRetentionDays;
-            configuredFileTarget.MaxArchiveDays = days;
-            return StoredLogManager.Cleanup(LogDirectory, days, DateTime.UtcNow);
+            // Drain the async startup header before changing archive policy.
+            // Updating MaxArchiveDays resets NLog's archive state; startup
+            // rollover must only happen once, not again on the next log write.
+            // ConfigureArchiveLimits re-enables it for the next process launch.
+            factory.Flush(TimeSpan.FromSeconds(1));
+            target.ArchiveOldFileOnStartup = false;
+            target.MaxArchiveDays = StoredLogManager.NormalizeRetentionDays(days);
+            return StoredLogManager.Cleanup(directory, days, utcNow);
         }
 
         internal static FileTarget FindFileTarget(

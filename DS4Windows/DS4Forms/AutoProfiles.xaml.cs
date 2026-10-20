@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -309,6 +309,7 @@ namespace DS4WinWPF.DS4Forms
 
         private void AddProgramsBtn_Click(object sender, RoutedEventArgs e)
         {
+            addProgramsBtn.ContextMenu.PlacementTarget = addProgramsBtn;
             addProgramsBtn.ContextMenu.IsOpen = true;
             e.Handled = true;
         }

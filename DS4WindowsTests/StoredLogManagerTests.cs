@@ -5,6 +5,7 @@ using DS4WinWPF.DS4Control.DTOXml;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using NLog.Targets.Wrappers;
 
 namespace DS4WindowsTests;
 
@@ -110,6 +111,45 @@ public sealed class StoredLogManagerTests
         Assert.IsTrue(Directory.GetFiles(fixture.Root).Length <= 21);
         factory.Shutdown();
         StringAssert.Contains(File.ReadAllText(Path.Combine(fixture.Root, "ds4windows_log.txt")), "still writing");
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void StartupAndRetentionChangesKeepHeaderAndSessionInOneLog(bool asynchronous)
+    {
+        using var fixture = new Files();
+        string active = Path.Combine(fixture.Root, "ds4windows_log.txt");
+        File.WriteAllText(active, "previous session");
+        using var factory = new LogFactory();
+        var target = new FileTarget("logfile")
+        {
+            FileName = active,
+            ArchiveFileName = Path.Combine(fixture.Root, "ds4windows_log_{#}.txt"),
+            Layout = "${message}"
+        };
+        LoggerHolder.ConfigureArchiveLimits(target);
+        var config = new LoggingConfiguration();
+        Target logTarget = asynchronous ? new AsyncTargetWrapper(target) { Name = "async-logfile" } : target;
+        config.AddRule(LogLevel.Info, LogLevel.Fatal, logTarget);
+        factory.Configuration = config;
+        var logger = factory.GetLogger("session-continuity-test");
+        logger.Info("startup header");
+        LoggerHolder.ApplyRetention(target, factory, fixture.Root, 30, DateTime.UtcNow);
+        logger.Info("controller connected");
+        factory.Flush();
+        LoggerHolder.ApplyRetention(target, factory, fixture.Root, 7, DateTime.UtcNow);
+        Assert.AreEqual(7, target.MaxArchiveDays, "NLog must retain age cleanup for sessions left running across rotations.");
+        Assert.IsFalse(target.ArchiveOldFileOnStartup);
+        logger.Info("session continues after retention change");
+        factory.Flush();
+        Assert.AreEqual(1, Directory.GetFiles(fixture.Root, "ds4windows_log_*.txt").Length,
+            "Only the previous session should be archived, not this run's startup header.");
+        factory.Shutdown();
+        string current = File.ReadAllText(active);
+        StringAssert.Contains(current, "startup header");
+        StringAssert.Contains(current, "controller connected");
+        StringAssert.Contains(current, "session continues after retention change");
     }
 
     private sealed class Files : IDisposable
