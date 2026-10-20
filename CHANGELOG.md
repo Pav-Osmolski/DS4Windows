@@ -3,7 +3,7 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## Unreleased
+## [5.0.39](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.39) - 2026-10-21
 
 ### Fixed
 
@@ -14,6 +14,10 @@ The Auto Profiles and Hotkeys/About refinements below are part of [PR #62](https
 - Separate saving, enabling/disabling and deleting Auto Profile rules. Delete removes saved and unsaved rows; Rule enabled preserves a rule while pausing it; edits apply on Save rule. Display rule priority instead of alphabetical sorting, make moves work for unsaved rows too, and select the right-clicked row before showing move actions.
 - Align Auto Profiles toolbar button heights and give the rule editor consistent scrollbar clearance in both themes.
 - Centre the Auto Profiles sidebar divider between the title field and global options, using a one-logical-pixel line (two physical pixels at 200% scaling). Preserve all controller assignments and write Auto Profiles configuration atomically.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
 
 ## [5.0.38](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.38) - 2026-10-20
 
