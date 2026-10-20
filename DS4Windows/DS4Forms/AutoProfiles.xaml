@@ -31,8 +31,11 @@
         <Style x:Key="AutoProfileMenuStyle" TargetType="ContextMenu">
             <Style.Resources>
                 <Style TargetType="MenuItem" BasedOn="{StaticResource AutoProfileMenuItemStyle}"/>
-                <Style TargetType="Separator">
-                    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Separator"><Border Height="1" Background="{DynamicResource BorderColor}"/></ControlTemplate></Setter.Value></Setter>
+                <Style TargetType="Separator" x:Key="{x:Static MenuItem.SeparatorStyleKey}">
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Separator"><Border Height="1" Background="{DynamicResource MenuSeparatorColor}"/></ControlTemplate></Setter.Value></Setter>
                 </Style>
             </Style.Resources>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>

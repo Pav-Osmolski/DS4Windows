@@ -12,7 +12,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Fixed
 
-- Centre the button-mapping dialog's RGB sliders inside equal, aligned channel backgrounds in both themes. Remove the Add Programs popup's outer item gaps, follow the current light/dark theme and style its separator separately so opening the menu does not crash ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
+- Centre the button-mapping dialog's RGB sliders inside equal, aligned channel backgrounds in both themes. Remove the Add Programs popup's outer item gaps, follow the current light/dark theme, use a full-width separator in both themes and style its separator separately so opening the menu does not crash ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
 
 - Keep the startup header and session in one active log when loading or changing retention. Avoid repeating startup rollover while preserving retention cleanup and daily/size rotation ([PR #58](https://github.com/Pav-Osmolski/DS4Windows/pull/58)).
 

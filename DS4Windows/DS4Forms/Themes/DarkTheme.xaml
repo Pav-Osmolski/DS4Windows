@@ -12,6 +12,8 @@
     <Style x:Key="ProfileGreenChannelStyle" TargetType="Border"><Setter Property="Background" Value="{Binding Tag, RelativeSource={RelativeSource Self}}" /></Style>
     <Style x:Key="ProfileBlueChannelStyle" TargetType="Border"><Setter Property="Background" Value="{Binding Tag, RelativeSource={RelativeSource Self}}" /></Style>
 
+    <SolidColorBrush x:Key="MenuSeparatorColor" Color="#FF153B6E" />
+
     <!-- Brushes -->
     <SolidColorBrush x:Key="BackgroundColor" Color="#FF070D15" />
     <SolidColorBrush x:Key="BorderColor" Color="#FF223041" />

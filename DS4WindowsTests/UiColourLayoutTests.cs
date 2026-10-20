@@ -108,6 +108,16 @@ public sealed class UiColourLayoutTests
             foreach (var item in menu.Items.OfType<MenuItem>()) Assert.AreEqual(typeof(MenuItem), item.Style.TargetType);
             var separator = menu.Items.OfType<Separator>().Single();
             Assert.AreEqual(typeof(Separator), separator.Style.TargetType);
+            var paintedLine = Descendants(separator).OfType<Border>().FirstOrDefault(border =>
+                border.Background is SolidColorBrush || border.BorderThickness.Top > 0 || border.BorderThickness.Bottom > 0);
+            Assert.IsNotNull(paintedLine, "The separator must render a line.");
+            Assert.AreEqual(0d, paintedLine.TranslatePoint(new Point(), separator).X, 0.01,
+                "The visible separator line must not inherit the native menu icon-gutter inset.");
+            Assert.AreEqual(separator.ActualWidth, paintedLine.ActualWidth, 0.01);
+            var left = separator.TranslatePoint(new Point(), menu);
+            var right = separator.TranslatePoint(new Point(separator.ActualWidth, 0), menu);
+            Assert.AreEqual(menu.BorderThickness.Left, left.X, 0.01, "The separator must start at the menu's inside edge.");
+            Assert.AreEqual(menu.ActualWidth - menu.BorderThickness.Right, right.X, 0.01, "The separator must reach the opposite inside edge.");
             Assert.AreEqual(new Thickness(0), menu.Padding);
             Assert.AreEqual(new Thickness(1), menu.BorderThickness);
             var initialColour = ((SolidColorBrush)menu.Background).Color;
@@ -119,6 +129,16 @@ public sealed class UiColourLayoutTests
             Assert.AreEqual(((SolidColorBrush)resources["CardBackgroundColor"]).Color, ((SolidColorBrush)menu.Background).Color);
             Assert.AreEqual(((SolidColorBrush)resources["ForegroundColor"]).Color, ((SolidColorBrush)menu.Foreground).Color);
         });
+    }
+
+    private static IEnumerable<DependencyObject> Descendants(DependencyObject parent)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            yield return child;
+            foreach (var nested in Descendants(child)) yield return nested;
+        }
     }
 
     private static string Source(string filename, [CallerFilePath] string caller = "") =>
