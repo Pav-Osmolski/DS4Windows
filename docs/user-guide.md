@@ -351,6 +351,9 @@ For a button-triggered check, add or edit a **Check Battery** Special Action,
 select **Use battery alert audio and vibration**, and save its button combination.
 Existing tray-notification and lightbar actions continue working unchanged.
 
+For controllers that report only battery bands, low alerts use the reported **low**
+band; the percentage threshold applies to controllers with percentage reports.
+
 Alerts wait for three stable observations, use recovery thresholds and cooldowns,
 and retain their state through profile changes and reconnects during the app
 session. DS3, DS4 and DualSense completion reports can trigger the full alert;

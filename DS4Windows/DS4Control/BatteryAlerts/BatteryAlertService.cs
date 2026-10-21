@@ -205,7 +205,7 @@ internal sealed class BatteryAlertService
                 throw new BatteryAlertUnavailableException("Connect the selected controller to preview vibration.");
             var reading = request.Preview ? new BatteryAlertReading(50, false, request.Kind == BatteryAlertKind.Full, true) : Read(request.Device);
             if (!request.Preview && request.Kind == BatteryAlertKind.Low &&
-                (!reading.Reliable || reading.Charging || reading.Percentage > settings.LowThreshold)) return;
+                (!reading.Reliable || !BatteryAlertPolicy.IsLow(reading, settings.LowThreshold))) return;
             if (!request.Preview && request.Kind == BatteryAlertKind.Full && !reading.Full) return;
             var token = cancellation.Token;
             // Validate the route before synthesising speech or starting vibration.

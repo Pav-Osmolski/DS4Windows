@@ -80,6 +80,8 @@ internal static class BatteryAlertReports
 /// <summary>One latch per physical identity, retained across reconnections and profile changes.</summary>
 internal sealed class BatteryAlertPolicy
 {
+    internal static bool IsLow(BatteryAlertReading reading, int threshold) =>
+        !reading.Charging && (reading.Level == null ? reading.Percentage <= threshold : reading.Level == "low");
     private bool lowLatched, fullLatched;
     private int threshold = -1;
     private long lastLow = long.MinValue, lastFull = long.MinValue;
@@ -91,10 +93,11 @@ internal sealed class BatteryAlertPolicy
         if (!reading.Reliable) { Pause(); return null; }
         // Ignore transient reports. A changed threshold is a new deliberate configuration.
         if (threshold != settings.LowThreshold) { threshold = settings.LowThreshold; lowLatched = false; stableLow = 0; }
-        bool low = !reading.Charging && reading.Percentage <= threshold;
+        bool low = IsLow(reading, threshold);
         stableLow = low ? Math.Min(3, stableLow + 1) : 0;
         stableFull = reading.Full ? Math.Min(3, stableFull + 1) : 0;
-        recoveredLow = reading.Charging || reading.Percentage >= threshold + 5 ? Math.Min(3, recoveredLow + 1) : 0;
+        bool recovered = reading.Charging || (reading.Level == null ? reading.Percentage >= threshold + 5 : reading.Level != "low");
+        recoveredLow = recovered ? Math.Min(3, recoveredLow + 1) : 0;
         recoveredFull = !reading.Full && reading.Percentage <= 95 ? Math.Min(3, recoveredFull + 1) : 0;
         if (recoveredLow == 3) lowLatched = false;
         if (recoveredFull == 3) fullLatched = false;

@@ -1,4 +1,4 @@
-<UserControl x:Class="DS4WinWPF.DS4Forms.ControllerOverviewControl"
+﻿<UserControl x:Class="DS4WinWPF.DS4Forms.ControllerOverviewControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -410,10 +410,10 @@
                                         <TextBlock Text="{Binding SelectedController.FeedbackControlLabel}"
                                                    FontSize="15" FontWeight="SemiBold" />
                                         <TextBlock Grid.Column="1"
-                                                   Text="{Binding HapticStrengthPercent, StringFormat={}{0}%}"
+                                                   Text="{Binding Value, ElementName=overviewHapticStrengthSlider, StringFormat={}{0:0}%}"
                                                    FontWeight="SemiBold"
                                                    Foreground="{DynamicResource AccentColor}" />
-                                        <Slider Grid.Row="1" Grid.ColumnSpan="2" Margin="0,11,0,0"
+                                        <Slider x:Name="overviewHapticStrengthSlider" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,11,0,0"
                                                 Style="{StaticResource OverviewQuickSliderStyle}"
                                                 Minimum="0" Maximum="100" TickFrequency="1"
                                                 Value="{Binding HapticStrengthPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=220}" />
@@ -527,10 +527,10 @@
                                             <TextBlock Text="Controller speaker"
                                                        IsEnabled="{Binding HeadsetOnlyAudio, Converter={StaticResource InverseBoolConverter}}" />
                                             <TextBlock Grid.Column="1"
-                                                       Text="{Binding SpeakerVolumePercent, StringFormat={}{0}%}"
+                                                       Text="{Binding Value, ElementName=overviewSpeakerVolumeSlider, StringFormat={}{0:0}%}"
                                                        IsEnabled="{Binding HeadsetOnlyAudio, Converter={StaticResource InverseBoolConverter}}"
                                                        Foreground="{DynamicResource AccentColor}" />
-                                            <Slider Grid.Row="1" Grid.ColumnSpan="2" Margin="0,7,0,14"
+                                            <Slider x:Name="overviewSpeakerVolumeSlider" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,7,0,14"
                                                     Style="{StaticResource OverviewQuickSliderStyle}"
                                                     Minimum="0" Maximum="100" TickFrequency="1"
                                                     IsEnabled="{Binding HeadsetOnlyAudio, Converter={StaticResource InverseBoolConverter}}"
@@ -539,10 +539,10 @@
                                                        IsEnabled="{Binding HeadsetOnlyAudio}"
                                                        ToolTip="Controls the controller headset jack independently from its built-in speaker." />
                                             <TextBlock Grid.Row="2" Grid.Column="1"
-                                                       Text="{Binding HeadphoneVolumePercent, StringFormat={}{0}%}"
+                                                       Text="{Binding Value, ElementName=overviewHeadphoneVolumeSlider, StringFormat={}{0:0}%}"
                                                        IsEnabled="{Binding HeadsetOnlyAudio}"
                                                        Foreground="{DynamicResource AccentColor}" />
-                                            <Slider Grid.Row="3" Grid.ColumnSpan="2" Margin="0,7,0,0"
+                                            <Slider x:Name="overviewHeadphoneVolumeSlider" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,7,0,0"
                                                     Style="{StaticResource OverviewQuickSliderStyle}"
                                                     Minimum="0" Maximum="100" TickFrequency="1"
                                                     IsEnabled="{Binding HeadsetOnlyAudio}"
@@ -578,8 +578,8 @@
                                             <DockPanel Grid.Row="1" Grid.Column="1" Margin="0,13,0,0">
                                                 <TextBlock DockPanel.Dock="Right" Margin="10,0,0,0"
                                                            MinWidth="34" TextAlignment="Right"
-                                                           Text="{Binding SpeakerBassBoostDb, StringFormat={}{0} dB}" />
-                                                <Slider Style="{StaticResource OverviewQuickSliderStyle}"
+                                                           Text="{Binding Value, ElementName=overviewSpeakerBassSlider, StringFormat={}{0:0} dB}" />
+                                                <Slider x:Name="overviewSpeakerBassSlider" Style="{StaticResource OverviewQuickSliderStyle}"
                                                         Minimum="0" Maximum="6" TickFrequency="1"
                                                         TickPlacement="BottomRight"
                                                         IsSnapToTickEnabled="True"
@@ -616,9 +616,9 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="Microphone level" />
                                             <TextBlock Grid.Column="1"
-                                                       Text="{Binding MicrophoneVolumePercent, StringFormat={}{0}%}"
+                                                       Text="{Binding Value, ElementName=overviewMicrophoneVolumeSlider, StringFormat={}{0:0}%}"
                                                        Foreground="{DynamicResource AccentColor}" />
-                                            <Slider Grid.Row="1" Grid.ColumnSpan="2" Margin="0,7,0,12"
+                                            <Slider x:Name="overviewMicrophoneVolumeSlider" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,7,0,12"
                                                     Style="{StaticResource OverviewQuickSliderStyle}"
                                                     Minimum="0" Maximum="100" TickFrequency="1"
                                                     Value="{Binding MicrophoneVolumePercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=220}" />

@@ -10,6 +10,69 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2RuntimeInputDeviceTests
 {
+    [TestMethod]
+    [DataRow(Switch2Transport.Usb)]
+    [DataRow(Switch2Transport.BluetoothLe)]
+    public void BatteryAlertsConsumeRealSwitch2ProTelemetryAsBands(Switch2Transport transport)
+    {
+        var device = CreateProDevice(99001, 99002, transport);
+        device.StartUpdate();
+        try
+        {
+            Assert.IsFalse(BatteryAlertService.Read(device).Reliable);
+            Assert.IsTrue(device.TryPublishPro(CreateProFrame(99001, 99002, 0,
+                bluetoothLe: transport == Switch2Transport.BluetoothLe, batteryVoltageMillivolts: 3000)));
+            AssertBandAlert(device, "low", true);
+            Assert.IsTrue(device.TryPublishPro(CreateProFrame(99001, 99002, 0, counter: 2, timestamp: 2,
+                bluetoothLe: transport == Switch2Transport.BluetoothLe, batteryVoltageMillivolts: 3400)));
+            AssertBandAlert(device, "high", false);
+        }
+        finally { device.StopUpdate(); }
+    }
+
+    [TestMethod]
+    [DataRow(true)]
+    [DataRow(false)]
+    public void BatteryAlertsConsumeRealStandaloneJoyCon2Telemetry(bool left)
+    {
+        var device = CreateStandaloneDevice(left ? Switch2ControllerModel.JoyCon2Left : Switch2ControllerModel.JoyCon2Right, 99003, 99004);
+        device.StartUpdate();
+        try
+        {
+            Assert.IsTrue(device.TryPublishStandaloneJoyCon(MapStandalone(left ? Switch2JoyConProfileMode.StandaloneHorizontalLeft : Switch2JoyConProfileMode.StandaloneHorizontalRight,
+                0, 99003, 99004, batteryVoltageMillivolts: 3000)));
+            AssertBandAlert(device, "low", true);
+        }
+        finally { device.StopUpdate(); }
+    }
+
+    [TestMethod]
+    public void BatteryAlertsForJoinedJoyCon2UseTheWeakerHalf()
+    {
+        var device = CreateJoinedDevice(99005, 99006, 99007, 99008, 99009, 99010);
+        device.StartUpdate();
+        try
+        {
+            Assert.IsTrue(device.TryPublishJoinedJoyCon(MapJoined(99006, 99007, 99008, 99009, 99010, 0, 0,
+                leftBatteryVoltageMillivolts: 3400, rightBatteryVoltageMillivolts: 3000)));
+            AssertBandAlert(device, "low", true);
+        }
+        finally { device.StopUpdate(); }
+    }
+
+    private static void AssertBandAlert(Switch2RuntimeInputDevice device, string band, bool low)
+    {
+        var reading = BatteryAlertService.Read(device);
+        Assert.IsTrue(reading.Reliable); Assert.AreEqual(band, reading.Level);
+        Assert.IsFalse(reading.Full, "Battery voltage does not establish charge completion.");
+        string message = BatteryAlertService.Message(0, BatteryAlertKind.Check, reading);
+        Assert.IsTrue(message.Contains(band)); Assert.IsFalse(message.Contains("percent"));
+        var policy = new BatteryAlertPolicy();
+        var settings = new BatteryAlertSettings { LowEnabled = true, FullEnabled = true };
+        policy.Observe(reading, settings, 0); policy.Observe(reading, settings, 1);
+        Assert.AreEqual(low ? BatteryAlertKind.Low : (BatteryAlertKind?)null, policy.Observe(reading, settings, 2));
+    }
+
     private const Switch2GattProperty InputProperties =
         Switch2GattProperty.Read | Switch2GattProperty.Notify;
 

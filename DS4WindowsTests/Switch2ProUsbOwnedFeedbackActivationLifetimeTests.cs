@@ -11,6 +11,34 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class Switch2ProUsbOwnedFeedbackActivationLifetimeTests
 {
+    [TestMethod]
+    public void BatteryPulseReachesOwnedUsbPacketsAndReleasesToNeutral()
+    {
+        var composition = CreateCommitted(ContainerA);
+        Assert.IsTrue(Switch2RuntimeInputDevice.TryCreatePro(DeviceGeneration, TransportGeneration,
+            Switch2Transport.Usb, out var runtime, out _));
+        Assert.IsTrue(runtime.TryAttachUsbFeedbackLifetime(composition.Authority, composition.Feedback));
+        runtime.StartUpdate();
+        try
+        {
+            using var battery = runtime.TryBeginBatteryAlertRumble(96);
+            Assert.IsNotNull(battery);
+            Assert.IsTrue(composition.Lease.ReportCount > 0);
+            Assert.IsTrue(Switch2UsbHdRumbleCodec.TryDecodeProController(composition.Lease.ReportAt(0), out _, out var left, out var right, out _));
+            Assert.IsTrue(left.First.Oscillator0AmplitudeCode != 0 || left.First.Oscillator1AmplitudeCode != 0);
+            Assert.IsTrue(right.First.Oscillator0AmplitudeCode != 0 || right.First.Oscillator1AmplitudeCode != 0);
+            battery.Dispose();
+            Assert.IsTrue(Switch2UsbHdRumbleCodec.TryDecodeProController(composition.Lease.ReportAt(composition.Lease.ReportCount - 1), out _, out left, out right, out _));
+            Assert.AreEqual((ushort)0, left.First.Oscillator0AmplitudeCode);
+            Assert.AreEqual((ushort)0, right.First.Oscillator0AmplitudeCode);
+        }
+        finally
+        {
+            runtime.StopUpdate();
+            composition.Feedback.TryNeutralizeAndQuiesce(composition.Authority, 100);
+        }
+    }
+
     private const ulong DeviceGeneration = 401;
     private const ulong TransportGeneration = 409;
 

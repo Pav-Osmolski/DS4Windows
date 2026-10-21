@@ -8,6 +8,30 @@ namespace DS4WindowsTests;
 [TestClass]
 public class Switch2BluetoothFeedbackLifetimeTests
 {
+    [TestMethod]
+    public void BatteryPulseReachesRealSwitch2BluetoothWriterAndCannotCancelNewEditorPreview()
+    {
+        RecordingLease lease = new();
+        Assert.IsTrue(Switch2BluetoothFeedbackLifetime.TryCreate(lease, Switch2ControllerModel.ProController2,
+            DeviceGeneration, TransportGeneration, out var feedback));
+        Assert.IsTrue(Switch2RuntimeInputDevice.TryCreatePro(DeviceGeneration, TransportGeneration, Switch2Transport.BluetoothLe, out var runtime, out _));
+        Assert.IsTrue(runtime.TryAttachBluetoothFeedbackLifetime(Switch2ControllerModel.ProController2, DeviceGeneration, TransportGeneration, feedback));
+        StartRuntime(runtime);
+        try
+        {
+            using var battery = runtime.TryBeginBatteryAlertRumble(96);
+            Assert.IsNotNull(battery);
+            AssertHdRumble(lease.LastPayload, expectAmplitude: true, out _, out _);
+            runtime.SetRumblePreview(true, 200, true, 120);
+            byte[] editor = (byte[])lease.LastPayload.Clone();
+            battery.Dispose();
+            CollectionAssert.AreEqual(editor, lease.LastPayload);
+            runtime.ClearRumblePreview();
+            AssertHdRumble(lease.LastPayload, expectAmplitude: false, out _, out _);
+        }
+        finally { runtime.StopUpdate(); feedback.TryStopAndRetireUntil(Environment.TickCount64 + 1000, maxAttempts: 3); }
+    }
+
     private readonly List<Switch2RuntimeInputDevice> startedRuntimes = new();
 
     private void StartRuntime(Switch2RuntimeInputDevice runtime)

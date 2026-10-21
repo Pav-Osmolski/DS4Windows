@@ -11,6 +11,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Fixed
 
+- Trigger low-battery alerts from the reported low band on DS3 and original Nintendo controllers, instead of comparing their approximate 25% value with the default 20% threshold. Keep percentage thresholds for controllers that provide percentage readings.
+- Update Overview slider numbers immediately while dragging, retaining the delay for settings and hardware updates. Add icon previews to Settings > Icon Choice, including visible white and black previews in either theme.
 - Preserve Profile Editor audio dropdown selections across endpoint refreshes and reopening, including automatic and unavailable saved devices. Send USB DualSense battery announcements directly to the matching physical speaker, keeping haptics channels silent; report muted/zero-volume outputs clearly. Use the USB internal-speaker routing value in both local and native-game reports while preserving Bluetooth audio routing.
 - Match USB DualSense speaker auto-detection to the physical controller and keep its game-audio capture source separate from the speaker destination. Prefer the matching VIIPER USB/IP port and restart capture when that port changes. Correct battery-alert guidance to Profile Editor > Advanced > Audio.
 

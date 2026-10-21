@@ -110,6 +110,7 @@ public sealed class ControllerOverviewAudioTests
     internal static void ValidateRenderedOverview(ControllerOverviewControl overview,
         string resultsDirectory, List<string> renderedFiles)
     {
+        ValidateImmediateSliderLabels(overview);
         var managed = (FrameworkElement)overview.FindName("managedAudioLevelsPanel");
         var speaker = (FrameworkElement)overview.FindName("managedSpeakerRouteCard");
         var native = (FrameworkElement)overview.FindName("nativeUsbHeadsetCard");
@@ -142,6 +143,32 @@ public sealed class ControllerOverviewAudioTests
         Assert.AreEqual(Visibility.Collapsed, native.Visibility);
         Assert.AreEqual(Visibility.Collapsed, managed.Visibility);
         Assert.AreEqual(Visibility.Collapsed, speaker.Visibility);
+        overview.DataContext = null;
+    }
+
+    private static void ValidateImmediateSliderLabels(ControllerOverviewControl overview)
+    {
+        using var profile = new AudioProfileScope();
+        overview.DataContext = Model(new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB, sony: true));
+        overview.Measure(new Size(1100, 950)); overview.Arrange(new Rect(0, 0, 1100, 950)); overview.UpdateLayout();
+        overview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+        foreach (string name in new[] { "overviewHapticStrengthSlider", "overviewSpeakerVolumeSlider", "overviewHeadphoneVolumeSlider", "overviewSpeakerBassSlider", "overviewMicrophoneVolumeSlider" })
+        {
+            var slider = (Slider)overview.FindName(name);
+            TextBlock label = null;
+            foreach (var child in LogicalTreeHelper.GetChildren(slider.Parent))
+                if (child is TextBlock text && System.Windows.Data.BindingOperations.GetBinding(text, TextBlock.TextProperty)?.ElementName == name) label = text;
+            Assert.IsNotNull(label, name);
+            foreach (int value in slider.Maximum == 6 ? new[] { 1, 4, 6, 2 } : new[] { 12, 78, 93, 27 })
+            {
+                slider.SetCurrentValue(Slider.ValueProperty, (double)value);
+                Assert.AreEqual((double)value, slider.Value);
+                overview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+                Assert.AreEqual(slider.Maximum == 6 ? $"{value} dB" : $"{value}%", label.Text,
+                    "The numeric readout must follow the thumb without waiting for a delayed profile write.");
+            }
+            slider.GetBindingExpression(Slider.ValueProperty)?.UpdateSource();
+        }
         overview.DataContext = null;
     }
 

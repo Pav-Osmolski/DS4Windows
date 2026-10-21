@@ -40,7 +40,7 @@
    <TextBlock Text="%" VerticalAlignment="Center" Margin="8,0,0,0"/>
   </WrapPanel>
   <CheckBox Content="Fully charged alert" IsChecked="{Binding Settings.FullEnabled}" ToolTip="DS3, DS4 and DualSense can report charging completion." Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,0,0,6"/>
-  <TextBlock Text="Full-charge alerts require a controller that reports charging completion. Coarse battery levels are spoken as low, medium or high. Alerts wait for stable readings and do not repeat on every reconnect or profile switch." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+  <TextBlock Text="Full-charge alerts require a controller that reports charging completion. Controllers that report battery bands alert on the low band; percentage thresholds apply to percentage reports. Coarse levels are spoken as low, medium or high. Alerts wait for stable readings and do not repeat on every reconnect or profile switch." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
   <Expander Header="Configure voices, sounds and vibration" Margin="0,8,0,0"><StackPanel>
   <TextBlock Text="Voice" Margin="0,10,0,4"/>
   <ComboBox x:Name="voiceCombo" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="Voice_Changed" MinHeight="34"/>

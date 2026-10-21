@@ -192,6 +192,16 @@ public sealed class SettingsNavigationTests
         root.Resources.MergedDictionaries.Add(resources);
         ((ContentControl)root.FindName("batteryAlertsTestHost")).Content =
             new DS4WinWPF.DS4Forms.BatteryAlertsControl(false, new DS4Windows.BatteryAlertSettings());
+        var trayChoices = (ComboBox)root.FindName("useIconChoiceCom");
+        Assert.AreEqual(5, trayChoices.Items.Count);
+        foreach (ComboBoxItem choice in trayChoices.Items)
+        {
+            var row = (StackPanel)choice.Content;
+            var image = (Image)row.Children.OfType<Border>().Single().Child;
+            Assert.IsNotNull(image.Source, "Every tray-icon choice must have an actual embedded icon preview.");
+            Assert.IsTrue(((System.Windows.Media.Imaging.BitmapSource)image.Source).PixelWidth > 0);
+            Assert.IsTrue(row.Children.OfType<TextBlock>().Any());
+        }
         return root;
     }
 
