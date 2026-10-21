@@ -547,6 +547,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
         public SidebarIconChoice SidebarIcon { get; private set; } = SidebarIconChoice.BlueTile;
 
         public double SidebarIconHue { get; set; }
+        public BatteryAlertSettings BatteryAlerts { get; set; } = new();
 
         [XmlElement("SidebarIcon")]
         public string SidebarIconString
@@ -990,6 +991,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             AppIcon = source.useIconChoice;
             SidebarIcon = SidebarIconPolicy.Normalize(source.sidebarIcon);
             SidebarIconHue = SidebarIconPolicy.NormalizeHue(source.sidebarIconHue);
+            BatteryAlerts = source.batteryAlerts?.Clone() ?? new();
             AppTheme = source.useCurrentTheme;
             UseOSCServer = source.useOSCServ;
             OSCServerPort = source.oscServPort;
@@ -1109,6 +1111,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.useIconChoice = AppIcon;
             destination.sidebarIcon = SidebarIconPolicy.Normalize(SidebarIcon);
             destination.sidebarIconHue = SidebarIconPolicy.NormalizeHue(SidebarIconHue);
+            destination.batteryAlerts = BatteryAlerts?.Clone() ?? new();
             destination.useCurrentTheme = AppTheme;
             destination.useOSCServ = UseOSCServer;
             destination.oscServPort = OSCServerPort;

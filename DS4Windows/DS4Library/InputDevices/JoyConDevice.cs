@@ -834,6 +834,7 @@ namespace DS4Windows.InputDevices
                             BatteryChanged?.Invoke(this, EventArgs.Empty);
                         }
 
+                        batteryReadingAvailable = ((tempByte & 0xE0) >> 4) <= 8;
                         cState.Battery = (byte)tempBattery;
 
                         tempCharging = (tempByte & 0x10) != 0;
@@ -1553,6 +1554,33 @@ namespace DS4Windows.InputDevices
             {
                 hdRumbleDelivery?.Clear();
                 base.setRumble(light, heavy);
+            }
+        }
+
+        internal override IDisposable TryBeginBatteryAlertRumble(byte strength)
+        {
+            var own = BeginLocalBatteryRumble(strength);
+            if (own == null) return null;
+            IDisposable paired = null;
+            var entry = ProfileConnection;
+            var group = entry == null ? null : Volatile.Read(ref entry.Group);
+            if (group?.Joined == true && ReferenceEquals(group.Owner, entry) && IsHdRumbleAuthorityCurrent(group) &&
+                group.Other.Device is JoyConDevice other)
+                paired = other.BeginLocalBatteryRumble(strength);
+            return new BatteryAlertRumbleLease(() => { paired?.Dispose(); own.Dispose(); });
+        }
+
+        private IDisposable BeginLocalBatteryRumble(byte strength)
+        {
+            lock (legacyFeedbackGate)
+            {
+                var lease = base.TryBeginBatteryAlertRumble(strength);
+                if (lease == null) return null;
+                hdRumbleDelivery?.Clear();
+                return new BatteryAlertRumbleLease(() =>
+                {
+                    lock (legacyFeedbackGate) { hdRumbleDelivery?.Clear(); lease.Dispose(); }
+                });
             }
         }
 

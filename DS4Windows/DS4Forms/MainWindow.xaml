@@ -717,11 +717,46 @@
                                             </Grid.ColumnDefinitions>
                                             <Label Content="{lex:Loc IconChoice}" ContentStringFormat="{}{0}:" VerticalAlignment="Center" Padding="0" Margin="0,0,16,0" />
                                             <ComboBox x:Name="useIconChoiceCom" SelectedIndex="{Binding IconChoiceIndex,FallbackValue='0'}" Margin="0" Grid.Column="1" Width="220" Style="{DynamicResource BridgeSettingsComboBoxStyle}">
-                                                <ComboBoxItem Content="{lex:Loc Default}" />
-                                                <ComboBoxItem Content="{lex:Loc Colored}" />
-                                                <ComboBoxItem Content="{lex:Loc White}" />
-                                                <ComboBoxItem Content="{lex:Loc Black}" />
-                                                <ComboBoxItem Content="{lex:Loc Battery}" />
+                                                <ComboBoxItem TextSearch.Text="{lex:Loc Default}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
+                                                            <Image Source="/DS4Windows;component/Resources/DS4W.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                                                        </Border>
+                                                        <TextBlock Text="{lex:Loc Default}" VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </ComboBoxItem>
+                                                <ComboBoxItem TextSearch.Text="{lex:Loc Colored}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
+                                                            <Image Source="/DS4Windows;component/Resources/DS4W.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                                                        </Border>
+                                                        <TextBlock Text="{lex:Loc Colored}" VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </ComboBoxItem>
+                                                <ComboBoxItem TextSearch.Text="{lex:Loc White}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
+                                                            <Image Source="/DS4Windows;component/Resources/DS4W - White.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                                                        </Border>
+                                                        <TextBlock Text="{lex:Loc White}" VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </ComboBoxItem>
+                                                <ComboBoxItem TextSearch.Text="{lex:Loc Black}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
+                                                            <Image Source="/DS4Windows;component/Resources/DS4W - Black.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                                                        </Border>
+                                                        <TextBlock Text="{lex:Loc Black}" VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </ComboBoxItem>
+                                                <ComboBoxItem ToolTip="Example battery icon; the tray follows the connected controller’s battery level." TextSearch.Text="{lex:Loc Battery}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
+                                                            <Image Source="/DS4Windows;component/Resources/100.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                                                        </Border>
+                                                        <TextBlock Text="{lex:Loc Battery}" VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </ComboBoxItem>
                                             </ComboBox>
                                         </Grid>
                                     </StackPanel>
@@ -798,6 +833,7 @@
                                         <TextBlock Text="Restart VIIPER to apply." Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="28,4,0,0" />
                                     </StackPanel>
                                 </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}"><local:BatteryAlertsControl/></Border>
                                 <Border Style="{DynamicResource BridgeCardStyle}">
                                     <StackPanel>
                                         <TextBlock Text="Prevent double input" Style="{DynamicResource BridgeSectionTitleStyle}" />

@@ -268,7 +268,7 @@ internal sealed class DualSenseUsbHapticsPassthrough
         return null;
     }
 
-    private static MMDevice FindPhysicalEndpoint(MMDeviceEnumerator enumerator,
+    internal static MMDevice FindPhysicalEndpoint(MMDeviceEnumerator enumerator,
         DualSenseDevice device, string requestedId)
     {
         Guid container = Guid.Empty;

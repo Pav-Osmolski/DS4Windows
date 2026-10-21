@@ -41,6 +41,8 @@ namespace DS4Windows
 {
     public partial class ControlService
     {
+        private BatteryAlertService batteryAlerts;
+        internal BatteryAlertService BatteryAlerts => System.Threading.LazyInitializer.EnsureInitialized(ref batteryAlerts, () => new(this));
         private readonly DualSenseAudioPassthrough dualSenseAudioPassthrough = new DualSenseAudioPassthrough();
         private readonly DualSenseUsbHapticsPassthrough dualSenseUsbHaptics = new();
         private readonly DualShock4AudioPassthrough dualShock4AudioPassthrough = new DualShock4AudioPassthrough();
@@ -3056,6 +3058,7 @@ namespace DS4Windows
             inServiceTask = false;
             runHotPlug = true;
             StartupDiag("ControlService.Start before ServiceStarted events");
+            BatteryAlerts.Start();
             ServiceStarted?.Invoke(this, EventArgs.Empty);
             RunningChanged?.Invoke(this, EventArgs.Empty);
             ReconcileLegacyJoyConPairs();
@@ -3345,6 +3348,7 @@ namespace DS4Windows
                     StopGameBarStateTimer();
                     StopAllGameBarCompatibilityOutputs();
                     StartupDiag("ControlService.Stop PreServiceStop begin");
+                    batteryAlerts?.Stop();
                     PreServiceStop?.Invoke(this, EventArgs.Empty);
                     StartupDiag("ControlService.Stop PreServiceStop end");
 

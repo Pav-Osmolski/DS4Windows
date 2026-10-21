@@ -316,6 +316,55 @@ Use [Swipe profiles](swipe-profiles.md) to limit profile cycling. For double
 input, configure HidHide and check overlapping Steam Input mappings.
 Run at Startup and Start Minimized are separate choices.
 
+### Battery alerts
+
+Open **Settings > Controllers > Battery alerts**. Automatic low-battery and
+fully-charged alerts are off by default. Enable the alerts you want, choose a
+low-battery threshold, and expand **Configure voices, sounds and vibration**.
+
+- Choose an installed Windows voice, speech speed and alert volume. **Manage
+  Windows voices** opens Windows speech settings; refresh the list after adding
+  a voice. If a saved voice is missing, the system default is used.
+- Select the default Windows audio device or a specific headset/speaker.
+  A missing specifically selected device produces an error instead of silently
+  playing through another device.
+- **Controller speaker** uses the matching physical USB DualSense speaker directly;
+  Bluetooth uses the matching emulated controller's existing native speaker route.
+  Enable **Stream audio to controller** and turn off **Headset only** in
+  **Profile Editor > Advanced > Audio**. For Bluetooth, use native game audio as
+  the source. Profile speaker volume, controller mute and Windows endpoint volume
+  still apply. This option does not switch on a disabled controller audio route.
+- Configure **Low battery**, **Fully charged** and **On-demand battery check**
+  independently: speech, a custom sound, sound followed by speech, or no audio.
+  Each can also use an adjustable vibration pattern (strength, pulse length and
+  count, with 150 ms gaps). New vibration pulses skip an already busy rumble
+  lane; releasing an alert preserves more recent game feedback.
+- **Import sound** accepts WAV, MP3 and AIFF. Files are validated, decoded and
+  saved as local PCM audio in the settings folder's `BatteryAlertSounds`
+  directory. Moving the original file does not break the alert. Short clips of
+  1-3 seconds are recommended; the import limits are 30 seconds and 64 MB.
+- Use **Preview** and **Stop preview** to check each alert. Ordinary audio
+  previews work without a controller; vibration and controller-speaker previews
+  require the selected physical controller.
+
+For a button-triggered check, add or edit a **Check Battery** Special Action,
+select **Use battery alert audio and vibration**, and save its button combination.
+Existing tray-notification and lightbar actions continue working unchanged.
+
+For controllers that report only battery bands, low alerts use the reported **low**
+band; the percentage threshold applies to controllers with percentage reports.
+
+Alerts wait for three stable observations, use recovery thresholds and cooldowns,
+and retain their state through profile changes and reconnects during the app
+session. DS3, DS4 and DualSense completion reports can trigger the full alert;
+a high percentage alone cannot. Controllers reporting only battery bands are
+announced as low, medium or high. Unknown readings are not treated as an empty
+battery. If Audio Haptics captures the selected playback device, the announcement
+is part of that captured system audio too.
+
+Back up `BatteryAlertSounds` along with `Profiles.xml` when moving your settings.
+Speech uses installed Windows voices locally, without a cloud service.
+
 ## Log and diagnostics
 
 ![Log page with startup entries, backend verification and log-management controls](images/site/log.webp)

@@ -9,6 +9,26 @@ namespace DS4WindowsTests;
 [TestClass]
 public sealed class LegacyJoyConHdRumbleTests
 {
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void BatteryPulseDrivesBothJoinedHalvesAndReleasesToNeutral(bool rightOwns)
+    {
+        using var f = new PairFixture(rightOwns);
+        using var lease = f.Owner.TryBeginBatteryAlertRumble(96);
+        Assert.IsNotNull(lease);
+        f.Left.WriteReport(); f.Right.WriteReport();
+        f.Left.Output.PumpOnce(); f.Right.Output.PumpOnce();
+        var neutral = new byte[] { 0, 1, 0x60, 0x40 };
+        Assert.IsFalse(f.Left.Reports[^1][2..6].SequenceEqual(neutral));
+        Assert.IsFalse(f.Right.Reports[^1][6..10].SequenceEqual(neutral));
+        lease.Dispose();
+        f.Left.WriteReport(); f.Right.WriteReport();
+        f.Left.Output.PumpOnce(); f.Right.Output.PumpOnce();
+        AssertNeutral(f.Left.Reports[^1]);
+        CollectionAssert.AreEqual(neutral, f.Right.Reports[^1][6..10]);
+    }
+
     private static Switch2HdRumbleGroup Wave(ushort high = 300, ushort low = 100,
         ushort highFrequency = 320, ushort lowFrequency = 160)
     {
