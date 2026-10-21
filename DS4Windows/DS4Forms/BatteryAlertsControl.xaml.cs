@@ -135,10 +135,12 @@ public partial class BatteryAlertsControl : UserControl
         if (sender is not Button button || !Enum.TryParse<BatteryAlertKind>(button.Tag?.ToString(), out var kind)) return;
         previewCancellation?.Cancel();
         using var cancellation = previewCancellation = new();
-        previewButtons.IsEnabled = false;
+        // Keep the clicked button focused. Disabling its parent makes WPF move
+        // focus to another setting and scroll that setting into view.
+        // Starting another preview cancels the previous one instead.
         try { await DS4Windows.Program.rootHub.BatteryAlerts.PreviewAsync(controllerCombo.SelectedIndex, kind, cancellation.Token); }
         catch (OperationCanceledException) { statusText.Text = "Preview stopped."; }
-        finally { if (ReferenceEquals(previewCancellation, cancellation)) previewCancellation = null; previewButtons.IsEnabled = true; }
+        finally { if (ReferenceEquals(previewCancellation, cancellation)) previewCancellation = null; }
     }
 
     private void Stop_Click(object sender, RoutedEventArgs e) => previewCancellation?.Cancel();

@@ -81,7 +81,7 @@
    <Button Content="Preview battery check" Tag="Check" Click="Preview_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6"/>
   </WrapPanel>
   <Button Content="Stop preview" Click="Stop_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left"/>
-  <TextBlock x:Name="statusText" Text="Automatic alerts are optional. Preview audio works without a connected controller; vibration requires one." TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,8,0,0"/>
+  <TextBlock x:Name="statusText" Text="Automatic alerts are optional. Preview audio works without a connected controller; vibration requires one." MinHeight="60" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,8,0,0"/>
   </StackPanel></Expander>
  </StackPanel>
 </UserControl>

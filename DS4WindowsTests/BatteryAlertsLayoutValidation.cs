@@ -52,12 +52,67 @@ internal static class BatteryAlertsLayoutValidation
                 string filename = Path.Combine(directory, $"battery-alerts-{theme}.png");
                 using (var stream = File.Create(filename)) encoder.Save(stream);
                 rendered.Add(filename);
+                ValidatePreviewScrollPosition(control, card, theme);
             }
         }
         finally
         {
             application.Resources.MergedDictionaries.Clear();
             foreach (var resource in previous) application.Resources.MergedDictionaries.Add(resource);
+        }
+    }
+    private static void ValidatePreviewScrollPosition(BatteryAlertsControl control, Border card, string theme)
+    {
+        var previousHub = DS4Windows.Program.rootHub;
+        var previousSettings = Global.BatteryAlerts;
+        var hub = (ControlService)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(ControlService));
+        hub.DS4Controllers = new DS4Device[8];
+        var settings = new BatteryAlertSettings();
+        settings.Low.Mode = settings.Full.Mode = settings.Check.Mode = BatteryAlertMode.Off;
+        var buttons = (WrapPanel)control.FindName("previewButtons");
+        var status = (TextBlock)control.FindName("statusText");
+        var content = new StackPanel();
+        content.Children.Add(new Border { Height = 600 });
+        content.Children.Add(card);
+        var scroll = new ScrollViewer { Content = content, VerticalScrollBarVisibility = ScrollBarVisibility.Visible };
+        void Layout(double width)
+        {
+            scroll.Measure(new Size(width, 500));
+            scroll.Arrange(new Rect(0, 0, width, 500)); scroll.UpdateLayout();
+        }
+        buttons.IsEnabledChanged += (_, _) => Assert.IsTrue(buttons.IsEnabled, "Preview must not disable the focused button and move keyboard focus.");
+        try
+        {
+            DS4Windows.Program.rootHub = hub;
+            Global.BatteryAlerts = settings; // No real audio, controller writes or settings saves.
+            hub.BatteryAlerts.StatusChanged += message => status.Text = message;
+            foreach (double width in new[] { 740d, 480d })
+            {
+                status.Text = "Automatic alerts are optional. Preview audio works without a connected controller; vibration requires one.";
+                Layout(width); scroll.ScrollToBottom(); Layout(width);
+                double offset = scroll.VerticalOffset, extent = scroll.ExtentHeight;
+                foreach (var button in buttons.Children.OfType<Button>())
+                {
+                    button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, button));
+                    Layout(width);
+                    Assert.IsTrue(status.Text.StartsWith("Battery alert:"));
+                    Assert.AreEqual(offset, scroll.VerticalOffset, .1, $"{theme}: {button.Content} moved the page.");
+                    Assert.AreEqual(extent, scroll.ExtentHeight, .1, "Preview status must not resize the page.");
+                }
+                foreach (string message in new[] { "Preparing battery alert...", "Playing battery alert...", "Battery alert finished.",
+                    "Battery alert: Enable the controller speaker in Profile Editor > Controller audio first." })
+                {
+                    status.Text = message; Layout(width);
+                    Assert.AreEqual(offset, scroll.VerticalOffset, .1, $"{theme}: preview progress moved the page.");
+                    Assert.AreEqual(extent, scroll.ExtentHeight, .1, "Preview progress must not resize the page.");
+                }
+            }
+        }
+        finally
+        {
+            hub.BatteryAlerts.Stop();
+            DS4Windows.Program.rootHub = previousHub;
+            Global.BatteryAlerts = previousSettings;
         }
     }
     private static IEnumerable<DependencyObject> Logical(DependencyObject root)
