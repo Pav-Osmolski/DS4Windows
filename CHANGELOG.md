@@ -7,7 +7,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Added
 
-- Optional repeating low-battery warnings: every 30 seconds, 1, 2, 5 or 10 minutes, with a total of 1–10 warnings (including the first) or until charging. Repeating defaults to Off. Cancel the sequence on charging, recovery, disconnect, invalid readings or disabled alerts, and discard queued warnings from ended sequences. Thanks to [@Masterload1975](https://github.com/Masterload1975) for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+- Optional repeating low-battery warnings: every 30 seconds, 1, 2, 5 or 10 minutes, with a total of 1–10 warnings (including the first) or until charging. Repeating defaults to Off. Cancel the sequence on charging, recovery, disconnect, invalid readings or disabled alerts, and discard queued warnings from ended sequences. Thanks to @Masterload1975 for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
 
 ### Fixed
 
@@ -21,7 +21,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Added
 
-- Optional battery alerts in Settings > Controllers: installed Windows voices, selected audio output, separate low/full/on-demand sounds and vibration patterns, previews and cancellation. Import WAV, MP3 or AIFF into the settings folder. Extend Check Battery Special Actions without changing existing actions. Require stable valid readings, suppress repeats across reconnects/profile changes, and use explicit DS3/DS4/DualSense charging-completion status for full-charge notifications. Controller-speaker alerts reuse an already enabled matching native audio route. Thanks to [@Masterload1975](https://github.com/Masterload1975) for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+- Optional battery alerts in Settings > Controllers: installed Windows voices, selected audio output, separate low/full/on-demand sounds and vibration patterns, previews and cancellation. Import WAV, MP3 or AIFF into the settings folder. Extend Check Battery Special Actions without changing existing actions. Require stable valid readings, suppress repeats across reconnects/profile changes, and use explicit DS3/DS4/DualSense charging-completion status for full-charge notifications. Controller-speaker alerts reuse an already enabled matching native audio route. Thanks to @Masterload1975 for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
 
 ### Fixed
 
