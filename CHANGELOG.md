@@ -7,7 +7,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Added
 
-- Optional repeating low-battery warnings: every 30 seconds, 1, 2, 5 or 10 minutes, with a total of 1–10 warnings (including the first) or until charging. Repeating defaults to Off. Cancel the sequence on charging, recovery, disconnect, invalid readings or disabled alerts, and discard queued warnings from ended sequences. Thanks to @Masterload1975 for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+- Optional repeating low-battery warnings: every 30 seconds, 1, 2, 5 or 10 minutes, with a total of 1–10 warnings (including the first) or until charging. Repeating defaults to Off. Cancel the sequence on charging, recovery, disconnect, invalid readings or disabled alerts, and discard queued warnings from ended sequences. Thanks to [@Masterload1975](https://github.com/Masterload1975) for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
 
 ### Fixed
 
@@ -21,7 +21,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ### Added
 
-- Optional battery alerts in Settings > Controllers: installed Windows voices, selected audio output, separate low/full/on-demand sounds and vibration patterns, previews and cancellation. Import WAV, MP3 or AIFF into the settings folder. Extend Check Battery Special Actions without changing existing actions. Require stable valid readings, suppress repeats across reconnects/profile changes, and use explicit DS3/DS4/DualSense charging-completion status for full-charge notifications. Controller-speaker alerts reuse an already enabled matching native audio route. Thanks to @Masterload1975 for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+- Optional battery alerts in Settings > Controllers: installed Windows voices, selected audio output, separate low/full/on-demand sounds and vibration patterns, previews and cancellation. Import WAV, MP3 or AIFF into the settings folder. Extend Check Battery Special Actions without changing existing actions. Require stable valid readings, suppress repeats across reconnects/profile changes, and use explicit DS3/DS4/DualSense charging-completion status for full-charge notifications. Controller-speaker alerts reuse an already enabled matching native audio route. Thanks to [@Masterload1975](https://github.com/Masterload1975) for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
 
 ### Fixed
 
@@ -68,7 +68,7 @@ The Auto Profiles and Hotkeys/About refinements below are part of [PR #62](https
 
 ### Fixed
 
-- Make the observed physical report interval in Controller Readings easier to read: show exactly two decimal places in each supplied translation and refresh the number every 250 ms (four times per second). Refresh immediately when switching controllers or reopening the readings page. Controller sampling, live plots, warning detection and internal measurement precision retain their existing behaviour. Thanks to @Basfet for reporting this ([PR #60](https://github.com/Pav-Osmolski/DS4Windows/pull/60), [issue #59](https://github.com/Pav-Osmolski/DS4Windows/issues/59)).
+- Make the observed physical report interval in Controller Readings easier to read: show exactly two decimal places in each supplied translation and refresh the number every 250 ms (four times per second). Refresh immediately when switching controllers or reopening the readings page. Controller sampling, live plots, warning detection and internal measurement precision retain their existing behaviour. Thanks to [@Basfet](https://github.com/Basfet) for reporting this ([PR #60](https://github.com/Pav-Osmolski/DS4Windows/pull/60), [issue #59](https://github.com/Pav-Osmolski/DS4Windows/issues/59)).
 
 ### Documentation
 
@@ -109,7 +109,7 @@ The Auto Profiles and Hotkeys/About refinements below are part of [PR #62](https
 
 ### Fixed
 
-- Improve DualSense game feedback over USB and Bluetooth: pace native output commands in VIIPER using its advertised HID output interval, reduce redundant consecutive pending state updates in DS4Windows, and preserve the game's Bluetooth rumble mode across trigger-only updates. Distinct effects, final stops and command ordering remain intact. Maintainer testing confirmed normal gameplay in DEATHLOOP and GTA V Enhanced over both connections, including extended Bluetooth play. On 2026-10-19, [the original reporter also confirmed that the haptic problems were fixed over USB and Bluetooth](https://github.com/Pav-Osmolski/DS4Windows/issues/47#issuecomment-6274412583). Thanks to @Jobima1st for the reports and logs ([DS4Windows PR #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54), [VIIPER PR #6](https://github.com/Pav-Osmolski/VIIPER/pull/6), [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), [upstream issue #119](https://github.com/hbashton/DS4Windows/issues/119)).
+- Improve DualSense game feedback over USB and Bluetooth: pace native output commands in VIIPER using its advertised HID output interval, reduce redundant consecutive pending state updates in DS4Windows, and preserve the game's Bluetooth rumble mode across trigger-only updates. Distinct effects, final stops and command ordering remain intact. Maintainer testing confirmed normal gameplay in DEATHLOOP and GTA V Enhanced over both connections, including extended Bluetooth play. On 2026-10-19, [the original reporter also confirmed that the haptic problems were fixed over USB and Bluetooth](https://github.com/Pav-Osmolski/DS4Windows/issues/47#issuecomment-6274412583). Thanks to [@Jobima1st](https://github.com/Jobima1st) for the reports and logs ([DS4Windows PR #54](https://github.com/Pav-Osmolski/DS4Windows/pull/54), [VIIPER PR #6](https://github.com/Pav-Osmolski/VIIPER/pull/6), [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), [upstream issue #119](https://github.com/hbashton/DS4Windows/issues/119)).
 - Overhaul the in-app changelog and update-notes reader: clearer release spacing, theme-aware tables, readable links/code/quotes, images constrained to the window, and loading/error/retry states. Add a GitHub releases shortcut and improve window sizing and footer layout ([PR #53](https://github.com/Pav-Osmolski/DS4Windows/pull/53)).
 - Refine Profile Editor > Nintendo Options > Feel game feedback: centre % and ms with a consistent 3px gap, keep fields and units together when wrapping, and align checkbox groups and numeric fields ([PR #53](https://github.com/Pav-Osmolski/DS4Windows/pull/53)).
 
@@ -130,7 +130,7 @@ Close games, DS4Windows and VIIPER before updating, and allow the bundled backen
 ### Added
 
 - Add opt-in **Advanced tuning** to Audio Haptics with adjustable low-pass (40-1400 Hz) and high-pass (0-200 Hz; 0 disables high-pass) filters. Save the controls per profile and use the existing intensity adjustment. Custom filters replace Bass Focus only when enabled; older profiles retain their previous response ([#52](https://github.com/Pav-Osmolski/DS4Windows/pull/52)). Thanks to [u/d3boshy](https://www.reddit.com/user/d3boshy/) for the request, with [dsz](https://github.com/MaximumFreak/dsz) as the reference for the controls.
-- Make appreciation for @nefarius and links to [support his projects](https://docs.nefarius.at/Donations/) more visible in the README, contributors page and About > Credits. Explain ViGEm's role in earlier DS4Windows versions, HidHide's ongoing contribution and this fork's current VIIPER backend ([#51](https://github.com/Pav-Osmolski/DS4Windows/pull/51)).
+- Make appreciation for [Nefarius](https://github.com/nefarius) and links to [support his projects](https://docs.nefarius.at/Donations/) more visible in the README, contributors page and About > Credits. Explain ViGEm's role in earlier DS4Windows versions, HidHide's ongoing contribution and this fork's current VIIPER backend ([#51](https://github.com/Pav-Osmolski/DS4Windows/pull/51)).
 
 ### Fixed
 
@@ -155,7 +155,7 @@ Close games, DS4Windows and VIIPER before updating, and allow the bundled backen
 
 ### Validation and updating
 
-- Thanks to @Jobima1st for the logs and report in [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), related to upstream [#119](https://github.com/hbashton/DS4Windows/issues/119). The reported game delay and Bluetooth strength/skipping still need hardware confirmation; this release does not claim a complete fix. See the [validation record](docs/validation/2026-10-18-native-feedback-and-logs.md) and [Log guide](docs/user-guide.md#log-and-diagnostics).
+- Thanks to [@Jobima1st](https://github.com/Jobima1st) for the logs and report in [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), related to upstream [#119](https://github.com/hbashton/DS4Windows/issues/119). The reported game delay and Bluetooth strength/skipping still need hardware confirmation; this release does not claim a complete fix. See the [validation record](docs/validation/2026-10-18-native-feedback-and-logs.md) and [Log guide](docs/user-guide.md#log-and-diagnostics).
 - Close games, DS4Windows and VIIPER before updating. VIIPER remains at 0.1.11 and USB/IP at 0.9.8.1; no driver version change is required. This release is unsigned.
 
 ## [5.0.31](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.31) - 2026-10-18

@@ -45,8 +45,9 @@ For dependency or SDK changes, follow [dependency maintenance](dependency-mainte
    the same reporter was thanked in an earlier release. Before publication,
    explicitly check each issue-driven change against its requester/reporter and
    confirm the thank-you appears in both the release body and changelog.
-   Write credits as plain `@username` mentions, not Markdown profile links, so
-   GitHub can recognize the contributor.
+   In the GitHub release body, write credits as plain `@username` mentions so
+   GitHub can recognize the contributor. In `CHANGELOG.md`, use profile links
+   such as `[@username](https://github.com/username)` instead.
 3. Run **.NET Release** from that same commit/branch, entering the draft tag.
    The workflow creates a missing tag only when the draft target matches the
    selected commit. It builds the portable ZIP, installer, matching source
