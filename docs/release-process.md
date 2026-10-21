@@ -41,6 +41,10 @@ For dependency or SDK changes, follow [dependency maintenance](dependency-mainte
    in their original repository. Verify the reporter's GitHub handle and thank
    them beside the relevant change. Check the title, links and credits against
    the previous release and source issues before publication.
+   Credit follow-up suggestions in each release that implements them, even when
+   the same reporter was thanked in an earlier release. Before publication,
+   explicitly check each issue-driven change against its requester/reporter and
+   confirm the thank-you appears in both the release body and changelog.
 3. Run **.NET Release** from that same commit/branch, entering the draft tag.
    The workflow creates a missing tag only when the draft target matches the
    selected commit. It builds the portable ZIP, installer, matching source
