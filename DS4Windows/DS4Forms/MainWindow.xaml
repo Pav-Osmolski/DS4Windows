@@ -719,7 +719,7 @@
                                             <ComboBox x:Name="useIconChoiceCom" SelectedIndex="{Binding IconChoiceIndex,FallbackValue='0'}" Margin="0" Grid.Column="1" Width="220" Style="{DynamicResource BridgeSettingsComboBoxStyle}">
                                                 <ComboBoxItem TextSearch.Text="{lex:Loc Default}">
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Border Width="24" Height="24" Margin="0,0,8,0" CornerRadius="3" Background="#7B8491">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
                                                             <Image Source="/DS4Windows;component/Resources/DS4W.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
                                                         </Border>
                                                         <TextBlock Text="{lex:Loc Default}" VerticalAlignment="Center" />
@@ -727,7 +727,7 @@
                                                 </ComboBoxItem>
                                                 <ComboBoxItem TextSearch.Text="{lex:Loc Colored}">
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Border Width="24" Height="24" Margin="0,0,8,0" CornerRadius="3" Background="#7B8491">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
                                                             <Image Source="/DS4Windows;component/Resources/DS4W.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
                                                         </Border>
                                                         <TextBlock Text="{lex:Loc Colored}" VerticalAlignment="Center" />
@@ -735,7 +735,7 @@
                                                 </ComboBoxItem>
                                                 <ComboBoxItem TextSearch.Text="{lex:Loc White}">
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Border Width="24" Height="24" Margin="0,0,8,0" CornerRadius="3" Background="#7B8491">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
                                                             <Image Source="/DS4Windows;component/Resources/DS4W - White.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
                                                         </Border>
                                                         <TextBlock Text="{lex:Loc White}" VerticalAlignment="Center" />
@@ -743,7 +743,7 @@
                                                 </ComboBoxItem>
                                                 <ComboBoxItem TextSearch.Text="{lex:Loc Black}">
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Border Width="24" Height="24" Margin="0,0,8,0" CornerRadius="3" Background="#7B8491">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
                                                             <Image Source="/DS4Windows;component/Resources/DS4W - Black.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
                                                         </Border>
                                                         <TextBlock Text="{lex:Loc Black}" VerticalAlignment="Center" />
@@ -751,7 +751,7 @@
                                                 </ComboBoxItem>
                                                 <ComboBoxItem ToolTip="Example battery icon; the tray follows the connected controller’s battery level." TextSearch.Text="{lex:Loc Battery}">
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Border Width="24" Height="24" Margin="0,0,8,0" CornerRadius="3" Background="#7B8491">
+                                                        <Border Width="24" Height="24" Margin="0,0,8,0" Background="Transparent">
                                                             <Image Source="/DS4Windows;component/Resources/100.ico" Width="20" Height="20" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
                                                         </Border>
                                                         <TextBlock Text="{lex:Loc Battery}" VerticalAlignment="Center" />
