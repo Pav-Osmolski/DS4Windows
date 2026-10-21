@@ -101,7 +101,7 @@ internal static class BatteryAlertsLayoutValidation
                     Assert.AreEqual(extent, scroll.ExtentHeight, .1, "Preview status must not resize the page.");
                 }
                 foreach (string message in new[] { "Preparing battery alert...", "Playing battery alert...", "Battery alert finished.",
-                    "Battery alert: Enable the controller speaker in Profile Editor > Controller audio first." })
+                    "Battery alert: Enable 'Stream audio to controller' in Profile Editor > Advanced > Audio and turn off 'Headset only'." })
                 {
                     status.Text = message; Layout(width);
                     Assert.AreEqual(message, status.ToolTip, "Keep the full message available when the status is trimmed.");

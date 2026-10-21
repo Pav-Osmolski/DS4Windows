@@ -330,7 +330,7 @@ low-battery threshold, and expand **Configure voices, sounds and vibration**.
   playing through another device.
 - **Controller speaker** uses the matching emulated controller's native audio
   endpoint and its existing physical speaker route. Enable speaker output in
-  **Profile Editor > Controller audio**, using native game audio as the source.
+  **Profile Editor > Advanced > Audio**, using native game audio as the source.
   Profile speaker volume and mute settings still apply. This option does not
   switch on or take over a disabled controller audio route.
 - Configure **Low battery**, **Fully charged** and **On-demand battery check**

@@ -268,7 +268,7 @@ internal sealed class BatteryAlertService
         if (device.DeviceType is not (InputDeviceType.DS4 or InputDeviceType.DualSense))
             throw new BatteryAlertUnavailableException("This controller does not have a supported built-in speaker route. Select a headset or Windows audio device.");
         if (!Global.DualSenseEnableSpeakerOutput[slot] || Global.DualSenseHeadsetOnlyAudio[slot])
-            throw new BatteryAlertUnavailableException("Enable the controller speaker in Profile Editor > Controller audio first.");
+            throw new BatteryAlertUnavailableException("Enable 'Stream audio to controller' in Profile Editor > Advanced > Audio and turn off 'Headset only'.");
         var output = hub.GetPlayStationFeatureOutput(slot);
         int port = output?.DirectSpeakerUsbipPort ?? -1;
         if (port < 0) throw new BatteryAlertUnavailableException("This controller has no active native audio route.");

@@ -44,7 +44,7 @@ public sealed class BatteryAlertTests
                 await service.PreviewAsync(0, kind);
                 string expected = disconnected
                     ? "Battery alert: Connect the controller before previewing its speaker."
-                    : "Battery alert: Enable the controller speaker in Profile Editor > Controller audio first.";
+                    : "Battery alert: Enable 'Stream audio to controller' in Profile Editor > Advanced > Audio and turn off 'Headset only'.";
                 CollectionAssert.AreEqual(new[] { expected }, statuses);
                 CollectionAssert.AreEqual(new[] { expected }, logs);
                 Assert.IsFalse(device.Preview);
