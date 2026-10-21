@@ -354,6 +354,15 @@ Existing tray-notification and lightbar actions continue working unchanged.
 For controllers that report only battery bands, low alerts use the reported **low**
 band; the percentage threshold applies to controllers with percentage reports.
 
+Low-battery warnings can optionally repeat every **30 seconds, 1, 2, 5 or 10
+minutes**. **Repeat interval: Off** is the default and keeps the existing single
+warning. Choose **Total warnings: 1–10**, including the first alert, or **Until
+charging** for ongoing reminders. Repeats use the same low-battery speech, sound
+and vibration settings. They stop when charging begins, the battery rises above
+the low threshold, the controller disconnects or low-battery alerts are disabled.
+A reconnect does not restart the previous reminder sequence. Previews and
+on-demand checks do not count towards the automatic warning total.
+
 Alerts wait for three stable observations, use recovery thresholds and cooldowns,
 and retain their state through profile changes and reconnects during the app
 session. DS3, DS4 and DualSense completion reports can trigger the full alert;

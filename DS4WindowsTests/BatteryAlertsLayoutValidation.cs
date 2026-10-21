@@ -24,6 +24,17 @@ internal static class BatteryAlertsLayoutValidation
                 settings.Low.SoundName = "Battery warning.wav";
                 settings.Low.Mode = BatteryAlertMode.Both;
                 var control = new BatteryAlertsControl(false, settings);
+                var interval = (ComboBox)control.FindName("repeatIntervalCombo");
+                var total = (ComboBox)control.FindName("warningCountCombo");
+                control.Measure(new Size(740, double.PositiveInfinity));
+                control.Arrange(new Rect(0, 0, 740, control.DesiredSize.Height)); control.UpdateLayout();
+                control.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                Assert.AreEqual(0, interval.SelectedValue, "Existing settings must open with repeats off.");
+                interval.SelectedValue = 60;
+                total.SelectedValue = 0;
+                control.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+                Assert.AreEqual(60, control.Settings.LowRepeatSeconds);
+                Assert.AreEqual(0, control.Settings.LowWarningCount);
                 ((ComboBox)control.FindName("voiceCombo")).ItemsSource = new[] { new BatteryAlertChoice("", "System default") };
                 ((ComboBox)control.FindName("voiceCombo")).SelectedIndex = 0;
                 ((ComboBox)control.FindName("outputCombo")).ItemsSource = new[] { new BatteryAlertChoice("", "Windows default audio device") };
@@ -42,6 +53,12 @@ internal static class BatteryAlertsLayoutValidation
                         var bounds = button.TransformToAncestor(card).TransformBounds(new Rect(button.RenderSize));
                         Assert.IsTrue(bounds.Right <= width + .1, $"{theme}: {button.Content} overflows at width {width}.");
                         Assert.IsTrue(button.ActualHeight >= 30, $"{theme}: button height.");
+                    }
+                    foreach (var combo in new[] { interval, total })
+                    {
+                        var bounds = combo.TransformToAncestor(card).TransformBounds(new Rect(combo.RenderSize));
+                        Assert.IsTrue(bounds.Right <= width + .1, $"{theme}: reminder selector overflows at width {width}.");
+                        Assert.IsTrue(combo.ActualHeight >= 30);
                     }
                 }
                 card.Measure(new Size(740, double.PositiveInfinity));

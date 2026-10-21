@@ -14,6 +14,7 @@ namespace DS4Windows;
 internal sealed class BatteryAlertService
 {
     private readonly ControlService hub;
+    private readonly TimeProvider clock;
     private readonly object gate = new();
     private readonly Dictionary<string, BatteryAlertPolicy> policies = new(StringComparer.OrdinalIgnoreCase);
     private readonly long[] manualTimes = new long[ControlService.MAX_DS4_CONTROLLER_COUNT];
@@ -21,12 +22,30 @@ internal sealed class BatteryAlertService
     private Channel<AlertRequest> requests;
     private readonly SemaphoreSlim playbackGate = new(1);
     private DS4Device playingDevice;
+    private AlertRequest playingRequest;
     private int playingSlot = -1;
     private long playbackEpoch;
     internal event Action<string> StatusChanged;
-    private sealed record AlertRequest(int Slot, DS4Device Device, BatteryAlertKind Kind, bool Preview, long Epoch);
+    private sealed record AlertRequest(int Slot, DS4Device Device, BatteryAlertKind Kind, bool Preview, long Epoch)
+    {
+        internal BatteryAlertPolicy LowPolicy { get; init; }
+        internal long LowCycle { get; init; }
+    }
 
-    internal BatteryAlertService(ControlService hub) => this.hub = hub;
+    private bool LowRequestCurrent(AlertRequest request)
+    {
+        if (request.Preview || request.Kind != BatteryAlertKind.Low) return true;
+        var settings = Global.BatteryAlerts;
+        var reading = Read(request.Device);
+        if (!settings.LowEnabled || !reading.Reliable || !BatteryAlertPolicy.IsLow(reading, settings.LowThreshold)) return false;
+        lock (policies) return request.LowPolicy?.IsLowCycleCurrent(request.LowCycle) ?? true;
+    }
+
+    internal BatteryAlertService(ControlService hub, TimeProvider clock = null)
+    {
+        this.hub = hub;
+        this.clock = clock ?? TimeProvider.System;
+    }
 
     internal void Start()
     {
@@ -127,6 +146,7 @@ internal sealed class BatteryAlertService
                 lock (gate)
                 {
                     if (playingDevice != null && !Current(playingSlot, playingDevice)) playbackCancellation?.Cancel();
+                    if (playingRequest != null && !LowRequestCurrent(playingRequest)) playbackCancellation?.Cancel();
                 }
                 if (settings.LowEnabled || settings.FullEnabled)
                 {
@@ -149,8 +169,12 @@ internal sealed class BatteryAlertService
                                     if (policies.Count >= 256) policies.Remove(policies.Keys.First());
                                     policies[identity] = policy = new();
                                 }
-                                var kind = policy.Observe(reading, settings, Stopwatch.GetTimestamp() / Stopwatch.Frequency);
-                                if (kind.HasValue) channel.Writer.TryWrite(new(i, device, kind.Value, false, Interlocked.Read(ref playbackEpoch)));
+                                var kind = policy.Observe(reading, settings, clock.GetTimestamp() / clock.TimestampFrequency, device);
+                                if (kind.HasValue) channel.Writer.TryWrite(new(i, device, kind.Value, false, Interlocked.Read(ref playbackEpoch))
+                                {
+                                    LowPolicy = kind == BatteryAlertKind.Low ? policy : null,
+                                    LowCycle = policy.LowCycle,
+                                });
                             }
                         }
                     }
@@ -159,6 +183,14 @@ internal sealed class BatteryAlertService
                         if (token.IsCancellationRequested || !ReferenceEquals(requests, channel)) return;
                         lock (policies)
                             foreach (var entry in policies) if (!observed.Contains(entry.Key)) entry.Value.Pause();
+                    }
+                }
+                else
+                {
+                    lock (gate)
+                    {
+                        if (token.IsCancellationRequested || !ReferenceEquals(requests, channel)) return;
+                        lock (policies) foreach (var policy in policies.Values) policy.Pause();
                     }
                 }
                 await Task.Delay(1000, token).ConfigureAwait(false);
@@ -189,12 +221,14 @@ internal sealed class BatteryAlertService
             if (request.Epoch != Interlocked.Read(ref playbackEpoch)) { playbackGate.Release(); return; }
             playbackCancellation = cancellation;
             playingDevice = request.Device;
+            playingRequest = request;
             playingSlot = request.Slot;
         }
         string stage = "preparing the alert";
         try
         {
             if (request.Device != null && !Current(request.Slot, request.Device)) return;
+            if (!LowRequestCurrent(request)) return;
             var settings = Global.BatteryAlerts.Clone();
             if (!request.Preview && request.Kind == BatteryAlertKind.Low && !settings.LowEnabled ||
                 !request.Preview && request.Kind == BatteryAlertKind.Full && !settings.FullEnabled) return;
@@ -226,6 +260,7 @@ internal sealed class BatteryAlertService
             }
             token.ThrowIfCancellationRequested();
             if (request.Device != null && !Current(request.Slot, request.Device)) return;
+            if (!LowRequestCurrent(request)) return;
             Task vibration = rule.Vibrate && request.Device != null
                 ? PlayVibrationAsync(request.Device, rule, token) : Task.CompletedTask;
             try
@@ -256,7 +291,7 @@ internal sealed class BatteryAlertService
         {
             lock (gate)
             {
-                if (ReferenceEquals(playbackCancellation, cancellation)) { playbackCancellation = null; playingDevice = null; }
+                if (ReferenceEquals(playbackCancellation, cancellation)) { playbackCancellation = null; playingDevice = null; playingRequest = null; }
             }
             playbackGate.Release();
         }

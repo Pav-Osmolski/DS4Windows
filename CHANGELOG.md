@@ -3,6 +3,12 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Added
+
+- Optional repeating low-battery warnings: every 30 seconds, 1, 2, 5 or 10 minutes, with a total of 1–10 warnings (including the first) or until charging. Repeating defaults to Off. Cancel the sequence on charging, recovery, disconnect, invalid readings or disabled alerts, and discard queued warnings from ended sequences. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+
 ## [5.0.40](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.40) - 2026-10-21
 
 ### Added
