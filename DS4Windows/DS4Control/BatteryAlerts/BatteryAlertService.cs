@@ -191,6 +191,7 @@ internal sealed class BatteryAlertService
             playingDevice = request.Device;
             playingSlot = request.Slot;
         }
+        string stage = "preparing the alert";
         try
         {
             if (request.Device != null && !Current(request.Slot, request.Device)) return;
@@ -210,9 +211,15 @@ internal sealed class BatteryAlertService
             Report("Preparing battery alert...");
             var clips = new List<float[]>();
             if (settings.Volume > 0 && (rule.Mode is BatteryAlertMode.Sound or BatteryAlertMode.Both))
+            {
+                stage = "loading the custom sound";
                 clips.Add(await Task.Run(() => BatteryAlertAudio.ReadSound(rule.SoundFile, token), token).ConfigureAwait(false));
+            }
             if (settings.Volume > 0 && (rule.Mode is BatteryAlertMode.Speech or BatteryAlertMode.Both))
+            {
+                stage = "generating speech";
                 clips.Add(await BatteryAlertAudio.SpeakAsync(Message(request.Slot, request.Kind, reading), settings, token).ConfigureAwait(false));
+            }
             token.ThrowIfCancellationRequested();
             if (request.Device != null && !Current(request.Slot, request.Device)) return;
             Task vibration = rule.Vibrate && request.Device != null
@@ -220,9 +227,11 @@ internal sealed class BatteryAlertService
             try
             {
                 Report("Playing battery alert...");
+                stage = "playing audio";
                 foreach (var clip in clips)
                     await BatteryAlertAudio.PlayAsync(clip, settings.Endpoint,
                         () => ControllerEndpoint(request.Slot, request.Device), settings.Volume, token).ConfigureAwait(false);
+                stage = "playing vibration";
                 await vibration.ConfigureAwait(false);
             }
             finally { cancellation.Cancel(); await vibration.ConfigureAwait(false); }
@@ -232,6 +241,7 @@ internal sealed class BatteryAlertService
         catch (Exception ex)
         {
             Report("Battery alert: " + ex.Message);
+            AppLogger.LogToGui($"Battery alert failed while {stage} (0x{ex.HResult:X8}): {ex}", true);
             if (!request.Preview) AppLogger.LogToTray("Battery alert could not play: " + ex.Message, true);
         }
         finally

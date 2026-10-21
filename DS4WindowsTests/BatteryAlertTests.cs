@@ -15,6 +15,67 @@ public sealed class BatteryAlertTests
     public TestContext TestContext { get; set; }
 
     [TestMethod]
+    public async Task OptInDefaultEndpointPlaysBatterySpeech()
+    {
+        if (Environment.GetEnvironmentVariable("DS4W_BATTERY_PLAYBACK_SMOKE") != "1")
+            Assert.Inconclusive("Set DS4W_BATTERY_PLAYBACK_SMOKE=1 to play a short battery preview on the default output.");
+        using var enumerator = new NAudio.CoreAudioApi.MMDeviceEnumerator();
+        using var device = enumerator.GetDefaultAudioEndpoint(NAudio.CoreAudioApi.DataFlow.Render, NAudio.CoreAudioApi.Role.Multimedia);
+        TestContext.WriteLine($"Playback endpoint: {device.FriendlyName}; mix: {device.AudioClient.MixFormat}");
+        var previous = Global.BatteryAlerts;
+        try
+        {
+            Global.BatteryAlerts = new BatteryAlertSettings { Volume = 15 };
+            var hub = (ControlService)RuntimeHelpers.GetUninitializedObject(typeof(ControlService));
+            hub.DS4Controllers = new DS4Device[8];
+            var service = new BatteryAlertService(hub);
+            var messages = new List<string>();
+            service.StatusChanged += messages.Add;
+            foreach (var kind in new[] { BatteryAlertKind.Low, BatteryAlertKind.Full, BatteryAlertKind.Check })
+            {
+                messages.Clear();
+                await service.PreviewAsync(0, kind);
+                Assert.AreEqual("Battery alert finished.", messages.Last());
+            }
+        }
+        finally { Global.BatteryAlerts = previous; }
+    }
+
+    [TestMethod]
+    [DataRow(16)]
+    [DataRow(24)]
+    [DataRow(32)]
+    public void EndpointPcmFormatIsPreservedAndSamplesAreClamped(int bits)
+    {
+        WaveFormat format = bits == 32 ? new WaveFormat(48000, bits, 4) : new WaveFormatExtensible(48000, bits, 4);
+        var provider = new BatteryAlertOutputProvider(new BatteryAlertChannelProvider(new Samples(-2, 2), 4, true), format);
+        Assert.AreSame(format, provider.WaveFormat);
+        var buffer = new byte[format.BlockAlign * 2 + 7];
+        int bytes = bits / 8;
+        Assert.AreEqual(format.BlockAlign * 2, provider.Read(buffer, 3, format.BlockAlign * 2));
+        Assert.AreEqual(0x80, buffer[3 + bytes * 2 - 1]);
+        Assert.AreEqual(0x7f, buffer[3 + format.BlockAlign + bytes * 2 - 1]);
+        for (int frame = 0; frame < 2; frame++)
+            for (int channel = 0; channel < 4; channel++)
+                if (channel != 1)
+                    for (int b = 0; b < bytes; b++) Assert.AreEqual(0, buffer[3 + frame * format.BlockAlign + channel * bytes + b]);
+        Assert.AreEqual(0, provider.Read(buffer, 0, buffer.Length));
+    }
+
+    [TestMethod]
+    public void EndpointFloatFormatKeepsItsChannelMaskAndSpeakerRouting()
+    {
+        var format = new WaveFormatExtensible(48000, 32, 4);
+        var provider = new BatteryAlertOutputProvider(new BatteryAlertChannelProvider(new Samples(.5f), 4, true), format);
+        Assert.AreSame(format, provider.WaveFormat);
+        var buffer = new byte[format.BlockAlign];
+        Assert.AreEqual(buffer.Length, provider.Read(buffer, 0, buffer.Length));
+        var values = new float[4]; Buffer.BlockCopy(buffer, 0, values, 0, buffer.Length);
+        CollectionAssert.AreEqual(new float[] { 0, .5f, 0, 0 }, values);
+        Assert.Throws<NotSupportedException>(() => new BatteryAlertOutputProvider(new Samples(0), new WaveFormat(44100, 16, 1)));
+    }
+
+    [TestMethod]
     public async Task OptInInstalledVoicesProducePcmWithoutPlayingAudio()
     {
         if (Environment.GetEnvironmentVariable("DS4W_BATTERY_SPEECH_SMOKE") != "1")

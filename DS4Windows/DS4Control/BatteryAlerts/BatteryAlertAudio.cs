@@ -1,4 +1,5 @@
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -143,7 +144,9 @@ internal static class BatteryAlertAudio
         {
             if (args.Exception != null) finished.TrySetException(args.Exception); else finished.TrySetResult();
         };
-        player.Init(gain);
+        // Preserve the endpoint's extensible format (including its channel mask).
+        // A plain float WAVEFORMATEX can be rejected even at the same rate/channel count.
+        player.Init(new BatteryAlertOutputProvider(gain, mix));
         token.ThrowIfCancellationRequested();
         player.Play();
         try { await finished.Task.WaitAsync(TimeSpan.FromSeconds(samples.Length / (double)SampleRate + 5), token).ConfigureAwait(false); }
@@ -171,6 +174,50 @@ internal static class BatteryAlertAudio
         public override long Seek(long offset, SeekOrigin origin) => inner.Seek(offset, origin);
         public override void SetLength(long value) => inner.SetLength(value);
         public override void Flush() => inner.Flush();
+    }
+}
+
+internal sealed class BatteryAlertOutputProvider : IWaveProvider
+{
+    private readonly ISampleProvider source;
+    private readonly bool floatingPoint;
+    private readonly float[] samples = new float[4096];
+    public WaveFormat WaveFormat { get; }
+
+    internal BatteryAlertOutputProvider(ISampleProvider source, WaveFormat format)
+    {
+        var standard = format is WaveFormatExtensible extensible ? extensible.ToStandardWaveFormat() : format;
+        floatingPoint = standard.Encoding == WaveFormatEncoding.IeeeFloat;
+        if (source.WaveFormat.SampleRate != format.SampleRate || source.WaveFormat.Channels != format.Channels ||
+            !(floatingPoint && format.BitsPerSample is 32 or 64 ||
+              standard.Encoding == WaveFormatEncoding.Pcm && format.BitsPerSample is 16 or 24 or 32))
+            throw new NotSupportedException("The selected audio device has an unsupported playback format.");
+        this.source = source;
+        WaveFormat = format;
+    }
+
+    public int Read(byte[] buffer, int offset, int count)
+    {
+        int bytesPerSample = WaveFormat.BitsPerSample / 8;
+        int sampleCount = Math.Min(count / WaveFormat.BlockAlign, samples.Length / WaveFormat.Channels) * WaveFormat.Channels;
+        int read = source.Read(samples, 0, sampleCount);
+        for (int i = 0; i < read; i++)
+        {
+            var destination = buffer.AsSpan(offset + i * bytesPerSample, bytesPerSample);
+            float value = Math.Clamp(samples[i], -1, 1);
+            if (floatingPoint)
+            {
+                if (bytesPerSample == 4) BinaryPrimitives.WriteSingleLittleEndian(destination, value);
+                else BinaryPrimitives.WriteDoubleLittleEndian(destination, value);
+            }
+            else
+            {
+                long scale = 1L << (WaveFormat.BitsPerSample - 1);
+                long integer = Math.Clamp((long)(value * (double)scale), -scale, scale - 1);
+                for (int b = 0; b < bytesPerSample; b++) destination[b] = (byte)(integer >> (8 * b));
+            }
+        }
+        return read * bytesPerSample;
     }
 }
 
