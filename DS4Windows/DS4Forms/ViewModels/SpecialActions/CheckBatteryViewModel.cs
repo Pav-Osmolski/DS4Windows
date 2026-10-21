@@ -31,6 +31,13 @@ namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
     {
         private double delay;
         private bool notification;
+        private bool batteryAlerts;
+        public bool BatteryAlerts
+        {
+            get => batteryAlerts;
+            set { if (batteryAlerts == value) return; batteryAlerts = value; BatteryAlertsChanged?.Invoke(this, EventArgs.Empty); }
+        }
+        public event EventHandler BatteryAlertsChanged;
         private bool lightbar = true;
         private Color emptyColor
             = new Color() { A = 255, R = 255, G = 0, B = 0 };
@@ -99,6 +106,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
         {
             string[] details = action.details.Split(',');
             delay = action.delayTime;
+            BatteryAlerts = details.Length > 9 && bool.TryParse(details[9], out bool alerts) && alerts;
             bool.TryParse(details[1], out notification);
             bool.TryParse(details[2], out lightbar);
             emptyColor = Color.FromArgb(255, byte.Parse(details[3]), byte.Parse(details[4]), byte.Parse(details[5]));
@@ -108,7 +116,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
         public void SaveAction(SpecialAction action, bool edit = false)
         {
             string details = $"{delay.ToString("#.##", Global.configFileDecimalCulture)}|{notification}|{lightbar}|{emptyColor.R}|{emptyColor.G}|{emptyColor.B}|" +
-                $"{fullColor.R}|{fullColor.G}|{fullColor.B}";
+                $"{fullColor.R}|{fullColor.G}|{fullColor.B}|{BatteryAlerts}";
 
             Global.SaveAction(action.name, action.controls, 6, details, edit, delay);
         }
@@ -121,7 +129,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
             List<string> notificationErrors = new List<string>();
             List<string> lightbarErrors = new List<string>();
 
-            if (!notification && !lightbar)
+            if (!notification && !lightbar && !BatteryAlerts)
             {
                 notificationErrors.Add("Need status option");
                 lightbarErrors.Add("Need status option");

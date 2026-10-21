@@ -99,6 +99,7 @@ namespace DS4WindowsTests
                         application, resultsDirectory, renderedFiles);
                     ThemeConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
                     AutoProfileLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
+                    BatteryAlertsLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                 }
                 catch (Exception ex)
                 {
@@ -113,7 +114,7 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(22, renderedFiles.Count);
+            Assert.AreEqual(24, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

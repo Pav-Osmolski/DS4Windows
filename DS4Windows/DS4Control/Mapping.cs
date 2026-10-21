@@ -5318,6 +5318,8 @@ namespace DS4Windows
                                 string[] dets = action.details.Split('|');
                                 if (dets.Length == 1)
                                     dets = action.details.Split(',');
+                                if (dets.Length > 9 && bool.TryParse(dets[9], out bool batteryAlerts) && batteryAlerts && !actionDone[index].dev[device])
+                                    ctrl.BatteryAlerts.RequestCheck(device);
                                 if (bool.Parse(dets[1]) && !actionDone[index].dev[device])
                                 {
                                     AppLogger.LogToTray("Controller " + (device + 1) + ": " +

@@ -2154,6 +2154,12 @@ namespace DS4Windows
             set => m_Config.sidebarIcon = SidebarIconPolicy.Normalize(value);
         }
 
+        public static BatteryAlertSettings BatteryAlerts
+        {
+            get => System.Threading.Volatile.Read(ref m_Config.batteryAlerts);
+            set => System.Threading.Volatile.Write(ref m_Config.batteryAlerts, value?.Clone() ?? new());
+        }
+
         public static double SidebarIconHue
         {
             get => SidebarIconPolicy.NormalizeHue(m_Config.sidebarIconHue);
@@ -5084,6 +5090,7 @@ namespace DS4Windows
         public TrayIconChoice useIconChoice;
         public SidebarIconChoice sidebarIcon = SidebarIconChoice.BlueTile;
         public double sidebarIconHue;
+        public BatteryAlertSettings batteryAlerts = new();
         public const bool DEFAULT_FLASH_WHEN_LATE = true;
         public bool flashWhenLate = DEFAULT_FLASH_WHEN_LATE;
 

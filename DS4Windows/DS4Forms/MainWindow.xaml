@@ -798,6 +798,7 @@
                                         <TextBlock Text="Restart VIIPER to apply." Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="28,4,0,0" />
                                     </StackPanel>
                                 </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}"><local:BatteryAlertsControl/></Border>
                                 <Border Style="{DynamicResource BridgeCardStyle}">
                                     <StackPanel>
                                         <TextBlock Text="Prevent double input" Style="{DynamicResource BridgeSectionTitleStyle}" />

@@ -168,6 +168,11 @@ public sealed class SettingsNavigationTests
                 element.ReplaceWith(new XElement(wpf + "TextBlock", new XAttribute("Text", "Language selector")));
                 continue;
             }
+            if (element.Name.LocalName == "BatteryAlertsControl")
+            {
+                element.ReplaceWith(new XElement(wpf + "ContentControl", new XAttribute(x + "Name", "batteryAlertsTestHost")));
+                continue;
+            }
             foreach (XAttribute attribute in element.Attributes().ToArray())
             {
                 if (attribute.Name.LocalName is "Click" or "Checked" or "SelectionChanged" or "TextChanged" or "PreviewKeyDown" ||
@@ -185,6 +190,8 @@ public sealed class SettingsNavigationTests
         var resources = (ResourceDictionary)XamlReader.Parse(bridge.ToString());
         var root = (Grid)XamlReader.Parse(markup.ToString());
         root.Resources.MergedDictionaries.Add(resources);
+        ((ContentControl)root.FindName("batteryAlertsTestHost")).Content =
+            new DS4WinWPF.DS4Forms.BatteryAlertsControl(false, new DS4Windows.BatteryAlertSettings());
         return root;
     }
 

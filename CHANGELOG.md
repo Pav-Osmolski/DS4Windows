@@ -3,6 +3,12 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+### Added
+
+- Optional battery alerts in Settings > Controllers: installed Windows voices, selected audio output, separate low/full/on-demand sounds and vibration patterns, previews and cancellation. Import WAV, MP3 or AIFF into the settings folder. Extend Check Battery Special Actions without changing existing actions. Require stable valid readings, suppress repeats across reconnects/profile changes, and use explicit DS3/DS4/DualSense charging-completion status for full-charge notifications. Controller-speaker alerts reuse an already enabled matching native audio route. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+
 ## [5.0.39](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.39) - 2026-10-21
 
 ### Fixed

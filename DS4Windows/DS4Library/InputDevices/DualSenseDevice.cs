@@ -722,6 +722,8 @@ namespace DS4Windows.InputDevices
         private const int BluetoothControlTemplateQueueWaitMilliseconds = 250;
         private const int DeviceStatusChargingChanged = 0x01;
         private const int DeviceStatusBatteryChanged = 0x02;
+        private volatile bool batteryChargeComplete;
+        public override bool BatteryChargeComplete => batteryChargeComplete;
         private const byte BluetoothNormalInputBit = 0x01;
         private const byte BluetoothMicrophoneInputBit = 0x02;
         private const byte BluetoothMicrophoneControlEnable = 0x01;
@@ -2968,6 +2970,14 @@ namespace DS4Windows.InputDevices
                     rumbleState.RumbleMotorStrengthLeftHeavySlow);
                 QueuePhysicalOutputUpdate();
             }
+        }
+
+        internal override IDisposable TryBeginBatteryAlertRumble(byte strength)
+        {
+            if (IsDisconnecting || IsRemoving) return null;
+            var lease = physicalOutputStateMailbox.TryBeginBatteryAlertRumble(strength, QueuePhysicalOutputUpdate);
+            if (lease != null) QueuePhysicalOutputUpdate();
+            return lease;
         }
 
         public override void setRumble(byte rightLightFastMotor,
@@ -5314,6 +5324,7 @@ namespace DS4Windows.InputDevices
 
                         tempByte = inputReport[53 + reportOffset];
                         tempFull = (tempByte & 0x20) != 0; // Check for Full status
+                        batteryChargeComplete = BatteryAlertReports.DualSenseComplete(tempByte);
                         maxBatteryValue = BATTERY_MAX;
                         if (tempFull)
                         {
@@ -5335,6 +5346,7 @@ namespace DS4Windows.InputDevices
                                 DeviceStatusBatteryChanged);
                         }
 
+                        batteryReadingAvailable = BatteryAlertReports.DualSenseValid(tempByte);
                         cState.Battery = (byte)battery;
                         //System.Diagnostics.Debug.WriteLine("CURRENT BATTERY: " + (inputReport[30] & 0x0f) + " | " + tempBattery + " | " + battery);
                     }
