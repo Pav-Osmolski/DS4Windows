@@ -15,6 +15,51 @@ public sealed class BatteryAlertTests
     public TestContext TestContext { get; set; }
 
     [TestMethod]
+    [DataRow(false, false, true)]
+    [DataRow(false, false, false)]
+    [DataRow(true, true, false)]
+    public async Task UnavailableControllerSpeakerReportsOneHelpfulMessageWithoutExceptionTrace(bool speaker, bool headsetOnly, bool disconnected)
+    {
+        var previous = Global.BatteryAlerts;
+        bool previousSpeaker = Global.DualSenseEnableSpeakerOutput[0];
+        bool previousHeadset = Global.DualSenseHeadsetOnlyAudio[0];
+        using var device = new Device();
+        var hub = (ControlService)RuntimeHelpers.GetUninitializedObject(typeof(ControlService));
+        hub.DS4Controllers = new DS4Device[8];
+        if (!disconnected) hub.DS4Controllers[0] = device;
+        var service = new BatteryAlertService(hub);
+        var statuses = new List<string>();
+        var logs = new List<string>();
+        service.StatusChanged += statuses.Add;
+        EventHandler<DebugEventArgs> log = (_, e) => logs.Add(e.Data);
+        AppLogger.GuiLog += log;
+        try
+        {
+            Global.BatteryAlerts = new BatteryAlertSettings { Endpoint = "controller" };
+            Global.DualSenseEnableSpeakerOutput[0] = speaker;
+            Global.DualSenseHeadsetOnlyAudio[0] = headsetOnly;
+            foreach (var kind in new[] { BatteryAlertKind.Low, BatteryAlertKind.Full, BatteryAlertKind.Check })
+            {
+                statuses.Clear(); logs.Clear();
+                await service.PreviewAsync(0, kind);
+                string expected = disconnected
+                    ? "Battery alert: Connect the controller before previewing its speaker."
+                    : "Battery alert: Enable the controller speaker in Profile Editor > Controller audio first.";
+                CollectionAssert.AreEqual(new[] { expected }, statuses);
+                CollectionAssert.AreEqual(new[] { expected }, logs);
+                Assert.IsFalse(device.Preview);
+            }
+        }
+        finally
+        {
+            service.Stop(); AppLogger.GuiLog -= log;
+            Global.BatteryAlerts = previous;
+            Global.DualSenseEnableSpeakerOutput[0] = previousSpeaker;
+            Global.DualSenseHeadsetOnlyAudio[0] = previousHeadset;
+        }
+    }
+
+    [TestMethod]
     public async Task OptInDefaultEndpointPlaysBatterySpeech()
     {
         if (Environment.GetEnvironmentVariable("DS4W_BATTERY_PLAYBACK_SMOKE") != "1")

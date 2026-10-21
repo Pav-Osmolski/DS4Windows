@@ -200,14 +200,18 @@ internal sealed class BatteryAlertService
                 !request.Preview && request.Kind == BatteryAlertKind.Full && !settings.FullEnabled) return;
             var rule = settings.Rule(request.Kind);
             if (rule.Mode == BatteryAlertMode.Off && !rule.Vibrate)
-                throw new InvalidOperationException("Choose speech, a custom sound or vibration for this alert.");
+                throw new BatteryAlertUnavailableException("Choose speech, a custom sound or vibration for this alert.");
             if (rule.Mode == BatteryAlertMode.Off && request.Device == null)
-                throw new InvalidOperationException("Connect the selected controller to preview vibration.");
+                throw new BatteryAlertUnavailableException("Connect the selected controller to preview vibration.");
             var reading = request.Preview ? new BatteryAlertReading(50, false, request.Kind == BatteryAlertKind.Full, true) : Read(request.Device);
             if (!request.Preview && request.Kind == BatteryAlertKind.Low &&
                 (!reading.Reliable || reading.Charging || reading.Percentage > settings.LowThreshold)) return;
             if (!request.Preview && request.Kind == BatteryAlertKind.Full && !reading.Full) return;
             var token = cancellation.Token;
+            // Validate the route before synthesising speech or starting vibration.
+            // Playback checks again in case the controller/profile changes while preparing.
+            if (settings.Volume > 0 && rule.Mode != BatteryAlertMode.Off && settings.Endpoint == "controller")
+                _ = ControllerEndpoint(request.Slot, request.Device);
             Report("Preparing battery alert...");
             var clips = new List<float[]>();
             if (settings.Volume > 0 && (rule.Mode is BatteryAlertMode.Sound or BatteryAlertMode.Both))
@@ -238,6 +242,10 @@ internal sealed class BatteryAlertService
             Report("Battery alert finished.");
         }
         catch (OperationCanceledException) { Report("Battery alert stopped."); }
+        catch (BatteryAlertUnavailableException ex)
+        {
+            Report("Battery alert: " + ex.Message);
+        }
         catch (Exception ex)
         {
             Report("Battery alert: " + ex.Message);
@@ -256,17 +264,17 @@ internal sealed class BatteryAlertService
 
     private string ControllerEndpoint(int slot, DS4Device device)
     {
-        if (!Current(slot, device)) throw new InvalidOperationException("Connect the controller before previewing its speaker.");
+        if (!Current(slot, device)) throw new BatteryAlertUnavailableException("Connect the controller before previewing its speaker.");
         if (device.DeviceType is not (InputDeviceType.DS4 or InputDeviceType.DualSense))
-            throw new InvalidOperationException("This controller does not have a supported built-in speaker route. Select a headset or Windows audio device.");
+            throw new BatteryAlertUnavailableException("This controller does not have a supported built-in speaker route. Select a headset or Windows audio device.");
         if (!Global.DualSenseEnableSpeakerOutput[slot] || Global.DualSenseHeadsetOnlyAudio[slot])
-            throw new InvalidOperationException("Enable the controller speaker in Profile Editor > Controller audio first.");
+            throw new BatteryAlertUnavailableException("Enable the controller speaker in Profile Editor > Controller audio first.");
         var output = hub.GetPlayStationFeatureOutput(slot);
         int port = output?.DirectSpeakerUsbipPort ?? -1;
-        if (port < 0) throw new InvalidOperationException("This controller has no active native audio route.");
+        if (port < 0) throw new BatteryAlertUnavailableException("This controller has no active native audio route.");
         if (DualSenseAudioPassthrough.EvaluateDirectSpeakerRoute(Global.DualSenseAudioCaptureEndpointId[slot],
                 DualSenseAudioPassthrough.GetEndpointKind(output.OutputType), output) != DirectSpeakerRouteDecision.Direct)
-            throw new InvalidOperationException("Choose native game audio as the controller speaker source, or select a headset for battery alerts.");
+            throw new BatteryAlertUnavailableException("Choose native game audio as the controller speaker source, or select a headset for battery alerts.");
         using var enumerator = new MMDeviceEnumerator();
         var devices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
         foreach (var endpoint in devices)
@@ -275,7 +283,7 @@ internal sealed class BatteryAlertService
                 if (DualSenseAudioPassthrough.TryGetEndpointUsbipPort(endpoint, out int candidate) && candidate == port)
                     return endpoint.ID;
         }
-        throw new InvalidOperationException("The matching controller audio device is unavailable.");
+        throw new BatteryAlertUnavailableException("The matching controller audio device is unavailable.");
     }
 
     private static async Task PlayVibrationAsync(DS4Device device, BatteryAlertRule rule, CancellationToken token)
@@ -300,3 +308,6 @@ internal sealed class BatteryAlertService
         if (status.StartsWith("Battery alert:", StringComparison.Ordinal)) AppLogger.LogToGui(status, true);
     }
 }
+
+/// <summary>An expected configuration/device condition with an actionable user message.</summary>
+internal sealed class BatteryAlertUnavailableException(string message) : Exception(message);
