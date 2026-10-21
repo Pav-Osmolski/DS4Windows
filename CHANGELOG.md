@@ -3,11 +3,19 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## Unreleased
+## [5.0.41](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.41) - 2026-10-21
 
 ### Added
 
 - Optional repeating low-battery warnings: every 30 seconds, 1, 2, 5 or 10 minutes, with a total of 1–10 warnings (including the first) or until charging. Repeating defaults to Off. Cancel the sequence on charging, recovery, disconnect, invalid readings or disabled alerts, and discard queued warnings from ended sequences. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+
+### Fixed
+
+- Publish release documentation through a main-branch workflow run so GitHub Pages deployment respects the existing main-only environment rule.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
 
 ## [5.0.40](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.40) - 2026-10-21
 
