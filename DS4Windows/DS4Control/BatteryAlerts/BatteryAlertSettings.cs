@@ -47,11 +47,15 @@ public sealed class BatteryAlertSettings : BatteryAlertObservable
 {
     private bool lowEnabled, fullEnabled;
     private int lowThreshold = 20, volume = 60;
+    private int lowRepeatSeconds, lowWarningCount = 3;
     private double rate = 1;
     private string voice = "", endpoint = "";
     public bool LowEnabled { get => lowEnabled; set => Set(ref lowEnabled, value); }
     public bool FullEnabled { get => fullEnabled; set => Set(ref fullEnabled, value); }
     public int LowThreshold { get => lowThreshold; set => Set(ref lowThreshold, Math.Clamp(value, 5, 50)); }
+    public int LowRepeatSeconds { get => lowRepeatSeconds; set => Set(ref lowRepeatSeconds, value is 30 or 60 or 120 or 300 or 600 ? value : 0); }
+    // Zero means until charging/recovery/disconnect; finite totals include the first warning.
+    public int LowWarningCount { get => lowWarningCount; set => Set(ref lowWarningCount, Math.Clamp(value, 0, 10)); }
     public int Volume { get => volume; set => Set(ref volume, Math.Clamp(value, 0, 100)); }
     public double Rate { get => rate; set => Set(ref rate, double.IsFinite(value) ? Math.Clamp(value, 0.5, 2) : 1); }
     public string Voice { get => voice; set => Set(ref voice, value ?? ""); }
@@ -62,7 +66,8 @@ public sealed class BatteryAlertSettings : BatteryAlertObservable
     public BatteryAlertRule Check { get; set; } = new() { Pulses = 1 };
     public BatteryAlertRule Rule(BatteryAlertKind kind) => kind switch { BatteryAlertKind.Low => Low, BatteryAlertKind.Full => Full, _ => Check };
     public BatteryAlertSettings Clone() => new() { LowEnabled = LowEnabled, FullEnabled = FullEnabled,
-        LowThreshold = LowThreshold, Volume = Volume, Rate = Rate, Voice = Voice, Endpoint = Endpoint,
+        LowThreshold = LowThreshold, LowRepeatSeconds = LowRepeatSeconds, LowWarningCount = LowWarningCount,
+        Volume = Volume, Rate = Rate, Voice = Voice, Endpoint = Endpoint,
         Low = Low?.Clone() ?? new(), Full = Full?.Clone() ?? new(), Check = Check?.Clone() ?? new() };
 }
 
@@ -86,14 +91,30 @@ internal sealed class BatteryAlertPolicy
     private int threshold = -1;
     private long lastLow = long.MinValue, lastFull = long.MinValue;
     private int stableLow, stableFull, recoveredLow, recoveredFull;
-    internal void Pause() => stableLow = stableFull = recoveredLow = recoveredFull = 0;
-
-    internal BatteryAlertKind? Observe(BatteryAlertReading reading, BatteryAlertSettings settings, long seconds)
+    private bool lowCycleActive;
+    private int lowWarnings;
+    private long lastLowWarning;
+    private object observedSession;
+    internal long LowCycle { get; private set; }
+    internal bool IsLowCycleCurrent(long cycle) => lowCycleActive && cycle == LowCycle;
+    private void EndLowCycle()
     {
+        if (lowCycleActive) { lowCycleActive = false; LowCycle++; }
+    }
+    internal void Pause()
+    {
+        stableLow = stableFull = recoveredLow = recoveredFull = 0;
+        EndLowCycle();
+    }
+
+    internal BatteryAlertKind? Observe(BatteryAlertReading reading, BatteryAlertSettings settings, long seconds, object session = null)
+    {
+        if (!ReferenceEquals(session, observedSession)) { Pause(); observedSession = session; }
         if (!reading.Reliable) { Pause(); return null; }
         // Ignore transient reports. A changed threshold is a new deliberate configuration.
-        if (threshold != settings.LowThreshold) { threshold = settings.LowThreshold; lowLatched = false; stableLow = 0; }
+        if (threshold != settings.LowThreshold) { EndLowCycle(); threshold = settings.LowThreshold; lowLatched = false; stableLow = 0; }
         bool low = IsLow(reading, threshold);
+        if (!low || !settings.LowEnabled) EndLowCycle();
         stableLow = low ? Math.Min(3, stableLow + 1) : 0;
         stableFull = reading.Full ? Math.Min(3, stableFull + 1) : 0;
         bool recovered = reading.Charging || (reading.Level == null ? reading.Percentage >= threshold + 5 : reading.Level != "low");
@@ -106,6 +127,18 @@ internal sealed class BatteryAlertPolicy
             lowLatched = true;
             if (lastLow != long.MinValue && seconds - lastLow < 300) return null;
             lastLow = seconds;
+            lastLowWarning = seconds;
+            lowWarnings = 1;
+            lowCycleActive = true;
+            LowCycle++;
+            return BatteryAlertKind.Low;
+        }
+        if (settings.LowEnabled && stableLow == 3 && lowCycleActive && settings.LowRepeatSeconds > 0 &&
+            (settings.LowWarningCount == 0 || lowWarnings < settings.LowWarningCount) &&
+            seconds - lastLowWarning >= settings.LowRepeatSeconds)
+        {
+            lastLowWarning = seconds;
+            lowWarnings++;
             return BatteryAlertKind.Low;
         }
         if (settings.FullEnabled && stableFull == 3 && !fullLatched)
