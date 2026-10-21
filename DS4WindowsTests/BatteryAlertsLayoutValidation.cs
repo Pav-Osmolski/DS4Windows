@@ -90,6 +90,7 @@ internal static class BatteryAlertsLayoutValidation
             {
                 status.Text = "Automatic alerts are optional. Preview audio works without a connected controller; vibration requires one.";
                 Layout(width); scroll.ScrollToBottom(); Layout(width);
+                Assert.IsTrue(status.ActualHeight < status.FontSize * 2, "Status must occupy one line without reserved blank space.");
                 double offset = scroll.VerticalOffset, extent = scroll.ExtentHeight;
                 foreach (var button in buttons.Children.OfType<Button>())
                 {
@@ -103,6 +104,7 @@ internal static class BatteryAlertsLayoutValidation
                     "Battery alert: Enable the controller speaker in Profile Editor > Controller audio first." })
                 {
                     status.Text = message; Layout(width);
+                    Assert.AreEqual(message, status.ToolTip, "Keep the full message available when the status is trimmed.");
                     Assert.AreEqual(offset, scroll.VerticalOffset, .1, $"{theme}: preview progress moved the page.");
                     Assert.AreEqual(extent, scroll.ExtentHeight, .1, "Preview progress must not resize the page.");
                 }
