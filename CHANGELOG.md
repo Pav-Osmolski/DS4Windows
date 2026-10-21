@@ -3,7 +3,7 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## Unreleased
+## [5.0.40](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.40) - 2026-10-21
 
 ### Added
 
@@ -15,6 +15,10 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Update Overview slider numbers immediately while dragging, retaining the delay for settings and hardware updates. Add transparent icon previews to Settings > Icon Choice.
 - Preserve Profile Editor audio dropdown selections across endpoint refreshes and reopening, including automatic and unavailable saved devices. Send USB DualSense battery announcements directly to the matching physical speaker, keeping haptics channels silent; report muted/zero-volume outputs clearly. Use the USB internal-speaker routing value in both local and native-game reports while preserving Bluetooth audio routing.
 - Match USB DualSense speaker auto-detection to the physical controller and keep its game-audio capture source separate from the speaker destination. Prefer the matching VIIPER USB/IP port and restart capture when that port changes. Correct battery-alert guidance to Profile Editor > Advanced > Audio.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
 
 ## [5.0.39](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.39) - 2026-10-21
 
