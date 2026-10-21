@@ -269,6 +269,19 @@ internal sealed class BatteryAlertService
             throw new BatteryAlertUnavailableException("This controller does not have a supported built-in speaker route. Select a headset or Windows audio device.");
         if (!Global.DualSenseEnableSpeakerOutput[slot] || Global.DualSenseHeadsetOnlyAudio[slot])
             throw new BatteryAlertUnavailableException("Enable 'Stream audio to controller' in Profile Editor > Advanced > Audio and turn off 'Headset only'.");
+        if (device is DualSenseDevice usb && usb.ConnectionType == ConnectionType.USB)
+        {
+            if (!usb.EnableSpeakerOutput || usb.HeadsetOnlyAudio || usb.SpeakerVolume == 0)
+                throw new BatteryAlertUnavailableException("The controller speaker is muted or its volume is zero. Check Profile Editor > Advanced > Audio and the controller mute button.");
+            // USB has a real Windows audio destination. Do not depend on recapturing
+            // an announcement from the emulated endpoint just to play it physically.
+            using var physicalEnumerator = new MMDeviceEnumerator();
+            using var physical = DualSenseUsbHapticsPassthrough.FindPhysicalEndpoint(physicalEnumerator,
+                usb, Global.DualSenseAudioSpeakerEndpointId[slot]);
+            if (physical == null)
+                throw new BatteryAlertUnavailableException("The matching physical USB controller speaker is unavailable. Check Profile Editor > Advanced > Audio > USB DualSense speaker.");
+            return physical.ID;
+        }
         var output = hub.GetPlayStationFeatureOutput(slot);
         int port = output?.DirectSpeakerUsbipPort ?? -1;
         if (port < 0) throw new BatteryAlertUnavailableException("This controller has no active native audio route.");

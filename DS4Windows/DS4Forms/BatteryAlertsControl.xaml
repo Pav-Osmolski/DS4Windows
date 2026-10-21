@@ -50,7 +50,7 @@
   </WrapPanel>
   <TextBlock Text="Audio output" Margin="0,0,0,4"/>
   <ComboBox x:Name="outputCombo" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="Output_Changed" MinHeight="34"/>
-  <TextBlock Text="For the controller speaker, enable its speaker output in Profile Editor > Advanced > Audio. The matching native audio endpoint is used; the game’s speaker route and mute settings still apply." Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,6,0,10"/>
+  <TextBlock Text="For the controller speaker, enable its speaker output in Profile Editor > Advanced > Audio. USB DualSense alerts use its physical speaker; Bluetooth uses the matching native audio route. The game’s speaker route and mute settings still apply." Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,6,0,10"/>
   <WrapPanel>
    <StackPanel MinWidth="180" Margin="0,0,20,10">
     <TextBlock Text="{Binding Settings.Volume, StringFormat=Alert volume: {0}%}"/>

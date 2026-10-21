@@ -15,6 +15,26 @@ public sealed class BatteryAlertTests
     public TestContext TestContext { get; set; }
 
     [TestMethod]
+    public async Task OptInPhysicalUsbControllerPlaysBatterySpeech()
+    {
+        if (Environment.GetEnvironmentVariable("DS4W_BATTERY_USB_PLAYBACK_SMOKE") != "1")
+            Assert.Inconclusive("Set DS4W_BATTERY_USB_PLAYBACK_SMOKE=1 to play a short announcement through the single connected physical USB DualSense.");
+        using var enumerator = new NAudio.CoreAudioApi.MMDeviceEnumerator();
+        var endpoints = enumerator.EnumerateAudioEndPoints(NAudio.CoreAudioApi.DataFlow.Render, NAudio.CoreAudioApi.DeviceState.Active);
+        try
+        {
+            var physical = endpoints.Where(e => DualSenseAudioPassthrough.IsDualSenseEndpoint(e) &&
+                !DualSenseAudioPassthrough.TryGetEndpointUsbipPort(e, out _)).ToArray();
+            if (physical.Length != 1) Assert.Inconclusive("This check requires exactly one physical USB DualSense audio endpoint.");
+            var endpoint = physical[0];
+            TestContext.WriteLine($"Physical USB output: {endpoint.FriendlyName}; mix: {endpoint.AudioClient.MixFormat}; Windows mute={endpoint.AudioEndpointVolume.Mute}; Windows gain={endpoint.AudioEndpointVolume.MasterVolumeLevelScalar}");
+            var samples = await BatteryAlertAudio.SpeakAsync("Controller one battery alert preview.", new BatteryAlertSettings(), CancellationToken.None);
+            await BatteryAlertAudio.PlayAsync(samples, endpoint.ID, () => throw new InvalidOperationException(), 70, CancellationToken.None);
+        }
+        finally { foreach (var endpoint in endpoints) endpoint.Dispose(); }
+    }
+
+    [TestMethod]
     [DataRow(false, false, true)]
     [DataRow(false, false, false)]
     [DataRow(true, true, false)]

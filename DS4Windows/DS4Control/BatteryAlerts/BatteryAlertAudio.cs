@@ -134,9 +134,13 @@ internal static class BatteryAlertAudio
         using var stream = new RawSourceWaveStream(FloatBytes(samples), WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, 1));
         ISampleProvider source = stream.ToSampleProvider();
         var mix = device.AudioClient.MixFormat;
+        bool controller = DualSenseAudioPassthrough.IsControllerAudioEndpoint(device);
+        if (controller && (device.AudioEndpointVolume.Mute || device.AudioEndpointVolume.MasterVolumeLevelScalar <= 0))
+            throw new BatteryAlertUnavailableException("The selected controller audio device is muted or at zero volume in Windows sound settings.");
+        AppLogger.LogToGui($"Battery alert playback: {device.FriendlyName}; {mix.SampleRate} Hz, {mix.Channels} channels; alert volume {volume}%.", false);
         if (mix.SampleRate != SampleRate) source = new WdlResamplingSampleProvider(source, mix.SampleRate);
         source = new BatteryAlertChannelProvider(source, mix.Channels,
-            DualSenseAudioPassthrough.IsControllerAudioEndpoint(device));
+            controller);
         var gain = new VolumeSampleProvider(source) { Volume = volume / 100f };
         using var player = new WasapiOut(device, AudioClientShareMode.Shared, true, 50);
         var finished = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);

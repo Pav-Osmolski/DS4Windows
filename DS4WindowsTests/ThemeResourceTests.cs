@@ -100,6 +100,7 @@ namespace DS4WindowsTests
                     ThemeConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
                     AutoProfileLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     BatteryAlertsLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
+                    ProfileAudioSelectionValidation.Validate();
                 }
                 catch (Exception ex)
                 {

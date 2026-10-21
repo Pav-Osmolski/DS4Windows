@@ -731,6 +731,10 @@ namespace DS4Windows.InputDevices
         // every 0x36 media report. Byte 0x09 selects the internal speaker
         // contract while retaining the controller's microphone clock.
         private const byte DualSenseAudioControlOutputSpeaker = 0x09;
+        // USB audio_flags bits 4/5 select the physical output path:
+        // 0x30 sends the right front USB channel to the built-in speaker.
+        // The Bluetooth combined-media 0x09 snapshot is a different contract.
+        internal const byte DualSenseUsbAudioControlOutputSpeaker = 0x30;
         private const byte DualSenseAudioControlOutputHeadphones = 0x00;
         private const byte BluetoothCombinedSpeakerPacketType = 0x93;
         private const byte BluetoothCombinedHeadsetPacketType = 0x96;
@@ -5917,12 +5921,12 @@ namespace DS4Windows.InputDevices
                 // Internal microphone volume
                 outputReport[7] = MapDualSenseMicrophoneVolume(
                     outputState.MicrophoneVolume);
-                // Route the Opus stream to either the controller speaker or
+                // Route the USB PCM stream to either the controller speaker or
                 // the 3.5 mm headset DAC. This byte is an output-path field,
                 // not merely an internal-speaker enable bit.
                 outputReport[8] = outputState.EnableSpeakerOutput ?
                     (outputState.HeadsetOnlyAudio ? DualSenseAudioControlOutputHeadphones :
-                        DualSenseAudioControlOutputSpeaker) : (byte)0x00;
+                        DualSenseUsbAudioControlOutputSpeaker) : (byte)0x00;
 
                 // Mute button LED. 0x01 = Solid. 0x02 = Pulsating
                 outputReport[9] = outputState.MuteLedOverride ? (outputState.MuteLedOn ? (byte)0x01 : (byte)0x00) :
@@ -8411,7 +8415,7 @@ namespace DS4Windows.InputDevices
             report[stateOffset + 7] = outputState.EnableSpeakerOutput ?
                 (outputState.HeadsetOnlyAudio ?
                     DualSenseAudioControlOutputHeadphones :
-                    DualSenseAudioControlOutputSpeaker) : (byte)0;
+                    DualSenseUsbAudioControlOutputSpeaker) : (byte)0;
             report[stateOffset + 8] = outputState.MuteLedOverride ?
                 (outputState.MuteLedOn ? (byte)0x01 : (byte)0x00) :
                 outputState.MicrophoneMuteOverride ?

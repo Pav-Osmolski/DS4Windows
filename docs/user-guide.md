@@ -328,11 +328,12 @@ low-battery threshold, and expand **Configure voices, sounds and vibration**.
 - Select the default Windows audio device or a specific headset/speaker.
   A missing specifically selected device produces an error instead of silently
   playing through another device.
-- **Controller speaker** uses the matching emulated controller's native audio
-  endpoint and its existing physical speaker route. Enable speaker output in
-  **Profile Editor > Advanced > Audio**, using native game audio as the source.
-  Profile speaker volume and mute settings still apply. This option does not
-  switch on or take over a disabled controller audio route.
+- **Controller speaker** uses the matching physical USB DualSense speaker directly;
+  Bluetooth uses the matching emulated controller's existing native speaker route.
+  Enable **Stream audio to controller** and turn off **Headset only** in
+  **Profile Editor > Advanced > Audio**. For Bluetooth, use native game audio as
+  the source. Profile speaker volume, controller mute and Windows endpoint volume
+  still apply. This option does not switch on a disabled controller audio route.
 - Configure **Low battery**, **Fully charged** and **On-demand battery check**
   independently: speech, a custom sound, sound followed by speech, or no audio.
   Each can also use an adjustable vibration pattern (strength, pulse length and
