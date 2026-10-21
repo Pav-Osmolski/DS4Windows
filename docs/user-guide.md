@@ -101,10 +101,9 @@ show physical input, gray markers show mapped output, and red areas show dead
 zones or drift. The observed physical report interval is not end-to-end latency.
 Sensor bars are read-only; configure behavior on the other editor pages.
 
-![Profile editor with a DualShock 4 layout](images/profile-editor-current.png)
+![Profile Editor button mapping and controller layout](images/site/profile-editor.webp)
 
-The controller diagram follows the selected controller layout; this example
-shows a DualShock 4 layout, while the earlier image shows a DualSense.
+The controller diagram follows the selected controller layout.
 
 ![Button remapping dialog](images/site/remapping-dialog.webp)
 
