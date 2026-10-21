@@ -18,7 +18,23 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  refresh_after_release:
+    if: github.event_name == 'release' && github.event.release.prerelease == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      # A checkout of main does not change a release run's tag ref. Request
+      # a main-ref run so the existing Pages environment policy is respected.
+      - name: Request documentation publication from main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main --repo "$GITHUB_REPOSITORY"
+
   build:
+    if: github.event_name != 'release'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -41,7 +57,7 @@ jobs:
           path: .pages/site
 
   deploy:
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || (github.event_name == 'release' && github.event.release.prerelease == false))
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
