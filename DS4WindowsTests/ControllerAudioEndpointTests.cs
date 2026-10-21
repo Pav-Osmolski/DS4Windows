@@ -11,6 +11,38 @@ namespace DS4WindowsTests
     [TestClass]
     public class ControllerAudioEndpointTests
     {
+        public TestContext TestContext { get; set; }
+
+        [TestMethod]
+        public void OptInUsbSpeakerCaptureSelectsVirtualSourceAndExcludesPhysicalDestination()
+        {
+            if (Environment.GetEnvironmentVariable("DS4W_USB_SPEAKER_ROUTE_SMOKE") != "1")
+                Assert.Inconclusive("Set DS4W_USB_SPEAKER_ROUTE_SMOKE=1 with a USB DualSense and its VIIPER endpoint connected; only enumerates endpoints, no playback.");
+            using var enumerator = new NAudio.CoreAudioApi.MMDeviceEnumerator();
+            var endpoints = enumerator.EnumerateAudioEndPoints(NAudio.CoreAudioApi.DataFlow.Render, NAudio.CoreAudioApi.DeviceState.Active);
+            try
+            {
+                foreach (var endpoint in endpoints)
+                    TestContext.WriteLine($"{endpoint.FriendlyName}: controller={DualSenseAudioPassthrough.IsDualSenseEndpoint(endpoint)}, USB/IP={DualSenseAudioPassthrough.TryGetEndpointUsbipPort(endpoint, out int endpointPort)}, port={endpointPort}");
+                var physical = endpoints.FirstOrDefault(e => DualSenseAudioPassthrough.IsDualSenseEndpoint(e) &&
+                    !DualSenseAudioPassthrough.TryGetEndpointUsbipPort(e, out _));
+                var virtualEndpoint = endpoints.FirstOrDefault(e => DualSenseAudioPassthrough.IsDualSenseEndpoint(e) &&
+                    DualSenseAudioPassthrough.TryGetEndpointUsbipPort(e, out _));
+                if (physical == null || virtualEndpoint == null)
+                    Assert.Inconclusive("Connect the physical USB DualSense and start its VIIPER output before running this hardware check.");
+                Assert.IsTrue(DualSenseAudioPassthrough.TryGetEndpointUsbipPort(virtualEndpoint, out int port));
+                var finder = typeof(DualSenseAudioPassthrough).GetMethod("FindCaptureEndpoint",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                using var source = (NAudio.CoreAudioApi.MMDevice)finder.Invoke(null, new object[] {
+                    DualSenseAudioPassthrough.AutoDetectGameAudioEndpointId, physical.ID, ControllerAudioEndpointKind.DualSense, port });
+                Assert.IsNotNull(source);
+                Assert.AreNotEqual(physical.ID, source.ID);
+                Assert.AreEqual(virtualEndpoint.ID, source.ID);
+                TestContext.WriteLine($"USB/IP port {port}: capture {source.FriendlyName}; physical destination {physical.FriendlyName}. No audio opened.");
+            }
+            finally { foreach (var endpoint in endpoints) endpoint.Dispose(); }
+        }
+
         [TestMethod]
         [DataRow(@"USB\VID_054C&PID_09CC&MI_01", (int)ControllerAudioEndpointKind.DualShock4)]
         [DataRow(@"USB\VID_054C&PID_05C4&MI_01", (int)ControllerAudioEndpointKind.DualShock4)]

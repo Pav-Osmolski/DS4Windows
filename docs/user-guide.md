@@ -101,10 +101,9 @@ show physical input, gray markers show mapped output, and red areas show dead
 zones or drift. The observed physical report interval is not end-to-end latency.
 Sensor bars are read-only; configure behavior on the other editor pages.
 
-![Profile editor with a DualShock 4 layout](images/profile-editor-current.png)
+![Profile Editor button mapping and controller layout](images/site/profile-editor.webp)
 
-The controller diagram follows the selected controller layout; this example
-shows a DualShock 4 layout, while the earlier image shows a DualSense.
+The controller diagram follows the selected controller layout.
 
 ![Button remapping dialog](images/site/remapping-dialog.webp)
 
@@ -216,8 +215,9 @@ For example, to use a gyro profile only in one game:
    add it from the available program sources. A launcher and the game itself
    may be different executables.
 3. Select the entry, choose the profile for the intended controller slot (or All
-   when that is intended), and Save. The read-only checkbox marks an existing
-   saved rule; it is not an enable switch.
+   when that is intended), leave **Rule enabled** checked, and select **Save rule**.
+   Newly discovered programs show **Not saved** until you save them. Saved rules
+   show **Enabled** or **Disabled**.
 4. Launch/focus the game and confirm the active profile on Controllers.
 
 For a window-title rule, use **Add Programs → Add Window Title Rule**, enter the
@@ -228,9 +228,23 @@ it does not change their matching configuration.
 The **Device** choice restricts a rule to a controller family. For a matching
 application/window, a matching device-specific rule takes priority over an Any
 rule; the first matching rule within each group is used. Use the entry's context
-menu **Move Up/Move Down** to order overlapping rules. A `(none)` profile does
-not request a profile switch for that controller. Remove a saved rule when you
-no longer want it to match.
+menu or the visible **Move up/Move down** buttons to order overlapping rules.
+Clear the search first so the full priority order is visible. A `(none)` profile
+does not request a profile switch for that controller.
+
+To pause a rule without losing its settings, clear **Rule enabled** and select
+**Save rule**. **Delete** removes the selected program and its saved rule; deleting
+a saved rule asks for confirmation and keeps the controller profiles themselves.
+**Clear unsaved programs** removes discoveries that have not been saved, keeping
+saved rules. Editing a saved rule takes effect when you select **Save rule**.
+**Duplicate** creates an unsaved copy for you to edit and save; it does not save
+changes to the original rule.
+
+Start Menu, Steam and directory discovery show progress and a **Cancel** button
+while keeping the page visible. Cancel leaves existing rules intact and adds no
+partial results. Completion shows how many programs were added, already listed
+or skipped. Start Menu discovery imports executable shortcut targets; for an app
+without one, use **Browse for Other Programs** or **Add Window Title Rule**.
 
 **Revert to default profile on unknown** determines whether to return to the
 default when no known rule matches. Leave the temporary-stop option off unless
@@ -302,6 +316,55 @@ Use [Swipe profiles](swipe-profiles.md) to limit profile cycling. For double
 input, configure HidHide and check overlapping Steam Input mappings.
 Run at Startup and Start Minimized are separate choices.
 
+### Battery alerts
+
+Open **Settings > Controllers > Battery alerts**. Automatic low-battery and
+fully-charged alerts are off by default. Enable the alerts you want, choose a
+low-battery threshold, and expand **Configure voices, sounds and vibration**.
+
+- Choose an installed Windows voice, speech speed and alert volume. **Manage
+  Windows voices** opens Windows speech settings; refresh the list after adding
+  a voice. If a saved voice is missing, the system default is used.
+- Select the default Windows audio device or a specific headset/speaker.
+  A missing specifically selected device produces an error instead of silently
+  playing through another device.
+- **Controller speaker** uses the matching physical USB DualSense speaker directly;
+  Bluetooth uses the matching emulated controller's existing native speaker route.
+  Enable **Stream audio to controller** and turn off **Headset only** in
+  **Profile Editor > Advanced > Audio**. For Bluetooth, use native game audio as
+  the source. Profile speaker volume, controller mute and Windows endpoint volume
+  still apply. This option does not switch on a disabled controller audio route.
+- Configure **Low battery**, **Fully charged** and **On-demand battery check**
+  independently: speech, a custom sound, sound followed by speech, or no audio.
+  Each can also use an adjustable vibration pattern (strength, pulse length and
+  count, with 150 ms gaps). New vibration pulses skip an already busy rumble
+  lane; releasing an alert preserves more recent game feedback.
+- **Import sound** accepts WAV, MP3 and AIFF. Files are validated, decoded and
+  saved as local PCM audio in the settings folder's `BatteryAlertSounds`
+  directory. Moving the original file does not break the alert. Short clips of
+  1-3 seconds are recommended; the import limits are 30 seconds and 64 MB.
+- Use **Preview** and **Stop preview** to check each alert. Ordinary audio
+  previews work without a controller; vibration and controller-speaker previews
+  require the selected physical controller.
+
+For a button-triggered check, add or edit a **Check Battery** Special Action,
+select **Use battery alert audio and vibration**, and save its button combination.
+Existing tray-notification and lightbar actions continue working unchanged.
+
+For controllers that report only battery bands, low alerts use the reported **low**
+band; the percentage threshold applies to controllers with percentage reports.
+
+Alerts wait for three stable observations, use recovery thresholds and cooldowns,
+and retain their state through profile changes and reconnects during the app
+session. DS3, DS4 and DualSense completion reports can trigger the full alert;
+a high percentage alone cannot. Controllers reporting only battery bands are
+announced as low, medium or high. Unknown readings are not treated as an empty
+battery. If Audio Haptics captures the selected playback device, the announcement
+is part of that captured system audio too.
+
+Back up `BatteryAlertSounds` along with `Profiles.xml` when moving your settings.
+Speech uses installed Windows voices locally, without a cloud service.
+
 ## Log and diagnostics
 
 ![Log page with startup entries, backend verification and log-management controls](images/site/log.webp)
@@ -365,6 +428,23 @@ tester for them. The test is read-only: it does not assign slots, create virtual
 controllers, trigger rumble or measure latency. If Windows XInput is unavailable,
 the window explains the error; close and reopen it to retry. Close the window
 when finished.
+
+## Hotkeys and About
+
+Open **Hotkeys/About** at the bottom of the main window. The About page shows
+this fork's version and links to the website, setup guide, source and issue
+tracker. Hotkeys groups connection shortcuts, touchpad gestures and mapping
+terms, with notes about the settings they require.
+
+Shortcuts depend on the controller and active profile. For example, PS + Options
+requires the **Disconnect Controller** Special Action to be assigned and enabled.
+Holding PS to switch off a supported PlayStation controller is a hardware
+shortcut; see [PlayStation's controller help](https://controller.dl.playstation.net/controller/lang/gb/index.html).
+
+Credits acknowledges the community and supporting projects. License includes
+the full bundled GNU GPL v3 text, and Extras links to component projects and
+third-party notices. All pages scroll within the window; press **Escape** or
+choose **Close** to return to DS4Windows.
 
 ## Native feedback and feature limits
 

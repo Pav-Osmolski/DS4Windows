@@ -54,6 +54,7 @@ namespace DS4Windows
         private WaveFormat captureFormat;
         private string captureEndpointId = string.Empty;
         private ControllerAudioEndpointKind captureEndpointKind;
+        private int captureUsbipPort = -1;
         private bool disposed;
 
         public ControllerRuntimeLaneState GetStatus(int slot)
@@ -144,7 +145,7 @@ namespace DS4Windows
                         }
 
                         MMDevice endpoint = FindControllerEndpoint(slot,
-                            requestedSpeakerEndpointId);
+                            requestedSpeakerEndpointId, dualSenseDevice);
                         if (endpoint == null)
                         {
                             AppLogger.LogToGui(
@@ -167,7 +168,8 @@ namespace DS4Windows
                             slots[slot].SpeakerVolume = speakerVolume;
                             EnsureCaptureStarted(requestedCaptureEndpointId,
                                 endpoint.ID,
-                                GetEndpointKind(emulatedControllerType));
+                                GetEndpointKind(emulatedControllerType),
+                                directSpeakerSource?.DirectSpeakerUsbipPort ?? -1);
                             return;
                         }
                         else
@@ -195,7 +197,8 @@ namespace DS4Windows
                                 provider, outputFormat, speakerVolume);
                             EnsureCaptureStarted(requestedCaptureEndpointId,
                                 endpoint.ID,
-                                GetEndpointKind(emulatedControllerType));
+                                GetEndpointKind(emulatedControllerType),
+                                directSpeakerSource?.DirectSpeakerUsbipPort ?? -1);
                             AppLogger.LogToGui(
                                 $"DualSense audio passthrough started for controller {slot + 1}: {endpoint.FriendlyName}",
                                 false);
@@ -574,12 +577,13 @@ namespace DS4Windows
         }
 
         private void EnsureCaptureStarted(string requestedCaptureEndpointId,
-            string speakerEndpointId, ControllerAudioEndpointKind endpointKind)
+            string speakerEndpointId, ControllerAudioEndpointKind endpointKind,
+            int preferredUsbipPort = -1)
         {
             requestedCaptureEndpointId ??= string.Empty;
             speakerEndpointId ??= string.Empty;
 
-            if (capture != null && captureEndpointKind == endpointKind &&
+            if (capture != null && captureEndpointKind == endpointKind && captureUsbipPort == preferredUsbipPort &&
                 string.Equals(captureEndpointId, requestedCaptureEndpointId, StringComparison.Ordinal))
             {
                 return;
@@ -594,6 +598,7 @@ namespace DS4Windows
                     automaticSlot);
                 captureEndpointId = requestedCaptureEndpointId;
                 captureEndpointKind = endpointKind;
+                captureUsbipPort = preferredUsbipPort;
                 captureFormat = capture.WaveFormat;
                 capture.DataAvailable += Capture_DataAvailable;
                 capture.RecordingStopped += Capture_RecordingStopped;
@@ -610,6 +615,7 @@ namespace DS4Windows
                 capture = new ProcessLoopbackWaveCapture(processId);
                 captureEndpointId = requestedCaptureEndpointId;
                 captureEndpointKind = endpointKind;
+                captureUsbipPort = preferredUsbipPort;
                 captureFormat = capture.WaveFormat;
                 capture.DataAvailable += Capture_DataAvailable;
                 capture.RecordingStopped += Capture_RecordingStopped;
@@ -628,7 +634,7 @@ namespace DS4Windows
             }
 
             MMDevice sourceEndpoint = FindCaptureEndpoint(requestedCaptureEndpointId,
-                speakerEndpointId, endpointKind);
+                speakerEndpointId, endpointKind, preferredUsbipPort);
             bool expectsControllerEndpoint =
                 string.Equals(requestedCaptureEndpointId,
                     AutoDetectGameAudioEndpointId, StringComparison.Ordinal) ||
@@ -656,6 +662,7 @@ namespace DS4Windows
                 "DualSense USB speaker");
             captureEndpointId = requestedCaptureEndpointId;
             captureEndpointKind = endpointKind;
+            captureUsbipPort = preferredUsbipPort;
             captureFormat = capture.WaveFormat;
             capture.DataAvailable += Capture_DataAvailable;
             capture.RecordingStopped += Capture_RecordingStopped;
@@ -672,6 +679,7 @@ namespace DS4Windows
             captureFormat = null;
             captureEndpointId = string.Empty;
             captureEndpointKind = ControllerAudioEndpointKind.Any;
+            captureUsbipPort = -1;
             foreach (SlotPlayback slot in slots)
             {
                 slot?.ResetCaptureSource();
@@ -748,7 +756,8 @@ namespace DS4Windows
             }
         }
 
-        private MMDevice FindControllerEndpoint(int slot, string requestedSpeakerEndpointId)
+        private MMDevice FindControllerEndpoint(int slot, string requestedSpeakerEndpointId,
+            DualSenseDevice physicalDevice)
         {
             HashSet<string> usedIds = slots
                 .Where((item, index) => item != null && index != slot)
@@ -772,9 +781,16 @@ namespace DS4Windows
                 }
             }
 
-            MMDevice autoEndpoint = enumerator
-                .EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)
-                .FirstOrDefault(device => !usedIds.Contains(device.ID) && IsDualSenseEndpoint(device));
+            // The emulated controller also exposes a DualSense audio endpoint.
+            // Match the physical controller's container instead of enumeration order.
+            MMDevice autoEndpoint = physicalDevice?.HidDevice == null ? null :
+                DualSenseUsbHapticsPassthrough.FindPhysicalEndpoint(enumerator,
+                    physicalDevice, string.Empty);
+            if (autoEndpoint != null && usedIds.Contains(autoEndpoint.ID))
+            {
+                autoEndpoint.Dispose();
+                autoEndpoint = null;
+            }
 
             if (autoEndpoint == null)
             {
@@ -794,7 +810,7 @@ namespace DS4Windows
         }
 
         private static MMDevice FindCaptureEndpoint(string endpointId, string speakerEndpointId,
-            ControllerAudioEndpointKind endpointKind)
+            ControllerAudioEndpointKind endpointKind, int preferredUsbipPort = -1)
         {
             bool useSystemDefault = string.Equals(endpointId,
                 DefaultSystemAudioEndpointId, StringComparison.Ordinal) ||
@@ -812,10 +828,19 @@ namespace DS4Windows
                     string.Equals(endpointId, AutoDetectGameAudioEndpointId,
                         StringComparison.Ordinal);
                 MMDevice endpoint = autoDetect ?
-                    FindActiveGameAudioEndpoint(enumerator, null, endpointKind) :
+                    FindActiveGameAudioEndpoint(enumerator, null, endpointKind,
+                        preferredUsbipPort, speakerEndpointId) :
                     enumerator.GetDevice(endpointId);
                 if (endpoint?.State != DeviceState.Active)
                 {
+                    endpoint?.Dispose();
+                    return null;
+                }
+
+                if (autoDetect && preferredUsbipPort >= 0 &&
+                    !EndpointMatchesUsbipPort(endpoint, preferredUsbipPort))
+                {
+                    endpoint.Dispose();
                     return null;
                 }
 
@@ -925,10 +950,11 @@ namespace DS4Windows
         internal static MMDevice FindActiveGameAudioEndpoint(MMDeviceEnumerator enumerator,
             string previousEndpointId = null,
             ControllerAudioEndpointKind preferredKind = ControllerAudioEndpointKind.Any,
-            int preferredUsbipPort = -1)
+            int preferredUsbipPort = -1, string excludedEndpointId = null)
         {
             IEnumerable<MMDevice> endpoints = enumerator
                 .EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)
+                .Where(endpoint => !string.Equals(endpoint.ID, excludedEndpointId, StringComparison.Ordinal))
                 .Where(IsControllerAudioEndpoint);
 
             if (preferredKind != ControllerAudioEndpointKind.Any)

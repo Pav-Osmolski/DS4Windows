@@ -145,6 +145,15 @@ internal static class ThemeConsistencyValidation
             if (attr.Name.LocalName == "Click") attr.Remove();
             else if (attr.Value.StartsWith("{lex:Loc ")) attr.Value = attr.Value[9..^1];
         }
+        // A toolbar button keeps its page-local style when rendered in isolation.
+        if ((string)element.Attribute("Style") == "{StaticResource AutoProfileToolbarButtonStyle}")
+        {
+            var style = source.Descendants(wpf + "Style").Single(e => (string)e.Attribute(x + "Key") == "AutoProfileToolbarButtonStyle");
+            var inlineStyle = new XElement(style);
+            inlineStyle.Attribute(x + "Key")!.Remove();
+            element.Attribute("Style")!.Remove();
+            element.AddFirst(new XElement(wpf + "Button.Style", inlineStyle));
+        }
         element.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
         return (FrameworkElement)XamlReader.Parse(element.ToString());
     }

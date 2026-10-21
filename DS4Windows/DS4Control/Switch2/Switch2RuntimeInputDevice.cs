@@ -181,6 +181,7 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
     private byte profileHeavySlowRumble;
     private bool profileRumbleHeld;
     private bool previewRumbleHeld;
+    private object batteryAlertPreviewOwner;
     private struct PendingLocalRumble
     {
         internal bool Withdraw;
@@ -2513,6 +2514,7 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
     {
         lock (localFeedbackGate)
         {
+            batteryAlertPreviewOwner = null;
             CancelIdentificationHapticNoLock(withdraw: true);
             if (lightMotorActive && lightMotorStrength != 0 ||
                 heavyMotorActive && heavyMotorStrength != 0)
@@ -2532,10 +2534,31 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
         }
     }
 
+    internal override IDisposable TryBeginBatteryAlertRumble(byte strength)
+    {
+        lock (localFeedbackGate)
+        {
+            if (previewRumbleHeld || identificationHapticOwnsPreviewLane || connectionHapticOwnsProfileLane ||
+                profileHeavySlowRumble != 0 || profileLightFastRumble != 0 || IsDisconnecting || IsRemoving) return null;
+            if (!TryPublishLocalRumbleNoLock(ControllerFeedbackPublicationOrigin.TestPreview, strength, strength)) return null;
+            object owner = batteryAlertPreviewOwner = new();
+            return new BatteryAlertRumbleLease(() =>
+            {
+                lock (localFeedbackGate)
+                {
+                    if (!ReferenceEquals(batteryAlertPreviewOwner, owner)) return;
+                    batteryAlertPreviewOwner = null;
+                    TryWithdrawLocalRumbleNoLock(ControllerFeedbackPublicationOrigin.TestPreview);
+                }
+            });
+        }
+    }
+
     public override void ClearRumblePreview()
     {
         lock (localFeedbackGate)
         {
+            batteryAlertPreviewOwner = null;
             CancelIdentificationHapticNoLock(withdraw: true);
             TryWithdrawLocalRumbleNoLock(
                 ControllerFeedbackPublicationOrigin.TestPreview);

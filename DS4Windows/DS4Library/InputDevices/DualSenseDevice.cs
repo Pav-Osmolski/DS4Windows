@@ -722,6 +722,8 @@ namespace DS4Windows.InputDevices
         private const int BluetoothControlTemplateQueueWaitMilliseconds = 250;
         private const int DeviceStatusChargingChanged = 0x01;
         private const int DeviceStatusBatteryChanged = 0x02;
+        private volatile bool batteryChargeComplete;
+        public override bool BatteryChargeComplete => batteryChargeComplete;
         private const byte BluetoothNormalInputBit = 0x01;
         private const byte BluetoothMicrophoneInputBit = 0x02;
         private const byte BluetoothMicrophoneControlEnable = 0x01;
@@ -729,6 +731,10 @@ namespace DS4Windows.InputDevices
         // every 0x36 media report. Byte 0x09 selects the internal speaker
         // contract while retaining the controller's microphone clock.
         private const byte DualSenseAudioControlOutputSpeaker = 0x09;
+        // USB audio_flags bits 4/5 select the physical output path:
+        // 0x30 sends the right front USB channel to the built-in speaker.
+        // The Bluetooth combined-media 0x09 snapshot is a different contract.
+        internal const byte DualSenseUsbAudioControlOutputSpeaker = 0x30;
         private const byte DualSenseAudioControlOutputHeadphones = 0x00;
         private const byte BluetoothCombinedSpeakerPacketType = 0x93;
         private const byte BluetoothCombinedHeadsetPacketType = 0x96;
@@ -2968,6 +2974,14 @@ namespace DS4Windows.InputDevices
                     rumbleState.RumbleMotorStrengthLeftHeavySlow);
                 QueuePhysicalOutputUpdate();
             }
+        }
+
+        internal override IDisposable TryBeginBatteryAlertRumble(byte strength)
+        {
+            if (IsDisconnecting || IsRemoving) return null;
+            var lease = physicalOutputStateMailbox.TryBeginBatteryAlertRumble(strength, QueuePhysicalOutputUpdate);
+            if (lease != null) QueuePhysicalOutputUpdate();
+            return lease;
         }
 
         public override void setRumble(byte rightLightFastMotor,
@@ -5314,6 +5328,7 @@ namespace DS4Windows.InputDevices
 
                         tempByte = inputReport[53 + reportOffset];
                         tempFull = (tempByte & 0x20) != 0; // Check for Full status
+                        batteryChargeComplete = BatteryAlertReports.DualSenseComplete(tempByte);
                         maxBatteryValue = BATTERY_MAX;
                         if (tempFull)
                         {
@@ -5335,6 +5350,7 @@ namespace DS4Windows.InputDevices
                                 DeviceStatusBatteryChanged);
                         }
 
+                        batteryReadingAvailable = BatteryAlertReports.DualSenseValid(tempByte);
                         cState.Battery = (byte)battery;
                         //System.Diagnostics.Debug.WriteLine("CURRENT BATTERY: " + (inputReport[30] & 0x0f) + " | " + tempBattery + " | " + battery);
                     }
@@ -5905,12 +5921,12 @@ namespace DS4Windows.InputDevices
                 // Internal microphone volume
                 outputReport[7] = MapDualSenseMicrophoneVolume(
                     outputState.MicrophoneVolume);
-                // Route the Opus stream to either the controller speaker or
+                // Route the USB PCM stream to either the controller speaker or
                 // the 3.5 mm headset DAC. This byte is an output-path field,
                 // not merely an internal-speaker enable bit.
                 outputReport[8] = outputState.EnableSpeakerOutput ?
                     (outputState.HeadsetOnlyAudio ? DualSenseAudioControlOutputHeadphones :
-                        DualSenseAudioControlOutputSpeaker) : (byte)0x00;
+                        DualSenseUsbAudioControlOutputSpeaker) : (byte)0x00;
 
                 // Mute button LED. 0x01 = Solid. 0x02 = Pulsating
                 outputReport[9] = outputState.MuteLedOverride ? (outputState.MuteLedOn ? (byte)0x01 : (byte)0x00) :
@@ -8399,7 +8415,7 @@ namespace DS4Windows.InputDevices
             report[stateOffset + 7] = outputState.EnableSpeakerOutput ?
                 (outputState.HeadsetOnlyAudio ?
                     DualSenseAudioControlOutputHeadphones :
-                    DualSenseAudioControlOutputSpeaker) : (byte)0;
+                    DualSenseUsbAudioControlOutputSpeaker) : (byte)0;
             report[stateOffset + 8] = outputState.MuteLedOverride ?
                 (outputState.MuteLedOn ? (byte)0x01 : (byte)0x00) :
                 outputState.MicrophoneMuteOverride ?

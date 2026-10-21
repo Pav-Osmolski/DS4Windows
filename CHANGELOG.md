@@ -3,6 +3,67 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.40](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.40) - 2026-10-21
+
+### Added
+
+- Optional battery alerts in Settings > Controllers: installed Windows voices, selected audio output, separate low/full/on-demand sounds and vibration patterns, previews and cancellation. Import WAV, MP3 or AIFF into the settings folder. Extend Check Battery Special Actions without changing existing actions. Require stable valid readings, suppress repeats across reconnects/profile changes, and use explicit DS3/DS4/DualSense charging-completion status for full-charge notifications. Controller-speaker alerts reuse an already enabled matching native audio route. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+
+### Fixed
+
+- Trigger low-battery alerts from the reported low band on DS3 and original Nintendo controllers, instead of comparing their approximate 25% value with the default 20% threshold. Keep percentage thresholds for controllers that provide percentage readings.
+- Update Overview slider numbers immediately while dragging, retaining the delay for settings and hardware updates. Add transparent icon previews to Settings > Icon Choice.
+- Preserve Profile Editor audio dropdown selections across endpoint refreshes and reopening, including automatic and unavailable saved devices. Send USB DualSense battery announcements directly to the matching physical speaker, keeping haptics channels silent; report muted/zero-volume outputs clearly. Use the USB internal-speaker routing value in both local and native-game reports while preserving Bluetooth audio routing.
+- Match USB DualSense speaker auto-detection to the physical controller and keep its game-audio capture source separate from the speaker destination. Prefer the matching VIIPER USB/IP port and restart capture when that port changes. Correct battery-alert guidance to Profile Editor > Advanced > Audio.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
+## [5.0.39](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.39) - 2026-10-21
+
+### Fixed
+
+The Auto Profiles and Hotkeys/About refinements below are part of [PR #62](https://github.com/Pav-Osmolski/DS4Windows/pull/62).
+
+- Prevent Hotkeys/About from focusing a link at the bottom when changing tabs. Give each page's scroll container an initial keyboard stop and reset its position before rendering, replacing the delayed correction that caused a visible jump.
+- Rework Auto Profiles discovery with visible progress, cancellation, duplicate handling and completion/error messages. Load executable icons for displayed rows in the background, with cached results and a fallback icon. Resolve Start Menu shortcut targets on a dedicated background apartment without Windows Installer probes.
+- Separate saving, enabling/disabling and deleting Auto Profile rules. Delete removes saved and unsaved rows; Rule enabled preserves a rule while pausing it; edits apply on Save rule. Display rule priority instead of alphabetical sorting, make moves work for unsaved rows too, and select the right-clicked row before showing move actions.
+- Align Auto Profiles toolbar button heights and give the rule editor consistent scrollbar clearance in both themes.
+- Centre the Auto Profiles sidebar divider between the title field and global options, using a one-logical-pixel line (two physical pixels at 200% scaling). Preserve all controller assignments and write Auto Profiles configuration atomically.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
+## [5.0.38](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.38) - 2026-10-20
+
+### Improved
+
+- Redesign Hotkeys/About with an artwork-led About page, grouped shortcut explanations, consistent theme-aware cards and tabs, and accessible credits/component links. Adapt the maintainer-provided promotional artwork into a decorative banner with sharp live text. Keep the complete GPL licence embedded directly from `COPYING`, add a persistent Close button/Escape action, and fit the dialog to the owner's scaled monitor work area. ([PR #61](https://github.com/Pav-Osmolski/DS4Windows/pull/61))
+
+### Fixed
+
+- Keep About link-button hover, pressed and focus states readable in both themes. Open each selected help page at the top after tab focus restoration.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
+## [5.0.37](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.37) - 2026-10-20
+
+### Fixed
+
+- Make the observed physical report interval in Controller Readings easier to read: show exactly two decimal places in each supplied translation and refresh the number every 250 ms (four times per second). Refresh immediately when switching controllers or reopening the readings page. Controller sampling, live plots, warning detection and internal measurement precision retain their existing behaviour. Thanks to [@Basfet](https://github.com/Basfet) for reporting this ([PR #60](https://github.com/Pav-Osmolski/DS4Windows/pull/60), [issue #59](https://github.com/Pav-Osmolski/DS4Windows/issues/59)).
+
+### Documentation
+
+- Give the website homepage a complete light palette while preserving its dark presentation. Refine migration guidance and record the maintainer's and original reporter's confirmation of the released DualSense USB/Bluetooth haptics fix in troubleshooting and the historical validation record.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
 ## [5.0.36](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.36) - 2026-10-20
 
 ### Added

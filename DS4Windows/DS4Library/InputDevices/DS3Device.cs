@@ -36,6 +36,8 @@ namespace DS4Windows.InputDevices
         internal Func<byte[], bool> PhysicalOutputWriteTestHook;
 
         public override event ReportHandler<EventArgs> Report = null;
+        private volatile bool batteryChargeComplete;
+        public override bool BatteryChargeComplete => batteryChargeComplete;
         public override event EventHandler BatteryChanged;
         public override event EventHandler ChargingChanged;
 
@@ -224,6 +226,7 @@ namespace DS4Windows.InputDevices
                         }
 
                         tempFull = tempByte == 0xEF; // Check for Full status
+                        batteryChargeComplete = tempFull;
                         if (tempFull)
                         {
                             // Full Charge flag found
@@ -264,6 +267,7 @@ namespace DS4Windows.InputDevices
                             outputDirty = true;
                         }
 
+                        batteryReadingAvailable = tempByte is >= 1 and <= 5 or 0xEF;
                         cState.Battery = (byte)battery;
                         //System.Diagnostics.Debug.WriteLine("CURRENT BATTERY: " + (featureReport[30] & 0x0f) + " | " + tempBattery + " | " + battery);
                     }

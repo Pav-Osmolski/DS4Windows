@@ -14,6 +14,23 @@ public sealed class Ds3FeedbackBacklogAuditTests
     [TestMethod]
     [DataRow(ConnectionType.USB)]
     [DataRow(ConnectionType.BT)]
+    public void BatteryAlertPulseUsesRealDs3PacketsAndRestoresNewerGameFeedback(ConnectionType transport)
+    {
+        var device = Create(transport);
+        using var lease = device.TryBeginBatteryAlertRumble(80);
+        Assert.IsNotNull(lease);
+        var active = Compose(device);
+        Assert.AreEqual((byte)1, active[6]); Assert.AreEqual((byte)80, active[8]);
+        device.setRumble(23, 191);
+        lease.Dispose();
+        var restored = Compose(device);
+        Assert.AreEqual((byte)1, restored[6]); Assert.AreEqual((byte)191, restored[8]);
+        Assert.IsNull(device.TryBeginBatteryAlertRumble(80), "A battery pulse cannot take over active game rumble.");
+    }
+
+    [TestMethod]
+    [DataRow(ConnectionType.USB)]
+    [DataRow(ConnectionType.BT)]
     public void FloodReachesTheNewestMotorStateOnTheNextComposition(ConnectionType transport)
     {
         DS3Device device = Create(transport);

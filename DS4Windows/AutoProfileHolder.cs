@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -50,11 +50,13 @@ namespace DS4WinWPF
 
         //private Dictionary<string, AutoProfileEntity> autoProfileDict;
 
-        public AutoProfileHolder()
+        public AutoProfileHolder() : this(true) { }
+
+        internal AutoProfileHolder(bool loadEntries)
         {
             autoProfileColl = new ObservableCollection<AutoProfileEntity>();
             //autoProfileDict = new Dictionary<string, AutoProfileEntity>();
-            Load();
+            if (loadEntries) Load();
 
             BindingOperations.EnableCollectionSynchronization(autoProfileColl, _colLockobj);
         }
@@ -139,16 +141,20 @@ namespace DS4WinWPF
                 //Trace.WriteLine(testStr);
             }
 
+            string temporaryPath = output_path + "." + Guid.NewGuid().ToString("N") + ".tmp";
             try
             {
-                using (StreamWriter sw = new StreamWriter(output_path, false))
-                {
-                    sw.Write(testStr);
-                }
+                File.WriteAllText(temporaryPath, testStr, new UTF8Encoding(false));
+                File.Move(temporaryPath, output_path, true);
             }
-            catch (UnauthorizedAccessException)
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException)
             {
                 saved = false;
+            }
+            finally
+            {
+                try { if (File.Exists(temporaryPath)) File.Delete(temporaryPath); }
+                catch (Exception error) when (error is IOException or UnauthorizedAccessException) { }
             }
 
             return saved;
@@ -177,6 +183,7 @@ namespace DS4WinWPF
         public string Path { get => path; set => SetSearchPath(value); }
         public string Title { get => title; set => SetSearchTitle(value); }
         public bool Turnoff { get => turnoff; set => turnoff = value; }
+        public bool Enabled { get; set; } = true;
         public AutoProfileDeviceOption DeviceOption { get => deviceOption; set => deviceOption = value; }
         public bool ApplyToAllControllers { get => applyToAllControllers; set => applyToAllControllers = value; }
         public string[] ProfileNames
@@ -199,6 +206,7 @@ namespace DS4WinWPF
 
         public bool IsMatch(string searchPath, string searchTitle)
         {
+            if (!Enabled) return false;
             searchPath = (searchPath?.Trim() ?? string.Empty)
                 .Replace('/', '\\').ToLowerInvariant();
             searchTitle = (searchTitle?.Trim() ?? string.Empty)

@@ -112,14 +112,29 @@ Test native game haptics separately from Audio Haptics capture. Use the
 
 ### Delayed or weak DualSense vibration
 
-For a useful report, enable **Log > Verbose logging**, restart DS4Windows and
+Update to **5.0.34 or later**, including its matching bundled VIIPER backend.
+The delayed haptics problem reported in
+[issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47) was fixed through
+changes in both DS4Windows and VIIPER. Maintainer testing confirmed normal
+feedback in DEATHLOOP and GTA V Enhanced over USB and Bluetooth, and
+[the original reporter also confirmed the fix on both connections](https://github.com/Pav-Osmolski/DS4Windows/issues/47#issuecomment-6274412583).
+The investigation also covered the related upstream
+[issue #119](https://github.com/hbashton/DS4Windows/issues/119). See the
+[validation record and reporter confirmation](validation/dualsense-native-command-pressure-test.md#reporter-confirmation-after-release).
+
+If feedback still feels delayed or weak, check the profile's rumble strength
+and disable local Trigger Lab effects while comparing game-authored feedback.
+Test native game haptics separately from Audio Haptics. For a useful report,
+enable **Log > Verbose logging**, restart DS4Windows and
 play for 1–2 minutes, including the problem and releasing all controls. Use
 **Log > Copy Text** to paste the whole retained log and label it **USB** or
 **Bluetooth**. Include the affected profile and roughly when the problem occurs.
 The full log is always best. If startup is no longer visible, use **Open log
 folder** and attach the saved log too. Turn verbose logging off after testing.
 
-Starting in 5.0.32, `DualSense native feedback` lines report the physical queue's
+#### Reading the feedback diagnostics
+
+In verbose logs, `DualSense native feedback` lines report the physical queue's
 pending/high-water counts, admission retries, queue/head age, owner processing
 time, completed commands and explicit motor-stop receipt revisions. These reach
 the copyable Log page even while controller-speaker streaming defers larger
@@ -129,17 +144,16 @@ radio write or actuator effect has completed. Timings are lifetime maxima for
 the physical device; they are not vibration-strength measurements. Profile
 and other local overrides can affect the final output.
 
-Only consecutive identical, unclaimed, recognized state reports can be
-suppressed. The native-command pressure candidate extends this to documented
-DualSense power settings on USB and Bluetooth and to the physical-output queue.
+The released fixes combine corrected feedback pacing in VIIPER with reduced
+redundant queue traffic in DS4Windows. Only consecutive identical, unclaimed,
+recognized state reports can be suppressed. Since 5.0.34, this includes
+documented DualSense power settings on USB and Bluetooth and reports waiting
+in the physical-output queue.
 `nativePhysicalPendingRepeats` counts redundant pending occurrences shared in
 that queue; `nativeRepeatsSuppressed` counts sharing in the earlier VIIPER queue.
 Neither counter counts discarded distinct effects. Alternating rumble/trigger
 commands, changed values, final stops, media, unknown commands and ownership
-changes retain their order. See the [candidate test instructions](validation/dualsense-native-command-pressure-test.md).
-These changes reduce redundant traffic; they do **not** confirm a full
-fix for [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47) or the
-related upstream [issue #119](https://github.com/hbashton/DS4Windows/issues/119).
+changes retain their order.
 
 See [Log and diagnostics](user-guide.md#log-and-diagnostics) for stored-log
 retention, clearing and the Report an issue button.
@@ -150,10 +164,6 @@ Use [this fork's releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 Installed users run the matching Setup EXE; portable users replace the complete
 packaged app files in their existing folder. Keep profiles, settings and
 portable-data. Check both `%APPDATA%\DS4Windows` and the app folder for settings.
-
-RC4.6.7 checks upstream and needs one manual upgrade. Later fork builds use
-this repository with DS4Updater 2.0.9 or newer. Replacing the updater alone
-cannot change the old app's release source.
 
 ## Report a reproducible issue
 

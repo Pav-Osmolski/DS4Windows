@@ -98,6 +98,9 @@ namespace DS4WindowsTests
                     BindingWindowLiveInputLayoutTests.ValidateRenderedBindingWindows(
                         application, resultsDirectory, renderedFiles);
                     ThemeConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
+                    AutoProfileLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
+                    BatteryAlertsLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
+                    ProfileAudioSelectionValidation.Validate();
                 }
                 catch (Exception ex)
                 {
@@ -112,7 +115,7 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(20, renderedFiles.Count);
+            Assert.AreEqual(26, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

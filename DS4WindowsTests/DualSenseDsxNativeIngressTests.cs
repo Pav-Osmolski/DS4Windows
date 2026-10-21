@@ -9,6 +9,39 @@ namespace DS4WindowsTests;
 public class DualSenseDsxNativeIngressTests
 {
     [TestMethod]
+    [DataRow(ConnectionType.USB, true, false, 0x30)]
+    [DataRow(ConnectionType.USB, true, true, 0x00)]
+    [DataRow(ConnectionType.USB, false, false, 0x00)]
+    [DataRow(ConnectionType.BT, true, false, 0x09)]
+    [DataRow(ConnectionType.BT, true, true, 0x00)]
+    public void PhysicalAudioReportsUseTheCorrectTransportSpeakerPath(ConnectionType connection, bool enabled, bool headset, int expected)
+    {
+        var device = CreateDevice(connection);
+        try
+        {
+            device.SetProfileAudioAndMuteButtonState(enabled, 128, 128, headset,
+                false, false, false, false, false, false);
+            Invoke(device, "PrepareOutReport");
+            var report = Get<byte[]>(device, typeof(DS4Device), "outputReport");
+            int offset = connection == ConnectionType.USB ? 8 : 9;
+            Assert.AreEqual((byte)expected, report[offset], "USB PCM speaker routing and the Bluetooth media snapshot use different audio-control contracts.");
+            if (connection == ConnectionType.USB)
+            {
+                byte[] written = null;
+                device.PhysicalRawOutputWriteTestHook = bytes => { written = (byte[])bytes.Clone(); return true; };
+                var native = RawNative(0x21, 17);
+                native[1] |= 0x80; native[8] = 0x09;
+                Assert.IsTrue(device.WriteRawOutputReportFromGame(native, 0, native.Length));
+                Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Published, device.ProcessNextPhysicalOutputCommand());
+                Assert.AreEqual((byte)expected, written[8], "Native game reports must retain the profile's USB speaker path.");
+                Invoke(device, "PrepareOutReport");
+                Assert.AreEqual((byte)expected, report[8], "The cached native underlay must retain the USB speaker path too.");
+            }
+        }
+        finally { device.ReadWaitEv.Dispose(); }
+    }
+
+    [TestMethod]
     public void UsbPassthruRestoresLatestIndicatorsAfterOffWithoutAnotherApplicationPacket()
     {
         var device = CreateDevice(ConnectionType.USB);

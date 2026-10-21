@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -3460,31 +3461,33 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             set => Global.DualSenseHeadsetOnlyAudio[device] = value;
         }
 
-        public List<AudioEndpointChoice> AudioCaptureEndpointChoices
+        private ObservableCollection<AudioEndpointChoice> audioCaptureEndpointChoices, audioSpeakerEndpointChoices;
+        public ObservableCollection<AudioEndpointChoice> AudioCaptureEndpointChoices =>
+            audioCaptureEndpointChoices ??= new(BuildAudioCaptureEndpointChoices());
+
+        private List<AudioEndpointChoice> BuildAudioCaptureEndpointChoices()
         {
-            get
-            {
-                ViiperOutDevice outputDevice = App.rootHub?
-                    .GetPlayStationFeatureOutput(device);
-                return AudioEndpointChoiceCache.BuildControllerAudioChoices(
-                    DualSenseAudioCaptureEndpointId,
-                    outputDevice?.OutputType ??
-                        Global.OutContType[device].Normalize(),
-                    outputDevice?.DirectSpeakerUsbipPort ?? -1);
-            }
+            ViiperOutDevice outputDevice = App.rootHub?
+                .GetPlayStationFeatureOutput(device);
+            return AudioEndpointChoiceCache.BuildControllerAudioChoices(
+                DualSenseAudioCaptureEndpointId,
+                outputDevice?.OutputType ??
+                    Global.OutContType[device].Normalize(),
+                outputDevice?.DirectSpeakerUsbipPort ?? -1);
         }
 
         public string DualSenseAudioCaptureEndpointId
         {
             get
             {
-                string endpointId = Global.DualSenseAudioCaptureEndpointId[device];
+                string endpointId = Global.DualSenseAudioCaptureEndpointId[device] ?? string.Empty;
                 return string.Equals(endpointId,
                     DualSenseAudioPassthrough.AutoDetectGameAudioEndpointId,
                     StringComparison.Ordinal) ? string.Empty : endpointId;
             }
             set
             {
+                if (value == null) return; // A list refresh is not a user selection.
                 string normalized = value ?? string.Empty;
                 // A VIIPER controller endpoint is recreated with a new
                 // Windows GUID whenever its virtual USB function is rebuilt.
@@ -3527,36 +3530,36 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             AudioHapticsSpeakerOverrideActiveChanged?.Invoke(this,
                 EventArgs.Empty);
 
-        public List<AudioEndpointChoice> AudioSpeakerEndpointChoices
+        public ObservableCollection<AudioEndpointChoice> AudioSpeakerEndpointChoices =>
+            audioSpeakerEndpointChoices ??= new(BuildAudioSpeakerEndpointChoices());
+
+        private List<AudioEndpointChoice> BuildAudioSpeakerEndpointChoices()
         {
-            get
+            var choices = new List<AudioEndpointChoice>()
             {
-                var choices = new List<AudioEndpointChoice>()
-                {
-                    new AudioEndpointChoice("Auto-detect controller speaker", string.Empty),
-                };
+                new AudioEndpointChoice("Auto-detect controller speaker", string.Empty),
+            };
 
-                foreach (AudioEndpointSnapshot endpoint in
-                    AudioEndpointChoiceCache.RenderEndpoints)
-                {
-                    choices.Add(new AudioEndpointChoice(endpoint.Name,
-                        endpoint.EndpointId));
-                }
-
-                string savedEndpointId = DualSenseAudioSpeakerEndpointId;
-                if (!string.IsNullOrEmpty(savedEndpointId) && !choices.Exists(item => item.EndpointId == savedEndpointId))
-                {
-                    choices.Add(new AudioEndpointChoice("Saved speaker endpoint (not currently available)", savedEndpointId));
-                }
-
-                return choices;
+            foreach (AudioEndpointSnapshot endpoint in
+                AudioEndpointChoiceCache.RenderEndpoints)
+            {
+                choices.Add(new AudioEndpointChoice(endpoint.Name,
+                    endpoint.EndpointId));
             }
+
+            string savedEndpointId = DualSenseAudioSpeakerEndpointId;
+            if (!string.IsNullOrEmpty(savedEndpointId) && !choices.Exists(item => item.EndpointId == savedEndpointId))
+            {
+                choices.Add(new AudioEndpointChoice("Saved speaker endpoint (not currently available)", savedEndpointId));
+            }
+
+            return choices;
         }
 
         public string DualSenseAudioSpeakerEndpointId
         {
-            get => Global.DualSenseAudioSpeakerEndpointId[device];
-            set => Global.DualSenseAudioSpeakerEndpointId[device] = value ?? string.Empty;
+            get => Global.DualSenseAudioSpeakerEndpointId[device] ?? string.Empty;
+            set { if (value != null) Global.DualSenseAudioSpeakerEndpointId[device] = value; }
         }
 
         public bool DualSenseEnableMicrophonePassthrough
@@ -4500,15 +4503,36 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
             await dispatcher.InvokeAsync(() =>
             {
-                AudioCaptureEndpointChoicesChanged?.Invoke(this, EventArgs.Empty);
-                AudioSpeakerEndpointChoicesChanged?.Invoke(this, EventArgs.Empty);
-                MicrophoneCaptureEndpointChoicesChanged?.Invoke(this, EventArgs.Empty);
-                MicrophoneOutputEndpointChoicesChanged?.Invoke(this, EventArgs.Empty);
+                NotifyAudioEndpointChoicesChanged();
             });
         }
 
-        public event EventHandler AudioCaptureEndpointChoicesChanged;
-        public event EventHandler AudioSpeakerEndpointChoicesChanged;
+        internal void NotifyAudioEndpointChoicesChanged()
+        {
+            // Keep each selected item and the collection itself alive while devices refresh.
+            // Replacing ItemsSource clears WPF's selection, especially the empty-ID auto choice.
+            RefreshChoices(AudioCaptureEndpointChoices, BuildAudioCaptureEndpointChoices());
+            RefreshChoices(AudioSpeakerEndpointChoices, BuildAudioSpeakerEndpointChoices());
+            MicrophoneCaptureEndpointChoicesChanged?.Invoke(this, EventArgs.Empty);
+            MicrophoneOutputEndpointChoicesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private static void RefreshChoices(ObservableCollection<AudioEndpointChoice> current, List<AudioEndpointChoice> updated)
+        {
+            for (int index = 0; index < updated.Count; index++)
+            {
+                var choice = current.FirstOrDefault(item => item.EndpointId == updated[index].EndpointId);
+                if (choice == null) current.Insert(index, updated[index]);
+                else
+                {
+                    choice.Name = updated[index].Name;
+                    int previous = current.IndexOf(choice);
+                    if (previous != index) current.Move(previous, index);
+                }
+            }
+            while (current.Count > updated.Count) current.RemoveAt(current.Count - 1);
+        }
+
         public event EventHandler MicrophoneCaptureEndpointChoicesChanged;
         public event EventHandler MicrophoneOutputEndpointChoicesChanged;
 
@@ -5561,9 +5585,20 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
     public sealed record FlickCalibrationTriggerChoice(DS4Controls Control, string Label);
 
-    public class AudioEndpointChoice
+    public class AudioEndpointChoice : System.ComponentModel.INotifyPropertyChanged
     {
-        public string Name { get; }
+        private string name;
+        public string Name
+        {
+            get => name;
+            internal set
+            {
+                if (name == value) return;
+                name = value;
+                PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(nameof(Name)));
+            }
+        }
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public string EndpointId { get; }
 
         public AudioEndpointChoice(string name, string endpointId)

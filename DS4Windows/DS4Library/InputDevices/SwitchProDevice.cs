@@ -515,6 +515,7 @@ namespace DS4Windows.InputDevices
                             BatteryChanged?.Invoke(this, EventArgs.Empty);
                         }
 
+                        batteryReadingAvailable = ((tempByte & 0xE0) >> 4) <= 8;
                         cState.Battery = (byte)tempBattery;
 
                         tempCharging = (tempByte & 0x10) != 0;

@@ -1,12 +1,25 @@
 # DualSense native-command pressure test
 
-Candidate for [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47).
+## Released fix and current status
+
+The fix for [issue #47](https://github.com/Pav-Osmolski/DS4Windows/issues/47)
+was released in **DS4Windows 5.0.34 with VIIPER 0.1.12**. Maintainer testing
+confirmed normal feedback in DEATHLOOP and GTA V Enhanced over USB and Bluetooth.
+On 2026-10-19, [the original reporter also confirmed the fix over both connections](https://github.com/Pav-Osmolski/DS4Windows/issues/47#issuecomment-6274412583).
+
+The candidate-build instructions and pre-release observations below are retained
+as investigation history. For current troubleshooting, use the
+[latest release](https://github.com/Pav-Osmolski/DS4Windows/releases/latest)
+and the [troubleshooting guide](../troubleshooting.md#delayed-or-weak-dualsense-vibration).
+
+## Investigation background
+
 The reporter's 5.0.33 logs show physical-command queue waits up to about 277 ms
 over Bluetooth and 252 ms over USB. Disabling optional speaker streaming did
 not resolve their symptoms. The summaries cannot establish that the queued
 reports are byte-identical, and their maxima do not timestamp every symptom.
 
-## Quick test
+## Historical candidate test
 
 1. Close the game and DS4Windows. Extract the complete candidate portable ZIP
    into a separate folder and run its `DS4Windows.exe`. Check that the first log

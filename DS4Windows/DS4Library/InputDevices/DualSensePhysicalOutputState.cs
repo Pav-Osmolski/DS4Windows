@@ -116,6 +116,32 @@ namespace DS4Windows.InputDevices
         private DualSensePhysicalOutputSnapshot latest =
             DualSensePhysicalOutputSnapshot.Default;
         private long version = 1;
+        private object batteryRumbleOwner;
+        internal IDisposable TryBeginBatteryAlertRumble(byte strength, Action changed)
+        {
+            lock (syncRoot)
+            {
+                if (strength == 0 || latest.PreviewLightRumbleActive || latest.PreviewHeavyRumbleActive ||
+                    latest.RumbleState.RumbleMotorStrengthLeftHeavySlow != 0 ||
+                    latest.RumbleState.RumbleMotorStrengthRightLightFast != 0) return null;
+                object owner = batteryRumbleOwner = new();
+                PublishLocked(latest with { PreviewLightRumbleActive = true, PreviewHeavyRumbleActive = true,
+                    PreviewLightRumbleStrength = strength, PreviewHeavyRumbleStrength = strength,
+                    RumbleGeneration = latest.RumbleGeneration + 1 });
+                return new BatteryAlertRumbleLease(() =>
+                {
+                    lock (syncRoot)
+                    {
+                        if (!ReferenceEquals(batteryRumbleOwner, owner)) return;
+                        batteryRumbleOwner = null;
+                        PublishLocked(latest with { PreviewLightRumbleActive = false, PreviewHeavyRumbleActive = false,
+                            PreviewLightRumbleStrength = 0, PreviewHeavyRumbleStrength = 0,
+                            RumbleGeneration = latest.RumbleGeneration + 1 });
+                    }
+                    changed();
+                });
+            }
+        }
 
         internal DualSensePhysicalOutputSnapshot ReadLatest()
         {
@@ -248,6 +274,7 @@ namespace DS4Windows.InputDevices
         {
             lock (syncRoot)
             {
+                batteryRumbleOwner = null;
                 DS4ForceFeedbackState rumble = latest.RumbleState;
                 if (!lightActive && !heavyActive)
                 {

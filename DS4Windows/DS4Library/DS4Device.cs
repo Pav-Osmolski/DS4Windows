@@ -168,7 +168,7 @@ namespace DS4Windows
         }
     }
 
-    public class DS4Device
+    public partial class DS4Device
     {
         public class GyroMouseSens
         {
@@ -638,7 +638,11 @@ namespace DS4Windows
         private const byte COPYCAT_OUTPUT_FEATURES = 0x03;
         private byte outputFeaturesByte = DEFAULT_OUTPUT_FEATURES;
 
+        protected volatile bool batteryReadingAvailable;
+        public virtual bool BatteryReadingAvailable => batteryReadingAvailable;
         public int Battery => battery;
+        protected volatile bool reportedChargeComplete;
+        public virtual bool BatteryChargeComplete => reportedChargeComplete;
         public delegate void BatteryUpdateHandler(object sender, EventArgs e);
         public virtual event EventHandler BatteryChanged;
         public int getBattery()
@@ -2172,6 +2176,7 @@ namespace DS4Windows
                     if ((this.featureSet & VidPidFeatureSet.NoBatteryReading) == 0)
                     {
                         tempByte = inputReport[30];
+                        reportedChargeComplete = BatteryAlertReports.DualShock4Complete(tempByte);
                         tempCharging = (tempByte & 0x10) != 0;
                         if (tempCharging != charging)
                         {
@@ -2188,6 +2193,7 @@ namespace DS4Windows
                             BatteryChanged?.Invoke(this, EventArgs.Empty);
                         }
 
+                        batteryReadingAvailable = BatteryAlertReports.DualShock4Valid(tempByte);
                         cState.Battery = (byte)battery;
                         //Debug.WriteLine("CURRENT BATTERY: " + (inputReport[30] & 0x0f) + " | " + tempBattery + " | " + battery);
                         if (tempByte != priorInputReport30)
@@ -3065,6 +3071,7 @@ namespace DS4Windows
                     return;
                 }
 
+                batteryAlertRumbleOwner = null;
                 previewLightRumbleActive = lightMotorActive;
                 previewHeavyRumbleActive = heavyMotorActive;
                 previewLightRumbleStrength = lightMotorStrength;
@@ -3098,6 +3105,7 @@ namespace DS4Windows
 
         private void ClearRumblePreviewNoLock()
         {
+            batteryAlertRumbleOwner = null;
             previewLightRumbleActive = false;
             previewHeavyRumbleActive = false;
             previewLightRumbleStrength = 0;

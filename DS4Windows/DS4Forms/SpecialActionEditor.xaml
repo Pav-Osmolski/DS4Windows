@@ -160,6 +160,8 @@
                                 </StackPanel>
                                 <CheckBox Content="{lex:Loc SpecialActionEdit.ViaNotification}" IsChecked="{Binding Notification}" Margin="{StaticResource spaceMargin}" />
                                 <CheckBox Content="{lex:Loc SpecialActionEdit.ViaLightbar}" IsChecked="{Binding Lightbar}" Margin="{StaticResource spaceMargin}" />
+                                <CheckBox Content="Use battery alert audio and vibration" IsChecked="{Binding BatteryAlerts}" Margin="{StaticResource spaceMargin}"/>
+                                <TextBlock Text="Configure voices, sounds and vibration in Settings > Controllers > Battery alerts." TextWrapping="Wrap" Margin="0,0,0,8"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,8">
                                     <StackPanel HorizontalAlignment="Left">
                                         <Button x:Name="batteryLowColorBtn" Width="20" Height="20" Click="BatteryEmptyColorBtn_Click">

@@ -54,6 +54,7 @@ namespace DS4WinWPF.DS4Forms
         private volatile bool useTimer;
         private int readingInProgress;
         private readonly object readingTimerGate = new();
+        private readonly ControllerReportIntervalDisplay reportIntervalDisplay = new();
         private double lsDeadX;
         private double lsDeadY;
         private double rsDeadX;
@@ -288,6 +289,7 @@ namespace DS4WinWPF.DS4Forms
 
         public void UseDevice(int index, int profileDevIdx)
         {
+            reportIntervalDisplay.Reset();
             deviceNum = index;
             profileDeviceNum = profileDevIdx;
             DeviceNumChanged?.Invoke(this, EventArgs.Empty);
@@ -301,6 +303,7 @@ namespace DS4WinWPF.DS4Forms
                 if (useTimer == state)
                     return;
                 useTimer = state;
+                reportIntervalDisplay.Reset();
                 if (state)
                 {
                     readingTimer.Elapsed += ControllerReadingTimer_Elapsed;
@@ -434,8 +437,8 @@ namespace DS4WinWPF.DS4Forms
 
                     double latency = ds.Latency;
                     int warnInterval = ds.getWarnInterval();
-                    inputDelayLb.Content = string.Format(Properties.Resources.InputDelay,
-                        latency.ToString());
+                    if (reportIntervalDisplay.TryUpdate(ds, System.Diagnostics.Stopwatch.GetTimestamp(), out string intervalText))
+                        inputDelayLb.Content = intervalText;
 
                     if (latency > warnInterval)
                     {
