@@ -3,6 +3,12 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.44-issue66-trace-preview20261022](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44-issue66-trace-preview20261022) - 2026-10-22
+
+- Diagnostic pre-release for the remaining communication failure in [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), also reported in [upstream issue #153](https://github.com/hbashton/DS4Windows/issues/153). This is **not a confirmed fix**. Thanks to [@cns00](https://github.com/cns00) for the follow-up logs and screenshots showing that output still fails with Default selected.
+- Record management-request stages, local socket ports, completed transport byte counts, reply completion and socket error codes. Match these with VIIPER's debug log without recording message contents, credentials, keys or arbitrary exception text. Successful exchanges require verbose logging; failures are recorded regardless. Authentication, framing, deadlines and retry behaviour remain unchanged.
+- Exercise complete and truncated encrypted replies, the next connection failing after successful bus creation, safe error recording and a failing logging sink. The portable preview is unsigned; VIIPER remains at 0.1.12 and USB/IP at 0.9.8.1. Stable 5.0.44 remains Latest.
+
 ## [5.0.44](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44) - 2026-10-22
 
 ### Important fix: connected controller, but no input in games

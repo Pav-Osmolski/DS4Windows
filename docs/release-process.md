@@ -76,6 +76,24 @@ combined hardware testing. See the [USB/IP upgrade guide](usbip-upgrade.md).
 
 ## Download files
 
+### Diagnostic test previews
+
+When the maintainer explicitly requests a portable diagnostic pre-release,
+use a versioned tag such as `5.0.44-issue66-trace-preview20261022` on the
+tested development commit. Mark it **Pre-release**, keep **Latest** unchanged,
+and describe it as diagnostic work rather than a confirmed fix. These requested
+test builds are unsigned; say so in the notes. They do not use the normal
+stable installer/publication workflow, whose signing policy is unchanged.
+
+Before publication, run the application and standalone test suites, validate
+the portable package and pinned backend, and include matching source, SHA-256
+checksums and a build record naming the exact commit and test results. Never
+replace an existing published asset. Give clear logging instructions and
+credit the reporter in both the notes and changelog. Keep the issue open until
+the actual failure is understood and a fix is confirmed.
+
+### Standard release downloads
+
 Future releases upload seven assets: the installer, portable ZIP, matching
 DS4Windows and VIIPER source ZIPs, `DS4Windows-<version>-RELEASE-INFO.zip`,
 `SHA256SUMS.txt` and `RELEASE-BUILD.json`. GitHub also supplies its own automatic

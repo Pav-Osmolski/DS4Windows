@@ -3133,10 +3133,14 @@ namespace DS4Windows
             => ProbeServer(host, port, authenticated, out _);
 
         internal static bool ProbeServer(string host, int port, bool authenticated,
-            out string failure, int totalTimeoutMilliseconds = 3000)
+            out string failure, int totalTimeoutMilliseconds = 3000,
+            Action<string> managementDiagnostic = null)
         {
             failure = null;
             string phase = "Connect";
+            var trace = new ViiperManagementTrace("ping", managementDiagnostic);
+            bool success = false;
+            Exception fault = null;
             try
             {
                 using TcpClient tcp = new TcpClient
@@ -3169,7 +3173,9 @@ namespace DS4Windows
 
                 phase = "CompleteConnect";
                 tcp.EndConnect(result);
-                using var transport = new ViiperProbeDeadlineStream(tcp.GetStream(),
+                trace.Connected(tcp);
+                using Stream observed = trace.Observe(tcp.GetStream());
+                using var transport = new ViiperProbeDeadlineStream(observed,
                     probeStarted, budgetMilliseconds);
                 phase = authenticated ? "Authenticate" : "OpenStream";
                 using Stream stream = authenticated
@@ -3193,11 +3199,14 @@ namespace DS4Windows
                         break;
                     }
                     total += read;
+                    trace.PlaintextReceived += read;
                     string response = Encoding.UTF8.GetString(buffer, 0,
                         total);
                     if (response.IndexOf("VIIPER",
                             StringComparison.OrdinalIgnoreCase) >= 0)
                     {
+                        trace.ReplyComplete = true;
+                        success = true;
                         return true;
                     }
                 }
@@ -3208,8 +3217,14 @@ namespace DS4Windows
             {
                 // This is cold-path diagnostic state, not a per-report log.
                 // Never include exception messages, key paths, or peer bytes.
+                fault = exception;
                 failure = $"{phase}: {exception.GetType().Name}";
                 return false;
+            }
+            finally
+            {
+                trace.Phase = phase;
+                trace.Finish(success && fault == null, fault);
             }
         }
 

@@ -16,6 +16,14 @@ permissions:
 
 jobs:
   identity:
+    # Explicitly requested portable trace previews are manually built, tested
+    # and accompanied by source/checksums/build records before publication.
+    # They are prereleases, never Latest, and do not enter the installer lane.
+    if: >-
+      github.event_name != 'release' ||
+      github.repository != 'Pav-Osmolski/DS4Windows' ||
+      !github.event.release.prerelease ||
+      !contains(github.event.release.tag_name, '-trace-preview')
     runs-on: windows-2022
     timeout-minutes: 45
     outputs:

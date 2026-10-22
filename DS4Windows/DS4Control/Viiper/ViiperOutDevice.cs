@@ -10552,6 +10552,7 @@ namespace DS4Windows
         private readonly string host;
         private readonly int port;
         private readonly Func<Stream, Stream> authenticate;
+        private readonly Action<string> managementDiagnostic;
 
         public ViiperClient(string host, int port)
             : this(host, port, ViiperAuthentication.Authenticate)
@@ -10559,10 +10560,11 @@ namespace DS4Windows
         }
 
         internal ViiperClient(string host, int port,
-            Func<Stream, Stream> authenticate)
+            Func<Stream, Stream> authenticate, Action<string> managementDiagnostic = null)
         {
             this.host = host;
             this.port = port;
+            this.managementDiagnostic = managementDiagnostic;
             this.authenticate = authenticate ??
                 throw new ArgumentNullException(nameof(authenticate));
         }
@@ -11129,30 +11131,55 @@ namespace DS4Windows
         private string SendRequestRaw(string path, string payload = null,
             int receiveTimeout = ApiReceiveTimeoutMs)
         {
-            using TcpClient tcp = Connect(receiveTimeout);
-            using Stream stream = authenticate(tcp.GetStream());
-            string request = string.IsNullOrEmpty(payload) ? path : $"{path} {payload}";
-            byte[] requestBytes = Encoding.UTF8.GetBytes(request + "\0");
-            stream.Write(requestBytes, 0, requestBytes.Length);
-
-            using MemoryStream response = new MemoryStream();
-            byte[] buffer = new byte[1024];
-            int read;
-            while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+            var trace = new ViiperManagementTrace(path, managementDiagnostic);
+            Exception failure = null;
+            try
             {
-                // VIIPER writeOK/writeError terminate each management reply
-                // with LF. Once that complete reply has arrived, waiting for
-                // socket EOF can turn a successful operation into a failure
-                // if the peer's close is reported as a connection reset.
-                // Encrypted streams authenticate the whole record before
-                // returning any plaintext; incomplete records still fail.
-                int terminator = Array.IndexOf(buffer, (byte)'\n', 0, read);
-                response.Write(buffer, 0, terminator >= 0 ? terminator : read);
-                if (terminator >= 0)
-                    break;
-            }
+                using TcpClient tcp = Connect(receiveTimeout);
+                trace.Connected(tcp);
+                using Stream transport = trace.Observe(tcp.GetStream());
+                trace.Phase = "Authenticate";
+                using Stream stream = authenticate(transport);
+                string request = string.IsNullOrEmpty(payload) ? path : $"{path} {payload}";
+                byte[] requestBytes = Encoding.UTF8.GetBytes(request + "\0");
+                trace.Phase = "WriteRequest";
+                stream.Write(requestBytes, 0, requestBytes.Length);
+                trace.Phase = "ReadReply";
 
-            return Encoding.UTF8.GetString(response.ToArray()).TrimEnd('\n');
+                using MemoryStream response = new MemoryStream();
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    // VIIPER writeOK/writeError terminate each management reply
+                    // with LF. Once that complete reply has arrived, waiting for
+                    // socket EOF can turn a successful operation into a failure
+                    // if the peer's close is reported as a connection reset.
+                    // Encrypted streams authenticate the whole record before
+                    // returning any plaintext; incomplete records still fail.
+                    trace.PlaintextReceived += read;
+                    int terminator = Array.IndexOf(buffer, (byte)'\n', 0, read);
+                    response.Write(buffer, 0, terminator >= 0 ? terminator : read);
+                    if (terminator >= 0)
+                    {
+                        trace.ReplyComplete = true;
+                        break;
+                    }
+                }
+
+                string raw = Encoding.UTF8.GetString(response.ToArray()).TrimEnd('\n');
+                trace.Phase = "Close";
+                return raw;
+            }
+            catch (Exception exception)
+            {
+                failure = exception;
+                throw;
+            }
+            finally
+            {
+                trace.Finish(failure == null, failure);
+            }
         }
 
         private TcpClient Connect(int receiveTimeout,
