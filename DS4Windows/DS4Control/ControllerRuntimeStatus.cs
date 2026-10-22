@@ -45,6 +45,7 @@ namespace DS4Windows
         StartingAudioHaptics,
         Ready,
         Attention,
+        ProfileRequired,
     }
 
     public readonly struct ControllerRuntimeSignals
@@ -57,7 +58,7 @@ namespace DS4Windows
             ControllerRuntimeLaneState microphone,
             ControllerRuntimeLaneState audioHaptics,
             string virtualControllerName, bool virtualFailed = false,
-            bool physicalCleanupQuarantined = false)
+            bool physicalCleanupQuarantined = false, bool profileSelected = true)
         {
             PhysicalPresent = physicalPresent;
             PhysicalSynced = physicalSynced;
@@ -72,6 +73,7 @@ namespace DS4Windows
             VirtualControllerName = virtualControllerName ?? "virtual controller";
             VirtualFailed = virtualFailed;
             PhysicalCleanupQuarantined = physicalCleanupQuarantined;
+            ProfileSelected = profileSelected;
         }
 
         public bool PhysicalPresent { get; }
@@ -87,6 +89,7 @@ namespace DS4Windows
         public string VirtualControllerName { get; }
         public bool VirtualFailed { get; }
         public bool PhysicalCleanupQuarantined { get; }
+        public bool ProfileSelected { get; }
     }
 
     public readonly struct ControllerStartupStatus : IEquatable<ControllerStartupStatus>
@@ -103,7 +106,7 @@ namespace DS4Windows
         public string Title { get; }
         public string Detail { get; }
         public bool IsReady => Stage == ControllerStartupStage.Ready;
-        public bool NeedsAttention => Stage == ControllerStartupStage.Attention;
+        public bool NeedsAttention => Stage is ControllerStartupStage.Attention or ControllerStartupStage.ProfileRequired;
 
         public bool Equals(ControllerStartupStatus other) =>
             Stage == other.Stage && Title == other.Title && Detail == other.Detail;
@@ -163,6 +166,12 @@ namespace DS4Windows
                 return new ControllerStartupStatus(
                     ControllerStartupStage.Connecting, "Connecting",
                     "Waiting for stable input from the physical controller.");
+            }
+
+            if (!signals.ProfileSelected)
+            {
+                return new ControllerStartupStatus(ControllerStartupStage.ProfileRequired,
+                    "Select a profile", "Choose an Active Profile under Controllers. No virtual controller will start until a profile is selected.");
             }
 
             if (signals.VirtualRequired && signals.VirtualFailed)
