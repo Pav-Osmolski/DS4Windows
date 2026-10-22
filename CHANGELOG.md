@@ -3,6 +3,17 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.42](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.42) - 2026-10-22
+
+### Fixed
+
+- Finish reading VIIPER management replies at their newline terminator instead of waiting for the connection to close. A connection reset after a complete reply could otherwise discard a successful response and trigger virtual-controller cleanup. Preserve response validation and failures for incomplete or damaged encrypted replies. Thanks to [@cns00](https://github.com/cns00) for the reports and diagnostic logs. ([Issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), [upstream issue #153](https://github.com/hbashton/DS4Windows/issues/153))
+- Add regression coverage for completed replies followed by connection resets, fragmented encrypted records, incomplete or invalid responses, and TCP connections that stay open after sending a reply. The maintainer tested the preview successfully; issue #66 remains open pending confirmation on the reporter's computer.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
 ## [5.0.41](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.41) - 2026-10-21
 
 ### Added
