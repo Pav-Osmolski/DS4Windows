@@ -367,9 +367,6 @@ namespace DS4WinWPF
                 return;
             }
 
-            // Never spawn a broker until this process owns the mapper gate.
-            if (!StartPortableBroker()) return;
-
             CreateTempWorkerThread();
 
             DS4Windows.Global.FindConfigLocation();
@@ -469,6 +466,12 @@ namespace DS4WinWPF
             // both explicit and Windows-following theme modes.
             SetUICulture(DS4Windows.Global.UseLang);
             ChangeTheme(DS4Windows.Global.UseCurrentTheme, false);
+
+            // Identity/conflict preflight and the exclusive mapper gate are
+            // already established. Launch only after settings and their data
+            // directory are loaded, so logging/tray choices reach the first
+            // broker process and readiness failures use the saved theme.
+            if (!StartPortableBroker()) return;
 
             if (!DS4Windows.PortableLabContext.IsActive && (readAppConfig || firstRun))
             {
