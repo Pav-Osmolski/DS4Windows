@@ -1925,6 +1925,22 @@ Suspend support not enabled.", true);
             }
         }
 
+        private void ViiperDebugHelpBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(this,
+                "1. Enable VIIPER debug logging on this page.\n\n" +
+                "2. Fully exit DS4Windows and VIIPER. If VIIPER has no tray icon and remains running, " +
+                "end viiper.exe in Task Manager. " +
+                "Reopen DS4Windows normally; do not launch VIIPER separately.\n\n" +
+                "3. Reproduce the problem, then use Open log folder. Share viiper-debug.log " +
+                "together with ds4windows_log.txt. The preceding capture is kept as viiper-debug-previous.log.\n\n" +
+                "4. Turn the option off and restart both applications after testing. " +
+                "Changing it does not interrupt the current session.\n\n" +
+                "Installed copies may ask for Windows permission to start the diagnostic session. " +
+                "The startup task is unchanged. Raw packet logging stays off.",
+                "Capture VIIPER diagnostics", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         private void ReportIssueBtn_Click(object sender, RoutedEventArgs e)
         {
             try

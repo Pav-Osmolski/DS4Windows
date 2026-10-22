@@ -439,6 +439,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
             set;
         }
 
+        [XmlElement("ViiperDebugLogging")]
+        public bool ViiperDebugLogging { get; set; }
+
         [XmlElement("ShowViiperTrayIcon")]
         public bool ShowViiperTrayIcon { get; set; } = true;
 
@@ -981,6 +984,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             OutputSlotsColumnWidths = source.outputSlotsColumnWidths?.ToArray() ?? Array.Empty<double>();
             SuppressViiperSetupPrompt = source.suppressViiperSetupPrompt;
             ShowViiperTrayIcon = source.showViiperTrayIcon;
+            ViiperDebugLogging = source.viiperDebugLogging;
             PreferredViiperPath = source.preferredViiperPath;
             CloseMinimizes = source.closeMini;
             UseLang = source.useLang;
@@ -1100,6 +1104,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.suppressViiperSetupPrompt =
                 SuppressViiperSetupPrompt;
             destination.showViiperTrayIcon = ShowViiperTrayIcon;
+            destination.viiperDebugLogging = ViiperDebugLogging;
             destination.preferredViiperPath = PreferredViiperPath ??
                 string.Empty;
             destination.closeMini = CloseMinimizes;

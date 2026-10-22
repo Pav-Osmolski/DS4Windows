@@ -3027,11 +3027,16 @@ namespace DS4Windows
                 // verified runtime preference. Use it only when it matches;
                 // otherwise start the selected backend for this session after
                 // the same exclusive-process ownership check above.
-                bool taskReady = IsViiperStartupTaskValid(viiperPath,
+                bool taskReady = !Global.ViiperDebugLogging && IsViiperStartupTaskValid(viiperPath,
                     out _);
                 ProcessStartInfo startInfo = CreateViiperServerStartInfo(
                     viiperPath, taskReady, Global.IsAdministrator(),
                     Environment.SystemDirectory);
+                if (Global.ViiperDebugLogging)
+                {
+                    ViiperDiagnostics.PrepareLogFile(ViiperDiagnostics.LogPath);
+                    AppLogger.LogToGui("VIIPER debug capture: " + ViiperDiagnostics.LogPath, false);
+                }
                 using Process process = Process.Start(startInfo);
                 if (process == null)
                 {
@@ -3057,7 +3062,29 @@ namespace DS4Windows
 
         internal static ProcessStartInfo CreateViiperServerStartInfo(
             string viiperPath, bool taskReady, bool administrator,
-            string systemDirectory) => taskReady
+            string systemDirectory, bool? debugLogging = null, string logPath = null)
+        {
+            bool capture = debugLogging ?? Global.ViiperDebugLogging;
+            // Keep the persistent task unchanged. A requested capture is an
+            // elevated session launch of the same verified backend instead.
+            if (capture)
+            {
+                var diagnostic = new ProcessStartInfo
+                {
+                    FileName = Path.GetFullPath(viiperPath),
+                    WorkingDirectory = Path.GetDirectoryName(Path.GetFullPath(viiperPath)),
+                    UseShellExecute = true,
+                    Verb = administrator ? string.Empty : "runas",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                };
+                diagnostic.ArgumentList.Add("server");
+                diagnostic.ArgumentList.Add("--usb.retained-import-authority-id=" +
+                    ViiperRetainedImportAuthorityId.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                ViiperDiagnostics.AddArguments(diagnostic, true, logPath ?? ViiperDiagnostics.LogPath);
+                ViiperTrayPreference.AddArgument(diagnostic, Global.ShowViiperTrayIcon);
+                return diagnostic;
+            }
+            return taskReady
             ? new ProcessStartInfo
             {
                 FileName = Path.Combine(systemDirectory, "schtasks.exe"),
@@ -3076,6 +3103,7 @@ namespace DS4Windows
                 Verb = administrator ? string.Empty : "runas",
                 WindowStyle = ProcessWindowStyle.Hidden,
             };
+        }
 
         private static bool CanPingServer(bool authenticated = false)
             => ProbeServer(ApiHost, ApiPort, authenticated);

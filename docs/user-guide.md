@@ -396,6 +396,12 @@ startup diagnostics, reproduce the problem, then turn it off after collecting
 the log. **Report an issue** opens this fork's GitHub issue form in your browser;
 it does not upload a log or create a report automatically.
 
+**VIIPER debug logging** captures the backend's own diagnostic text separately
+from DS4Windows verbose logging. Enable it, fully exit both applications, then
+reopen DS4Windows normally. Use **Capture instructions** for the steps and
+**Open log folder** to find `viiper-debug.log`. Turn it off and restart both
+after testing. See [the VIIPER capture guide](troubleshooting.md#capture-viipers-own-debug-log).
+
 **Keep stored logs for up to** offers 1, 7, 14, 30 or 90 days; the default is
 **30 days**. The preference persists across restarts. Archives also rotate daily
 or at 10 MB and are capped at 20 files, so busy sessions may retain less history.
