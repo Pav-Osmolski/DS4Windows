@@ -380,6 +380,69 @@ public class PortableBrokerContextTests
         if (sameIdentity) Assert.AreEqual(5000, host.Child.StopTimeout);
     }
 
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void DebugCaptureStartsWithManagedAuthenticationAndToggleDoesNotRestart(bool borrow)
+    {
+        bool previous = Global.ViiperDebugLogging;
+        string previousData = Global.appdatapath;
+        try
+        {
+            Global.ViiperDebugLogging = true;
+            Global.appdatapath = root;
+            if (borrow)
+            {
+                PrepareBorrowed();
+                File.WriteAllText(ViiperDiagnostics.LogPath, "borrowed capture must survive");
+                context.Start();
+                Assert.AreEqual("borrowed capture must survive", File.ReadAllText(ViiperDiagnostics.LogPath));
+                Assert.AreEqual(0, host.Starts);
+            }
+            else
+            {
+                Open().Start();
+                CollectionAssert.Contains(host.StartInfo.ArgumentList.ToArray(), "--log.level=debug");
+                CollectionAssert.Contains(host.StartInfo.ArgumentList.ToArray(), "--log.file=" + ViiperDiagnostics.LogPath);
+                CollectionAssert.Contains(host.StartInfo.ArgumentList.ToArray(), "--key-file");
+                CollectionAssert.Contains(host.StartInfo.ArgumentList.ToArray(), "--api.require-local-host-auth=true");
+                Assert.AreEqual(1, host.Starts);
+            }
+            Global.ViiperDebugLogging = false;
+            Assert.IsTrue(context.InspectOwnedProcess(out bool running, out _));
+            Assert.IsTrue(running);
+            context.Start();
+            Assert.AreEqual(0, host.Child.StopCalls);
+        }
+        finally
+        {
+            Global.ViiperDebugLogging = previous;
+            Global.appdatapath = previousData;
+        }
+    }
+
+    [TestMethod]
+    public void DebugLoggingDoesNotAuthorizeChangedAuthenticationOrArbitraryArguments()
+    {
+        bool previous = Global.ViiperDebugLogging;
+        string previousData = Global.appdatapath;
+        try
+        {
+            Global.ViiperDebugLogging = true;
+            Global.appdatapath = root;
+            PrepareBorrowed();
+            host.Arguments = host.Arguments.Where(a => a != "--api.require-local-host-auth=true").ToArray();
+            Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
+            Assert.AreEqual(0, host.Starts);
+            Assert.AreEqual(0, host.Child.StopCalls);
+        }
+        finally
+        {
+            Global.ViiperDebugLogging = previous;
+            Global.appdatapath = previousData;
+        }
+    }
+
     private void PrepareBorrowed()
     {
         Open().Start();

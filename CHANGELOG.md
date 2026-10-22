@@ -3,7 +3,11 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
-## [5.0.42](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.42) - 2026-10-22
+## [5.0.43](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.43) - 2026-10-22
+
+### Added
+
+- Capture VIIPER's own debug log from the Log page without manually launching the backend. Keep managed authentication and process checks, preserve the preceding capture, and apply changes on the next backend start without interrupting the current controller session. Includes instructions for collecting both application and backend logs when investigating [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), with thanks to [@cns00](https://github.com/cns00) for the diagnostic reports.
 
 ### Fixed
 

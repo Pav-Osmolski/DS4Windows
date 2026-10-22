@@ -448,7 +448,13 @@ internal sealed class PortableBrokerContext : IDisposable
                     borrowed = existing; // Readiness still requires the caller's authenticated ping.
                     return;
                 }
-                owned = host.Start(BuildStartInfo());
+                ProcessStartInfo start = BuildStartInfo();
+                if (Global.ViiperDebugLogging)
+                {
+                    ViiperDiagnostics.PrepareLogFile(ViiperDiagnostics.LogPath);
+                    AppLogger.LogToGui("VIIPER debug capture: " + ViiperDiagnostics.LogPath, false);
+                }
+                owned = host.Start(start);
                 if (owned == null) throw new PortableBrokerStartupException(StartFailure);
                 if (!InspectOwnedProcessCore(out bool running, out string failure) || !running)
                     throw new PortableBrokerStartupException(failure ?? StartFailure);
@@ -483,7 +489,7 @@ internal sealed class PortableBrokerContext : IDisposable
         foreach (string argument in new[]
         {
             "--config-only", "--config", ConfigPath, "--update-notify=none",
-            "--log.level=warn", "--log.file=", "--log.raw-file=", "server",
+            "server",
             "--key-file", KeyPath, "--usb.addr=127.0.0.1:3241", "--api.addr=127.0.0.1:3242",
             "--api.require-local-host-auth=true", "--api.auto-attach-local-client=true",
             "--api.auto-attach-windows-native=true", "--usb.retained-import-authority-id=" +
@@ -491,6 +497,7 @@ internal sealed class PortableBrokerContext : IDisposable
             "--usb.write-batch-flush-interval=0", "--usb.retained-input-service-ms=0",
             "--connection-timeout=30s", "--api.device-handler-connect-timeout=5s", "--usb.endpoint-diagnostics=false",
         }) start.ArgumentList.Add(argument);
+        ViiperDiagnostics.AddArguments(start, Global.ViiperDebugLogging, ViiperDiagnostics.LogPath);
         ViiperTrayPreference.AddArgument(start, Global.ShowViiperTrayIcon);
         return start;
     }

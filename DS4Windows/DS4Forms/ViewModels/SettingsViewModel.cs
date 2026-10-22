@@ -210,6 +210,29 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
         }
 
+        public bool ViiperDebugLogging
+        {
+            get => Global.ViiperDebugLogging;
+            set
+            {
+                if (!SystemIntegrationEnabled || value == Global.ViiperDebugLogging) return;
+                bool previous = Global.ViiperDebugLogging;
+                try
+                {
+                    Global.ViiperDebugLogging = value;
+                    if (!Global.Save()) throw new IOException("DS4Windows settings could not be saved.");
+                }
+                catch (Exception error)
+                {
+                    Global.ViiperDebugLogging = previous;
+                    MessageBox.Show("The VIIPER logging preference could not be saved. " + error.Message,
+                        "VIIPER debug logging", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                ViiperDebugLoggingChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler ViiperDebugLoggingChanged;
+
         public event EventHandler VerboseStartupLoggingChanged;
         public event EventHandler LogRetentionDaysChanged;
         public int[] LogRetentionChoices => StoredLogManager.RetentionChoices;

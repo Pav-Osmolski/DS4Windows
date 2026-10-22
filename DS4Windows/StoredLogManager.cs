@@ -37,7 +37,8 @@ internal static class StoredLogManager
             {
                 if ((file.Attributes & FileAttributes.ReparsePoint) != 0) continue;
                 if (ArchiveName.IsMatch(file.Name) ||
-                    file.Name.Equals("startup_failure.log", StringComparison.OrdinalIgnoreCase))
+                    file.Name.Equals("startup_failure.log", StringComparison.OrdinalIgnoreCase) ||
+                    file.Name.Equals(DS4Windows.ViiperDiagnostics.PreviousFileName, StringComparison.OrdinalIgnoreCase))
                     candidates.Add(file);
             }
             DateTime cutoff = utcNow.AddDays(-NormalizeRetentionDays(days));
