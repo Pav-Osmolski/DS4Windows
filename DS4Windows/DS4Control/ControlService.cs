@@ -5347,7 +5347,9 @@ namespace DS4Windows
                 physicalSynced, physicalAlive, virtualRequired,
                 virtualConnected, virtualTypeMatches, advancedHaptics,
                 speaker, microphone, audioHaptics,
-                desiredType.ToDisplayName(), virtualFailed, physicalCleanupQuarantined);
+                desiredType.ToDisplayName(), virtualFailed, physicalCleanupQuarantined,
+                profileSelected: !string.IsNullOrWhiteSpace(Global.useTempProfile[index]
+                    ? Global.tempprofilename[index] : Global.ProfilePath[index]));
         }
 
         internal static bool ShouldUseGameBarControllerCompatibility(bool enabled,

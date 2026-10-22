@@ -16,11 +16,31 @@ namespace DS4WindowsTests
             ControllerRuntimeLaneState speaker = ControllerRuntimeLaneState.NotRequired,
             ControllerRuntimeLaneState microphone = ControllerRuntimeLaneState.NotRequired,
             ControllerRuntimeLaneState audioHaptics = ControllerRuntimeLaneState.NotRequired,
-            bool virtualFailed = false, bool physicalCleanupQuarantined = false) =>
+            bool virtualFailed = false, bool physicalCleanupQuarantined = false, bool profileSelected = true) =>
             new ControllerRuntimeSignals(present, synced, alive,
                 virtualRequired, virtualConnected, virtualTypeMatches,
                 haptics, speaker, microphone, audioHaptics, "DualSense", virtualFailed,
-                physicalCleanupQuarantined);
+                physicalCleanupQuarantined, profileSelected);
+
+        [TestMethod]
+        [DataRow(false)]
+        [DataRow(true)]
+        public void MissingProfileExplainsBlockedOutputInsteadOfClaimingCreationOrReadiness(bool virtualRequired)
+        {
+            var missing = ControllerRuntimeStatusPolicy.Evaluate(Signals(
+                virtualRequired: virtualRequired, virtualConnected: false, profileSelected: false));
+            Assert.AreEqual(ControllerStartupStage.ProfileRequired, missing.Stage);
+            Assert.AreEqual("Select a profile", missing.Title);
+            Assert.IsTrue(missing.NeedsAttention);
+            Assert.IsFalse(missing.IsReady);
+            StringAssert.Contains(missing.Detail, "Active Profile under Controllers");
+            Assert.AreEqual(ControllerStartupStage.Ready, ControllerRuntimeStatusPolicy.Evaluate(
+                Signals(virtualRequired: virtualRequired, profileSelected: true)).Stage);
+            Assert.AreEqual(ControllerStartupStage.Disconnected, ControllerRuntimeStatusPolicy.Evaluate(
+                Signals(present: false, profileSelected: false)).Stage);
+            Assert.AreEqual(ControllerStartupStage.Attention, ControllerRuntimeStatusPolicy.Evaluate(
+                Signals(physicalCleanupQuarantined: true, profileSelected: false)).Stage);
+        }
 
         [TestMethod]
         public void QuarantinedPhysicalCleanupPrecedesWaitingForInputOrVirtualReadiness()

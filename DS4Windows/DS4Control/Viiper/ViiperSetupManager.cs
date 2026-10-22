@@ -45,6 +45,7 @@ namespace DS4Windows
         public bool UsbipDriverFilesSafe { get; set; }
         public string UsbipDriverIntegrityMessage { get; set; }
         public bool UsbipRuntimeReady { get; set; }
+        public bool UsbipProbeTimedOut { get; set; }
         public bool UsbipRebootOrRepairRequired { get; set; }
         public bool ViiperProcessConflict { get; set; }
         public bool ViiperStartupTaskReady { get; set; }
@@ -287,6 +288,7 @@ namespace DS4Windows
                 FileHasSha256(Path.Combine(Path.GetDirectoryName(usbipPath),
                     "libusbip.dll"), SupportedUsbipLibrarySha256);
             bool usbipRuntimeReady = false;
+            bool usbipProbeTimedOut = false;
             string usbipProbeMessage;
             ViiperDependencyStatus dependencies = dependencyReadiness.Read(refreshDependencies || tryStartServer);
             bool usbipDriverFilesSafe = dependencies.UsbipDriverFilesSafe;
@@ -298,7 +300,7 @@ namespace DS4Windows
                 usbipDriverFilesSafe)
             {
                 usbipRuntimeReady = TryProbeUsbipRuntime(usbipPath,
-                    out usbipProbeMessage);
+                    out usbipProbeMessage, out usbipProbeTimedOut);
             }
             else if (!File.Exists(usbipPath))
             {
@@ -374,6 +376,7 @@ namespace DS4Windows
                 UsbipPath = usbipPath,
                 UsbipVersion = usbipVersion?.ToString(),
                 UsbipProbeMessage = usbipProbeMessage,
+                UsbipProbeTimedOut = usbipProbeTimedOut,
                 ServerRunning = viiperServerRunning,
                 ServerProbeMessage = serverProbeFailure == null ? null :
                     "VIIPER is running, but its " + (lab != null || portable != null ? "authenticated " : "") +
@@ -389,7 +392,9 @@ namespace DS4Windows
         public static bool EnsureReadyWithPrompt(Window owner, bool forcePrompt = false)
         {
             if (ViiperRecovery.IsRecovering) return false;
-            ViiperPrerequisiteStatus status = GetStatus(tryStartServer: true);
+            ViiperPrerequisiteStatus status = ViiperStartupProbe.Check(
+                () => GetStatus(tryStartServer: true), Thread.Sleep,
+                message => NLog.LogManager.GetCurrentClassLogger().Info(message));
             bool runtimePrerequisitesReady = HasSafeRuntimePrerequisites(status);
             // Unmarked copies still offer the existing full-setup workflow
             // when no managed app installation exists. Broker-only repair
@@ -403,6 +408,8 @@ namespace DS4Windows
             {
                 if (!ViiperRecovery.Repair(owner)) return false;
                 status = GetStatus();
+                foreach (string line in ViiperStartupDiagnostics.Describe(status))
+                    NLog.LogManager.GetCurrentClassLogger().Info("After VIIPER recovery: " + line);
             }
             // A failed broker repair must not claim Ready. Missing/unsafe
             // drivers still reach the managed prerequisite prompt below;
@@ -2864,8 +2871,9 @@ namespace DS4Windows
         }
 
         private static bool TryProbeUsbipRuntime(string usbipPath,
-            out string message)
+            out string message, out bool timedOut)
         {
+            timedOut = false;
             try
             {
                 Stopwatch probeElapsed = Stopwatch.StartNew();
@@ -2907,12 +2915,13 @@ namespace DS4Windows
                             process.WaitForExit(UsbipProbePipeDrainMilliseconds);
                         }
                         catch { }
+                        timedOut = true;
                         message = "usbip.exe port timed out; reboot or repair usbip-win2.";
                         return false;
                     }
 
                     remaining = (int)Math.Max(0, UsbipProbeTimeoutMilliseconds - probeElapsed.ElapsedMilliseconds);
-                    if (!TryCompleteUsbipProbeOutput(stdout, stderr, remaining, out string output, out message))
+                    if (!TryCompleteUsbipProbeOutput(stdout, stderr, remaining, out string output, out message, out timedOut))
                         return false;
                     if (!IsSuccessfulUsbipPortProbe(process.ExitCode, output))
                     {
@@ -2981,24 +2990,36 @@ namespace DS4Windows
         }
 
         internal static bool TryCompleteUsbipProbeOutput(Task<string> stdout, Task<string> stderr,
-            int remainingMilliseconds, out string output, out string message)
+            int remainingMilliseconds, out string output, out string message) =>
+            TryCompleteUsbipProbeOutput(stdout, stderr, remainingMilliseconds,
+                out output, out message, out _);
+
+        internal static bool TryCompleteUsbipProbeOutput(Task<string> stdout, Task<string> stderr,
+            int remainingMilliseconds, out string output, out string message, out bool timedOut)
         {
+            timedOut = false;
             ArgumentNullException.ThrowIfNull(stdout);
             ArgumentNullException.ThrowIfNull(stderr);
             output = null;
             Task<string[]> reads = Task.WhenAll(stdout, stderr);
             ObserveUsbipProbeRead(reads);
+            if (remainingMilliseconds <= 0)
+            {
+                timedOut = true;
+                message = "usbip.exe port diagnostic output timed out; retry or repair usbip-win2.";
+                return false;
+            }
             try
             {
-                if (remainingMilliseconds <= 0) throw new TimeoutException();
                 string[] completed = reads.WaitAsync(TimeSpan.FromMilliseconds(
                     Math.Min(remainingMilliseconds, UsbipProbePipeDrainMilliseconds))).GetAwaiter().GetResult();
                 output = string.Join(Environment.NewLine, completed).Trim();
                 message = null;
                 return true;
             }
-            catch (TimeoutException)
+            catch (TimeoutException) when (!reads.IsFaulted && !reads.IsCanceled)
             {
+                timedOut = true;
                 message = "usbip.exe port diagnostic output timed out; retry or repair usbip-win2.";
                 return false;
             }

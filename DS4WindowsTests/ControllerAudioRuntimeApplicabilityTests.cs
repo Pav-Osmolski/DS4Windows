@@ -124,6 +124,29 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
             SupportsControllerAudio, "Offline profile editing remains available.");
     }
 
+    [TestMethod]
+    [DoNotParallelize]
+    public void ServiceReportsMissingProfileUntilRegularOrTemporarySelectionExists()
+    {
+        using var profile = new ProfileScope();
+        var service = Service(new TestPhysicalDevice(InputDeviceType.Switch2Pro,
+            ConnectionType.USB, 0x057E, 0x2069), installAudioServices: false);
+        Global.ProfilePath[0] = "";
+        var signals = service.GetControllerRuntimeSignals(0);
+        Assert.IsTrue(signals.PhysicalPresent && signals.PhysicalAlive && signals.PhysicalSynced);
+        Assert.IsFalse(signals.ProfileSelected);
+        Assert.AreEqual(ControllerStartupStage.ProfileRequired,
+            ControllerRuntimeStatusPolicy.Evaluate(signals).Stage);
+        Global.ProfilePath[0] = "Chosen profile";
+        Assert.IsTrue(ControllerRuntimeStatusPolicy.Evaluate(service.GetControllerRuntimeSignals(0)).IsReady);
+        Global.ProfilePath[0] = "";
+        Global.useTempProfile[0] = true;
+        Global.tempprofilename[0] = "Temporary game profile";
+        Assert.IsTrue(ControllerRuntimeStatusPolicy.Evaluate(service.GetControllerRuntimeSignals(0)).IsReady);
+        Global.tempprofilename[0] = "";
+        Assert.IsFalse(service.GetControllerRuntimeSignals(0).ProfileSelected);
+    }
+
     private static ControlService Service(DS4Device device,
         bool installAudioServices)
     {
@@ -185,6 +208,9 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
 
     private sealed class ProfileScope : IDisposable
     {
+        private readonly string selectedProfile = Global.ProfilePath[0];
+        private readonly bool temporaryProfile = Global.useTempProfile[0];
+        private readonly string temporaryName = Global.tempprofilename[0];
         private readonly bool speaker = Global.DualSenseEnableSpeakerOutput[0];
         private readonly bool microphone = Global.DualSenseEnableMicrophonePassthrough[0];
         private readonly bool dinputOnly = Global.DinputOnly[0];
@@ -192,6 +218,8 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
 
         internal ProfileScope()
         {
+            Global.ProfilePath[0] = "Audio applicability test";
+            Global.useTempProfile[0] = false;
             Global.DinputOnly[0] = true;
             Global.DualSenseEnableSpeakerOutput[0] = true;
             Global.DualSenseEnableMicrophonePassthrough[0] = true;
@@ -204,6 +232,9 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
 
         public void Dispose()
         {
+            Global.ProfilePath[0] = selectedProfile;
+            Global.useTempProfile[0] = temporaryProfile;
+            Global.tempprofilename[0] = temporaryName;
             Global.DinputOnly[0] = dinputOnly;
             Global.DualSenseEnableSpeakerOutput[0] = speaker;
             Global.DualSenseEnableMicrophonePassthrough[0] = microphone;
