@@ -77,7 +77,7 @@ if ($Baseline -ceq 'Numeric') {
     $oldInstallerSha256 = '8E4684F00DE8ECFEF43A16427D2E48EF097D63877955872EF8E632AA90A4B08E'
     $oldInstallerLength = 201211599L
     $oldInstallerUrl = 'https://github.com/Pav-Osmolski/DS4Windows/releases/download/5.0.43/DS4Windows_5.0.43.0_Setup_x64.exe'
-    $oldLayoutName = 'DS4Windows_5.0.43.0_Setup_x64.exe'
+    $oldLayoutName = 'DS4Windows_5.0.43_Setup_x64.exe'
     $oldMsiSha256 = '4C63EFF64BF016EAFF49B23F9ED53741F002C7031F995C402910ED546E3F7262'
 }
 if ([version]$newVersion -le [version]$oldVersion) { throw 'Upgrade target must be newer than the pinned baseline; sync the branch version first.' }
