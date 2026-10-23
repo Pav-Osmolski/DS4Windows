@@ -289,6 +289,17 @@ Settings fills the available window width and groups related options into cards.
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
 
+In **Settings > Appearance > Theme and tray icon**, choose **Follow Windows**,
+**Light**, **Dark**, **Graphite**, **Paper**, **Midnight** or **High contrast**.
+The theme menu shows a small palette preview. Follow Windows uses your Windows
+app theme. Windows contrast themes take priority over the selected app theme
+and use your system colours.
+
+Choose the theme's accent, your Windows accent, one of the colour presets, or
+**Custom…** to pick a colour. The saved colour is adjusted for readable contrast
+where necessary. Windows contrast colours take priority over custom accents.
+Theme and accent changes apply immediately and are saved with app settings.
+
 In **Appearance > Sidebar icon**, choose **Blue Tile**, **Midnight Circle**,
 **Blue Frame**, **Controller** or **Angular Badge** using the image previews.
 Blue Tile is first and is the default for new and existing settings. The choice

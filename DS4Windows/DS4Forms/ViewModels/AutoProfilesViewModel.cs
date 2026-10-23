@@ -506,7 +506,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private bool enabled = true;
         public bool Enabled { get => enabled; set { enabled = value; EnabledChanged?.Invoke(this, EventArgs.Empty); } }
         public event EventHandler EnabledChanged;
-        public string StateText => matchedAutoProfile == null ? "Not saved" : matchedAutoProfile.Enabled ? "Enabled" : "Disabled";
+        public string StateText => matchedAutoProfile == null ? global::DS4Windows.UiText.Get("Not saved") : matchedAutoProfile.Enabled ? global::DS4Windows.UiText.Get("Enabled") : global::DS4Windows.UiText.Get("Disabled");
         public event EventHandler StateTextChanged;
         public void RefreshState() => StateTextChanged?.Invoke(this, EventArgs.Empty);
 

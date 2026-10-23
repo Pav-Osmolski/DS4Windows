@@ -66,7 +66,7 @@ public sealed class Switch2DualGyroEditorTests
     public void BoundButtonActionDescriptionRefreshesForModeActivationAndProfileLoad()
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -120,11 +120,9 @@ public sealed class Switch2DualGyroEditorTests
                 });
             }
             catch (Exception exception) { failure = exception; }
-            finally { Dispatcher.CurrentDispatcher.InvokeShutdown(); }
-        }) { IsBackground = true };
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(15)), "Description binding test timed out.");
+
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null)
             System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(failure).Throw();
     }
@@ -209,7 +207,7 @@ public sealed class Switch2DualGyroEditorTests
     public void BoundEditorNormalizesDominantSideAndPreservesIndependentMasks()
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             const int slot = Global.TEST_PROFILE_INDEX;
             var previousMode = Global.Switch2DualJoyConGyroMode[slot];
@@ -313,12 +311,10 @@ public sealed class Switch2DualGyroEditorTests
                 Global.Switch2DualJoyConGyroDominantSide[slot] = previousDominant;
                 Global.Switch2DualJoyConGyroLeftActivationButton[slot] = previousLeft;
                 Global.Switch2DualJoyConGyroRightActivationButton[slot] = previousRight;
-                Dispatcher.CurrentDispatcher.InvokeShutdown();
+
             }
-        }) { IsBackground = true };
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(15)), "Editor binding test timed out.");
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null)
         {
             Assert.Fail(failure.ToString());

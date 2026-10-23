@@ -35,18 +35,18 @@ namespace DS4WinWPF.DS4Forms
 
             if (citrixUsbMonitorConflict)
             {
-                headingText.Text = "VIIPER paused for system safety";
+                headingText.Text = global::DS4Windows.UiText.Get("VIIPER paused for system safety");
                 summaryText.Text =
-                    "A conflicting Citrix USB monitor is active.";
+                    global::DS4Windows.UiText.Get("A conflicting Citrix USB monitor is active.");
                 requirementsText.Text =
-                    "• Disable Citrix generic USB redirection only\n" +
-                    "• Restart Windows before VIIPER starts again";
+                    global::DS4Windows.UiText.Get("• Disable Citrix generic USB redirection only\n") +
+                    global::DS4Windows.UiText.Get("• Restart Windows before VIIPER starts again");
                 installButton.Content = "Disable conflicting USB monitor";
                 installPortableButton.Visibility = Visibility.Collapsed;
                 portableWarningPanel.Visibility = Visibility.Collapsed;
                 suppressPromptCheck.Visibility = Visibility.Collapsed;
                 notNowButton.Content = "Continue without virtual output";
-                closeButton.ToolTip = "Continue without virtual output";
+                closeButton.ToolTip = global::DS4Windows.UiText.Get("Continue without virtual output");
                 return;
             }
 
@@ -59,19 +59,19 @@ namespace DS4WinWPF.DS4Forms
             if (verifiedUpdateRequired)
             {
                 headingText.Text = usbipReplacementRequired
-                    ? "USB-IP version must be replaced"
-                    : "VIIPER verification failed";
+                    ? global::DS4Windows.UiText.Get("USB-IP version must be replaced")
+                    : global::DS4Windows.UiText.Get("VIIPER verification failed");
                 summaryText.Text = usbipReplacementRequired
                     ? currentStatus
-                    : "The installed VIIPER does not match this DS4Windows package.";
-                requirementsHeadingText.Text = "Verified update required";
+                    : global::DS4Windows.UiText.Get("The installed VIIPER does not match this DS4Windows package.");
+                requirementsHeadingText.Text = global::DS4Windows.UiText.Get("Verified update required");
                 requirementsText.Text = usbipReplacementRequired
-                    ? "• Install and verify bundled VIIPER 0.1.10\n" +
-                      "• Safely remove the unsupported USB-IP package\n" +
-                      "• Restart, then finish installing USB-IP 0.9.8.1"
-                    : "• Install the exact bundled VIIPER build\n" +
-                      "• Keep your existing installation location\n" +
-                      "• The unverified backend will not be started";
+                    ? global::DS4Windows.UiText.Get("• Install and verify bundled VIIPER 0.1.10\n") +
+                      global::DS4Windows.UiText.Get("• Safely remove the unsupported USB-IP package\n") +
+                      global::DS4Windows.UiText.Get("• Restart, then finish installing USB-IP 0.9.8.1")
+                    : global::DS4Windows.UiText.Get("• Install the exact bundled VIIPER build\n") +
+                      global::DS4Windows.UiText.Get("• Keep your existing installation location\n") +
+                      global::DS4Windows.UiText.Get("• The unverified backend will not be started");
                 installButton.Content = usbipReplacementRequired
                     ? "Repair VIIPER + USB-IP"
                     : "Install / Repair";
@@ -80,22 +80,22 @@ namespace DS4WinWPF.DS4Forms
                 existingViiperPanel.Visibility = Visibility.Collapsed;
                 suppressPromptCheck.Visibility = Visibility.Collapsed;
                 notNowButton.Content = "Continue without virtual output";
-                closeButton.ToolTip = "Continue without virtual output";
+                closeButton.ToolTip = global::DS4Windows.UiText.Get("Continue without virtual output");
             }
             else if (this.mandatoryRepairRequired)
             {
-                headingText.Text = "VIIPER setup required";
+                headingText.Text = global::DS4Windows.UiText.Get("VIIPER setup required");
                 summaryText.Text = currentStatus;
-                requirementsHeadingText.Text = "Required before DS4Windows can run";
+                requirementsHeadingText.Text = global::DS4Windows.UiText.Get("Required before DS4Windows can run");
                 requirementsText.Text =
-                    "• Install the bundled VIIPER 0.1.10 build\n" +
-                    "• Install and verify USB-IP 0.9.8.1\n" +
-                    "• Start DS4Windows only after the runtime probe passes";
+                    global::DS4Windows.UiText.Get("• Install the bundled VIIPER 0.1.10 build\n") +
+                    global::DS4Windows.UiText.Get("• Install and verify USB-IP 0.9.8.1\n") +
+                    global::DS4Windows.UiText.Get("• Start DS4Windows only after the runtime probe passes");
                 installButton.Content = "Install / Repair";
                 installPortableButton.Content = "Keep DS4Windows portable";
                 suppressPromptCheck.Visibility = Visibility.Collapsed;
                 notNowButton.Content = "Continue without virtual output";
-                closeButton.ToolTip = "Continue without virtual output";
+                closeButton.ToolTip = global::DS4Windows.UiText.Get("Continue without virtual output");
             }
         }
 

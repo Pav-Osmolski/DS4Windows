@@ -121,12 +121,12 @@ public sealed class AppAudioSessionDiscoveryTests
     [TestMethod]
     public void SourceHelpExplainsDefaultOutputWithoutPromisingAnAllOutputMix()
     {
-        var markup = System.Xml.Linq.XDocument.Load(Path.Combine(FindSourceRoot(),
+        var markup = LocalizedSource.Load(Path.Combine(FindSourceRoot(),
             "DS4Windows", "DS4Forms", "AudioHapticsControl.xaml"));
         System.Xml.Linq.XNamespace xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
         var help = markup.Descendants().Single(element =>
             (string)element.Attribute(xaml + "Name") == "sourceScopeHelp");
-        string text = (string)help.Attribute("Text");
+        string text = LocalizedSource.Resolve((string)help.Attribute("Text"));
         StringAssert.Contains(text, "only Windows' default output");
         StringAssert.Contains(text, "not every Sonar output");
         StringAssert.Contains(text, "Choose an app");

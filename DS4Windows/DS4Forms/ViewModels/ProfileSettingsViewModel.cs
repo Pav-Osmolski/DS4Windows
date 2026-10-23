@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -44,7 +44,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private static readonly IReadOnlyList<FlickCalibrationTriggerChoice> flickCalibrationTriggerChoices =
             Array.AsReadOnly(new[]
             {
-                new FlickCalibrationTriggerChoice(DS4Controls.None, "Not assigned"),
+                new FlickCalibrationTriggerChoice(DS4Controls.None, global::DS4Windows.UiText.Get("Not assigned")),
             }.Concat(SpecialActionTriggerCatalog.Entries
                 // Deliberate button/touch presses keep the test independent of
                 // the stick and gyro movement that the user is calibrating.
@@ -142,7 +142,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public bool ShowUsbPollingDetails =>
             controllerUiCapabilities.ConnectionType == ConnectionType.USB;
 
-        private string usbPollingDescription = "USB endpoint intervals: not available.";
+        private string usbPollingDescription = global::DS4Windows.UiText.Get("USB endpoint intervals: not available.");
         public string UsbPollingDescription => usbPollingDescription;
         public event EventHandler UsbPollingDescriptionChanged;
 
@@ -151,7 +151,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             if (!ShowUsbPollingDetails || string.IsNullOrEmpty(path) ||
                 vendorId == null || productId == null) return;
-            usbPollingDescription = "Reading advertised USB endpoint intervals...";
+            usbPollingDescription = global::DS4Windows.UiText.Get("Reading advertised USB endpoint intervals...");
             var timings = await System.Threading.Tasks.Task.Run(() =>
                 UsbEndpointTimingProbe.Detect(path, vendorId.Value,
                     productId.Value)).ConfigureAwait(false);
@@ -2195,17 +2195,17 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         private List<TriggerModeChoice> triggerModeChoices = new List<TriggerModeChoice>()
         {
-            new TriggerModeChoice("Normal", TriggerMode.Normal),
+            new TriggerModeChoice(global::DS4Windows.UiText.Get("Normal"), TriggerMode.Normal),
         };
 
         private List<TwoStageChoice> twoStageModeChoices = new List<TwoStageChoice>()
         {
-            new TwoStageChoice("Disabled", TwoStageTriggerMode.Disabled),
-            new TwoStageChoice("Normal", TwoStageTriggerMode.Normal),
-            new TwoStageChoice("Exclusive", TwoStageTriggerMode.ExclusiveButtons),
-            new TwoStageChoice("Hair Trigger", TwoStageTriggerMode.HairTrigger),
-            new TwoStageChoice("Hip Fire", TwoStageTriggerMode.HipFire),
-            new TwoStageChoice("Hip Fire Exclusive", TwoStageTriggerMode.HipFireExclusiveButtons),
+            new TwoStageChoice(global::DS4Windows.UiText.Get("Disabled"), TwoStageTriggerMode.Disabled),
+            new TwoStageChoice(global::DS4Windows.UiText.Get("Normal"), TwoStageTriggerMode.Normal),
+            new TwoStageChoice(global::DS4Windows.UiText.Get("Exclusive"), TwoStageTriggerMode.ExclusiveButtons),
+            new TwoStageChoice(global::DS4Windows.UiText.Get("Hair Trigger"), TwoStageTriggerMode.HairTrigger),
+            new TwoStageChoice(global::DS4Windows.UiText.Get("Hip Fire"), TwoStageTriggerMode.HipFire),
+            new TwoStageChoice(global::DS4Windows.UiText.Get("Hip Fire Exclusive"), TwoStageTriggerMode.HipFireExclusiveButtons),
         };
         public List<TwoStageChoice> TwoStageModeChoices { get => twoStageModeChoices; }
 
@@ -3483,7 +3483,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             var choices = new List<AudioEndpointChoice>()
             {
-                new AudioEndpointChoice("Auto-detect controller speaker", string.Empty),
+                new AudioEndpointChoice(global::DS4Windows.UiText.Get("Auto-detect controller speaker"), string.Empty),
             };
 
             foreach (AudioEndpointSnapshot endpoint in
@@ -3496,7 +3496,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             string savedEndpointId = DualSenseAudioSpeakerEndpointId;
             if (!string.IsNullOrEmpty(savedEndpointId) && !choices.Exists(item => item.EndpointId == savedEndpointId))
             {
-                choices.Add(new AudioEndpointChoice("Saved speaker endpoint (not currently available)", savedEndpointId));
+                choices.Add(new AudioEndpointChoice(global::DS4Windows.UiText.Get("Saved speaker endpoint (not currently available)"), savedEndpointId));
             }
 
             return choices;
@@ -3541,7 +3541,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 var choices = new List<AudioEndpointChoice>()
                 {
-                    new AudioEndpointChoice("Auto-detect controller microphone", string.Empty),
+                    new AudioEndpointChoice(global::DS4Windows.UiText.Get("Auto-detect controller microphone"), string.Empty),
                 };
 
                 foreach (AudioEndpointSnapshot endpoint in
@@ -3554,7 +3554,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 string savedEndpointId = DualSenseMicrophoneCaptureEndpointId;
                 if (!string.IsNullOrEmpty(savedEndpointId) && !choices.Exists(item => item.EndpointId == savedEndpointId))
                 {
-                    choices.Add(new AudioEndpointChoice("Saved microphone endpoint (not currently available)", savedEndpointId));
+                    choices.Add(new AudioEndpointChoice(global::DS4Windows.UiText.Get("Saved microphone endpoint (not currently available)"), savedEndpointId));
                 }
 
                 return choices;
@@ -3573,7 +3573,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 var choices = new List<AudioEndpointChoice>()
                 {
-                    new AudioEndpointChoice("Select virtual audio device", string.Empty),
+                    new AudioEndpointChoice(global::DS4Windows.UiText.Get("Select virtual audio device"), string.Empty),
                 };
 
                 foreach (AudioEndpointSnapshot endpoint in
@@ -3589,7 +3589,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 string savedEndpointId = DualSenseMicrophoneOutputEndpointId;
                 if (!string.IsNullOrEmpty(savedEndpointId) && !choices.Exists(item => item.EndpointId == savedEndpointId))
                 {
-                    choices.Add(new AudioEndpointChoice("Saved virtual audio device (not currently available)", savedEndpointId));
+                    choices.Add(new AudioEndpointChoice(global::DS4Windows.UiText.Get("Saved virtual audio device (not currently available)"), savedEndpointId));
                 }
 
                 return choices;
@@ -4878,7 +4878,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             // described as Always On when the runtime rejects those tokens.
             if (unsupported || selected.Count != 0)
                 names.Add("Unsupported trigger");
-            return names.Count == 0 ? "None" : string.Join(", ", names);
+            return names.Count == 0 ? global::DS4Windows.UiText.Get("None") : string.Join(", ", names);
         }
 
         public void UpdateGyroMouseTrig(ContextMenu menu, bool alwaysOnChecked)
@@ -5039,11 +5039,11 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private Dictionary<ControlSelection, string> presetInputLabelDict =
             new Dictionary<ControlSelection, string>()
             {
-                [ControlSelection.None] = "None",
+                [ControlSelection.None] = global::DS4Windows.UiText.Get("None"),
                 [ControlSelection.DPad] = "DPad",
-                [ControlSelection.LeftStick] = "Left Stick",
-                [ControlSelection.RightStick] = "Right Stick",
-                [ControlSelection.FaceButtons] = "Face Buttons",
+                [ControlSelection.LeftStick] = global::DS4Windows.UiText.Get("Left Stick"),
+                [ControlSelection.RightStick] = global::DS4Windows.UiText.Get("Right Stick"),
+                [ControlSelection.FaceButtons] = global::DS4Windows.UiText.Get("Face Buttons"),
             };
 
         public Dictionary<ControlSelection, string> PresetInputLabelDict

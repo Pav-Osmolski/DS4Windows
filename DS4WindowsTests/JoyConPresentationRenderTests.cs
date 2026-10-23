@@ -202,7 +202,7 @@ public sealed class JoyConPresentationRenderTests
         {
             string path = Path.Combine(root.FullName, "DS4Windows", "DS4Forms", file);
             if (!File.Exists(path)) continue;
-            document = XDocument.Load(path);
+            document = LocalizedSource.Load(path);
             break;
         }
         Assert.IsNotNull(document, file);
@@ -216,7 +216,7 @@ public sealed class JoyConPresentationRenderTests
         markup.SetAttributeValue("Background", "Transparent");
         markup.SetAttributeValue("BorderBrush", "Transparent");
         markup.Element(Wpf + "Image").Attribute("Source").Remove();
-        var host = (Border)XamlReader.Parse(markup.ToString());
+        var host = (Border)XamlReader.Parse(LocalizedSource.Markup(markup));
         ((Image)host.Child).Source = source;
         return host;
     }
@@ -256,10 +256,8 @@ public sealed class JoyConPresentationRenderTests
     private static void RunSta(Action action)
     {
         Exception failure = null;
-        var thread = new Thread(() => { try { action(); } catch (Exception e) { failure = e; } });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(30)), "Artwork rendering timed out.");
+        Action thread = () => { try { action(); } catch (Exception e) { failure = e; } };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(failure).Throw();
     }
 }

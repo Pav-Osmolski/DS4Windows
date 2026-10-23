@@ -64,8 +64,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 CreateLanguageAssembliesBindingSource();
 
+                string available = LanguagePackPolicy.AvailableCulture(tempculture, langPackList.Select(item => item.Name));
                 int index = langPackList.Select((item, idx) => new { item, idx })
-                                        .Where(x => x.item.Name == tempculture)
+                                        .Where(x => x.item.Name == available)
                                         .Select(x => x.idx)
                                         .DefaultIfEmpty(-1)
                                         .First();
@@ -84,7 +85,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             if (selectedIndex > -1)
             {
                 LangPackItem item = langPackList[selectedIndex];
-                string newValue = item.Name;
+                string newValue = LanguagePackPolicy.Normalize(item.Name);
                 if (newValue != Global.UseLang)
                 {
                     Global.UseLang = newValue;
@@ -108,8 +109,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
             // Get all culture for which satellite folder found with culture code, then insert invariant culture at the beginning.
             langPackList = CultureInfo.GetCultures(CultureTypes.AllCultures)
-                .Where(c => IsLanguageAssemblyAvailable(lookupPaths, c))
-                .Select(c => new LangPackItem(c.Name, c.NativeName))
+                .Where(c => c.Name == LanguagePackPolicy.Normalize(c.Name) && IsLanguageAssemblyAvailable(lookupPaths, c))
+                .Select(c => new LangPackItem(c.Name, LanguagePackPolicy.DisplayName(c)))
                 .ToList();
             langPackList.Insert(0, new LangPackItem("", invariantCultureTextValue));
         }

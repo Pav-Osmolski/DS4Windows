@@ -2,69 +2,71 @@
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
- xmlns:entity="clr-namespace:DS4Windows" Loaded="Control_Loaded" Unloaded="Control_Unloaded">
+ xmlns:entity="clr-namespace:DS4Windows" Loaded="Control_Loaded" Unloaded="Control_Unloaded"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows">
  <UserControl.Resources>
   <DataTemplate x:Key="RuleEditor">
    <StackPanel Margin="0,10,0,12">
-    <TextBlock Text="Audio" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,4"/>
+    <TextBlock Text="{lex:Loc Strings:UI_BC1B88907D3B748A}" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,4"/>
     <ComboBox SelectedValue="{Binding Mode}" SelectedValuePath="Tag" MinHeight="34" HorizontalAlignment="Left" MinWidth="220">
-     <ComboBoxItem Content="Speech" Tag="{x:Static entity:BatteryAlertMode.Speech}"/>
-     <ComboBoxItem Content="Custom sound" Tag="{x:Static entity:BatteryAlertMode.Sound}"/>
-     <ComboBoxItem Content="Sound, then speech" Tag="{x:Static entity:BatteryAlertMode.Both}"/>
-     <ComboBoxItem Content="No audio" Tag="{x:Static entity:BatteryAlertMode.Off}"/>
+     <ComboBoxItem Content="{lex:Loc Strings:UI_3565FCC6C17D4558}" Tag="{x:Static entity:BatteryAlertMode.Speech}"/>
+     <ComboBoxItem Content="{lex:Loc Strings:UI_14627F7C2066E864}" Tag="{x:Static entity:BatteryAlertMode.Sound}"/>
+     <ComboBoxItem Content="{lex:Loc Strings:UI_BBEE95BDE8663E75}" Tag="{x:Static entity:BatteryAlertMode.Both}"/>
+     <ComboBoxItem Content="{lex:Loc Strings:UI_907F6DE68F8022AE}" Tag="{x:Static entity:BatteryAlertMode.Off}"/>
     </ComboBox>
     <WrapPanel Margin="0,8,0,12">
-     <Button Content="Import sound…" Click="Import_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,4"/>
-     <Button Content="Clear sound" Click="ClearSound_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,4"/>
-     <TextBlock Text="{Binding SoundName}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+     <Button Content="{lex:Loc Strings:UI_D679A7103CEA0C6C}" Click="Import_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,4"/>
+     <Button Content="{lex:Loc Strings:UI_E8731DC77D2F6579}" Click="ClearSound_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,4"/>
+     <TextBlock Text="{Binding SoundDisplayName}" TextWrapping="Wrap" VerticalAlignment="Center"/>
     </WrapPanel>
-    <CheckBox Content="Vibrate" IsChecked="{Binding Vibrate}" ToolTip="Uses the selected controller, with a 150 ms gap between pulses." Style="{DynamicResource BridgeSettingsCheckBoxStyle}"/>
+    <CheckBox Content="{lex:Loc Strings:UI_C96D5458BCF5F7F7}" IsChecked="{Binding Vibrate}" ToolTip="{lex:Loc Strings:UI_BE57465F7E79F891}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}"/>
     <WrapPanel Margin="0,8,0,0" IsEnabled="{Binding Vibrate}">
-     <StackPanel Margin="0,0,16,4"><TextBlock Text="Strength (%)" Margin="0,0,0,4"/>
+     <StackPanel Margin="0,0,16,4"><TextBlock Text="{lex:Loc Strings:UI_10071FC0FF7B2EE9}" Margin="0,0,0,4"/>
       <xctk:IntegerUpDown Value="{Binding Strength}" Minimum="1" Maximum="100" MinWidth="90" MinHeight="34"/></StackPanel>
-     <StackPanel Margin="0,0,16,4"><TextBlock Text="Pulse length (ms)" Margin="0,0,0,4"/>
+     <StackPanel Margin="0,0,16,4"><TextBlock Text="{lex:Loc Strings:UI_02E78A4139E6296F}" Margin="0,0,0,4"/>
       <xctk:IntegerUpDown Value="{Binding Duration}" Minimum="50" Maximum="1000" Increment="50" MinWidth="110" MinHeight="34"/></StackPanel>
-     <StackPanel Margin="0,0,0,4"><TextBlock Text="Pulse count" Margin="0,0,0,4"/>
+     <StackPanel Margin="0,0,0,4"><TextBlock Text="{lex:Loc Strings:UI_1DCB7E266261D70B}" Margin="0,0,0,4"/>
       <xctk:IntegerUpDown Value="{Binding Pulses}" Minimum="1" Maximum="5" MinWidth="90" MinHeight="34"/></StackPanel>
     </WrapPanel>
    </StackPanel>
   </DataTemplate>
  </UserControl.Resources>
  <StackPanel>
-  <TextBlock Text="Battery alerts" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-  <TextBlock Text="Hear battery information through your headphones, speakers or an enabled controller audio route. Automatic alerts are off until you enable them." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
-  <CheckBox Content="Low battery alert" IsChecked="{Binding Settings.LowEnabled}" ToolTip="Notify when the battery reaches the threshold and stays there. Repeating is optional." Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,6,0,8"/>
+  <TextBlock Text="{lex:Loc Strings:UI_C6718109FEEF1419}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+  <TextBlock Text="{lex:Loc Strings:UI_647E5D8569700A8B}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+  <CheckBox Content="{lex:Loc Strings:UI_22730DFDA30C292A}" IsChecked="{Binding Settings.LowEnabled}" ToolTip="{lex:Loc Strings:UI_ADD36BCECC319A78}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,6,0,8"/>
   <WrapPanel Margin="0,0,0,12" IsEnabled="{Binding Settings.LowEnabled}">
-   <TextBlock Text="Notify at or below" VerticalAlignment="Center" Margin="0,0,12,0"/>
+   <TextBlock Text="{lex:Loc Strings:UI_BD3649D82EC783AA}" VerticalAlignment="Center" Margin="0,0,12,0"/>
    <xctk:IntegerUpDown Value="{Binding Settings.LowThreshold}" Minimum="5" Maximum="50" MinWidth="90" MinHeight="34"/>
    <TextBlock Text="%" VerticalAlignment="Center" Margin="8,0,0,0"/>
   </WrapPanel>
   <WrapPanel Margin="0,0,0,8" IsEnabled="{Binding Settings.LowEnabled}">
    <StackPanel Margin="0,0,16,6">
-    <TextBlock Text="Repeat interval" Margin="0,0,0,4"/>
+    <TextBlock Text="{lex:Loc Strings:UI_C48D5520CA4EB81D}" Margin="0,0,0,4"/>
     <ComboBox x:Name="repeatIntervalCombo" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Settings.LowRepeatSeconds, Mode=TwoWay}" MinWidth="200" MinHeight="34"/>
    </StackPanel>
    <StackPanel Margin="0,0,0,6">
     <StackPanel.Style><Style TargetType="StackPanel"><Style.Triggers>
      <DataTrigger Binding="{Binding Settings.LowRepeatSeconds}" Value="0"><Setter Property="IsEnabled" Value="False"/></DataTrigger>
     </Style.Triggers></Style></StackPanel.Style>
-    <TextBlock Text="Total warnings" Margin="0,0,0,4"/>
+    <TextBlock Text="{lex:Loc Strings:UI_1B5DDFB2A2923561}" Margin="0,0,0,4"/>
     <ComboBox x:Name="warningCountCombo" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Settings.LowWarningCount, Mode=TwoWay}" MinWidth="200" MinHeight="34"/>
    </StackPanel>
   </WrapPanel>
-  <TextBlock Text="The total includes the first warning. Repeats use the low-battery sound, speech and vibration settings, and stop when charging starts, the battery recovers, the controller disconnects or low-battery alerts are disabled." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
-  <CheckBox Content="Fully charged alert" IsChecked="{Binding Settings.FullEnabled}" ToolTip="DS3, DS4 and DualSense can report charging completion." Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,0,0,6"/>
-  <TextBlock Text="Full-charge alerts require a controller that reports charging completion. Controllers that report battery bands alert on the low band; percentage thresholds apply to percentage reports. Coarse levels are spoken as low, medium or high. Alerts wait for stable readings and do not repeat on every reconnect or profile switch." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
-  <Expander Header="Configure voices, sounds and vibration" Margin="0,8,0,0"><StackPanel>
-  <TextBlock Text="Voice" Margin="0,10,0,4"/>
+  <TextBlock Text="{lex:Loc Strings:UI_94486BF2DA4B3114}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+  <CheckBox Content="{lex:Loc Strings:UI_FA7F8F6442CF8A91}" IsChecked="{Binding Settings.FullEnabled}" ToolTip="{lex:Loc Strings:UI_F67407350BE8B89D}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,0,0,6"/>
+  <TextBlock Text="{lex:Loc Strings:UI_2F577F94C191A92D}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+  <Expander Header="{lex:Loc Strings:UI_82664910C6DEB659}" Margin="0,8,0,0"><StackPanel>
+  <TextBlock Text="{lex:Loc Strings:UI_87BF2BC08589F0BD}" Margin="0,10,0,4"/>
   <ComboBox x:Name="voiceCombo" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="Voice_Changed" MinHeight="34"/>
   <WrapPanel Margin="0,8,0,12">
-   <Button x:Name="refreshBtn" Content="Refresh voices and devices" Click="Refresh_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,4"/>
-   <Button Content="Manage Windows voices" Click="ManageVoices_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,0,4"/>
+   <Button x:Name="refreshBtn" Content="{lex:Loc Strings:UI_519C09AA930DC9F1}" Click="Refresh_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,4"/>
+   <Button Content="{lex:Loc Strings:UI_F7E57AF9F92D29AD}" Click="ManageVoices_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,0,4"/>
   </WrapPanel>
-  <TextBlock Text="Audio output" Margin="0,0,0,4"/>
+  <TextBlock Text="{lex:Loc Strings:UI_BDBDB91EB847C4AF}" Margin="0,0,0,4"/>
   <ComboBox x:Name="outputCombo" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="Output_Changed" MinHeight="34"/>
-  <TextBlock Text="For the controller speaker, enable its speaker output in Profile Editor > Advanced > Audio. USB DualSense alerts use its physical speaker; Bluetooth uses the matching native audio route. The game’s speaker route and mute settings still apply." Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,6,0,10"/>
+  <TextBlock Text="{lex:Loc Strings:UI_54F63B205F5152AB}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,6,0,10"/>
   <WrapPanel>
    <StackPanel MinWidth="180" Margin="0,0,20,10">
     <TextBlock Text="{Binding Settings.Volume, StringFormat=Alert volume: {0}%}"/>
@@ -75,27 +77,27 @@
     <Slider Value="{Binding Settings.Rate}" Minimum="0.5" Maximum="2" TickFrequency="0.1" IsSnapToTickEnabled="True" Margin="0,8,0,0"/>
    </StackPanel>
   </WrapPanel>
-  <TextBlock Text="Choose each alert's sound and vibration pattern. Imported WAV, MP3 and AIFF files are saved with your settings. Short clips of 1–3 seconds work best (maximum 30 seconds)." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
-  <Expander Header="Low battery" IsExpanded="True" Margin="0,10,0,0">
+  <TextBlock Text="{lex:Loc Strings:UI_051C19D6AB0F7B09}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+  <Expander Header="{lex:Loc Strings:UI_A894DE3C08A258AC}" IsExpanded="True" Margin="0,10,0,0">
    <ContentControl Content="{Binding Settings.Low}" ContentTemplate="{StaticResource RuleEditor}"/>
   </Expander>
-  <Expander Header="Fully charged" Margin="0,8,0,0">
+  <Expander Header="{lex:Loc Strings:UI_B9A6EA6000671746}" Margin="0,8,0,0">
    <ContentControl Content="{Binding Settings.Full}" ContentTemplate="{StaticResource RuleEditor}"/>
   </Expander>
-  <Expander Header="On-demand battery check" Margin="0,8,0,0">
-   <StackPanel><TextBlock Text="Enable 'Use battery alert audio and vibration' in a Check Battery Special Action, then choose its button combination." Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,8,0,0"/>
+  <Expander Header="{lex:Loc Strings:UI_5492765BD19D4804}" Margin="0,8,0,0">
+   <StackPanel><TextBlock Text="{lex:Loc Strings:UI_EF451E38FFCD4127}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,8,0,0"/>
     <ContentControl Content="{Binding Settings.Check}" ContentTemplate="{StaticResource RuleEditor}"/></StackPanel>
   </Expander>
   <Border Height="1" Background="{DynamicResource BorderColor}" Margin="0,14"/>
-  <TextBlock Text="Preview controller" Margin="0,0,0,4"/>
+  <TextBlock Text="{lex:Loc Strings:UI_39862B5DC15AC6F9}" Margin="0,0,0,4"/>
   <ComboBox x:Name="controllerCombo" MinHeight="34" MinWidth="160" HorizontalAlignment="Left"/>
   <WrapPanel x:Name="previewButtons" Margin="0,10,0,0">
-   <Button Content="Preview low battery" Tag="Low" Click="Preview_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6"/>
-   <Button Content="Preview full charge" Tag="Full" Click="Preview_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6"/>
-   <Button Content="Preview battery check" Tag="Check" Click="Preview_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6"/>
+   <Button Content="{lex:Loc Strings:UI_FA822D64D7323BDB}" Tag="Low" Click="Preview_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6"/>
+   <Button Content="{lex:Loc Strings:UI_58B4519B41E414B6}" Tag="Full" Click="Preview_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6"/>
+   <Button Content="{lex:Loc Strings:UI_6222A2CF84EF072D}" Tag="Check" Click="Preview_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6"/>
   </WrapPanel>
-  <Button Content="Stop preview" Click="Stop_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left"/>
-  <TextBlock x:Name="statusText" Text="Ready to preview. Vibration requires a connected controller." TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,8,0,0"/>
+  <Button Content="{lex:Loc Strings:UI_178940D0698C7EED}" Click="Stop_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left"/>
+  <TextBlock x:Name="statusText" Text="{lex:Loc Strings:UI_13EA514DD20888BE}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,8,0,0"/>
   </StackPanel></Expander>
  </StackPanel>
 </UserControl>

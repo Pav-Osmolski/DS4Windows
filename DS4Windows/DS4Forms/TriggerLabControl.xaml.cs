@@ -65,39 +65,39 @@ namespace DS4WinWPF.DS4Forms
             {
                 new FullPullModeChoice
                 {
-                    Name = "Off",
+                    Name = global::DS4Windows.UiText.Get("Off"),
                     Mode = TwoStageTriggerMode.Disabled,
-                    Description = "Only the regular trigger action runs.",
+                    Description = global::DS4Windows.UiText.Get("Only the regular trigger action runs."),
                 },
                 new FullPullModeChoice
                 {
-                    Name = "Add at full pull",
+                    Name = global::DS4Windows.UiText.Get("Add at full pull"),
                     Mode = TwoStageTriggerMode.Normal,
-                    Description = "Keep the regular trigger action active and also run the full-pull action at the end of travel.",
+                    Description = global::DS4Windows.UiText.Get("Keep the regular trigger action active and also run the full-pull action at the end of travel."),
                 },
                 new FullPullModeChoice
                 {
-                    Name = "Replace at full pull",
+                    Name = global::DS4Windows.UiText.Get("Replace at full pull"),
                     Mode = TwoStageTriggerMode.ExclusiveButtons,
-                    Description = "Release the regular trigger action and replace it with the full-pull action at the end of travel.",
+                    Description = global::DS4Windows.UiText.Get("Release the regular trigger action and replace it with the full-pull action at the end of travel."),
                 },
                 new FullPullModeChoice
                 {
-                    Name = "Hair trigger",
+                    Name = global::DS4Windows.UiText.Get("Hair trigger"),
                     Mode = TwoStageTriggerMode.HairTrigger,
-                    Description = "Run both actions at full pull, then release both as soon as the trigger backs away from the end stop.",
+                    Description = global::DS4Windows.UiText.Get("Run both actions at full pull, then release both as soon as the trigger backs away from the end stop."),
                 },
                 new FullPullModeChoice
                 {
-                    Name = "Hip fire",
+                    Name = global::DS4Windows.UiText.Get("Hip fire"),
                     Mode = TwoStageTriggerMode.HipFire,
-                    Description = "Wait for the chosen delay, then run the regular or full-pull action based on how far the trigger was pressed.",
+                    Description = global::DS4Windows.UiText.Get("Wait for the chosen delay, then run the regular or full-pull action based on how far the trigger was pressed."),
                 },
                 new FullPullModeChoice
                 {
-                    Name = "Hip fire (exclusive)",
+                    Name = global::DS4Windows.UiText.Get("Hip fire (exclusive)"),
                     Mode = TwoStageTriggerMode.HipFireExclusiveButtons,
-                    Description = "Wait for the chosen delay and run only one action: regular pull or full pull.",
+                    Description = global::DS4Windows.UiText.Get("Wait for the chosen delay and run only one action: regular pull or full pull."),
                 },
             };
 
@@ -183,7 +183,7 @@ namespace DS4WinWPF.DS4Forms
                 IsEnabled = available;
                 if (!available)
                 {
-                    labStatusText.Text = "Select a controller or profile to open Trigger Lab.";
+                    labStatusText.Text = global::DS4Windows.UiText.Get("Select a controller or profile to open Trigger Lab.");
                     return;
                 }
 
@@ -232,13 +232,13 @@ namespace DS4WinWPF.DS4Forms
             triggerGraphic.SetResourceReference(Border.BorderBrushProperty, "AccentColor");
             heading.Children.Add(triggerGraphic);
             StackPanel title = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-            title.Children.Add(new TextBlock { Text = ui.IsLeft ? "Left Trigger" : "Right Trigger", FontSize = 17, FontWeight = FontWeights.SemiBold });
-            title.Children.Add(new TextBlock { Text = $"Shape the {(ui.IsLeft ? "L2" : "R2")} trigger feel", Style = FindResource("LabMutedText") as Style });
+            title.Children.Add(new TextBlock { Text = ui.IsLeft ? global::DS4Windows.UiText.Get("Left Trigger") : global::DS4Windows.UiText.Get("Right Trigger"), FontSize = 17, FontWeight = FontWeights.SemiBold });
+            title.Children.Add(new TextBlock { Text = global::DS4Windows.UiText.Format("Shape the {0} trigger feel", (ui.IsLeft ? "L2" : "R2")), Style = FindResource("LabMutedText") as Style });
             Grid.SetColumn(title, 1); heading.Children.Add(title);
             StackPanel active = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
             ui.ActiveLabel = new TextBlock
             {
-                Text = "Active",
+                Text = global::DS4Windows.UiText.Get("Active"),
                 Margin = new Thickness(0, 0, 8, 0),
                 VerticalAlignment = VerticalAlignment.Center,
             };
@@ -288,9 +288,9 @@ namespace DS4WinWPF.DS4Forms
 
             Grid actions = new Grid { Margin = new Thickness(0, 14, 0, 0) };
             actions.ColumnDefinitions.Add(new ColumnDefinition()); actions.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) }); actions.ColumnDefinitions.Add(new ColumnDefinition());
-            Button preview = new Button { Content = "\u25B6  Preview", MinHeight = 38, Style = FindResource("BridgeSecondaryButtonStyle") as Style };
+            Button preview = new Button { Content = global::DS4Windows.UiText.Get("▶  Preview"), MinHeight = 38, Style = FindResource("BridgeSecondaryButtonStyle") as Style };
             preview.Click += (_, _) => Preview(ui);
-            Button reset = new Button { Content = $"\u21BB  Reset {(ui.IsLeft ? "L2" : "R2")}", MinHeight = 38, Style = FindResource("BridgeSecondaryButtonStyle") as Style };
+            Button reset = new Button { Content = global::DS4Windows.UiText.Format("↻  Reset {0}", (ui.IsLeft ? "L2" : "R2")), MinHeight = 38, Style = FindResource("BridgeSecondaryButtonStyle") as Style };
             reset.Click += (_, _) => ResetSide(ui); Grid.SetColumn(reset, 2);
             actions.Children.Add(preview); actions.Children.Add(reset); root.Children.Add(actions);
             return root;
@@ -308,13 +308,13 @@ namespace DS4WinWPF.DS4Forms
             StackPanel copy = new StackPanel();
             copy.Children.Add(new TextBlock
             {
-                Text = "Game rumble vibration",
+                Text = global::DS4Windows.UiText.Get("Game rumble vibration"),
                 FontSize = 15,
                 FontWeight = FontWeights.SemiBold,
             });
             copy.Children.Add(new TextBlock
             {
-                Text = $"Stream the game's {(ui.IsLeft ? "heavy / left" : "light / right")} HID rumble motor to {(ui.IsLeft ? "L2" : "R2")} as a low-latency vibration effect.",
+                Text = global::DS4Windows.UiText.Format("Stream the game's {0} HID rumble motor to {1} as a low-latency vibration effect.", (ui.IsLeft ? "heavy / left" : "light / right"), (ui.IsLeft ? "L2" : "R2")),
                 Margin = new Thickness(0, 4, 14, 0),
                 Style = FindResource("LabMutedText") as Style,
                 TextWrapping = TextWrapping.Wrap,
@@ -325,7 +325,7 @@ namespace DS4WinWPF.DS4Forms
             {
                 Style = FindResource("LabToggle") as Style,
                 VerticalAlignment = VerticalAlignment.Center,
-                ToolTip = $"Independently enable game-rumble vibration for {(ui.IsLeft ? "L2" : "R2")}. This does not link the other trigger.",
+                ToolTip = global::DS4Windows.UiText.Format("Independently enable game-rumble vibration for {0}. This does not link the other trigger.", (ui.IsLeft ? "L2" : "R2")),
             };
             ui.GameRumbleVibration.Click += (_, _) =>
                 GameRumbleVibrationChanged(ui);
@@ -361,7 +361,7 @@ namespace DS4WinWPF.DS4Forms
             });
             heading.Children.Add(new TextBlock
             {
-                Text = "Full-pull action",
+                Text = global::DS4Windows.UiText.Get("Full-pull action"),
                 FontSize = 15,
                 FontWeight = FontWeights.SemiBold,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -374,7 +374,7 @@ namespace DS4WinWPF.DS4Forms
                 Padding = new Thickness(7, 3, 7, 3),
                 Child = new TextBlock
                 {
-                    Text = "END OF TRAVEL",
+                    Text = global::DS4Windows.UiText.Get("END OF TRAVEL"),
                     FontSize = 9,
                     FontWeight = FontWeights.Bold,
                     Style = FindResource("LabMutedText") as Style,
@@ -385,7 +385,7 @@ namespace DS4WinWPF.DS4Forms
             content.Children.Add(heading);
             content.Children.Add(new TextBlock
             {
-                Text = $"When {(ui.IsLeft ? "L2" : "R2")} is pressed completely, run the action below using the selected behavior.",
+                Text = global::DS4Windows.UiText.Format("When {0} is pressed completely, run the action below using the selected behavior.", (ui.IsLeft ? "L2" : "R2")),
                 Margin = new Thickness(0, 4, 0, 10),
                 Style = FindResource("LabMutedText") as Style,
                 TextWrapping = TextWrapping.Wrap,
@@ -400,14 +400,14 @@ namespace DS4WinWPF.DS4Forms
             StackPanel actionText = new StackPanel();
             actionText.Children.Add(new TextBlock
             {
-                Text = "Assigned action",
+                Text = global::DS4Windows.UiText.Get("Assigned action"),
                 FontSize = 10,
                 FontWeight = FontWeights.SemiBold,
                 Style = FindResource("LabMutedText") as Style,
             });
             ui.FullPullActionName = new TextBlock
             {
-                Text = "Unassigned",
+                Text = global::DS4Windows.UiText.Get("Unassigned"),
                 Margin = new Thickness(0, 2, 10, 0),
                 FontWeight = FontWeights.SemiBold,
                 TextTrimming = TextTrimming.CharacterEllipsis,
@@ -416,7 +416,7 @@ namespace DS4WinWPF.DS4Forms
             actionContent.Children.Add(actionText);
             TextBlock changeLabel = new TextBlock
             {
-                Text = "Change  ›",
+                Text = global::DS4Windows.UiText.Get("Change  ›"),
                 Style = FindResource("LabAccentText") as Style,
                 FontWeight = FontWeights.SemiBold,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -448,7 +448,7 @@ namespace DS4WinWPF.DS4Forms
             modeRow.ColumnDefinitions.Add(new ColumnDefinition());
             modeRow.Children.Add(new TextBlock
             {
-                Text = "Behavior",
+                Text = global::DS4Windows.UiText.Get("Behavior"),
                 FontWeight = FontWeights.SemiBold,
                 Style = FindResource("LabMutedText") as Style,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -489,7 +489,7 @@ namespace DS4WinWPF.DS4Forms
             });
             ui.HipFireDelayRow.Children.Add(new TextBlock
             {
-                Text = "Delay",
+                Text = global::DS4Windows.UiText.Get("Delay"),
                 FontWeight = FontWeights.SemiBold,
                 Style = FindResource("LabMutedText") as Style,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -579,7 +579,7 @@ namespace DS4WinWPF.DS4Forms
             {
                 Id = profile.Id,
                 Name = profile.Name,
-                Description = "Saved custom effect.",
+                Description = global::DS4Windows.UiText.Get("Saved custom effect."),
                 IsCustom = true,
             }));
             ui.Profile.ItemsSource = profiles;
@@ -589,11 +589,11 @@ namespace DS4WinWPF.DS4Forms
             ui.Profile.ToolTip = selected.Description;
             ui.RenameProfile.IsEnabled = selected.IsCustom;
             ui.DeleteProfile.IsEnabled = selected.IsCustom;
-            ui.ActiveLabel.Text = labEnabled ? "Active" : "Armed";
+            ui.ActiveLabel.Text = labEnabled ? global::DS4Windows.UiText.Get("Active") : global::DS4Windows.UiText.Get("Armed");
             ui.Active.IsChecked = active;
             ui.Active.ToolTip = labEnabled
-                ? $"Enable or disable this effect for {(ui.IsLeft ? "L2" : "R2")} only."
-                : $"This {(ui.IsLeft ? "L2" : "R2")} choice is saved, but Trigger Lab is globally paused.";
+                ? global::DS4Windows.UiText.Format("Enable or disable this effect for {0} only.", (ui.IsLeft ? "L2" : "R2"))
+                : global::DS4Windows.UiText.Format("This {0} choice is saved, but Trigger Lab is globally paused.", (ui.IsLeft ? "L2" : "R2"));
             ui.Start.Value = effect.StartPercent; ui.Wall.Value = effect.WallPercent; ui.Force.Value = effect.ForcePercent;
             ui.StartValue.Text = $"{effect.StartPercent}%"; ui.WallValue.Text = $"{effect.WallPercent}%"; ui.ForceValue.Text = $"{effect.ForcePercent}%";
             ui.GameRumbleVibration.IsChecked = ui.IsLeft
@@ -624,7 +624,7 @@ namespace DS4WinWPF.DS4Forms
             ui.HipFireDelay.IsEnabled = available;
             if (!available)
             {
-                ui.FullPullActionName.Text = "Select a controller or profile";
+                ui.FullPullActionName.Text = global::DS4Windows.UiText.Get("Select a controller or profile");
                 ui.FullPullModeDescription.Text = string.Empty;
                 ui.HipFireDelayRow.Visibility = Visibility.Collapsed;
                 return;
@@ -633,7 +633,7 @@ namespace DS4WinWPF.DS4Forms
             ui.FullPullMapping.UpdateMappingName();
             ui.FullPullActionName.Text = ui.FullPullMapping.MappingName;
             ui.FullPullAction.ToolTip =
-                $"Choose what happens when {(ui.IsLeft ? "L2" : "R2")} reaches full travel.";
+                global::DS4Windows.UiText.Format("Choose what happens when {0} reaches full travel.", (ui.IsLeft ? "L2" : "R2"));
             FullPullModeChoice mode = FullPullModes.FirstOrDefault(choice =>
                 choice.Mode == outputSettings.twoStageMode) ?? FullPullModes[0];
             ui.FullPullMode.SelectedItem = mode;
@@ -968,8 +968,8 @@ namespace DS4WinWPF.DS4Forms
             TextBox text = new TextBox { Text = initial, MaxLength = 48, MinHeight = 36, VerticalContentAlignment = VerticalAlignment.Center };
             grid.Children.Add(text);
             StackPanel buttons = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 14, 0, 0) };
-            Button cancel = new Button { Content = "Cancel", Width = 86, Height = 34, IsCancel = true };
-            Button save = new Button { Content = "Save", Width = 86, Height = 34, Margin = new Thickness(8, 0, 0, 0), IsDefault = true, Style = FindResource("BridgePrimaryButtonStyle") as Style };
+            Button cancel = new Button { Content = global::DS4Windows.UiText.Get("Cancel"), Width = 86, Height = 34, IsCancel = true };
+            Button save = new Button { Content = global::DS4Windows.UiText.Get("Save"), Width = 86, Height = 34, Margin = new Thickness(8, 0, 0, 0), IsDefault = true, Style = FindResource("BridgePrimaryButtonStyle") as Style };
             save.Click += (_, _) => dialog.DialogResult = true;
             buttons.Children.Add(cancel); buttons.Children.Add(save); Grid.SetRow(buttons, 1); grid.Children.Add(buttons);
             dialog.Content = grid; text.SelectAll(); text.Focus();
@@ -1058,26 +1058,26 @@ namespace DS4WinWPF.DS4Forms
                     settings.LeftGameRumbleVibration ||
                     settings.RightGameRumbleVibration;
                 labStatusText.Text = anyArmed
-                    ? $"Trigger Lab is paused. {ArmedTriggerLabel(settings)} " +
-                        $"{(AreBothTriggersArmed(settings) ? "are" : "is")} armed and will resume when Enabled is turned on."
-                    : "Trigger Lab is paused. Choose an effect and arm L2 or R2, then turn Enabled on.";
+                    ? global::DS4Windows.UiText.Format("Trigger Lab is paused. {0} ", ArmedTriggerLabel(settings)) +
+                        global::DS4Windows.UiText.Format("{0} armed and will resume when Enabled is turned on.", (AreBothTriggersArmed(settings) ? "are" : "is"))
+                    : global::DS4Windows.UiText.Get("Trigger Lab is paused. Choose an effect and arm L2 or R2, then turn Enabled on.");
                 labBehaviorText.Text =
-                    "Armed effects are saved per trigger and do not override the game while paused.";
+                    global::DS4Windows.UiText.Get("Armed effects are saved per trigger and do not override the game while paused.");
                 return;
             }
 
             labStatusText.Text = settings.HasActiveOverride
-                ? $"Made with Trigger Lab - {ActiveTriggerLabel(settings)} overrides incoming game trigger effects."
+                ? global::DS4Windows.UiText.Format("Made with Trigger Lab - {0} overrides incoming game trigger effects.", ActiveTriggerLabel(settings))
                 : settings.HasGameRumbleVibration
-                    ? $"Game rumble is streaming to {GameRumbleTriggerLabel(settings)} as trigger vibration."
-                    : "Trigger Lab is enabled. Arm L2 or R2 to persist an effect in this profile.";
+                    ? global::DS4Windows.UiText.Format("Game rumble is streaming to {0} as trigger vibration.", GameRumbleTriggerLabel(settings))
+                    : global::DS4Windows.UiText.Get("Trigger Lab is enabled. Arm L2 or R2 to persist an effect in this profile.");
             labBehaviorText.Text =
-                "Active lab effects override incoming game adaptive-trigger output.";
+                global::DS4Windows.UiText.Get("Active lab effects override incoming game adaptive-trigger output.");
         }
 
         private static string ActiveTriggerLabel(TriggerLabProfileSettings settings)
         {
-            if (settings.LeftActive && settings.RightActive) return "L2 and R2";
+            if (settings.LeftActive && settings.RightActive) return global::DS4Windows.UiText.Get("L2 and R2");
             return settings.LeftActive ? "L2" : "R2";
         }
 
@@ -1087,7 +1087,7 @@ namespace DS4WinWPF.DS4Forms
             if (settings.LeftGameRumbleVibration &&
                 settings.RightGameRumbleVibration)
             {
-                return "L2 and R2";
+                return global::DS4Windows.UiText.Get("L2 and R2");
             }
 
             return settings.LeftGameRumbleVibration ? "L2" : "R2";
@@ -1100,7 +1100,7 @@ namespace DS4WinWPF.DS4Forms
                 settings.LeftGameRumbleVibration;
             bool right = settings.RightActive ||
                 settings.RightGameRumbleVibration;
-            return left && right ? "L2 and R2" : left ? "L2" : "R2";
+            return left && right ? global::DS4Windows.UiText.Get("L2 and R2") : left ? "L2" : "R2";
         }
 
         private static bool AreBothTriggersArmed(

@@ -34,7 +34,7 @@ internal sealed class XInputDiagnosticSlot : XInputDiagnosticObservable
     private bool connected;
     private int leftTrigger, rightTrigger;
 
-    internal XInputDiagnosticSlot(int index) => Title = $"Slot {index + 1} (XInput index {index})";
+    internal XInputDiagnosticSlot(int index) => Title = global::DS4Windows.UiText.Format("Slot {0} (XInput index {1})", index + 1, index);
     public string Title { get; }
     public string Status { get => status; private set => Set(ref status, value); }
     public bool Connected { get => connected; private set => Set(ref connected, value); }
@@ -47,15 +47,15 @@ internal sealed class XInputDiagnosticSlot : XInputDiagnosticObservable
     internal void Apply(XInputDiagnosticReading reading)
     {
         Connected = reading.ErrorCode == 0;
-        Status = Connected ? "Connected" : reading.ErrorCode == XInputDiagnosticPoller.NotConnected ?
-            "Not connected" : $"Read failed (Windows error {reading.ErrorCode})";
+        Status = Connected ? global::DS4Windows.UiText.Get("Connected") : reading.ErrorCode == XInputDiagnosticPoller.NotConnected ?
+            global::DS4Windows.UiText.Get("Not connected") : global::DS4Windows.UiText.Format("Read failed (Windows error {0})", reading.ErrorCode);
         ApplyInputs(Connected ? reading.State.Gamepad : default);
     }
 
     internal void Unavailable()
     {
         Connected = false;
-        Status = "Unavailable";
+        Status = global::DS4Windows.UiText.Get("Unavailable");
         ApplyInputs(default);
     }
 

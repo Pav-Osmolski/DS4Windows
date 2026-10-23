@@ -32,14 +32,14 @@ public partial class BatteryAlertsControl : UserControl
         InitializeComponent();
         repeatIntervalCombo.ItemsSource = new[]
         {
-            new KeyValuePair<int, string>(0, "Off"), new(30, "30 seconds"), new(60, "1 minute"),
-            new(120, "2 minutes"), new(300, "5 minutes"), new(600, "10 minutes"),
+            new KeyValuePair<int, string>(0, UiText.Get("Off")), new(30, global::DS4Windows.UiText.Get("30 seconds")), new(60, global::DS4Windows.UiText.Get("1 minute")),
+            new(120, global::DS4Windows.UiText.Get("2 minutes")), new(300, global::DS4Windows.UiText.Get("5 minutes")), new(600, global::DS4Windows.UiText.Get("10 minutes")),
         };
         warningCountCombo.ItemsSource = Enumerable.Range(1, 10)
             .Select(i => new KeyValuePair<int, string>(i, i.ToString()))
-            .Append(new(0, "Until charging")).ToArray();
+            .Append(new(0, UiText.Get("Until charging"))).ToArray();
         DataContext = this;
-        controllerCombo.ItemsSource = Enumerable.Range(1, 8).Select(i => $"Controller {i}");
+        controllerCombo.ItemsSource = Enumerable.Range(1, 8).Select(i => UiText.Format("Controller {0}", i));
         controllerCombo.SelectedIndex = 0;
         saveTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
         saveTimer.Tick += (_, _) => Save();
@@ -58,7 +58,7 @@ public partial class BatteryAlertsControl : UserControl
     {
         saveTimer.Stop();
         if (!persist) return;
-        if (!Global.Save()) statusText.Text = "Applied for this session, but settings could not be saved. Check access to the settings folder.";
+        if (!Global.Save()) statusText.Text = global::DS4Windows.UiText.Get("Applied for this session, but settings could not be saved. Check access to the settings folder.");
     }
 
     private async void Control_Loaded(object sender, RoutedEventArgs e)
@@ -89,12 +89,12 @@ public partial class BatteryAlertsControl : UserControl
         try
         {
             var discovered = await Task.Run(() => (Voices: BatteryAlertAudio.Voices().ToList(), Outputs: BatteryAlertAudio.Outputs().ToList()));
-            if (discovered.Voices.All(v => v.Id != voice)) discovered.Voices.Add(new(voice, "Unavailable voice (uses system default)"));
-            if (discovered.Outputs.All(v => v.Id != output)) discovered.Outputs.Add(new(output, "Unavailable audio device (select another output)"));
+            if (discovered.Voices.All(v => v.Id != voice)) discovered.Voices.Add(new(voice, global::DS4Windows.UiText.Get("Unavailable voice (uses system default)")));
+            if (discovered.Outputs.All(v => v.Id != output)) discovered.Outputs.Add(new(output, global::DS4Windows.UiText.Get("Unavailable audio device (select another output)")));
             voiceCombo.ItemsSource = discovered.Voices; voiceCombo.SelectedValue = voice;
             outputCombo.ItemsSource = discovered.Outputs; outputCombo.SelectedValue = output;
         }
-        catch (Exception ex) { statusText.Text = "Could not list voices or audio devices: " + ex.Message; }
+        catch (Exception ex) { statusText.Text = global::DS4Windows.UiText.Get("Could not list voices or audio devices: ") + ex.Message; }
         finally { refreshing = false; refreshBtn.IsEnabled = true; }
     }
 
@@ -110,24 +110,24 @@ public partial class BatteryAlertsControl : UserControl
     private void ManageVoices_Click(object sender, RoutedEventArgs e)
     {
         try { Process.Start(new ProcessStartInfo("ms-settings:speech") { UseShellExecute = true }); }
-        catch (Exception ex) { statusText.Text = "Open Windows Settings > Time & language > Speech to manage voices. " + ex.Message; }
+        catch (Exception ex) { statusText.Text = global::DS4Windows.UiText.Get("Open Windows Settings > Time & language > Speech to manage voices. ") + ex.Message; }
     }
 
     private async void Import_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.DataContext is not BatteryAlertRule rule) return;
-        var picker = new OpenFileDialog { Title = "Import a battery alert sound", Filter = "Sound files|*.wav;*.mp3;*.aif;*.aiff", CheckFileExists = true };
+        var picker = new OpenFileDialog { Title = global::DS4Windows.UiText.Get("Import a battery alert sound"), Filter = global::DS4Windows.UiText.FileFilter("Sound files|*.wav;*.mp3;*.aif;*.aiff"), CheckFileExists = true };
         if (picker.ShowDialog(Window.GetWindow(this)) != true) return;
         button.IsEnabled = false;
         try
         {
-            statusText.Text = "Importing and preparing sound…";
+            statusText.Text = global::DS4Windows.UiText.Get("Importing and preparing sound…");
             rule.SoundFile = await BatteryAlertAudio.ImportAsync(picker.FileName, BatteryAlertAudio.SoundDirectory, CancellationToken.None);
             rule.SoundName = Path.GetFileName(picker.FileName);
             if (rule.Mode == BatteryAlertMode.Speech || rule.Mode == BatteryAlertMode.Off) rule.Mode = BatteryAlertMode.Sound;
-            statusText.Text = "Sound imported. Use Preview to hear it.";
+            statusText.Text = global::DS4Windows.UiText.Get("Sound imported. Use Preview to hear it.");
         }
-        catch (Exception ex) { statusText.Text = "Sound could not be imported: " + ex.Message; }
+        catch (Exception ex) { statusText.Text = global::DS4Windows.UiText.Get("Sound could not be imported: ") + ex.Message; }
         finally { button.IsEnabled = true; }
     }
 
@@ -140,7 +140,7 @@ public partial class BatteryAlertsControl : UserControl
 
     private async void Preview_Click(object sender, RoutedEventArgs e)
     {
-        if (DS4Windows.Program.rootHub == null) { statusText.Text = "Controller service is unavailable."; return; }
+        if (DS4Windows.Program.rootHub == null) { statusText.Text = global::DS4Windows.UiText.Get("Controller service is unavailable."); return; }
         if (sender is not Button button || !Enum.TryParse<BatteryAlertKind>(button.Tag?.ToString(), out var kind)) return;
         previewCancellation?.Cancel();
         using var cancellation = previewCancellation = new();
@@ -148,7 +148,7 @@ public partial class BatteryAlertsControl : UserControl
         // focus to another setting and scroll that setting into view.
         // Starting another preview cancels the previous one instead.
         try { await DS4Windows.Program.rootHub.BatteryAlerts.PreviewAsync(controllerCombo.SelectedIndex, kind, cancellation.Token); }
-        catch (OperationCanceledException) { statusText.Text = "Preview stopped."; }
+        catch (OperationCanceledException) { statusText.Text = global::DS4Windows.UiText.Get("Preview stopped."); }
         finally { if (ReferenceEquals(previewCancellation, cancellation)) previewCancellation = null; }
     }
 

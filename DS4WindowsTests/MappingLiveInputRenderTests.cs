@@ -98,14 +98,12 @@ public sealed class MappingLiveInputRenderTests
     private static void OnSta(Action action)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try { action(); }
             catch (Exception exception) { failure = exception; }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(30)), "Preview render timed out.");
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 }

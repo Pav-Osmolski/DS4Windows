@@ -153,6 +153,9 @@ jobs:
         python-version: "3.12"
     - name: Check release documentation text encoding
       run: python utils/test-text-encoding.py --self-test
+
+    - name: Check every language pack
+      run: python utils/validate-language-packs.py
     - name: Cache NuGet packages
       uses: actions/cache@v6
       with:

@@ -21,10 +21,10 @@ internal sealed class PortableRepairProgress : Window
         panel.Children.Add(new TextBlock { Text = message, TextWrapping = TextWrapping.Wrap });
         panel.Children.Add(new ProgressBar { IsIndeterminate = true, Height = 8,
             Margin = new Thickness(0, 18, 0, 18) });
-        var cancel = new Button { Content = "Cancel", MinWidth = 90,
+        var cancel = new Button { Content = global::DS4Windows.UiText.Get("Cancel"), MinWidth = 90,
             HorizontalAlignment = HorizontalAlignment.Right };
         panel.Children.Add(cancel);
-        var window = new PortableRepairProgress { Title = "DS4Windows — VIIPER repair",
+        var window = new PortableRepairProgress { Title = global::DS4Windows.UiText.Get("DS4Windows — VIIPER repair"),
             Width = 480, SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize, Content = panel,
             WindowStartupLocation = WindowStartupLocation.CenterScreen };

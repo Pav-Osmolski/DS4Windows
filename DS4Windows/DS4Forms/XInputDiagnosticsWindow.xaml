@@ -1,23 +1,25 @@
 <Window x:Class="DS4WinWPF.DS4Forms.XInputDiagnosticsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="XInput controller test" Width="860" Height="880"
+        Title="{lex:Loc Strings:UI_9E25DD28622853DE}" Width="860" Height="880"
         MinWidth="720" MinHeight="480" WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False" Style="{DynamicResource WindowStyle}"
         Background="{DynamicResource SurfaceBackgroundColor}"
-        Foreground="{DynamicResource ForegroundColor}">
+        Foreground="{DynamicResource ForegroundColor}"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows">
     <DockPanel Margin="24">
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
-            <TextBlock Text="XInput controller test" FontSize="22" FontWeight="SemiBold"/>
-            <TextBlock Text="Press buttons, move the sticks or squeeze the triggers to find your controller."
+            <TextBlock Text="{lex:Loc Strings:UI_9E25DD28622853DE}" FontSize="22" FontWeight="SemiBold"/>
+            <TextBlock Text="{lex:Loc Strings:UI_ABAF526A45DDBA31}"
                        TextWrapping="Wrap" Margin="0,6,0,0" Foreground="{DynamicResource MutedForegroundColor}"/>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" Margin="0,12,0,0">
-            <TextBlock Text="Xbox/XInput controllers only. Virtual DS4 and DualSense outputs do not appear here. These are Windows XInput slots, separate from DS4Windows controller and output slot numbers."
+            <TextBlock Text="{lex:Loc Strings:UI_1BE0F85E07813717}"
                        TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}"/>
-            <TextBlock Text="Stick values: -32768 to 32767 (0 is centre). Triggers: 0 to 255. Readings update live; this is not a latency measurement."
+            <TextBlock Text="{lex:Loc Strings:UI_BAB1A93D82E86310}"
                        TextWrapping="Wrap" Margin="0,8,0,12" Foreground="{DynamicResource MutedForegroundColor}"/>
-            <Button Content="_Close" IsCancel="True" Click="Close_Click" MinWidth="90"
+            <Button Content="{lex:Loc Strings:UI_29B7344A039678C2}" IsCancel="True" Click="Close_Click" MinWidth="90"
                     HorizontalAlignment="Right" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
         </StackPanel>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
@@ -68,23 +70,23 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </StackPanel.Style>
-                                        <TextBlock Text="Pressed buttons" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock Text="{lex:Loc Strings:UI_F0087AAE2107CF88}" Foreground="{DynamicResource MutedForegroundColor}"/>
                                         <TextBlock Text="{Binding PressedButtons}" TextWrapping="Wrap" MinHeight="44" Margin="0,4,0,8"/>
-                                        <TextBlock Text="Left stick" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock Text="{lex:Loc Strings:UI_674E595229EA2709}" Foreground="{DynamicResource MutedForegroundColor}"/>
                                         <TextBlock Text="{Binding LeftStick}" FontFamily="Consolas" Margin="0,4,0,8"/>
-                                        <TextBlock Text="Right stick" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock Text="{lex:Loc Strings:UI_20FCDBFB7BC65BDC}" Foreground="{DynamicResource MutedForegroundColor}"/>
                                         <TextBlock Text="{Binding RightStick}" FontFamily="Consolas" Margin="0,4,0,12"/>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/><ColumnDefinition Width="12"/><ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
                                             <StackPanel>
-                                                <TextBlock Text="Left trigger" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                                <TextBlock Text="{lex:Loc Strings:UI_F5A2A2B89ECDB69E}" Foreground="{DynamicResource MutedForegroundColor}"/>
                                                 <ProgressBar Foreground="{DynamicResource AccentColor}" Background="{DynamicResource SurfaceBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" Minimum="0" Maximum="255" Value="{Binding LeftTrigger, Mode=OneWay}" Height="8" Margin="0,6,0,4" AutomationProperties.Name="Left trigger"/>
                                                 <TextBlock Text="{Binding LeftTrigger, StringFormat={}{0}/255}"/>
                                             </StackPanel>
                                             <StackPanel Grid.Column="2">
-                                                <TextBlock Text="Right trigger" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                                <TextBlock Text="{lex:Loc Strings:UI_1ECB44AF39ED44FB}" Foreground="{DynamicResource MutedForegroundColor}"/>
                                                 <ProgressBar Foreground="{DynamicResource AccentColor}" Background="{DynamicResource SurfaceBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" Minimum="0" Maximum="255" Value="{Binding RightTrigger, Mode=OneWay}" Height="8" Margin="0,6,0,4" AutomationProperties.Name="Right trigger"/>
                                                 <TextBlock Text="{Binding RightTrigger, StringFormat={}{0}/255}"/>
                                             </StackPanel>

@@ -18,7 +18,7 @@ public sealed class ControllerReadingsLayoutTests
     public void LongStatusAndExtremeReadingsFitWithoutChangingPlotCoordinates(string theme, double width)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -71,10 +71,8 @@ public sealed class ControllerReadingsLayoutTests
                 }
             }
             catch (Exception error) { failure = error; }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        thread.Join();
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
@@ -84,7 +82,7 @@ public sealed class ControllerReadingsLayoutTests
     public void RgbSlidersAreCenteredInsideTheirColorSurfaces(string theme)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -119,10 +117,8 @@ public sealed class ControllerReadingsLayoutTests
                 }
             }
             catch (Exception error) { failure = error; }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        thread.Join();
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 

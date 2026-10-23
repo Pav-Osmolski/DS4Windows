@@ -145,7 +145,7 @@ internal static class ViiperRecovery
     private static void Message(Window owner, string message)
     {
         if (owner?.IsLoaded == true)
-            MessageBox.Show(owner, message, "VIIPER needs attention", MessageBoxButton.OK, MessageBoxImage.Warning);
-        else MessageBox.Show(message, "VIIPER needs attention", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(owner, message, global::DS4Windows.UiText.Get("VIIPER needs attention"), MessageBoxButton.OK, MessageBoxImage.Warning);
+        else MessageBox.Show(message, global::DS4Windows.UiText.Get("VIIPER needs attention"), MessageBoxButton.OK, MessageBoxImage.Warning);
     }
 }

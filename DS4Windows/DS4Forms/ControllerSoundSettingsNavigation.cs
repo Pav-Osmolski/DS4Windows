@@ -22,8 +22,8 @@ internal static class ControllerSoundSettingsNavigation
             InvalidOperationException or System.Security.SecurityException)
         {
             AppLogger.LogToGui($"Could not open Windows Sound settings: {exception.Message}", true);
-            MessageBox.Show("Open Windows Settings > System > Sound to choose your Switch 2 Pro headphones or headset microphone.",
-                "Headset audio", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(global::DS4Windows.UiText.Get("Open Windows Settings > System > Sound to choose your Switch 2 Pro headphones or headset microphone."),
+                global::DS4Windows.UiText.Get("Headset audio"), MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

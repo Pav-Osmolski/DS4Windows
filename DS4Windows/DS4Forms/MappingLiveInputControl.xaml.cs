@@ -82,7 +82,7 @@ public partial class MappingLiveInputControl : UserControl
     {
         projection.Update(raw, type);
         if (!projection.Valid) { RenderStatus(MappingLiveInputStatus.Waiting); return; }
-        liveStatus.Text = "Live";
+        liveStatus.Text = global::DS4Windows.UiText.Get("Live");
         RenderStick(leftStickPlot, leftStickDot, leftStickValue, projection.LeftX, projection.LeftY, projection.LeftPresent);
         RenderStick(rightStickPlot, rightStickDot, rightStickValue, projection.RightX, projection.RightY, projection.RightPresent);
         leftTriggerName.Text = projection.LeftTriggerName;
@@ -91,14 +91,14 @@ public partial class MappingLiveInputControl : UserControl
         rightTriggerMeter.Value = projection.RightTrigger;
         leftTriggerValue.Text = $"{projection.LeftTrigger:0}%";
         rightTriggerValue.Text = $"{projection.RightTrigger:0}%";
-        pressedButtons.Text = projection.PressedButtons.Length == 0 ? "No buttons pressed" : projection.PressedButtons;
+        pressedButtons.Text = projection.PressedButtons.Length == 0 ? global::DS4Windows.UiText.Get("No buttons pressed") : projection.PressedButtons;
         pressedButtons.ToolTip = pressedButtons.Text;
     }
 
     private void RenderStick(Canvas plot, FrameworkElement dot, TextBlock value, int x, int y, bool present)
     {
         plot.Opacity = present ? 1 : 0.35;
-        value.Text = present ? $"X {x}\nY {y}" : "Not present";
+        value.Text = present ? $"X {x}\nY {y}" : global::DS4Windows.UiText.Get("Not present");
         double px = present ? Math.Clamp(x / (double)projection.AxisMaximum, 0, 1) : 0.5;
         double py = present ? Math.Clamp(y / (double)projection.AxisMaximum, 0, 1) : 0.5;
         if (projection.InvertPlotY) py = 1 - py;
@@ -110,18 +110,18 @@ public partial class MappingLiveInputControl : UserControl
     {
         liveStatus.Text = status switch
         {
-            MappingLiveInputStatus.Disconnected => "Disconnected",
-            MappingLiveInputStatus.Replaced => "Controller changed",
-            MappingLiveInputStatus.Stale => "No recent input",
-            _ => "Waiting"
+            MappingLiveInputStatus.Disconnected => global::DS4Windows.UiText.Get("Disconnected"),
+            MappingLiveInputStatus.Replaced => global::DS4Windows.UiText.Get("Controller changed"),
+            MappingLiveInputStatus.Stale => global::DS4Windows.UiText.Get("No recent input"),
+            _ => global::DS4Windows.UiText.Get("Waiting")
         };
         pressedButtons.Text = status switch
         {
-            MappingLiveInputStatus.Replaced => "Reopen the editor to preview the new controller.",
-            MappingLiveInputStatus.Disconnected => "Controller disconnected. Reconnect and reopen the editor.",
-            MappingLiveInputStatus.Stale => "Waiting for fresh controller input…",
-            _ => snapshot.HasBoundDevice ? "Waiting for controller input…" :
-                "Open this profile from a connected controller."
+            MappingLiveInputStatus.Replaced => global::DS4Windows.UiText.Get("Reopen the editor to preview the new controller."),
+            MappingLiveInputStatus.Disconnected => global::DS4Windows.UiText.Get("Controller disconnected. Reconnect and reopen the editor."),
+            MappingLiveInputStatus.Stale => global::DS4Windows.UiText.Get("Waiting for fresh controller input…"),
+            _ => snapshot.HasBoundDevice ? global::DS4Windows.UiText.Get("Waiting for controller input…") :
+                global::DS4Windows.UiText.Get("Open this profile from a connected controller.")
         };
         pressedButtons.ToolTip = pressedButtons.Text;
         leftStickValue.Text = rightStickValue.Text = "X —\nY —";

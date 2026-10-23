@@ -1,110 +1,51 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:schema id="root">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xs:element name="root" ns1:IsDataSet="true">
+      <xs:complexType>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="metadata">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" />
+              </xs:sequence>
+              <xs:attribute name="name" use="required" type="xsd:string" />
+              <xs:attribute name="type" type="xsd:string" />
+              <xs:attribute name="mimetype" type="xsd:string" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="assembly">
+            <xs:complexType>
+              <xs:attribute name="alias" type="xsd:string" />
+              <xs:attribute name="name" type="xsd:string" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="data">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+              <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+              <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="resheader">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" />
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
   </resheader>
@@ -199,7 +140,7 @@
     <value>マクロ</value>
   </data>
   <data name="MacroRecorded" xml:space="preserve">
-    <value>Macro Recorded</value>
+    <value>マクロレコード</value>
   </data>
   <data name="MultiAction" xml:space="preserve">
     <value>マルチアクションボタン</value>
@@ -226,7 +167,7 @@
     <value>*Profile name* を復元することはできません。</value>
   </data>
   <data name="QuitOtherPrograms" xml:space="preserve">
-    <value>'DS4コントローラーを隠す'オプションを有効にする前に、UWPアプリ(Netflix)、Steam、Uplay、Edge、NVIDIA IN-GAMEなどの他のアプリケーションを終了する必要があります。詳しくは https://github.com/Ryochan7/DS4Windows/wiki/Exclusive-Mode-(Hide-DS4-Controller-config-option)-tips-and-issues をご覧ください。</value>
+    <value>現在物理コントローラを保持しているアプリケーションを閉じ、「Use HidHide to Prevent Double Input」を有効にします。</value>
   </data>
   <data name="SASteeringWheelEmulationCalibrate" xml:space="preserve">
     <value>6軸ホイールエミュレーションの調整</value>
@@ -323,5 +264,338 @@
   </data>
   <data name="XMLActionsCorrupt" xml:space="preserve">
     <value>Actions.xml ファイルが壊れていました。空の状態から開始します。</value>
+  </data>
+  <data name="AddingToList" xml:space="preserve">
+    <value>リストに追加...</value>
+  </data>
+  <data name="AddPrograms" xml:space="preserve">
+    <value>プログラムを追加</value>
+  </data>
+  <data name="ALocactionNeeded" xml:space="preserve">
+    <value>A location must be selected to continue</value>
+  </data>
+  <data name="AlwaysRainbow" xml:space="preserve">
+    <value>ALWAYS RAINBOW MODE</value>
+  </data>
+  <data name="AssignProfile" xml:space="preserve">
+    <value>コントローラー番号(コントローラー番号)</value>
+  </data>
+  <data name="Battery" xml:space="preserve">
+    <value>バッテリー: *番号*%</value>
+  </data>
+  <data name="BestUsedRightSide" xml:space="preserve">
+    <value>右側をマウス機能として最適に使用</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>ブラウザ...</value>
+  </data>
+  <data name="BTPollRate" xml:space="preserve">
+    <value>Bluetooth 経由で接続された場合に DS4 ハードウェアで使用されるアンケートレートを決定します。</value>
+  </data>
+  <data name="CannotMoveFiles" xml:space="preserve">
+    <value>ファイルを新しい場所に移動できません、DS4Tool フォルダの名前を "DS4Windows" に変更してください。</value>
+  </data>
+  <data name="CannotWriteHere" xml:space="preserve">
+    <value>現在の場所に書き込めません. 設定をappdataにコピーできますか?</value>
+  </data>
+  <data name="Charged" xml:space="preserve">
+    <value>充電</value>
+  </data>
+  <data name="Charging" xml:space="preserve">
+    <value>充電量: *番号*%</value>
+  </data>
+  <data name="CloseDS4W" xml:space="preserve">
+    <value>近く DS4Windows?</value>
+  </data>
+  <data name="CloseMinimize" xml:space="preserve">
+    <value>メインウィンドウを閉じるとアプリを最小限にします。</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>色</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>つながり...</value>
+  </data>
+  <data name="ContextEdit" xml:space="preserve">
+    <value>コントローラーのプロフィールを編集する *番号*</value>
+  </data>
+  <data name="ContextNew" xml:space="preserve">
+    <value>コントローラーのプロフィールを作成する *番号*</value>
+  </data>
+  <data name="CopyComplete" xml:space="preserve">
+    <value>コピー完了し、DS4Windowsを再起動してプログラムディレクトリから設定を削除してください。</value>
+  </data>
+  <data name="CopyFullColor" xml:space="preserve">
+    <value>Click to copy the full color をクリックする</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>日</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>日々</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>disconnected</value>
+  </data>
+  <data name="DownText" xml:space="preserve">
+    <value>ダウン</value>
+  </data>
+  <data name="DS4WindowsCannotEditHere" xml:space="preserve">
+    <value>DS4Windowsはここで設定を編集できません、これは今閉じます</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="FallBackTo" xml:space="preserve">
+    <value>*ボタンに戻る</value>
+  </data>
+  <data name="FifthMouseDown" xml:space="preserve">
+    <value>第5回 マウスボタンダウン</value>
+  </data>
+  <data name="FifthMouseUp" xml:space="preserve">
+    <value>第5話 マウスボタン</value>
+  </data>
+  <data name="FlashAtTip" xml:space="preserve">
+    <value>クリックしてフラッシュ色を変更します ブラック = デフォルト色</value>
+  </data>
+  <data name="FlushHID" xml:space="preserve">
+    <value>フラッシュ HID</value>
+  </data>
+  <data name="FlushHIDTip" xml:space="preserve">
+    <value>Flush HID 各読書後</value>
+  </data>
+  <data name="FourthMouseDown" xml:space="preserve">
+    <value>第4回 マウスボタンダウン</value>
+  </data>
+  <data name="FourthMouseUp" xml:space="preserve">
+    <value>第4回 マウスボタンアップ</value>
+  </data>
+  <data name="GyroReadout" xml:space="preserve">
+    <value>クリックして Sixaxis Gyro のレビューを見る</value>
+  </data>
+  <data name="GyroTriggerBehavior" xml:space="preserve">
+    <value>トリガーがアクティブである間、ジロを有効にするようにチェックします。</value>
+  </data>
+  <data name="GyroX" xml:space="preserve">
+    <value>GyroX, Left and Right Tilt シングル</value>
+  </data>
+  <data name="GyroY" xml:space="preserve">
+    <value>GyroY, Forward and Back Tilt(ギロイ)</value>
+  </data>
+  <data name="GyroZ" xml:space="preserve">
+    <value>GyroZ - Up and Down Tilt シングル</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>時刻</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="HoverOverItems" xml:space="preserve">
+    <value>Hover over items to see description or more about 詳細を見る</value>
+  </data>
+  <data name="IfRemovingDS4Windows" xml:space="preserve">
+    <value>DS4Windowsを削除する場合は、プロフィール フォルダのリンクに従って設定を削除できます。</value>
+  </data>
+  <data name="InstallDriver" xml:space="preserve">
+    <value>ドライバーの設定はこちら</value>
+  </data>
+  <data name="Jitter" xml:space="preserve">
+    <value>Sixaxis を使用してタッチパッドの動きを計算する</value>
+  </data>
+  <data name="KeepThisSize" xml:space="preserve">
+    <value>閉じたあとにこのサイズの窓を保つ</value>
+  </data>
+  <data name="LightByBatteryTip" xml:space="preserve">
+    <value>また、DS4が完全に充電されているときに有効にした場合の無休タイムアウトによる光を暗くします。</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>充電...</value>
+  </data>
+  <data name="MakeNewProfile" xml:space="preserve">
+    <value>新しいプロフィールを作成</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>新規</value>
+  </data>
+  <data name="NoMacroRecorded" xml:space="preserve">
+    <value>macro が記録されていません。</value>
+  </data>
+  <data name="noneProfile" xml:space="preserve">
+    <value>(いない)</value>
+  </data>
+  <data name="NoProfileLoaded" xml:space="preserve">
+    <value>プロフィールなし</value>
+  </data>
+  <data name="OpeningInstaller" xml:space="preserve">
+    <value>オープンインストーラー</value>
+  </data>
+  <data name="OpenScpDriver" xml:space="preserve">
+    <value>Settings &gt; Controllers を開いて、Install / Repair VIIPER を選択します。</value>
+  </data>
+  <data name="PleaseImport" xml:space="preserve">
+    <value>プロフィールをインポートまたは作成してください。</value>
+  </data>
+  <data name="PlusNewProfile" xml:space="preserve">
+    <value>新規プロファイル</value>
+  </data>
+  <data name="ProfileFolderMoved" xml:space="preserve">
+    <value>プロフィール フォルダー Moved to program folder</value>
+  </data>
+  <data name="Programs" xml:space="preserve">
+    <value>プログラム</value>
+  </data>
+  <data name="QuickCharge" xml:space="preserve">
+    <value>USB に接続する際の BT 自動無効化</value>
+  </data>
+  <data name="RecordText" xml:space="preserve">
+    <value>記録</value>
+  </data>
+  <data name="RightClickPresets" xml:space="preserve">
+    <value>右クリックして、コントロールのセットのプレセットを設定します。</value>
+  </data>
+  <data name="RunAtStartup" xml:space="preserve">
+    <value>Windows がログイン後、DS4Windows を起動するように言います。</value>
+  </data>
+  <data name="SaveRecordedMacro" xml:space="preserve">
+    <value>マクロを保存する</value>
+  </data>
+  <data name="SelectActionTitle" xml:space="preserve">
+    <value>アクションを選択してください *action*</value>
+  </data>
+  <data name="SetRegularTrigger" xml:space="preserve">
+    <value>定期トリガー</value>
+  </data>
+  <data name="SetUnloadTrigger" xml:space="preserve">
+    <value>ダウンロードトリガー</value>
+  </data>
+  <data name="Shortcuts" xml:space="preserve">
+    <value>ショートカット</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoneAxisError" xml:space="preserve">
+    <value>Gyro 車輪エミュレーション軸オプションは NONE に設定されています (エミュレーションは使用されていません)。Sixaxis gyro 車輪エミュレーションをカリブレートする前に、軸オプションを選択してください。</value>
+  </data>
+  <data name="SixAxisReading" xml:space="preserve">
+    <value>「Advanced Sixaxis Reading」をクリック</value>
+  </data>
+  <data name="StartText" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="Step1" xml:space="preserve">
+    <value>ステップ 1: VIIPER と USB/IP をインストールする</value>
+  </data>
+  <data name="SwipeDown" xml:space="preserve">
+    <value>swipe down</value>
+  </data>
+  <data name="SwipeLeft" xml:space="preserve">
+    <value>スイッチ左</value>
+  </data>
+  <data name="SwipeRight" xml:space="preserve">
+    <value>スワイプ右</value>
+  </data>
+  <data name="SwipeTouchpad" xml:space="preserve">
+    <value>Swipe Touchpad to change profiles プロフィールを変更する</value>
+  </data>
+  <data name="SwipeUp" xml:space="preserve">
+    <value>swipe up</value>
+  </data>
+  <data name="TapAndHold" xml:space="preserve">
+    <value>Tap and hold to drag, slight delay with single taps. 単一タップで軽い遅延</value>
+  </data>
+  <data name="TextDocs" xml:space="preserve">
+    <value>テキスト・ドキュメント(*.txt)</value>
+  </data>
+  <data name="TouchpadOffTip" xml:space="preserve">
+    <value>PS+Touchpad を押す</value>
+  </data>
+  <data name="TwoFingerSwipe" xml:space="preserve">
+    <value>2 Finger Touchpad Swipe 左または右</value>
+  </data>
+  <data name="TypeNewName" xml:space="preserve">
+    <value>新しい名前はこちら</value>
+  </data>
+  <data name="TypeProfileName" xml:space="preserve">
+    <value>プロフィール名はこちら</value>
+  </data>
+  <data name="UACTask" xml:space="preserve">
+    <value>このモードを有効にするには、管理者として DS4Windows を実行する必要があります。</value>
+  </data>
+  <data name="UpText" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="UseControllerForMapping" xml:space="preserve">
+    <value>また、コントローラを使用してコントロールを変更することもできます。</value>
+  </data>
+  <data name="UsingTPSwipes" xml:space="preserve">
+    <value>タッチパッドをマウスとして無効にします。</value>
+  </data>
+  <data name="WaitMS" xml:space="preserve">
+    <value>番号 *ms *ms</value>
+  </data>
+  <data name="WillKeep" xml:space="preserve">
+    <value>ウィル Keep</value>
+  </data>
+  <data name="XMLFiles" xml:space="preserve">
+    <value>XMLファイル(*.xml)</value>
+  </data>
+  <data name="EnableTouchToggle" xml:space="preserve">
+    <value>タッチパッドのマウス機能を許可し、PS + Touchpad Clickでトグレードできます。</value>
+  </data>
+  <data name="UdpServer" xml:space="preserve">
+    <value>アドレス値オプション: 127.0.0.1 localhost のみ ⁇  0.0.0.0 すべてのアドレス ⁇  特定のホスト名または IP アドレス</value>
+  </data>
+  <data name="AutoProfilePathAndWindowTitleEditTip" xml:space="preserve">
+    <value>^ABC = 文字列の始まりに匹敵する ABC$ = 文字列の終わりに匹敵する ABC$ *ABC = Contains a string (*)</value>
+  </data>
+  <data name="ShowAutoProfileDebugLogTip" xml:space="preserve">
+    <value>アクティブであれば、ログタブページには自動プロフィールイベントの詳細なメッセージが表示されます。</value>
+  </data>
+  <data name="MacroScanCodeTip" xml:space="preserve">
+    <value>マクロでキーボードのスキャンコード値を使用する</value>
+  </data>
+  <data name="MacroRunOnReleaseTip" xml:space="preserve">
+    <value>トリガーキーリリースでマクロを実行する</value>
+  </data>
+  <data name="MacroSynchronizedRunTip" xml:space="preserve">
+    <value>同じトリガーが複数のマクロを持っている場合、複数のマクロを同期順に実行します(キーリリースマクロを実行する前に完了したキーダウンマクロ)</value>
+  </data>
+  <data name="MacroRepeatTip" xml:space="preserve">
+    <value>トリガーキーが押されている間にマクロを繰り返します。</value>
+  </data>
+  <data name="MacroKeepKeyStateTip" xml:space="preserve">
+    <value>マクロ実行が完了したときに最後のキー状態を保持します(つまり、キーがダウン状態に残されている場合、自動的にデフォルト状態に戻りません)。</value>
+  </data>
+  <data name="SquareStickRoundness" xml:space="preserve">
+    <value>Roundness of Square Stick コーナー</value>
+  </data>
+  <data name="OscServer" xml:space="preserve">
+    <value>OSC Server を有効にします. すべてのアドレスでポートを聴く。</value>
+  </data>
+  <data name="UsingAutoTempProfile" xml:space="preserve">
+    <value>コントローラー {0} は temp Profile "{1}" を使用しています。</value>
+  </data>
+  <data name="DinputOnly" xml:space="preserve">
+    <value>仮想コントローラの出力を無効にする</value>
+  </data>
+  <data name="OutContNotice" xml:space="preserve">
+    <value>検出するべき仮想コントローラーゲームを選択します。プロフィールを保存して変更を適用します。</value>
+  </data>
+  <data name="TouchStarted" xml:space="preserve">
+    <value>タッチ開始</value>
+  </data>
+  <data name="TouchEnded" xml:space="preserve">
+    <value>タッチ終了</value>
+  </data>
+  <data name="ProfileNameInvalid" xml:space="preserve">
+    <value>後ろのスペースやドットなしで有効なプロフィール名を入力します。</value>
+  </data>
+  <data name="ProfileRenameCollision" xml:space="preserve">
+    <value>このプロフィールは既に存在しています 別の名前を選択します プロフィールも変更されていません。</value>
+  </data>
+  <data name="ProfileRenameFailed" xml:space="preserve">
+    <value>プロフィールの名前は変更できませんでした. 名前は変更されていません. ファイル権限または別のプログラムがそれを使用しているかどうかを確認してください.</value>
+  </data>
+  <data name="ResolvePendingProfileSave" xml:space="preserve">
+    <value>このプロフィールには保存されていない概要の変更が含まれています。編集または改名する前に、概要に保存中の保存をリセットまたは削除します。</value>
   </data>
 </root>

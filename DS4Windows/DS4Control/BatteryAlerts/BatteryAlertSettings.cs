@@ -17,6 +17,7 @@ public abstract class BatteryAlertObservable : INotifyPropertyChanged
         field = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+    protected void Notify(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
 
 public sealed class BatteryAlertRule : BatteryAlertObservable
@@ -33,8 +34,10 @@ public sealed class BatteryAlertRule : BatteryAlertObservable
         get => Mode.ToString();
         set => Mode = Enum.TryParse<BatteryAlertMode>(value, true, out var parsed) && Enum.IsDefined(parsed) ? parsed : BatteryAlertMode.Speech;
     }
-    public string SoundFile { get => soundFile; set => Set(ref soundFile, value ?? ""); }
-    public string SoundName { get => soundName; set => Set(ref soundName, value ?? ""); }
+    public string SoundFile { get => soundFile; set { Set(ref soundFile, value ?? ""); Notify(nameof(SoundDisplayName)); } }
+    public string SoundName { get => soundName; set { Set(ref soundName, value ?? ""); Notify(nameof(SoundDisplayName)); } }
+    [XmlIgnore]
+    public string SoundDisplayName => string.IsNullOrEmpty(soundFile) ? UiText.Get("No sound selected") : soundName;
     public bool Vibrate { get => vibrate; set => Set(ref vibrate, value); }
     public int Strength { get => strength; set => Set(ref strength, Math.Clamp(value, 1, 100)); }
     public int Duration { get => duration; set => Set(ref duration, Math.Clamp(value, 50, 1000)); }

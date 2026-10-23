@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -77,11 +77,11 @@ namespace DS4WinWPF.DS4Forms
 
             if (settings.control != DS4Windows.DS4Controls.None)
             {
-                Title = $"Select action for {DS4Windows.Global.ds4inputNames[settings.control]}";
+                Title = global::DS4Windows.UiText.Format("Select action for {0}", DS4Windows.Global.ds4inputNames[settings.control]);
             }
             else
             {
-                Title = "Select action";
+                Title = global::DS4Windows.UiText.Get("Select action");
             }
 
             guideBtn.Content = "";

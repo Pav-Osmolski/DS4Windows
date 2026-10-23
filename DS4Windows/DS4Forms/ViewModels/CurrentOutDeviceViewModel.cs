@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -228,7 +228,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         private static string GetOutputTypeDisplayName(OutContType type)
         {
-            return type.Normalize() == OutContType.None ? "Empty" :
+            return type.Normalize() == OutContType.None ? global::DS4Windows.UiText.Get("Empty") :
                 type.ToDisplayName();
         }
 

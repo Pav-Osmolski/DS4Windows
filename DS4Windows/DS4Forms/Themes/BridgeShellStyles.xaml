@@ -37,7 +37,7 @@
     <Style x:Key="BridgePrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
         <Setter Property="Background" Value="{DynamicResource AccentColor}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource AccentForegroundColor}" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Padding" Value="16,8" />
         <Setter Property="MinHeight" Value="36" />
@@ -732,7 +732,7 @@
                                     <StackPanel Orientation="Horizontal" Margin="4,0,0,16">
                                         <Border Width="30" Height="30" CornerRadius="5"
                                                 Background="{DynamicResource AccentColor}" Margin="0,0,10,0">
-                                            <TextBlock Text="P" Foreground="White" FontSize="17" FontWeight="Bold"
+                                            <TextBlock Text="P" Foreground="{DynamicResource AccentForegroundColor}" FontSize="17" FontWeight="Bold"
                                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
                                         </Border>
                                         <StackPanel VerticalAlignment="Center">

@@ -137,13 +137,13 @@ internal static class ThemeConsistencyValidation
     {
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-        var source = XDocument.Load(Path.Combine(SourceDirectory(), file + ".xaml"));
+        var source = LocalizedSource.Load(Path.Combine(SourceDirectory(), file + ".xaml"));
         var element = new XElement(source.Descendants().Single(e => (string)e.Attribute(x + "Name") == name));
         foreach (var menu in element.Descendants(wpf + "Button.ContextMenu").ToArray()) menu.Remove();
         foreach (var attr in element.DescendantsAndSelf().Attributes().ToArray())
         {
             if (attr.Name.LocalName == "Click") attr.Remove();
-            else if (attr.Value.StartsWith("{lex:Loc ")) attr.Value = attr.Value[9..^1];
+            else if (attr.Value.StartsWith("{lex:Loc ")) attr.Value = LocalizedSource.Resolve(attr.Value);
         }
         // A toolbar button keeps its page-local style when rendered in isolation.
         if ((string)element.Attribute("Style") == "{StaticResource AutoProfileToolbarButtonStyle}")
@@ -155,7 +155,7 @@ internal static class ThemeConsistencyValidation
             element.AddFirst(new XElement(wpf + "Button.Style", inlineStyle));
         }
         element.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
-        return (FrameworkElement)XamlReader.Parse(element.ToString());
+        return (FrameworkElement)XamlReader.Parse(LocalizedSource.Markup(element));
     }
 
     internal static void Layout(FrameworkElement element, double width, double height)

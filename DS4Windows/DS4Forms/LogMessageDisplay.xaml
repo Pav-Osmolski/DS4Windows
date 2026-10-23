@@ -1,4 +1,4 @@
-﻿<Window x:Class="DS4WinWPF.DS4Forms.LogMessageDisplay"
+<Window x:Class="DS4WinWPF.DS4Forms.LogMessageDisplay"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
         lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         mc:Ignorable="d"
-        Title="Log" MinHeight="200" Height="200" Width="600" MinWidth="400" SizeToContent="Height" WindowStartupLocation="CenterScreen"
+        Title="{lex:Loc Strings:UI_21E49EB2B299C9F7}" MinHeight="200" Height="200" Width="600" MinWidth="400" SizeToContent="Height" WindowStartupLocation="CenterScreen"
         Style="{DynamicResource WindowStyle}">
     <DockPanel Margin="4">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">

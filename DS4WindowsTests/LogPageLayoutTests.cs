@@ -23,7 +23,7 @@ public sealed class LogPageLayoutTests
     public void LogToolsRemainReachableWithoutSqueezingTheVirtualizedList(string theme, double width)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -65,11 +65,9 @@ public sealed class LogPageLayoutTests
                 list.ItemsSource = null;
             }
             catch (Exception exception) { failure = exception; }
-            finally { Dispatcher.CurrentDispatcher.InvokeShutdown(); }
-        }) { IsBackground = true };
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(30)));
+
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
@@ -78,7 +76,7 @@ public sealed class LogPageLayoutTests
         string forms = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(source)!, "..", "DS4Windows", "DS4Forms"));
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-        XElement tab = XDocument.Load(Path.Combine(forms, "MainWindow.xaml")).Descendants(wpf + "TabItem")
+        XElement tab = LocalizedSource.Load(Path.Combine(forms, "MainWindow.xaml")).Descendants(wpf + "TabItem")
             .Single(element => (string)element.Attribute(x + "Name") == "logTab");
         var markup = new XElement(tab.Element(wpf + "DockPanel")!);
         markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
@@ -86,13 +84,13 @@ public sealed class LogPageLayoutTests
         {
             if (attribute.Name.LocalName is "Click" or "MouseDoubleClick" ||
                 attribute.Value.StartsWith("{Binding") && attribute.Name.LocalName != "Text") attribute.Remove();
-            else if (attribute.Value.StartsWith("{lex:Loc ")) attribute.Value = attribute.Value[9..^1];
+            else if (attribute.Value.StartsWith("{lex:Loc ")) attribute.Value = LocalizedSource.Resolve(attribute.Value);
         }
-        XElement bridge = XDocument.Load(Path.Combine(forms, "Themes", "BridgeShellStyles.xaml")).Root!;
+        XElement bridge = LocalizedSource.Load(Path.Combine(forms, "Themes", "BridgeShellStyles.xaml")).Root!;
         bridge.AddFirst(new XElement(wpf + "ResourceDictionary.MergedDictionaries",
             new XElement(wpf + "ResourceDictionary", new XAttribute("Source", $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))));
-        var root = (DockPanel)XamlReader.Parse(markup.ToString());
-        root.Resources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Parse(bridge.ToString()));
+        var root = (DockPanel)XamlReader.Parse(LocalizedSource.Markup(markup));
+        root.Resources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Parse(LocalizedSource.Markup(bridge)));
         var list = (ListView)root.FindName("logListView");
         if (root.TryFindResource("ListViewStyle") is Style listStyle) list.Style = listStyle;
         if (root.TryFindResource("ListViewItemStyle") is Style itemStyle) list.ItemContainerStyle = itemStyle;

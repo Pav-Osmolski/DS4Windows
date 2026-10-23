@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:schema id="root">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xs:element name="root" ns1:IsDataSet="true">
+      <xs:complexType>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="metadata">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" />
+              </xs:sequence>
+              <xs:attribute name="name" use="required" type="xsd:string" />
+              <xs:attribute name="type" type="xsd:string" />
+              <xs:attribute name="mimetype" type="xsd:string" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="assembly">
+            <xs:complexType>
+              <xs:attribute name="alias" type="xsd:string" />
+              <xs:attribute name="name" type="xsd:string" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="data">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+              <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+              <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="resheader">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" />
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionExists" xml:space="preserve">
+    <value>Namnet på denna åtgärd finns redan</value>
+  </data>
+  <data name="AddingToList" xml:space="preserve">
+    <value>Lägga till i listan...</value>
+  </data>
+  <data name="AddPrograms" xml:space="preserve">
+    <value>Lägg till program</value>
+  </data>
+  <data name="ALocactionNeeded" xml:space="preserve">
+    <value>En plats måste väljas för att fortsätta</value>
+  </data>
+  <data name="AlwaysRainbow" xml:space="preserve">
+    <value>Alltid Rainbow Mode</value>
+  </data>
+  <data name="AssignProfile" xml:space="preserve">
+    <value>Tilldela till Controller *nummer *</value>
+  </data>
+  <data name="Battery" xml:space="preserve">
+    <value>Batteri: * Antal batteri *%</value>
+  </data>
+  <data name="BestUsedRightSide" xml:space="preserve">
+    <value>Används bäst med höger sida som en musfunktion</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="BTPollRate" xml:space="preserve">
+    <value>Bestämmer undersökningshastigheten som används för DS4-hårdvaran när den är ansluten via Bluetooth. (Gäller på profilspara)</value>
+  </data>
+  <data name="CannotMoveFiles" xml:space="preserve">
+    <value>Kan inte flytta filer till en ny plats, Vänligen byta namn på mappen DS4Tool till "DS4Windows"</value>
+  </data>
+  <data name="CannotWriteHere" xml:space="preserve">
+    <value>Kan inte skriva på aktuell plats. Kopiera inställningar till appdata?</value>
+  </data>
+  <data name="ChargeController" xml:space="preserve">
+    <value>Ladda batteriet</value>
+  </data>
+  <data name="Charged" xml:space="preserve">
+    <value>laddad</value>
+  </data>
+  <data name="Charging" xml:space="preserve">
+    <value>Laddning: * Antal *%</value>
+  </data>
+  <data name="CheckBattery" xml:space="preserve">
+    <value>Kontrollera batteriet</value>
+  </data>
+  <data name="CloseConfirm" xml:space="preserve">
+    <value>Detta kommer att koppla bort alla dina anslutna kontroller. Fortsätt?</value>
+  </data>
+  <data name="CloseDS4W" xml:space="preserve">
+    <value>Stängd DS4Windows?</value>
+  </data>
+  <data name="CloseMinimize" xml:space="preserve">
+    <value>Stängning av huvudfönstret minimerar appen. Avsluta appen görs via anmälningsikonen</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Färg</value>
+  </data>
+  <data name="ColorByBattery" xml:space="preserve">
+    <value>Färg per batteri %</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Bekräfta...</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>Anslut...</value>
+  </data>
+  <data name="ContextEdit" xml:space="preserve">
+    <value>Redigera profil för Controller *nummer*</value>
+  </data>
+  <data name="ContextNew" xml:space="preserve">
+    <value>Skapa en profil för Controller *Nummer*</value>
+  </data>
+  <data name="ControllerWasRemoved" xml:space="preserve">
+    <value>Kontroller *Mac-adress* togs bort eller förlorade anslutningen</value>
+  </data>
+  <data name="CopyComplete" xml:space="preserve">
+    <value>Kopiera komplett, starta om DS4Windows och ta bort inställningar från Program Directory</value>
+  </data>
+  <data name="CopyFullColor" xml:space="preserve">
+    <value>Klicka för att kopiera hela färgen</value>
+  </data>
+  <data name="CouldNotOpenDS4" xml:space="preserve">
+    <value>Varning: Kan inte öppna DS4 *Mac-adress* exklusivt.</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>dag</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dagarna</value>
+  </data>
+  <data name="DeleteProfile" xml:space="preserve">
+    <value>Att ta bort profil?</value>
+  </data>
+  <data name="DimByBattery" xml:space="preserve">
+    <value>Dim per batteri %</value>
+  </data>
+  <data name="DisconnectBT" xml:space="preserve">
+    <value>Avstängd BT</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Avkopplade</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Nedladdning * Antal *%</value>
+  </data>
+  <data name="DownloadVersion" xml:space="preserve">
+    <value>Ladda ner version *number* nu?</value>
+  </data>
+  <data name="DownText" xml:space="preserve">
+    <value>nedåt</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DS4Update" xml:space="preserve">
+    <value>DS4Windows Update är tillgänglig!</value>
+  </data>
+  <data name="DS4WindowsCannotEditHere" xml:space="preserve">
+    <value>DS4Windows kan inte redigera inställningar här, Detta stängs nu</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Redigera</value>
+  </data>
+  <data name="FallBack" xml:space="preserve">
+    <value>Fall tillbaka</value>
+  </data>
+  <data name="FallBackTo" xml:space="preserve">
+    <value>Gå tillbaka till *Button*</value>
+  </data>
+  <data name="FifthMouseDown" xml:space="preserve">
+    <value>Fjärde musknappen ner</value>
+  </data>
+  <data name="FifthMouseUp" xml:space="preserve">
+    <value>Fjärde musknapp upp</value>
+  </data>
+  <data name="FlashAtTip" xml:space="preserve">
+    <value>Klicka för att ändra färg. Svart = standardfärg</value>
+  </data>
+  <data name="FlushHID" xml:space="preserve">
+    <value>Flush gömma</value>
+  </data>
+  <data name="FlushHIDTip" xml:space="preserve">
+    <value>Flush HID kö efter varje läsning</value>
+  </data>
+  <data name="FoundController" xml:space="preserve">
+    <value>Hittade en kontrollör:</value>
+  </data>
+  <data name="FourthMouseDown" xml:space="preserve">
+    <value>Fjärde musknappen ner</value>
+  </data>
+  <data name="FourthMouseUp" xml:space="preserve">
+    <value>Fjärde musknapp upp</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Hela</value>
+  </data>
+  <data name="GyroReadout" xml:space="preserve">
+    <value>Klicka för att se läsning av Sixaxis Gyro</value>
+  </data>
+  <data name="GyroTriggerBehavior" xml:space="preserve">
+    <value>Kontrollera att gyro är aktiv medan trigger är aktiv. Avmarkera för att inaktivera gyro medan trigger är aktiv.</value>
+  </data>
+  <data name="GyroX" xml:space="preserve">
+    <value>GyroX, vänster och höger sluttning</value>
+  </data>
+  <data name="GyroY" xml:space="preserve">
+    <value>GyroY, framåt och bakåt</value>
+  </data>
+  <data name="GyroZ" xml:space="preserve">
+    <value>GyroZ, Up and Down Tilt Övrigt</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>timme</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>timmar</value>
+  </data>
+  <data name="HoverOverItems" xml:space="preserve">
+    <value>Bläddra över objekt för att se beskrivning eller mer om</value>
+  </data>
+  <data name="IfRemovingDS4Windows" xml:space="preserve">
+    <value>Om du tar bort DS4Windows, Du kan ta bort inställningarna enligt profilmappen länk</value>
+  </data>
+  <data name="InputDelay" xml:space="preserve">
+    <value>Observerat fysiskt rapporteringsintervall: {0:0.00} ms</value>
+  </data>
+  <data name="InstallComplete" xml:space="preserve">
+    <value>Komplett installation</value>
+  </data>
+  <data name="InstallDriver" xml:space="preserve">
+    <value>Installera förare här</value>
+  </data>
+  <data name="InstallFailed" xml:space="preserve">
+    <value>Installationen misslyckades, vänligen återställ</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Installera...</value>
+  </data>
+  <data name="Jitter" xml:space="preserve">
+    <value>Använd Sixaxis för att beräkna rörelse på pekplattan</value>
+  </data>
+  <data name="KeepThisSize" xml:space="preserve">
+    <value>Håll den här storleken på fönstret efter stängning</value>
+  </data>
+  <data name="LanguagePackApplyRestartRequired" xml:space="preserve">
+    <value>Språkpaket ändring kommer att träda i kraft efter DS4Windows ansökan startas om.</value>
+  </data>
+  <data name="LatencyNotOverTen" xml:space="preserve">
+    <value>Controller *number* latens nu under 10ms</value>
+  </data>
+  <data name="LatencyOverTen" xml:space="preserve">
+    <value>Kontrollerens latens {0} över 10 ms ({1} ms)</value>
+  </data>
+  <data name="LaunchProgram" xml:space="preserve">
+    <value>Lansera * Programmet *</value>
+  </data>
+  <data name="LightByBatteryTip" xml:space="preserve">
+    <value>Ljuset dämpas också av tidlöshet om det är aktiverat när DS4 är helt laddad.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Laddning ...</value>
+  </data>
+  <data name="LoadProfile" xml:space="preserve">
+    <value>Ladda upp *profil*</value>
+  </data>
+  <data name="Macro" xml:space="preserve">
+    <value>Makro</value>
+  </data>
+  <data name="MacroRecorded" xml:space="preserve">
+    <value>Makro inspelad</value>
+  </data>
+  <data name="MakeNewProfile" xml:space="preserve">
+    <value>Skapa en ny profil</value>
+  </data>
+  <data name="MultiAction" xml:space="preserve">
+    <value>Mutli-action knappen</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Ny</value>
+  </data>
+  <data name="NoMacroRecorded" xml:space="preserve">
+    <value>Inga makron har registrerats</value>
+  </data>
+  <data name="noneProfile" xml:space="preserve">
+    <value>(Ingen av dem)</value>
+  </data>
+  <data name="NoneText" xml:space="preserve">
+    <value>Ingen</value>
+  </data>
+  <data name="NoProfileLoaded" xml:space="preserve">
+    <value>Inga profiler laddade</value>
+  </data>
+  <data name="NotUsingProfile" xml:space="preserve">
+    <value>Kontroller {0} använder inte en profil. Batterinivån är {1}%</value>
+  </data>
+  <data name="NotValid" xml:space="preserve">
+    <value>inte giltigt</value>
+  </data>
+  <data name="OpeningInstaller" xml:space="preserve">
+    <value>Öppna installatören</value>
+  </data>
+  <data name="OpenScpDriver" xml:space="preserve">
+    <value>Öppna Inställningar &gt; Styrenheter och välj Installera / Reparera VIIPER.</value>
+  </data>
+  <data name="OtherFileLocation" xml:space="preserve">
+    <value>Övriga lokaliseringsfiler tas bort</value>
+  </data>
+  <data name="PleaseDownloadUpdater" xml:space="preserve">
+    <value>Vänligen ladda ner Updater nu, placera den i programmappen och byta namn till DS4Updater.exe om på x86, sedan kontrollera för uppdatering igen. DS4Windows kommer att försöka öppna DS4Updater Release sida när det här fönstret stängs.</value>
+  </data>
+  <data name="PleaseImport" xml:space="preserve">
+    <value>Vänligen importera eller skapa en profil</value>
+  </data>
+  <data name="PlusNewProfile" xml:space="preserve">
+    <value>Ny profil</value>
+  </data>
+  <data name="ProfileCannotRestore" xml:space="preserve">
+    <value>*Profilnamn * kan inte återställas.</value>
+  </data>
+  <data name="ProfileFolderMoved" xml:space="preserve">
+    <value>Profilmapp Flyttad till programmapp</value>
+  </data>
+  <data name="Programs" xml:space="preserve">
+    <value>Programmen</value>
+  </data>
+  <data name="QuickCharge" xml:space="preserve">
+    <value>Automatiskt inaktivera BT när du ansluter till USB</value>
+  </data>
+  <data name="QuitOtherPrograms" xml:space="preserve">
+    <value>Stäng program som för närvarande håller den fysiska handkontrollen innan du aktiverar "Använd HidHide för att förhindra dubbel inmatning".</value>
+  </data>
+  <data name="RecordText" xml:space="preserve">
+    <value>Spela in</value>
+  </data>
+  <data name="RightClickPresets" xml:space="preserve">
+    <value>Högerklicka för att ställa in förinställningar för en uppsättning kontroller</value>
+  </data>
+  <data name="RunAtStartup" xml:space="preserve">
+    <value>Berätta för Windows att starta DS4Windows efter inloggning</value>
+  </data>
+  <data name="SaveRecordedMacro" xml:space="preserve">
+    <value>Spara inspelade makron?</value>
+  </data>
+  <data name="ScanCode" xml:space="preserve">
+    <value>Skanna kod</value>
+  </data>
+  <data name="SearchingController" xml:space="preserve">
+    <value>På jakt efter kontrollanter...</value>
+  </data>
+  <data name="SelectActionTitle" xml:space="preserve">
+    <value>Välj en åtgärd för *action*</value>
+  </data>
+  <data name="SelectMacro" xml:space="preserve">
+    <value>Välj ett makro</value>
+  </data>
+  <data name="SetRegularTrigger" xml:space="preserve">
+    <value>Ställ in vanlig trigger</value>
+  </data>
+  <data name="SetUnloadTrigger" xml:space="preserve">
+    <value>Ladda ner Trigger</value>
+  </data>
+  <data name="Shortcuts" xml:space="preserve">
+    <value>Förkortningar</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrate" xml:space="preserve">
+    <value>Kalibrering av sixaxis hjul emulation</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction1" xml:space="preserve">
+    <value>(1) Centrera handkontrollen, håll den stadigt och tryck på "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction2" xml:space="preserve">
+    <value>(2) Vrid till 90° vänster (eller höger) position och tryck på "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction3" xml:space="preserve">
+    <value>(3) Vrid till 90° höger (eller vänster) position och tryck på "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction" xml:space="preserve">
+    <value>Alla kalibreringspunkter ställs in när ljusbarsfärgen blir grön. När du vrider styrenheten blinkar ljusbarsfärgen när styrenheten är vid kalibreringspunkten. Acceptera kalibreringen med OK-knappen</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoControllerError" xml:space="preserve">
+    <value>Kan inte kalibrera gyro (sixaxis) styrhjulsemuleringsvärden utan en controller. Anslut en controller via Bluetooth eller usb</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoneAxisError" xml:space="preserve">
+    <value>Gyro hjul emulering axel alternativet är inställt på NONE (emulering används inte). Vänligen välj ett axel alternativ innan du kalibrerar sixaxis gyro hjul emulering</value>
+  </data>
+  <data name="SixAxisReading" xml:space="preserve">
+    <value>Klicka för avancerad Sixaxis läsning</value>
+  </data>
+  <data name="Starting" xml:space="preserve">
+    <value>Börja...</value>
+  </data>
+  <data name="StartText" xml:space="preserve">
+    <value>Börja</value>
+  </data>
+  <data name="Step1" xml:space="preserve">
+    <value>Steg 1: Installera VIIPER och USB/IP</value>
+  </data>
+  <data name="StopHText" xml:space="preserve">
+    <value>Stoppa tungt</value>
+  </data>
+  <data name="StopLText" xml:space="preserve">
+    <value>Stoppa ljuset</value>
+  </data>
+  <data name="StoppedDS4Windows" xml:space="preserve">
+    <value>Stoppade DS4Windows</value>
+  </data>
+  <data name="StoppingDS4" xml:space="preserve">
+    <value>Stäng av DS4 Input Controller</value>
+  </data>
+  <data name="StoppingX360" xml:space="preserve">
+    <value>Stäng av virtuella utgångskontroller</value>
+  </data>
+  <data name="StopText" xml:space="preserve">
+    <value>Stanna upp</value>
+  </data>
+  <data name="SwipeDown" xml:space="preserve">
+    <value>Swipe ner</value>
+  </data>
+  <data name="SwipeLeft" xml:space="preserve">
+    <value>Swipe vänster</value>
+  </data>
+  <data name="SwipeRight" xml:space="preserve">
+    <value>Swipe höger</value>
+  </data>
+  <data name="SwipeTouchpad" xml:space="preserve">
+    <value>Swipe Touchpad för att ändra profiler</value>
+  </data>
+  <data name="SwipeUp" xml:space="preserve">
+    <value>Swipe upp</value>
+  </data>
+  <data name="TapAndHold" xml:space="preserve">
+    <value>Tryck och håll för att dra, liten fördröjning med enstaka tryck</value>
+  </data>
+  <data name="TestHText" xml:space="preserve">
+    <value>Tester tungt</value>
+  </data>
+  <data name="TestLText" xml:space="preserve">
+    <value>Test av ljus</value>
+  </data>
+  <data name="TestText" xml:space="preserve">
+    <value>Testerna</value>
+  </data>
+  <data name="TextDocs" xml:space="preserve">
+    <value>Text i dokumentet (*.txt)</value>
+  </data>
+  <data name="TiltDown" xml:space="preserve">
+    <value>Tilt ner</value>
+  </data>
+  <data name="TiltLeft" xml:space="preserve">
+    <value>Tilt vänster</value>
+  </data>
+  <data name="TiltRight" xml:space="preserve">
+    <value>Till höger</value>
+  </data>
+  <data name="TiltUp" xml:space="preserve">
+    <value>Tilt upp</value>
+  </data>
+  <data name="TouchpadMovementOff" xml:space="preserve">
+    <value>Touchpad Movement är nu avstängt</value>
+  </data>
+  <data name="TouchpadMovementOn" xml:space="preserve">
+    <value>Touchpad Movement är nu på</value>
+  </data>
+  <data name="TouchpadOffTip" xml:space="preserve">
+    <value>Återaktivera genom att trycka på PS+Touchpad</value>
+  </data>
+  <data name="TwoFingerSwipe" xml:space="preserve">
+    <value>2 finger touchpad svep vänster eller höger</value>
+  </data>
+  <data name="TypeNewName" xml:space="preserve">
+    <value>Nytt namn här</value>
+  </data>
+  <data name="TypeProfileName" xml:space="preserve">
+    <value>Profilnamn här</value>
+  </data>
+  <data name="UACTask" xml:space="preserve">
+    <value>Du måste köra DS4Windows som administratör för att aktivera detta läge.</value>
+  </data>
+  <data name="Unassigned" xml:space="preserve">
+    <value>Ej tilldelad</value>
+  </data>
+  <data name="UpText" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="UpToDate" xml:space="preserve">
+    <value>DS4Windows ansökan är uppdaterad.</value>
+  </data>
+  <data name="UseControllerForMapping" xml:space="preserve">
+    <value>Du kan också använda din kontroll för att ändra kontroller</value>
+  </data>
+  <data name="UsingExclusive" xml:space="preserve">
+    <value>Använder exklusivt mode</value>
+  </data>
+  <data name="UsingProfile" xml:space="preserve">
+    <value>Kontroller {0} använder Profile "{1}". Batterinivån är {2}%</value>
+  </data>
+  <data name="UsingShared" xml:space="preserve">
+    <value>Använda delat läge</value>
+  </data>
+  <data name="UsingTPSwipes" xml:space="preserve">
+    <value>Detta inaktiverar Touchpad som en mus</value>
+  </data>
+  <data name="ValidName" xml:space="preserve">
+    <value>Vänligen ange ett giltigt namn</value>
+  </data>
+  <data name="WaitMS" xml:space="preserve">
+    <value>Vänta på *nummer * ms</value>
+  </data>
+  <data name="WillKeep" xml:space="preserve">
+    <value>kommer att hålla</value>
+  </data>
+  <data name="XMLFiles" xml:space="preserve">
+    <value>XML filer (*.xml)</value>
+  </data>
+  <data name="EnableTouchToggle" xml:space="preserve">
+    <value>Tillåt touchpad musfunktion för att få toggled med PS + Touchpad Klicka.</value>
+  </data>
+  <data name="UdpServer" xml:space="preserve">
+    <value>Aktivera UDP-server. Server lyssna adress och port. Adressvärdealternativ: 127.0.0.1 localhost endast Ebay 0.0.0.0 alla adresser Ebay Specifikt värdnamn eller IP-adress.</value>
+  </data>
+  <data name="AutoProfilePathAndWindowTitleEditTip" xml:space="preserve">
+    <value>^ABC = Matcha i början av sträng (^) Ebay ABC$ = Matcha i slutet av sträng ($) Ebay *ABC =Innehåller en sträng (*)</value>
+  </data>
+  <data name="ShowAutoProfileDebugLogTip" xml:space="preserve">
+    <value>Om det är aktiverat visar fliken Logg detaljerade meddelanden om auto-profil händelser.</value>
+  </data>
+  <data name="MacroScanCodeTip" xml:space="preserve">
+    <value>Använd ett skanningskodvärde för tangentbordstangenter i ett makro</value>
+  </data>
+  <data name="MacroRunOnReleaseTip" xml:space="preserve">
+    <value>Kör ett makro på triggernyckelversionen</value>
+  </data>
+  <data name="MacroSynchronizedRunTip" xml:space="preserve">
+    <value>Kör flera makron i synkroniserad ordning om samma utlösare har flera makron (nyckelfärdig makro innan nyckelfri makro körs)</value>
+  </data>
+  <data name="MacroRepeatTip" xml:space="preserve">
+    <value>Upprepa ett makro medan triggernyckeln hålls ned</value>
+  </data>
+  <data name="MacroKeepKeyStateTip" xml:space="preserve">
+    <value>Behåll den sista nyckelstatusen när makroutförandet är slutfört (dvs. om en nyckel lämnas i nedtillstånd återställs den inte automatiskt till standardstatus)</value>
+  </data>
+  <data name="SquareStickRoundness" xml:space="preserve">
+    <value>Omdöme om Square Stick corners</value>
+  </data>
+  <data name="XMLActionsCorrupt" xml:space="preserve">
+    <value>Actions.xml fil var skadad. Börja från grunden.</value>
+  </data>
+  <data name="OscServer" xml:space="preserve">
+    <value>Aktivera OSC Server. Lyssna på port på alla adresser.</value>
+  </data>
+  <data name="UsingAutoTempProfile" xml:space="preserve">
+    <value>Kontroller {0} använder temp Profile "{1}"</value>
+  </data>
+  <data name="DinputOnly" xml:space="preserve">
+    <value>Inaktivera virtuell controller-utgång</value>
+  </data>
+  <data name="OutContNotice" xml:space="preserve">
+    <value>Välj de virtuella controller spel bör upptäcka. Spara profilen för att tillämpa ändringen.</value>
+  </data>
+  <data name="TouchStarted" xml:space="preserve">
+    <value>Touch startar</value>
+  </data>
+  <data name="TouchEnded" xml:space="preserve">
+    <value>Beröring slut</value>
+  </data>
+  <data name="ProfileNameInvalid" xml:space="preserve">
+    <value>Ange ett giltigt profilnamn utan spärr eller prick.</value>
+  </data>
+  <data name="ProfileRenameCollision" xml:space="preserve">
+    <value>En profil med det namnet finns redan. Välj ett annat namn. Ingen profil har ändrats.</value>
+  </data>
+  <data name="ProfileRenameFailed" xml:space="preserve">
+    <value>Profilen kunde inte bytas namn. Dess namn har inte ändrats. Kontrollera fil behörigheter eller om ett annat program använder den.</value>
+  </data>
+  <data name="ResolvePendingProfileSave" xml:space="preserve">
+    <value>Den här profilen har icke sparade Översikt ändringar. Återställ eller avlägsna dess väntande sparar på Översikt innan du redigerar eller byter namn på den.</value>
+  </data>
+</root>

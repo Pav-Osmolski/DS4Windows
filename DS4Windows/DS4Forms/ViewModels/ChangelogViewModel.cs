@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -33,7 +33,7 @@ public class ChangelogViewModel : INotifyPropertyChanged
     public bool IsLoading { get; private set; }
     public bool HasError { get; private set; }
     public bool ShowStatus => IsLoading || HasError;
-    public string StatusText { get; private set; } = "Loading release notes...";
+    public string StatusText { get; private set; } = global::DS4Windows.UiText.Get("Loading release notes...");
     public event PropertyChangedEventHandler PropertyChanged;
 
     public async Task DisplayChangelog()
@@ -41,20 +41,20 @@ public class ChangelogViewModel : INotifyPropertyChanged
         if (IsLoading) return;
         IsLoading = true;
         HasError = false;
-        StatusText = "Loading release notes...";
+        StatusText = global::DS4Windows.UiText.Get("Loading release notes...");
         Notify();
         try
         {
             string notes = await load();
             if (string.IsNullOrWhiteSpace(notes))
-                throw new InvalidOperationException("No release notes were returned.");
+                throw new InvalidOperationException(global::DS4Windows.UiText.Get("No release notes were returned."));
             Markdown = notes;
             StatusText = string.Empty;
         }
         catch (Exception error)
         {
             HasError = true;
-            StatusText = "Release notes could not be loaded. Check your connection and try again, or view releases on GitHub.";
+            StatusText = global::DS4Windows.UiText.Get("Release notes could not be loaded. Check your connection and try again, or view releases on GitHub.");
             NLog.LogManager.GetCurrentClassLogger().Warn(error, "Could not load the changelog.");
         }
         finally

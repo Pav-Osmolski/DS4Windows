@@ -194,7 +194,7 @@ public sealed class Switch2GyroActivationTests
     public void AllGyroMenusPersistTokensIndependentlyOfDisplayOrder(int mode)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             string previous = Read();
             var previousOutput = Global.outDevTypeTemp[Slot];
@@ -269,10 +269,8 @@ public sealed class Switch2GyroActivationTests
             }
             catch (Exception ex) { failure = ex; }
             finally { Write(previous); Global.outDevTypeTemp[Slot] = previousOutput; }
-        }) { IsBackground = true };
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(15)));
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) Assert.Fail(failure.ToString());
 
         string Read() => mode switch {

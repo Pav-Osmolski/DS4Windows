@@ -11,7 +11,7 @@
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         mc:Ignorable="d"
         Style="{DynamicResource WindowStyle}"
-        Title="Lightbar macro creator" Height="450" Width="800">
+        Title="{lex:Loc Strings:UI_84C58AB03BDE4666}" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*" />

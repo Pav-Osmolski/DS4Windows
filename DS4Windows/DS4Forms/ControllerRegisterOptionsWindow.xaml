@@ -1,4 +1,4 @@
-﻿<Window x:Class="DS4WinWPF.DS4Forms.ControllerRegisterOptionsWindow"
+<Window x:Class="DS4WinWPF.DS4Forms.ControllerRegisterOptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,9 +22,9 @@
                 <CheckBox Content="{lex:Loc ControllerSupportSwitchPro}" IsChecked="{Binding SwitchProDeviceOpts.Enabled}" />
                 <CheckBox Content="{lex:Loc ControllerSupportJoyCon}" IsChecked="{Binding JoyConDeviceOpts.Enabled}" />
                 <CheckBox Content="{lex:Loc ControllerSupportDS3}" IsChecked="{Binding DS3DeviceOpts.Enabled}" />
-                <CheckBox Content="Accept Moonlight / Sunshine virtual controllers"
+                <CheckBox Content="{lex:Loc Strings:UI_8DD8CBAABF98A695}"
                           IsChecked="{Binding UseMoonlight}"
-                          ToolTip="Accept every supported virtual controller created while Sunshine is running. DS4Windows' own VIIPER outputs are always excluded." />
+                          ToolTip="{lex:Loc Strings:UI_E326981106F123EC}" />
                 <TextBlock>
                     <Hyperlink NavigateUri="https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/moonlight-support.md"
                                RequestNavigate="Hyperlink_RequestNavigate">
@@ -52,7 +52,7 @@
         </DockPanel>
 
         <TabControl x:Name="deviceSettingsTabControl" DockPanel.Dock="Right" SelectedIndex="{Binding CurrentTabSelectedIndex}" Margin="40,4,4,4">
-            <TabItem Header="Blank" Visibility="Collapsed">
+            <TabItem Header="{lex:Loc Strings:UI_2C3D371CBFD31225}" Visibility="Collapsed">
             </TabItem>
 
             <TabItem x:Name="ds4OptsTabItem" Header="DS4" Visibility="Collapsed">
@@ -89,7 +89,7 @@
                 </StackPanel>
             </TabItem>
 
-            <TabItem x:Name="joyConOptsTabItem" Header="JoyCon" Visibility="Collapsed">
+            <TabItem x:Name="joyConOptsTabItem" Header="{lex:Loc Strings:UI_B62B3BC00532441A}" Visibility="Collapsed">
                 <StackPanel Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4">
                     <TextBlock Foreground="#FFDE4343" FontWeight="Bold">
                         <Run Text="*  -  " />

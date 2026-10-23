@@ -18,7 +18,7 @@ public sealed class ChangelogReaderLayoutTests
     public void MarkdownTablesImagesAndReleaseBoundariesFitBothThemesAndResize(string theme)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             string imageFile = Path.Combine(Path.GetTempPath(), $"ds4w-changelog-{Guid.NewGuid():N}.png");
             try
@@ -69,9 +69,8 @@ public sealed class ChangelogReaderLayoutTests
             }
             catch (Exception error) { failure = error; }
             finally { if (File.Exists(imageFile)) File.Delete(imageFile); }
-        });
-        thread.SetApartmentState(ApartmentState.STA); thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(40)));
+        };
+HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
@@ -83,7 +82,7 @@ public sealed class ChangelogReaderLayoutTests
     public void FullChangelogWindowKeepsHeaderFooterAndRetryReachable(string theme, double width)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             DS4WinWPF.DS4Forms.ChangelogWindow window = null;
             try
@@ -109,9 +108,8 @@ public sealed class ChangelogReaderLayoutTests
             }
             catch (Exception error) { failure = error; }
             finally { window?.Close(); }
-        });
-        thread.SetApartmentState(ApartmentState.STA); thread.Start(); thread.Join();
-        if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
+        };
+HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
     private static void Layout(FrameworkElement root, double width)

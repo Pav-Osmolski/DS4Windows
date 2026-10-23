@@ -5,7 +5,8 @@
         xmlns:mdxam="clr-namespace:MdXaml;assembly=MdXaml"
         Title="{lex:Loc Changelog}" Height="650" Width="900" MinHeight="400" MinWidth="520"
         UseLayoutRounding="True" SnapsToDevicePixels="True" WindowStartupLocation="CenterOwner"
-        Style="{DynamicResource WindowStyle}" Background="{DynamicResource SurfaceBackgroundColor}">
+        Style="{DynamicResource WindowStyle}" Background="{DynamicResource SurfaceBackgroundColor}"
+        lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,8 +23,8 @@
         </Grid.RowDefinitions>
         <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1" Padding="20,16">
             <StackPanel>
-                <TextBlock Text="Release history" FontSize="22" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" />
-                <TextBlock Text="Updates and release notes for DS4Windows" Margin="0,4,0,0" Foreground="{DynamicResource MutedForegroundColor}" />
+                <TextBlock Text="{lex:Loc Strings:UI_F952FEE736ED2287}" FontSize="22" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" />
+                <TextBlock Text="{lex:Loc Strings:UI_399DC9EE169ACF55}" Margin="0,4,0,0" Foreground="{DynamicResource MutedForegroundColor}" />
             </StackPanel>
         </Border>
         <mdxam:MarkdownScrollViewer x:Name="changelogReader" Grid.Row="1"
@@ -35,7 +36,7 @@
         <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="24"
                     Visibility="{Binding ShowStatus, Converter={StaticResource BooleanVisibility}}">
             <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{DynamicResource MutedForegroundColor}" />
-            <Button Content="Try again" Click="RetryBtn_Click" HorizontalAlignment="Center" Margin="0,12,0,0" Padding="16,8"
+            <Button Content="{lex:Loc Strings:UI_D8B8392E2C542950}" Click="RetryBtn_Click" HorizontalAlignment="Center" Margin="0,12,0,0" Padding="16,8"
                     Visibility="{Binding HasError, Converter={StaticResource BooleanVisibility}}" />
         </StackPanel>
         <Border Grid.Row="2" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="20,12">

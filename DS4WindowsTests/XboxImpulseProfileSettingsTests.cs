@@ -40,7 +40,7 @@ public sealed class XboxImpulseProfileSettingsTests
             (string)node.Ancestors(Wpf + "TabItem").First().Attribute("Header") == "Advanced");
         Assert.AreEqual("Translate Xbox impulse-trigger vibration", (string)checkbox.Attribute("Content"));
         var rumbleCard = checkbox.Ancestors(Wpf + "Border").First();
-        Assert.AreEqual("{lex:Loc Rumble}", (string)rumbleCard.Element(Wpf + "StackPanel").Elements(Wpf + "TextBlock").First().Attribute("Text"));
+        Assert.AreEqual("Rumble", (string)rumbleCard.Element(Wpf + "StackPanel").Elements(Wpf + "TextBlock").First().Attribute("Text"));
         var tab = checkbox.Ancestors(Wpf + "TabItem").First();
         Assert.AreEqual("Advanced", (string)tab.Attribute("Header"));
         foreach (var element in checkbox.AncestorsAndSelf().TakeWhile(node => node != tab).Append(tab))
@@ -94,7 +94,7 @@ public sealed class XboxImpulseProfileSettingsTests
             var editor = LoadEditor();
             var masters = editor.Descendants(Wpf + "CheckBox").Where(node =>
                 (string)node.Attribute("IsChecked") == "{Binding MapXboxImpulseTriggers}")
-                .Select(node => (CheckBox)XamlReader.Parse(node.ToString())).ToArray();
+                .Select(node => (CheckBox)XamlReader.Parse(LocalizedSource.Markup(node))).ToArray();
             var routingMarkup = editor.Descendants(Wpf + "CheckBox").Single(node =>
                 (string)node.Attribute("IsChecked") == "{Binding XboxImpulseToAdaptiveTriggers}").Parent;
             var routingPanel = (StackPanel)ParseThemedControl(routingMarkup);
@@ -325,7 +325,7 @@ public sealed class XboxImpulseProfileSettingsTests
                         SupportsAdaptiveTriggers = supportsAdaptive,
                     },
                 };
-                section.Children.Add((CheckBox)XamlReader.Parse(masterMarkup.ToString()));
+                section.Children.Add((CheckBox)XamlReader.Parse(LocalizedSource.Markup(masterMarkup)));
                 section.Children.Add(ParseThemedControl(routingMarkup, theme));
                 panel.Children.Add(section);
             }
@@ -372,7 +372,7 @@ public sealed class XboxImpulseProfileSettingsTests
                 new XElement(Wpf + "ResourceDictionary", new XAttribute("Source",
                     $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))),
             new XElement(markup));
-        var wrapper = (StackPanel)XamlReader.Parse(wrapperMarkup.ToString());
+        var wrapper = (StackPanel)XamlReader.Parse(LocalizedSource.Markup(wrapperMarkup));
         var control = (FrameworkElement)wrapper.Children[0];
         wrapper.Children.Clear();
         return control;
@@ -391,15 +391,13 @@ public sealed class XboxImpulseProfileSettingsTests
     private static void RunSta(Action action)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try { action(); }
             catch (Exception exception) { failure = exception; }
-            finally { Dispatcher.CurrentDispatcher.InvokeShutdown(); }
-        }) { IsBackground = true };
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(10)), "WPF impulse binding test timed out.");
+
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
@@ -408,7 +406,7 @@ public sealed class XboxImpulseProfileSettingsTests
         for (var root = new DirectoryInfo(AppContext.BaseDirectory); root != null; root = root.Parent)
         {
             string path = Path.Combine(root.FullName, "DS4Windows", "DS4Forms", "ProfileEditor.xaml");
-            if (File.Exists(path)) return XDocument.Load(path);
+            if (File.Exists(path)) return XDocument.Parse(LocalizedSource.Markup(LocalizedSource.Load(path).Root));
         }
         throw new FileNotFoundException("Production ProfileEditor.xaml not found.");
     }

@@ -17,8 +17,8 @@
         <StackPanel Margin="0,0,12,8">
             <Border Style="{DynamicResource BridgeCardStyle}">
                 <StackPanel>
-                    <TextBlock Text="Controller status" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-                    <TextBlock Text="Live physical input and profile-mapped output." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                    <TextBlock Text="{lex:Loc Strings:UI_818915EC72C25C2E}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                    <TextBlock Text="{lex:Loc Strings:UI_2CE2D68611A1F110}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                     <WrapPanel>
                         <Label x:Name="inputContNum" Content="#" FontWeight="Bold" Padding="0,4" Margin="0,0,24,8"/>
                         <Label x:Name="batteryLvlLb" Content="{lex:Loc ReadingsControl.BatteryZero}" Margin="0,0,24,8" Padding="0,4"/>
@@ -36,13 +36,13 @@
                             </DataTemplate>
                         </Label.ContentTemplate>
                     </Label>
-                    <TextBlock Text="Plot markers: blue = physical input; gray = mapped output; red = dead zone / drift." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                    <TextBlock Text="{lex:Loc Strings:UI_125A15DE4B4E068B}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                 </StackPanel>
             </Border>
             <WrapPanel>
                 <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
-                        <TextBlock Text="Left stick" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_674E595229EA2709}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                         <Viewbox Width="170" Height="170" Stretch="Uniform" Margin="0,8,0,16" HorizontalAlignment="Center">
                             <Canvas x:Name="lsCanvas" Width="130" Height="130" ClipToBounds="True">
                                 <Rectangle Width="130" Height="130" Stroke="{DynamicResource BorderColor}"/>
@@ -65,8 +65,8 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Input" Grid.Column="1" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
-                            <TextBlock Text="Output" Grid.Column="2" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_36ECB4F8669133CE}" Grid.Column="1" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" Grid.Column="2" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
                             <TextBlock Text="X" VerticalAlignment="Center" Grid.Row="1"/>
                             <Label x:Name="lxInValLb" Content="" Padding="0,5" Grid.Row="1" Grid.Column="1"/>
                             <Label x:Name="lxOutValLb" Content="" Padding="0,5" Grid.Row="1" Grid.Column="2"/>
@@ -78,7 +78,7 @@
                 </Border>
                 <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
-                        <TextBlock Text="Right stick" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_20FCDBFB7BC65BDC}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                         <Viewbox Width="170" Height="170" Stretch="Uniform" Margin="0,8,0,16" HorizontalAlignment="Center">
                             <Canvas x:Name="rsCanvas" Width="130" Height="130" ClipToBounds="True">
                                 <Rectangle Width="{Binding Path=Width, ElementName=rsCanvas}" Height="{Binding Path=Height, ElementName=rsCanvas}" Stroke="{DynamicResource BorderColor}"/>
@@ -101,8 +101,8 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Input" Grid.Column="1" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
-                            <TextBlock Text="Output" Grid.Column="2" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_36ECB4F8669133CE}" Grid.Column="1" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" Grid.Column="2" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
                             <TextBlock Text="X" VerticalAlignment="Center" Grid.Row="1"/>
                             <Label x:Name="rxInValLb" Content="" Grid.Row="1" Grid.Column="1" Padding="0,5"/>
                             <Label x:Name="rxOutValLb" Content="" Grid.Row="1" Grid.Column="2" Padding="0,5"/>
@@ -114,8 +114,8 @@
                 </Border>
                 <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
-                        <TextBlock Text="Motion axes" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-                        <TextBlock Text="X is flipped in the plot for easier reading." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_EDF61AF9E1947310}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_CCBE6D28696ECE54}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                         <Viewbox Width="170" Height="170" Stretch="Uniform" Margin="0,8,0,16" HorizontalAlignment="Center">
                             <Canvas x:Name="sixaxisCanvas" Width="130" Height="130" ClipToBounds="True">
                                 <Rectangle Width="{Binding Path=Width, ElementName=sixaxisCanvas}" Height="{Binding Path=Height, ElementName=sixaxisCanvas}" Stroke="{DynamicResource BorderColor}"/>
@@ -138,8 +138,8 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Input" Grid.Column="1" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
-                            <TextBlock Text="Output" Grid.Column="2" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_36ECB4F8669133CE}" Grid.Column="1" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" Grid.Column="2" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
                             <TextBlock Text="X" VerticalAlignment="Center" Grid.Row="1"/>
                             <Label x:Name="sixAxisXInValLb" Content="" Grid.Row="1" Grid.Column="1" Padding="0,5"/>
                             <Label x:Name="sixAxisXOutValLb" Content="" Grid.Row="1" Grid.Column="2" Padding="0,5"/>
@@ -151,8 +151,8 @@
                 </Border>
                 <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
-                        <TextBlock Text="Triggers" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-                        <TextBlock Text="Physical trigger pressure and mapped output (0–255)." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_E62F2148A64D96BB}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_A6164F725C39C5E3}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                         <Label x:Name="l2ValLb" Content="L2" VerticalAlignment="Center" HorizontalAlignment="Left" RenderTransformOrigin="0.5,1" Padding="0,0,0,8" Margin="0">
                             <Label.Foreground>
                                 <SolidColorBrush x:Name="l2ValLbBrush" Color="{Binding Color, Source={StaticResource ForegroundColor}}"/>
@@ -176,8 +176,8 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Input" Grid.Column="1" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
-                            <TextBlock Text="Output" Grid.Column="2" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_36ECB4F8669133CE}" Grid.Column="1" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" Grid.Column="2" Margin="0,0,0,8" Foreground="{DynamicResource MutedForegroundColor}"/>
                             <TextBlock Text="L2" VerticalAlignment="Center" Grid.Row="1"/>
                             <Label x:Name="l2InValLb" Content="" Grid.Row="1" Grid.Column="1" Padding="0,5"/>
                             <Label x:Name="l2OutValLb" Content="" Grid.Row="1" Grid.Column="2" Padding="0,5"/>
@@ -189,15 +189,15 @@
                 </Border>
                 <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
-                        <TextBlock Text="Motion sensors" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-                        <TextBlock Text="Physical gyro and accelerometer readings." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
-                        <TextBlock Text="Gyro" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_7E93ACFCA96BDE2D}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_CA15682FEDE221C1}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_359012A1259DD4FC}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                         <Grid Margin="0,0,0,8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="48"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Yaw" VerticalAlignment="Center"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_F1E30A232F8CEAFC}" VerticalAlignment="Center"/>
                             <Slider x:Name="gyroYawSlider" Minimum="-9000" Maximum="9000" Value="0" Focusable="False" Margin="0" Grid.Column="1" Height="28" IsHitTestVisible="False"/>
                         </Grid>
                         <Grid Margin="0,0,0,8">
@@ -205,7 +205,7 @@
                                 <ColumnDefinition Width="48"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Pitch" VerticalAlignment="Center"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_6AF11CC594045511}" VerticalAlignment="Center"/>
                             <Slider x:Name="gyroPitchSlider" Minimum="-9000" Maximum="9000" Value="0" Focusable="False" Margin="0" Grid.Column="1" Height="28" IsHitTestVisible="False"/>
                         </Grid>
                         <Grid Margin="0,0,0,8">
@@ -213,10 +213,10 @@
                                 <ColumnDefinition Width="48"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Roll" VerticalAlignment="Center"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_4464105F259B6424}" VerticalAlignment="Center"/>
                             <Slider x:Name="gyroRollSlider" Minimum="-9000" Maximum="9000" Value="0" Focusable="False" Margin="0" Grid.Column="1" Height="28" IsHitTestVisible="False"/>
                         </Grid>
-                        <TextBlock Text="Acceleration" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_91663A8E5FA01CD7}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                         <Grid Margin="0,0,0,8">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="48"/>
@@ -245,8 +245,8 @@
                 </Border>
                 <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
-                        <TextBlock Text="Touchpad" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-                        <TextBlock Text="First touch contact, in physical touchpad coordinates." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_D0CA456731145198}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_1458E86F9CD27DE2}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                             <TextBlock Text="X" Width="48" VerticalAlignment="Center"/>
                             <Label x:Name="touchXValLb" Content="" Padding="0,4"/>

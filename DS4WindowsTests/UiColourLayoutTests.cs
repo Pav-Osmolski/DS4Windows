@@ -21,19 +21,19 @@ public sealed class UiColourLayoutTests
         {
             XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
             XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-            var source = XDocument.Load(Source("BindingWindow.xaml"));
+            var source = LocalizedSource.Load(Source("BindingWindow.xaml"));
             var resource = new XElement(wpf + "ResourceDictionary", new XAttribute(XNamespace.Xmlns + "x", x),
                 new XElement(wpf + "ResourceDictionary.MergedDictionaries", new XElement(wpf + "ResourceDictionary",
                     new XAttribute("Source", $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))),
                 new XElement(source.Descendants(wpf + "Style").Single(e => (string)e.Attribute(x + "Key") == "ProfileRgbSliderStyle")));
-            var panel = new StackPanel { Width = 160, Resources = (ResourceDictionary)XamlReader.Parse(resource.ToString()) };
+            var panel = new StackPanel { Width = 160, Resources = (ResourceDictionary)XamlReader.Parse(LocalizedSource.Markup(resource)) };
             var channels = source.Descendants(wpf + "Border").Where(e => ((string)e.Attribute("Tag"))?.Contains("ExtrasColor") == true).ToArray();
             Assert.AreEqual(3, channels.Length);
             foreach (var channel in channels)
             {
                 var rowMarkup = new XElement(channel.Parent!);
                 rowMarkup.AddFirst(new XElement(wpf + "Grid.Resources", new XElement(resource)));
-                var row = (Grid)XamlReader.Parse(rowMarkup.ToString());
+                var row = (Grid)XamlReader.Parse(LocalizedSource.Markup(rowMarkup));
                 panel.Children.Add(row);
             }
             panel.Measure(new Size(160, 500));
@@ -82,12 +82,12 @@ public sealed class UiColourLayoutTests
         {
             XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
             XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-            var source = XDocument.Load(Source("AutoProfiles.xaml"));
+            var source = LocalizedSource.Load(Source("AutoProfiles.xaml"));
             var dictionary = new XElement(wpf + "ResourceDictionary", new XAttribute(XNamespace.Xmlns + "x", x),
                 new XElement(wpf + "ResourceDictionary.MergedDictionaries", new XElement(wpf + "ResourceDictionary",
                     new XAttribute("Source", $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))),
                 source.Descendants(wpf + "Style").Where(e => (string)e.Attribute(x + "Key") is "AutoProfileMenuItemStyle" or "AutoProfileMenuStyle").Select(e => new XElement(e)));
-            var resources = (ResourceDictionary)XamlReader.Parse(dictionary.ToString());
+            var resources = (ResourceDictionary)XamlReader.Parse(LocalizedSource.Markup(dictionary));
             var menu = new ContextMenu { Resources = resources, Style = (Style)resources["AutoProfileMenuStyle"] };
             var actualMenu = source.Descendants(wpf + "Button").Single(e => (string)e.Attribute(x + "Name") == "addProgramsBtn")
                 .Descendants(wpf + "ContextMenu").Single();

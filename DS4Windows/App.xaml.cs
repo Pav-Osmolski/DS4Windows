@@ -112,14 +112,6 @@ namespace DS4WinWPF
         private MemoryMappedFile ipcClassNameMMF = null; // MemoryMappedFile for inter-process communication used to hold className of DS4Form window
         private MemoryMappedFile ipcResultDataMMF = null; // MemoryMappedFile for inter-process communication used to exchange string result data between cmdline client process and the background running DS4Windows app
 
-        private static Dictionary<DS4Windows.AppThemeChoice, string> themeLocs = new
-            Dictionary<DS4Windows.AppThemeChoice, string>()
-        {
-            [DS4Windows.AppThemeChoice.Default] = "DS4Forms/Themes/DefaultTheme.xaml",
-            [DS4Windows.AppThemeChoice.Light] = "DS4Forms/Themes/DefaultTheme.xaml",
-            [DS4Windows.AppThemeChoice.Dark] = "DS4Forms/Themes/DarkTheme.xaml",
-        };
-
         public event EventHandler ThemeChanged;
 
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -278,7 +270,7 @@ namespace DS4WinWPF
                         return;
                     }
                     if (startupMaintenanceAttempted) DS4Windows.ViiperRecovery.TryBeginAutomaticRecovery();
-                    MessageBox.Show(exception.Message, "VIIPER needs attention",
+                    MessageBox.Show(exception.Message, global::DS4Windows.UiText.Get("VIIPER needs attention"),
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
@@ -318,8 +310,8 @@ namespace DS4WinWPF
                     tempComEvent.Close();
 
                     if (DS4Windows.PortableLabContext.IsActive)
-                        MessageBox.Show("Another DS4Windows instance owns the controllers. Close it before starting this portable lab. No existing instance was activated or changed.",
-                            "Portable controller lab", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(global::DS4Windows.UiText.Get("Another DS4Windows instance owns the controllers. Close it before starting this portable lab. No existing instance was activated or changed."),
+                            global::DS4Windows.UiText.Get("Portable controller lab"), MessageBoxButton.OK, MessageBoxImage.Information);
 
                     runShutdown = false;
                     Current.Shutdown(DS4Windows.PortableLabContext.IsActive ? 1 : 0);
@@ -351,7 +343,7 @@ namespace DS4WinWPF
                         requireNew: true);
                 if (threadComEvent == null)
                 {
-                    MessageBox.Show("Another DS4Windows instance started first. This startup was cancelled.",
+                    MessageBox.Show(global::DS4Windows.UiText.Get("Another DS4Windows instance started first. This startup was cancelled."),
                         "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Information);
                     runShutdown = false;
                     Current.Shutdown(1);
@@ -391,7 +383,7 @@ namespace DS4WinWPF
             // Exit if base configuration could not be generated
             if (firstRun && !CreateConfDirSkeleton())
             {
-                MessageBox.Show($"Cannot create config folder structure in {DS4Windows.Global.appdatapath}. Exiting",
+                MessageBox.Show(global::DS4Windows.UiText.Format("Cannot create config folder structure in {0}. Exiting", DS4Windows.Global.appdatapath),
                     "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Error);
                 Current.Shutdown(1);
                 return;
@@ -426,9 +418,9 @@ namespace DS4WinWPF
             StartupDiag(logger, $"App bootstrap pid={Environment.ProcessId} admin={DS4Windows.Global.IsAdministrator()} cwd=\"{Environment.CurrentDirectory}\" cmd=\"{Environment.CommandLine}\"");
             StartupDiag(logger, $"Exe location=\"{DS4Windows.Global.exelocation}\" configPath=\"{DS4Windows.Global.appdatapath}\" firstRun={firstRun}");
 
-            StartupDiag(logger, "Global.Load begin");
+            StartupDiag(logger, "DS4Windows.Global.Load begin");
             bool readAppConfig = DS4Windows.Global.Load();
-            StartupDiag(logger, $"Global.Load end readAppConfig={readAppConfig}");
+            StartupDiag(logger, $"DS4Windows.Global.Load end readAppConfig={readAppConfig}");
             StoredLogCleanupResult logCleanup = ApplyLogRetention();
             if (logCleanup.Failed > 0) logger.Warn("Some expired log files could not be removed; check the Logs folder permissions.");
             if (!firstRun && !readAppConfig)
@@ -496,23 +488,23 @@ namespace DS4WinWPF
             else
             {
                 MessageBox.Show(
-                    "This build cannot create VIIPER virtual controllers. Install the x64 DS4Windows build on 64-bit Windows.",
-                    "DS4Windows virtual controller setup",
+                    global::DS4Windows.UiText.Get("This build cannot create VIIPER virtual controllers. Install the x64 DS4Windows build on 64-bit Windows."),
+                    global::DS4Windows.UiText.Get("DS4Windows virtual controller setup"),
                     MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             skipSave = false;
 
-            StartupDiag(logger, "Global.LoadActions begin");
+            StartupDiag(logger, "DS4Windows.Global.LoadActions begin");
             if (!DS4Windows.Global.LoadActions())
             {
-                StartupDiag(logger, "Global.LoadActions failed; CreateStdActions begin");
+                StartupDiag(logger, "DS4Windows.Global.LoadActions failed; CreateStdActions begin");
                 DS4Windows.Global.CreateStdActions();
                 StartupDiag(logger, "CreateStdActions end");
             }
             else
             {
-                StartupDiag(logger, "Global.LoadActions end success");
+                StartupDiag(logger, "DS4Windows.Global.LoadActions end success");
             }
 
             StartupDiag(logger, "LoadLinkedProfiles begin");
@@ -578,7 +570,7 @@ namespace DS4WinWPF
 
         private void CancelPortableStartup(string message)
         {
-            MessageBox.Show(message, "DS4Windows portable",
+            MessageBox.Show(message, global::DS4Windows.UiText.Get("DS4Windows portable"),
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             runShutdown = false;
             Current.Shutdown(1);
@@ -623,7 +615,7 @@ namespace DS4WinWPF
                     // explicit repair path; keep the application available.
                     message += "\n\n" + retirementFailure.Message;
                 }
-                MessageBox.Show(message, "VIIPER needs attention",
+                MessageBox.Show(message, global::DS4Windows.UiText.Get("VIIPER needs attention"),
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return true;
             }
@@ -648,9 +640,9 @@ namespace DS4WinWPF
             try
             {
                 MessageBox.Show(
-                    "Another DS4Windows instance is already running under a different permission level. " +
+                    global::DS4Windows.UiText.Get("Another DS4Windows instance is already running under a different permission level. ") +
                     "Open it from the notification area, or close the existing DS4Windows.exe in Task Manager and try again.",
-                    "DS4Windows is already running", MessageBoxButton.OK,
+                    global::DS4Windows.UiText.Get("DS4Windows is already running"), MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
             catch { }
@@ -760,7 +752,7 @@ namespace DS4WinWPF
             {
                 MessageBox.Show(
                     StartupFailureReporter.BuildUserMessage(logPath),
-                    "DS4Windows startup failed", MessageBoxButton.OK,
+                    global::DS4Windows.UiText.Get("DS4Windows startup failed"), MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
             catch
@@ -796,8 +788,8 @@ namespace DS4WinWPF
                 if (DS4Windows.PortableLabContext.IsActive)
                 {
                     skipSave = true;
-                    MessageBox.Show("Cannot save portable lab settings. No settings were copied to AppData.",
-                        "Portable controller lab", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(global::DS4Windows.UiText.Get("Cannot save portable lab settings. No settings were copied to AppData."),
+                        global::DS4Windows.UiText.Get("Portable controller lab"), MessageBoxButton.OK, MessageBoxImage.Error);
                     Current.Shutdown(1);
                     return;
                 }
@@ -818,12 +810,12 @@ namespace DS4WinWPF
                         }
                     }
                     catch { }
-                    MessageBox.Show("Copy complete, please relaunch DS4Windows and remove settings from Program Directory",
+                    MessageBox.Show(global::DS4Windows.UiText.Get("Copy complete, please relaunch DS4Windows and remove settings from Program Directory"),
                         "DS4Windows");
                 }
                 else
                 {
-                    MessageBox.Show("DS4Windows cannot edit settings here, This will now close",
+                    MessageBox.Show(global::DS4Windows.UiText.Get("DS4Windows cannot edit settings here, This will now close"),
                         "DS4Windows");
                 }
 
@@ -1205,7 +1197,7 @@ namespace DS4WinWPF
             try
             {
                 //CultureInfo ci = new CultureInfo("ja");
-                CultureInfo ci = CultureInfo.GetCultureInfo(culture);
+                CultureInfo ci = CultureInfo.GetCultureInfo(DS4Windows.LanguagePackPolicy.Normalize(culture));
                 LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
                 LocalizeDictionary.Instance.Culture = ci;
                 // fixes the culture in threads
@@ -1218,48 +1210,42 @@ namespace DS4WinWPF
             catch (CultureNotFoundException) { /* Skip setting culture that we cannot set */ }
         }
 
+        private bool watchingThemePreferences;
         public void ChangeTheme(DS4Windows.AppThemeChoice themeChoice,
             bool fireChanged = true)
         {
+            var theme = DS4Forms.Themes.AppThemeCatalog.Create(themeChoice, DS4Windows.Global.AppAccent);
+            Application.Current.Resources.MergedDictionaries.Clear();
+            Application.Current.Resources.MergedDictionaries.Add(theme);
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
+            {
+                Source = new Uri("DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative)
+            });
             DS4Forms.SidebarIconCatalog.Apply(Application.Current.Resources,
                 DS4Windows.Global.UseSidebarIcon, DS4Windows.Global.SidebarIconHue);
-            if (themeChoice == DS4Windows.AppThemeChoice.Default)
+            if (!watchingThemePreferences)
             {
-                Application.Current.Resources.MergedDictionaries.Clear();
-
-                // Attempt to switch theme based on currently selected Windows apps theme mode
-                DS4Windows.AppThemeChoice implicitTheme = DS4Windows.Util.SystemAppsUsingDarkTheme() ?
-                    DS4Windows.AppThemeChoice.Dark : DS4Windows.AppThemeChoice.Light;
-                themeLocs.TryGetValue(implicitTheme, out string loc);
-                Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri(loc, uriKind: UriKind.Relative) });
-                Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary()
-                {
-                    Source = new Uri("DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative)
-                });
-
-                if (fireChanged)
-                {
-                    ThemeChanged?.Invoke(this, EventArgs.Empty);
-                }
+                Microsoft.Win32.SystemEvents.UserPreferenceChanged += WindowsThemePreferenceChanged;
+                watchingThemePreferences = true;
             }
-            else if (themeLocs.TryGetValue(themeChoice, out string loc))
-            {
-                Application.Current.Resources.MergedDictionaries.Clear();
-                Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary() { Source = new Uri(loc, uriKind: UriKind.Relative) });
-                Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary()
-                {
-                    Source = new Uri("DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative)
-                });
+            if (fireChanged) ThemeChanged?.Invoke(this, EventArgs.Empty);
+        }
 
-                if (fireChanged)
+        private void WindowsThemePreferenceChanged(object sender, Microsoft.Win32.UserPreferenceChangedEventArgs args)
+        {
+            if (args.Category is not (Microsoft.Win32.UserPreferenceCategory.General or
+                Microsoft.Win32.UserPreferenceCategory.Color or Microsoft.Win32.UserPreferenceCategory.VisualStyle or
+                Microsoft.Win32.UserPreferenceCategory.Accessibility)) return;
+            if (!Dispatcher.HasShutdownStarted)
+                Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    ThemeChanged?.Invoke(this, EventArgs.Empty);
-                }
-            }
+                    if (!Dispatcher.HasShutdownStarted) ChangeTheme(DS4Windows.Global.UseCurrentTheme);
+                }));
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            if (watchingThemePreferences) Microsoft.Win32.SystemEvents.UserPreferenceChanged -= WindowsThemePreferenceChanged;
             try
             {
                 if (runShutdown)
