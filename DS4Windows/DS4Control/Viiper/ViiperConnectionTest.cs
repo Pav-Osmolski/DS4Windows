@@ -14,8 +14,8 @@ namespace DS4Windows
     internal static class ViiperConnectionTest
     {
         internal const string ProbeName = "VIIPER-API-PROBE.exe";
-        internal const string ProbeSha256 = "69CF2143E18FA1F8060FA32C19AFAF9CCC2EA64BBEDAA22D2BBAA67A8FE96DD1";
-        internal const string CollectorSha256 = "0DF0D2B1A5C7C278258A580ED188CFE332C0193A78FBA74C1B0E5E065FECD683";
+        internal const string ProbeSha256 = "543635E38CB515232F62165CE37C4AD8EF31195CF2BA10F09FF8C6AAC5FC89F9";
+        internal const string CollectorSha256 = "F23E17EC33D98B99E5A66C47FBC0F951C43626B555A189634F1086B70DBBA563";
         internal const int Attempts = 20;
 
         internal static async Task<string> RunAsync(string logDirectory, Action<string> record,

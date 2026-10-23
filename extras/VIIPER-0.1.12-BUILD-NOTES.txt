@@ -2,30 +2,30 @@ VIIPER bundled artifact provenance
 
 Version: v0.1.12-issue66-comprehensive-preview20261023
 Source: https://github.com/Pav-Osmolski/VIIPER
-Source commit: 7c85578f45392622b9816e71b8ba570204b2629a
+Source commit: f5a3a2ba5e025dfedbf0c40dae6937144c5ef849
 Toolchain: Go 1.27.2 windows/amd64
 Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
-Embedded commit: 7c85578f45392622b9816e71b8ba570204b2629a
-Embedded build date: 2026-10-23T12:28:31Z
-Embedded VCS revision: 7c85578f45392622b9816e71b8ba570204b2629a
-Embedded VCS time: 2026-10-23T12:28:29Z
+Embedded commit: f5a3a2ba5e025dfedbf0c40dae6937144c5ef849
+Embedded build date: 2026-10-23T13:16:06Z
+Embedded VCS revision: f5a3a2ba5e025dfedbf0c40dae6937144c5ef849
+Embedded VCS time: 2026-10-23T13:15:39Z
 Embedded VCS modified: false
 PE file version: 0.1.12.0
 PE product version: 0.1.12-issue66-comprehensive-preview20261023
 Binary: VIIPER-0.1.12-x64.exe
-Binary SHA-256: 313315DB5AEA4C61164F624D79A6BA135DEF733EE50B240E53AEB555B1D354C9
+Binary SHA-256: 6F59B5E0C41A86DD89B0C63917995D4795F780B1AEEC9E1C382ED65159FE9B75
 Authenticode status at packaging: NotSigned
 License notice: VIIPER-0.1.12-LICENSES.txt
 License notice SHA-256: EE49B79156A9A982BF8BCB13CFBC794CCD4E18EB93D76797A3D085CE4C40B486
 
 VIIPER issue 66 diagnostic preview - not a confirmed fix
 
-Source: https://github.com/Pav-Osmolski/VIIPER/commit/7c85578f45392622b9816e71b8ba570204b2629a
+Source: https://github.com/Pav-Osmolski/VIIPER/commit/f5a3a2ba5e025dfedbf0c40dae6937144c5ef849
 Base runtime source: 46390f60f043da201d5a3adeaf950834c3f2135c (0.1.12)
 Source archive: VIIPER-0.1.12-SOURCE.zip
-Source archive SHA-256: A1F92F512CEF661163C110D439EED4C75BF76C93D0A55AE052CF4D843B9C5199
+Source archive SHA-256: 66704E658533DD8EB28BC0C22C3BAA5A8EAFADDDC022D9DFAAB1CC14A6362C97
 Independent probe: VIIPER-API-PROBE.exe
-Independent probe SHA-256: 69CF2143E18FA1F8060FA32C19AFAF9CCC2EA64BBEDAA22D2BBAA67A8FE96DD1
+Independent probe SHA-256: 543635E38CB515232F62165CE37C4AD8EF31195CF2BA10F09FF8C6AAC5FC89F9
 
 This is a local Release build from the clean recorded development commit,
 with Go 1.27.2, CGO disabled and trimmed source paths. It is not the stable
@@ -37,6 +37,8 @@ This diagnostic preview adds a bounded graceful half-close/drain after complete
 management replies, with an explicit original-close comparison mode. Streaming
 controller/audio I/O, authentication and record framing are unchanged. An
 automated collector compares both modes and records Windows TCP/filter metadata.
+Its explicit authenticated loopback ping-only mode exposes no device routes and
+bypasses USB/IP prerequisites only for these isolated diagnostic instances.
 Completed socket writes are not proof that the peer received the reply.
 
 All module versions and checksums match the stable runtime. GPL, complete

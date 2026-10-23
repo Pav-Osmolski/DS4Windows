@@ -150,7 +150,7 @@ try {
         Write-Host "Comparing connection shutdown: $label (both clients, 40 requests)..."
         $server = $null
         try {
-            $server = Start-Owned (Join-Path $private 'viiper.exe') @('server','--config-only',('--config=' + (Join-Path $private 'empty.json')),
+            $server = Start-Owned (Join-Path $private 'viiper.exe') @('server','--diagnostic-ping-only','--config-only',('--config=' + (Join-Path $private 'empty.json')),
                 ('--key-file=' + (Join-Path $data 'viiper.key.txt')),'--usb.addr=127.0.0.1:0',"--api.addr=127.0.0.1:$testPort",'--api.auto-attach-local-client=false',
                 '--api.require-local-host-auth=true','--no-tray','--log.level=debug',('--log.file=' + (Join-Path $evidence ($label + '-server.log'))),
                 '--usb.retained-import-authority-id=0',"--api.management-close-mode=$mode")

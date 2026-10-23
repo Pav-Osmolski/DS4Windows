@@ -1,16 +1,16 @@
 {
   "SchemaVersion": 1,
-  "SourceCommit": "7c85578f45392622b9816e71b8ba570204b2629a",
+  "SourceCommit": "f5a3a2ba5e025dfedbf0c40dae6937144c5ef849",
   "Version": "v0.1.12-issue66-comprehensive-preview20261023",
   "ProductVersion": "0.1.12-issue66-comprehensive-preview20261023",
   "FileVersion": "0.1.12.0",
-  "BuildDate": "2026-10-23T12:28:31Z",
+  "BuildDate": "2026-10-23T13:16:06Z",
   "GitHubRunId": null,
   "GitHubRunAttempt": null,
   "Binary": {
     "Name": "VIIPER-0.1.12-x64.exe",
-    "Size": 9494016,
-    "Sha256": "313315DB5AEA4C61164F624D79A6BA135DEF733EE50B240E53AEB555B1D354C9"
+    "Size": 9500672,
+    "Sha256": "6F59B5E0C41A86DD89B0C63917995D4795F780B1AEEC9E1C382ED65159FE9B75"
   },
   "LicenseFiles": [
     {
@@ -39,7 +39,7 @@
     "Path": "github.com/Alia5/VIIPER/cmd/viiper",
     "Main": {
       "Path": "github.com/Alia5/VIIPER",
-      "Version": "v0.1.12-0.20261023122829-7c85578f4539"
+      "Version": "v0.1.12-0.20261023131539-f5a3a2ba5e02"
     },
     "Deps": [
       {
@@ -127,11 +127,11 @@
       },
       {
         "Key": "vcs.revision",
-        "Value": "7c85578f45392622b9816e71b8ba570204b2629a"
+        "Value": "f5a3a2ba5e025dfedbf0c40dae6937144c5ef849"
       },
       {
         "Key": "vcs.time",
-        "Value": "2026-10-23T12:28:29Z"
+        "Value": "2026-10-23T13:15:39Z"
       },
       {
         "Key": "vcs.modified",
@@ -185,21 +185,21 @@
   ],
   "SourceArchive": {
     "Name": "VIIPER-0.1.12-SOURCE.zip",
-    "Sha256": "A1F92F512CEF661163C110D439EED4C75BF76C93D0A55AE052CF4D843B9C5199"
+    "Sha256": "66704E658533DD8EB28BC0C22C3BAA5A8EAFADDDC022D9DFAAB1CC14A6362C97"
   },
   "BuildKind": "local-diagnostic-preview",
   "DiagnosticProbe": {
     "Name": "VIIPER-API-PROBE.exe",
     "Size": 3647488,
-    "Sha256": "69CF2143E18FA1F8060FA32C19AFAF9CCC2EA64BBEDAA22D2BBAA67A8FE96DD1"
+    "Sha256": "543635E38CB515232F62165CE37C4AD8EF31195CF2BA10F09FF8C6AAC5FC89F9"
   },
   "HelpOutput": [
     "Usage: VIIPER <command> [flags]",
     "",
     "Virtual Input over IP EmulatoR",
     "",
-    "    Version: v0.1.12-issue66-comprehensive-preview20261023 (7c85578f45392622b9816e71b8ba570204b2629a)",
-    "             2026-10-23T12:28:31Z",
+    "    Version: v0.1.12-issue66-comprehensive-preview20261023 (f5a3a2ba5e025dfedbf0c40dae6937144c5ef849)",
+    "             2026-10-23T13:16:06Z",
     "    Source:  https://github.com/hbashton/VIIPER",
     "    License: GPLv3",
     "",
