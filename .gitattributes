@@ -85,3 +85,6 @@ extras/VIIPER-0.1.11-BUILD-INFO.json -text whitespace=cr-at-eol
 extras/VIIPER-0.1.12-LICENSES.txt -text whitespace=cr-at-eol,-blank-at-eof
 extras/VIIPER-0.1.12-BUILD-NOTES.txt -text whitespace=cr-at-eol
 extras/VIIPER-0.1.12-BUILD-INFO.json -text whitespace=cr-at-eol
+
+# The diagnostic collector is verified against an embedded byte hash.
+extras/Collect-Issue66.ps1 -text

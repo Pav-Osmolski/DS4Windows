@@ -5,6 +5,10 @@ if ($env:GITHUB_ACTIONS -cne 'true' -or $env:RUNNER_ENVIRONMENT -cne 'github-hos
     throw 'Elevated collector verification is restricted to a disposable hosted runner.'
 }
 $PreviewRoot = (Resolve-Path -LiteralPath $PreviewRoot).Path
+$collectorHash = (Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $PreviewRoot 'extras\Collect-Issue66.ps1')).Hash
+$assemblyHex = [Convert]::ToHexString([IO.File]::ReadAllBytes((Join-Path $PreviewRoot 'DS4Windows.dll')))
+$pinHex = [Convert]::ToHexString([Text.Encoding]::Unicode.GetBytes($collectorHash))
+if (-not $assemblyHex.Contains($pinHex)) { throw 'Published collector bytes do not match the app embedded pin.' }
 $logs = Join-Path $env:RUNNER_TEMP ('issue66-empty-logs-' + [Guid]::NewGuid().ToString('N'))
 [void](New-Item -ItemType Directory -Path $logs)
 # post-build puts the aliases in the ZIP only; materialize only these exact bytes.
