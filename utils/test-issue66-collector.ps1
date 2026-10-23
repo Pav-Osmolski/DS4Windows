@@ -31,6 +31,11 @@ try {
     }
     if ((Get-Item -LiteralPath (Join-Path $evidence 'tcpip.etl')).Length -le 4096) { throw 'Windows trace is empty.' }
     if ((Get-Content -LiteralPath (Join-Path $evidence 'trace-status.txt') -Raw) -notmatch '2F07E2EE|TCPIP') { throw 'TCPIP provider not enabled.' }
+    $reset = Get-Content -LiteralPath (Join-Path $evidence 'controlled-reset-self-test.json') -Raw | ConvertFrom-Json
+    if ($reset.observedError -ne 10054) { throw 'Controlled reset self-test did not trigger the expected socket error.' }
+    $decoded = @(Get-Content -LiteralPath (Join-Path $evidence 'tcp-reset-events.json') -Raw | ConvertFrom-Json)
+    $resetSignature = '0200' + ('{0:X4}' -f [int]$reset.serverPort) + '7F000001'
+    if (@($decoded | Where-Object {$_.xml.Contains($resetSignature)}).Count -lt 1) { throw 'The controlled reset was not correlated to its exact loopback endpoint in Windows events.' }
     $key = Join-Path $capture[0].FullName 'private\lab-data\viiper.key.txt'
     if (Test-Path -LiteralPath $key) { throw 'Temporary credential was retained.' }
     Add-Type -AssemblyName System.IO.Compression.FileSystem

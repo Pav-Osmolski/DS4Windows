@@ -41,7 +41,9 @@ public class PortableBrokerProcessTreeTests
             parent = new PortableBrokerProcessHost().Start(start);
             var elapsed = Stopwatch.StartNew();
             int helperId = 0;
-            while (elapsed.ElapsedMilliseconds < 10_000)
+            // A hosted VM may cold-start Windows PowerShell slowly under scanning.
+            // This is fixture startup, not the product stop deadline tested below.
+            while (elapsed.ElapsedMilliseconds < 30_000)
             {
                 if (File.Exists(pidFile) && int.TryParse(File.ReadAllText(pidFile), out helperId)) break;
                 Assert.IsTrue(parent.IsRunning, "The test parent exited before creating its helper.");

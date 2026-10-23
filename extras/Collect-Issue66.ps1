@@ -121,7 +121,7 @@ try {
     # Diagnostic event metadata only; no NDIS/packet-capture provider or payload capture.
     # Do not request Packet/PiiPresent keywords; restrict to connection diagnostics. Unique bounded session, no global netsh trace.
     $providers = Join-Path $private 'providers.txt'
-    [IO.File]::WriteAllLines($providers, @('{2F07E2EE-15DB-40F1-90EF-9D7BA282188A} 0x000001170040068F 5','{0C478C5B-0351-41B1-8C58-4A6737DA32E3} 0x0000011F00000001 5'), [Text.Encoding]::ASCII)
+    [IO.File]::WriteAllLines($providers, @('{2F07E2EE-15DB-40F1-90EF-9D7BA282188A} 0x0000011400000080 5','{0C478C5B-0351-41B1-8C58-4A6737DA32E3} 0x0000011C00000000 5'), [Text.Encoding]::ASCII)
     $exit = Capture-Native 'trace-start.txt' 'logman.exe' @('create','trace',$traceName,'-ets','-o',(Join-Path $evidence 'tcpip.etl'),'-f','bincirc','-max','64',
         '-pf',$providers)
     $traceActive = $exit -eq 0
@@ -158,6 +158,29 @@ try {
         } catch { $gaps.Add($label + ': ' + $_.Exception.GetType().Name) }
         finally { if ($server -and -not $server.HasExited) { $server.Kill(); [void]$server.WaitForExit(5000) } }
     }
+    # Prove the capture can observe a known reset on an owned disposable loopback
+    # connection. This does not touch the live server or a controller.
+    $resetListener = New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,0)
+    $resetClient = New-Object Net.Sockets.TcpClient
+    $resetPeer = $null
+    try {
+        $resetListener.Start()
+        $resetClient.Connect('127.0.0.1',$resetListener.LocalEndpoint.Port)
+        $resetPeer = $resetListener.AcceptTcpClient()
+        $resetMetadata = [ordered]@{ startedUtc=[DateTimeOffset]::UtcNow.ToString('o'); processId=$PID;
+            clientPort=$resetClient.Client.LocalEndPoint.Port; serverPort=$resetPeer.Client.LocalEndPoint.Port; expectedError=10054; observedError=0 }
+        $resetPeer.Client.LingerState = New-Object Net.Sockets.LingerOption($true,0)
+        $resetClient.GetStream().WriteByte(65)
+        [void]$resetPeer.Client.Poll(500000,[Net.Sockets.SelectMode]::SelectRead)
+        $resetPeer.Client.Close(0)
+        $resetClient.ReceiveTimeout = 1000
+        try { [void]$resetClient.GetStream().ReadByte() } catch {
+            $failure = $_.Exception
+            while ($failure.InnerException) { $failure = $failure.InnerException }
+            if ($failure -is [Net.Sockets.SocketException]) { $resetMetadata.observedError=$failure.NativeErrorCode }
+        }
+        Write-Json $resetMetadata 'controlled-reset-self-test.json'
+    } finally { if ($resetPeer) { $resetPeer.Dispose() }; $resetClient.Dispose(); $resetListener.Stop() }
     if (-not $SkipLiveTests -and (Test-Path -LiteralPath $LiveKeyPath -PathType Leaf)) {
         $keyInfo = Get-Item -LiteralPath $LiveKeyPath
         if ($keyInfo.Length -gt 0 -and $keyInfo.Length -le 4096) {
@@ -189,6 +212,14 @@ try {
 } catch { $gaps.Add('Collector: ' + $_.Exception.GetType().Name) }
 finally {
     if ($traceActive) { $traceStopped = (Capture-Native 'trace-stop.txt' 'logman.exe' @('stop',$traceName,'-ets')) -eq 0 }
+    if ($traceStopped) {
+        try {
+            $resets = @(Get-WinEvent -FilterHashtable @{Path=(Join-Path $evidence 'tcpip.etl');Id=1039,1040,1468,1479} -Oldest -ErrorAction Stop |
+                Select-Object -First 2000 TimeCreated,Id,ProcessId,@{n='xml';e={$_.ToXml()}})
+            Write-Json $resets 'tcp-reset-events.json'
+            if ($resets.Count -eq 0) { $gaps.Add('No TCP reset events decoded; inspect raw tcpip.etl.') }
+        } catch { $gaps.Add('TCP reset event decoding: ' + $_.Exception.GetType().Name + '; raw trace retained.') }
+    }
     foreach ($p in $owned) { if (-not $traceStopped -and $watchdog -and $p.Id -eq $watchdog.Id) { continue }; try { if (-not $p.HasExited) { $p.Kill(); [void]$p.WaitForExit(5000) }; $p.Dispose() } catch {} }
     $temporaryKey = Join-Path $data 'viiper.key.txt'
     if (Test-Path -LiteralPath $temporaryKey -PathType Leaf) { Remove-Item -LiteralPath $temporaryKey }
