@@ -143,6 +143,42 @@ public sealed class ViiperManagementTraceTests
         StringAssert.Contains(lines.Single(), "wireSent=5 wireReceived=0 plaintextReceived=0");
     }
 
+    [TestMethod]
+    public async Task RapidReadinessConnectionsDoNotLoseTheirCompletionHandle()
+    {
+        const int count = 256;
+        using var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        int port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        using var stopped = new CancellationTokenSource();
+        Task server = Task.Factory.StartNew(() =>
+        {
+            try
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    using TcpClient peer = listener.AcceptTcpClient();
+                    peer.ReceiveTimeout = 3000;
+                    peer.GetStream().ReadExactly(new byte[5]);
+                    peer.GetStream().Write("VIIPER rapid connection fixture\n"u8);
+                }
+            }
+            catch (SocketException) when (stopped.IsCancellationRequested) { }
+        }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        try
+        {
+            for (int i = 0; i < count; i++)
+                Assert.IsTrue(ViiperSetupManager.ProbeServer("127.0.0.1", port, false,
+                    out string failure), $"Readiness connection {i + 1}: {failure}");
+        }
+        finally
+        {
+            stopped.Cancel();
+            listener.Stop();
+            await server.WaitAsync(TimeSpan.FromSeconds(5));
+        }
+    }
+
     private sealed class PrefixThenReset(int length) : Stream
     {
         private readonly MemoryStream input = new(new byte[] { 0, 0, 0, 40, 0, 0, 0 }, 0, length);

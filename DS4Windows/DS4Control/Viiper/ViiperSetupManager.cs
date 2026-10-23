@@ -3163,19 +3163,17 @@ namespace DS4Windows
                     try { tcp.Dispose(); } catch (ObjectDisposedException) { }
                 });
 
-                IAsyncResult result = tcp.BeginConnect(host, port, null, null);
-                using (result.AsyncWaitHandle)
+                // Match the regular client: socket completion can retire the
+                // legacy APM wait handle before a fast readiness check waits on
+                // it. Own cancellation instead of sharing AsyncWaitHandle.
+                using (var connectDeadline = CancellationTokenSource.CreateLinkedTokenSource(totalDeadline.Token))
                 {
-                    if (!result.AsyncWaitHandle.WaitOne(
-                            TimeSpan.FromMilliseconds(750)))
-                    {
-                        failure = "Connect: timeout";
-                        return false;
-                    }
+                    connectDeadline.CancelAfter(Math.Min(750, budgetMilliseconds));
+                    tcp.ConnectAsync(host, port, connectDeadline.Token).AsTask()
+                        .GetAwaiter().GetResult();
                 }
 
                 phase = "CompleteConnect";
-                tcp.EndConnect(result);
                 trace.Connected(tcp);
                 using Stream observed = trace.Observe(tcp.GetStream());
                 using var transport = new ViiperProbeDeadlineStream(observed,
