@@ -246,6 +246,28 @@ def validate_release_workflow(release_workflow: str) -> None:
     ])
     if 'dotnet publish' in verification or 'gh release upload' in verification:
         raise SystemExit("Published RC verification must not rebuild or upload assets.")
+    promotion = between("  promote:", "  verify_published_release:")
+    require(promotion, [
+        "inputs.mode == 'promote' && needs.identity.outputs.unsigned_release == 'true'",
+        'INPUT_CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}',
+        'release-candidate.py fetch --run-id $env:INPUT_CANDIDATE_RUN_ID',
+        '$publish = $env:CANDIDATE_PUBLISH_ROOT',
+        'candidateRunId = $env:CANDIDATE_RUN_ID',
+        'candidateArtifactId = $env:CANDIDATE_ARTIFACT_ID',
+    ])
+    if 'dotnet publish' in promotion or 'dotnet test' in promotion or 'build-installer.ps1' in promotion:
+        raise SystemExit("Candidate promotion must not rebuild or replace tested binary bytes.")
+    # The promotion and explicit rebuild paths must execute identical source,
+    # licence, digest, receipt and no-overwrite guards. Only the verified input
+    # publish directory and additional CI provenance may differ.
+    original_records = between("    - name: Prepare verified release records", "    - name: Remove signing material")
+    promoted_records = promotion[promotion.index("    - name: Prepare verified release records"):]
+    promoted_records = promoted_records.replace('$publish = $env:CANDIDATE_PUBLISH_ROOT',
+        "$publish = (Resolve-Path '.\\bin\\x64\\Release\\DS4Windows').Path")
+    promoted_records = re.sub(r'^.*candidateRunId =.*\n', '', promoted_records, flags=re.MULTILINE)
+    promoted_records = re.sub(r'^.*candidateArtifactId =.*\n', '', promoted_records, flags=re.MULTILINE)
+    if promoted_records.strip() != original_records.strip():
+        raise SystemExit("Promotion must retain the complete existing release-record and upload policy.")
     for contract in [
         "TAG=${{ github.event.release.tag_name }}",
         "/p:AssemblyVersion=${{ env.BINARY_VERSION }}",
