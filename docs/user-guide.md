@@ -319,6 +319,8 @@ app. The reader follows your theme, separates release headings, and fits images
 to the reading area as you resize the window. If notes cannot be loaded, use
 **Try again** or **View releases on GitHub**.
 
+See [languages and translation coverage](localization.md) for available packs and how to report wording improvements.
+
 Language changes show a restart reminder. A custom executable name shows a
 re-launch reminder with the filename to open. Theme and tray icon changes apply
 immediately.
