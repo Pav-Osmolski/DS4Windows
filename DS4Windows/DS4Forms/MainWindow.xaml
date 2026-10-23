@@ -1143,6 +1143,10 @@
                                           ToolTip="Restart DS4Windows and VIIPER to apply. Use Open log folder to find viiper-debug.log. Raw packet logging stays off." />
                                 <Button x:Name="viiperDebugHelpBtn" Content="Capture instructions" Margin="0,0,0,8"
                                         Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ViiperDebugHelpBtn_Click" />
+                                <Button x:Name="viiperConnectionTestBtn" Content="Test VIIPER connection" Margin="12,0,0,8"
+                                        Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ViiperConnectionTestBtn_Click"
+                                        IsEnabled="{Binding SystemIntegrationEnabled}"
+                                        ToolTip="Run authenticated connection checks with DS4Windows and an independent probe. No controller, driver or security settings are changed." />
                             </WrapPanel>
                             <TextBlock Text="DS4Windows archives: 30 days by default, rotating at 10 MB, up to 20 files. The current session log is kept when clearing stored logs."
                                        Foreground="{DynamicResource MutedForegroundColor}" TextWrapping="Wrap" />

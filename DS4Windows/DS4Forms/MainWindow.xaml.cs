@@ -1925,6 +1925,37 @@ Suspend support not enabled.", true);
             }
         }
 
+        private async void ViiperConnectionTestBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Global.ViiperDebugLogging)
+            {
+                logActionStatus.Text = "Enable VIIPER debug logging, exit DS4Windows and VIIPER, then restart this preview before running the connection test.";
+                return;
+            }
+            viiperConnectionTestBtn.IsEnabled = false;
+            logActionStatus.Text = "Testing VIIPER connections. This can take up to 45 seconds. No driver or controller changes are made.";
+            using var cancellation = new CancellationTokenSource(TimeSpan.FromSeconds(45));
+            try
+            {
+                logActionStatus.Text = await ViiperConnectionTest.RunAsync(App.LogDirectory,
+                    line => AppLogger.LogToGui(line, false), cancellation.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                logActionStatus.Text = "The connection test reached its time limit. Use Open log folder to share both logs.";
+                AppLogger.LogToGui("VIIPER connection test reached its time limit.", true);
+            }
+            catch (Exception exception)
+            {
+                logActionStatus.Text = "The connection test could not finish. Use the complete preview ZIP and share both logs.";
+                AppLogger.LogToGui($"VIIPER connection test failed: {exception.GetType().Name}. No changes were made to the controller or drivers.", true);
+            }
+            finally
+            {
+                viiperConnectionTestBtn.IsEnabled = settingsWrapVM.SystemIntegrationEnabled;
+            }
+        }
+
         private void ViiperDebugHelpBtn_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(this,

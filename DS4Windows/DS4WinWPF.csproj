@@ -159,6 +159,11 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
+		<Content Include="..\extras\VIIPER-API-PROBE.exe">
+			<Link>extras\VIIPER-API-PROBE.exe</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 		<Content Include="..\extras\VIIPER-0.1.12-BUILD-INFO.json">
 			<Link>extras\VIIPER-0.1.12-BUILD-INFO.json</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

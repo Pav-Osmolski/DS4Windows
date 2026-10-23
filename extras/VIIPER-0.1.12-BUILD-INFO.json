@@ -1,16 +1,16 @@
 {
   "SchemaVersion": 1,
-  "SourceCommit": "46390f60f043da201d5a3adeaf950834c3f2135c",
-  "Version": "v0.1.12",
-  "ProductVersion": "0.1.12",
+  "SourceCommit": "dc1809cca96a1f2f7356c080e77ea05908706938",
+  "Version": "v0.1.12-issue66-trace-preview20261023",
+  "ProductVersion": "0.1.12-issue66-trace-preview20261023",
   "FileVersion": "0.1.12.0",
-  "BuildDate": "2026-10-19T12:17:19Z",
-  "GitHubRunId": "39250438513",
-  "GitHubRunAttempt": "1",
+  "BuildDate": "2026-10-23T09:45:49Z",
+  "GitHubRunId": null,
+  "GitHubRunAttempt": null,
   "Binary": {
     "Name": "VIIPER-0.1.12-x64.exe",
-    "Size": 9477120,
-    "Sha256": "FA1716E581E7A9E85ED593B7573D51221A223D6A0F291D1DD9A2BB4F6E77C785"
+    "Size": 9489920,
+    "Sha256": "237D5EF4D33C9D2085BBF0C58D4953B55BFE175C0B26D441E03450A130CF4359"
   },
   "LicenseFiles": [
     {
@@ -39,7 +39,7 @@
     "Path": "github.com/Alia5/VIIPER/cmd/viiper",
     "Main": {
       "Path": "github.com/Alia5/VIIPER",
-      "Version": "v0.1.12"
+      "Version": "v0.1.12-0.20261023094526-dc1809cca96a"
     },
     "Deps": [
       {
@@ -127,11 +127,11 @@
       },
       {
         "Key": "vcs.revision",
-        "Value": "46390f60f043da201d5a3adeaf950834c3f2135c"
+        "Value": "dc1809cca96a1f2f7356c080e77ea05908706938"
       },
       {
         "Key": "vcs.time",
-        "Value": "2026-10-19T12:13:47Z"
+        "Value": "2026-10-23T09:45:26Z"
       },
       {
         "Key": "vcs.modified",
@@ -185,6 +185,56 @@
   ],
   "SourceArchive": {
     "Name": "VIIPER-0.1.12-SOURCE.zip",
-    "Sha256": "54DAAB83C3CA2EF08B0F5DC64C92E28996DFE7C1897DA53A5CDAEE0449E5EDF2"
-  }
+    "Sha256": "466BC62324B8B74281557DFDAC78FC41A58FD898486013E79A6EA209016AD4F8"
+  },
+  "BuildKind": "local-diagnostic-preview",
+  "DiagnosticProbe": {
+    "Name": "VIIPER-API-PROBE.exe",
+    "Size": 3647488,
+    "Sha256": "E2527B32963D7C2587FD8E2B3769689E725927A6FC47C59812F3874B70AF61F6"
+  },
+  "HelpOutput": [
+    "Usage: VIIPER <command> [flags]",
+    "",
+    "Virtual Input over IP EmulatoR",
+    "",
+    "    Version: v0.1.12-issue66-trace-preview20261023 (dc1809cca96a1f2f7356c080e77ea05908706938)",
+    "             2026-10-23T09:45:49Z",
+    "    Source:  https://github.com/hbashton/VIIPER",
+    "    License: GPLv3",
+    "",
+    "Flags:",
+    "  -h, --help                    Show context-sensitive help.",
+    "      --config=STRING           Path to configuration file (json|yaml|toml)",
+    "                                ($VIIPER_CONFIG)",
+    "      --config-only             Load only the explicit absolute --config file;",
+    "                                never search default locations",
+    "      --update-notify=\"none\"    Deprecated and ignored; built-in self-updates",
+    "                                have been removed ($VIIPER_UPDATE_NOTIFY)",
+    "      --log.level=\"info\"        Log level: trace, debug, info, warn, error",
+    "                                ($VIIPER_LOG_LEVEL)",
+    "      --log.file=STRING         Log file path (default: none; logs only to",
+    "                                console) ($VIIPER_LOG_FILE)",
+    "      --log.raw-file=STRING     Raw packet log file path (default: none)",
+    "                                ($VIIPER_LOG_RAW_FILE)",
+    "",
+    "Commands:",
+    "  server [flags]",
+    "    Start the VIIPER USB-IP server",
+    "",
+    "  proxy --upstream-addr=STRING [flags]",
+    "    Start the VIIPER USB-IP proxy",
+    "",
+    "  config init <command> [flags]",
+    "    Generate a configuration template",
+    "",
+    "  install [flags]",
+    "    Add the current VIIPER executable to system startup and runs it (creates a",
+    "    Systemd service on Linux)",
+    "",
+    "  uninstall [flags]",
+    "    Remove any VIIPER system startup configuration / Systemd service",
+    "",
+    "Run \"VIIPER <command> --help\" for more information on a command."
+  ]
 }

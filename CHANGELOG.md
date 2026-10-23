@@ -3,6 +3,12 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## [5.0.44-issue66-server-trace-preview20261023](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44-issue66-server-trace-preview20261023) - 2026-10-23
+
+- Second diagnostic pre-release for [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), also reported in [upstream issue #153](https://github.com/hbashton/DS4Windows/issues/153). Thanks to [@cns00](https://github.com/cns00) for the additional logs, video and intermittent successful runs. This is **not a confirmed fix**; stable 5.0.44 remains Latest.
+- Bundle a matched VIIPER diagnostic build that records management reply writes, connection closure and the existing socket linger setting. It does not alter authentication, socket options, deadlines, retries or streaming report writes. A completed server write is not proof that its peer received the response.
+- Add **Test VIIPER connection** to the Log page. Compare 20 authenticated pings using DS4Windows with 20 using an independent Go client, and save a safe summary in `viiper-connection-test.json`. The test does not create controllers, change drivers or repair the installation. Matching source and checksums accompany this unsigned portable preview.
+
 ## [5.0.44-issue66-trace-preview20261022](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44-issue66-trace-preview20261022) - 2026-10-22
 
 - Diagnostic pre-release for the remaining communication failure in [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), also reported in [upstream issue #153](https://github.com/hbashton/DS4Windows/issues/153). This is **not a confirmed fix**. Thanks to [@cns00](https://github.com/cns00) for the follow-up logs and screenshots showing that output still fails with Default selected.

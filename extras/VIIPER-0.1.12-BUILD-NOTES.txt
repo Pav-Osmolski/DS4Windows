@@ -1,43 +1,45 @@
 VIIPER bundled artifact provenance
 
-Version: v0.1.12
+Version: v0.1.12-issue66-trace-preview20261023
 Source: https://github.com/Pav-Osmolski/VIIPER
-Source commit: 46390f60f043da201d5a3adeaf950834c3f2135c
+Source commit: dc1809cca96a1f2f7356c080e77ea05908706938
 Toolchain: Go 1.27.2 windows/amd64
 Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
-Embedded commit: 46390f60f043da201d5a3adeaf950834c3f2135c
-Embedded build date: 2026-10-19T12:17:19Z
-Embedded VCS revision: 46390f60f043da201d5a3adeaf950834c3f2135c
-Embedded VCS time: 2026-10-19T12:13:47Z
+Embedded commit: dc1809cca96a1f2f7356c080e77ea05908706938
+Embedded build date: 2026-10-23T09:45:49Z
+Embedded VCS revision: dc1809cca96a1f2f7356c080e77ea05908706938
+Embedded VCS time: 2026-10-23T09:45:26Z
 Embedded VCS modified: false
 PE file version: 0.1.12.0
-PE product version: 0.1.12
+PE product version: 0.1.12-issue66-trace-preview20261023
 Binary: VIIPER-0.1.12-x64.exe
-Binary SHA-256: FA1716E581E7A9E85ED593B7573D51221A223D6A0F291D1DD9A2BB4F6E77C785
+Binary SHA-256: 237D5EF4D33C9D2085BBF0C58D4953B55BFE175C0B26D441E03450A130CF4359
 Authenticode status at packaging: NotSigned
 License notice: VIIPER-0.1.12-LICENSES.txt
 License notice SHA-256: EE49B79156A9A982BF8BCB13CFBC794CCD4E18EB93D76797A3D085CE4C40B486
 
-VIIPER 0.1.12 corresponding-source and build record
+VIIPER issue 66 diagnostic preview - not a confirmed fix
 
-Release workflow: https://github.com/Pav-Osmolski/VIIPER/actions/runs/39250438513
-Pull request: https://github.com/Pav-Osmolski/VIIPER/pull/6
+Source: https://github.com/Pav-Osmolski/VIIPER/commit/dc1809cca96a1f2f7356c080e77ea05908706938
+Base runtime source: 46390f60f043da201d5a3adeaf950834c3f2135c (0.1.12)
 Source archive: VIIPER-0.1.12-SOURCE.zip
-Source archive SHA-256: 54DAAB83C3CA2EF08B0F5DC64C92E28996DFE7C1897DA53A5CDAEE0449E5EDF2
+Source archive SHA-256: 466BC62324B8B74281557DFDAC78FC41A58FD898486013E79A6EA209016AD4F8
+Independent probe: VIIPER-API-PROBE.exe
+Independent probe SHA-256: E2527B32963D7C2587FD8E2B3769689E725927A6FC47C59812F3874B70AF61F6
 
-This is the Windows amd64 executable from the clean, tagged Release workflow,
-with Go 1.27.2, CGO disabled, release build tags and trimmed source paths.
-BUILD-INFO.json records the embedded Go settings, help-only version output,
-binary checksum and complete license-file checksums. The corresponding source
-archive preserves every Git blob from the recorded source commit; its ZIP
-comment records that same commit.
+This is a local Release build from the clean recorded development commit,
+with Go 1.27.2, CGO disabled and trimmed source paths. It is not the stable
+0.1.12 release executable. The legacy bundle filenames remain for the paired
+application's packaging contract; the product version, hashes and provenance
+identify this diagnostic build explicitly.
 
-Native output admission derives timing from the advertised output endpoint.
-The paired candidate was tested by Pawel in DEATHLOOP and GTA V Enhanced over
-USB and Bluetooth. Full software tests and Windows timing checks run in CI.
-These checks do not guarantee identical behaviour on every controller or host.
+Changes only add safe command reply-write/close diagnostics and an independent
+authenticated loopback probe. Authentication, socket options, framing and
+shutdown behaviour are unchanged. Streaming controller/audio I/O is not wrapped.
+Completed socket writes are not proof that the peer received the reply.
 
-Third-party module versions and checksums match the preceding verified release.
-The included GPL, complete dependency grants, systray modification notice and
-WDL notices are retained byte-for-byte from the workflow package. This Windows
-executable is unsigned; checksums establish artifact identity, not a signature.
+All module versions and checksums match the stable runtime. GPL, complete
+dependency grants, systray modification notice and WDL notices are retained
+byte-for-byte. The corresponding source ZIP contains the recorded Git tree
+and its comment records the source commit. These Windows binaries are unsigned.
+No hardware acceptance or resolution on the reporter's laptop is claimed.
