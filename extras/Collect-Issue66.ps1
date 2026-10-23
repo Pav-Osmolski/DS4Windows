@@ -15,6 +15,8 @@ $private = Join-Path $session 'private'
 $data = Join-Path $private 'lab-data'
 $traceName = 'DS4W-Issue66-' + [Guid]::NewGuid().ToString('N')
 $traceActive = $false
+$watchdog = $null
+$traceStopped = $false
 $owned = New-Object 'System.Collections.Generic.List[System.Diagnostics.Process]'
 $outcomes = New-Object 'System.Collections.Generic.List[object]'
 $gaps = New-Object 'System.Collections.Generic.List[string]'
@@ -120,11 +122,18 @@ try {
     # Do not request Packet/PiiPresent keywords; restrict to connection diagnostics. Unique bounded session, no global netsh trace.
     $providers = Join-Path $private 'providers.txt'
     [IO.File]::WriteAllLines($providers, @('{2F07E2EE-15DB-40F1-90EF-9D7BA282188A} 0x000001170040068F 5','{0C478C5B-0351-41B1-8C58-4A6737DA32E3} 0x0000011F00000001 5'), [Text.Encoding]::ASCII)
-    $exit = Capture-Native 'trace-start.txt' 'logman.exe' @('create','trace',$traceName,'-ets','-o',(Join-Path $evidence 'tcpip.etl'),'-f','bincirc','-max','64','-rf','00:08:00',
+    $exit = Capture-Native 'trace-start.txt' 'logman.exe' @('create','trace',$traceName,'-ets','-o',(Join-Path $evidence 'tcpip.etl'),'-f','bincirc','-max','64',
         '-pf',$providers)
     $traceActive = $exit -eq 0
+    if ($traceActive) {
+        # Direct ETW sessions do not support logman's -rf duration. An independent
+        # hidden child bounds this exact GUID-named session if this window dies.
+        $stopCode = "[Threading.Thread]::Sleep(480000); & '$env:SystemRoot\System32\logman.exe' stop '$traceName' -ets | Out-Null"
+        $encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($stopCode))
+        $watchdog = Start-Owned (Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe') @('-NoProfile','-NonInteractive','-EncodedCommand',$encoded)
+    }
     if ($traceActive) { [void](Capture-Native 'trace-status.txt' 'logman.exe' @('query',$traceName,'-ets')) }
-    if (-not $traceActive) { $gaps.Add('Windows TCP/filter trace unavailable. Run the preview as administrator for this capture.') }
+    if (-not $traceActive) { $gaps.Add('Windows TCP/filter trace unavailable; see trace-start.txt for the Windows error. Administrator permission is required.') }
     $listener = New-Object Net.Sockets.TcpListener([Net.IPAddress]::Loopback,0)
     $listener.Start(); $testPort = $listener.LocalEndpoint.Port; $listener.Stop()
     if ($testPort -eq 3242) { throw 'Isolated endpoint collided with production port.' }
@@ -179,8 +188,8 @@ try {
     } catch { $gaps.Add('System events: ' + $_.Exception.GetType().Name) }
 } catch { $gaps.Add('Collector: ' + $_.Exception.GetType().Name) }
 finally {
-    if ($traceActive) { [void](Capture-Native 'trace-stop.txt' 'logman.exe' @('stop',$traceName,'-ets')) }
-    foreach ($p in $owned) { try { if (-not $p.HasExited) { $p.Kill(); [void]$p.WaitForExit(5000) }; $p.Dispose() } catch {} }
+    if ($traceActive) { $traceStopped = (Capture-Native 'trace-stop.txt' 'logman.exe' @('stop',$traceName,'-ets')) -eq 0 }
+    foreach ($p in $owned) { if ($watchdog -and $p.Id -eq $watchdog.Id -and -not $traceStopped) { continue }; try { if (-not $p.HasExited) { $p.Kill(); [void]$p.WaitForExit(5000) }; $p.Dispose() } catch {} }
     $temporaryKey = Join-Path $data 'viiper.key.txt'
     if (Test-Path -LiteralPath $temporaryKey -PathType Leaf) { Remove-Item -LiteralPath $temporaryKey }
     if (Test-Path -LiteralPath $evidence) {
