@@ -7,7 +7,8 @@ Related reports: [#74](https://github.com/Pav-Osmolski/DS4Windows/issues/74) and
 The paired VIIPER source is `bcd7ddecd3c8e011402b3272b4e59a725102ed30`
 ([draft PR](https://github.com/Pav-Osmolski/VIIPER/pull/8)). Its exact executable,
 source archive, hashes, notices and local build provenance ship with the preview.
-The preview is for testing only; neither component is merged or released stable.
+This records the local testing-only preview before either component was merged
+or released stable.
 
 ## Software validation
 
@@ -25,13 +26,15 @@ The preview is for testing only; neither component is merged or released stable.
 - Portable ZIP integrity, 24 compiled language satellites, named XAML resources,
   backend identity/hash and testing channel marker were verified.
 
-## Physical acceptance still required
+## Maintainer acceptance
 
-Verify audio switches in both directions on DualSense USB and Bluetooth and
-genuine DualShock 4 Bluetooth. Check manual choices and saved-profile reopening.
-Compare virtual Sony battery bands while discharging, charging and fully charged.
-Check native DualSense passthrough has no regression. Synthetic tests cannot
-certify the actual audio route or the Windows/game display.
+The maintainer reported that the paired preview works well and approved merge
+and release on 2026-10-23. The acceptance checklist supplied with that preview
+covered audio switching, manual choices, profile persistence and battery bands.
+This sign-off is not certification of every supported controller or game;
+genuine DS4 and Nintendo hardware coverage remains limited to the actual
+hardware available to testers. Synthetic tests cannot certify an audio route
+or a particular Windows/game display.
 
 Xbox personas remain wired USB devices. DS4/DualSense browser testing alone
 cannot prove Xbox battery support. Factory build-time fields retain valid
