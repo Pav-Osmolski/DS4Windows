@@ -1,4 +1,4 @@
-/*
+﻿/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -146,6 +146,13 @@ namespace DS4WinWPF
         {
             runShutdown = true;
             skipSave = true;
+
+            if (DS4Windows.ViiperTransportProbeHelper.TryRun(e.Args, out int transportProbeExitCode))
+            {
+                runShutdown = false;
+                Current.Shutdown(transportProbeExitCode);
+                return;
+            }
 
             // Validate explicit lab policy before any maintenance helper can
             // repair tasks, install packages, or signal a running mapper.

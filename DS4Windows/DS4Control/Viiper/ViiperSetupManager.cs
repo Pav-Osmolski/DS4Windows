@@ -168,11 +168,11 @@ namespace DS4Windows
         // Keep the legacy flat payload/download identity. This preview must be
         // extracted intact; the different pinned hash rejects the stable download.
         internal const string SupportedViiperReleaseTag = "v0.1.12";
-        internal const string SupportedViiperDisplayVersion = "0.1.12-issue66-trace-preview20261023";
+        internal const string SupportedViiperDisplayVersion = "0.1.12-issue66-comprehensive-preview20261023";
         private const string BundledViiperHashName =
             BundledViiperName + ".sha256";
         internal const string SupportedViiperSha256 =
-            "237D5EF4D33C9D2085BBF0C58D4953B55BFE175C0B26D441E03450A130CF4359";
+            "313315DB5AEA4C61164F624D79A6BA135DEF733EE50B240E53AEB555B1D354C9";
         private const string BundledUsbipName = "USBip-0.9.8.1-x64.exe";
         private const string BundledHidHideName =
             "HidHide_1.5.230_x64.exe";

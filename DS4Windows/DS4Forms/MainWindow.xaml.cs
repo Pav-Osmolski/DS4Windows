@@ -1,4 +1,4 @@
-/*
+﻿/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -1925,34 +1925,37 @@ Suspend support not enabled.", true);
             }
         }
 
-        private async void ViiperConnectionTestBtn_Click(object sender, RoutedEventArgs e)
+        private void ViiperConnectionTestBtn_Click(object sender, RoutedEventArgs e)
         {
             if (!Global.ViiperDebugLogging)
             {
-                logActionStatus.Text = "Enable VIIPER debug logging, exit DS4Windows and VIIPER, then restart this preview before running the connection test.";
+                logActionStatus.Text = "Enable Verbose logging and VIIPER debug logging, then restart this preview before collecting diagnostics.";
                 return;
             }
-            viiperConnectionTestBtn.IsEnabled = false;
-            logActionStatus.Text = "Testing VIIPER connections. This can take up to 45 seconds. No driver or controller changes are made.";
-            using var cancellation = new CancellationTokenSource(TimeSpan.FromSeconds(45));
             try
             {
-                logActionStatus.Text = await ViiperConnectionTest.RunAsync(App.LogDirectory,
-                    line => AppLogger.LogToGui(line, false), cancellation.Token);
-            }
-            catch (OperationCanceledException)
-            {
-                logActionStatus.Text = "The connection test reached its time limit. Use Open log folder to share both logs.";
-                AppLogger.LogToGui("VIIPER connection test reached its time limit.", true);
+                string script = Path.Combine(AppContext.BaseDirectory, "extras", "Collect-Issue66.ps1");
+                using (var input = File.OpenRead(script))
+                    if ((File.GetAttributes(script) & FileAttributes.ReparsePoint) != 0 ||
+                        !Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(input)).Equals(
+                            ViiperConnectionTest.CollectorSha256, StringComparison.OrdinalIgnoreCase))
+                        throw new IOException("The matching diagnostic collector is missing or changed.");
+                var start = new ProcessStartInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),
+                    @"WindowsPowerShell\v1.0\powershell.exe"))
+                {
+                    UseShellExecute = true, Verb = "runas", WindowStyle = ProcessWindowStyle.Normal,
+                    WorkingDirectory = AppContext.BaseDirectory,
+                };
+                foreach (string argument in new[] { "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script,
+                    "-LogDirectory", App.LogDirectory, "-LiveKeyPath", ViiperAuthentication.DefaultKeyFilePath })
+                    start.ArgumentList.Add(argument);
+                Process.Start(start)?.Dispose();
+                logActionStatus.Text = "Follow the diagnostics window. It will create one private ZIP in the preview's Diagnostics folder.";
             }
             catch (Exception exception)
             {
-                logActionStatus.Text = "The connection test could not finish. Use the complete preview ZIP and share both logs.";
-                AppLogger.LogToGui($"VIIPER connection test failed: {exception.GetType().Name}. No changes were made to the controller or drivers.", true);
-            }
-            finally
-            {
-                viiperConnectionTestBtn.IsEnabled = settingsWrapVM.SystemIntegrationEnabled;
+                logActionStatus.Text = "Diagnostics could not start. Use the complete preview ZIP and allow the Windows administrator prompt.";
+                AppLogger.LogToGui($"VIIPER diagnostic collector launch failed: {exception.GetType().Name}.", true);
             }
         }
 
