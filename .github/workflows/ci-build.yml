@@ -231,6 +231,19 @@ jobs:
         shell: pwsh
         run: .\utils\test-issue66-collector.ps1 -PreviewRoot '.\bin\x64\Release\DS4Windows'
 
+      - name: Preserve isolated issue 66 comparison evidence
+        if: always() && github.ref == 'refs/heads/fix/issue66-comprehensive-diagnostics'
+        uses: actions/upload-artifact@v7
+        with:
+          name: Issue66_Isolated_Comparison
+          path: |
+            bin/x64/Release/DS4Windows/Diagnostics/*/evidence/*-dotnet.json
+            bin/x64/Release/DS4Windows/Diagnostics/*/evidence/*-go.json
+            bin/x64/Release/DS4Windows/Diagnostics/*/evidence/*-server.log
+            bin/x64/Release/DS4Windows/Diagnostics/*/evidence/completion.json
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Verify packaged translations from different launch directories
         shell: pwsh
         run: |

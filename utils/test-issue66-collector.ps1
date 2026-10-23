@@ -32,6 +32,11 @@ try {
     foreach ($phase in @('1-immediate','2-graceful','3-graceful','4-immediate')) {
         $dotnet = @(Get-Content -LiteralPath (Join-Path $evidence ($phase + '-dotnet.json')) -Raw | ConvertFrom-Json)
         $go = Get-Content -LiteralPath (Join-Path $evidence ($phase + '-go.json')) -Raw | ConvertFrom-Json
+        $failedDotnet = @($dotnet | Where-Object {-not $_.success})
+        Write-Host ($phase + ': .NET ' + ($dotnet.Count - $failedDotnet.Count) + '/' + $dotnet.Count + '; Go ' + $go.successful + '/' + $go.attempted)
+        if ($failedDotnet.Count -gt 0) { Write-Host ($failedDotnet | ConvertTo-Json -Depth 8) }
+        $failedGo = @($go.attempts | Where-Object {-not $_.success})
+        if ($failedGo.Count -gt 0) { Write-Host ($failedGo | ConvertTo-Json -Depth 8) }
         if ($dotnet.Count -ne 20 -or @($dotnet | Where-Object {-not $_.success}).Count -gt 0 -or
             $go.setupFailed -or $go.successful -ne 20 -or $go.attempted -ne 20) { throw "Connection comparison failed: $phase" }
         $server = Get-Content -LiteralPath (Join-Path $evidence ($phase + '-server.log')) -Raw
