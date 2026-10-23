@@ -3,6 +3,13 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+- Avoid duplicate push/PR tests, retain full tests on WIP updates, and offer explicit portable/installer previews. Packaging and infrastructure PRs keep pre-merge installer validation; known documentation-only changes use text/site checks.
+- Build final-version release candidates once on main. Release preparation verifies the exact successful main CI run, artifact and package hashes, then promotes those same portable/installer bytes. Keep an explicit fully validated rebuild fallback, schema-1 updater compatibility, signing policy and no-overwrite protection.
+- Use cached Python 3.12 for packaging and avoid compressing package archives again during artifact upload. Clarify the legacy RC4.5.5 upgrade-test name and also verify upgrades from pinned numeric stable 5.0.43, preserving profiles across repair/uninstall.
+- Document issue classifications, distinct closure outcomes and genuine dependencies separately from general cross-references.
+
 ## [5.0.44](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44) - 2026-10-22
 
 ### Important fix: connected controller, but no input in games
