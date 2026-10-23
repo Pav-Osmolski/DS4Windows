@@ -11,7 +11,7 @@ namespace DS4Windows
             if (!status.UsbipRuntimeReady && !string.IsNullOrWhiteSpace(status.UsbipProbeMessage))
                 yield return "USB/IP diagnostic: " + status.UsbipProbeMessage;
             yield return $"USB/IP package verification: {(status.UsbipExecutableSafe && status.UsbipDriverFilesSafe ? "passed" : "not passed")}";
-            yield return $"VIIPER: supported version {ViiperSetupManager.SupportedViiperReleaseTag.TrimStart('v')}; selected executable {(status.ViiperPackageCurrent ? "verified" : "not verified")}; server {(status.ServerRunning ? "running and reachable" : "not ready")}";
+            yield return $"VIIPER: supported version {ViiperSetupManager.SupportedViiperDisplayVersion}; selected executable {(status.ViiperPackageCurrent ? "verified" : "not verified")}; server {(status.ServerRunning ? "running and reachable" : "not ready")}";
             yield return status.Ready ? "VIIPER virtual-controller backend ready"
                 : "VIIPER virtual-controller backend not ready: " + status.DisplayText;
         }

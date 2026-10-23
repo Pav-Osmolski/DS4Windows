@@ -165,7 +165,10 @@ namespace DS4Windows
         private const string InstallerResourceName =
             "DS4Windows.install-viiper-backend.ps1";
         internal const string BundledViiperName = "VIIPER-0.1.12-x64.exe";
-        internal const string SupportedViiperReleaseTag = "v0.1.12-issue66-trace-preview20261023";
+        // Keep the legacy flat payload/download identity. This preview must be
+        // extracted intact; the different pinned hash rejects the stable download.
+        internal const string SupportedViiperReleaseTag = "v0.1.12";
+        internal const string SupportedViiperDisplayVersion = "0.1.12-issue66-trace-preview20261023";
         private const string BundledViiperHashName =
             BundledViiperName + ".sha256";
         internal const string SupportedViiperSha256 =
