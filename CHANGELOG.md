@@ -5,10 +5,23 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+## [5.0.45](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.45) - 2026-10-23
+
+### Appearance and languages
+
+- Correct the executable's company, authors, description and project/repository links for the Pav-Osmolski fork, retaining the original copyright credits.
+- Add Graphite, Paper, Midnight and High contrast app themes, palette previews, preset accents and a custom accent picker. Follow Windows replaces the ambiguous Default label; Windows contrast settings take priority. Theme and accent choices apply immediately and persist across restarts.
+- Complete both language resource sets for all 24 supported languages and make newer interface screens translatable. Preserve existing translations where suitable, fill gaps with offline machine-assisted translations, repair placeholder errors and update obsolete driver/setup guidance. Correct Swedish and Indonesian culture identifiers with migration of saved choices; consistently capitalize native language names. Resource coverage and formatting are checked automatically; wording remains open to native-speaker improvements.
+### Build and maintenance
+
 - Avoid duplicate push/PR tests, retain full tests on WIP updates, and offer explicit portable/installer previews. Packaging and infrastructure PRs keep pre-merge installer validation; known documentation-only changes use text/site checks.
 - Build final-version release candidates once on main. Release preparation verifies the exact successful main CI run, artifact and package hashes, then promotes those same portable/installer bytes. Keep an explicit fully validated rebuild fallback, schema-1 updater compatibility, signing policy and no-overwrite protection.
 - Use cached Python 3.12 for packaging and avoid compressing package archives again during artifact upload. Clarify the legacy RC4.5.5 upgrade-test name and also verify upgrades from pinned numeric stable 5.0.43, preserving profiles across repair/uninstall.
 - Document issue classifications, distinct closure outcomes and genuine dependencies separately from general cross-references.
+
+Themes, language coverage and fork metadata are tracked in [PR #73](https://github.com/Pav-Osmolski/DS4Windows/pull/73).
+
+The build and release improvements are tracked in [PR #72](https://github.com/Pav-Osmolski/DS4Windows/pull/72).
 
 ## [5.0.44](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44) - 2026-10-22
 

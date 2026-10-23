@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -267,10 +267,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 Visible = candidate.IsValid || joined.IsValid,
                 Enabled = canSelect && (candidate.IsValid || joined.IsValid),
                 IsArmed = armed,
-                Text = joined.IsValid ? "Unlink" : armed ? "Cancel" : "Link",
-                ToolTip = automatic ? "Turn off automatic pairing in Settings to link or unlink Joy-Cons." :
-                    joined.IsValid ? "Use these Joy-Cons as two separate controllers." :
-                    armed ? "Cancel this selection." : "Select this Joy-Con, then Link on the other one. This controller keeps its profile and virtual pad."
+                Text = joined.IsValid ? global::DS4Windows.UiText.Get("Unlink") : armed ? global::DS4Windows.UiText.Get("Cancel") : global::DS4Windows.UiText.Get("Link"),
+                ToolTip = automatic ? global::DS4Windows.UiText.Get("Turn off automatic pairing in Settings to link or unlink Joy-Cons.") :
+                    joined.IsValid ? global::DS4Windows.UiText.Get("Use these Joy-Cons as two separate controllers.") :
+                    armed ? global::DS4Windows.UiText.Get("Cancel this selection.") : global::DS4Windows.UiText.Get("Select this Joy-Con, then Link on the other one. This controller keeps its profile and virtual pad.")
             };
             if (next == JoyConLinkAction) return;
             JoyConLinkAction = next;
@@ -304,14 +304,14 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler SelectedProfileChanged;
 
         public string ControllerDisplayName => device is JoyConDevice { ProfileConnection.Group.Joined: true } ?
-            "Joy-Con Pair" : device.DisplayName;
+            global::DS4Windows.UiText.Get("Joy-Con Pair") : device.DisplayName;
 
         public string ConnectionText => device.ConnectionType switch
         {
             ConnectionType.USB => "USB",
             ConnectionType.BT => "Bluetooth",
-            ConnectionType.SONYWA => "Wireless adapter",
-            _ => "Connected",
+            ConnectionType.SONYWA => global::DS4Windows.UiText.Get("Wireless adapter"),
+            _ => global::DS4Windows.UiText.Get("Connected"),
         };
 
         public string LatencyText
@@ -343,14 +343,14 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public string Switch2StandaloneHoldModeText =>
             EffectiveSwitch2StandaloneHoldMode() ==
-                Switch2JoyConHoldMode.Horizontal ? "Horizontal" :
-                "Vertical";
+                Switch2JoyConHoldMode.Horizontal ? global::DS4Windows.UiText.Get("Horizontal") :
+                global::DS4Windows.UiText.Get("Vertical");
 
         public event EventHandler Switch2StandaloneHoldModeTextChanged;
 
         public string Switch2StandaloneHoldModeToolTip =>
-            device is JoyConDevice ? "Hold this Joy-Con upright or sideways. Saves to its current profile." :
-                "Switch between holding this Joy-Con upright or sideways. Your choice is remembered for this controller.";
+            device is JoyConDevice ? global::DS4Windows.UiText.Get("Hold this Joy-Con upright or sideways. Saves to its current profile.") :
+                global::DS4Windows.UiText.Get("Switch between holding this Joy-Con upright or sideways. Your choice is remembered for this controller.");
 
         public bool SupportsControllerAudio =>
             UiCapabilities.SupportsControllerAudio;
@@ -933,10 +933,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public void AddLightContextItems()
         {
-            MenuItem thing = new MenuItem() { Header = "Use Profile Controls", IsChecked = !useCustomColor };
+            MenuItem thing = new MenuItem() { Header = global::DS4Windows.UiText.Get("Use Profile Controls"), IsChecked = !useCustomColor };
             thing.Click += ProfileColorMenuClick;
             lightContext.Items.Add(thing);
-            thing = new MenuItem() { Header = "Use Custom Color", IsChecked = useCustomColor };
+            thing = new MenuItem() { Header = global::DS4Windows.UiText.Get("Use Custom Color"), IsChecked = useCustomColor };
             thing.Click += CustomColorItemClick;
             lightContext.Items.Add(thing);
         }

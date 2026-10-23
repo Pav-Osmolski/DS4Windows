@@ -20,7 +20,7 @@ public sealed class BindingWindowLiveInputLayoutTests
     [TestMethod]
     public void PreviewAndToggleStayOutsideTheScrollableAndMacroEditor()
     {
-        var document = XDocument.Load(SourcePath("BindingWindow.xaml"));
+        var document = LocalizedSource.Load(SourcePath("BindingWindow.xaml"));
         XElement preview = Named(document, "bindingLiveInput");
         XElement previewScroll = Named(document, "liveInputPreviewScroll");
         XElement toggle = Named(document, "liveInputPreviewToggle");
@@ -45,7 +45,7 @@ public sealed class BindingWindowLiveInputLayoutTests
     [TestMethod]
     public void PreviewStartsCollapsedAndSmallScreensCanScrollTheExistingEditor()
     {
-        var document = XDocument.Load(SourcePath("BindingWindow.xaml"));
+        var document = LocalizedSource.Load(SourcePath("BindingWindow.xaml"));
         XElement preview = Named(document, "bindingLiveInput");
         XElement previewScroll = Named(document, "liveInputPreviewScroll");
         XElement toggle = Named(document, "liveInputPreviewToggle");
@@ -53,7 +53,7 @@ public sealed class BindingWindowLiveInputLayoutTests
         Assert.AreEqual("Collapsed", (string)preview.Attribute("Visibility"));
         Assert.AreEqual("Collapsed", (string)previewScroll.Attribute("Visibility"));
         Assert.AreEqual("Collapsed", (string)toggle.Attribute("Visibility"));
-        Assert.AreEqual("Show live preview", (string)toggle.Attribute("Content"));
+        Assert.AreEqual("Show live preview", LocalizedSource.Resolve((string)toggle.Attribute("Content")));
         Assert.AreEqual("Right", (string)toggle.Attribute("HorizontalAlignment"));
         Assert.AreEqual("LiveInputPreviewToggle_Click", (string)toggle.Attribute("Click"));
         Assert.IsNull(preview.Attribute("MaxHeight"), "The preview itself must not clip its content.");

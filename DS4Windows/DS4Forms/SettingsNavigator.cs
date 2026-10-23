@@ -52,7 +52,7 @@ internal sealed class SettingsNavigator
         sections = navigation.Select(button =>
         {
             var page = pages.Children.OfType<StackPanel>().Single(panel => panel.Name == button.Name.Replace("Nav", "Page"));
-            var heading = new TextBlock { Text = button.Content + " — search results", Visibility = Visibility.Collapsed, Margin = new Thickness(0, 0, 0, 6) };
+            var heading = new TextBlock { Text = button.Content + global::DS4Windows.UiText.Get(" — search results"), Visibility = Visibility.Collapsed, Margin = new Thickness(0, 0, 0, 6) };
             heading.SetResourceReference(FrameworkElement.StyleProperty, "BridgeSectionTitleStyle");
             var cards = page.Children.OfType<FrameworkElement>().Where(child => child is Border or Expander).ToArray();
             page.Children.Insert(0, heading);

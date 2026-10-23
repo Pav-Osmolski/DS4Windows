@@ -129,14 +129,14 @@ namespace DS4WinWPF.DS4Forms
         {
             List<AudioSourceChoice> choices = new List<AudioSourceChoice>
             {
-                new AudioSourceChoice { DisplayName = "System audio · default output", Kind = AudioHapticsSourceKind.SystemAudio },
-                new AudioSourceChoice { DisplayName = "Controller audio", Kind = AudioHapticsSourceKind.ControllerAudio },
+                new AudioSourceChoice { DisplayName = global::DS4Windows.UiText.Get("System audio · default output"), Kind = AudioHapticsSourceKind.SystemAudio },
+                new AudioSourceChoice { DisplayName = global::DS4Windows.UiText.Get("Controller audio"), Kind = AudioHapticsSourceKind.ControllerAudio },
             };
             if (settings?.AutomaticGameDetection == true)
             {
                 choices.Add(new AudioSourceChoice
                 {
-                    DisplayName = "No fallback app selected",
+                    DisplayName = global::DS4Windows.UiText.Get("No fallback app selected"),
                     Kind = AudioHapticsSourceKind.AppSession,
                 });
             }
@@ -145,7 +145,7 @@ namespace DS4WinWPF.DS4Forms
             {
                 choices.Add(new AudioSourceChoice
                 {
-                    DisplayName = $"{session.Name}  ·  App",
+                    DisplayName = global::DS4Windows.UiText.Format("{0}  ·  App", session.Name),
                     Kind = AudioHapticsSourceKind.AppSession,
                     ProcessId = session.ProcessId,
                     ExecutableName = session.ExecutableName,
@@ -160,7 +160,7 @@ namespace DS4WinWPF.DS4Forms
             {
                 choices.Add(new AudioSourceChoice
                 {
-                    DisplayName = $"{(string.IsNullOrWhiteSpace(settings.DisplayName) ? settings.ExecutableName : settings.DisplayName)}  ·  Unavailable",
+                    DisplayName = global::DS4Windows.UiText.Format("{0}  ·  Unavailable", (string.IsNullOrWhiteSpace(settings.DisplayName) ? settings.ExecutableName : settings.DisplayName)),
                     Kind = AudioHapticsSourceKind.AppSession,
                     ProcessId = settings.ProcessId,
                     ExecutableName = settings.ExecutableName,
@@ -252,10 +252,10 @@ namespace DS4WinWPF.DS4Forms
                 ? FindResource("BridgePrimaryButtonStyle") as Style
                 : FindResource("BridgeSecondaryButtonStyle") as Style;
             modeHelpText.Text = mode == AudioHapticsMode.Mix
-                ? "Mix adds audio-driven detail while preserving game-provided advanced haptics."
+                ? global::DS4Windows.UiText.Get("Mix adds audio-driven detail while preserving game-provided advanced haptics.")
                 : IsNintendoAudioHapticsDevice
-                    ? "Replace uses only the selected audio for vibration. Choose Mix to keep game vibrations too."
-                    : "Replace ignores game-provided advanced haptics and uses only the selected audio source.";
+                    ? global::DS4Windows.UiText.Get("Replace uses only the selected audio for vibration. Choose Mix to keep game vibrations too.")
+                    : global::DS4Windows.UiText.Get("Replace ignores game-provided advanced haptics and uses only the selected audio source.");
         }
 
         private bool IsNintendoAudioHapticsDevice => deviceIndex >= 0 &&
@@ -281,8 +281,8 @@ namespace DS4WinWPF.DS4Forms
         {
             if (settings == null)
             {
-                statusText.Text = "Select a controller";
-                sourceStatusText.Text = "No source";
+                statusText.Text = global::DS4Windows.UiText.Get("Select a controller");
+                sourceStatusText.Text = global::DS4Windows.UiText.Get("No source");
                 statusDot.Fill = FindBrush("MutedForegroundColor", Brushes.Gray);
                 return;
             }
@@ -290,7 +290,7 @@ namespace DS4WinWPF.DS4Forms
             sourceStatusText.Text = SourceDisplayName(settings);
             if (!settings.Enabled)
             {
-                statusText.Text = "Off";
+                statusText.Text = global::DS4Windows.UiText.Get("Off");
                 statusDot.Fill = FindBrush("MutedForegroundColor", Brushes.Gray);
                 return;
             }
@@ -300,7 +300,7 @@ namespace DS4WinWPF.DS4Forms
                 Program.rootHub?.DS4Controllers[deviceIndex] != null;
             if (!liveController)
             {
-                statusText.Text = "Saved to profile";
+                statusText.Text = global::DS4Windows.UiText.Get("Saved to profile");
                 statusDot.Fill = FindBrush("AccentColor", Brushes.DodgerBlue);
                 return;
             }
@@ -308,7 +308,7 @@ namespace DS4WinWPF.DS4Forms
             AudioHapticsRuntimeStatus runtime =
                 Program.rootHub.GetAudioHapticsStatus(deviceIndex);
             statusText.Text = runtime.Active &&
-                !settings.AutomaticGameDetection ? "Active" : runtime.Message;
+                !settings.AutomaticGameDetection ? global::DS4Windows.UiText.Get("Active") : runtime.Message;
             statusDot.Fill = runtime.Active
                 ? FindBrush("SuccessColor", Brushes.LimeGreen)
                 : FindBrush("AccentColor", Brushes.DodgerBlue);
@@ -316,13 +316,13 @@ namespace DS4WinWPF.DS4Forms
 
         private static string SourceDisplayName(AudioHapticsProfileSettings settings) => settings.Source switch
         {
-            AudioHapticsSourceKind.ControllerAudio => "Controller audio",
+            AudioHapticsSourceKind.ControllerAudio => global::DS4Windows.UiText.Get("Controller audio"),
             AudioHapticsSourceKind.AppSession when
-                settings.AutomaticGameDetection => "Automatic game detection",
+                settings.AutomaticGameDetection => global::DS4Windows.UiText.Get("Automatic game detection"),
             AudioHapticsSourceKind.AppSession => string.IsNullOrWhiteSpace(settings.DisplayName)
-                ? (string.IsNullOrWhiteSpace(settings.ExecutableName) ? "Selected app" : settings.ExecutableName)
+                ? (string.IsNullOrWhiteSpace(settings.ExecutableName) ? global::DS4Windows.UiText.Get("Selected app") : settings.ExecutableName)
                 : settings.DisplayName,
-            _ => "System audio · default output",
+            _ => global::DS4Windows.UiText.Get("System audio · default output"),
         };
 
         private Brush FindBrush(string key, Brush fallback) => TryFindResource(key) as Brush ?? fallback;

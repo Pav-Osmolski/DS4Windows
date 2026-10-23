@@ -115,7 +115,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     ControllerRuntimeLaneState.NotRequired,
                     ControllerRuntimeLaneState.NotRequired,
                     ControllerRuntimeLaneState.NotRequired,
-                    "virtual controller"));
+                    global::DS4Windows.UiText.Get("virtual controller")));
 
         public CompositeDeviceModel SelectedController
         {
@@ -225,7 +225,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     return new ControllerMicrophoneUiState(
                         ControllerMicrophoneUiStatus.RequiresCompatibleController,
                         canEnable: false,
-                        "Select a compatible PlayStation controller to configure microphone input.");
+                        global::DS4Windows.UiText.Get("Select a compatible PlayStation controller to configure microphone input."));
                 }
 
                 int deviceIndex = selectedController.DevIndex;
@@ -867,7 +867,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                             ControllerRuntimeLaneState.NotRequired,
                             ControllerRuntimeLaneState.NotRequired,
                             ControllerRuntimeLaneState.NotRequired,
-                            "virtual controller"));
+                            global::DS4Windows.UiText.Get("virtual controller")));
 
             return new OverviewRuntimeSnapshot(CurrentProfileName,
                 SelectedControllerConnection, SelectedControllerLatency,
@@ -1110,7 +1110,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
         public event EventHandler ProfileEditorNavigationIndexChanged;
 
-        private string profileEditorSectionTitle = "Button Mapping";
+        private string profileEditorSectionTitle = global::DS4Windows.UiText.Get("Button Mapping");
 
         public string ProfileEditorSectionTitle
         {
@@ -1125,7 +1125,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler ProfileEditorSectionTitleChanged;
 
         private string profileEditorSectionDescription =
-            "Assign controller buttons, sticks, touch gestures, and shortcuts.";
+            global::DS4Windows.UiText.Get("Assign controller buttons, sticks, touch gestures, and shortcuts.");
 
         public string ProfileEditorSectionDescription
         {

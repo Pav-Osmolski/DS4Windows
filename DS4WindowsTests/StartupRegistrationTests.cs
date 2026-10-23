@@ -453,7 +453,7 @@ public class StartupRegistrationTests
     public void RejectedDisableRefreshesTheBoundCheckboxWithoutOpeningAWindow()
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -479,11 +479,9 @@ public class StartupRegistrationTests
                 BindingOperations.ClearAllBindings(checkbox);
             }
             catch (Exception error) { failure = error; }
-            finally { Dispatcher.CurrentDispatcher.InvokeShutdown(); }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(10)), "Isolated binding check timed out.");
+
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 

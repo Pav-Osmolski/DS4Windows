@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using DS4Windows;
 using DS4WinWPF.DS4Forms.ViewModels;
@@ -37,7 +37,7 @@ public partial class StickCalibrationWindow : Window
             _profileSettingsVM.LeftStickDriftXAxis = Convert.ToSByte(xAxisDrift);
             _profileSettingsVM.LeftStickDriftYAxis = Convert.ToSByte(yAxisDrift);
 
-            MessageBox.Show($"Detected drift:\nX axis: {xAxisDrift}, Y axis: {yAxisDrift}",
+            MessageBox.Show(global::DS4Windows.UiText.Format("Detected drift:\nX axis: {0}, Y axis: {1}", xAxisDrift, yAxisDrift),
                 "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -49,7 +49,7 @@ public partial class StickCalibrationWindow : Window
             _profileSettingsVM.RightStickDriftXAxis = Convert.ToSByte(xAxisDrift);
             _profileSettingsVM.RightStickDriftYAxis = Convert.ToSByte(yAxisDrift);
 
-            MessageBox.Show($"Detected drift:\nX axis: {xAxisDrift}, Y axis: {yAxisDrift}",
+            MessageBox.Show(global::DS4Windows.UiText.Format("Detected drift:\nX axis: {0}, Y axis: {1}", xAxisDrift, yAxisDrift),
                 "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 

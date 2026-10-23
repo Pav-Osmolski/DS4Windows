@@ -142,6 +142,10 @@ namespace DS4Windows
         Default,
         Light,
         Dark,
+        Graphite,
+        Paper,
+        Midnight,
+        HighContrast,
     }
 
     public class ControlActionData
@@ -1958,8 +1962,8 @@ namespace DS4Windows
 
         public static string UseLang
         {
-            set { m_Config.useLang = value; }
-            get { return m_Config.useLang; }
+            set { m_Config.useLang = LanguagePackPolicy.Normalize(value); }
+            get { return LanguagePackPolicy.Normalize(m_Config.useLang); }
         }
 
         public static bool DownloadLang
@@ -2191,8 +2195,14 @@ namespace DS4Windows
 
         public static AppThemeChoice UseCurrentTheme
         {
-            get => m_Config.useCurrentTheme;
-            set => m_Config.useCurrentTheme = value;
+            get => DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.Normalize(m_Config.useCurrentTheme);
+            set => m_Config.useCurrentTheme = DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.Normalize(value);
+        }
+
+        public static string AppAccent
+        {
+            get => DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.NormalizeAccent(m_Config.appAccent);
+            set => m_Config.appAccent = DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.NormalizeAccent(value);
         }
 
         public static bool UseCustomSteamFolder
@@ -5138,6 +5148,7 @@ namespace DS4Windows
         public bool useCustomSteamFolder;
         public string customSteamFolder;
         public AppThemeChoice useCurrentTheme;
+        public string appAccent = "Theme";
         public string fakeExeFileName = string.Empty;
         public string absDisplayEDID = string.Empty;
 
@@ -9669,7 +9680,7 @@ namespace DS4Windows
                     catch { missingSetting = true; }
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/CloseMinimizes"); Boolean.TryParse(Item.InnerText, out closeMini); }
                     catch { missingSetting = true; }
-                    try { Item = m_Xdoc.SelectSingleNode("/Profile/UseLang"); useLang = Item.InnerText; }
+                    try { Item = m_Xdoc.SelectSingleNode("/Profile/UseLang"); useLang = LanguagePackPolicy.Normalize(Item.InnerText); }
                     catch { missingSetting = true; }
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/DownloadLang"); Boolean.TryParse(Item.InnerText, out downloadLang); }
                     catch { missingSetting = true; }
@@ -9716,6 +9727,9 @@ namespace DS4Windows
                         useCurrentTheme = choice;
                     }
                     catch { missingSetting = true; useCurrentTheme = AppThemeChoice.Default; }
+
+                    appAccent = DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.NormalizeAccent(
+                        m_Xdoc.SelectSingleNode("/Profile/AppAccent")?.InnerText);
 
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/UseOSCServer"); Boolean.TryParse(Item.InnerText, out useOSCServ); }
                     catch { missingSetting = true; }
@@ -10054,6 +10068,7 @@ namespace DS4Windows
             XmlNode xmlSidebarHue = m_Xdoc.CreateNode(XmlNodeType.Element, "SidebarIconHue", null); xmlSidebarHue.InnerText = SidebarIconPolicy.NormalizeHue(sidebarIconHue).ToString(CultureInfo.InvariantCulture); rootElement.AppendChild(xmlSidebarHue);
             XmlNode xmlSidebarIcon = m_Xdoc.CreateNode(XmlNodeType.Element, "SidebarIcon", null); xmlSidebarIcon.InnerText = SidebarIconPolicy.Normalize(sidebarIcon).ToString(); rootElement.AppendChild(xmlSidebarIcon);
             XmlNode xmlAppThemeChoice = m_Xdoc.CreateNode(XmlNodeType.Element, "AppTheme", null); xmlAppThemeChoice.InnerText = useCurrentTheme.ToString(); rootElement.AppendChild(xmlAppThemeChoice);
+            XmlNode xmlAppAccent = m_Xdoc.CreateNode(XmlNodeType.Element, "AppAccent", null); xmlAppAccent.InnerText = appAccent; rootElement.AppendChild(xmlAppAccent);
             XmlNode xmlUseOSCServ = m_Xdoc.CreateNode(XmlNodeType.Element, "UseOSCServer", null); xmlUseOSCServ.InnerText = useOSCServ.ToString(); rootElement.AppendChild(xmlUseOSCServ);
             XmlNode xmlOSCServPort = m_Xdoc.CreateNode(XmlNodeType.Element, "OSCServerPort", null); xmlOSCServPort.InnerText = oscServPort.ToString(); rootElement.AppendChild(xmlOSCServPort);
             XmlNode xmlInterpretingOscMonitoring = m_Xdoc.CreateNode(XmlNodeType.Element, "InterpretingOscMonitoring", null); xmlInterpretingOscMonitoring.InnerText = interpretingOscMonitoring.ToString(); rootElement.AppendChild(xmlInterpretingOscMonitoring);

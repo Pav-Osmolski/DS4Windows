@@ -5,7 +5,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignHeight="760" d:DesignWidth="1040"
              HorizontalAlignment="Left" VerticalAlignment="Stretch"
-             Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={StaticResource ShellViewportWidth}, ConverterParameter=318}">
+             Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={StaticResource ShellViewportWidth}, ConverterParameter=318}"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows">
     <UserControl.Resources>
         <Style x:Key="FeatureCard" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
@@ -115,7 +117,7 @@
                 <Border Style="{StaticResource FeatureCard}" Padding="14,9"
                         HorizontalAlignment="Right" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Enabled" FontWeight="SemiBold" VerticalAlignment="Center"
+                        <TextBlock Text="{lex:Loc Strings:UI_92C1CDFDF4CB9CF6}" FontWeight="SemiBold" VerticalAlignment="Center"
                                    Margin="0,0,12,0" />
                         <CheckBox x:Name="enabledToggle" Style="{StaticResource ModernToggle}"
                                   Click="EnabledToggle_Click" />
@@ -150,8 +152,8 @@
                                                HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock Text="Audio Haptics" FontSize="17" FontWeight="SemiBold" />
-                                    <TextBlock Text="Audio-driven controller feedback" TextWrapping="Wrap"
+                                    <TextBlock Text="{lex:Loc Strings:UI_7100F6A2F74F84AE}" FontSize="17" FontWeight="SemiBold" />
+                                    <TextBlock Text="{lex:Loc Strings:UI_B09207F3CF78A78B}" TextWrapping="Wrap"
                                                Foreground="{DynamicResource MutedForegroundColor}" />
                                 </StackPanel>
                             </Grid>
@@ -185,15 +187,15 @@
                                     <ColumnDefinition Width="10" />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="lowGainButton" Content="Low" Tag="50" Style="{StaticResource PresetButton}"
+                                <Button x:Name="lowGainButton" Content="{lex:Loc Strings:UI_F793DE205EAD5AC3}" Tag="50" Style="{StaticResource PresetButton}"
                                         Click="GainPreset_Click" />
-                                <Button x:Name="mediumGainButton" Grid.Column="2" Content="Medium" Tag="100"
+                                <Button x:Name="mediumGainButton" Grid.Column="2" Content="{lex:Loc Strings:UI_8E588CD187741F1C}" Tag="100"
                                         Style="{StaticResource PresetButton}" Click="GainPreset_Click" />
-                                <Button x:Name="highGainButton" Grid.Column="4" Content="High" Tag="150"
+                                <Button x:Name="highGainButton" Grid.Column="4" Content="{lex:Loc Strings:UI_C4EBC6D4A5832CD9}" Tag="150"
                                         Style="{StaticResource PresetButton}" Click="GainPreset_Click" />
                             </Grid>
 
-                            <TextBlock Text="SOURCE" Style="{StaticResource FeatureLabel}" />
+                            <TextBlock Text="{lex:Loc Strings:UI_56CCD012FA61DD4B}" Style="{StaticResource FeatureLabel}" />
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -204,11 +206,11 @@
                                           DisplayMemberPath="DisplayName" />
                                 <Button Grid.Column="1" Content="&#xE72C;" FontFamily="Segoe MDL2 Assets"
                                         Width="42" Height="42" Margin="8,0,0,0"
-                                        ToolTip="Refresh running audio sessions"
+                                        ToolTip="{lex:Loc Strings:UI_1BAF753F2B197388}"
                                         Click="RefreshSources_Click" />
                             </Grid>
                             <TextBlock x:Name="sourceScopeHelp"
-                                       Text="System audio uses only Windows' default output, not every Sonar output. Choose an app to follow its audio on any output."
+                                       Text="{lex:Loc Strings:UI_8C8D61C3039A4B8B}"
                                        Margin="0,7,0,0" FontSize="11" TextWrapping="Wrap"
                                        Foreground="{DynamicResource MutedForegroundColor}" />
 
@@ -222,9 +224,9 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Margin="0,0,12,0">
-                                        <TextBlock Text="Automatically follow games"
+                                        <TextBlock Text="{lex:Loc Strings:UI_F7494DC007A3874E}"
                                                    FontWeight="SemiBold" />
-                                        <TextBlock Text="Switch to the active game's audio using Windows game records and installed launcher manifests."
+                                        <TextBlock Text="{lex:Loc Strings:UI_E5AFDB36790D61BE}"
                                                    Margin="0,3,0,0" FontSize="11"
                                                    TextWrapping="Wrap"
                                                    Foreground="{DynamicResource MutedForegroundColor}" />
@@ -233,7 +235,7 @@
                                               Grid.Column="1"
                                               Style="{StaticResource ModernToggle}"
                                               VerticalAlignment="Center"
-                                              ToolTip="Follows games recognized by Windows, Steam, Epic, or GOG. The selected app remains the fallback."
+                                              ToolTip="{lex:Loc Strings:UI_CB2EF7CDCCD67F8B}"
                                               Click="AutomaticGameDetectionToggle_Click" />
                                 </Grid>
                             </Border>
@@ -254,9 +256,9 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Margin="0,0,12,0">
-                                        <TextBlock Text="Play app through controller"
+                                        <TextBlock Text="{lex:Loc Strings:UI_8A77B384B715EB77}"
                                                    FontWeight="SemiBold" />
-                                        <TextBlock Text="Also stream this selected app to the controller speaker and AUX headset."
+                                        <TextBlock Text="{lex:Loc Strings:UI_F6B248C8F8278E3F}"
                                                    Margin="0,3,0,0" FontSize="11"
                                                    TextWrapping="Wrap"
                                                    Foreground="{DynamicResource MutedForegroundColor}" />
@@ -265,7 +267,7 @@
                                               Grid.Column="1"
                                               Style="{StaticResource ModernToggle}"
                                               VerticalAlignment="Center"
-                                              ToolTip="Overrides Advanced > Controller audio source while enabled. Choosing another source there releases this override."
+                                              ToolTip="{lex:Loc Strings:UI_63AA15F31116A92D}"
                                               Click="StreamAppToSpeakerToggle_Click" />
                                     <Grid x:Name="streamAppToHeadsetOnlyPanel"
                                           Grid.Row="1" Grid.ColumnSpan="2"
@@ -275,9 +277,9 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <StackPanel Margin="0,0,12,0">
-                                            <TextBlock Text="Headset only"
+                                            <TextBlock Text="{lex:Loc Strings:UI_6E3B4116187DF042}"
                                                        FontWeight="SemiBold" />
-                                            <TextBlock Text="Send the captured app only through the controller AUX port."
+                                            <TextBlock Text="{lex:Loc Strings:UI_05DABDBD3CBEB671}"
                                                        Margin="0,3,0,0" FontSize="11"
                                                        TextWrapping="Wrap"
                                                        Foreground="{DynamicResource MutedForegroundColor}" />
@@ -286,25 +288,25 @@
                                                   Grid.Column="1"
                                                   Style="{StaticResource ModernToggle}"
                                                   VerticalAlignment="Center"
-                                                  ToolTip="Routes captured app audio to headphones connected to the controller and mutes the controller speaker."
+                                                  ToolTip="{lex:Loc Strings:UI_CA3401C35F05E080}"
                                                   Click="StreamAppToHeadsetOnlyToggle_Click" />
                                     </Grid>
                                 </Grid>
                             </Border>
 
-                            <TextBlock Text="MODE" Style="{StaticResource FeatureLabel}"
+                            <TextBlock Text="{lex:Loc Strings:UI_AC6C84ED1369F964}" Style="{StaticResource FeatureLabel}"
                                        Margin="0,15,0,7" />
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="mixModeButton" Content="Mix" MinHeight="40"
+                                <Button x:Name="mixModeButton" Content="{lex:Loc Strings:UI_DCE6EB4447EF655F}" MinHeight="40"
                                         Click="MixMode_Click"
-                                        ToolTip="Add audio-derived feedback to game haptics and rumble." />
-                                <Button x:Name="replaceModeButton" Grid.Column="1" Content="Replace"
+                                        ToolTip="{lex:Loc Strings:UI_4B3DA22AF0A9A20F}" />
+                                <Button x:Name="replaceModeButton" Grid.Column="1" Content="{lex:Loc Strings:UI_95E154398A4BC009}"
                                         MinHeight="40" Click="ReplaceMode_Click"
-                                        ToolTip="Use only audio-derived feedback." />
+                                        ToolTip="{lex:Loc Strings:UI_6E683F3EE32BF629}" />
                             </Grid>
                             <TextBlock x:Name="modeHelpText" Margin="0,8,0,0" TextWrapping="Wrap"
                                        Foreground="{DynamicResource MutedForegroundColor}" />
@@ -332,8 +334,8 @@
                                                HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock Text="Response" FontSize="17" FontWeight="SemiBold" />
-                                    <TextBlock Text="Frequency focus and strength" TextWrapping="Wrap"
+                                    <TextBlock Text="{lex:Loc Strings:UI_9061383B8E228EF3}" FontSize="17" FontWeight="SemiBold" />
+                                    <TextBlock Text="{lex:Loc Strings:UI_C2394E190A2B0544}" TextWrapping="Wrap"
                                                Foreground="{DynamicResource MutedForegroundColor}" />
                                 </StackPanel>
                             </Grid>
@@ -361,8 +363,8 @@
                                     </Grid.ColumnDefinitions>
 
                                     <StackPanel>
-                                        <TextBlock Text="Bass Focus" Style="{StaticResource FeatureLabel}"
-                                                   ToolTip="Choose which low-frequency region becomes vibration." />
+                                        <TextBlock Text="{lex:Loc Strings:UI_14109BAE34F1E570}" Style="{StaticResource FeatureLabel}"
+                                                   ToolTip="{lex:Loc Strings:UI_AFF4E1FA5E67A574}" />
                                         <ComboBox x:Name="bassFocusCombo" MinHeight="38"
                                                   SelectionChanged="BassFocusCombo_SelectionChanged">
                                             <ComboBoxItem Content="80 Hz" />
@@ -372,51 +374,51 @@
                                         </ComboBox>
                                     </StackPanel>
                                     <StackPanel Grid.Column="2">
-                                        <TextBlock Text="Response" Style="{StaticResource FeatureLabel}"
-                                                   ToolTip="Control how strongly haptics react, especially to peaks." />
+                                        <TextBlock Text="{lex:Loc Strings:UI_9061383B8E228EF3}" Style="{StaticResource FeatureLabel}"
+                                                   ToolTip="{lex:Loc Strings:UI_0CA3A6E7FD1C8060}" />
                                         <ComboBox x:Name="responseCombo" MinHeight="38"
                                                   SelectionChanged="ResponseCombo_SelectionChanged">
-                                            <ComboBoxItem Content="Subtle" />
-                                            <ComboBoxItem Content="Dynamic" />
-                                            <ComboBoxItem Content="Aggressive" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_3EADECFBD53379B9}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_B6EE7B3E8D9C49D8}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_4AD0CC8EC0084946}" />
                                         </ComboBox>
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="2">
-                                        <TextBlock Text="Ramp" Style="{StaticResource FeatureLabel}"
-                                                   ToolTip="Control how quickly haptics rise with the sound." />
+                                        <TextBlock Text="{lex:Loc Strings:UI_70A5AE4AA40DC35B}" Style="{StaticResource FeatureLabel}"
+                                                   ToolTip="{lex:Loc Strings:UI_F08FE5709F5BEB76}" />
                                         <ComboBox x:Name="attackCombo" MinHeight="38"
                                                   SelectionChanged="AttackCombo_SelectionChanged">
-                                            <ComboBoxItem Content="Slow Ramp" />
-                                            <ComboBoxItem Content="Medium Ramp" />
-                                            <ComboBoxItem Content="Fast Ramp" />
-                                            <ComboBoxItem Content="Instant Ramp" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_E03B2E6B52C8FB89}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_24BBF5E512D84C9D}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_F40EFD76D018D7FB}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_36CE9B888B0C2D7B}" />
                                         </ComboBox>
                                     </StackPanel>
                                     <StackPanel Grid.Row="2" Grid.Column="2">
-                                        <TextBlock Text="Fade" Style="{StaticResource FeatureLabel}"
-                                                   ToolTip="Control how quickly haptics fade after the sound drops." />
+                                        <TextBlock Text="{lex:Loc Strings:UI_9EFB597C915414FD}" Style="{StaticResource FeatureLabel}"
+                                                   ToolTip="{lex:Loc Strings:UI_A0A09846F6C64713}" />
                                         <ComboBox x:Name="releaseCombo" MinHeight="38"
                                                   SelectionChanged="ReleaseCombo_SelectionChanged">
-                                            <ComboBoxItem Content="Fast Fade" />
-                                            <ComboBoxItem Content="Medium Fade" />
-                                            <ComboBoxItem Content="Slow Fade" />
-                                            <ComboBoxItem Content="Long Fade" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_827DEB019D72780D}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_1E35938EBC875C2A}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_530B094666EB6097}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_A5DD0016FD12E61B}" />
                                         </ComboBox>
                                     </StackPanel>
                                 </Grid>
                             </Border>
 
-                            <Expander Grid.Row="1" Header="Advanced tuning" Margin="0,16,0,0"
+                            <Expander Grid.Row="1" Header="{lex:Loc Strings:UI_E6D2DF0198F79332}" Margin="0,16,0,0"
                                       Foreground="{DynamicResource ForegroundColor}">
                                 <StackPanel Margin="0,10,0,0">
-                                    <CheckBox x:Name="customFiltersToggle" Content="Use custom frequency filters"
+                                    <CheckBox x:Name="customFiltersToggle" Content="{lex:Loc Strings:UI_DBA1F6F6A6653DAC}"
                                               Click="CustomFiltersToggle_Click" />
-                                    <TextBlock Text="Replaces Bass Focus. Filters affect audio-derived vibration only."
+                                    <TextBlock Text="{lex:Loc Strings:UI_BF40309DBD0E77EA}"
                                                TextWrapping="Wrap" Margin="0,8,0,12"
                                                Foreground="{DynamicResource MutedForegroundColor}" />
                                     <DockPanel>
-                                        <TextBlock Text="Low-pass" VerticalAlignment="Center" />
+                                        <TextBlock Text="{lex:Loc Strings:UI_FAA22CEE68AE363E}" VerticalAlignment="Center" />
                                         <TextBlock x:Name="lowPassValueText" Text="160 Hz" DockPanel.Dock="Right"
                                                    HorizontalAlignment="Right" VerticalAlignment="Center" />
                                     </DockPanel>
@@ -424,10 +426,10 @@
                                             TickFrequency="10" IsSnapToTickEnabled="True"
                                             Style="{StaticResource HapticsSlider}" ValueChanged="FrequencySlider_ValueChanged"
                                             AutomationProperties.Name="Low-pass frequency in Hz" />
-                                    <TextBlock Text="Lower values reduce higher-frequency detail, including some dialogue."
+                                    <TextBlock Text="{lex:Loc Strings:UI_D56F042DEE02B24C}"
                                                TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
                                     <DockPanel Margin="0,12,0,0">
-                                        <TextBlock Text="High-pass" VerticalAlignment="Center" />
+                                        <TextBlock Text="{lex:Loc Strings:UI_C7E889C15C3F0FE3}" VerticalAlignment="Center" />
                                         <TextBlock x:Name="highPassValueText" Text="20 Hz" DockPanel.Dock="Right"
                                                    HorizontalAlignment="Right" VerticalAlignment="Center" />
                                     </DockPanel>
@@ -435,9 +437,9 @@
                                             TickFrequency="1" IsSnapToTickEnabled="True"
                                             Style="{StaticResource HapticsSlider}" ValueChanged="FrequencySlider_ValueChanged"
                                             AutomationProperties.Name="High-pass frequency in Hz" />
-                                    <TextBlock Text="Removes very low-frequency rumble. Set to 0 Hz to turn off."
+                                    <TextBlock Text="{lex:Loc Strings:UI_D4D99A5879DE972C}"
                                                TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
-                                    <TextBlock Text="Use the existing intensity slider to adjust strength. Filters cannot fully separate voices from other sounds."
+                                    <TextBlock Text="{lex:Loc Strings:UI_B62CE2D79CCCD408}"
                                                TextWrapping="Wrap" Margin="0,12,0,0"
                                                Foreground="{DynamicResource MutedForegroundColor}" />
                                 </StackPanel>
@@ -449,7 +451,7 @@
                                                  Fill="{DynamicResource MutedForegroundColor}"
                                                  VerticalAlignment="Center" />
                                         <TextBlock x:Name="statusText" Margin="8,0,0,0"
-                                                   Text="Audio Haptics is disabled." FontWeight="SemiBold"
+                                                   Text="{lex:Loc Strings:UI_CBEEF937575950AA}" FontWeight="SemiBold"
                                                    TextWrapping="Wrap" />
                                     </StackPanel>
                                 </Border>
@@ -458,7 +460,7 @@
                                         <Ellipse Width="8" Height="8" Fill="{DynamicResource MutedForegroundColor}"
                                                  VerticalAlignment="Center" />
                                         <TextBlock x:Name="sourceStatusText" Margin="8,0,0,0"
-                                                   Text="System audio" FontWeight="SemiBold" />
+                                                   Text="{lex:Loc Strings:UI_C14D8013D802D47E}" FontWeight="SemiBold" />
                                     </StackPanel>
                                 </Border>
                             </WrapPanel>

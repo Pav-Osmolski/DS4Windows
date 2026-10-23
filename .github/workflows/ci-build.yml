@@ -48,6 +48,9 @@ jobs:
           fetch-depth: 2
       - name: Check documentation text encoding
         run: python utils/test-text-encoding.py --self-test
+
+      - name: Check every language pack
+        run: python utils/validate-language-packs.py
       - name: Select package build
         id: select
         shell: pwsh
@@ -189,6 +192,9 @@ jobs:
 
       - name: Test localization package layout
         run: python .\utils\test-localization-package.py
+
+      - name: Check every language pack
+        run: python utils/validate-language-packs.py
 
       - name: Cache NuGet packages
         uses: actions/cache@v6

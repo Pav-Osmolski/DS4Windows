@@ -85,22 +85,22 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 if (DeviceType == null)
                 {
-                    return "Automatic uses the conservative 250 Hz (4 ms) input interval for DS4-compatible Bluetooth controllers. Turn it off to request a manual rate. Other controllers retain their managed timing; applies when the profile is saved.";
+                    return global::DS4Windows.UiText.Get("Automatic uses the conservative 250 Hz (4 ms) input interval for DS4-compatible Bluetooth controllers. Turn it off to request a manual rate. Other controllers retain their managed timing; applies when the profile is saved.");
                 }
 
                 if (!IsDualShock4)
                 {
-                    return $"{ControllerName}: Bluetooth reporting is managed automatically. DS4Windows does not implement an adjustable input rate for this controller.";
+                    return global::DS4Windows.UiText.Format("{0}: Bluetooth reporting is managed automatically. DS4Windows does not implement an adjustable input rate for this controller.", ControllerName);
                 }
 
                 string identity = HasRecognizedBluetoothPollingIdentity ?
-                    "Recognized DualShock 4 identity. The selected rate is requested from the controller; device IDs do not verify genuine hardware or confirm the accepted rate." :
-                    "Unverified DS4-compatible controller. Its supported rates cannot be queried; it may ignore the selected rate.";
+                    global::DS4Windows.UiText.Get("Recognized DualShock 4 identity. The selected rate is requested from the controller; device IDs do not verify genuine hardware or confirm the accepted rate.") :
+                    global::DS4Windows.UiText.Get("Unverified DS4-compatible controller. Its supported rates cannot be queried; it may ignore the selected rate.");
                 string connection = ConnectionType != null &&
                     ConnectionType != DS4Windows.ConnectionType.BT ?
-                    " Applies when this profile is used over Bluetooth; it does not change USB polling." :
-                    " Applies when the profile is saved.";
-                return "Automatic requests 250 Hz (4 ms); turn it off to choose a manual input rate. Supported rates cannot be detected automatically. " + identity + connection;
+                    global::DS4Windows.UiText.Get(" Applies when this profile is used over Bluetooth; it does not change USB polling.") :
+                    global::DS4Windows.UiText.Get(" Applies when the profile is saved.");
+                return global::DS4Windows.UiText.Get("Automatic requests 250 Hz (4 ms); turn it off to choose a manual input rate. Supported rates cannot be detected automatically. ") + identity + connection;
             }
         }
 
@@ -178,7 +178,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 return new ControllerMicrophoneUiState(
                     ControllerMicrophoneUiStatus.OfflineConfiguration,
                     canEnable: true,
-                    "These settings will activate when the profile is used with a compatible PlayStation controller.");
+                    global::DS4Windows.UiText.Get("These settings will activate when the profile is used with a compatible PlayStation controller."));
             }
 
             if (!IsGenuineSonyController ||
@@ -187,7 +187,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 return new ControllerMicrophoneUiState(
                     ControllerMicrophoneUiStatus.RequiresCompatibleController,
                     canEnable: false,
-                    "Controller microphone routing requires a genuine Sony DualShock 4 or DualSense.");
+                    global::DS4Windows.UiText.Get("Controller microphone routing requires a genuine Sony DualShock 4 or DualSense."));
             }
 
             if (IsDualSense &&
@@ -196,7 +196,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 return new ControllerMicrophoneUiState(
                     ControllerMicrophoneUiStatus.UsbLegacyRoute,
                     canEnable: true,
-                    "USB DualSense microphone routing uses the capture and virtual-output endpoints in Advanced audio.");
+                    global::DS4Windows.UiText.Get("USB DualSense microphone routing uses the capture and virtual-output endpoints in Advanced audio."));
             }
 
             if (ConnectionType != DS4Windows.ConnectionType.BT)
@@ -204,7 +204,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 return new ControllerMicrophoneUiState(
                     ControllerMicrophoneUiStatus.RequiresBluetooth,
                     canEnable: false,
-                    "Direct controller microphone input requires a Bluetooth DualShock 4 or DualSense.");
+                    global::DS4Windows.UiText.Get("Direct controller microphone input requires a Bluetooth DualShock 4 or DualSense."));
             }
 
             if (!ControllerMicrophoneRoutePolicy
@@ -213,7 +213,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 return new ControllerMicrophoneUiState(
                     ControllerMicrophoneUiStatus.RequiresPlayStationOutput,
                     canEnable: false,
-                    "A VIIPER PlayStation audio interface is required to expose the controller microphone.");
+                    global::DS4Windows.UiText.Get("A VIIPER PlayStation audio interface is required to expose the controller microphone."));
             }
 
             if (requireActiveStream && !activeStreamSupportsMicrophone)
@@ -221,7 +221,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 return new ControllerMicrophoneUiState(
                     ControllerMicrophoneUiStatus.OutputStarting,
                     canEnable: false,
-                    "The VIIPER microphone interface is starting. This control will become available automatically.");
+                    global::DS4Windows.UiText.Get("The VIIPER microphone interface is starting. This control will become available automatically."));
             }
 
             return new ControllerMicrophoneUiState(

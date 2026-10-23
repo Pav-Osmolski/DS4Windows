@@ -144,7 +144,7 @@ public class FlickStickCalibrationLayoutTests
     [TestMethod]
     public void CalibrationSelectorsLiveBesideEachSticksCalibrationInAxisConfig()
     {
-        XDocument document = XDocument.Load(FormPath("ProfileEditor.xaml"));
+        XDocument document = LocalizedSource.Load(FormPath("ProfileEditor.xaml"));
         foreach (string stick in new[] { "LS", "RS" })
         {
             XElement panel = CalibrationPanel(document, stick);
@@ -168,7 +168,7 @@ public class FlickStickCalibrationLayoutTests
             Assert.AreEqual("Control", (string)selector.Attribute("SelectedValuePath"));
             Assert.AreEqual("{Binding " + stick + "FlickCalibrationTrigger}", (string)selector.Attribute("SelectedValue"));
             string guidance = string.Join(" ", panel.Elements(Wpf + "TextBlock")
-                .Select(text => (string)text.Attribute("Text")));
+                .Select(text => LocalizedSource.Resolve((string)text.Attribute("Text"))));
             StringAssert.Contains(guidance, "Save the profile");
             StringAssert.Contains(guidance, "in-game");
             StringAssert.Contains(guidance, "Increase Real World Calibration");
@@ -176,7 +176,7 @@ public class FlickStickCalibrationLayoutTests
             StringAssert.Contains(guidance, "Not assigned to release the button");
         }
 
-        XDocument remapper = XDocument.Load(FormPath("BindingWindow.xaml"));
+        XDocument remapper = LocalizedSource.Load(FormPath("BindingWindow.xaml"));
         Assert.IsFalse(remapper.Descendants().Attributes().Any(attribute =>
             attribute.Value.Contains("flickStickCalibr", StringComparison.OrdinalIgnoreCase)),
             "Calibration settings must not reappear as remapping actions.");
@@ -185,7 +185,7 @@ public class FlickStickCalibrationLayoutTests
     [TestMethod]
     public void AxisTriggerTuningKeepsItsNormalRowsAndLeavesAdaptiveEffectsInTriggerLab()
     {
-        XDocument document = XDocument.Load(FormPath("ProfileEditor.xaml"));
+        XDocument document = LocalizedSource.Load(FormPath("ProfileEditor.xaml"));
         XElement triggers = document.Descendants(Wpf + "Grid").Single(element =>
             element.Elements().Any(control => (string)control.Attribute("Value") == "{Binding L2DeadZone}") &&
             element.Elements().Any(control => (string)control.Attribute("Value") == "{Binding R2DeadZone}"));
@@ -205,13 +205,13 @@ public class FlickStickCalibrationLayoutTests
 
     private static Border CreateProductionPanelHost(string theme, CalibrationLayoutModel model)
     {
-        var document = XDocument.Load(FormPath("ProfileEditor.xaml"));
+        var document = LocalizedSource.Load(FormPath("ProfileEditor.xaml"));
         var markup = new XElement(Wpf + "Border",
             new XAttribute(XNamespace.Xmlns + "x", Xaml.NamespaceName),
             new XElement(Wpf + "StackPanel", new[] { "LS", "RS" }.Select(stick =>
                 new XElement(Wpf + "GroupBox", new XAttribute("Header", stick),
                     new XElement(CalibrationPanel(document, stick))))));
-        var host = (Border)XamlReader.Parse(markup.ToString());
+        var host = (Border)XamlReader.Parse(LocalizedSource.Markup(markup));
         host.Resources.MergedDictionaries.Add(new ResourceDictionary
         {
             Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml", UriKind.Relative),
@@ -300,14 +300,12 @@ public class FlickStickCalibrationLayoutTests
     private static void RunSta(Action action)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try { action(); }
             catch (Exception exception) { failure = exception; }
-        }) { IsBackground = true };
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(30)), "Calibration render timed out.");
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 }

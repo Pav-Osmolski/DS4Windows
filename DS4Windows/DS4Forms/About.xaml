@@ -127,15 +127,15 @@
         <Grid Margin="0,0,0,18">
             <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
             <StackPanel>
-                <TextBlock Text="Hotkeys &amp; About" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}"/>
-                <TextBlock Text="Help, shortcuts and project information." Style="{StaticResource AboutDescription}" Margin="0,4,0,0"/>
+                <TextBlock Text="{lex:Loc Strings:UI_358AAAF6CFD026A5}" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}"/>
+                <TextBlock Text="{lex:Loc Strings:UI_7CA1F2815CA00933}" Style="{StaticResource AboutDescription}" Margin="0,4,0,0"/>
             </StackPanel>
             <Border Grid.Column="1" Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="6" Padding="12,7" VerticalAlignment="Center" Margin="16,0,0,0">
                 <TextBlock x:Name="versionText" Style="{StaticResource AboutBody}" FontWeight="SemiBold"/>
             </Border>
         </Grid>
         <TabControl x:Name="aboutTabs" Grid.Row="1" Style="{StaticResource AboutTabs}" SelectedIndex="0" SelectionChanged="AboutTabs_SelectionChanged">
-            <TabItem Header="_About">
+            <TabItem Header="{lex:Loc Strings:UI_579B0A6B1024EA0B}">
                 <ScrollViewer x:Name="aboutScroll" Focusable="True" IsTabStop="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
                     <StackPanel>
                         <Border x:Name="aboutHero" CornerRadius="8" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" Margin="0,0,0,20">
@@ -144,196 +144,196 @@
                                 <Image Source="{StaticResource AboutBanner}" Stretch="Uniform" Visibility="Hidden" IsHitTestVisible="False"/>
                                 <StackPanel Margin="26,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" MaxWidth="330">
                                     <TextBlock Text="DS4Windows" Foreground="#F4F7FF" FontSize="36" FontWeight="Bold"/>
-                                    <TextBlock Text="Your controller. Your way." Foreground="#79C7FF" FontSize="18" TextWrapping="Wrap" Margin="0,8,0,0"/>
-                                    <TextBlock Text="Remapping · Haptics · Gyro" Foreground="#D0DDF0" FontSize="13" TextWrapping="Wrap" Margin="0,14,0,0"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_903189090ACC10BA}" Foreground="#79C7FF" FontSize="18" TextWrapping="Wrap" Margin="0,8,0,0"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_D6CC6AD6734453BF}" Foreground="#D0DDF0" FontSize="13" TextWrapping="Wrap" Margin="0,14,0,0"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
                         <Border Style="{StaticResource AboutCard}">
                             <StackPanel>
-                                <TextBlock Text="Make your controller feel at home on Windows." Style="{StaticResource AboutHeading}"/>
-                                <TextBlock Text="Remap controls, fine-tune gyro aiming and feedback, and create profiles for the games you play. Available features depend on your controller, connection and game." Style="{StaticResource AboutDescription}"/>
+                                <TextBlock Text="{lex:Loc Strings:UI_71E4956F2BFF6BCC}" Style="{StaticResource AboutHeading}"/>
+                                <TextBlock Text="{lex:Loc Strings:UI_E5EB88BF2E7CF78F}" Style="{StaticResource AboutDescription}"/>
                                 <WrapPanel Margin="0,16,0,0">
-                                    <Button Content="Website" Tag="https://pav-osmolski.github.io/DS4Windows/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
-                                    <Button Content="Getting started" Tag="https://pav-osmolski.github.io/DS4Windows/docs/getting-started/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
-                                    <Button Content="Report an issue" Tag="https://github.com/Pav-Osmolski/DS4Windows/issues/new/choose" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                    <Button Content="{lex:Loc Strings:UI_B5A229AC8BECC603}" Tag="https://pav-osmolski.github.io/DS4Windows/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                    <Button Content="{lex:Loc Strings:UI_831D0F72D242B7D1}" Tag="https://pav-osmolski.github.io/DS4Windows/docs/getting-started/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                    <Button Content="{lex:Loc Strings:UI_635AE219AD13DC71}" Tag="https://github.com/Pav-Osmolski/DS4Windows/issues/new/choose" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
                                 </WrapPanel>
                             </StackPanel>
                         </Border>
                         <Border Style="{StaticResource AboutCard}">
                             <StackPanel>
-                                <TextBlock Text="Free, open source and actively maintained." Style="{StaticResource AboutHeading}"/>
-                                <TextBlock Text="This independent fork is maintained by Pav-Osmolski and continues the work of hbashton and the wider DS4Windows community. Read the Credits and License tabs for the people and projects behind it." Style="{StaticResource AboutDescription}"/>
+                                <TextBlock Text="{lex:Loc Strings:UI_1B92660E4D9F8F92}" Style="{StaticResource AboutHeading}"/>
+                                <TextBlock Text="{lex:Loc Strings:UI_5B1CB2D087FB7D24}" Style="{StaticResource AboutDescription}"/>
                                 <WrapPanel Margin="0,16,0,0">
-                                    <Button Content="Source code" Tag="https://github.com/Pav-Osmolski/DS4Windows" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
-                                    <Button Content="Release notes" Tag="https://github.com/Pav-Osmolski/DS4Windows/releases" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
-                                    <Button Content="Support development" Tag="https://ko-fi.com/devilhood42" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                    <Button Content="{lex:Loc Strings:UI_BF046C7395CB38EE}" Tag="https://github.com/Pav-Osmolski/DS4Windows" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                    <Button Content="{lex:Loc Strings:UI_1254829BD9996472}" Tag="https://github.com/Pav-Osmolski/DS4Windows/releases" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                    <Button Content="{lex:Loc Strings:UI_C3008F19D555DFA2}" Tag="https://ko-fi.com/devilhood42" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
                                 </WrapPanel>
-                                <TextBlock Text="Support is entirely optional. DS4Windows remains free and open source." Style="{StaticResource AboutDescription}"/>
+                                <TextBlock Text="{lex:Loc Strings:UI_563200F444E367DF}" Style="{StaticResource AboutDescription}"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="_Hotkeys">
+            <TabItem Header="{lex:Loc Strings:UI_E934708AE2AE10C9}">
                 <ScrollViewer x:Name="hotkeysScroll" Focusable="True" IsTabStop="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
                     <StackPanel>
-                        <TextBlock Text="Shortcuts and gestures" Style="{StaticResource AboutHeading}"/>
-                        <TextBlock Text="Shortcuts depend on your controller and active profile. Enable optional gestures in the Profile Editor and check Special Actions for your own button combinations." Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_ED51FAEE63257B98}" Style="{StaticResource AboutHeading}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_711CFD51C8B89011}" Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="Connection and touchpad mouse" Style="{StaticResource AboutHeading}" Margin="0,0,0,16"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_4B01288761F25CBA}" Style="{StaticResource AboutHeading}" Margin="0,0,0,16"/>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="PS + Options" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_4ACACCFBACB76AB5}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Disconnect Bluetooth when the Disconnect Controller Special Action is configured and enabled." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_080AA6FFDB79597C}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Hold PS" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_7F460AC511B3DF57}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Switch off supported PlayStation controllers by holding PS until their lights go out. This is the controller's own power shortcut." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_41953C59765DA330}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Touchpad + PS" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_611E778835DF3A9E}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Toggle touchpad pointer movement in mouse mode. Touchpad clicks continue working." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_0C0FEE61CD8239E8}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Two fingers up / down" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_3238438B039921FE}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Scroll when two-finger scrolling is enabled in the touchpad settings." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_E84747F701A37713}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Tap, then hold" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_EE89B9E24BBEBE01}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Drag with the left mouse button when tap-to-drag is enabled." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_2688CBF6412D3D83}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Lower-right touchpad click" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_BC5D3CF85730CC24}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Right-click when the lower-right click option is enabled." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_4E4DC7B50970CE86}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Two-finger swipe left / right" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_6E1ABF12C7F020E9}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Cycle profiles when touchpad profile swiping is enabled in Settings &gt; Controllers." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_65854687AC67321C}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="Touchpad mapping regions" Style="{StaticResource AboutHeading}" Margin="0,0,0,16"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_221280CD7DB36C2F}" Style="{StaticResource AboutHeading}" Margin="0,0,0,16"/>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Left Touch / Right Touch" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_1C2E2ACE6780C67B}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Click the left or right side of the touchpad to activate its assigned binding." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_C91BE4587CDF6AC3}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Multitouch" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_3BB039FD911B1AB5}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Click the touchpad with two fingers to activate the multitouch binding." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_5525EF1A1623C421}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                 <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Upper Touch" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_D59FFE727C8667B3}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
                                 </Border>
-                                <TextBlock Grid.Column="1" Text="Click the upper part of the touchpad to activate its assigned binding." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
-                            </Grid>
-                        </StackPanel></Border>
-                        <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="Keyboard, mouse and secondary bindings" Style="{StaticResource AboutHeading}" Margin="0,0,0,16"/>
-                            <Grid Margin="0,0,0,12">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Shift Modifier" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
-                                </Border>
-                                <TextBlock Grid.Column="1" Text="Hold an assigned control to use its secondary set of bindings." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
-                            </Grid>
-                            <Grid Margin="0,0,0,12">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Toggle" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
-                                </Border>
-                                <TextBlock Grid.Column="1" Text="Keep a mapped key held until you press its assigned control again." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
-                            </Grid>
-                            <Grid Margin="0,0,0,12">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Macro" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
-                                </Border>
-                                <TextBlock Grid.Column="1" Text="Assign a recorded sequence of actions to a controller input." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
-                            </Grid>
-                            <Grid Margin="0,0,0,12">
-                                <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
-                                    <TextBlock Text="Scan Code" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
-                                </Border>
-                                <TextBlock Grid.Column="1" Text="Send keyboard scan codes for applications that need them. Choose this in the binding editor." Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_7599274241C501AC}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
                             </Grid>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="Seeing duplicate input?" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="HidHide can hide the physical controller from games while allowing DS4Windows to read it. Avoid overlapping remapping for the same game." Style="{StaticResource AboutDescription}"/>
-                            <WrapPanel Margin="0,12,0,0"><Button Content="Open troubleshooting guide" Tag="https://pav-osmolski.github.io/DS4Windows/docs/troubleshooting/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/></WrapPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_39DEF9821E0D7C6B}" Style="{StaticResource AboutHeading}" Margin="0,0,0,16"/>
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
+                                    <TextBlock Text="{lex:Loc Strings:UI_7B97A02782ACBC72}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_3F555520A15954BF}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
+                                    <TextBlock Text="{lex:Loc Strings:UI_3D03A1DEA561D0DB}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_6FF741017BFA9330}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
+                                    <TextBlock Text="{lex:Loc Strings:UI_CDF16EC115AD5A80}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_97249A505EB459E3}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="200"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="4" Padding="8,5" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,16,0">
+                                    <TextBlock Text="{lex:Loc Strings:UI_308E60FD01C6B05E}" Style="{StaticResource AboutBody}" FontWeight="SemiBold" MaxWidth="168"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_BB59EA725D9802D9}" Style="{StaticResource AboutBody}" Margin="0,5,0,0"/>
+                            </Grid>
+                        </StackPanel></Border>
+                        <Border Style="{StaticResource AboutCard}"><StackPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_EDA9FAB08F75E14F}" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_0ABCB016B4514EBA}" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_9E8B8E061FB62627}" Tag="https://pav-osmolski.github.io/DS4Windows/docs/troubleshooting/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/></WrapPanel>
                         </StackPanel></Border>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="_Credits">
+            <TabItem Header="{lex:Loc Strings:UI_F9B2363520D886E1}">
                 <ScrollViewer x:Name="creditsScroll" Focusable="True" IsTabStop="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
                     <StackPanel>
-                        <TextBlock Text="Built on a community's work." Style="{StaticResource AboutHeading}"/>
-                        <TextBlock Text="Thank you to the maintainers, contributors, researchers and users who have helped DS4Windows and its supporting projects grow." Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_769038F7B1E3DB8B}" Style="{StaticResource AboutHeading}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_403B4B477B663608}" Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="DS4Windows and its origins" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="This fork builds on hbashton's DS4Windows and the wider community, including work by Schmaldeo, Ryochan7 and Jays2Kings. Its history also includes InhexSTER's DS4Tool and electrobrains' early branch. Upstream contributions retain their attribution." Style="{StaticResource AboutDescription}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_2E7CC6526B73D32C}" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_9CBE594820B7A37B}" Style="{StaticResource AboutDescription}"/>
                             <WrapPanel Margin="0,16,0,0">
                                 <Button Content="hbashton" Tag="https://github.com/hbashton/DS4Windows" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
-                                <Button Content="Schmaldeo" Tag="https://github.com/schmaldeo" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                <Button Content="{lex:Loc Strings:UI_24A1D7B03BBA1B95}" Tag="https://github.com/schmaldeo" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
                                 <Button Content="Ryochan7" Tag="https://github.com/Ryochan7" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
                                 <Button Content="Jays2Kings" Tag="https://github.com/Jays2Kings" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
-                                <Button Content="InhexSTER / DS4Tool" Tag="https://code.google.com/p/ds4-tool/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
-                                <Button Content="electrobrains" Tag="https://code.google.com/r/brianfundakowskifeldman-ds4windows/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
-                                <Button Content="All contributors" Tag="https://github.com/Pav-Osmolski/DS4Windows/blob/main/contributors.md" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                <Button Content="{lex:Loc Strings:UI_8429890CAB578EA8}" Tag="https://code.google.com/p/ds4-tool/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                <Button Content="{lex:Loc Strings:UI_5866C71A16EC75B3}" Tag="https://code.google.com/r/brianfundakowskifeldman-ds4windows/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                <Button Content="{lex:Loc Strings:UI_7F774321B093CF01}" Tag="https://github.com/Pav-Osmolski/DS4Windows/blob/main/contributors.md" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
                             </WrapPanel>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="Special appreciation for Nefarius" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="Nefarius made foundational contributions to Windows controller software, including ViGEm, which powered earlier DS4Windows versions, and HidHide, which helps prevent double input in this fork. This fork now uses VIIPER for virtual-controller output, while continuing to benefit from the wider ecosystem he helped build." Style="{StaticResource AboutDescription}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_ECE366BF952C475F}" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_932CA9EF723DBB12}" Style="{StaticResource AboutDescription}"/>
                             <WrapPanel Margin="0,16,0,0">
-                                <Button Content="Nefarius and his projects" Tag="https://github.com/nefarius" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
-                                <Button Content="Support his projects" Tag="https://docs.nefarius.at/Donations/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                <Button Content="{lex:Loc Strings:UI_2BDC5C63B76886B4}" Tag="https://github.com/nefarius" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
+                                <Button Content="{lex:Loc Strings:UI_06D533B9D31CA991}" Tag="https://docs.nefarius.at/Donations/" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/>
                             </WrapPanel>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="Reports, research and testing" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="Controller research, bug reports, translations, shared logs and real-world testing all help improve this project. Thank you to everyone contributing their time and experience." Style="{StaticResource AboutDescription}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_D1B7AADBB3EEE630}" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_AF5D1ED9D883C192}" Style="{StaticResource AboutDescription}"/>
                         </StackPanel></Border>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="_License">
+            <TabItem Header="{lex:Loc Strings:UI_816754F7AB2A8D89}">
                 <Grid>
                     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="GNU General Public License v3" Style="{StaticResource AboutHeading}"/>
-                        <TextBlock Text="DS4Windows is free and open source software. The full licence is included below; dependency notices are available in Extras." Style="{StaticResource AboutDescription}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_A14BFFFC24C3A843}" Style="{StaticResource AboutHeading}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_111870862105004A}" Style="{StaticResource AboutDescription}"/>
                     </StackPanel>
                     <TextBox x:Name="licenseText" Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap" Padding="16"
                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
@@ -342,58 +342,58 @@
                              AutomationProperties.Name="GNU General Public License version 3"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="_Extras">
+            <TabItem Header="{lex:Loc Strings:UI_81D93BEF8740F048}">
                 <ScrollViewer x:Name="extrasScroll" Focusable="True" IsTabStop="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
                     <StackPanel>
-                        <TextBlock Text="Supporting projects and libraries" Style="{StaticResource AboutHeading}"/>
-                        <TextBlock Text="These projects help power DS4Windows. Install or repair bundled components through Setup or Settings so their versions stay matched." Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_BB2DA415C72F2A88}" Style="{StaticResource AboutHeading}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_923E17DDA16AB85B}" Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
                             <TextBlock Text="VIIPER" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="The virtual-controller backend bundled with this fork. Use the matching version supplied with DS4Windows." Style="{StaticResource AboutDescription}"/>
-                            <WrapPanel Margin="0,12,0,0"><Button Content="Project page" Tag="https://github.com/Pav-Osmolski/VIIPER" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="VIIPER project page"/></WrapPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_6F6EEC24AF256344}" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_D6E6CDD8433D8A73}" Tag="https://github.com/Pav-Osmolski/VIIPER" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="VIIPER project page"/></WrapPanel>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="usbip-win2" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="The USB/IP driver stack used by the backend. Use Setup to install, update or repair the supported package." Style="{StaticResource AboutDescription}"/>
-                            <WrapPanel Margin="0,12,0,0"><Button Content="Project page" Tag="https://github.com/vadimgrn/usbip-win2" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="usbip-win2 project page"/></WrapPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_88DDE11C35F476C7}" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_CDEA8B1F7E55D2F4}" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_D6E6CDD8433D8A73}" Tag="https://github.com/vadimgrn/usbip-win2" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="usbip-win2 project page"/></WrapPanel>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
                             <TextBlock Text="HidHide" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="Hides selected physical controllers from games to help prevent duplicate input. DS4Windows must remain allowed to access them." Style="{StaticResource AboutDescription}"/>
-                            <WrapPanel Margin="0,12,0,0"><Button Content="Project page" Tag="https://github.com/nefarius/HidHide/" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="HidHide project page"/></WrapPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_65A077F06FAA5702}" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_D6E6CDD8433D8A73}" Tag="https://github.com/nefarius/HidHide/" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="HidHide project page"/></WrapPanel>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
                             <TextBlock Text="FakerInput" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="An optional virtual keyboard and mouse driver for applications where standard injected input is unsuitable. Compatibility depends on the application and system." Style="{StaticResource AboutDescription}"/>
-                            <WrapPanel Margin="0,12,0,0"><Button Content="Project page" Tag="https://github.com/Ryochan7/FakerInput/" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="FakerInput project page"/></WrapPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_109077486EBEA8CD}" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_D6E6CDD8433D8A73}" Tag="https://github.com/Ryochan7/FakerInput/" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="FakerInput project page"/></WrapPanel>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="CRC32" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="CRC32 checksumming library." Style="{StaticResource AboutDescription}"/>
-                            <WrapPanel Margin="0,12,0,0"><Button Content="Project page" Tag="https://github.com/dariogriffo/Crc32" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="CRC32 project page"/></WrapPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_18CA10F18413E2F8}" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_463D9E928127173E}" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_D6E6CDD8433D8A73}" Tag="https://github.com/dariogriffo/Crc32" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="CRC32 project page"/></WrapPanel>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="One Euro Filter" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="Adaptive smoothing for motion data." Style="{StaticResource AboutDescription}"/>
-                            <WrapPanel Margin="0,12,0,0"><Button Content="Project page" Tag="https://gery.casiez.net/1euro/" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="One Euro Filter project page"/></WrapPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_E17CED38AEC06753}" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_46555DE9135092D0}" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_D6E6CDD8433D8A73}" Tag="https://gery.casiez.net/1euro/" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="One Euro Filter project page"/></WrapPanel>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="H.NotifyIcon" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="Windows notification-area icon support." Style="{StaticResource AboutDescription}"/>
-                            <WrapPanel Margin="0,12,0,0"><Button Content="Project page" Tag="https://github.com/HavenDV/H.NotifyIcon/" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="H.NotifyIcon project page"/></WrapPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_7BA69FA413124CA5}" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_3806B13E4188BFDA}" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_D6E6CDD8433D8A73}" Tag="https://github.com/HavenDV/H.NotifyIcon/" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="H.NotifyIcon project page"/></WrapPanel>
                         </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
-                            <TextBlock Text="vJoyInterfaceCS" Style="{StaticResource AboutHeading}"/>
-                            <TextBlock Text="Interface library from the vJoy project." Style="{StaticResource AboutDescription}"/>
-                            <WrapPanel Margin="0,12,0,0"><Button Content="Project page" Tag="https://github.com/shauleiz/vJoy/tree/master/apps/common/vJoyInterfaceCS" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="vJoyInterfaceCS project page"/></WrapPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_BE731966ABF430E8}" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="{lex:Loc Strings:UI_768173B98615B768}" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_D6E6CDD8433D8A73}" Tag="https://github.com/shauleiz/vJoy/tree/master/apps/common/vJoyInterfaceCS" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="vJoyInterfaceCS project page"/></WrapPanel>
                         </StackPanel></Border>
-                        <WrapPanel><Button Content="Full dependency notices" Tag="https://github.com/Pav-Osmolski/DS4Windows/blob/main/NOTICE.txt" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/></WrapPanel>
+                        <WrapPanel><Button Content="{lex:Loc Strings:UI_B347C5B8B302C26F}" Tag="https://github.com/Pav-Osmolski/DS4Windows/blob/main/NOTICE.txt" Style="{StaticResource AboutLinkButton}" Click="Link_Click"/></WrapPanel>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
         </TabControl>
         <Border Grid.Row="2" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="0,12,0,0" Margin="0,12,0,0">
-            <Button Content="Close" Style="{StaticResource AboutLinkButton}" Margin="0" MinWidth="90" Padding="18,7" HorizontalAlignment="Right" IsCancel="True" Click="Close_Click"/>
+            <Button Content="{lex:Loc Strings:UI_7D9EB7ACB13E2462}" Style="{StaticResource AboutLinkButton}" Margin="0" MinWidth="90" Padding="18,7" HorizontalAlignment="Right" IsCancel="True" Click="Close_Click"/>
         </Border>
     </Grid>
 </Window>

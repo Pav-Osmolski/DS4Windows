@@ -48,13 +48,13 @@ internal static class TrayIconLoader
         byte[] data = bytes.ToArray();
         using var reader = new BinaryReader(new MemoryStream(data));
         if (reader.ReadUInt16() != 0 || reader.ReadUInt16() != 1)
-            throw new InvalidDataException("Invalid tray icon header.");
+            throw new InvalidDataException(global::DS4Windows.UiText.Get("Invalid tray icon header."));
         int count = reader.ReadUInt16();
         int selected = -1, selectedSize = 0, selectedDepth = 0;
         for (int index = 0; index < count; index++)
         {
             int offset = 6 + index * 16;
-            if (offset + 16 > data.Length) throw new InvalidDataException("Truncated tray icon directory.");
+            if (offset + 16 > data.Length) throw new InvalidDataException(global::DS4Windows.UiText.Get("Truncated tray icon directory."));
             int width = data[offset] == 0 ? 256 : data[offset];
             int height = data[offset + 1] == 0 ? 256 : data[offset + 1];
             if (width != height) continue;
@@ -67,11 +67,11 @@ internal static class TrayIconLoader
                 (width == selectedSize && depth > selectedDepth);
             if (better) { selected = offset; selectedSize = width; selectedDepth = depth; }
         }
-        if (selected < 0) throw new InvalidDataException("Tray icon has no square frames.");
+        if (selected < 0) throw new InvalidDataException(global::DS4Windows.UiText.Get("Tray icon has no square frames."));
         uint length = BitConverter.ToUInt32(data, selected + 8);
         uint start = BitConverter.ToUInt32(data, selected + 12);
         if (length == 0 || start < 6 + count * 16 || (ulong)start + length > (ulong)data.Length)
-            throw new InvalidDataException("Invalid tray icon frame.");
+            throw new InvalidDataException(global::DS4Windows.UiText.Get("Invalid tray icon frame."));
         using var frame = new MemoryStream();
         using (var writer = new BinaryWriter(frame, System.Text.Encoding.UTF8, leaveOpen: true))
         {

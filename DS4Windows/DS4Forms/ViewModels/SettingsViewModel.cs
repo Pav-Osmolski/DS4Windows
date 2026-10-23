@@ -220,13 +220,13 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 try
                 {
                     Global.ViiperDebugLogging = value;
-                    if (!Global.Save()) throw new IOException("DS4Windows settings could not be saved.");
+                    if (!Global.Save()) throw new IOException(global::DS4Windows.UiText.Get("DS4Windows settings could not be saved."));
                 }
                 catch (Exception error)
                 {
                     Global.ViiperDebugLogging = previous;
-                    MessageBox.Show("The VIIPER logging preference could not be saved. " + error.Message,
-                        "VIIPER debug logging", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(global::DS4Windows.UiText.Get("The VIIPER logging preference could not be saved. ") + error.Message,
+                        global::DS4Windows.UiText.Get("VIIPER debug logging"), MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 ViiperDebugLoggingChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -277,7 +277,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     ViiperTrayPreference.Apply(previous, value, visible =>
                     {
                         Global.ShowViiperTrayIcon = visible;
-                        if (!Global.Save()) throw new IOException("DS4Windows settings could not be saved.");
+                        if (!Global.Save()) throw new IOException(global::DS4Windows.UiText.Get("DS4Windows settings could not be saved."));
                     }, visible => ViiperTrayPreference.WriteStartupPreference(visible));
                 }
                 catch (Exception error)
@@ -285,7 +285,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     Global.ShowViiperTrayIcon = previous;
                     string message = "The VIIPER tray preference could not be saved. " + error.Message;
                     DS4Windows.AppLogger.LogToGui(message, true);
-                    MessageBox.Show(message, "VIIPER tray icon", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(message, global::DS4Windows.UiText.Get("VIIPER tray icon"), MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 ShowViiperTrayIconChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -337,6 +337,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             get => (int)DS4Windows.Global.UseCurrentTheme;
             set
             {
+                if (value < 0 || value >= AppThemeChoices.Count) return;
                 int temp = (int)DS4Windows.Global.UseCurrentTheme;
                 if (temp == value) return;
                 DS4Windows.Global.UseCurrentTheme = (DS4Windows.AppThemeChoice)value;
@@ -344,6 +345,26 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
         }
         public event EventHandler AppChoiceIndexChanged;
+
+        public IReadOnlyList<Themes.AppThemeItem> AppThemeChoices => Themes.AppThemeCatalog.Choices;
+        private System.Collections.ObjectModel.ObservableCollection<Themes.AppAccentItem> appAccentChoices;
+        public System.Collections.ObjectModel.ObservableCollection<Themes.AppAccentItem> AppAccentChoices =>
+            appAccentChoices ??= new(Themes.AppThemeCatalog.AccentChoices(Global.AppAccent));
+        public string AppAccent
+        {
+            get => Global.AppAccent;
+            set
+            {
+                if (value == null) return; // Ignore a selector's transient empty state.
+                string normal = Themes.AppThemeCatalog.NormalizeAccent(value);
+                if (normal == Global.AppAccent) return;
+                Global.AppAccent = normal;
+                if (!AppAccentChoices.Any(item => item.Value == normal))
+                    AppAccentChoices.Add(new(normal, "Custom colour", normal));
+                AppAccentChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler AppAccentChanged;
 
         public bool CheckForUpdates
         {
@@ -575,8 +596,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
                 {
                     AppLogger.LogToGui("Could not create the executable alias: " + ex.Message, true);
-                    MessageBox.Show("The executable name was not changed. " + ex.Message,
-                        "Executable name", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(global::DS4Windows.UiText.Get("The executable name was not changed. ") + ex.Message,
+                        global::DS4Windows.UiText.Get("Executable name"), MessageBoxButton.OK, MessageBoxImage.Warning);
                     FakeExeNameChanged?.Invoke(this, EventArgs.Empty);
                     return;
                 }
@@ -763,7 +784,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             DS4Windows.AppLogger.LogToGui("The startup change could not be completed. " + error, true);
             const string message = "The startup change could not be completed. Check the status under Run at Startup in Settings, and see the Log tab for details. You can still open DS4Windows manually.";
-            MessageBox.Show(message, "Run at startup", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(message, global::DS4Windows.UiText.Get("Run at startup"), MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         private void SettingsViewModel_CheckForUpdatesChanged(object sender, EventArgs e)
@@ -803,7 +824,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             absMonitorChoices.Clear();
             absMonitorChoices.Add(new MonitorChoiceListing()
             {
-                DisplayName = "All Monitors",
+                DisplayName = global::DS4Windows.UiText.Get("All Monitors"),
                 EDID = string.Empty,
                 Index = 0,
             });

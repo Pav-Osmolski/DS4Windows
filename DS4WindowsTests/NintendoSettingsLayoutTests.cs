@@ -21,7 +21,7 @@ public class NintendoSettingsLayoutTests
     public void NintendoPagesKeepPopulatedControlsReachable(string theme, double width)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -36,7 +36,7 @@ public class NintendoSettingsLayoutTests
                 var join = (Button)setup.FindName("switch2CreateJoyConPairBtn");
                 var right = (ComboBox)setup.FindName("switch2JoyConRightCandidates");
                 double pairGap = join.TranslatePoint(new Point(), setup).Y - right.TranslatePoint(new Point(0, right.ActualHeight), setup).Y;
-                Assert.IsTrue(pairGap >= 12 && pairGap <= 18, $"Pairing button gap must be 12–18px, got {pairGap}.");
+                Assert.IsTrue(pairGap >= 12 && pairGap <= 18, $"Pairing button gap must be 12ï¿½18px, got {pairGap}.");
                 CheckWidth(setup, width);
                 Save(setup, theme, width, "Nintendo-setup");
 
@@ -112,10 +112,8 @@ public class NintendoSettingsLayoutTests
                 }
             }
             catch (Exception error) { failure = error; }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start(); thread.Join();
-        if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
+        };
+        HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
     public sealed class Choice

@@ -151,7 +151,7 @@ public class FlickStickCalibrationBindingTests
     public void BindingEditorDoesNotOfferFlickStickCalibrationActions()
     {
         XNamespace xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
-        var document = XDocument.Load(BindingWindowPath());
+        var document = LocalizedSource.Load(BindingWindowPath());
         foreach (string name in new[]
         {
             "flickStickCalibrationTab",

@@ -244,7 +244,7 @@ public sealed class ControllerOverviewAudioTests
         for (var root = new DirectoryInfo(AppContext.BaseDirectory); root != null; root = root.Parent)
         {
             string file = Path.Combine(root.FullName, "DS4Windows", "DS4Forms", "ControllerOverviewControl.xaml");
-            if (File.Exists(file)) return XDocument.Load(file);
+            if (File.Exists(file)) return LocalizedSource.Load(file);
         }
         throw new FileNotFoundException("Production Overview markup not found.");
     }

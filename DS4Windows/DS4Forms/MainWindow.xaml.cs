@@ -132,7 +132,7 @@ namespace DS4WinWPF.DS4Forms
         public MainWindow(ArgumentParser parser)
         {
             InitializeComponent();
-            if (PortableLabContext.IsActive) Title = "DS4Windows — Portable controller lab";
+            if (PortableLabContext.IsActive) Title = global::DS4Windows.UiText.Get("DS4Windows — Portable controller lab");
             profileEditorReturnTabIndex = mainTabCon.Items.IndexOf(profilesTab);
 
             mainWinVM = new MainWindowsViewModel();
@@ -169,12 +169,12 @@ namespace DS4WinWPF.DS4Forms
                 {
                     StoredLogCleanupResult result = await Task.Run(App.ApplyLogRetention);
                     logActionStatus.Text = result.Failed == 0 ?
-                        $"Retention saved. Removed {result.Deleted} older log file(s)." :
-                        $"Retention saved. Removed {result.Deleted} file(s); {result.Failed} could not be removed.";
+                        global::DS4Windows.UiText.Format("Retention saved. Removed {0} older log file(s).", result.Deleted) :
+                        global::DS4Windows.UiText.Format("Retention saved. Removed {0} file(s); {1} could not be removed.", result.Deleted, result.Failed);
                 }
                 catch (Exception exception)
                 {
-                    logActionStatus.Text = "Retention was saved, but cleanup could not finish: " + exception.Message;
+                    logActionStatus.Text = global::DS4Windows.UiText.Get("Retention was saved, but cleanup could not finish: ") + exception.Message;
                 }
             };
             settingsNavigator = new SettingsNavigator(settingsPages, new[]
@@ -336,7 +336,7 @@ namespace DS4WinWPF.DS4Forms
                     }
                     catch
                     {
-                        Dispatcher.Invoke(() => MessageBox.Show(Strings.FailedToRetrieveLatestVersion, "DS4Windows Updater"));
+                        Dispatcher.Invoke(() => MessageBox.Show(Strings.FailedToRetrieveLatestVersion, global::DS4Windows.UiText.Get("DS4Windows Updater")));
                         // bubble the exception up to allow to see what's wrong in the log
                         throw;
                     }
@@ -475,7 +475,7 @@ namespace DS4WinWPF.DS4Forms
 
                 if (showstatus)
                 {
-                    Dispatcher.Invoke(() => MessageBox.Show(Properties.Resources.UpToDate, "DS4Windows Updater"));
+                    Dispatcher.Invoke(() => MessageBox.Show(Properties.Resources.UpToDate, global::DS4Windows.UiText.Get("DS4Windows Updater")));
                 }
             }
         }
@@ -545,6 +545,7 @@ namespace DS4WinWPF.DS4Forms
             settingsWrapVM.SidebarIconIndexChanged += SettingsWrapVM_SidebarIconIndexChanged;
             settingsWrapVM.SidebarIconHueChanged += SettingsWrapVM_SidebarIconIndexChanged;
             settingsWrapVM.AppChoiceIndexChanged += SettingsWrapVM_AppChoiceIndexChanged;
+            settingsWrapVM.AppAccentChanged += SettingsWrapVM_AppChoiceIndexChanged;
 
             autoProfControl.AutoDebugChanged += AutoProfControl_AutoDebugChanged;
             autoprofileChecker.RequestServiceChange += AutoprofileChecker_RequestServiceChange;
@@ -597,6 +598,24 @@ Suspend support not enabled.", true);
             App current = App.Current as App;
             current.ChangeTheme(choice);
             trayIconVM.PopulateContextMenu();
+        }
+
+        private sealed class ColourDialogOwner(IntPtr handle) : System.Windows.Forms.IWin32Window
+        {
+            public IntPtr Handle => handle;
+        }
+
+        private void CustomAppAccent_Click(object sender, RoutedEventArgs e)
+        {
+            var current = Application.Current.TryFindResource("AccentColor") as SolidColorBrush;
+            Color colour = current?.Color ?? Colors.DodgerBlue;
+            using var picker = new System.Windows.Forms.ColorDialog
+            {
+                FullOpen = true, AnyColor = true,
+                Color = System.Drawing.Color.FromArgb(colour.R, colour.G, colour.B)
+            };
+            if (picker.ShowDialog(new ColourDialogOwner(new System.Windows.Interop.WindowInteropHelper(this).Handle)) == System.Windows.Forms.DialogResult.OK)
+                settingsWrapVM.AppAccent = $"#{picker.Color.R:X2}{picker.Color.G:X2}{picker.Color.B:X2}";
         }
 
         private void SettingsWrapVM_IconChoiceIndexChanged(object sender, EventArgs e)
@@ -1435,7 +1454,7 @@ Suspend support not enabled.", true);
             bool searching = settingsNavigator.IsSearching;
             clearSettingsSearchBtn.Visibility = searching ? Visibility.Visible : Visibility.Collapsed;
             settingsSearchStatus.Visibility = searching ? Visibility.Visible : Visibility.Collapsed;
-            settingsSearchStatus.Text = $"Searching all sections · {matches} matching settings group{(matches == 1 ? "" : "s")}";
+            settingsSearchStatus.Text = global::DS4Windows.UiText.Format("Searching all sections · {0} matching settings group{1}", matches, (matches == 1 ? "" : "s"));
             settingsNoResults.Visibility = searching && matches == 0 ? Visibility.Visible : Visibility.Collapsed;
             settingsScrollViewer.Visibility = searching && matches == 0 ? Visibility.Collapsed : Visibility.Visible;
             settingsScrollViewer.ScrollToTop();
@@ -1466,7 +1485,7 @@ Suspend support not enabled.", true);
         {
             executableRestartHint.Visibility = SettingsRestartRequirements.Executable(Global.exeFileName, Global.FakeExeName)
                 ? Visibility.Visible : Visibility.Collapsed;
-            executableRestartHint.Text = $"Re-launch required: close DS4Windows, then open {SettingsRestartRequirements.RequestedExecutable(Global.FakeExeName)}.";
+            executableRestartHint.Text = global::DS4Windows.UiText.Format("Re-launch required: close DS4Windows, then open {0}.", SettingsRestartRequirements.RequestedExecutable(Global.FakeExeName));
         }
 
         private void OpenSettingsLog_Click(object sender, RoutedEventArgs e)
@@ -1921,24 +1940,24 @@ Suspend support not enabled.", true);
             }
             catch (Exception exception)
             {
-                logActionStatus.Text = "Could not open the log folder: " + exception.Message;
+                logActionStatus.Text = global::DS4Windows.UiText.Get("Could not open the log folder: ") + exception.Message;
             }
         }
 
         private void ViiperDebugHelpBtn_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(this,
-                "1. Enable VIIPER debug logging on this page.\n\n" +
-                "2. Fully exit DS4Windows and VIIPER. If VIIPER has no tray icon and remains running, " +
+                global::DS4Windows.UiText.Get("1. Enable VIIPER debug logging on this page.\n\n") +
+                global::DS4Windows.UiText.Get("2. Fully exit DS4Windows and VIIPER. If VIIPER has no tray icon and remains running, ") +
                 "end viiper.exe in Task Manager. " +
-                "Reopen DS4Windows normally; do not launch VIIPER separately.\n\n" +
-                "3. Reproduce the problem, then use Open log folder. Share viiper-debug.log " +
-                "together with ds4windows_log.txt. The preceding capture is kept as viiper-debug-previous.log.\n\n" +
-                "4. Turn the option off and restart both applications after testing. " +
-                "Changing it does not interrupt the current session.\n\n" +
-                "Installed copies may ask for Windows permission to start the diagnostic session. " +
-                "The startup task is unchanged. Raw packet logging stays off.",
-                "Capture VIIPER diagnostics", MessageBoxButton.OK, MessageBoxImage.Information);
+                global::DS4Windows.UiText.Get("Reopen DS4Windows normally; do not launch VIIPER separately.\n\n") +
+                global::DS4Windows.UiText.Get("3. Reproduce the problem, then use Open log folder. Share viiper-debug.log ") +
+                global::DS4Windows.UiText.Get("together with ds4windows_log.txt. The preceding capture is kept as viiper-debug-previous.log.\n\n") +
+                global::DS4Windows.UiText.Get("4. Turn the option off and restart both applications after testing. ") +
+                global::DS4Windows.UiText.Get("Changing it does not interrupt the current session.\n\n") +
+                global::DS4Windows.UiText.Get("Installed copies may ask for Windows permission to start the diagnostic session. ") +
+                global::DS4Windows.UiText.Get("The startup task is unchanged. Raw packet logging stays off."),
+                global::DS4Windows.UiText.Get("Capture VIIPER diagnostics"), MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ReportIssueBtn_Click(object sender, RoutedEventArgs e)
@@ -1947,11 +1966,11 @@ Suspend support not enabled.", true);
             {
                 using var process = Process.Start(new ProcessStartInfo(
                     "https://github.com/Pav-Osmolski/DS4Windows/issues/new/choose") { UseShellExecute = true });
-                logActionStatus.Text = "Paste the full log into your report and attach the affected profile if relevant. Nothing was uploaded automatically.";
+                logActionStatus.Text = global::DS4Windows.UiText.Get("Paste the full log into your report and attach the affected profile if relevant. Nothing was uploaded automatically.");
             }
             catch (Exception exception)
             {
-                logActionStatus.Text = "Could not open GitHub: " + exception.Message;
+                logActionStatus.Text = global::DS4Windows.UiText.Get("Could not open GitHub: ") + exception.Message;
             }
         }
 
@@ -1968,12 +1987,12 @@ Suspend support not enabled.", true);
                 StoredLogCleanupResult result = await Task.Run(() => StoredLogManager.Cleanup(
                     directory, Global.LogRetentionDays, DateTime.UtcNow, clearAll: true));
                 logActionStatus.Text = result.Failed == 0 ?
-                    $"Deleted {result.Deleted} stored log file(s). The current session log is kept." :
-                    $"Deleted {result.Deleted} file(s); {result.Failed} could not be removed. They may be in use or read-only.";
+                    global::DS4Windows.UiText.Format("Deleted {0} stored log file(s). The current session log is kept.", result.Deleted) :
+                    global::DS4Windows.UiText.Format("Deleted {0} file(s); {1} could not be removed. They may be in use or read-only.", result.Deleted, result.Failed);
             }
             catch (Exception exception)
             {
-                logActionStatus.Text = "Could not clear stored logs: " + exception.Message;
+                logActionStatus.Text = global::DS4Windows.UiText.Get("Could not clear stored logs: ") + exception.Message;
             }
             finally { clearStoredLogsBtn.IsEnabled = true; }
         }
@@ -1986,8 +2005,8 @@ Suspend support not enabled.", true);
             }
             catch (ExternalException)
             {
-                MessageBox.Show(this, "The clipboard is currently unavailable. Please try Copy Text again.",
-                    "Copy Log", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(this, global::DS4Windows.UiText.Get("The clipboard is currently unavailable. Please try Copy Text again."),
+                    global::DS4Windows.UiText.Get("Copy Log"), MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -1996,8 +2015,8 @@ Suspend support not enabled.", true);
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.AddExtension = true;
             dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text Documents (*.txt)|*.txt";
-            dialog.Title = "Select Export File";
+            dialog.Filter = global::DS4Windows.UiText.FileFilter("Text Documents (*.txt)|*.txt");
+            dialog.Title = global::DS4Windows.UiText.Get("Select Export File");
             // TODO: Expose config dir
             dialog.InitialDirectory = Global.appdatapath;
             if (dialog.ShowDialog() == true)
@@ -2075,9 +2094,9 @@ Suspend support not enabled.", true);
             if (!persisted)
             {
                 button.ToolTip = controller.Device is DS4Windows.InputDevices.JoyConDevice ?
-                    "The holding style is active, but the profile could not be saved." :
-                    "The new hold mode is active for this connection, but " +
-                    "its controller-specific record could not be saved.";
+                    global::DS4Windows.UiText.Get("The holding style is active, but the profile could not be saved.") :
+                    global::DS4Windows.UiText.Get("The new hold mode is active for this connection, but ") +
+                    global::DS4Windows.UiText.Get("its controller-specific record could not be saved.");
             }
             else button.SetBinding(FrameworkElement.ToolTipProperty,
                 new Binding(nameof(CompositeDeviceModel.Switch2StandaloneHoldModeToolTip)));
@@ -2886,8 +2905,8 @@ Suspend support not enabled.", true);
             ViiperPrerequisiteStatus status = ViiperSetupManager.GetStatus(tryStartServer: false);
             viiperStatusText.ToolTip = status.StartupPreferenceReadError;
             viiperStatusText.Text = $"{status.DisplayText}.\n" +
-                $"USB/IP: {status.UsbipVersion ?? "not detected"} · " +
-                $"Server: {(status.ServerRunning ? "running" : "not running")}.";
+                global::DS4Windows.UiText.Format("USB/IP: {0} · ", status.UsbipVersion ?? "not detected") +
+                global::DS4Windows.UiText.Format("Server: {0}.", (status.ServerRunning ? "running" : "not running"));
             viiperStatusText.SetResourceReference(TextBlock.ForegroundProperty,
                 status.Ready ? "SuccessColor" : "DangerColor");
         }
@@ -2917,16 +2936,16 @@ Suspend support not enabled.", true);
                 IsArmed = isArmed;
                 Label = candidate.Label;
                 PairButtonToolTip = isArmed ?
-                    "Cancel this Joy-Con pairing selection" :
-                    "Select this Joy-Con for manual pairing";
+                    global::DS4Windows.UiText.Get("Cancel this Joy-Con pairing selection") :
+                    global::DS4Windows.UiText.Get("Select this Joy-Con for manual pairing");
             }
 
             internal NintendoJoyConCandidate Candidate { get; }
             public string Label { get; }
             public bool IsArmed { get; }
             public string PairButtonToolTip { get; }
-            public string ButtonText => IsArmed ? "Cancel" : "Link";
-            public string StatusText => IsArmed ? "Selected — choose the other Joy-Con" : "Works on its own · Available to link";
+            public string ButtonText => IsArmed ? global::DS4Windows.UiText.Get("Cancel") : global::DS4Windows.UiText.Get("Link");
+            public string StatusText => IsArmed ? global::DS4Windows.UiText.Get("Selected — choose the other Joy-Con") : global::DS4Windows.UiText.Get("Works on its own · Available to link");
         }
 
         private void RefreshSwitch2JoyConManualRows(bool force = false)
@@ -3024,15 +3043,15 @@ Suspend support not enabled.", true);
             }
             switch2JoyConManualPairSelection.Clear();
             SetSwitch2JoyConMutationBusy(true);
-            switch2JoyConManualStatusText.Text = "Unlinking — keeping both Joy-Cons connected…";
+            switch2JoyConManualStatusText.Text = global::DS4Windows.UiText.Get("Unlinking — keeping both Joy-Cons connected…");
             try
             {
                 bool result = await App.rootHub.UnlinkNintendoJoyConsAsync(action.Joined);
                 switch2JoyConManualStatusText.Text = result ?
-                    "Joy-Cons are now two separate controllers." : "Could not finish unlinking. Check the controller list and log.";
+                    global::DS4Windows.UiText.Get("Joy-Cons are now two separate controllers.") : global::DS4Windows.UiText.Get("Could not finish unlinking. Check the controller list and log.");
             }
             catch (Exception exception)
-            { switch2JoyConManualStatusText.Text = $"Could not finish unlinking: {exception.Message}"; }
+            { switch2JoyConManualStatusText.Text = global::DS4Windows.UiText.Format("Could not finish unlinking: {0}", exception.Message); }
             finally { SetSwitch2JoyConMutationBusy(false); }
         }
 
@@ -3044,43 +3063,43 @@ Suspend support not enabled.", true);
             {
                 case Switch2JoyConManualPairSelectionDisposition.Armed:
                     switch2JoyConManualStatusText.Text =
-                        $"{row.Label} selected. Click an opposite-side Joy-Con to join them.";
+                        global::DS4Windows.UiText.Format("{0} selected. Click an opposite-side Joy-Con to join them.", row.Label);
                     RefreshSwitch2JoyConManualRows(force: true);
                     return;
                 case Switch2JoyConManualPairSelectionDisposition.Cancelled:
                     switch2JoyConManualStatusText.Text =
-                        "Pair selection cancelled.";
+                        global::DS4Windows.UiText.Get("Pair selection cancelled.");
                     RefreshSwitch2JoyConManualRows(force: true);
                     return;
                 case Switch2JoyConManualPairSelectionDisposition.
                         IncompatibleSide:
                     switch2JoyConManualStatusText.Text =
-                        "Choose one left and one right Joy-Con from the same generation.";
+                        global::DS4Windows.UiText.Get("Choose one left and one right Joy-Con from the same generation.");
                     return;
                 case Switch2JoyConManualPairSelectionDisposition.PairReady:
                     break;
                 default:
                     switch2JoyConManualStatusText.Text =
-                        "That Joy-Con is no longer available.";
+                        global::DS4Windows.UiText.Get("That Joy-Con is no longer available.");
                     RefreshSwitch2JoyConManualRows(force: true);
                     return;
             }
 
             SetSwitch2JoyConMutationBusy(true);
             switch2JoyConManualStatusText.Text =
-                "Joining and remembering the selected Joy-Con pair…";
+                global::DS4Windows.UiText.Get("Joining and remembering the selected Joy-Con pair…");
             try
             {
                 bool result = await App.rootHub.LinkNintendoJoyConsAsync(selection.Preferred,
                     selection.Preferred.IsLeft ? selection.Right : selection.Left);
                 switch2JoyConManualStatusText.Text = result ?
-                    "Joy-Cons connected as one controller." :
-                    "The Joy-Con pair could not be joined. Check the controller list and log.";
+                    global::DS4Windows.UiText.Get("Joy-Cons connected as one controller.") :
+                    global::DS4Windows.UiText.Get("The Joy-Con pair could not be joined. Check the controller list and log.");
             }
             catch (Exception exception)
             {
                 switch2JoyConManualStatusText.Text =
-                    $"Joy-Con pair could not be joined: {exception.Message}";
+                    global::DS4Windows.UiText.Format("Joy-Con pair could not be joined: {0}", exception.Message);
             }
             finally
             {
@@ -3102,24 +3121,24 @@ Suspend support not enabled.", true);
                 if (enabled && App.rootHub?.running == true)
                 {
                     switch2JoyConPairStatusText.Text =
-                        "Pairing the oldest compatible Joy-Con halves…";
+                        global::DS4Windows.UiText.Get("Pairing the oldest compatible Joy-Con halves…");
                     int activated = await App.rootHub.
                         ReconcileAutomaticNintendoJoyConPairsAsync();
                     switch2JoyConPairStatusText.Text = activated == 0 ?
-                        "Automatic pairing is on. Waiting for compatible left/right halves." :
-                        $"Automatically connected {activated} Joy-Con pair{(activated == 1 ? string.Empty : "s")}.";
+                        global::DS4Windows.UiText.Get("Automatic pairing is on. Waiting for compatible left/right halves.") :
+                        global::DS4Windows.UiText.Format("Automatically connected {0} Joy-Con pair{1}.", activated, (activated == 1 ? string.Empty : "s"));
                 }
                 else
                 {
                     switch2JoyConPairStatusText.Text =
-                        enabled ? "Automatic pairing is on and will apply when compatible Joy-Con connections are available." :
-                        "Automatic pairing is off. Use the link buttons on the Controllers tab to choose exact pairs.";
+                        enabled ? global::DS4Windows.UiText.Get("Automatic pairing is on and will apply when compatible Joy-Con connections are available.") :
+                        global::DS4Windows.UiText.Get("Automatic pairing is off. Use the link buttons on the Controllers tab to choose exact pairs.");
                 }
             }
             catch (Exception exception)
             {
                 switch2JoyConPairStatusText.Text =
-                    $"Automatic Joy-Con pairing could not be reconciled: {exception.GetType().Name}.";
+                    global::DS4Windows.UiText.Format("Automatic Joy-Con pairing could not be reconciled: {0}.", exception.GetType().Name);
             }
             finally
             {
@@ -3199,14 +3218,14 @@ Suspend support not enabled.", true);
             {
                 RefreshSwitch2AssociationCandidates();
                 switch2AssociationStatusText.Text =
-                    "Association is unavailable until Bluetooth discovery is active.";
+                    global::DS4Windows.UiText.Get("Association is unavailable until Bluetooth discovery is active.");
                 return;
             }
             if (switch2AssociationCandidatesList.SelectedItem is not
                     Switch2AssociationListItem selected)
             {
                 switch2AssociationStatusText.Text =
-                    "Select a controller to associate or reconnect first.";
+                    global::DS4Windows.UiText.Get("Select a controller to associate or reconnect first.");
                 return;
             }
 
@@ -3215,21 +3234,21 @@ Suspend support not enabled.", true);
             UpdateSwitch2ControllerActionAdmission();
             RefreshSwitch2JoyConManualRows(force: true);
             switch2AssociationStatusText.Text =
-                selected.IsRemembered ? "Reconnecting the selected controller without changing its association…" :
-                    $"Associating {selected.Label}…";
+                selected.IsRemembered ? global::DS4Windows.UiText.Get("Reconnecting the selected controller without changing its association…") :
+                    global::DS4Windows.UiText.Format("Associating {0}…", selected.Label);
             try
             {
                 Switch2BluetoothWindowsAssociationResult result = await
                     App.rootHub.AssociateSwitch2BluetoothAsync(selected.Id);
                 switch2AssociationStatusText.Text = selected.IsRemembered ?
                     Switch2BluetoothDiscoveryPresentation.DescribeReconnect(result) : result.Succeeded ?
-                    $"{selected.Label} associated. It will connect automatically when it resumes advertising." :
-                    $"Association failed at {result.LastCompletedStep}: {result.Failure}.";
+                    global::DS4Windows.UiText.Format("{0} associated. It will connect automatically when it resumes advertising.", selected.Label) :
+                    global::DS4Windows.UiText.Format("Association failed at {0}: {1}.", result.LastCompletedStep, result.Failure);
             }
             catch (Exception exception)
             {
                 switch2AssociationStatusText.Text =
-                    $"{(selected.IsRemembered ? "Reconnect" : "Association")} failed: {exception.GetType().Name}.";
+                    global::DS4Windows.UiText.Format("{0} failed: {1}.", (selected.IsRemembered ? "Reconnect" : "Association"), exception.GetType().Name);
             }
             finally
             {
@@ -3328,7 +3347,7 @@ Suspend support not enabled.", true);
             if (App.rootHub?.running != true)
             {
                 switch2JoyConCandidateStatusText.Text =
-                    "Start DS4Windows before joining Joy-Con 2 controllers.";
+                    global::DS4Windows.UiText.Get("Start DS4Windows before joining Joy-Con 2 controllers.");
                 UpdateSwitch2JoyConActionAdmission();
                 return;
             }
@@ -3366,8 +3385,8 @@ Suspend support not enabled.", true);
 
             switch2JoyConCandidateStatusText.Text =
                 automatic ?
-                $"Automatic pairing is on; {leftCount} left and {rightCount} right half{(leftCount + rightCount == 1 ? string.Empty : "s")} are waiting for compatible partners." :
-                $"{leftCount} left and {rightCount} right unmatched Joy-Con 2 connection{(leftCount + rightCount == 1 ? string.Empty : "s")} available.";
+                global::DS4Windows.UiText.Format("Automatic pairing is on; {0} left and {1} right half{2} are waiting for compatible partners.", leftCount, rightCount, (leftCount + rightCount == 1 ? string.Empty : "s")) :
+                global::DS4Windows.UiText.Format("{0} left and {1} right unmatched Joy-Con 2 connection{2} available.", leftCount, rightCount, (leftCount + rightCount == 1 ? string.Empty : "s"));
             UpdateSwitch2JoyConActionAdmission();
         }
 
@@ -3381,24 +3400,24 @@ Suspend support not enabled.", true);
                     Switch2AssociationListItem right)
             {
                 switch2JoyConPairStatusText.Text =
-                    "Select one left and one right Joy-Con 2 first.";
+                    global::DS4Windows.UiText.Get("Select one left and one right Joy-Con 2 first.");
                 return;
             }
 
             SetSwitch2JoyConMutationBusy(true);
-            switch2JoyConPairStatusText.Text = "Joining the selected pair…";
+            switch2JoyConPairStatusText.Text = global::DS4Windows.UiText.Get("Joining the selected pair…");
             try
             {
                 Switch2JoyConPairActivationResult result = await App.rootHub.
                     CreateAndActivateSwitch2JoyConPairAsync(left.Id, right.Id);
                 switch2JoyConPairStatusText.Text = result.Succeeded ?
-                    "Joy-Con 2 pair saved and connected as one controller." :
-                    $"Joy-Con 2 pair could not be joined: {result.Failure}.";
+                    global::DS4Windows.UiText.Get("Joy-Con 2 pair saved and connected as one controller.") :
+                    global::DS4Windows.UiText.Format("Joy-Con 2 pair could not be joined: {0}.", result.Failure);
             }
             catch (Exception exception)
             {
                 switch2JoyConPairStatusText.Text =
-                    $"Joy-Con 2 pair could not be joined: {exception.GetType().Name}.";
+                    global::DS4Windows.UiText.Format("Joy-Con 2 pair could not be joined: {0}.", exception.GetType().Name);
             }
             finally
             {
@@ -3428,26 +3447,26 @@ Suspend support not enabled.", true);
                     Switch2AssociationListItem selected)
             {
                 switch2JoyConPairStatusText.Text =
-                    "Select the Joy-Con 2 to use separately first.";
+                    global::DS4Windows.UiText.Get("Select the Joy-Con 2 to use separately first.");
                 return;
             }
 
             SetSwitch2JoyConMutationBusy(true);
             switch2JoyConPairStatusText.Text =
-                $"Connecting {selected.Label} separately…";
+                global::DS4Windows.UiText.Format("Connecting {0} separately…", selected.Label);
             try
             {
                 Switch2JoyConStandaloneActivationResult result = await
                     App.rootHub.ActivateSwitch2JoyConSeparatelyAsync(
                         selected.Id);
                 switch2JoyConPairStatusText.Text = result.Succeeded ?
-                    $"{selected.Label} connected as a separate controller." :
-                    $"{selected.Label} could not connect separately: {result.Failure}.";
+                    global::DS4Windows.UiText.Format("{0} connected as a separate controller.", selected.Label) :
+                    global::DS4Windows.UiText.Format("{0} could not connect separately: {1}.", selected.Label, result.Failure);
             }
             catch (Exception exception)
             {
                 switch2JoyConPairStatusText.Text =
-                    $"{selected.Label} could not connect separately: {exception.GetType().Name}.";
+                    global::DS4Windows.UiText.Format("{0} could not connect separately: {1}.", selected.Label, exception.GetType().Name);
             }
             finally
             {
@@ -3465,11 +3484,11 @@ Suspend support not enabled.", true);
                     if (Changelog.CheckNewerReleaseExists(out string releaseTag, false))
                         DisplayUpdaterWindow(releaseTag);
                     else
-                        Dispatcher.Invoke(() => MessageBox.Show(Properties.Resources.UpToDate, "DS4Windows Updater"));
+                        Dispatcher.Invoke(() => MessageBox.Show(Properties.Resources.UpToDate, global::DS4Windows.UiText.Get("DS4Windows Updater")));
                 }
                 catch
                 {
-                    Dispatcher.Invoke(() => MessageBox.Show(Strings.FailedToRetrieveLatestVersion, "DS4Windows Updater"));
+                    Dispatcher.Invoke(() => MessageBox.Show(Strings.FailedToRetrieveLatestVersion, global::DS4Windows.UiText.Get("DS4Windows Updater")));
                     // bubble the exception up to allow to see what's wrong in the log
                     throw;
                 }
@@ -3481,8 +3500,8 @@ Suspend support not enabled.", true);
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.AddExtension = true;
             dialog.DefaultExt = ".xml";
-            dialog.Filter = "DS4Windows Profile (*.xml)|*.xml";
-            dialog.Title = "Select Profile to Import File";
+            dialog.Filter = global::DS4Windows.UiText.FileFilter("DS4Windows Profile (*.xml)|*.xml");
+            dialog.Title = global::DS4Windows.UiText.Get("Select Profile to Import File");
             if (Global.appdatapath != Global.exedirpath)
                 dialog.InitialDirectory = Path.Combine(Global.appDataPpath, "Profiles");
             else
@@ -3508,8 +3527,8 @@ Suspend support not enabled.", true);
                 SaveFileDialog dialog = new SaveFileDialog();
                 dialog.AddExtension = true;
                 dialog.DefaultExt = ".xml";
-                dialog.Filter = "DS4Windows Profile (*.xml)|*.xml";
-                dialog.Title = "Select Profile to Export File";
+                dialog.Filter = global::DS4Windows.UiText.FileFilter("DS4Windows Profile (*.xml)|*.xml");
+                dialog.Title = global::DS4Windows.UiText.Get("Select Profile to Export File");
                 Stream stream;
                 Stream profile = new StreamReader(Global.appdatapath + "\\Profiles\\" + entity.Name + ".xml").BaseStream;
                 if (dialog.ShowDialog() == true)
@@ -3847,7 +3866,7 @@ Suspend support not enabled.", true);
             {
                 string path = Util.GetHidHideClientPath();
                 if (string.IsNullOrEmpty(path))
-                    throw new FileNotFoundException("The HidHide configuration tool could not be found.");
+                    throw new FileNotFoundException(global::DS4Windows.UiText.Get("The HidHide configuration tool could not be found."));
                 HidHideConfigurationAudit audit = await Task.Run(
                     () => App.rootHub.InspectHidHideConfiguration());
                 if (Volatile.Read(ref shutdownRequested) != 0) return;
@@ -3872,7 +3891,7 @@ Suspend support not enabled.", true);
                     if (!repair.Succeeded)
                     {
                         MessageBox.Show(this, repair.Failure +
-                            (repair.BackupPath == null ? "" : "\n\nBackup: " + repair.BackupPath),
+                            (repair.BackupPath == null ? "" : global::DS4Windows.UiText.Get("\n\nBackup: ") + repair.BackupPath),
                             "HidHide", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
@@ -3887,7 +3906,7 @@ Suspend support not enabled.", true);
             {
                 App.rootHub.LogDebug("HidHide configuration could not be opened: " + ex.Message, warning: true);
                 if (Volatile.Read(ref shutdownRequested) == 0)
-                    MessageBox.Show(this, "HidHide could not be opened. " + ex.Message,
+                    MessageBox.Show(this, global::DS4Windows.UiText.Get("HidHide could not be opened. ") + ex.Message,
                         "HidHide", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             finally { hidHideClientLaunchPending = false; }
@@ -3896,7 +3915,7 @@ Suspend support not enabled.", true);
         private void FakeExeNameExplainBtn_Click(object sender, RoutedEventArgs e)
         {
             string message = Translations.Strings.CustomExeNameInfo;
-            MessageBox.Show(message, "Custom Exe Name Info", MessageBoxButton.OK,
+            MessageBox.Show(message, global::DS4Windows.UiText.Get("Custom Exe Name Info"), MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
 
@@ -3980,10 +3999,10 @@ Suspend support not enabled.", true);
             clearProfilesSearchBtn.Visibility = hasQuery
                 ? Visibility.Visible
                 : Visibility.Collapsed;
-            profilesEmptyTitle.Text = hasQuery ? "No matching profiles" : "No profiles yet";
+            profilesEmptyTitle.Text = hasQuery ? global::DS4Windows.UiText.Get("No matching profiles") : global::DS4Windows.UiText.Get("No profiles yet");
             profilesEmptyDescription.Text = hasQuery
-                ? "Try a different profile name or clear the search."
-                : "Create or import a profile to get started.";
+                ? global::DS4Windows.UiText.Get("Try a different profile name or clear the search.")
+                : global::DS4Windows.UiText.Get("Create or import a profile to get started.");
             profilesCollectionView?.Refresh();
         }
 

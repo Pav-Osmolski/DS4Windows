@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -326,8 +326,8 @@ namespace DS4WinWPF.DS4Forms
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.AddExtension = true;
             dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text Documents (*.txt)|*.txt";
-            dialog.Title = "Select Export File";
+            dialog.Filter = global::DS4Windows.UiText.FileFilter("Text Documents (*.txt)|*.txt");
+            dialog.Title = global::DS4Windows.UiText.Get("Select Export File");
             dialog.InitialDirectory = $"{DS4Windows.Global.appdatapath}\\Macros";
             if (dialog.ShowDialog() == true)
             {
@@ -503,8 +503,8 @@ namespace DS4WinWPF.DS4Forms
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.AddExtension = true;
             dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text Documents (*.txt)|*.txt";
-            dialog.Title = "Select Preset File";
+            dialog.Filter = global::DS4Windows.UiText.FileFilter("Text Documents (*.txt)|*.txt");
+            dialog.Title = global::DS4Windows.UiText.Get("Select Preset File");
             dialog.InitialDirectory = $"{DS4Windows.Global.appdatapath}\\Macros";
             if (dialog.ShowDialog() == true)
             {

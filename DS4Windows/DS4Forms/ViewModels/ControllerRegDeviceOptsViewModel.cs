@@ -278,18 +278,18 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         private List<EnumChoiceSelection<LEDBarMode>> dsLEDModeOptions = new List<EnumChoiceSelection<LEDBarMode>>()
         {
-            new EnumChoiceSelection<LEDBarMode>("Off", LEDBarMode.Off),
-            new EnumChoiceSelection<LEDBarMode>("Only for multiple controllers", LEDBarMode.MultipleControllers),
-            new EnumChoiceSelection<LEDBarMode>("Battery Percentage", LEDBarMode.BatteryPercentage),
-            new EnumChoiceSelection<LEDBarMode>("On", LEDBarMode.On),
+            new EnumChoiceSelection<LEDBarMode>(UiText.Get("Off"), LEDBarMode.Off),
+            new EnumChoiceSelection<LEDBarMode>(UiText.Get("Only for multiple controllers"), LEDBarMode.MultipleControllers),
+            new EnumChoiceSelection<LEDBarMode>(UiText.Get("Battery Percentage"), LEDBarMode.BatteryPercentage),
+            new EnumChoiceSelection<LEDBarMode>(UiText.Get("On"), LEDBarMode.On),
         };
         public List<EnumChoiceSelection<LEDBarMode>> DsLEDModes { get => dsLEDModeOptions; }
 
         private List<EnumChoiceSelection<MuteLEDMode>> dsMuteLEDModes = new List<EnumChoiceSelection<MuteLEDMode>>()
         {
-            new EnumChoiceSelection<MuteLEDMode>("Off", MuteLEDMode.Off),
-            new EnumChoiceSelection<MuteLEDMode>("On", MuteLEDMode.On),
-            new EnumChoiceSelection<MuteLEDMode>("Pulse", MuteLEDMode.Pulse),
+            new EnumChoiceSelection<MuteLEDMode>(UiText.Get("Off"), MuteLEDMode.Off),
+            new EnumChoiceSelection<MuteLEDMode>(UiText.Get("On"), MuteLEDMode.On),
+            new EnumChoiceSelection<MuteLEDMode>(UiText.Get("Pulse"), MuteLEDMode.Pulse),
         };
         public List<EnumChoiceSelection<MuteLEDMode>> DsMuteLEDModes { get => dsMuteLEDModes; }
 
@@ -333,15 +333,15 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         private List<EnumChoiceSelection<LinkMode>> linkModes = new List<EnumChoiceSelection<LinkMode>>()
         {
-            new EnumChoiceSelection<LinkMode>("Split", LinkMode.Split),
-            new EnumChoiceSelection<LinkMode>("Joined", LinkMode.Joined),
+            new EnumChoiceSelection<LinkMode>(UiText.Get("Split"), LinkMode.Split),
+            new EnumChoiceSelection<LinkMode>(UiText.Get("Joined"), LinkMode.Joined),
         };
         public List<EnumChoiceSelection<LinkMode>> LinkModes { get => linkModes; }
 
         private List<EnumChoiceSelection<JoinedGyroProvider>> joinGyroOptions = new List<EnumChoiceSelection<JoinedGyroProvider>>()
         {
-            new EnumChoiceSelection<JoinedGyroProvider>("Left", JoinedGyroProvider.JoyConL),
-            new EnumChoiceSelection<JoinedGyroProvider>("Right", JoinedGyroProvider.JoyConR),
+            new EnumChoiceSelection<JoinedGyroProvider>(UiText.Get("Left"), JoinedGyroProvider.JoyConL),
+            new EnumChoiceSelection<JoinedGyroProvider>(UiText.Get("Right"), JoinedGyroProvider.JoyConR),
         };
         public List<EnumChoiceSelection<JoinedGyroProvider>> JoinGyroOptions { get => joinGyroOptions; }
 

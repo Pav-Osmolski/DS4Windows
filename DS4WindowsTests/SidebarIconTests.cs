@@ -89,15 +89,15 @@ public sealed class SidebarIconTests
                 Global.UseSidebarIcon = SidebarIconChoice.BlueTile;
                 XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
                 XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-                var markup = new XElement(XDocument.Load(SourcePath()).Descendants(wpf + "ComboBox")
+                var markup = new XElement(LocalizedSource.Load(SourcePath()).Descendants(wpf + "ComboBox")
                     .Single(element => (string)element.Attribute(x + "Name") == "sidebarIconCombo"));
                 markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
-                var combo = (ComboBox)XamlReader.Parse(markup.ToString());
-                var bridge = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "Themes", "BridgeShellStyles.xaml")).Root;
+                var combo = (ComboBox)XamlReader.Parse(LocalizedSource.Markup(markup));
+                var bridge = LocalizedSource.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "Themes", "BridgeShellStyles.xaml")).Root;
                 bridge.AddFirst(new XElement(wpf + "ResourceDictionary.MergedDictionaries",
                     new XElement(wpf + "ResourceDictionary", new XAttribute("Source",
                         $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))));
-                combo.Resources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Parse(bridge.ToString()));
+                combo.Resources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Parse(LocalizedSource.Markup(bridge)));
                 combo.DataContext = RuntimeHelpers.GetUninitializedObject(typeof(SettingsViewModel));
                 foreach (var choice in SidebarIconCatalog.Choices)
                 {
@@ -214,21 +214,21 @@ public sealed class SidebarIconTests
                 var original = SidebarIconCatalog.Choices.Select(c => c.Image).ToArray();
                 XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
                 XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-                var markup = new XElement(XDocument.Load(SourcePath()).Descendants(wpf + "Slider")
+                var markup = new XElement(LocalizedSource.Load(SourcePath()).Descendants(wpf + "Slider")
                     .Single(e => (string)e.Attribute(x + "Name") == "sidebarHueSlider"));
                 markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
-                var slider = (Slider)XamlReader.Parse(markup.ToString());
+                var slider = (Slider)XamlReader.Parse(LocalizedSource.Markup(markup));
                 var model = (SettingsViewModel)RuntimeHelpers.GetUninitializedObject(typeof(SettingsViewModel));
                 model.SidebarIconHueChanged += (_, _) => SidebarIconCatalog.Apply(resources, SidebarIconChoice.BlueTile, model.SidebarIconHue);
                 slider.DataContext = model;
-                var comboMarkup = new XElement(XDocument.Load(SourcePath()).Descendants(wpf + "ComboBox")
+                var comboMarkup = new XElement(LocalizedSource.Load(SourcePath()).Descendants(wpf + "ComboBox")
                     .Single(e => (string)e.Attribute(x + "Name") == "sidebarIconCombo"));
                 comboMarkup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
-                var combo = (ComboBox)XamlReader.Parse(comboMarkup.ToString());
-                var bridge = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "Themes", "BridgeShellStyles.xaml")).Root;
+                var combo = (ComboBox)XamlReader.Parse(LocalizedSource.Markup(comboMarkup));
+                var bridge = LocalizedSource.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "Themes", "BridgeShellStyles.xaml")).Root;
                 bridge.AddFirst(new XElement(wpf + "ResourceDictionary.MergedDictionaries",
                     new XElement(wpf + "ResourceDictionary", new XAttribute("Source", "/DS4Windows;component/DS4Forms/Themes/DarkTheme.xaml"))));
-                combo.Resources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Parse(bridge.ToString()));
+                combo.Resources.MergedDictionaries.Add((ResourceDictionary)XamlReader.Parse(LocalizedSource.Markup(bridge)));
                 combo.DataContext = model;
                 combo.Measure(new Size(220, 60)); combo.Arrange(new Rect(0, 0, 220, 60)); combo.UpdateLayout();
                 var preview = Visuals(combo).OfType<Image>().Single();

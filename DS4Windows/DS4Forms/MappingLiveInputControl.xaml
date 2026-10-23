@@ -1,7 +1,9 @@
 <UserControl x:Class="DS4WinWPF.DS4Forms.MappingLiveInputControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Focusable="False" Foreground="{DynamicResource ForegroundColor}">
+             Focusable="False" Foreground="{DynamicResource ForegroundColor}"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows">
     <Border Background="{DynamicResource RaisedBackgroundColor}"
             BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
             CornerRadius="8" Padding="12,10">
@@ -14,11 +16,11 @@
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <StackPanel>
-                    <TextBlock Text="Live input" FontWeight="SemiBold" FontSize="12" />
-                    <TextBlock Text="Physical controller · before remapping" FontSize="10" Margin="0,2,0,0"
+                    <TextBlock Text="{lex:Loc Strings:UI_ED46B5581A2D7863}" FontWeight="SemiBold" FontSize="12" />
+                    <TextBlock Text="{lex:Loc Strings:UI_BF7D745C494B23A7}" FontSize="10" Margin="0,2,0,0"
                                Foreground="{DynamicResource MutedForegroundColor}" />
                 </StackPanel>
-                <TextBlock x:Name="liveStatus" Grid.Column="1" Text="Waiting" FontSize="10"
+                <TextBlock x:Name="liveStatus" Grid.Column="1" Text="{lex:Loc Strings:UI_6E293A8C009E0011}" FontSize="10"
                            Foreground="{DynamicResource MutedForegroundColor}" VerticalAlignment="Center" Margin="8,0,0,0" />
             </Grid>
             <Grid Grid.Row="1" Margin="0,9,0,8">
@@ -31,7 +33,7 @@
                         <Ellipse x:Name="leftStickDot" Width="8" Height="8" Canvas.Left="20" Canvas.Top="20" Fill="{DynamicResource AccentColor}" />
                     </Canvas>
                     <StackPanel Margin="7,0,5,0" VerticalAlignment="Center">
-                        <TextBlock Text="L stick" FontWeight="SemiBold" FontSize="10" />
+                        <TextBlock Text="{lex:Loc Strings:UI_24B062EB1DEB39F5}" FontWeight="SemiBold" FontSize="10" />
                         <TextBlock x:Name="leftStickValue" Text="X —&#x0a;Y —" FontSize="10" Margin="0,3,0,0"
                                    Foreground="{DynamicResource MutedForegroundColor}" />
                     </StackPanel>
@@ -44,7 +46,7 @@
                         <Ellipse x:Name="rightStickDot" Width="8" Height="8" Canvas.Left="20" Canvas.Top="20" Fill="{DynamicResource AccentColor}" />
                     </Canvas>
                     <StackPanel Margin="7,0,5,0" VerticalAlignment="Center">
-                        <TextBlock Text="R stick" FontWeight="SemiBold" FontSize="10" />
+                        <TextBlock Text="{lex:Loc Strings:UI_9034AE31E8A37FD7}" FontWeight="SemiBold" FontSize="10" />
                         <TextBlock x:Name="rightStickValue" Text="X —&#x0a;Y —" FontSize="10" Margin="0,3,0,0"
                                    Foreground="{DynamicResource MutedForegroundColor}" />
                     </StackPanel>
@@ -64,9 +66,9 @@
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
-                <TextBlock Text="PRESSED" FontSize="9" FontWeight="SemiBold" Margin="0,0,10,0"
+                <TextBlock Text="{lex:Loc Strings:UI_580D962E8641E622}" FontSize="9" FontWeight="SemiBold" Margin="0,0,10,0"
                            Foreground="{DynamicResource MutedForegroundColor}" VerticalAlignment="Center" />
-                <TextBlock x:Name="pressedButtons" Grid.Column="1" Text="Connect a controller, then reopen this editor."
+                <TextBlock x:Name="pressedButtons" Grid.Column="1" Text="{lex:Loc Strings:UI_F7369D1136BB75B1}"
                            FontSize="11" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource AccentColor}" />
             </Grid>
         </Grid>

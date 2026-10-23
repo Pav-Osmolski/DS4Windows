@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:schema id="root">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xs:element name="root" ns1:IsDataSet="true">
+      <xs:complexType>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="metadata">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" />
+              </xs:sequence>
+              <xs:attribute name="name" use="required" type="xsd:string" />
+              <xs:attribute name="type" type="xsd:string" />
+              <xs:attribute name="mimetype" type="xsd:string" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="assembly">
+            <xs:complexType>
+              <xs:attribute name="alias" type="xsd:string" />
+              <xs:attribute name="name" type="xsd:string" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="data">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+              <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+              <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="resheader">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" />
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionExists" xml:space="preserve">
+    <value>Bu eylemin adı zaten var.</value>
+  </data>
+  <data name="AddingToList" xml:space="preserve">
+    <value>Listeye eklemek için...</value>
+  </data>
+  <data name="AddPrograms" xml:space="preserve">
+    <value>Program Ekle</value>
+  </data>
+  <data name="ALocactionNeeded" xml:space="preserve">
+    <value>Devam etmek için bir yer seçilmelidir</value>
+  </data>
+  <data name="AlwaysRainbow" xml:space="preserve">
+    <value>Always Rainbow Modası</value>
+  </data>
+  <data name="AssignProfile" xml:space="preserve">
+    <value>Kontrolör numarası * Numara *</value>
+  </data>
+  <data name="Battery" xml:space="preserve">
+    <value>Batarya Sayısı *%</value>
+  </data>
+  <data name="BestUsedRightSide" xml:space="preserve">
+    <value>Sağ tarafı bir fare işlevi olarak en iyi kullanılır</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="BTPollRate" xml:space="preserve">
+    <value>Bluetooth üzerinden bağlandığında DS4 donanımında kullanılan anket oranını belirler. (Profil kaydetme için geçerlidir)</value>
+  </data>
+  <data name="CannotMoveFiles" xml:space="preserve">
+    <value>Dosyaları yeni bir yere taşıyamıyorum, DS4Tool klasörünü "DS4Windows" olarak yeniden adlandırın</value>
+  </data>
+  <data name="CannotWriteHere" xml:space="preserve">
+    <value>Mevcut konumda yazamıyorum. ayarları appdata'ya kopyalamak için?</value>
+  </data>
+  <data name="ChargeController" xml:space="preserve">
+    <value>bataryayı şarj edin</value>
+  </data>
+  <data name="Charged" xml:space="preserve">
+    <value>Şarj</value>
+  </data>
+  <data name="Charging" xml:space="preserve">
+    <value>Şarj: *Sayı *%</value>
+  </data>
+  <data name="CheckBattery" xml:space="preserve">
+    <value>Batarya Kontrolü</value>
+  </data>
+  <data name="CloseConfirm" xml:space="preserve">
+    <value>Bu, tüm bağlantılı denetleyicilerinizi bağlayacaktır. devam edin?</value>
+  </data>
+  <data name="CloseDS4W" xml:space="preserve">
+    <value>DS4Windows için mi?</value>
+  </data>
+  <data name="CloseMinimize" xml:space="preserve">
+    <value>Ana pencereyi kapatmak uygulamayı en aza indirir. uygulamayı bırakmak bildirim simgesini kullanarak yapılır</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Renk</value>
+  </data>
+  <data name="ColorByBattery" xml:space="preserve">
+    <value>Renk Bataryası %</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Onaylayın...</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>Bağlantı...</value>
+  </data>
+  <data name="ContextEdit" xml:space="preserve">
+    <value>Kontrolör Profili Edit *Number*</value>
+  </data>
+  <data name="ContextNew" xml:space="preserve">
+    <value>Kontrolör numarası için Profil oluşturun *number*</value>
+  </data>
+  <data name="ControllerWasRemoved" xml:space="preserve">
+    <value>Kontrolör *Mac adresi* kaldırıldı veya bağlantı kayboldu</value>
+  </data>
+  <data name="CopyComplete" xml:space="preserve">
+    <value>Tamamlayın, lütfen DS4Windows'u yeniden başlatın ve Program Directory'den ayarları kaldırın</value>
+  </data>
+  <data name="CopyFullColor" xml:space="preserve">
+    <value>Renk kopyalamak için tıklayın</value>
+  </data>
+  <data name="CouldNotOpenDS4" xml:space="preserve">
+    <value>Uyarı: DS4 *Mac adresi* yalnızca açılamaz.</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>gün</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Günler</value>
+  </data>
+  <data name="DeleteProfile" xml:space="preserve">
+    <value>Profiller mi silinir?</value>
+  </data>
+  <data name="DimByBattery" xml:space="preserve">
+    <value>Bataryaya göre %</value>
+  </data>
+  <data name="DisconnectBT" xml:space="preserve">
+    <value>Bağlantı BT</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Bağlantısız</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>İndirme Sayısı *%</value>
+  </data>
+  <data name="DownloadVersion" xml:space="preserve">
+    <value>Download Version *Number* şimdi mi?</value>
+  </data>
+  <data name="DownText" xml:space="preserve">
+    <value>aşağıya</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DS4Update" xml:space="preserve">
+    <value>DS4Windows Güncelleştirme Hazır!</value>
+  </data>
+  <data name="DS4WindowsCannotEditHere" xml:space="preserve">
+    <value>DS4Windows burada ayarları düzenleyemez, Bu şimdi kapanacak</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Düzenle</value>
+  </data>
+  <data name="FallBack" xml:space="preserve">
+    <value>Geri Düşüş</value>
+  </data>
+  <data name="FallBackTo" xml:space="preserve">
+    <value>* Butonuna geri dön</value>
+  </data>
+  <data name="FifthMouseDown" xml:space="preserve">
+    <value>Beşinci Mouse Button Down</value>
+  </data>
+  <data name="FifthMouseUp" xml:space="preserve">
+    <value>5. Mouse Button Üstü</value>
+  </data>
+  <data name="FlashAtTip" xml:space="preserve">
+    <value>Renk değiştirmek için tıklayın. siyah = varsayılan renk</value>
+  </data>
+  <data name="FlushHID" xml:space="preserve">
+    <value>Flush gizleme</value>
+  </data>
+  <data name="FlushHIDTip" xml:space="preserve">
+    <value>Flush HID Her Okuma Sonrası</value>
+  </data>
+  <data name="FoundController" xml:space="preserve">
+    <value>Kontrolör Bulundu :</value>
+  </data>
+  <data name="FourthMouseDown" xml:space="preserve">
+    <value>Dördüncü Mouse Button</value>
+  </data>
+  <data name="FourthMouseUp" xml:space="preserve">
+    <value>Dördüncü Mouse Button Up</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Dolu</value>
+  </data>
+  <data name="GyroReadout" xml:space="preserve">
+    <value>Sixaxis Gyro'yu görmek için tıklayın</value>
+  </data>
+  <data name="GyroTriggerBehavior" xml:space="preserve">
+    <value>Girişimci aktif olduğunda gyro aktif olup olmadığını kontrol edin. trigger aktif olduğunda gyro'yu devre dışı bırakın.</value>
+  </data>
+  <data name="GyroX" xml:space="preserve">
+    <value>GyroX, Sol ve Sağ Tilt</value>
+  </data>
+  <data name="GyroY" xml:space="preserve">
+    <value>GyroY, Ön ve Geri Tilt</value>
+  </data>
+  <data name="GyroZ" xml:space="preserve">
+    <value>GyroZ - Yukarı ve Aşağı Tilt</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>saat</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>saatleri</value>
+  </data>
+  <data name="HoverOverItems" xml:space="preserve">
+    <value>Açıklama veya daha fazlasını görmek için öğeler üzerinde gezin</value>
+  </data>
+  <data name="IfRemovingDS4Windows" xml:space="preserve">
+    <value>DS4Windows kaldırırsanız, Profil klasörü bağlantısını takip ederek ayarları silebilirsiniz</value>
+  </data>
+  <data name="InputDelay" xml:space="preserve">
+    <value>Gözlenen fiziksel rapor aralığı: {0:0.00} ms</value>
+  </data>
+  <data name="InstallComplete" xml:space="preserve">
+    <value>Tamamlayıcı yükleme</value>
+  </data>
+  <data name="InstallDriver" xml:space="preserve">
+    <value>Sürücüler buraya</value>
+  </data>
+  <data name="InstallFailed" xml:space="preserve">
+    <value>yükleme başarısız, lütfen geri yükle</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Kurulumu...</value>
+  </data>
+  <data name="Jitter" xml:space="preserve">
+    <value>Touchpad Hareketini Hesaplamak için Sixaxis'i Kullanın</value>
+  </data>
+  <data name="KeepThisSize" xml:space="preserve">
+    <value>Kapandıktan sonra bu pencere boyutunu koruyun</value>
+  </data>
+  <data name="LanguagePackApplyRestartRequired" xml:space="preserve">
+    <value>Dil paketi değişikliği, DS4Windows uygulaması yeniden başlatıldıktan sonra etkili olacaktır.</value>
+  </data>
+  <data name="LatencyNotOverTen" xml:space="preserve">
+    <value>Kontrolörün *sayı* gecikmesi şimdi 10ms altında</value>
+  </data>
+  <data name="LatencyOverTen" xml:space="preserve">
+    <value>Kontrolör {0} 10ms ({1} ms) üzerinde latans</value>
+  </data>
+  <data name="LaunchProgram" xml:space="preserve">
+    <value>Başlangıç * Program *</value>
+  </data>
+  <data name="LightByBatteryTip" xml:space="preserve">
+    <value>Ayrıca DS4 tam şarj olduğunda devre dışı bırakılırsa</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Yükleme ...</value>
+  </data>
+  <data name="LoadProfile" xml:space="preserve">
+    <value>Yükleme * Profil *</value>
+  </data>
+  <data name="Macro" xml:space="preserve">
+    <value>makro</value>
+  </data>
+  <data name="MacroRecorded" xml:space="preserve">
+    <value>makro kayıt</value>
+  </data>
+  <data name="MakeNewProfile" xml:space="preserve">
+    <value>Yeni bir profil oluşturun</value>
+  </data>
+  <data name="MultiAction" xml:space="preserve">
+    <value>Mutli-Action düğmesi</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Yeni</value>
+  </data>
+  <data name="NoMacroRecorded" xml:space="preserve">
+    <value>Makro kaydedilmedi</value>
+  </data>
+  <data name="noneProfile" xml:space="preserve">
+    <value>(Hiçbir</value>
+  </data>
+  <data name="NoneText" xml:space="preserve">
+    <value>Hiçbir</value>
+  </data>
+  <data name="NoProfileLoaded" xml:space="preserve">
+    <value>Profil Yükleme</value>
+  </data>
+  <data name="NotUsingProfile" xml:space="preserve">
+    <value>Kontrolör {0} bir profil kullanmıyor. Batarya seviyesi {1}%</value>
+  </data>
+  <data name="NotValid" xml:space="preserve">
+    <value>geçerli değil</value>
+  </data>
+  <data name="OpeningInstaller" xml:space="preserve">
+    <value>Açık Installer</value>
+  </data>
+  <data name="OpenScpDriver" xml:space="preserve">
+    <value>Ayarlar &gt; Kontrolörler'i açın ve Install / Repair VIIPER'i seçin.</value>
+  </data>
+  <data name="OtherFileLocation" xml:space="preserve">
+    <value>Diğer yer dosyaları silinecektir</value>
+  </data>
+  <data name="PleaseDownloadUpdater" xml:space="preserve">
+    <value>Lütfen güncelleştirmeyi şimdi indirin, program klasörüne yerleştirin ve x86'da DS4Updater.exe olarak yeniden adlandırın, sonra güncelleştirme için tekrar kontrol edin. DS4Windows bu pencere kapatıldığında DS4Updater Yayın sayfası'nı açmaya çalışacaktır.</value>
+  </data>
+  <data name="PleaseImport" xml:space="preserve">
+    <value>Lütfen import veya profil oluşturun</value>
+  </data>
+  <data name="PlusNewProfile" xml:space="preserve">
+    <value>Yeni Profil</value>
+  </data>
+  <data name="ProfileCannotRestore" xml:space="preserve">
+    <value>*Profil adı* kurtarılamaz.</value>
+  </data>
+  <data name="ProfileFolderMoved" xml:space="preserve">
+    <value>Profil klasörü Program klasörüne taşındı</value>
+  </data>
+  <data name="Programs" xml:space="preserve">
+    <value>Programlar</value>
+  </data>
+  <data name="QuickCharge" xml:space="preserve">
+    <value>USB'ye bağlandığınızda BT otomatik olarak devre dışı bırakın</value>
+  </data>
+  <data name="QuitOtherPrograms" xml:space="preserve">
+    <value>Şu anda fiziksel denetleyiciyi tutan uygulamaları kapatın, "Double Input'ı önlemek için HidHide kullan" etkinleştirmeden önce.</value>
+  </data>
+  <data name="RecordText" xml:space="preserve">
+    <value>Kayıt</value>
+  </data>
+  <data name="RightClickPresets" xml:space="preserve">
+    <value>Sağ tıklayarak bir dizi denetim için ön ayarları ayarlamak</value>
+  </data>
+  <data name="RunAtStartup" xml:space="preserve">
+    <value>Windows'a giriş yaptıktan sonra DS4Windows'u başlatır</value>
+  </data>
+  <data name="SaveRecordedMacro" xml:space="preserve">
+    <value>Makro kaydedin mi?</value>
+  </data>
+  <data name="ScanCode" xml:space="preserve">
+    <value>Scan Kodları</value>
+  </data>
+  <data name="SearchingController" xml:space="preserve">
+    <value>Kontrolörler arıyor...</value>
+  </data>
+  <data name="SelectActionTitle" xml:space="preserve">
+    <value>*Action için bir eylem seçin*</value>
+  </data>
+  <data name="SelectMacro" xml:space="preserve">
+    <value>Bir makro seçin</value>
+  </data>
+  <data name="SetRegularTrigger" xml:space="preserve">
+    <value>Düzenli Trigger</value>
+  </data>
+  <data name="SetUnloadTrigger" xml:space="preserve">
+    <value>Unload Trigger Kullanımı</value>
+  </data>
+  <data name="Shortcuts" xml:space="preserve">
+    <value>Kısa</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrate" xml:space="preserve">
+    <value>Sixaxis Tekerlek Emülasyonu</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction1" xml:space="preserve">
+    <value>(1) Kontrolörün merkezine, sabit tutun ve "X" tuşuna basın</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction2" xml:space="preserve">
+    <value>(2) 90° sol (veya sağ) pozisyonuna dönün ve "X" basın</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction3" xml:space="preserve">
+    <value>(3) 90° sağ (veya sol) pozisyonuna dönün ve "X" basın</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction" xml:space="preserve">
+    <value>Tüm kalibrasyon noktaları ışık çubuğu renginin yeşil haline geldiğinde ayarlanır. Kontrolörün dönerken, ışık çubuğu rengi kontrolörün kalibrasyon noktasında olduğunda yanıp söner.</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoControllerError" xml:space="preserve">
+    <value>Bir denetleyici olmadan gyro (sixaxis) emülasyon değerlerini kalibre edemezsiniz. bir denetleyiciyi Bluetooth veya usb üzerinden bağlayın</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoneAxisError" xml:space="preserve">
+    <value>Gyro kumanda emülasyon eksen seçeneği NO'ya ayarlanır (emülasyon kullanılmamaktadır). Sixaxis gyro kumanda emülasyonunu kalibre etmeden önce bir eksen seçeneğini seçin</value>
+  </data>
+  <data name="SixAxisReading" xml:space="preserve">
+    <value>Advanced Sixaxis Reading için tıklayın</value>
+  </data>
+  <data name="Starting" xml:space="preserve">
+    <value>Başlamak...</value>
+  </data>
+  <data name="StartText" xml:space="preserve">
+    <value>Başlangıç</value>
+  </data>
+  <data name="Step1" xml:space="preserve">
+    <value>Adım 1: VIIPER ve USB/IP yükleme</value>
+  </data>
+  <data name="StopHText" xml:space="preserve">
+    <value>Ağır dur</value>
+  </data>
+  <data name="StopLText" xml:space="preserve">
+    <value>ışık dur</value>
+  </data>
+  <data name="StoppedDS4Windows" xml:space="preserve">
+    <value>Sıkıştırma DS4Windows</value>
+  </data>
+  <data name="StoppingDS4" xml:space="preserve">
+    <value>DS4 Giriş Kontrolörleri</value>
+  </data>
+  <data name="StoppingX360" xml:space="preserve">
+    <value>Virtual Output Controller Kullanımı</value>
+  </data>
+  <data name="StopText" xml:space="preserve">
+    <value>Dur</value>
+  </data>
+  <data name="SwipeDown" xml:space="preserve">
+    <value>Dışarıya Swipe</value>
+  </data>
+  <data name="SwipeLeft" xml:space="preserve">
+    <value>Sivas Solak</value>
+  </data>
+  <data name="SwipeRight" xml:space="preserve">
+    <value>Sağda çakmak</value>
+  </data>
+  <data name="SwipeTouchpad" xml:space="preserve">
+    <value>Profillerini Değiştirmek için Touchpad</value>
+  </data>
+  <data name="SwipeUp" xml:space="preserve">
+    <value>Yürüyüş</value>
+  </data>
+  <data name="TapAndHold" xml:space="preserve">
+    <value>Tek tıklama ile kaydırmak için dokunun ve tutun, hafif gecikme</value>
+  </data>
+  <data name="TestHText" xml:space="preserve">
+    <value>ağır test</value>
+  </data>
+  <data name="TestLText" xml:space="preserve">
+    <value>Işık Testi</value>
+  </data>
+  <data name="TestText" xml:space="preserve">
+    <value>TESTİ</value>
+  </data>
+  <data name="TextDocs" xml:space="preserve">
+    <value>Yazılı Bilgiler (*.txt)</value>
+  </data>
+  <data name="TiltDown" xml:space="preserve">
+    <value>Tilt Aşağı</value>
+  </data>
+  <data name="TiltLeft" xml:space="preserve">
+    <value>Tilt Sol</value>
+  </data>
+  <data name="TiltRight" xml:space="preserve">
+    <value>Tilt Hakkı</value>
+  </data>
+  <data name="TiltUp" xml:space="preserve">
+    <value>Tilt yukarı</value>
+  </data>
+  <data name="TouchpadMovementOff" xml:space="preserve">
+    <value>Touchpad Movement artık kapalı</value>
+  </data>
+  <data name="TouchpadMovementOn" xml:space="preserve">
+    <value>Touchpad Movement Artık Başlıyor</value>
+  </data>
+  <data name="TouchpadOffTip" xml:space="preserve">
+    <value>PS+Touchpad’a basarak yeniden etkinleştirin</value>
+  </data>
+  <data name="TwoFingerSwipe" xml:space="preserve">
+    <value>2 Parmaklı Touchpad Sağ veya Sol</value>
+  </data>
+  <data name="TypeNewName" xml:space="preserve">
+    <value>Yeni Adı Buraya</value>
+  </data>
+  <data name="TypeProfileName" xml:space="preserve">
+    <value>Profil Adı Burada</value>
+  </data>
+  <data name="UACTask" xml:space="preserve">
+    <value>Bu modu etkinleştirmek için DS4Windows'u Yönetici olarak çalıştırmanız gerekir.</value>
+  </data>
+  <data name="Unassigned" xml:space="preserve">
+    <value>Gönderilmemiş</value>
+  </data>
+  <data name="UpText" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="UpToDate" xml:space="preserve">
+    <value>DS4Windows uygulaması güncellenmiştir.</value>
+  </data>
+  <data name="UseControllerForMapping" xml:space="preserve">
+    <value>Kontrollerinizi değiştirmek için de kontrolünüzü kullanabilirsiniz.</value>
+  </data>
+  <data name="UsingExclusive" xml:space="preserve">
+    <value>Exclusive Mode Kullanımı</value>
+  </data>
+  <data name="UsingProfile" xml:space="preserve">
+    <value>Kontrolör {0} Profili "{1}" kullanıyor. Batarya seviyesi {2}%</value>
+  </data>
+  <data name="UsingShared" xml:space="preserve">
+    <value>Paylaşım Modu Kullanımı</value>
+  </data>
+  <data name="UsingTPSwipes" xml:space="preserve">
+    <value>Touchpad'ı fare gibi devre dışı bırakır</value>
+  </data>
+  <data name="ValidName" xml:space="preserve">
+    <value>Lütfen geçerli bir isim girin</value>
+  </data>
+  <data name="WaitMS" xml:space="preserve">
+    <value>Bekleme sayısı *ms</value>
+  </data>
+  <data name="WillKeep" xml:space="preserve">
+    <value>kalacak</value>
+  </data>
+  <data name="XMLFiles" xml:space="preserve">
+    <value>XML Dosyaları (*.xml)</value>
+  </data>
+  <data name="EnableTouchToggle" xml:space="preserve">
+    <value>PS + Touchpad Click ile dokunmatik fare işlevini kullanın.</value>
+  </data>
+  <data name="UdpServer" xml:space="preserve">
+    <value>UDP sunucusunu etkinleştirin.Server dinle adresi ve portu.Adres değeri seçenekleri: 127.0.0.1 localhost yalnızca__kn__ 0.0.0.0 tüm adresler.Specific host name veya IP address.</value>
+  </data>
+  <data name="AutoProfilePathAndWindowTitleEditTip" xml:space="preserve">
+    <value>^ABC = Döviz başlangıcında eşleşme (^) Ebay ABC$ = Döviz sonunda eşleşme ($) Ebay *ABC = Döviz (*) içerir</value>
+  </data>
+  <data name="ShowAutoProfileDebugLogTip" xml:space="preserve">
+    <value>Eğer etkinleştirilirse, Log sekmesi sayfasında otomatik profil olayları hakkında ayrıntılı mesajlar görüntülenir.</value>
+  </data>
+  <data name="MacroScanCodeTip" xml:space="preserve">
+    <value>Makro'da klavye anahtarlarının bir tarama kodu değeri kullanın</value>
+  </data>
+  <data name="MacroRunOnReleaseTip" xml:space="preserve">
+    <value>Trigger Key Release üzerinde bir makro çalıştırın</value>
+  </data>
+  <data name="MacroSynchronizedRunTip" xml:space="preserve">
+    <value>Birden fazla makro, aynı triggerin birden fazla makroya sahipse eğer senkronize sırada çalıştırılır (bir anahtar çıkartma makro çalıştırılmadan önce tamamlanmıştır)</value>
+  </data>
+  <data name="MacroRepeatTip" xml:space="preserve">
+    <value>Trigger anahtarı düştüğünde bir makroyi tekrarlayın</value>
+  </data>
+  <data name="MacroKeepKeyStateTip" xml:space="preserve">
+    <value>Makro çalışması tamamlandığında son anahtar durumunu tutun (yani bir anahtar aşağı durumda kalırsa otomatik olarak varsayılan durumuna geri ayarlanmaz)</value>
+  </data>
+  <data name="SquareStickRoundness" xml:space="preserve">
+    <value>Square Stick köşelerinin yuvarlaklığı</value>
+  </data>
+  <data name="XMLActionsCorrupt" xml:space="preserve">
+    <value>Actions.xml dosyası bozuk. baştan başlayarak.</value>
+  </data>
+  <data name="OscServer" xml:space="preserve">
+    <value>OSC Server'ı etkinleştirin. Tüm adreslerde port dinleyin.</value>
+  </data>
+  <data name="UsingAutoTempProfile" xml:space="preserve">
+    <value>Kontrolör {0} temp Profile "{1}" kullanıyor</value>
+  </data>
+  <data name="DinputOnly" xml:space="preserve">
+    <value>Virtuel Kontrolör Çıkışı</value>
+  </data>
+  <data name="OutContNotice" xml:space="preserve">
+    <value>Virtual controller oyunları tespit etmelidir seçin. değişikliği uygulamak için profil kaydedin.</value>
+  </data>
+  <data name="TouchStarted" xml:space="preserve">
+    <value>Dokunmaya Başladı</value>
+  </data>
+  <data name="TouchEnded" xml:space="preserve">
+    <value>Dokunma bitti</value>
+  </data>
+  <data name="ProfileNameInvalid" xml:space="preserve">
+    <value>Geçerli bir profil ismi girin, arka boşluk veya nokta olmadan.</value>
+  </data>
+  <data name="ProfileRenameCollision" xml:space="preserve">
+    <value>Bu ismi taşıyan bir profil zaten var. Başka bir isim seçin. Profil de değişmedi.</value>
+  </data>
+  <data name="ProfileRenameFailed" xml:space="preserve">
+    <value>Profil yeniden adlandırılamadı. Adı değiştirilmedi. Dosya izinlerini veya başka bir programın kullanıyor olup olmadığını kontrol edin.</value>
+  </data>
+  <data name="ResolvePendingProfileSave" xml:space="preserve">
+    <value>Bu profilde Özet değişiklikleri kaydedilmedi. Düzenleme veya yeniden adlandırmadan önce Özet'te beklenen kaydını geri yükleyin veya atın.</value>
+  </data>
+</root>

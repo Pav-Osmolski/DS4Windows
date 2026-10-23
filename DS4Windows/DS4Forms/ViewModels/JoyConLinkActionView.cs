@@ -11,6 +11,6 @@ public sealed record JoyConLinkActionView
     public bool Visible { get; init; }
     public bool Enabled { get; init; }
     public bool IsArmed { get; init; }
-    public string Text { get; init; } = "Link";
+    public string Text { get; init; } = global::DS4Windows.UiText.Get("Link");
     public string ToolTip { get; init; }
 }

@@ -59,11 +59,11 @@ internal static class SidebarIconCatalog
     internal static IReadOnlyList<SidebarIconOption> Choices { get; } =
         Array.AsReadOnly(new[]
         {
-            new SidebarIconOption(SidebarIconChoice.BlueTile, "Blue Tile", "blue-tile"),
-            new SidebarIconOption(SidebarIconChoice.MidnightCircle, "Midnight Circle", "midnight-circle"),
-            new SidebarIconOption(SidebarIconChoice.BlueFrame, "Blue Frame", "blue-frame"),
-            new SidebarIconOption(SidebarIconChoice.Controller, "Controller", "controller"),
-            new SidebarIconOption(SidebarIconChoice.AngularBadge, "Angular Badge", "angular-badge"),
+            new SidebarIconOption(SidebarIconChoice.BlueTile, global::DS4Windows.UiText.Get("Blue Tile"), "blue-tile"),
+            new SidebarIconOption(SidebarIconChoice.MidnightCircle, global::DS4Windows.UiText.Get("Midnight Circle"), "midnight-circle"),
+            new SidebarIconOption(SidebarIconChoice.BlueFrame, global::DS4Windows.UiText.Get("Blue Frame"), "blue-frame"),
+            new SidebarIconOption(SidebarIconChoice.Controller, global::DS4Windows.UiText.Get("Controller"), "controller"),
+            new SidebarIconOption(SidebarIconChoice.AngularBadge, global::DS4Windows.UiText.Get("Angular Badge"), "angular-badge"),
         });
 
     internal static void Apply(ResourceDictionary resources, SidebarIconChoice choice, double hue = 0)

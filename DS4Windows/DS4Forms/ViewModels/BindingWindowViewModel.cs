@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -1019,12 +1019,12 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             // parsing the string in general + active flag
             var fieldSplit = macro.Split('/');
-            if (fieldSplit.Length is < 3 or > 4) throw new ArgumentException($"Provided string doesn't comply with the format (too few or too many sections separated with '/').\n{macro}");
+            if (fieldSplit.Length is < 3 or > 4) throw new ArgumentException(global::DS4Windows.UiText.Format("Provided string doesn't comply with the format (too few or too many sections separated with '/').\n{0}", macro));
 
             // prior to 3.9.2 cancellation was not available, so the string was different, check is done for backwards compatibility
             var oldFormat = fieldSplit.Length == 3;
 
-            if (!bool.TryParse(fieldSplit[0], out var active)) throw new ArgumentException("Provided string doesn't comply with the format (cannot parse active flag).");
+            if (!bool.TryParse(fieldSplit[0], out var active)) throw new ArgumentException(global::DS4Windows.UiText.Get("Provided string doesn't comply with the format (cannot parse active flag)."));
 
             var macroSplit = fieldSplit[1].Split(';');
             List<LightbarMacroElement> macroList = [];
@@ -1037,7 +1037,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 DS4Color parsedColor = new();
                 if (!DS4Color.TryParse(color, ref parsedColor)
                     || !uint.TryParse(length, out var parsedLength))
-                    throw new ArgumentException("Provided lightbar macro string doesn't comply with the format (cannot parse color or length).");
+                    throw new ArgumentException(global::DS4Windows.UiText.Get("Provided lightbar macro string doesn't comply with the format (cannot parse color or length)."));
                 macroList.Add(new LightbarMacroElement(parsedColor, parsedLength));
             }
 
@@ -1049,7 +1049,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 cancel = true;
             else
                 if (!bool.TryParse(fieldSplit[3], out cancel))
-                    throw new ArgumentException("Provided lightbar macro string doesn't comply with the format (cannot parse cancellation flag).");
+                    throw new ArgumentException(global::DS4Windows.UiText.Get("Provided lightbar macro string doesn't comply with the format (cannot parse cancellation flag)."));
 
             return new LightbarMacro(active, macroList.ToArray(), lightbarMacroTrigger, cancel);
         }

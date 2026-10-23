@@ -274,32 +274,32 @@ namespace DS4WinWPF.DS4Forms
             scanStatusPanel.Visibility = Visibility.Visible;
             scanProgress.Visibility = cancelScanBtn.Visibility = Visibility.Visible;
             scanStatusText.Text = label;
-            scanLocationText.Text = "Looking for programs…";
+            scanLocationText.Text = global::DS4Windows.UiText.Get("Looking for programs…");
             addProgramsBtn.IsEnabled = hideUncheckedBtn.IsEnabled = editControlsPanel.IsEnabled = false;
             UpdateRuleActions();
             var progress = new Progress<ProgramScanProgress>(state =>
             {
                 if (scanCancellation != cancellation) return;
-                scanStatusText.Text = $"{label} · {state.Checked:N0} checked · {state.Found:N0} found";
+                scanStatusText.Text = global::DS4Windows.UiText.Format("{0} · {1:N0} checked · {2:N0} found", label, state.Checked, state.Found);
                 scanLocationText.Text = state.Location;
             });
             try
             {
                 ProgramScanResult result = await scan(cancellation.Token, progress);
-                scanStatusText.Text = $"Added {result.Added:N0} program(s). {result.Programs.Count - result.Added:N0} already listed. {result.Skipped:N0} unavailable or unsupported item(s) skipped.";
+                scanStatusText.Text = global::DS4Windows.UiText.Format("Added {0:N0} program(s). {1:N0} already listed. {2:N0} unavailable or unsupported item(s) skipped.", result.Added, result.Programs.Count - result.Added, result.Skipped);
                 scanLocationText.Text = result.Programs.Count == 0
-                    ? "No executable programs found. Try Browse for Other Programs or Add Window Title Rule."
-                    : result.Added == 0 ? "All discovered programs are already listed. Use search to find and configure them."
-                    : "Choose a program, configure its profiles, then Save rule. Only enabled, saved rules are applied.";
+                    ? global::DS4Windows.UiText.Get("No executable programs found. Try Browse for Other Programs or Add Window Title Rule.")
+                    : result.Added == 0 ? global::DS4Windows.UiText.Get("All discovered programs are already listed. Use search to find and configure them.")
+                    : global::DS4Windows.UiText.Get("Choose a program, configure its profiles, then Save rule. Only enabled, saved rules are applied.");
             }
             catch (OperationCanceledException)
             {
-                scanStatusText.Text = "Scan cancelled. No programs were added.";
-                scanLocationText.Text = "Your existing rules have been kept.";
+                scanStatusText.Text = global::DS4Windows.UiText.Get("Scan cancelled. No programs were added.");
+                scanLocationText.Text = global::DS4Windows.UiText.Get("Your existing rules have been kept.");
             }
             catch (Exception error)
             {
-                scanStatusText.Text = "Could not finish scanning programs.";
+                scanStatusText.Text = global::DS4Windows.UiText.Get("Could not finish scanning programs.");
                 scanLocationText.Text = error.Message;
             }
             finally
@@ -313,7 +313,7 @@ namespace DS4WinWPF.DS4Forms
         }
 
         private async void SteamMenuItem_Click(object sender, RoutedEventArgs e) =>
-            await RunProgramScanAsync("Scanning Steam games", (token, progress) => autoProfVM.AddProgramsFromDir(steamgamesdir, token, progress));
+            await RunProgramScanAsync(global::DS4Windows.UiText.Get("Scanning Steam games"), (token, progress) => autoProfVM.AddProgramsFromDir(steamgamesdir, token, progress));
 
         private async void BrowseProgsMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -323,7 +323,7 @@ namespace DS4WinWPF.DS4Forms
         }
 
         private async void StartMenuItem_Click(object sender, RoutedEventArgs e) =>
-            await RunProgramScanAsync("Scanning Start Menu", (token, progress) => autoProfVM.AddProgramsFromStartMenu(token, progress));
+            await RunProgramScanAsync(global::DS4Windows.UiText.Get("Scanning Start Menu"), (token, progress) => autoProfVM.AddProgramsFromStartMenu(token, progress));
 
         private void CancelScanBtn_Click(object sender, RoutedEventArgs e) => scanCancellation?.Cancel();
 
@@ -408,8 +408,8 @@ namespace DS4WinWPF.DS4Forms
             if (!autoProfileHolder.Save(m_Profile))
             {
                 scanStatusPanel.Visibility = Visibility.Visible;
-                scanStatusText.Text = "Could not save Auto Profiles.";
-                scanLocationText.Text = "Check that the settings folder is writable, then try Save rule again.";
+                scanStatusText.Text = global::DS4Windows.UiText.Get("Could not save Auto Profiles.");
+                scanLocationText.Text = global::DS4Windows.UiText.Get("Check that the settings folder is writable, then try Save rule again.");
             }
         }
 
@@ -420,8 +420,8 @@ namespace DS4WinWPF.DS4Forms
                 if (string.IsNullOrWhiteSpace(autoProfVM.SelectedItem.Path) && string.IsNullOrWhiteSpace(autoProfVM.SelectedItem.Title))
                 {
                     scanStatusPanel.Visibility = Visibility.Visible;
-                    scanStatusText.Text = "Enter a program path or window title before saving this rule.";
-                    scanLocationText.Text = "Blank rules cannot match a program.";
+                    scanStatusText.Text = global::DS4Windows.UiText.Get("Enter a program path or window title before saving this rule.");
+                    scanLocationText.Text = global::DS4Windows.UiText.Get("Blank rules cannot match a program.");
                     return;
                 }
                 if (autoProfVM.SelectedItem.MatchedAutoProfile == null)
@@ -457,7 +457,7 @@ namespace DS4WinWPF.DS4Forms
         private void BrowseAddProgMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog { Multiselect = false, AddExtension = true, DefaultExt = ".exe",
-                Filter = "Program (*.exe)|*.exe", Title = "Select Program",
+                Filter = global::DS4Windows.UiText.FileFilter("Program (*.exe)|*.exe"), Title = global::DS4Windows.UiText.Get("Select Program"),
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) };
             if (dialog.ShowDialog() == true)
             {
