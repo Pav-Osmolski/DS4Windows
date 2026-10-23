@@ -30,6 +30,10 @@ $cases = @(
     @{ Tag='5.0.14'; WrongTarget=$true; Accept=$false },
     @{ Tag='5.0.14'; ExistingTag=$true; WrongTarget=$true; Accept=$false },
     @{ Tag='5.0.14'; ExistingTag=$true; Accept=$true; Unsigned=$true; Verify=$false }
+    @{ Tag='5.0.14'; Ref='refs/heads/feature/example'; Accept=$false },
+    @{ Tag='5.0.14'; Mode='unexpected'; Accept=$false },
+    @{ Tag='5.0.14'; Mode='promote'; RunId=''; Accept=$false },
+    @{ Tag='5.0.14'; Mode='promote'; RunId='123'; Accept=$true; Unsigned=$true; Verify=$false }
 )
 $tempRoot = Join-Path ([IO.Path]::GetTempPath()) "ds4w-release-policy-$([guid]::NewGuid().ToString('N'))"
 New-Item -ItemType Directory -Path $tempRoot | Out-Null
@@ -52,6 +56,9 @@ foreach ($script:case in $cases) {
     $script:mockRelease = @{id=123;tag_name=$case.Tag;draft= -not $case.Published;prerelease=[bool]$case.Pre;target_commitish='main'}
     $env:GITHUB_REPOSITORY = if ($case.Repo) { $case.Repo } else { 'Pav-Osmolski/DS4Windows' }
     $env:GITHUB_SHA = $sha
+    $env:GITHUB_REF = if ($case.Ref) { $case.Ref } else { 'refs/heads/main' }
+    $env:INPUT_MODE = if ($case.Mode) { $case.Mode } else { 'rebuild' }
+    $env:INPUT_CANDIDATE_RUN_ID = $case.RunId
     $env:GITHUB_EVENT_NAME = if ($case.Published) { 'release' } else { 'workflow_dispatch' }
     $env:INPUT_TAG = $case.Tag
     $env:EVENT_TAG = $case.Tag

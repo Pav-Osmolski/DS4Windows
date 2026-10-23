@@ -74,9 +74,12 @@ try {
     $invocations = @($workflow -split "`r?`n" | Where-Object {
         $_ -match '^\s+\.\\utils\\test-previous-msi-upgrade\.ps1\s'
     })
-    if ($invocations.Count -ne 1 -or $invocations[0].Trim() -cne
+    if ($invocations.Count -ne 2 -or $invocations[0].Trim() -cne
         '.\utils\test-previous-msi-upgrade.ps1 -NewMsi $msi -ExpectedVersion "${{ env.PRODUCT_VERSION }}"') {
         throw 'CI must pass its build PRODUCT_VERSION explicitly to the hosted upgrade fixture.'
+    }
+    if ($invocations[1].Trim() -cne '.\utils\test-previous-msi-upgrade.ps1 -NewMsi $msi -ExpectedVersion "${{ env.PRODUCT_VERSION }}" -Baseline Numeric') {
+        throw 'CI must also exercise the pinned numeric stable baseline.'
     }
     if ($workflow -notmatch '(?m)^\s+run: \.\\utils\\test-previous-msi-upgrade-parameters\.ps1\s*$') {
         throw 'CI must run the native-free entry-point regression.'

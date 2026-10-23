@@ -6,9 +6,22 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Existing numeric release draft to build without publishing (for example 5.0.14)
+        description: Existing numeric release draft to prepare without publishing (for example 5.0.45)
         required: true
         type: string
+      mode:
+        description: Promote tested main packages, or explicitly rebuild if the candidate is unavailable
+        type: choice
+        options: [promote, rebuild]
+        default: promote
+      candidate_run_id:
+        description: Successful main CI run ID (required for promote)
+        required: false
+        type: string
+
+concurrency:
+  group: release-${{ inputs.tag || github.event.release.tag_name }}
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -30,6 +43,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.TOKEN }}
         INPUT_TAG: ${{ inputs.tag }}
+        INPUT_MODE: ${{ inputs.mode }}
+        INPUT_CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
         EVENT_TAG: ${{ github.event.release.tag_name }}
         EVENT_RELEASE_ID: ${{ github.event.release.id }}
         EVENT_PRERELEASE: ${{ github.event.release.prerelease }}
@@ -51,6 +66,12 @@ jobs:
           return $resolved
         }
         $dispatch = $env:GITHUB_EVENT_NAME -ceq 'workflow_dispatch'
+        if ($dispatch -and ($env:GITHUB_REF -cne 'refs/heads/main' -or $env:INPUT_MODE -cnotin @('promote','rebuild'))) {
+          throw 'Stable release preparation requires main and an explicit promote/rebuild mode.'
+        }
+        if ($dispatch -and $env:INPUT_MODE -ceq 'promote' -and $env:INPUT_CANDIDATE_RUN_ID -cnotmatch '^[1-9][0-9]*$') {
+          throw 'Promotion requires an explicit successful main CI run ID.'
+        }
         $tag = if ($dispatch) { $env:INPUT_TAG } else { $env:EVENT_TAG }
         if ($tag -cnotmatch '^[0-9A-Za-z][0-9A-Za-z._-]{0,79}\z') { throw 'Invalid release tag.' }
         $release = if ($dispatch) {
@@ -108,7 +129,7 @@ jobs:
         }
   release:
     needs: identity
-    if: needs.identity.outputs.verify_existing != 'true'
+    if: needs.identity.outputs.verify_existing != 'true' && (github.event_name != 'workflow_dispatch' || inputs.mode == 'rebuild')
     runs-on: windows-2022
     timeout-minutes: 45
     env:
@@ -126,10 +147,10 @@ jobs:
       uses: actions/setup-dotnet@v6
       with:
         global-json-file: global.json
-    - name: Set up Python 3.10
+    - name: Set up Python 3.12
       uses: actions/setup-python@v7
       with:
-        python-version: "3.10"
+        python-version: "3.12"
     - name: Check release documentation text encoding
       run: python utils/test-text-encoding.py --self-test
     - name: Cache NuGet packages
@@ -252,6 +273,80 @@ jobs:
           RequireSigning = $env:UNSIGNED_RELEASE -ne 'true'
         }
         .\installer\build-installer.ps1 @parameters
+    - name: Validate offline installer layout plan
+      shell: pwsh
+      run: |
+        $installer = ".\bin\x64\Release\installer\DS4Windows_${{ env.VERSION }}_Setup_x64.exe"
+        $layout = ".\bin\x64\Release\installer-layout"
+        $process = Start-Process -FilePath $installer `
+          -ArgumentList "/layout `"$layout`" /quiet" `
+          -WindowStyle Hidden -PassThru -Wait
+        if ($process.ExitCode -ne 0) {
+          throw "Installer layout planning failed with exit code $($process.ExitCode)."
+        }
+        if (-not (Test-Path $layout) -or -not (Get-ChildItem $layout -File -Recurse)) {
+          throw "Installer layout planning produced no offline payloads."
+        }
+
+    - name: Exercise MSI install, repair, and uninstall lifecycle
+      shell: pwsh
+      run: |
+        $msi = (Resolve-Path ".\installer\DS4Windows.Package\bin\x64\Release\DS4Windows_${{ env.BINARY_VERSION }}_x64.msi").Path
+        $msiexec = Join-Path $env:SystemRoot "System32\msiexec.exe"
+        $logRoot = Join-Path $env:RUNNER_TEMP "ds4windows-msi-lifecycle"
+        New-Item -ItemType Directory -Path $logRoot -Force | Out-Null
+        function Invoke-Msi([string]$arguments, [string]$phase) {
+          $process = Start-Process -FilePath $msiexec `
+            -ArgumentList "$arguments /qn /norestart /L*v `"$logRoot\$phase.log`"" `
+            -WindowStyle Hidden -PassThru -Wait
+          if ($process.ExitCode -notin @(0, 3010)) {
+            throw "MSI $phase failed with $($process.ExitCode). Log: $logRoot\$phase.log"
+          }
+        }
+        try {
+          Invoke-Msi "/i `"$msi`"" "install"
+          if (-not (Test-Path "$env:ProgramFiles\DS4Windows\DS4Windows.exe")) {
+            throw "MSI install completed without its application keypath."
+          }
+          Invoke-Msi "/fa `"$msi`"" "repair"
+        }
+        finally {
+          Invoke-Msi "/x `"$msi`"" "uninstall"
+        }
+        if (Test-Path "HKLM:\SOFTWARE\DS4Windows") {
+          $installPath = Get-ItemPropertyValue `
+            -Path "HKLM:\SOFTWARE\DS4Windows" -Name InstallPath `
+            -ErrorAction SilentlyContinue
+          if ($installPath) {
+            throw "MSI uninstall left its machine registration behind."
+          }
+        }
+
+    - name: Verify legacy installer upgrade and preserve profiles (RC4.5.5)
+      shell: pwsh
+      run: |
+        $msi = (Resolve-Path ".\installer\DS4Windows.Package\bin\x64\Release\DS4Windows_${{ env.BINARY_VERSION }}_x64.msi").Path
+        .\utils\test-msi-upgrade-metadata.ps1 -ExistingMsi $msi -ExpectedVersion "${{ env.BINARY_VERSION }}"
+        .\utils\test-previous-msi-upgrade.ps1 -NewMsi $msi -ExpectedVersion "${{ env.BINARY_VERSION }}"
+
+    - name: Verify recent stable installer upgrade and preserve profiles (5.0.43)
+      shell: pwsh
+      run: |
+        $msi = (Resolve-Path ".\installer\DS4Windows.Package\bin\x64\Release\DS4Windows_${{ env.BINARY_VERSION }}_x64.msi").Path
+        .\utils\test-previous-msi-upgrade.ps1 -NewMsi $msi -ExpectedVersion "${{ env.BINARY_VERSION }}" -Baseline Numeric
+
+    - name: Preserve installer lifecycle evidence
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: DS4Windows_Installer_Lifecycle_Evidence
+        path: |
+          ${{ runner.temp }}/ds4windows-msi-lifecycle/
+          ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/VERIFICATION.json
+          ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/*.log
+          ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/previous-extracted/extraction.json
+        if-no-files-found: warn
+
     - name: Name release asset
       shell: pwsh
       run: |
@@ -416,6 +511,170 @@ jobs:
         if (Test-Path -LiteralPath $certificatePath -PathType Leaf) {
           Remove-Item -LiteralPath $certificatePath -Force
         }
+  promote:
+    needs: identity
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'promote' && needs.identity.outputs.unsigned_release == 'true'
+    runs-on: windows-2022
+    timeout-minutes: 15
+    env:
+      RELEASE_TAG: ${{ needs.identity.outputs.tag }}
+      RELEASE_ID: ${{ needs.identity.outputs.release_id }}
+      UNSIGNED_RELEASE: ${{ needs.identity.outputs.unsigned_release }}
+      GH_TOKEN: ${{ github.token }}
+      INPUT_CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        ref: ${{ needs.identity.outputs.tag }}
+    - uses: actions/setup-python@v7
+      with:
+        python-version: '3.12'
+    - name: Verify and fetch exact main release candidate
+      shell: pwsh
+      run: |
+        $ErrorActionPreference = 'Stop'
+        python .\utils\release-candidate.py fetch --run-id $env:INPUT_CANDIDATE_RUN_ID `
+          --tag $env:RELEASE_TAG --output (Join-Path $env:RUNNER_TEMP 'main-release-candidate')
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    - name: Prepare verified release records
+      shell: pwsh
+      env:
+        GITHUB_TOKEN: ${{ github.TOKEN }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $PSNativeCommandUseErrorActionPreference = $true
+        $records = Join-Path $env:RUNNER_TEMP 'ds4windows-release-records'
+        New-Item -ItemType Directory -Path $records | Out-Null
+        $publish = $env:CANDIDATE_PUBLISH_ROOT
+        $provenance = Get-Content -LiteralPath (Join-Path $publish 'extras\VIIPER-0.1.12-PROVENANCE.txt') -Raw
+        $buildNotes = Get-Content -LiteralPath (Join-Path $publish 'extras\VIIPER-0.1.12-BUILD-NOTES.txt') -Raw
+        function Read-RecordField([string]$text, [string]$name, [string]$pattern) {
+          $match = [regex]::Match($text, '(?m)^' + [regex]::Escape($name) + ': (' + $pattern + ')\r?$')
+          if (-not $match.Success) { throw "Missing or invalid provenance field: $name" }
+          return $match.Groups[1].Value
+        }
+        $brokerName = Read-RecordField $provenance 'Binary' '[0-9A-Za-z._-]+\.exe'
+        $brokerHash = Read-RecordField $provenance 'Binary SHA-256' '[A-F0-9]{64}'
+        $brokerCommit = Read-RecordField $provenance 'Source commit' '[a-f0-9]{40}'
+        $brokerVersion = Read-RecordField $provenance 'Version' 'v[0-9A-Za-z._-]+'
+        $brokerSourceName = Read-RecordField $buildNotes 'Source archive' '[0-9A-Za-z._-]+\.zip'
+        $brokerSourceHash = Read-RecordField $buildNotes 'Source archive SHA-256' '[A-F0-9]{64}'
+        $brokerPath = Join-Path $publish "extras\$brokerName"
+        if ((Get-FileHash -LiteralPath $brokerPath -Algorithm SHA256).Hash -cne $brokerHash) {
+          throw 'Bundled VIIPER does not match its immutable provenance.'
+        }
+        # The portable alias is an additional path for the SAME pinned binary.
+        $zip = [IO.Compression.ZipFile]::OpenRead((Resolve-Path $env:RELEASE_ASSET).Path)
+        try {
+          foreach ($name in @('DS4Windows/viiper.exe', "DS4Windows/extras/$brokerName")) {
+            $entry = $zip.GetEntry($name)
+            if (-not $entry) { throw "Missing portable broker entry: $name" }
+            $stream = $entry.Open()
+            try { $hash = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($stream)) }
+            finally { $stream.Dispose() }
+            if ($hash -cne $brokerHash) { throw "Portable broker identity mismatch: $name" }
+          }
+        } finally { $zip.Dispose() }
+        $sourceCommit = (git rev-parse HEAD).Trim()
+        $tagCommit = (git rev-parse "$($env:RELEASE_TAG)^{commit}").Trim()
+        if ($sourceCommit -cne $tagCommit) { throw 'Release source does not match its tag.' }
+        $ds4Source = Join-Path $records "DS4Windows-$($env:VERSION)-SOURCE.zip"
+        git archive --format=zip --prefix=DS4Windows/ --output=$ds4Source HEAD
+        # Verify the public exact tag and copy the byte-identical corresponding
+        # source bundled offline; the backend can remain a draft during testing.
+        $brokerTagCommit = gh api "repos/Pav-Osmolski/VIIPER/commits/$brokerVersion" --jq '.sha'
+        if ($brokerTagCommit.Trim() -cne $brokerCommit) { throw 'Pinned VIIPER tag differs from binary source.' }
+        $brokerSource = Join-Path $records $brokerSourceName
+        Copy-Item -LiteralPath (Join-Path $publish "extras\$brokerSourceName") -Destination $brokerSource
+        if ((Get-FileHash -LiteralPath $brokerSource -Algorithm SHA256).Hash -cne $brokerSourceHash) {
+          throw 'VIIPER source archive differs from the recorded corresponding-source archive.'
+        }
+        $noticeNames = @('VIIPER-0.1.12-LICENSES.txt', 'VIIPER-0.1.12-PROVENANCE.txt',
+          'VIIPER-0.1.12-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md', 'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')
+        $infoDirectory = Join-Path $records 'release-info'
+        New-Item -ItemType Directory -Path $infoDirectory | Out-Null
+        foreach ($name in $noticeNames) { Copy-Item -LiteralPath (Join-Path $publish "extras\$name") -Destination $infoDirectory }
+        $signing = if ($env:UNSIGNED_RELEASE -ceq 'true') { 'Unsigned release (no Authenticode signature)' } else { 'Required Authenticode signing verified' }
+        @("DS4Windows release: $env:RELEASE_TAG", "DS4Windows source commit: $sourceCommit",
+          "VIIPER source commit: $brokerCommit", "VIIPER binary SHA-256: $brokerHash",
+          "Signing: $signing", "GitHub Actions run: $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID") |
+          Set-Content -LiteralPath (Join-Path $infoDirectory 'SOURCE-REVISIONS.txt') -Encoding utf8
+        $infoName = "DS4Windows-$($env:VERSION)-RELEASE-INFO.zip"
+        $infoPath = Join-Path $records $infoName
+        $infoFiles = @(Get-ChildItem -LiteralPath $infoDirectory -File | Sort-Object Name)
+        Compress-Archive -LiteralPath $infoFiles.FullName -DestinationPath $infoPath
+        $releaseInfo = @{ name = $infoName; files = @($infoFiles | ForEach-Object {
+          @{ name = $_.Name; sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash }
+        }) }
+        $assets = @((Resolve-Path $env:RELEASE_ASSET).Path, (Resolve-Path $env:INSTALLER_ASSET).Path) +
+          @(Get-ChildItem -LiteralPath $records -File | Sort-Object Name | Select-Object -ExpandProperty FullName)
+        if ($assets.Count -ne 5) { throw 'Expected two binary packages, two source ZIPs and one information ZIP.' }
+        $checksums = @($assets | ForEach-Object { "$( (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash ) *$([IO.Path]::GetFileName($_))" })
+        $checksumPath = Join-Path $records 'SHA256SUMS.txt'
+        $checksums | Set-Content -LiteralPath $checksumPath -Encoding ascii
+        $assets += $checksumPath
+        $receipt = @{
+          candidateRunId = $env:CANDIDATE_RUN_ID; candidateRunAttempt = $env:CANDIDATE_RUN_ATTEMPT
+          candidateArtifactId = $env:CANDIDATE_ARTIFACT_ID
+          schema = 1; repository = $env:GITHUB_REPOSITORY; tag = $env:RELEASE_TAG
+          sourceCommit = $sourceCommit; releaseId = $env:RELEASE_ID; runId = $env:GITHUB_RUN_ID
+          unsignedRc = ($env:RELEASE_TAG -cmatch '^VIIPERRC'); unsignedRelease = ($env:UNSIGNED_RELEASE -ceq 'true')
+          prerelease = ($env:RELEASE_TAG -cmatch '^VIIPERRC'); binaryVersion = $env:BINARY_VERSION
+          brokerSourceName = $brokerSourceName; brokerCommit = $brokerCommit
+          releaseInfo = $releaseInfo
+          assets = @($assets | ForEach-Object { @{ name = [IO.Path]::GetFileName($_); sha256 = (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash } })
+        }
+        $receiptPath = Join-Path $records 'RELEASE-BUILD.json'
+        $receipt | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $receiptPath -Encoding utf8
+        "RELEASE_RECEIPT_SHA256=$((Get-FileHash -LiteralPath $receiptPath -Algorithm SHA256).Hash)" >> $env:GITHUB_ENV
+        $assets += $receiptPath
+        $assets | ConvertTo-Json -AsArray | Set-Content -LiteralPath (Join-Path $env:RUNNER_TEMP 'ds4windows-release-assets.json') -Encoding utf8
+    - name: Verify and publish exact release assets
+      shell: pwsh
+      env:
+        GITHUB_TOKEN: ${{ github.TOKEN }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $PSNativeCommandUseErrorActionPreference = $true
+        $assets = @(Get-Content -LiteralPath (Join-Path $env:RUNNER_TEMP 'ds4windows-release-assets.json') -Raw | ConvertFrom-Json)
+        $names = @($assets | ForEach-Object { [IO.Path]::GetFileName($_) })
+        if (@($names | Sort-Object -Unique).Count -ne $names.Count) { throw 'Duplicate release asset names.' }
+        if ($env:RELEASE_ID -cnotmatch '^[1-9][0-9]*$') { throw 'Invalid verified release ID.' }
+        $release = gh api "repos/$env:GITHUB_REPOSITORY/releases/$env:RELEASE_ID" | ConvertFrom-Json
+        if ("$($release.id)" -cne $env:RELEASE_ID -or $release.tag_name -cne $env:RELEASE_TAG -or
+            ($env:GITHUB_EVENT_NAME -ceq 'workflow_dispatch' -and -not $release.draft)) {
+          throw 'Release identity/draft state changed before upload.'
+        }
+        $existing = @($release.assets.name)
+        foreach ($name in $names) {
+          if ($existing -contains $name) { throw "Refusing to overwrite existing release asset: $name" }
+        }
+        $checksumPath = $assets | Where-Object { [IO.Path]::GetFileName($_) -ceq 'SHA256SUMS.txt' }
+        $expected = @{}
+        foreach ($line in Get-Content -LiteralPath $checksumPath) {
+          if ($line -cnotmatch '^([A-F0-9]{64}) \*([^/\\]+)$') { throw 'Invalid generated checksum record.' }
+          $expected[$Matches[2]] = $Matches[1]
+        }
+        foreach ($asset in $assets) {
+          if ($asset -ceq $checksumPath -or [IO.Path]::GetFileName($asset) -ceq 'RELEASE-BUILD.json') { continue }
+          $name = [IO.Path]::GetFileName($asset)
+          if ((Get-FileHash -LiteralPath $asset -Algorithm SHA256).Hash -cne $expected[$name]) {
+            throw "Release asset changed after verification: $name"
+          }
+        }
+        $receiptPath = $assets | Where-Object { [IO.Path]::GetFileName($_) -ceq 'RELEASE-BUILD.json' }
+        if ((Get-FileHash -LiteralPath $receiptPath -Algorithm SHA256).Hash -cne $env:RELEASE_RECEIPT_SHA256) {
+          throw 'Release receipt changed after verification.'
+        }
+        $receipt = Get-Content -LiteralPath $receiptPath -Raw | ConvertFrom-Json
+        foreach ($record in $receipt.assets) {
+          $matching = @($assets | Where-Object { [IO.Path]::GetFileName($_) -ceq $record.name })
+          if ($matching.Count -ne 1 -or (Get-FileHash -LiteralPath $matching[0] -Algorithm SHA256).Hash -cne $record.sha256) {
+            throw 'Release receipt does not match the final upload set.'
+          }
+        }
+        # Fresh assets only: never clobber manually prepared bytes or provenance.
+        gh release upload $env:RELEASE_TAG @assets --repo $env:GITHUB_REPOSITORY
   verify_published_release:
     needs: identity
     if: needs.identity.outputs.verify_existing == 'true'

@@ -3,7 +3,8 @@ param(
     [Parameter(Mandatory)][string]$NewMsi,
     [Parameter(Mandatory)]
     [ValidatePattern('\A[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\z')]
-    [string]$ExpectedVersion
+    [string]$ExpectedVersion,
+    [ValidateSet('Legacy','Numeric')][string]$Baseline = 'Legacy'
 )
 
 Set-StrictMode -Version Latest
@@ -65,6 +66,21 @@ $newVersion = $ExpectedVersion
 $oldInstallerSha256 = '5DCA513CE521DD660BADAC0DD6A23FDCE8A3192930397C4A6C45D44A69B8ED74'
 $oldInstallerLength = 200120243L
 $oldInstallerUrl = 'https://github.com/hbashton/DS4Windows/releases/download/VIIPERRC4.5.5/DS4Windows_5.0.5.5_Setup_x64.exe'
+$oldTag = 'VIIPERRC4.5.5'
+$oldLayoutName = 'DS4Windows_VIIPERRC4.5.5_Setup_x64.exe'
+$oldMsiSha256 = 'EA28DE830488C8B7783607C38AE97A4B1CAFFB60DA68BE4F1CBD7105F25A4370'
+if ($Baseline -ceq 'Numeric') {
+    # Immutable recent-stable fixture, verified against its published receipt
+    # and passively extracted MSI. Never select a moving "latest" download.
+    $oldVersion = '5.0.43.0'
+    $oldTag = '5.0.43'
+    $oldInstallerSha256 = '8E4684F00DE8ECFEF43A16427D2E48EF097D63877955872EF8E632AA90A4B08E'
+    $oldInstallerLength = 201211599L
+    $oldInstallerUrl = 'https://github.com/Pav-Osmolski/DS4Windows/releases/download/5.0.43/DS4Windows_5.0.43.0_Setup_x64.exe'
+    $oldLayoutName = 'DS4Windows_5.0.43.0_Setup_x64.exe'
+    $oldMsiSha256 = '4C63EFF64BF016EAFF49B23F9ED53741F002C7031F995C402910ED546E3F7262'
+}
+if ([version]$newVersion -le [version]$oldVersion) { throw 'Upgrade target must be newer than the pinned baseline; sync the branch version first.' }
 
 # Inventory only. Avoid Win32_Product, which can trigger unrelated MSI repairs.
 Add-Type -TypeDefinition @'
@@ -106,6 +122,7 @@ $runRoot = Join-Path $runnerRoot ('ds4windows-previous-msi-upgrade-' + [Guid]::N
 $script:MutationTimedOut = $false
 $script:InstalledCodes = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
 $script:Sentinels = [Collections.Generic.Dictionary[string,string]]::new([StringComparer]::OrdinalIgnoreCase)
+$script:CreatedProfileDirectories = [Collections.Generic.List[string]]::new()
 $msiexec = Join-Path ([Environment]::SystemDirectory) 'msiexec.exe'
 
 function Invoke-BoundedProcess([string]$Executable, [string]$Arguments, [string]$Phase) {
@@ -256,7 +273,7 @@ try {
     Invoke-WebRequest -Uri $oldInstallerUrl -OutFile $oldInstaller -TimeoutSec 180
     if ((Get-Item -LiteralPath $oldInstaller).Length -ne $oldInstallerLength -or
         (Get-FileHash -LiteralPath $oldInstaller -Algorithm SHA256).Hash -cne $oldInstallerSha256) {
-        throw 'Published RC4.5.5 installer bytes do not match the immutable fixture pin.'
+        throw 'Published baseline installer bytes do not match the immutable fixture pin.'
     }
     $layout = Join-Path $runRoot 'previous-layout'
     Invoke-BoundedProcess $oldInstaller "/layout `"$layout`" /quiet /log `"$runRoot\layout.log`"" 'Previous bundle layout only'
@@ -264,14 +281,13 @@ try {
     if (@([Ds4HostedMsiInventory]::Related($upgradeCode)).Count -ne 0) {
         throw 'Layout unexpectedly changed MSI registration; refusing further work.'
     }
-    $layoutBundle = Join-Path $layout 'DS4Windows_VIIPERRC4.5.5_Setup_x64.exe'
+    $layoutBundle = Join-Path $layout $oldLayoutName
     if (-not (Test-Path -LiteralPath $layoutBundle -PathType Leaf) -or
         (Get-FileHash -LiteralPath $layoutBundle -Algorithm SHA256).Hash -cne $oldInstallerSha256) {
         throw 'Layout did not preserve the exact pinned previous bundle.'
     }
     $oldMsi = Expand-PreviousBundlePayloads $workspaceRoot $oldInstaller (Join-Path $runRoot 'previous-extracted') $oldVersion
-    if ((Get-FileHash -LiteralPath $oldMsi -Algorithm SHA256).Hash -cne
-        'EA28DE830488C8B7783607C38AE97A4B1CAFFB60DA68BE4F1CBD7105F25A4370') {
+    if ((Get-FileHash -LiteralPath $oldMsi -Algorithm SHA256).Hash -cne $oldMsiSha256) {
         throw 'Extracted previous MSI bytes do not match the immutable bundle payload.'
     }
     $oldIdentity = Inspect-Msi $oldMsi $oldVersion
@@ -283,6 +299,7 @@ try {
     foreach ($profileRoot in @((Join-Path $installRoot 'Profiles'),
         (Join-Path ([Environment]::GetFolderPath('ApplicationData')) 'DS4Windows\Profiles'))) {
         $profileRoot = Assert-LocalPath $profileRoot
+        if (-not (Test-Path -LiteralPath $profileRoot)) { $script:CreatedProfileDirectories.Add($profileRoot) }
         [void](New-Item -ItemType Directory -Path $profileRoot -Force)
         $sentinel = Join-Path $profileRoot ('rc456-upgrade-fixture-' + [Guid]::NewGuid().ToString('N') + '.xml')
         [IO.File]::WriteAllText($sentinel, '<DS4Windows><Name>CI upgrade preservation sentinel</Name></DS4Windows>')
@@ -303,7 +320,7 @@ try {
     Assert-Sentinels
     Assert-NoRuntimeProcesses
     [ordered]@{
-        PreviousTag = 'VIIPERRC4.5.5'; PreviousInstallerSha256 = $oldInstallerSha256
+        PreviousTag = $oldTag; PreviousInstallerSha256 = $oldInstallerSha256
         PreviousMsiSha256 = (Get-FileHash -LiteralPath $oldMsi -Algorithm SHA256).Hash
         PreviousProductCode = $oldIdentity.ProductCode; NewProductCode = $newIdentity.ProductCode
         PreviousFileVersion = $oldVersion; NewFileVersion = $newVersion
@@ -328,6 +345,15 @@ finally {
                 throw 'Unexpected sentinel cleanup target.'
             }
             Remove-Item -LiteralPath $verified -Force -ErrorAction SilentlyContinue
+        }
+        # Allow the next baseline fixture to run on this same ephemeral VM.
+        # Only newly created, empty directories are removed; never recurse.
+        foreach ($directory in $script:CreatedProfileDirectories) {
+            $verified = Assert-LocalPath $directory
+            if ((Test-Path -LiteralPath $verified -PathType Container) -and
+                @(Get-ChildItem -LiteralPath $verified -Force).Count -eq 0) {
+                Remove-Item -LiteralPath $verified
+            }
         }
     }
 }
