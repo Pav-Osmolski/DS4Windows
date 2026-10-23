@@ -354,6 +354,15 @@ Existing tray-notification and lightbar actions continue working unchanged.
 For controllers that report only battery bands, low alerts use the reported **low**
 band; the percentage threshold applies to controllers with percentage reports.
 
+Low-battery warnings can optionally repeat every **30 seconds, 1, 2, 5 or 10
+minutes**. **Repeat interval: Off** is the default and keeps the existing single
+warning. Choose **Total warnings: 1–10**, including the first alert, or **Until
+charging** for ongoing reminders. Repeats use the same low-battery speech, sound
+and vibration settings. They stop when charging begins, the battery rises above
+the low threshold, the controller disconnects or low-battery alerts are disabled.
+A reconnect does not restart the previous reminder sequence. Previews and
+on-demand checks do not count towards the automatic warning total.
+
 Alerts wait for three stable observations, use recovery thresholds and cooldowns,
 and retain their state through profile changes and reconnects during the app
 session. DS3, DS4 and DualSense completion reports can trigger the full alert;
@@ -386,6 +395,12 @@ with the existing Settings control. Enable it, restart DS4Windows to include
 startup diagnostics, reproduce the problem, then turn it off after collecting
 the log. **Report an issue** opens this fork's GitHub issue form in your browser;
 it does not upload a log or create a report automatically.
+
+**VIIPER debug logging** captures the backend's own diagnostic text separately
+from DS4Windows verbose logging. Enable it, fully exit both applications, then
+reopen DS4Windows normally. Use **Capture instructions** for the steps and
+**Open log folder** to find `viiper-debug.log`. Turn it off and restart both
+after testing. See [the VIIPER capture guide](troubleshooting.md#capture-viipers-own-debug-log).
 
 **Keep stored logs for up to** offers 1, 7, 14, 30 or 90 days; the default is
 **30 days**. The preference persists across restarts. Archives also rotate daily

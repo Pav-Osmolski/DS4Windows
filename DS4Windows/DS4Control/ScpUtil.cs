@@ -1886,6 +1886,12 @@ namespace DS4Windows
             set => m_Config.suppressViiperSetupPrompt = value;
         }
 
+        public static bool ViiperDebugLogging
+        {
+            get => m_Config.viiperDebugLogging;
+            set => m_Config.viiperDebugLogging = value;
+        }
+
         public static bool ShowViiperTrayIcon
         {
             get => m_Config.showViiperTrayIcon;
@@ -5073,6 +5079,7 @@ namespace DS4Windows
         public double[] outputSlotsColumnWidths = Array.Empty<double>();
         public bool suppressViiperSetupPrompt = false;
         public bool showViiperTrayIcon = true;
+        public bool viiperDebugLogging = false;
         public string preferredViiperPath = string.Empty;
         public bool closeMini = false;
         public List<SpecialAction> actions = new List<SpecialAction>();
@@ -9616,6 +9623,7 @@ namespace DS4Windows
                     catch { missingSetting = true; }
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/startMinimized"); Boolean.TryParse(Item.InnerText, out startMinimized); }
                     catch { missingSetting = true; }
+                    viiperDebugLogging = Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/ViiperDebugLogging")?.InnerText, out bool viiperDebug) && viiperDebug;
                     showViiperTrayIcon = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/ShowViiperTrayIcon")?.InnerText, out bool visibleTray) || visibleTray;
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/minimizeToTaskbar"); Boolean.TryParse(Item.InnerText, out minToTaskbar); }
                     catch { missingSetting = true; }
@@ -10024,6 +10032,7 @@ namespace DS4Windows
             XmlNode xmlUseExclNode = m_Xdoc.CreateNode(XmlNodeType.Element, "useExclusiveMode", null); xmlUseExclNode.InnerText = useExclusiveMode.ToString(); rootElement.AppendChild(xmlUseExclNode);
             XmlNode xmlReclaimSteamInput = m_Xdoc.CreateNode(XmlNodeType.Element, "ReclaimSteamInput", null); xmlReclaimSteamInput.InnerText = reclaimSteamInput.ToString(); rootElement.AppendChild(xmlReclaimSteamInput);
             XmlNode xmlStartMinimized = m_Xdoc.CreateNode(XmlNodeType.Element, "startMinimized", null); xmlStartMinimized.InnerText = startMinimized.ToString(); rootElement.AppendChild(xmlStartMinimized);
+            XmlNode xmlViiperDebug = m_Xdoc.CreateNode(XmlNodeType.Element, "ViiperDebugLogging", null); xmlViiperDebug.InnerText = viiperDebugLogging.ToString(); rootElement.AppendChild(xmlViiperDebug);
             XmlNode xmlViiperTray = m_Xdoc.CreateNode(XmlNodeType.Element, "ShowViiperTrayIcon", null); xmlViiperTray.InnerText = showViiperTrayIcon.ToString(); rootElement.AppendChild(xmlViiperTray);
             XmlNode xmlminToTaskbar = m_Xdoc.CreateNode(XmlNodeType.Element, "minimizeToTaskbar", null); xmlminToTaskbar.InnerText = minToTaskbar.ToString(); rootElement.AppendChild(xmlminToTaskbar);
             XmlNode xmlFormWidth = m_Xdoc.CreateNode(XmlNodeType.Element, "formWidth", null); xmlFormWidth.InnerText = formWidth.ToString(); rootElement.AppendChild(xmlFormWidth);

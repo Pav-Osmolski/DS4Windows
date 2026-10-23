@@ -28,12 +28,16 @@ and run it with the release-note file path before uploading notes. CI and the
 draft release build reject invalid UTF-8 and common garbled punctuation/accent
 sequences. The check reports problems without rewriting historical text.
 
-Builds use the SDK in `global.json` and committed NuGet lock files. The draft
-workflow runs both .NET suites against the checked-out tag before packaging.
+Builds use the SDK in `global.json` and committed NuGet lock files. Main CI
+runs both .NET suites and validates the final portable and installer packages.
+The normal release workflow promotes those exact tested bytes without rebuilding.
 For dependency or SDK changes, follow [dependency maintenance](dependency-maintenance.md#sdk-and-dependency-locks).
 
-1. Merge reviewed changes and wait for the `main` CI tests, package checks and
-   installer lifecycle/upgrade checks to pass.
+1. Commit the intended new numeric version before merging. Merge reviewed
+   changes and wait for the `main` CI **checks** gate, package checks and
+   installer lifecycle/upgrade checks to pass. Keep the CI run ID. Its
+   **DS4Windows_Release_Candidate_...** artifact contains the final-version
+   portable ZIP, installer and `CANDIDATE-BUILD.json`; retention is 30 days.
 2. Create a draft targeting that exact `main` commit. Use a three-part numeric
    tag such as `5.0.15` and the release title `DS4Windows 5.0.15`. Clear the
    prerelease flag and link the release body to the tagged `CHANGELOG.md`.
@@ -41,10 +45,22 @@ For dependency or SDK changes, follow [dependency maintenance](dependency-mainte
    in their original repository. Verify the reporter's GitHub handle and thank
    them beside the relevant change. Check the title, links and credits against
    the previous release and source issues before publication.
-3. Run **.NET Release** from that same commit/branch, entering the draft tag.
+   Credit follow-up suggestions in each release that implements them, even when
+   the same reporter was thanked in an earlier release. Before publication,
+   explicitly check each issue-driven change against its requester/reporter and
+   confirm the thank-you appears in both the release body and changelog.
+   In the GitHub release body, write credits as plain `@username` mentions so
+   GitHub can recognize the contributor. In `CHANGELOG.md`, use profile links
+   such as `[@username](https://github.com/username)` instead.
+3. Run **.NET Release** from **main**, entering the draft tag, **mode: promote**,
+   and the successful main **candidate_run_id**. The selected workflow commit,
+   tag, candidate source commit and embedded versions must agree exactly.
    The workflow creates a missing tag only when the draft target matches the
-   selected commit. It builds the portable ZIP, installer, matching source
-   archives, a release-information ZIP, checksums and `RELEASE-BUILD.json` into the draft.
+   selected commit. It verifies the successful same-repository main run, every
+   required test/installer gate, the exact run attempt, artifact digest and
+   package hashes. It uploads the original portable and installer bytes,
+   matching source archives, release-information ZIP, checksums and
+   `RELEASE-BUILD.json` into the draft. Branch and PR artifacts are never eligible.
 4. Test those downloads. Existing release assets are never overwritten.
 5. Publish the tested draft with **Latest** selected. The publication workflow
    verifies the successful draft run, source identity and every recorded asset
@@ -56,6 +72,56 @@ maintainer has approved unsigned numeric releases for this fork while trusted
 signing is investigated separately. Include the signing status in release
 notes. Source, digest, dependency and installer validation remain mandatory.
 Other release types retain the certificate, signer and timestamp checks.
+
+### Explicit rebuild fallback
+
+If the candidate is missing or expired, run **CI Build** from the intended main
+commit with **package: installer** to produce and validate a fresh candidate,
+then promote that explicit run ID. There is no automatic search for a newer
+artifact, another branch or an older attempt. If a documentation-only commit
+becomes the intended release source, this manual main build is also required.
+
+Alternatively select **mode: rebuild** in .NET Release. This deliberately runs
+the full test/build/package path again, including installer layout, install,
+repair, uninstall and both upgrade baselines. It is an explicit recovery path,
+not the default. Existing assets are never overwritten in either mode.
+
+The schema-1 release receipt remains compatible with DS4Updater 2.0.9.
+Promoted releases additionally record the candidate CI run, attempt and artifact
+ID. The receipt's `runId` identifies the successful release-preparation run;
+`candidateRunId` identifies the original binary-producing main CI run.
+
+### Branches, previews and required checks
+
+- Branches without an open PR run the application test suite. When a matching
+  same-repository PR is open, its proposed-merge validation replaces duplicate
+  push tests. An API lookup failure retains branch tests.
+- Ordinary PRs run tests. Installer, dependency, workflow and infrastructure
+  changes also build and validate both packages before merging. An unknown
+  changed-file set takes the full pre-merge package path.
+- To get a preview, run **CI Build** on the desired branch with **package:
+  portable** (default) or **installer**. This runs the full test gate first.
+  WIP branches remain independent; syncing main into one requires fresh tests.
+- Known documentation-only changes run text/site validation. The always-present
+  **checks** job fails if any selected CI gate fails or is cancelled, and can
+  be required by main's branch protection without waiting for skipped jobs.
+- Main application/infrastructure changes build once with final numeric
+  identities. CI publishes one candidate artifact rather than duplicate copies
+  of its packages. Already-compressed package artifacts use no outer compression.
+- Cancel superseded development runs within their own branch/event or PR.
+  Release preparation/publication is serialized per release tag and is not
+  cancelled by WIP activity. Documentation publication remains separate.
+
+Both the legacy **RC4.5.5** baseline and numeric **5.0.43** baseline exercise
+application-only MSI upgrade, repair, uninstall and preservation of test
+profiles on disposable hosted Windows runners. Their installers and MSI
+payloads have immutable hash pins. Update the numeric baseline deliberately
+as releases progress; do not replace it with a moving `latest` URL. These
+fixtures never install drivers or run on a developer's computer.
+
+Packaging uses Python 3.12, matching the documentation workflow and the hosted
+runner cache. The full application suite remains the release gate; optimising
+duplicate work does not mean reducing test coverage.
 
 The receipt remains schema 1 for compatibility with DS4Updater 2.0.9.
 Historical named RC receipts remain verifiable. Numeric releases carry a

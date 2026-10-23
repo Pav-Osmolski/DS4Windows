@@ -1,9 +1,7 @@
 name: CI Build
 
-# Tests every push and proposed merge; packages open PRs once from the merge.
-# Branches without an open PR, default-branch pushes and manual runs retain packages.
-# Complements release.yml (which only runs when a GitHub Release is published).
-# Produces a runnable x64 package as a downloadable build artifact.
+# Validate branch/PR source once; build stable packages once on main.
+# Explicit previews and infrastructure PRs retain packaging checks.
 
 on:
   push:
@@ -12,6 +10,13 @@ on:
   pull_request:
     branches: [ "**" ]
   workflow_dispatch:
+    inputs:
+      package:
+        description: Preview package (choose installer on main to rebuild a release candidate)
+        type: choice
+        options: [portable, installer, none]
+        default: portable
+
 
 permissions:
   contents: read
@@ -34,8 +39,15 @@ jobs:
       pull-requests: read
     outputs:
       build: ${{ steps.select.outputs.build }}
+      test: ${{ steps.select.outputs.test }}
+      package: ${{ steps.select.outputs.package }}
+      candidate: ${{ steps.select.outputs.candidate }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+      - name: Check documentation text encoding
+        run: python utils/test-text-encoding.py --self-test
       - name: Select package build
         id: select
         shell: pwsh
@@ -45,12 +57,17 @@ jobs:
           CI_REPOSITORY: ${{ github.repository }}
           CI_REF_NAME: ${{ github.ref_name }}
           CI_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          CI_MANUAL_PACKAGE: ${{ inputs.package || 'portable' }}
         run: |
-          .\utils\select-ci-package.ps1 -EventName $env:CI_EVENT_NAME `
+          .\utils\ci-plan.ps1 -EventName $env:CI_EVENT_NAME `
             -Repository $env:CI_REPOSITORY -RefName $env:CI_REF_NAME `
-            -DefaultBranch $env:CI_DEFAULT_BRANCH
+            -DefaultBranch $env:CI_DEFAULT_BRANCH -BaseCommit $env:CI_BASE_SHA `
+            -ManualPackage $env:CI_MANUAL_PACKAGE
 
   test:
+    needs: package_plan
+    if: needs.package_plan.outputs.test == 'true'
     runs-on: windows-2022
     timeout-minutes: 30
     steps:
@@ -91,7 +108,9 @@ jobs:
 
       - name: Test branch and PR package selection
         shell: pwsh
-        run: .\utils\test-ci-package-selection.ps1
+        run: |
+          .\utils\test-ci-plan.ps1
+          python .\utils\test-release-candidate.py
 
       - name: Test numeric release identity and legacy publication policy
         shell: pwsh
@@ -163,10 +182,10 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Set up Python 3.10
+      - name: Set up Python 3.12
         uses: actions/setup-python@v7
         with:
-          python-version: "3.10"
+          python-version: "3.12"
 
       - name: Test normal package inputs and preview isolation
         run: python .\utils\test-normal-package.py
@@ -189,19 +208,26 @@ jobs:
 
       - name: Compute version
         id: ver
-        shell: bash
+        shell: pwsh
+        env:
+          MAIN_CANDIDATE: ${{ needs.package_plan.outputs.candidate }}
         run: |
-          VERSION="$(date +%Y.%m.%d)-ci-${GITHUB_SHA::7}"
-          PRODUCT_VERSION="$(python -c "import xml.etree.ElementTree as ET; print(ET.parse('DS4Windows/DS4WinWPF.csproj').find('.//AssemblyVersion').text)")"
-          BUNDLE_BASE="$(echo "$PRODUCT_VERSION" | awk -F. '{print $1"."$2"."$3}')"
-          BUNDLE_VERSION="${BUNDLE_BASE}-ci.${GITHUB_RUN_NUMBER}"
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-          echo "PRODUCT_VERSION=$PRODUCT_VERSION" >> "$GITHUB_ENV"
-          echo "BUNDLE_VERSION=$BUNDLE_VERSION" >> "$GITHUB_ENV"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          $ErrorActionPreference = 'Stop'
+          [xml]$project = Get-Content DS4Windows/DS4WinWPF.csproj -Raw
+          $package = $project.SelectSingleNode('//Version').InnerText
+          $product = $project.SelectSingleNode('//AssemblyVersion').InnerText
+          if ($package -cnotmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$' -or $product -cne "$package.0") {
+            throw 'Project release and Windows versions must agree.'
+          }
+          $version = if ($env:MAIN_CANDIDATE -ceq 'true') { $package } else { "$(Get-Date -Format yyyy.MM.dd)-ci-$($env:GITHUB_SHA.Substring(0,7))" }
+          $bundle = if ($env:MAIN_CANDIDATE -ceq 'true') { $product } else { "$package-ci.$env:GITHUB_RUN_NUMBER" }
+          "VERSION=$version" >> $env:GITHUB_ENV
+          "PRODUCT_VERSION=$product" >> $env:GITHUB_ENV
+          "PACKAGE_VERSION=$package" >> $env:GITHUB_ENV
+          "BUNDLE_VERSION=$bundle" >> $env:GITHUB_ENV
 
       - name: Build ${{ matrix.platform }}
-        run: dotnet publish .\DS4Windows\DS4WinWPF.csproj -c Release /p:platform=${{ matrix.platform }} -r win-${{ matrix.platform }} --self-contained true --no-restore -o .\bin\${{ matrix.platform }}\Release\output
+        run: dotnet publish .\DS4Windows\DS4WinWPF.csproj -c Release /p:platform=${{ matrix.platform }} -r win-${{ matrix.platform }} --self-contained true --no-restore -p:Version=${{ env.PACKAGE_VERSION }} -p:InformationalVersion=${{ env.VERSION }} -p:IncludeSourceRevisionInInformationalVersion=false -o .\bin\${{ matrix.platform }}\Release\output
 
       - name: Package ${{ matrix.platform }}
         run: python .\utils\post-build.py .\bin\${{ matrix.platform }}\Release\output . ${{ env.VERSION }}
@@ -221,6 +247,7 @@ jobs:
           .\utils\SatelliteResourceProbe\Run-Probe.ps1 -SourceBuild ".\bin\${{ matrix.platform }}\Release\DS4Windows"
 
       - name: Build standard installer
+        if: needs.package_plan.outputs.package == 'installer'
         shell: pwsh
         run: |
           .\installer\build-installer.ps1 `
@@ -232,6 +259,7 @@ jobs:
             -SkipApplicationPublish
 
       - name: Validate offline installer layout plan
+        if: needs.package_plan.outputs.package == 'installer'
         shell: pwsh
         run: |
           $installer = ".\bin\${{ matrix.platform }}\Release\installer\DS4Windows_${{ env.VERSION }}_Setup_${{ matrix.platform }}.exe"
@@ -247,6 +275,7 @@ jobs:
           }
 
       - name: Exercise MSI install, repair, and uninstall lifecycle
+        if: needs.package_plan.outputs.package == 'installer'
         shell: pwsh
         run: |
           $msi = (Resolve-Path ".\installer\DS4Windows.Package\bin\x64\Release\DS4Windows_${{ env.PRODUCT_VERSION }}_x64.msi").Path
@@ -280,15 +309,23 @@ jobs:
             }
           }
 
-      - name: Upgrade from published RC4.5.5 and preserve profiles
+      - name: Verify legacy installer upgrade and preserve profiles (RC4.5.5)
+        if: needs.package_plan.outputs.package == 'installer'
         shell: pwsh
         run: |
           $msi = (Resolve-Path ".\installer\DS4Windows.Package\bin\x64\Release\DS4Windows_${{ env.PRODUCT_VERSION }}_x64.msi").Path
           .\utils\test-msi-upgrade-metadata.ps1 -ExistingMsi $msi -ExpectedVersion "${{ env.PRODUCT_VERSION }}"
           .\utils\test-previous-msi-upgrade.ps1 -NewMsi $msi -ExpectedVersion "${{ env.PRODUCT_VERSION }}"
 
+      - name: Verify recent stable installer upgrade and preserve profiles (5.0.43)
+        if: needs.package_plan.outputs.package == 'installer'
+        shell: pwsh
+        run: |
+          $msi = (Resolve-Path ".\installer\DS4Windows.Package\bin\x64\Release\DS4Windows_${{ env.PRODUCT_VERSION }}_x64.msi").Path
+          .\utils\test-previous-msi-upgrade.ps1 -NewMsi $msi -ExpectedVersion "${{ env.PRODUCT_VERSION }}" -Baseline Numeric
+
       - name: Preserve installer lifecycle evidence
-        if: always()
+        if: always() && needs.package_plan.outputs.package == 'installer'
         uses: actions/upload-artifact@v7
         with:
           name: DS4Windows_Installer_Lifecycle_Evidence
@@ -299,29 +336,83 @@ jobs:
             ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/previous-extracted/extraction.json
           if-no-files-found: warn
 
+      - name: Compose immutable main release candidate
+        if: needs.package_plan.outputs.candidate == 'true'
+        shell: pwsh
+        run: |
+          $publish = (Resolve-Path '.\bin\x64\Release\DS4Windows').Path
+          foreach ($name in @('DS4Windows.exe','DS4Windows.dll')) {
+            $identity = [Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $publish $name))
+            if ($identity.FileVersion -cne $env:PRODUCT_VERSION -or $identity.ProductVersion -cne $env:VERSION) {
+              throw "Candidate binary version mismatch: $name"
+            }
+          }
+          $installer = (Resolve-Path ".\bin\x64\Release\installer\DS4Windows_$($env:VERSION)_Setup_x64.exe").Path
+          $canonical = Join-Path (Resolve-Path '.\bin\x64\Release').Path "DS4Windows_$($env:PRODUCT_VERSION)_Setup_x64.exe"
+          [IO.File]::Copy($installer, $canonical, $false)
+          python .\utils\release-candidate.py create `
+            --portable ".\bin\x64\Release\DS4Windows_$($env:VERSION)_x64.zip" `
+            --installer $canonical --version $env:VERSION --binary-version $env:PRODUCT_VERSION `
+            --output '.\bin\x64\Release\candidate'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Upload immutable main release candidate
+        id: candidate
+        if: needs.package_plan.outputs.candidate == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: DS4Windows_Release_Candidate_${{ github.sha }}_${{ github.run_attempt }}
+          path: .\bin\x64\Release\candidate\*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
       - name: Upload portable ZIP
+        if: needs.package_plan.outputs.candidate != 'true'
         id: upload_portable
         uses: actions/upload-artifact@v7
         with:
           name: DS4Windows_${{ env.VERSION }}_${{ matrix.platform }}_Portable
           path: .\bin\${{ matrix.platform }}\Release\DS4Windows_${{ env.VERSION }}_${{ matrix.platform }}.zip
           if-no-files-found: error
+          compression-level: 0
 
       - name: Upload standard installer EXE
+        if: needs.package_plan.outputs.package == 'installer' && needs.package_plan.outputs.candidate != 'true'
         id: upload_installer
         uses: actions/upload-artifact@v7
         with:
           name: DS4Windows_${{ env.VERSION }}_Setup_${{ matrix.platform }}
           path: .\bin\${{ matrix.platform }}\Release\installer\DS4Windows_${{ env.VERSION }}_Setup_${{ matrix.platform }}.exe
           if-no-files-found: error
+          compression-level: 0
 
       - name: Publish artifact link to run summary
-        shell: bash
+        shell: pwsh
+        env:
+          CANDIDATE_URL: ${{ steps.candidate.outputs.artifact-url }}
+          PORTABLE_URL: ${{ steps.upload_portable.outputs.artifact-url }}
+          INSTALLER_URL: ${{ steps.upload_installer.outputs.artifact-url }}
         run: |
-          echo "### DS4Windows ${{ matrix.platform }} build" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "Version: \`${{ env.VERSION }}\`" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "- [Portable ZIP](${{ steps.upload_portable.outputs.artifact-url }})" >> "$GITHUB_STEP_SUMMARY"
-          echo "- [Standard installer EXE](${{ steps.upload_installer.outputs.artifact-url }})" >> "$GITHUB_STEP_SUMMARY"
+          "### DS4Windows x64 - $env:VERSION" >> $env:GITHUB_STEP_SUMMARY
+          if ($env:CANDIDATE_URL) { "- [Verified main release candidate]($env:CANDIDATE_URL)" >> $env:GITHUB_STEP_SUMMARY }
+          if ($env:PORTABLE_URL) { "- [Portable preview]($env:PORTABLE_URL)" >> $env:GITHUB_STEP_SUMMARY }
+          if ($env:INSTALLER_URL) { "- [Installer preview]($env:INSTALLER_URL)" >> $env:GITHUB_STEP_SUMMARY }
 
+  checks:
+    name: checks
+    if: always()
+    needs: [package_plan, test, build]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require every selected validation gate
+        env:
+          PLAN_RESULT: ${{ needs.package_plan.result }}
+          NEED_TEST: ${{ needs.package_plan.outputs.test }}
+          NEED_BUILD: ${{ needs.package_plan.outputs.build }}
+          TEST_RESULT: ${{ needs.test.result }}
+          BUILD_RESULT: ${{ needs.build.result }}
+        run: |
+          test "$PLAN_RESULT" = success
+          if [ "$NEED_TEST" = true ]; then test "$TEST_RESULT" = success; fi
+          if [ "$NEED_BUILD" = true ]; then test "$BUILD_RESULT" = success; fi

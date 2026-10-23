@@ -115,7 +115,9 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(26, renderedFiles.Count);
+            // Include both main's missing-profile views and this branch's
+            // DirectInput views in the light/dark render coverage.
+            Assert.AreEqual(28, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

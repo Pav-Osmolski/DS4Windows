@@ -3,11 +3,63 @@
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
+## Unreleased
+
+- Avoid duplicate push/PR tests, retain full tests on WIP updates, and offer explicit portable/installer previews. Packaging and infrastructure PRs keep pre-merge installer validation; known documentation-only changes use text/site checks.
+- Build final-version release candidates once on main. Release preparation verifies the exact successful main CI run, artifact and package hashes, then promotes those same portable/installer bytes. Keep an explicit fully validated rebuild fallback, schema-1 updater compatibility, signing policy and no-overwrite protection.
+- Use cached Python 3.12 for packaging and avoid compressing package archives again during artifact upload. Clarify the legacy RC4.5.5 upgrade-test name and also verify upgrades from pinned numeric stable 5.0.43, preserving profiles across repair/uninstall.
+- Document issue classifications, distinct closure outcomes and genuine dependencies separately from general cross-references.
+
+## [5.0.44](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44) - 2026-10-22
+
+### Important fix: connected controller, but no input in games
+
+- A controller without an active profile could remain at **Connected**, with no virtual controller created and no explanation of what was missing. Overview now shows **Select a profile**, explains how to choose **Controllers > Active Profile**, and provides a **Select profile** button. If the list is empty, create a profile under **Profiles** first. Thanks to [@cns00](https://github.com/cns00) for the follow-up logs in [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66). The maintainer reproduced this condition and verified the recovery in the preview.
+- Disable Overview's quick profile controls and profile editing actions until a profile is selected, and show the emulated device as **Not configured**. This avoids presenting settings as saved when there is no selected profile. Check empty-selection recovery, settings persistence, and the guidance in light and dark themes.
+
+### Startup diagnostics
+
+- Record the initial startup prerequisite result and elapsed time before any retry, recovery or repair prompt, so a later successful check does not hide the earlier failure.
+- Retry a verified USB/IP runtime probe once after 500 ms when it explicitly times out. Unsupported versions, integrity failures, ABI errors and process conflicts retain their existing checks. This handles a possible transient startup delay; it does not treat every repair warning as a timeout.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
+## [5.0.43](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.43) - 2026-10-22
+
+### Added
+
+- Capture VIIPER's own debug log from the Log page without manually launching the backend. Keep managed authentication and process checks, preserve the preceding capture, and apply changes on the next backend start without interrupting the current controller session. Includes instructions for collecting both application and backend logs when investigating [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), with thanks to [@cns00](https://github.com/cns00) for the diagnostic reports.
+
+### Fixed
+
+- Finish reading VIIPER management replies at their newline terminator instead of waiting for the connection to close. A connection reset after a complete reply could otherwise discard a successful response and trigger virtual-controller cleanup. Preserve response validation and failures for incomplete or damaged encrypted replies. Thanks to [@cns00](https://github.com/cns00) for the reports and diagnostic logs. ([Issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), [upstream issue #153](https://github.com/hbashton/DS4Windows/issues/153))
+- Add regression coverage for completed replies followed by connection resets, fragmented encrypted records, incomplete or invalid responses, and TCP connections that stay open after sending a reply. The maintainer tested the preview successfully; issue #66 remains open pending confirmation on the reporter's computer.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
+## [5.0.41](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.41) - 2026-10-21
+
+### Added
+
+- Optional repeating low-battery warnings: every 30 seconds, 1, 2, 5 or 10 minutes, with a total of 1–10 warnings (including the first) or until charging. Repeating defaults to Off. Cancel the sequence on charging, recovery, disconnect, invalid readings or disabled alerts, and discard queued warnings from ended sequences. Thanks to [@Masterload1975](https://github.com/Masterload1975) for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+
+### Fixed
+
+- Publish release documentation through a main-branch workflow run so GitHub Pages deployment respects the existing main-only environment rule.
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating. VIIPER remains at **0.1.12** and USB/IP at **0.9.8.1**; no driver version change is required. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
 ## [5.0.40](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.40) - 2026-10-21
 
 ### Added
 
-- Optional battery alerts in Settings > Controllers: installed Windows voices, selected audio output, separate low/full/on-demand sounds and vibration patterns, previews and cancellation. Import WAV, MP3 or AIFF into the settings folder. Extend Check Battery Special Actions without changing existing actions. Require stable valid readings, suppress repeats across reconnects/profile changes, and use explicit DS3/DS4/DualSense charging-completion status for full-charge notifications. Controller-speaker alerts reuse an already enabled matching native audio route. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
+- Optional battery alerts in Settings > Controllers: installed Windows voices, selected audio output, separate low/full/on-demand sounds and vibration patterns, previews and cancellation. Import WAV, MP3 or AIFF into the settings folder. Extend Check Battery Special Actions without changing existing actions. Require stable valid readings, suppress repeats across reconnects/profile changes, and use explicit DS3/DS4/DualSense charging-completion status for full-charge notifications. Controller-speaker alerts reuse an already enabled matching native audio route. Thanks to [@Masterload1975](https://github.com/Masterload1975) for the suggestion. ([Issue #45](https://github.com/Pav-Osmolski/DS4Windows/issues/45))
 
 ### Fixed
 
@@ -141,7 +193,7 @@ Close games, DS4Windows and VIIPER before updating, and allow the bundled backen
 
 ### Validation and updating
 
-- Thanks to @Jobima1st for the logs and report in [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), related to upstream [#119](https://github.com/hbashton/DS4Windows/issues/119). The reported game delay and Bluetooth strength/skipping still need hardware confirmation; this release does not claim a complete fix. See the [validation record](docs/validation/2026-10-18-native-feedback-and-logs.md) and [Log guide](docs/user-guide.md#log-and-diagnostics).
+- Thanks to [@Jobima1st](https://github.com/Jobima1st) for the logs and report in [#47](https://github.com/Pav-Osmolski/DS4Windows/issues/47), related to upstream [#119](https://github.com/hbashton/DS4Windows/issues/119). The reported game delay and Bluetooth strength/skipping still need hardware confirmation; this release does not claim a complete fix. See the [validation record](docs/validation/2026-10-18-native-feedback-and-logs.md) and [Log guide](docs/user-guide.md#log-and-diagnostics).
 - Close games, DS4Windows and VIIPER before updating. VIIPER remains at 0.1.11 and USB/IP at 0.9.8.1; no driver version change is required. This release is unsigned.
 
 ## [5.0.31](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.31) - 2026-10-18

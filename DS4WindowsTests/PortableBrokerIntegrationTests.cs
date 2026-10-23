@@ -40,14 +40,19 @@ public class PortableBrokerIntegrationTests
     }
 
     [TestMethod]
-    public void BrokerStartsOnlyAfterExclusiveMapperGateAndBeforeConfiguration()
+    public void BrokerStartsOnlyAfterExclusiveMapperGateAndSavedSettings()
     {
         string core = Section(Read("App.xaml.cs"),
             "private void ApplicationStartupCore(", "private void CancelPortableStartup(");
         Before(core, "CreateSingleAppComEvent(SingleAppComEventName,",
             "if (!StartPortableBroker()) return;");
-        Before(core, "if (!StartPortableBroker()) return;", "CreateTempWorkerThread();");
-        Before(core, "if (!StartPortableBroker()) return;", "Global.FindConfigLocation();");
+        // Startup identity preflight is still earlier than configuration, but
+        // process launch must see persisted logging/tray choices and log path.
+        Before(core, "Global.FindConfigLocation();", "if (!StartPortableBroker()) return;");
+        Before(core, "Global.Load();", "if (!StartPortableBroker()) return;");
+        Before(core, "ChangeTheme(DS4Windows.Global.UseCurrentTheme, false);", "if (!StartPortableBroker()) return;");
+        Before(core, "if (!StartPortableBroker()) return;", "EnsureReadyWithPrompt(null);");
+        Before(core, "if (!StartPortableBroker()) return;", "if (!DS4Windows.Global.LoadActions())");
         StringAssert.Contains(core, "CreateSingleAppComEvent(SingleAppComEventName,\n                        requireNew: true)");
         Before(core, "AcquirePortableRepairStartupGate()", "PortableBrokerMaintenance.EnsureStartupPayload(");
         // A second ordinary launch can activate its existing matching mapper;

@@ -1135,9 +1135,16 @@
                                           SelectedItem="{Binding LogRetentionDays}" Width="90" Margin="0,0,8,8"
                                           Style="{DynamicResource BridgeSettingsComboBoxStyle}"
                                           AutomationProperties.Name="Log retention in days" />
-                                <TextBlock Text="days" VerticalAlignment="Center" Margin="0,0,0,8" />
+                                <TextBlock Text="days" VerticalAlignment="Center" Margin="0,0,24,8" />
+                                <CheckBox x:Name="viiperDebugLoggingCk" Content="VIIPER debug logging" IsChecked="{Binding ViiperDebugLogging}"
+                                          IsEnabled="{Binding SystemIntegrationEnabled}"
+                                          Style="{DynamicResource BridgeLabeledCheckBoxStyle}" MinHeight="34" Margin="0,0,12,8"
+                                          VerticalAlignment="Center" VerticalContentAlignment="Center"
+                                          ToolTip="Restart DS4Windows and VIIPER to apply. Use Open log folder to find viiper-debug.log. Raw packet logging stays off." />
+                                <Button x:Name="viiperDebugHelpBtn" Content="Capture instructions" Margin="0,0,0,8"
+                                        Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ViiperDebugHelpBtn_Click" />
                             </WrapPanel>
-                            <TextBlock Text="Default: 30 days. Archives rotate at 10 MB, up to 20 files. The current session log is kept when clearing stored logs."
+                            <TextBlock Text="DS4Windows archives: 30 days by default, rotating at 10 MB, up to 20 files. The current session log is kept when clearing stored logs."
                                        Foreground="{DynamicResource MutedForegroundColor}" TextWrapping="Wrap" />
                             <TextBlock x:Name="logActionStatus" TextWrapping="Wrap" Margin="0,6,0,0"
                                        AutomationProperties.LiveSetting="Polite">

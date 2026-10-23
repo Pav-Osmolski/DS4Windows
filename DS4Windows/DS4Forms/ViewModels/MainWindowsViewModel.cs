@@ -138,6 +138,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler SelectedControllerChanged;
         public event EventHandler HasSelectedControllerChanged;
         public event EventHandler CurrentProfileNameChanged;
+        public event EventHandler HasSelectedProfileChanged;
+        public event EventHandler NeedsProfileSelectionChanged;
+        public event EventHandler ProfileGuidanceChanged;
         public event EventHandler SelectedControllerConnectionChanged;
         public event EventHandler SelectedControllerLatencyChanged;
         public event EventHandler SelectedControllerBatteryChanged;
@@ -171,6 +174,12 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler<QuickProfileSettingChangedEventArgs> QuickProfileSettingChanged;
 
         public bool HasSelectedController => selectedController != null;
+        public bool HasSelectedProfile => HasValidSelectedDevice &&
+            !string.IsNullOrWhiteSpace(selectedController.SelectedProfile);
+        public bool NeedsProfileSelection => HasSelectedController && !HasSelectedProfile;
+        public string ProfileGuidance => HasSelectedProfile
+            ? "Settings below save to this profile"
+            : "Select an Active Profile under Controllers. Create one under Profiles if the list is empty.";
 
         public string CurrentProfileName =>
             string.IsNullOrWhiteSpace(selectedController?.SelectedProfile)
@@ -208,7 +217,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 ShowSwitch2UsbHeadsetHelp;
 
         private bool HasEditableControllerAudio =>
-            HasValidSelectedDevice && SelectedControllerSupportsAudio;
+            HasSelectedProfile && SelectedControllerSupportsAudio;
 
         private ControllerMicrophoneUiState SelectedControllerMicrophoneUiState
         {
@@ -245,7 +254,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         // Keep an already-enabled but no-longer-supported profile switch
         // actionable so the user can turn it off from Overview.
-        public bool CanChangeMicrophoneInput => HasValidSelectedDevice &&
+        public bool CanChangeMicrophoneInput => HasSelectedProfile &&
             SelectedControllerMicrophoneUiState.CanChange(
                 MicrophoneInputEnabled);
 
@@ -263,7 +272,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             set
             {
                 value = value.Normalize();
-                if (!HasValidSelectedDevice || value == OutContType.None ||
+                if (!HasSelectedProfile || value == OutContType.None ||
                     value == OutContType.ViiperGenericJoystick && !PortableLabContext.IsActive ||
                     Global.OutContType[selectedController.DevIndex].Normalize() == value)
                 {
@@ -286,6 +295,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             get
             {
+                if (!HasSelectedProfile) return "Not configured";
                 OutContType selectedType = SelectedOutputController;
                 foreach (OverviewOutputControllerChoice choice in OutputControllerChoices)
                 {
@@ -317,7 +327,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
             set
             {
-                if (!HasValidSelectedDevice) return;
+                if (!HasSelectedProfile) return;
 
                 int deviceIndex = selectedController.DevIndex;
                 int requested = Math.Clamp(value, 0, 100);
@@ -450,7 +460,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     deviceIndex] ?? string.Empty;
                 // A hidden, inapplicable binding must not normalize and
                 // rewrite audio settings in a shared controller profile.
-                if (!SelectedControllerSupportsAudio) return endpointId;
+                if (!HasSelectedProfile || !SelectedControllerSupportsAudio) return endpointId;
                 string normalized = NormalizeAppAudioEndpointId(endpointId);
                 if (!string.Equals(endpointId, normalized,
                         StringComparison.Ordinal))
@@ -611,6 +621,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             SelectedControllerChanged?.Invoke(this, EventArgs.Empty);
             HasSelectedControllerChanged?.Invoke(this, EventArgs.Empty);
             CurrentProfileNameChanged?.Invoke(this, EventArgs.Empty);
+            HasSelectedProfileChanged?.Invoke(this, EventArgs.Empty);
+            NeedsProfileSelectionChanged?.Invoke(this, EventArgs.Empty);
+            ProfileGuidanceChanged?.Invoke(this, EventArgs.Empty);
             SelectedControllerConnectionChanged?.Invoke(this, EventArgs.Empty);
             SelectedControllerLatencyChanged?.Invoke(this, EventArgs.Empty);
             SelectedControllerBatteryChanged?.Invoke(this, EventArgs.Empty);
@@ -688,6 +701,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             if (previous.ProfileName != snapshot.ProfileName)
             {
                 CurrentProfileNameChanged?.Invoke(this, EventArgs.Empty);
+                HasSelectedProfileChanged?.Invoke(this, EventArgs.Empty);
+                NeedsProfileSelectionChanged?.Invoke(this, EventArgs.Empty);
+                ProfileGuidanceChanged?.Invoke(this, EventArgs.Empty);
+                SelectedOutputControllerNameChanged?.Invoke(this, EventArgs.Empty);
             }
             if (previous.Connection != snapshot.Connection)
             {

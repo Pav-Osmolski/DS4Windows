@@ -33,12 +33,26 @@
  <StackPanel>
   <TextBlock Text="Battery alerts" Style="{DynamicResource BridgeSectionTitleStyle}"/>
   <TextBlock Text="Hear battery information through your headphones, speakers or an enabled controller audio route. Automatic alerts are off until you enable them." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
-  <CheckBox Content="Low battery alert" IsChecked="{Binding Settings.LowEnabled}" ToolTip="Notify once when the battery reaches the threshold and stays there." Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,6,0,8"/>
+  <CheckBox Content="Low battery alert" IsChecked="{Binding Settings.LowEnabled}" ToolTip="Notify when the battery reaches the threshold and stays there. Repeating is optional." Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,6,0,8"/>
   <WrapPanel Margin="0,0,0,12" IsEnabled="{Binding Settings.LowEnabled}">
    <TextBlock Text="Notify at or below" VerticalAlignment="Center" Margin="0,0,12,0"/>
    <xctk:IntegerUpDown Value="{Binding Settings.LowThreshold}" Minimum="5" Maximum="50" MinWidth="90" MinHeight="34"/>
    <TextBlock Text="%" VerticalAlignment="Center" Margin="8,0,0,0"/>
   </WrapPanel>
+  <WrapPanel Margin="0,0,0,8" IsEnabled="{Binding Settings.LowEnabled}">
+   <StackPanel Margin="0,0,16,6">
+    <TextBlock Text="Repeat interval" Margin="0,0,0,4"/>
+    <ComboBox x:Name="repeatIntervalCombo" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Settings.LowRepeatSeconds, Mode=TwoWay}" MinWidth="200" MinHeight="34"/>
+   </StackPanel>
+   <StackPanel Margin="0,0,0,6">
+    <StackPanel.Style><Style TargetType="StackPanel"><Style.Triggers>
+     <DataTrigger Binding="{Binding Settings.LowRepeatSeconds}" Value="0"><Setter Property="IsEnabled" Value="False"/></DataTrigger>
+    </Style.Triggers></Style></StackPanel.Style>
+    <TextBlock Text="Total warnings" Margin="0,0,0,4"/>
+    <ComboBox x:Name="warningCountCombo" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Settings.LowWarningCount, Mode=TwoWay}" MinWidth="200" MinHeight="34"/>
+   </StackPanel>
+  </WrapPanel>
+  <TextBlock Text="The total includes the first warning. Repeats use the low-battery sound, speech and vibration settings, and stop when charging starts, the battery recovers, the controller disconnects or low-battery alerts are disabled." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
   <CheckBox Content="Fully charged alert" IsChecked="{Binding Settings.FullEnabled}" ToolTip="DS3, DS4 and DualSense can report charging completion." Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,0,0,6"/>
   <TextBlock Text="Full-charge alerts require a controller that reports charging completion. Controllers that report battery bands alert on the low band; percentage thresholds apply to percentage reports. Coarse levels are spoken as low, medium or high. Alerts wait for stable readings and do not repeat on every reconnect or profile switch." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
   <Expander Header="Configure voices, sounds and vibration" Margin="0,8,0,0"><StackPanel>

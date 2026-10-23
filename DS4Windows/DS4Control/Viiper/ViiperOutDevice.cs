@@ -11207,7 +11207,16 @@ namespace DS4Windows
             int read;
             while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
             {
-                response.Write(buffer, 0, read);
+                // VIIPER writeOK/writeError terminate each management reply
+                // with LF. Once that complete reply has arrived, waiting for
+                // socket EOF can turn a successful operation into a failure
+                // if the peer's close is reported as a connection reset.
+                // Encrypted streams authenticate the whole record before
+                // returning any plaintext; incomplete records still fail.
+                int terminator = Array.IndexOf(buffer, (byte)'\n', 0, read);
+                response.Write(buffer, 0, terminator >= 0 ? terminator : read);
+                if (terminator >= 0)
+                    break;
             }
 
             return Encoding.UTF8.GetString(response.ToArray()).TrimEnd('\n');

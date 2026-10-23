@@ -12,6 +12,9 @@ Include app version, Windows build, controller model, USB/Bluetooth connection,
 virtual output, installation type, steps and relevant logs. Review logs for
 personal data. A reproducible small case is more useful than a long speculation.
 
+Maintainers should follow [issue triage and historical records](docs/issue-triage.md)
+when classifying, linking or closing reports.
+
 ## Propose a change
 
 Start from the current default branch. Explain the concrete problem, resulting

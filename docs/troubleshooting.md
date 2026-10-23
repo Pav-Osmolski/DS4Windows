@@ -176,6 +176,24 @@ portable-data. Check both `%APPDATA%\DS4Windows` and the app folder for settings
 - Relevant exported log or installer diagnostics, reviewed for personal data.
 
 Enable verbose logging only when needed to reproduce a problem, then turn it off.
+
+### Capture VIIPER's own debug log
+
+In **Log**, enable **VIIPER debug logging**. Fully exit DS4Windows and VIIPER
+(including its tray icon, if present), then reopen DS4Windows normally. If
+VIIPER remains running with its icon hidden, end `viiper.exe` in Task Manager. Do not
+launch VIIPER with a separate command. Reproduce the problem and use **Open log
+folder** to find `viiper-debug.log`; attach it together with `ds4windows_log.txt`.
+The preceding capture is preserved as `viiper-debug-previous.log`. The active
+capture is replaced only when another diagnostic VIIPER session starts.
+
+Turn the option off, fully exit both applications and reopen DS4Windows when
+finished. Changing the checkbox does not interrupt a running controller session.
+The setting is separate from DS4Windows' **Verbose logging** and does not enable
+raw packet logging. Installed copies use a direct session launch (Windows may
+ask for permission) without changing the startup task. A VIIPER instance already
+running at logon must be closed first. Development lab launches continue to
+manage their own logging.
 For slow profile-editor opening, enable **Settings > Updates & tools > Profile
 editor timing logs**. This separate option records `[ProfileEditorTiming]` phases
 and is off by default. Turn it off after collecting the log.

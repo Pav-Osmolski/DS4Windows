@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:runtime="clr-namespace:DS4Windows"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="940">
@@ -305,7 +306,7 @@
                             <TextBlock Text="ACTIVE PROFILE" Style="{StaticResource OverviewEyebrowStyle}" />
                             <TextBlock Text="{Binding CurrentProfileName}" Margin="0,11,0,3"
                                        Style="{StaticResource OverviewValueStyle}" />
-                             <TextBlock Text="Settings below save to this profile"
+                             <TextBlock Text="{Binding ProfileGuidance}"
                                         TextWrapping="Wrap"
                                        Foreground="{DynamicResource MutedForegroundColor}" />
                         </StackPanel>
@@ -325,7 +326,7 @@
                     <Border Style="{StaticResource OverviewCardStyle}" Width="218" MinHeight="112" Margin="6">
                         <StackPanel>
                             <TextBlock Text="CONTROLLER STATUS" Style="{StaticResource OverviewEyebrowStyle}" />
-                            <TextBlock Text="{Binding SelectedControllerStartupTitle}"
+                            <TextBlock x:Name="controllerStartupTitle" Text="{Binding SelectedControllerStartupTitle}"
                                        Margin="0,11,0,3">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock" BasedOn="{StaticResource OverviewValueStyle}">
@@ -336,6 +337,9 @@
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding SelectedControllerNeedsAttention}" Value="True">
                                                 <Setter Property="Foreground" Value="#FFFFB020" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding SelectedControllerStartupStage}" Value="{x:Static runtime:ControllerStartupStage.ProfileRequired}">
+                                                <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -356,13 +360,21 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Margin="0,0,0,18">
+                            <StackPanel x:Name="profileSelectionNotice" Margin="0,0,0,16"
+                                        Visibility="{Binding NeedsProfileSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <TextBlock Text="Select a profile to get started" FontSize="18" FontWeight="SemiBold" />
+                                <TextBlock Text="Your controller is connected. Choose an Active Profile under Controllers to apply mappings and start the configured output."
+                                           TextWrapping="Wrap" Margin="0,5,0,10" Foreground="{DynamicResource MutedForegroundColor}" />
+                                <Button x:Name="selectProfileButton" Content="Select profile" HorizontalAlignment="Left"
+                                        Style="{StaticResource BridgePrimaryButtonStyle}" Click="ControllerDetailsBtn_Click" />
+                            </StackPanel>
                             <TextBlock Text="Quick profile controls" FontSize="18" FontWeight="SemiBold" />
                             <TextBlock Text="Every change is saved to the selected controller's active profile and applied automatically."
                                        Margin="0,3,0,0" TextWrapping="Wrap"
                                        Foreground="{DynamicResource MutedForegroundColor}" />
                         </StackPanel>
 
-                        <Grid Grid.Row="1">
+                        <Grid x:Name="quickProfileControls" Grid.Row="1" IsEnabled="{Binding HasSelectedProfile}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="5*" />
                                 <ColumnDefinition Width="24" />
@@ -664,13 +676,13 @@
                                         Foreground="{DynamicResource MutedForegroundColor}" />
                         </StackPanel>
                         <WrapPanel Margin="0,15,0,0">
-                            <Button Content="Edit active profile" Margin="0,0,8,0"
+                            <Button Content="Edit active profile" Margin="0,0,8,0" IsEnabled="{Binding HasSelectedProfile}"
                                     Style="{StaticResource BridgePrimaryButtonStyle}"
                                     Click="EditProfileBtn_Click" />
                             <Button Content="Controller details" Margin="0,0,8,0"
                                     Style="{StaticResource BridgeSecondaryButtonStyle}"
                                     Click="ControllerDetailsBtn_Click" />
-                            <Button Content="Lightbar controls" Margin="0,0,8,0"
+                            <Button Content="Lightbar controls" Margin="0,0,8,0" IsEnabled="{Binding HasSelectedProfile}"
                                     Style="{StaticResource BridgeSecondaryButtonStyle}"
                                     ToolTip="Use profile lightbar controls or choose a temporary custom color"
                                     Click="LightbarBtn_Click" />

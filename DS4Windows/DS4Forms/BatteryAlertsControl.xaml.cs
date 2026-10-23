@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,6 +30,14 @@ public partial class BatteryAlertsControl : UserControl
         this.persist = persist;
         Settings = (initial ?? Global.BatteryAlerts).Clone();
         InitializeComponent();
+        repeatIntervalCombo.ItemsSource = new[]
+        {
+            new KeyValuePair<int, string>(0, "Off"), new(30, "30 seconds"), new(60, "1 minute"),
+            new(120, "2 minutes"), new(300, "5 minutes"), new(600, "10 minutes"),
+        };
+        warningCountCombo.ItemsSource = Enumerable.Range(1, 10)
+            .Select(i => new KeyValuePair<int, string>(i, i.ToString()))
+            .Append(new(0, "Until charging")).ToArray();
         DataContext = this;
         controllerCombo.ItemsSource = Enumerable.Range(1, 8).Select(i => $"Controller {i}");
         controllerCombo.SelectedIndex = 0;

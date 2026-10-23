@@ -121,13 +121,20 @@ public sealed class ControllerOverviewAudioTests
         Assert.IsFalse(native.Descendants(wpf + "Slider").Any());
     }
 
-    private static MainWindowsViewModel Model(DS4Device device)
+    private static MainWindowsViewModel Model(DS4Device device, string profileName = "Test profile")
     {
         var model = new MainWindowsViewModel();
         // Avoid invoking live runtime/endpoint discovery in a pure binding test.
-        var card = new CompositeDeviceModel(device, 0, string.Empty, null);
+        var card = new CompositeDeviceModel(device, 0, profileName, new DS4WinWPF.ProfileList());
         typeof(MainWindowsViewModel).GetField("selectedController", BindingFlags.Instance | BindingFlags.NonPublic)!
             .SetValue(model, card);
+        var status = ControllerRuntimeStatusPolicy.Evaluate(new ControllerRuntimeSignals(
+            true, true, true, true, !string.IsNullOrEmpty(profileName), true,
+            ControllerRuntimeLaneState.NotRequired, ControllerRuntimeLaneState.NotRequired,
+            ControllerRuntimeLaneState.NotRequired, ControllerRuntimeLaneState.NotRequired,
+            "Xbox 360", profileSelected: !string.IsNullOrEmpty(profileName)));
+        typeof(MainWindowsViewModel).GetField("selectedControllerStartupStatus", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(model, status);
         return model;
     }
 
@@ -137,6 +144,41 @@ public sealed class ControllerOverviewAudioTests
         string resultsDirectory, List<string> renderedFiles)
     {
         ValidateImmediateSliderLabels(overview);
+        var resources = Application.Current.Resources.MergedDictionaries;
+        var originalTheme = resources[0];
+        foreach (string name in new[] { "DefaultTheme", "DarkTheme" })
+        {
+            resources[0] = new ResourceDictionary { Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{name}.xaml", UriKind.Relative) };
+            var themedOverview = new ControllerOverviewControl();
+            themedOverview.SetResourceReference(Control.ForegroundProperty, "ForegroundColor");
+            themedOverview.SetResourceReference(Control.BackgroundProperty, "SurfaceBackgroundColor");
+            var model = Model(new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB, sony: true), "");
+            themedOverview.DataContext = model;
+            Assert.AreEqual("Select a profile", model.SelectedControllerStartupTitle);
+            themedOverview.Measure(new Size(1100, 950));
+            themedOverview.Arrange(new Rect(0, 0, 1100, 950));
+            themedOverview.UpdateLayout();
+            themedOverview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+            Assert.IsFalse(((FrameworkElement)themedOverview.FindName("quickProfileControls")).IsEnabled);
+            Assert.AreEqual(Visibility.Visible, ((FrameworkElement)themedOverview.FindName("profileSelectionNotice")).Visibility);
+            Assert.IsTrue(((Button)themedOverview.FindName("selectProfileButton")).IsEnabled);
+            Assert.AreEqual(((SolidColorBrush)Application.Current.FindResource("AccentColor")).Color,
+                ((SolidColorBrush)((TextBlock)themedOverview.FindName("controllerStartupTitle")).Foreground).Color,
+                "Profile guidance must retain readable contrast in light and dark themes.");
+            var image = new RenderTargetBitmap(1100, 950, 96, 96, PixelFormats.Pbgra32);
+            image.Render(themedOverview);
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(image));
+            Directory.CreateDirectory(resultsDirectory);
+            string path = Path.Combine(resultsDirectory, $"overview-no-profile-{name}.png");
+            using (var stream = File.Create(path)) encoder.Save(stream);
+            renderedFiles.Add(path);
+            themedOverview.DataContext = Model(new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB, sony: true));
+            themedOverview.UpdateLayout();
+            Assert.IsTrue(((FrameworkElement)themedOverview.FindName("quickProfileControls")).IsEnabled);
+            Assert.AreEqual(Visibility.Collapsed, ((FrameworkElement)themedOverview.FindName("profileSelectionNotice")).Visibility);
+        }
+        resources[0] = originalTheme;
         var managed = (FrameworkElement)overview.FindName("managedAudioLevelsPanel");
         var speaker = (FrameworkElement)overview.FindName("managedSpeakerRouteCard");
         var native = (FrameworkElement)overview.FindName("nativeUsbHeadsetCard");
@@ -219,6 +261,31 @@ public sealed class ControllerOverviewAudioTests
             slider.GetBindingExpression(Slider.ValueProperty)?.UpdateSource();
         }
         overview.DataContext = null;
+    }
+
+    [TestMethod]
+    public void NoProfileCannotWriteAudioOrOutputSettings()
+    {
+        using var profile = new AudioProfileScope();
+        var model = Model(new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB, sony: true), "");
+        Assert.IsFalse(model.HasSelectedProfile);
+        Assert.IsTrue(model.NeedsProfileSelection);
+        Assert.AreEqual("Not configured", model.SelectedOutputControllerName);
+        var before = profile.Snapshot();
+        var output = Global.OutContType[0];
+        var haptics = Global.DualSenseHapticPowerLevel[0];
+        int changes = 0;
+        model.QuickProfileSettingChanged += (_, _) => changes++;
+        _ = model.ControllerAudioSourceId;
+        model.SelectedOutputController = output == OutContType.X360 ? OutContType.ViiperDualSense : OutContType.X360;
+        model.HapticStrengthPercent = 0;
+        model.SpeakerVolumePercent = 99;
+        model.SpeakerOutputEnabled = false;
+        model.ControllerAudioSourceId = "must-not-write";
+        CollectionAssert.AreEqual(before, profile.Snapshot());
+        Assert.AreEqual(output, Global.OutContType[0]);
+        Assert.AreEqual(haptics, Global.DualSenseHapticPowerLevel[0]);
+        Assert.AreEqual(0, changes);
     }
 
     private static XDocument LoadOverview()
