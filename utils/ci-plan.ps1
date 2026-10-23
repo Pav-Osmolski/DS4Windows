@@ -15,8 +15,15 @@ $test = $true
 $package = 'none'
 $reason = 'Validate development source; request preview packages explicitly.'
 if (-not $PSBoundParameters.ContainsKey('ChangedFiles') -and $BaseCommit -match '^[0-9a-f]{40}$' -and $BaseCommit -ne ('0' * 40)) {
-    $ChangedFiles = @(& git diff --name-only $BaseCommit HEAD)
-    if ($LASTEXITCODE -ne 0) { $ChangedFiles = @(); $global:LASTEXITCODE = 0 }
+    try {
+        $ChangedFiles = @(& git diff --name-only $BaseCommit HEAD 2>$null)
+        if ($LASTEXITCODE -ne 0) { throw 'Changed-file base unavailable in shallow checkout' }
+    } catch {
+        # Multi-commit pushes can exceed the shallow checkout. Unknown source
+        # changes must retain validation, including infrastructure PR packages.
+        $ChangedFiles = @()
+        $global:LASTEXITCODE = 0
+    }
 }
 $docsOnly = @($ChangedFiles).Count -gt 0 -and @($ChangedFiles | Where-Object {
     $_ -cnotmatch '^(docs/|website/|README\.md$|CHANGELOG\.md$|contributors\.md$|contributing\.md$|zensical\.toml$)'

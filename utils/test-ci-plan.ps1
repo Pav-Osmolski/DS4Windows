@@ -34,5 +34,14 @@ try {
   if($actual.test -cne $case.Test -or $actual.package -cne $case.Package -or $actual.candidate -cne $candidate -or
      $actual.build -cne ($case.Package -ne 'none').ToString().ToLowerInvariant()){throw "Wrong selection: $($case|ConvertTo-Json -Compress)"}
  }
+ $savedNativePreference=$PSNativeCommandUseErrorActionPreference
+ try {
+  $PSNativeCommandUseErrorActionPreference=$true
+  [IO.File]::WriteAllText($output,'')
+  & (Join-Path $PSScriptRoot 'ci-plan.ps1') -EventName pull_request -Repository $repo -RefName '123/merge' `
+    -DefaultBranch main -BaseCommit ('f' * 40) -OutputPath $output
+  $actual=ConvertFrom-StringData (Get-Content -LiteralPath $output -Raw)
+  if($actual.test -cne 'true' -or $actual.package -cne 'installer'){throw 'Missing shallow base must retain full PR validation.'}
+ } finally {$PSNativeCommandUseErrorActionPreference=$savedNativePreference}
  Write-Host "CI selection passed: $($cases.Count) cases; no network."
 } finally {Remove-Item -LiteralPath $output -ErrorAction SilentlyContinue}
