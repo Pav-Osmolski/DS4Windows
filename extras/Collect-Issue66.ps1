@@ -124,6 +124,13 @@ try {
     [IO.File]::WriteAllLines($providers, @('{2F07E2EE-15DB-40F1-90EF-9D7BA282188A} 0x0000011400000080 5','{0C478C5B-0351-41B1-8C58-4A6737DA32E3} 0x0000011C00000000 5'), [Text.Encoding]::ASCII)
     $exit = Capture-Native 'trace-start.txt' 'logman.exe' @('create','trace',$traceName,'-ets','-o',(Join-Path $evidence 'tcpip.etl'),'-f','bincirc','-max','64',
         '-pf',$providers)
+    if ($exit -ne 0) {
+        # Some Windows/provider combinations reject a combined provider file.
+        # Retain that error and try the core TCP provider directly instead.
+        $gaps.Add('Combined TCP/filter event session unavailable; trying TCP-only fallback.')
+        $exit = Capture-Native 'trace-start-fallback.txt' 'logman.exe' @('create','trace',$traceName,'-ets','-o',(Join-Path $evidence 'tcpip.etl'),'-f','bincirc','-max','64',
+            '-p','{2F07E2EE-15DB-40F1-90EF-9D7BA282188A}','0x0000011400000080','5')
+    }
     $traceActive = $exit -eq 0
     if ($traceActive) {
         # Direct ETW sessions do not support logman's -rf duration. An independent

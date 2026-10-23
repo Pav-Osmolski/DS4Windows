@@ -19,6 +19,11 @@ try {
     if ($capture.Count -ne 1) { throw 'Expected exactly one fresh diagnostic session.' }
     $evidence = Join-Path $capture[0].FullName 'evidence'
     $completion = Get-Content -LiteralPath (Join-Path $evidence 'completion.json') -Raw | ConvertFrom-Json
+    Write-Host (Get-Content -LiteralPath (Join-Path $evidence 'completion.json') -Raw)
+    foreach ($name in @('trace-start.txt','trace-start-fallback.txt')) {
+        $path = Join-Path $evidence $name
+        if (Test-Path -LiteralPath $path) { Write-Host ($name + ': ' + (Get-Content -LiteralPath $path -Raw)) }
+    }
     if (-not $completion.traceStarted -or $completion.phaseCount -ne 4) { throw 'Missing Windows trace or comparison phases.' }
     foreach ($phase in @('1-immediate','2-graceful','3-graceful','4-immediate')) {
         $dotnet = @(Get-Content -LiteralPath (Join-Path $evidence ($phase + '-dotnet.json')) -Raw | ConvertFrom-Json)
