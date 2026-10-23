@@ -19,6 +19,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Use cached Python 3.12 for packaging and avoid compressing package archives again during artifact upload. Clarify the legacy RC4.5.5 upgrade-test name and also verify upgrades from pinned numeric stable 5.0.43, preserving profiles across repair/uninstall.
 - Document issue classifications, distinct closure outcomes and genuine dependencies separately from general cross-references.
 
+Themes, language coverage and fork metadata are tracked in [PR #73](https://github.com/Pav-Osmolski/DS4Windows/pull/73).
+
 The build and release improvements are tracked in [PR #72](https://github.com/Pav-Osmolski/DS4Windows/pull/72).
 
 ## [5.0.44](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44) - 2026-10-22
