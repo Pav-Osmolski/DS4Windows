@@ -5,6 +5,12 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+### Connection reliability candidate
+
+- Port the tested graceful VIIPER management-reply closing behaviour onto the current backend, with bounded cleanup and server-shutdown interruption. Preserve controller/audio streaming, authentication and the existing single stream-open retry. Thanks to [@cns00](https://github.com/cns00) for five diagnostic captures in [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), also reported in [upstream #153](https://github.com/hbashton/DS4Windows/issues/153). The isolated comparison improved from 77/400 failed requests to 3/400 on the affected laptop; residual resets remain and no hardware fault has been established.
+- Replace the application and installer's readiness probes' legacy shared connection wait handles with cancellable connection deadlines, correcting a separate fast-completion race. Add 256 rapid loopback checks for each real probe. Thanks again to [@cns00](https://github.com/cns00) for the installer follow-up in [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66): setup completed successfully but a separate final health check failed, and Retry succeeded. This evidence does not distinguish that race from a transient connection reset. The candidate retains all stable 5.0.46 features and excludes the experimental comparison switches, independent probe and diagnostic collector interface.
+- Testing-only pre-release pending maintainer acceptance; stable 5.0.46 remains available. This candidate does not promise that every startup/reset problem is resolved.
+
 ## [5.0.46](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.46) - 2026-10-23
 
 ### Controller audio

@@ -1,0 +1,42 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.14-connection-preview20261023
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: 5e09cdef39d0ed2b4c1a8499ab8b284fa6d79398
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: 5e09cdef39d0ed2b4c1a8499ab8b284fa6d79398
+Embedded build date: 2026-10-23T19:15:01Z
+Embedded VCS revision: 5e09cdef39d0ed2b4c1a8499ab8b284fa6d79398
+Embedded VCS time: 2026-10-23T19:14:47Z
+Embedded VCS modified: false
+PE file version: 0.1.14.0
+PE product version: 0.1.14-connection-preview20261023
+Binary: VIIPER-0.1.14-connection-preview20261023-x64.exe
+Binary SHA-256: 2BF705A5C65A741E895B5A5F517F7C44B4934AE6C80D26E9118051472AF54797
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.14-connection-preview20261023-LICENSES.txt
+License notice SHA-256: 6C7B8BF7C333439D5B5B4673F704AFDE0AB333CEA8C5A758A2C3733D2506A49A
+
+VIIPER connection reliability testing candidate, not a stable release
+
+Source: https://github.com/Pav-Osmolski/VIIPER/commit/5e09cdef39d0ed2b4c1a8499ab8b284fa6d79398
+Base: released VIIPER 0.1.13, commit 2c0546b14aacc537b9ab743a23d017373175d132
+Source archive: VIIPER-0.1.14-connection-preview20261023-SOURCE.zip
+Source archive SHA-256: 7A1A0B0EFAE6E6769DFBF8355D42A30D762E31B7CB7AE65C0E4C0BD14C506DA9
+
+Locally built from the clean recorded commit using Go 1.27.2, Release tags,
+CGO disabled and trimmed paths. This is not a GitHub release-workflow binary.
+Graceful closing applies only after completed management replies, bounded by
+250 ms and 4097 drained bytes and interruptible by server shutdown. Controller
+and audio streams, authentication, encrypted framing and operation retries are
+unchanged. No experimental diagnostic server or comparison switches are included.
+
+Thanks to @cns00 for five captures in DS4Windows issue 66. The isolated original
+method failed 77/400 requests versus 3/400 with graceful closing on that laptop.
+Residual resets remain. No hardware fault or universal resolution is claimed.
+
+All dependency versions/checksums match 0.1.13. Complete dependency grants,
+GPL, systray modification notices and WDL notices are preserved. Only the
+top-level VIIPER version label in the license report is updated. These Windows
+packages are unsigned and require maintainer acceptance before stable release.
