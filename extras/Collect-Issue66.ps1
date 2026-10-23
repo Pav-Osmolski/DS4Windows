@@ -189,7 +189,7 @@ try {
 } catch { $gaps.Add('Collector: ' + $_.Exception.GetType().Name) }
 finally {
     if ($traceActive) { $traceStopped = (Capture-Native 'trace-stop.txt' 'logman.exe' @('stop',$traceName,'-ets')) -eq 0 }
-    foreach ($p in $owned) { if ($watchdog -and $p.Id -eq $watchdog.Id -and -not $traceStopped) { continue }; try { if (-not $p.HasExited) { $p.Kill(); [void]$p.WaitForExit(5000) }; $p.Dispose() } catch {} }
+    foreach ($p in $owned) { if (-not $traceStopped -and $watchdog -and $p.Id -eq $watchdog.Id) { continue }; try { if (-not $p.HasExited) { $p.Kill(); [void]$p.WaitForExit(5000) }; $p.Dispose() } catch {} }
     $temporaryKey = Join-Path $data 'viiper.key.txt'
     if (Test-Path -LiteralPath $temporaryKey -PathType Leaf) { Remove-Item -LiteralPath $temporaryKey }
     if (Test-Path -LiteralPath $evidence) {
