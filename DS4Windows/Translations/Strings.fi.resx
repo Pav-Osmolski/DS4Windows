@@ -6324,4 +6324,7 @@ Varmuuskopiointi : </value>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Kuollut alue ja</value>
   </data>
+  <data name="UI_F9F5196A5ACCAE02" xml:space="preserve">
+    <value>Seuraa kuulokeliitäntää</value>
+  </data>
 </root>

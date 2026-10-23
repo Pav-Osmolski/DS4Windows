@@ -1465,8 +1465,8 @@
                                             <TextBlock Text="{lex:Loc Strings:UI_2FE9FD087181A439}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <ComboBox x:Name="flashTypeCombo" SelectedIndex="{Binding FlashTypeIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_CFE6FCB880DCAC80}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8652A56735CD92D4}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_CFE6FCB880DCAC80}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8652A56735CD92D4}"/>
                                                 </ComboBox>
                                                 <xctk:IntegerUpDown d:IsHidden="True" Value="{Binding FlashAt,FallbackValue=0}" MinWidth="80" Minimum="-10" Maximum="100" Increment="10" MinHeight="34" VerticalAlignment="Center"/>
                                                 <Label Content="%" Padding="0" VerticalAlignment="Center" Margin="12,0,12,0" VerticalContentAlignment="Center"/>
@@ -1481,10 +1481,10 @@
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_9DB61B179D365C33}" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                 <ComboBox Margin="8,0,0,0" SelectedIndex="{Binding ChargingType,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_A7248EEB45EB1CE2}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_F7A403C6CDF31E72}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_B1F7B2EED6414EEB}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_6B73191A0A4B6742}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_A7248EEB45EB1CE2}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_F7A403C6CDF31E72}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_B1F7B2EED6414EEB}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_6B73191A0A4B6742}"/>
                                                 </ComboBox>
                                                 <Button x:Name="chargingColorBtn" Width="20" Height="20" Background="{Binding ChargingColor,FallbackValue=Blue}" Visibility="{Binding ChargingColorVisible}" Click="ChargingColorBtn_Click" Margin="20,0,0,0"/>
                                             </StackPanel>
@@ -1606,7 +1606,7 @@
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_7E04F2FFB9334E3D}" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                 <ComboBox MinWidth="160" SelectedIndex="{Binding TouchInvertIndex}" Margin="20,0,0,0" MinHeight="34" VerticalAlignment="Center">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
                                                     <ComboBoxItem Content="X"/>
                                                     <ComboBoxItem Content="Y"/>
                                                     <ComboBoxItem Content="X+Y"/>
@@ -1710,18 +1710,18 @@
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_8A1C463C7A888E65}" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                 <ComboBox SelectedIndex="{Binding TouchMouseStickOutputStick}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_D9AE40B5FBA600DC}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_654A436C945A96DE}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_D9AE40B5FBA600DC}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_654A436C945A96DE}"/>
                                                 </ComboBox>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_54657F45FD297B16}" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                 <ComboBox SelectedIndex="{Binding TouchMouseStickOutputAxes}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_182F84EC03B4CE2B}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_79DB7D1F19AAAD5A}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_9B37CEF476A3316E}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_182F84EC03B4CE2B}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_79DB7D1F19AAAD5A}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_9B37CEF476A3316E}"/>
                                                 </ComboBox>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
@@ -1923,7 +1923,7 @@
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_3DC72AEC90CBD918}" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                 <ComboBox SelectedIndex="{Binding GyroControlsEvalCondIndex,FallbackValue=0}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_0F67514B901DA8B9}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_0F67514B901DA8B9}"/>
                                                     <ComboBoxItem Content="Or"/>
                                                 </ComboBox>
                                             </StackPanel>
@@ -1937,18 +1937,18 @@
                                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                     <Label Content="{lex:Loc Strings:UI_F2F25414B9C7910C}" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                     <ComboBox Width="160" Margin="8,0,0,0" SelectedIndex="{Binding SASteeringWheelEmulationAxisIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_4017BE0FB9881CED}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_A24FE9F204C230D3}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_0ACDAD7D5B909564}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_C5F7467C8A97A7B3}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_F5CD6FEB5D8EC5F8}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_290DC49BD043C804}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_D9C91A26B20D09A4}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_17EFB78BF16E5275}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_CE21F09A834D6558}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_C637014259580555}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_85AB04AE67188569}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_4017BE0FB9881CED}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_A24FE9F204C230D3}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_0ACDAD7D5B909564}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_C5F7467C8A97A7B3}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_F5CD6FEB5D8EC5F8}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_290DC49BD043C804}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_D9C91A26B20D09A4}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_17EFB78BF16E5275}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_CE21F09A834D6558}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_C637014259580555}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_85AB04AE67188569}"/>
                                                     </ComboBox>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
@@ -2025,15 +2025,15 @@
                                                 <StackPanel>
                                                     <Label Content="{lex:Loc Strings:UI_3DC72AEC90CBD918}" Margin="0,4,12,10" Padding="0" VerticalAlignment="Center"/>
                                                     <ComboBox SelectedIndex="{Binding GyroMouseEvalCondIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_0F67514B901DA8B9}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_0F67514B901DA8B9}"/>
                                                         <ComboBoxItem Content="Or"/>
                                                     </ComboBox>
                                                 </StackPanel>
                                                 <StackPanel Margin="20,0,0,0">
                                                     <Label Content="{lex:Loc Strings:UI_795BFC65CF75D08B}" Margin="0,4,12,10" Padding="0" VerticalAlignment="Center"/>
                                                     <ComboBox SelectedIndex="{Binding GyroMouseXAxis,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_F1E30A232F8CEAFC}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_4464105F259B6424}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_F1E30A232F8CEAFC}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_4464105F259B6424}"/>
                                                     </ComboBox>
                                                 </StackPanel>
                                             </StackPanel>
@@ -2061,8 +2061,8 @@
 
                                             <StackPanel>
                                                 <ComboBox x:Name="gyroMouseSmoothMethodCombo" Margin="{StaticResource spaceMargin}" SelectedIndex="{Binding GyroMouseSmoothMethodIndex,FallbackValue='0'}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_A027E9793C1E999B}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_6C87A10015433B08}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_A027E9793C1E999B}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_6C87A10015433B08}"/>
                                                 </ComboBox>
                                                 <StackPanel x:Name="gyroMouseOneEuroPanel" Orientation="Horizontal" Margin="0,0,0,12" Visibility="{Binding GyroMouseOneEuroPanelVisibility,FallbackValue='Visible'}" VerticalAlignment="Center">
                                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
@@ -2119,18 +2119,18 @@
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_8A1C463C7A888E65}" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                 <ComboBox SelectedIndex="{Binding GyroMouseStickOutputStick}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_D9AE40B5FBA600DC}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_654A436C945A96DE}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_D9AE40B5FBA600DC}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_654A436C945A96DE}"/>
                                                 </ComboBox>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_54657F45FD297B16}" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                 <ComboBox SelectedIndex="{Binding GyroMouseStickOutputAxes}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_182F84EC03B4CE2B}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_79DB7D1F19AAAD5A}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_9B37CEF476A3316E}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_DC937B59892604F5}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_182F84EC03B4CE2B}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_79DB7D1F19AAAD5A}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_9B37CEF476A3316E}"/>
                                                 </ComboBox>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
@@ -2154,13 +2154,13 @@
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_3DC72AEC90CBD918}" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                 <ComboBox SelectedIndex="{Binding GyroMouseStickEvalCondIndex,FallbackValue=0}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_0F67514B901DA8B9}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_0F67514B901DA8B9}"/>
                                                     <ComboBoxItem Content="Or"/>
                                                 </ComboBox>
                                                 <Label Content="{lex:Loc Strings:UI_5DFF361D210ED230}" Margin="12,0,12,0" Padding="0" VerticalAlignment="Center"/>
                                                 <ComboBox SelectedIndex="{Binding GyroMouseStickXAxis,FallbackValue=0}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_F1E30A232F8CEAFC}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_4464105F259B6424}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_F1E30A232F8CEAFC}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_4464105F259B6424}"/>
                                                 </ComboBox>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
@@ -2177,8 +2177,8 @@
 
                                             <StackPanel>
                                                 <ComboBox x:Name="gyroMouseStickSmoothMethodCombo" Margin="{StaticResource spaceMargin}" SelectedIndex="{Binding GyroMouseStickSmoothMethodIndex,FallbackValue='0'}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_A027E9793C1E999B}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_6C87A10015433B08}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_A027E9793C1E999B}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_6C87A10015433B08}"/>
                                                 </ComboBox>
                                                 <StackPanel x:Name="gyroMouseStickOneEuroPanel" Orientation="Horizontal" Margin="0,0,0,12" Visibility="{Binding GyroMouseStickOneEuroPanelVisibility,FallbackValue='Visible'}" VerticalAlignment="Center">
                                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
@@ -2243,15 +2243,15 @@
                                                 <StackPanel>
                                                     <Label Content="{lex:Loc Strings:UI_3DC72AEC90CBD918}" Margin="0,4,12,10" Padding="0" VerticalAlignment="Center"/>
                                                     <ComboBox SelectedIndex="{Binding GyroSwipeEvalCondIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_0F67514B901DA8B9}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_0F67514B901DA8B9}"/>
                                                         <ComboBoxItem Content="Or"/>
                                                     </ComboBox>
                                                 </StackPanel>
                                                 <StackPanel Margin="20,0,0,0">
                                                     <Label Content="{lex:Loc Strings:UI_795BFC65CF75D08B}" Margin="0,4,12,10" Padding="0" VerticalAlignment="Center"/>
                                                     <ComboBox SelectedIndex="{Binding GyroSwipeXAxis,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_F1E30A232F8CEAFC}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_4464105F259B6424}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_F1E30A232F8CEAFC}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_4464105F259B6424}"/>
                                                     </ComboBox>
                                                 </StackPanel>
                                             </StackPanel>
@@ -2417,17 +2417,17 @@
                                             <WrapPanel Margin="0,5,0,4">
                                                 <TextBlock Text="{lex:Loc Strings:UI_BB4825F4A04B6DFB}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                 <ComboBox MinHeight="34" MinWidth="120" IsEnabled="{Binding IsChecked, ElementName=Switch2JoyConIrMouseEnabledCheckBox}" SelectedIndex="{Binding Switch2JoyConIrMouseSourceIndex}" Margin="0,0,8,8">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_D461A493A3753877}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_58EB9032E3BB83F0}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_883361D5D682A157}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_B6C1D862F9F75EC3}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_D461A493A3753877}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_58EB9032E3BB83F0}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_883361D5D682A157}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_B6C1D862F9F75EC3}"/>
                                                 </ComboBox>
                                             </WrapPanel>
                                             <WrapPanel Margin="0,0,0,4">
                                                 <TextBlock Text="{lex:Loc Strings:UI_824ECAFD51AF658B}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                 <ComboBox MinHeight="34" MinWidth="145" IsEnabled="{Binding IsChecked, ElementName=Switch2JoyConIrMouseEnabledCheckBox}" SelectedIndex="{Binding Switch2JoyConIrMouseScrollModeIndex}" ToolTip="{lex:Loc Strings:UI_AABDA1D68788DBC1}" Margin="0,0,8,8">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_1612D9CEBA13245D}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_EAACCB38E3A4C559}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_1612D9CEBA13245D}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_EAACCB38E3A4C559}"/>
                                                 </ComboBox>
                                             </WrapPanel>
                                             <WrapPanel Margin="0,0,0,4">
@@ -2445,17 +2445,17 @@
                                                 <WrapPanel Margin="0,0,0,4">
                                                     <TextBlock Text="{lex:Loc Strings:UI_AF1AD0F6E0B1B6EA}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                     <ComboBox MinHeight="34" MinWidth="120" SelectedIndex="{Binding Switch2JoyConLeftIrMouseActivationThresholdIndex}" Margin="0,0,8,8">
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_2E1A4C07CE94CB0C}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_43DDD4CA77F3867D}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_2E1A4C07CE94CB0C}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_43DDD4CA77F3867D}"/>
                                                     </ComboBox>
                                                 </WrapPanel>
                                                 <WrapPanel Margin="0,0,0,4">
                                                     <TextBlock Text="{lex:Loc Strings:UI_C3BC04A865216B77}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                     <ComboBox MinHeight="34" MinWidth="120" SelectedIndex="{Binding Switch2JoyConRightIrMouseActivationThresholdIndex}" Margin="0,0,8,8">
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_2E1A4C07CE94CB0C}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_43DDD4CA77F3867D}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_2E1A4C07CE94CB0C}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_43DDD4CA77F3867D}"/>
                                                     </ComboBox>
                                                 </WrapPanel>
                                             </StackPanel>
@@ -2488,10 +2488,10 @@
                                             <WrapPanel>
                                                 <TextBlock Text="{lex:Loc Strings:UI_A7397B5E0C789B5C}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                 <ComboBox SelectedIndex="{Binding Switch2AimSetup.ActivationIndex}" MinHeight="34" MinWidth="200" AutomationProperties.Name="Motion aiming activation">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_044BA8A9AE43B296}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_7D5084866F913D1C}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_11A70BE99F21B07D}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8D498C666473B96C}" IsEnabled="False"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_044BA8A9AE43B296}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_7D5084866F913D1C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_11A70BE99F21B07D}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8D498C666473B96C}" IsEnabled="False"/>
                                                 </ComboBox>
                                             </WrapPanel>
                                             <TextBlock Text="{lex:Loc Strings:UI_60EE91BE77345456}" TextWrapping="Wrap" Margin="0,6,0,10" Foreground="{DynamicResource MutedForegroundColor}"/>
@@ -2774,24 +2774,24 @@
                                                     <WrapPanel Margin="0,0,0,4">
                                                         <TextBlock Text="{lex:Loc Strings:UI_7CE1AFA3F281B07B}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                         <ComboBox MinHeight="34" MinWidth="165" SelectedIndex="{Binding Switch2DualGyroEditor.ModeIndex}" Margin="0,0,8,8">
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_EA284A48E6092DFB}"/>
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_8DD33C5BF4D47E93}"/>
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_CF0E923853AA3814}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_EA284A48E6092DFB}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_8DD33C5BF4D47E93}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_CF0E923853AA3814}"/>
                                                         </ComboBox>
                                                     </WrapPanel>
                                                     <WrapPanel Margin="0,0,0,4">
                                                         <TextBlock Text="{lex:Loc Strings:UI_14494E64879F569E}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                         <ComboBox MinHeight="34" MinWidth="120" SelectedIndex="{Binding Switch2DualGyroEditor.DominantSideIndex}" ToolTip="{lex:Loc Strings:UI_37A0E8A638984115}" Margin="0,0,8,8">
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_58EB9032E3BB83F0}"/>
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_883361D5D682A157}"/>
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_8017D383BFBDC52B}" IsEnabled="{Binding Switch2DualGyroEditor.CanCombineBoth}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_58EB9032E3BB83F0}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_883361D5D682A157}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_8017D383BFBDC52B}" IsEnabled="{Binding Switch2DualGyroEditor.CanCombineBoth}"/>
                                                         </ComboBox>
                                                     </WrapPanel>
                                                     <WrapPanel Margin="0,0,0,4">
                                                         <TextBlock Text="{lex:Loc Strings:UI_3E5833CDFE06670F}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                         <ComboBox MinHeight="34" MinWidth="120" SelectedIndex="{Binding Switch2DualGyroEditor.ActivationModeIndex}" Margin="0,0,8,8">
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_B5E629F09FBCA1F7}"/>
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_8333F84A92CC481A}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_B5E629F09FBCA1F7}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_8333F84A92CC481A}"/>
                                                         </ComboBox>
                                                     </WrapPanel>
                                                     <TextBlock Margin="0,0,0,6" TextWrapping="Wrap" Text="{Binding Switch2DualGyroEditor.ButtonActionDescription}"/>
@@ -3018,15 +3018,15 @@
                                             <WrapPanel Margin="0,5,0,4">
                                                 <TextBlock Text="{lex:Loc Strings:UI_87FD393643CDE0D8}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                 <ComboBox MinHeight="34" MinWidth="100" SelectedIndex="{Binding Switch2LeftStickScrollActivationModeIndex}" Margin="0,0,8,8">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                             </WrapPanel>
                                             <WrapPanel Margin="0,0,0,4">
                                                 <TextBlock Text="{lex:Loc Strings:UI_00ED9B6886A171F4}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                                 <ComboBox MinHeight="34" MinWidth="100" SelectedIndex="{Binding Switch2RightStickScrollActivationModeIndex}" Margin="0,0,8,8">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                             </WrapPanel>
                                             <TextBlock Margin="0,7,0,3" FontWeight="SemiBold" Text="{lex:Loc Strings:UI_3FA010F7EB48116F}"/>
@@ -3051,36 +3051,36 @@
                                                 <TextBlock Grid.Row="3" Grid.Column="0" Text="{lex:Loc Strings:UI_58EB9032E3BB83F0}" VerticalAlignment="Center"/>
                                                 <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc Strings:UI_883361D5D682A157}" VerticalAlignment="Center"/>
                                                 <ComboBox MinHeight="34" Grid.Row="1" Grid.Column="1" MinWidth="86" Margin="0,0,14,3" SelectedIndex="{Binding Switch2LeftStickUpActivationModeIndex}">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                                 <ComboBox MinHeight="34" Grid.Row="2" Grid.Column="1" MinWidth="86" Margin="0,0,14,3" SelectedIndex="{Binding Switch2LeftStickDownActivationModeIndex}">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                                 <ComboBox MinHeight="34" Grid.Row="3" Grid.Column="1" MinWidth="86" Margin="0,0,14,3" SelectedIndex="{Binding Switch2LeftStickLeftActivationModeIndex}">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                                 <ComboBox MinHeight="34" Grid.Row="4" Grid.Column="1" MinWidth="86" Margin="0,0,14,0" SelectedIndex="{Binding Switch2LeftStickRightActivationModeIndex}">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                                 <ComboBox MinHeight="34" Grid.Row="1" Grid.Column="2" MinWidth="86" Margin="0,0,0,3" SelectedIndex="{Binding Switch2RightStickUpActivationModeIndex}">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                                 <ComboBox MinHeight="34" Grid.Row="2" Grid.Column="2" MinWidth="86" Margin="0,0,0,3" SelectedIndex="{Binding Switch2RightStickDownActivationModeIndex}">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                                 <ComboBox MinHeight="34" Grid.Row="3" Grid.Column="2" MinWidth="86" Margin="0,0,0,3" SelectedIndex="{Binding Switch2RightStickLeftActivationModeIndex}">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                                 <ComboBox MinHeight="34" Grid.Row="4" Grid.Column="2" MinWidth="86" SelectedIndex="{Binding Switch2RightStickRightActivationModeIndex}">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8E685D5409B3A543}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_464D23B54F26916C}"/>
                                                 </ComboBox>
                                             </Grid>
                                             <TextBlock Margin="0,7,0,3" FontWeight="SemiBold" Text="{lex:Loc Strings:UI_A98FAA132E4FF320}"/>
@@ -3112,15 +3112,15 @@
                                         <WrapPanel Margin="0,0,0,4" ToolTip="{lex:Loc Strings:UI_F6D0A3E06EE83693}">
                                             <TextBlock Text="{lex:Loc Strings:UI_48D2A1F97816D2B3}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                             <ComboBox MinHeight="34" MinWidth="120" SelectedIndex="{Binding Switch2FaceButtonLayoutIndex}" Margin="0,0,8,8">
-                                                <ComboBoxItem Content="{lex:Loc Strings:UI_449B321E81007DFC}"/>
-                                                <ComboBoxItem Content="{lex:Loc Strings:UI_0BEE31AC676C1C2C}"/>
+                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_449B321E81007DFC}"/>
+                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_0BEE31AC676C1C2C}"/>
                                             </ComboBox>
                                         </WrapPanel>
                                         <WrapPanel Margin="0,0,0,4" Visibility="{Binding ShowSwitch2StandaloneJoyConControls, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <TextBlock Text="{lex:Loc Strings:UI_465B07A44D977A78}" VerticalAlignment="Center" Width="160" Margin="0,0,12,8"/>
                                             <ComboBox MinHeight="34" MinWidth="120" SelectedIndex="{Binding Switch2JoyConStandaloneHoldModeIndex}" ToolTip="{lex:Loc Strings:UI_44EC02547C22D6BF}" Margin="0,0,8,8">
-                                                <ComboBoxItem Content="{lex:Loc Strings:UI_501808A8C753E03F}"/>
-                                                <ComboBoxItem Content="{lex:Loc Strings:UI_8DE01A42B4284F18}"/>
+                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_501808A8C753E03F}"/>
+                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_8DE01A42B4284F18}"/>
                                             </ComboBox>
                                         </WrapPanel>
                                         <GroupBox Header="{lex:Loc Strings:UI_CABFD2B5D610E4BB}" Padding="7,5" Margin="0,0,0,8">
@@ -3130,9 +3130,9 @@
                                                     <StackPanel Margin="0,0,16,12">
                                                         <TextBlock Text="{lex:Loc Strings:UI_7CE1AFA3F281B07B}" VerticalAlignment="Center" Margin="0,0,0,6"/>
                                                         <ComboBox MinHeight="34" Width="150" SelectedIndex="{Binding Switch2AutoDisconnectModeIndex}">
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_CA7981B46ECF2C17}"/>
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_616D28A3D75E9613}"/>
-                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_B5B562537E7ED0E8}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_CA7981B46ECF2C17}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_616D28A3D75E9613}"/>
+                                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_B5B562537E7ED0E8}"/>
                                                         </ComboBox>
                                                     </StackPanel>
                                                     <StackPanel Margin="0,0,0,12">
@@ -3399,7 +3399,12 @@
                                                     </Grid.ColumnDefinitions>
                                                     <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
                                                         <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc Strings:UI_E0CE522B70470B1D}" IsChecked="{Binding DualSenseEnableSpeakerOutput}" Margin="{StaticResource spaceMargin}" ToolTip="{lex:Loc Strings:UI_C9D4739D7E6FA770}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
-                                                        <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc Strings:UI_3CFD124735ACB406}" IsChecked="{Binding DualSenseHeadsetOnlyAudio}" IsEnabled="{Binding DualSenseEnableSpeakerOutput}" Margin="20,2,3,2" ToolTip="{lex:Loc Strings:UI_C8D78B1300EF58A5}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                                        <TextBlock Text="{lex:Loc Strings:UI_BDBDB91EB847C4AF}" Margin="20,6,3,4" />
+                                                        <ComboBox SelectedIndex="{Binding ControllerAudioRoute}" IsEnabled="{Binding DualSenseEnableSpeakerOutput}" Margin="20,2,3,6">
+                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_45EB3D17B6D39E4B}" />
+                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_6E3B4116187DF042}" />
+                                                            <ComboBoxItem Content="{lex:Loc Strings:UI_F9F5196A5ACCAE02}" />
+                                                        </ComboBox>
                                                         <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" Content="{lex:Loc Strings:UI_0DE86CB44FD804BC}" IsChecked="{Binding DualSenseMuteButtonMutesSpeaker}" Margin="20,2,3,7" ToolTip="{lex:Loc Strings:UI_FA71BED7F456D597}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                                                     </StackPanel>
                                                     <Label Content="{lex:Loc Strings:UI_45DA990590EF970E}" Grid.Row="1" Grid.Column="0" ToolTip="{lex:Loc Strings:UI_BB981AE8E80B4D68}" VerticalAlignment="Center" Padding="0" Margin="0,0,10,8"/>
@@ -3419,10 +3424,10 @@
                                                     <xctk:IntegerUpDown Value="{Binding DualSenseSpeakerVolume}" Minimum="0" Maximum="255" Grid.Row="4" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                                     <Label Content="{lex:Loc Strings:UI_48B917BFFD863E5D}" Grid.Row="5" Grid.Column="0" ToolTip="{lex:Loc Strings:UI_9C2DE6A226B796CD}" VerticalAlignment="Center" Padding="0" Margin="0,0,10,8"/>
                                                     <ComboBox SelectedIndex="{Binding DualSenseSpeakerCompressionIndex}" Grid.Row="5" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center">
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_CA7981B46ECF2C17}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_30A04FDCB6BB10B0}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_27538F5839C88400}" IsEnabled="{Binding NvidiaNoiseSuppressionAvailable}" ToolTip="{Binding NvidiaNoiseSuppressionAvailability}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_CA7981B46ECF2C17}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_30A04FDCB6BB10B0}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_27538F5839C88400}" IsEnabled="{Binding NvidiaNoiseSuppressionAvailable}" ToolTip="{Binding NvidiaNoiseSuppressionAvailability}"/>
                                                     </ComboBox>
                                                     <Label Content="{lex:Loc Strings:UI_4F2F20566434A683}" Grid.Row="6" Grid.Column="0" ToolTip="{lex:Loc Strings:UI_5649CE20644B30B0}" VerticalAlignment="Center" Padding="0" Margin="0,0,10,8"/>
                                                     <xctk:IntegerUpDown Value="{Binding DualSenseSpeakerBassBoost}" Minimum="0" Maximum="6" Grid.Row="6" Grid.Column="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
@@ -3435,9 +3440,9 @@
                                                     <xctk:IntegerUpDown Value="{Binding DualSenseMicrophoneVolume}" Minimum="0" Maximum="255" Grid.Row="8" Grid.Column="1" IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                                     <Label Content="{lex:Loc Strings:UI_CB6319A79C7FC6D2}" Grid.Row="9" Grid.Column="0" IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}" ToolTip="{lex:Loc Strings:UI_EC7D998467B9324A}" VerticalAlignment="Center" Padding="0" Margin="0,0,10,8"/>
                                                     <ComboBox SelectedIndex="{Binding DualSenseMicrophoneNoiseSuppressionIndex}" Grid.Row="9" Grid.Column="1" IsEnabled="{Binding ControllerMicrophoneLevelControlsEnabled}" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center">
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_CA7981B46ECF2C17}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}"/>
-                                                        <ComboBoxItem Content="{lex:Loc Strings:UI_30A04FDCB6BB10B0}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_CA7981B46ECF2C17}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}"/>
+                                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_30A04FDCB6BB10B0}"/>
                                                     </ComboBox>
                                                 </Grid>
                                                 <Expander Header="{lex:Loc Strings:UI_DE7200BCE35D33FE}" Margin="2,8,2,0">
@@ -3621,7 +3626,7 @@
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center" IsEnabled="{Binding CanEditManualBTPollRate}">
                                                 <Label Content="{lex:Loc Strings:UI_133C73AB1C1B361E}" ToolTip="{Binding BluetoothPollingDescription}" VerticalAlignment="Center" Padding="0" Margin="0,0,10,0"/>
                                                 <ComboBox x:Name="btPollRateCombo" SelectedIndex="{Binding TempBTPollRateIndex,FallbackValue=4}" MinWidth="140" ToolTip="{Binding BluetoothPollingDescription}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center">
-                                                    <ComboBoxItem Content="{lex:Loc Strings:UI_381541DE7CF3D2AF}"/>
+                                                                <ComboBoxItem Content="{lex:Loc Strings:UI_381541DE7CF3D2AF}"/>
                                                     <ComboBoxItem Content="1000 Hz (1 ms)"/>
                                                     <ComboBoxItem Content="500 Hz (2 ms)"/>
                                                     <ComboBoxItem Content="333 Hz (3 ms)"/>

@@ -3020,6 +3020,8 @@ namespace DS4Windows
             set => m_Config.dualSenseHeadsetOnlyAudio = value;
         }
 
+        public static bool[] DualSenseFollowHeadphoneJack => m_Config.dualSenseFollowHeadphoneJack;
+
         public static byte[] DualSenseSpeakerVolume
         {
             get => m_Config.dualSenseSpeakerVolume;
@@ -4860,6 +4862,7 @@ namespace DS4Windows
             0,0,0,0,0,0,0,0,0
         };
         public bool[] dualSenseEnableSpeakerOutput = new bool[Global.TEST_PROFILE_ITEM_COUNT] { false, false, false, false, false, false, false, false, false };
+        public bool[] dualSenseFollowHeadphoneJack = new bool[Global.TEST_PROFILE_ITEM_COUNT];
         public bool[] dualSenseHeadsetOnlyAudio = new bool[Global.TEST_PROFILE_ITEM_COUNT] { false, false, false, false, false, false, false, false, false };
         public byte[] dualSenseSpeakerVolume = new byte[Global.TEST_PROFILE_ITEM_COUNT] { 128, 128, 128, 128, 128, 128, 128, 128, 128 };
         public byte[] dualSenseSpeakerCompression = new byte[Global.TEST_PROFILE_ITEM_COUNT];
@@ -6131,6 +6134,9 @@ namespace DS4Windows
                 XmlElement xmlDSAudioGroupElement = m_Xdoc.CreateElement("AudioSettings"); xmlDualSenseControllerSettingsElement.AppendChild(xmlDSAudioGroupElement);
                 XmlNode xmlDSEnableSpeakerOutputElement = m_Xdoc.CreateNode(XmlNodeType.Element, "EnableSpeakerOutput", null); xmlDSEnableSpeakerOutputElement.InnerText = dualSenseEnableSpeakerOutput[device].ToString(); xmlDSAudioGroupElement.AppendChild(xmlDSEnableSpeakerOutputElement);
                 XmlNode xmlDSHeadsetOnlyAudioElement = m_Xdoc.CreateNode(XmlNodeType.Element, "HeadsetOnlyAudio", null); xmlDSHeadsetOnlyAudioElement.InnerText = dualSenseHeadsetOnlyAudio[device].ToString(); xmlDSAudioGroupElement.AppendChild(xmlDSHeadsetOnlyAudioElement);
+                XmlNode followJack = m_Xdoc.CreateElement("FollowHeadphoneJack");
+                followJack.InnerText = dualSenseFollowHeadphoneJack[device].ToString();
+                xmlDSAudioGroupElement.AppendChild(followJack);
                 XmlNode xmlDSSpeakerVolumeElement = m_Xdoc.CreateNode(XmlNodeType.Element, "SpeakerVolume", null); xmlDSSpeakerVolumeElement.InnerText = dualSenseSpeakerVolume[device].ToString(); xmlDSAudioGroupElement.AppendChild(xmlDSSpeakerVolumeElement);
                 XmlNode xmlDSSpeakerCompressionElement = m_Xdoc.CreateNode(XmlNodeType.Element, "SpeakerCompression", null); xmlDSSpeakerCompressionElement.InnerText = dualSenseSpeakerCompression[device].ToString(); xmlDSAudioGroupElement.AppendChild(xmlDSSpeakerCompressionElement);
                 XmlNode xmlDSSpeakerBassBoostElement = m_Xdoc.CreateNode(XmlNodeType.Element, "SpeakerBassBoost", null); xmlDSSpeakerBassBoostElement.InnerText = dualSenseSpeakerBassBoost[device].ToString(); xmlDSAudioGroupElement.AppendChild(xmlDSSpeakerBassBoostElement);
@@ -8676,6 +8682,9 @@ namespace DS4Windows
                                     "HeadsetPluggedIn");
                             bool.TryParse(Item?.InnerText, out bool temp);
                             dualSenseHeadsetOnlyAudio[device] = temp;
+                            bool.TryParse(xmlDSAudioGroupElement.SelectSingleNode(
+                                "FollowHeadphoneJack")?.InnerText, out bool followJack);
+                            dualSenseFollowHeadphoneJack[device] = followJack;
                         }
                         catch { missingSetting = true; }
 

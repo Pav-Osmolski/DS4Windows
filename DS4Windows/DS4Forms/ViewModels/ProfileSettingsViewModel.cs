@@ -3407,6 +3407,17 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             set => Global.DualSenseHeadsetOnlyAudio[device] = value;
         }
 
+        public int ControllerAudioRoute
+        {
+            get => ControllerAudioRoutingPolicy.Selection(Global.DualSenseHeadsetOnlyAudio[device],
+                Global.DualSenseFollowHeadphoneJack[device]);
+            set
+            {
+                Global.DualSenseHeadsetOnlyAudio[device] = value == 1;
+                Global.DualSenseFollowHeadphoneJack[device] = value == 2;
+            }
+        }
+
         private ObservableCollection<AudioEndpointChoice> audioCaptureEndpointChoices, audioSpeakerEndpointChoices;
         public ObservableCollection<AudioEndpointChoice> AudioCaptureEndpointChoices =>
             audioCaptureEndpointChoices ??= new(BuildAudioCaptureEndpointChoices());

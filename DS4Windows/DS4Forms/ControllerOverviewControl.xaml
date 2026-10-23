@@ -456,12 +456,13 @@
                                                       IsChecked="{Binding SpeakerOutputEnabled, Mode=TwoWay}"
                                                       ToolTip="{lex:Loc Strings:UI_C9D4739D7E6FA770}"
                                                       Margin="0,0,0,12" />
-                                            <CheckBox Content="{lex:Loc Strings:UI_3CFD124735ACB406}"
-                                                      Style="{StaticResource OverviewToggleStyle}"
-                                                      IsChecked="{Binding HeadsetOnlyAudio, Mode=TwoWay}"
-                                                      IsEnabled="{Binding SpeakerOutputEnabled}"
-                                                      ToolTip="{lex:Loc Strings:UI_F8808E7A06D51F43}"
-                                                      Margin="0,0,0,13" />
+                                            <TextBlock Text="{lex:Loc Strings:UI_BDBDB91EB847C4AF}" Margin="0,0,0,7" />
+                                            <ComboBox SelectedIndex="{Binding ControllerAudioRoute, Mode=TwoWay}"
+                                                      IsEnabled="{Binding SpeakerOutputEnabled}" Margin="0,0,0,13">
+                                                <ComboBoxItem Content="{lex:Loc Strings:UI_45EB3D17B6D39E4B}" />
+                                                <ComboBoxItem Content="{lex:Loc Strings:UI_6E3B4116187DF042}" />
+                                                <ComboBoxItem Content="{lex:Loc Strings:UI_F9F5196A5ACCAE02}" />
+                                            </ComboBox>
                                         </StackPanel>
                                         <StackPanel Grid.Row="3">
                                             <TextBlock Text="{lex:Loc Strings:UI_F6479EB15E423313}" Margin="0,0,0,7" FontWeight="SemiBold"
@@ -539,27 +540,27 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="{lex:Loc Strings:UI_45EB3D17B6D39E4B}"
-                                                       IsEnabled="{Binding HeadsetOnlyAudio, Converter={StaticResource InverseBoolConverter}}" />
+                                                       IsEnabled="{Binding SpeakerOutputEnabled}" />
                                             <TextBlock Grid.Column="1"
                                                        Text="{Binding Value, ElementName=overviewSpeakerVolumeSlider, StringFormat={}{0:0}%}"
-                                                       IsEnabled="{Binding HeadsetOnlyAudio, Converter={StaticResource InverseBoolConverter}}"
+                                                       IsEnabled="{Binding SpeakerOutputEnabled}"
                                                        Foreground="{DynamicResource AccentColor}" />
                                             <Slider x:Name="overviewSpeakerVolumeSlider" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,7,0,14"
                                                     Style="{StaticResource OverviewQuickSliderStyle}"
                                                     Minimum="0" Maximum="100" TickFrequency="1"
-                                                    IsEnabled="{Binding HeadsetOnlyAudio, Converter={StaticResource InverseBoolConverter}}"
+                                                    IsEnabled="{Binding SpeakerOutputEnabled}"
                                                     Value="{Binding SpeakerVolumePercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=220}" />
                                             <TextBlock Grid.Row="2" Text="{lex:Loc Strings:UI_7C5DE709279C5A31}"
-                                                       IsEnabled="{Binding HeadsetOnlyAudio}"
+                                                       IsEnabled="{Binding SpeakerOutputEnabled}"
                                                        ToolTip="{lex:Loc Strings:UI_D63398FCBCB31030}" />
                                             <TextBlock Grid.Row="2" Grid.Column="1"
                                                        Text="{Binding Value, ElementName=overviewHeadphoneVolumeSlider, StringFormat={}{0:0}%}"
-                                                       IsEnabled="{Binding HeadsetOnlyAudio}"
+                                                       IsEnabled="{Binding SpeakerOutputEnabled}"
                                                        Foreground="{DynamicResource AccentColor}" />
                                             <Slider x:Name="overviewHeadphoneVolumeSlider" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,7,0,0"
                                                     Style="{StaticResource OverviewQuickSliderStyle}"
                                                     Minimum="0" Maximum="100" TickFrequency="1"
-                                                    IsEnabled="{Binding HeadsetOnlyAudio}"
+                                                    IsEnabled="{Binding SpeakerOutputEnabled}"
                                                     Value="{Binding HeadphoneVolumePercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=220}" />
                                         </Grid>
                                     </StackPanel>

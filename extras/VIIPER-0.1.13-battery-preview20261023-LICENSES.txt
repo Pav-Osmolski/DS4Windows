@@ -1,9 +1,9 @@
-﻿
+
 
 # github.com/Alia5/VIIPER
 
 * Name: github.com/Alia5/VIIPER
-* Version: v0.1.12
+* Version: v0.1.13-battery-preview20261023
 * License: [GPL-3.0](https://github.com/Alia5/VIIPER/blob/HEAD/LICENSE.txt)
 
 VIIPER - Virtual Input over IP EmulatoR

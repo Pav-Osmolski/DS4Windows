@@ -5267,6 +5267,8 @@ namespace DS4Windows.InputDevices
                     TryExtractPhysicalInputStatus(inputReport, reportOffset,
                         subType == DeviceSubType.DSEdge,
                         out cState.DualSenseRawInputStatus);
+                    SetHeadphoneJackConnected(cState.DualSenseRawInputStatus.IsValid &&
+                        ControllerAudioRoutingPolicy.HeadphoneDetected(cState.DualSenseRawInputStatus.ConnectionStatus));
                     cState.LX = inputReport[1 + reportOffset];
                     cState.LY = inputReport[2 + reportOffset];
                     cState.RX = inputReport[3 + reportOffset];

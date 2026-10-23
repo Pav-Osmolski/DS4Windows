@@ -158,6 +158,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler HapticStrengthPercentChanged;
         public event EventHandler SpeakerOutputEnabledChanged;
         public event EventHandler HeadsetOnlyAudioChanged;
+        public event EventHandler ControllerAudioRouteChanged;
         public event EventHandler ControllerAudioSourceChoicesChanged;
         public event EventHandler ControllerAudioSourceIdChanged;
         public event EventHandler AudioHapticsSpeakerOverrideActiveChanged;
@@ -387,7 +388,25 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 int deviceIndex = selectedController.DevIndex;
                 Global.DualSenseHeadsetOnlyAudio[deviceIndex] = value;
                 HeadsetOnlyAudioChanged?.Invoke(this, EventArgs.Empty);
+                ControllerAudioRouteChanged?.Invoke(this, EventArgs.Empty);
                 RaiseQuickProfileSettingChanged(deviceIndex);
+            }
+        }
+
+        public int ControllerAudioRoute
+        {
+            get => HasValidSelectedDevice ? ControllerAudioRoutingPolicy.Selection(
+                Global.DualSenseHeadsetOnlyAudio[selectedController.DevIndex],
+                Global.DualSenseFollowHeadphoneJack[selectedController.DevIndex]) : 0;
+            set
+            {
+                if (!HasEditableControllerAudio || value < 0 || value > 2 || ControllerAudioRoute == value) return;
+                int slot = selectedController.DevIndex;
+                Global.DualSenseHeadsetOnlyAudio[slot] = value == 1;
+                Global.DualSenseFollowHeadphoneJack[slot] = value == 2;
+                ControllerAudioRouteChanged?.Invoke(this, EventArgs.Empty);
+                HeadsetOnlyAudioChanged?.Invoke(this, EventArgs.Empty);
+                RaiseQuickProfileSettingChanged(slot);
             }
         }
 
@@ -633,6 +652,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             HapticStrengthPercentChanged?.Invoke(this, EventArgs.Empty);
             SpeakerOutputEnabledChanged?.Invoke(this, EventArgs.Empty);
             HeadsetOnlyAudioChanged?.Invoke(this, EventArgs.Empty);
+            ControllerAudioRouteChanged?.Invoke(this, EventArgs.Empty);
             if (refreshControllerAudioChoices)
             {
                 ControllerAudioSourceChoicesChanged?.Invoke(this,
@@ -732,6 +752,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 SpeakerOutputEnabledChanged?.Invoke(this, EventArgs.Empty);
             }
+            if (previous.ControllerAudioRoute != snapshot.ControllerAudioRoute)
+                ControllerAudioRouteChanged?.Invoke(this, EventArgs.Empty);
             if (previous.HeadsetOnlyAudio != snapshot.HeadsetOnlyAudio)
             {
                 HeadsetOnlyAudioChanged?.Invoke(this, EventArgs.Empty);
@@ -873,7 +895,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 SelectedControllerConnection, SelectedControllerLatency,
                 SelectedControllerBattery, SelectedOutputController,
                 HapticStrengthPercent, SpeakerOutputEnabled,
-                HeadsetOnlyAudio, ControllerAudioSourceId,
+                HeadsetOnlyAudio, ControllerAudioRoute, ControllerAudioSourceId,
                 AudioHapticsSpeakerOverrideActive, MicrophoneInputEnabled,
                 SpeakerVolumePercent,
                 HeadphoneVolumePercent, SpeakerCompressionIndex,
@@ -886,7 +908,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             public OverviewRuntimeSnapshot(string profileName,
                 string connection, string latency, string battery,
                 OutContType outputController, int hapticStrength,
-                bool speakerEnabled, bool headsetOnlyAudio,
+                bool speakerEnabled, bool headsetOnlyAudio, int controllerAudioRoute,
                 string controllerAudioSourceId,
                 bool audioHapticsSpeakerOverrideActive,
                 bool microphoneEnabled,
@@ -903,6 +925,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 HapticStrength = hapticStrength;
                 SpeakerEnabled = speakerEnabled;
                 HeadsetOnlyAudio = headsetOnlyAudio;
+                ControllerAudioRoute = controllerAudioRoute;
                 ControllerAudioSourceId = controllerAudioSourceId ??
                     string.Empty;
                 AudioHapticsSpeakerOverrideActive =
@@ -925,6 +948,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             public int HapticStrength { get; }
             public bool SpeakerEnabled { get; }
             public bool HeadsetOnlyAudio { get; }
+            public int ControllerAudioRoute { get; }
             public string ControllerAudioSourceId { get; }
             public bool AudioHapticsSpeakerOverrideActive { get; }
             public bool MicrophoneEnabled { get; }

@@ -4154,6 +4154,23 @@ namespace DS4Windows
             if (!startUp) CheckLauchProfileOption(ind, device);
         }
 
+        private readonly DS4Device[] observedAudioRouteSources = new DS4Device[MAX_DS4_CONTROLLER_COUNT];
+        private readonly bool[] observedHeadsetRoutes = new bool[MAX_DS4_CONTROLLER_COUNT];
+
+        private void RefreshHeadphoneJackRoute(int slot, DS4Device device)
+        {
+            if (!Global.DualSenseFollowHeadphoneJack[slot] ||
+                !IsControllerSpeakerEnabled(slot) ||
+                !ControllerAudioCapabilityPolicy.SupportsControllerAudio(device)) return;
+            bool headset = IsControllerHeadsetOnlyAudio(slot);
+            if (ReferenceEquals(observedAudioRouteSources[slot], device) &&
+                observedHeadsetRoutes[slot] == headset) return;
+            observedAudioRouteSources[slot] = device;
+            observedHeadsetRoutes[slot] = headset;
+            if (TryCaptureProfileActionTarget(slot, device, out var target))
+                QueueProfileColdOptions(slot, target, Global.ReadProfileSwitchRevision(slot), false);
+        }
+
         private readonly ProfileColdWorkQueue[] profileColdWorkQueues =
             Enumerable.Range(0, MAX_DS4_CONTROLLER_COUNT).Select(index =>
                 new ProfileColdWorkQueue(ex => StartupDiag(
@@ -4538,7 +4555,7 @@ namespace DS4Windows
                 outputType == OutContType.ViiperDualSenseEdge;
         }
 
-        private static bool IsControllerHeadsetOnlyAudio(int index)
+        internal bool IsControllerHeadsetOnlyAudio(int index)
         {
             if (IsAudioHapticsSpeakerOverrideActive(index))
             {
@@ -4546,7 +4563,10 @@ namespace DS4Windows
                     .StreamAppAudioToHeadsetOnly;
             }
 
-            return Global.DualSenseHeadsetOnlyAudio[index];
+            return ControllerAudioRoutingPolicy.UseHeadset(
+                Global.DualSenseHeadsetOnlyAudio[index],
+                Global.DualSenseFollowHeadphoneJack[index],
+                DS4Controllers[index]?.HeadphoneJackConnected == true);
         }
 
         private static string GetControllerSpeakerCaptureEndpointId(int index)
@@ -6118,6 +6138,7 @@ namespace DS4Windows
         {
             if ((uint)ind < (uint)DS4Controllers.Length)
             {
+                RefreshHeadphoneJackRoute(ind, device);
                 OutContType normalizedOutput = activeOutDevType[ind].Normalize();
                 ReportDiagnosticsSnapshot deferredDiagnostics = new()
                 {

@@ -639,6 +639,11 @@ namespace DS4Windows
         private byte outputFeaturesByte = DEFAULT_OUTPUT_FEATURES;
 
         protected volatile bool batteryReadingAvailable;
+        private int headphoneJackConnected;
+        public bool HeadphoneJackConnected => Volatile.Read(ref headphoneJackConnected) != 0;
+        protected void SetHeadphoneJackConnected(bool connected) =>
+            Volatile.Write(ref headphoneJackConnected, connected ? 1 : 0);
+
         public virtual bool BatteryReadingAvailable => batteryReadingAvailable;
         public int Battery => battery;
         protected volatile bool reportedChargeComplete;
@@ -2175,6 +2180,8 @@ namespace DS4Windows
 
                     if ((this.featureSet & VidPidFeatureSet.NoBatteryReading) == 0)
                     {
+                        // Normalized USB-layout status byte: bit 5 is headphone detect.
+                        SetHeadphoneJackConnected(ControllerAudioRoutingPolicy.DualShock4HeadphoneDetected(inputReport[30]));
                         tempByte = inputReport[30];
                         reportedChargeComplete = BatteryAlertReports.DualShock4Complete(tempByte);
                         tempCharging = (tempByte & 0x10) != 0;

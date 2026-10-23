@@ -644,7 +644,9 @@
   "UI_6E3B4116187DF042": {
     "source": "Headset only",
     "files": [
-      "DS4Windows/DS4Forms/AudioHapticsControl.xaml"
+      "DS4Windows/DS4Forms/AudioHapticsControl.xaml",
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml",
+      "DS4Windows/DS4Forms/ProfileEditor.xaml"
     ]
   },
   "UI_05DABDBD3CBEB671": {
@@ -1194,7 +1196,9 @@
   "UI_BDBDB91EB847C4AF": {
     "source": "Audio output",
     "files": [
-      "DS4Windows/DS4Forms/BatteryAlertsControl.xaml"
+      "DS4Windows/DS4Forms/BatteryAlertsControl.xaml",
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml",
+      "DS4Windows/DS4Forms/ProfileEditor.xaml"
     ]
   },
   "UI_54F63B205F5152AB": {
@@ -1920,7 +1924,8 @@
   "UI_45EB3D17B6D39E4B": {
     "source": "Controller speaker",
     "files": [
-      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml"
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml",
+      "DS4Windows/DS4Forms/ProfileEditor.xaml"
     ]
   },
   "UI_7C5DE709279C5A31": {
@@ -9898,6 +9903,13 @@
   "UI_170E14D35022EECE": {
     "source": "Estimates DS3 pitch and roll from accelerometer input while gyro control is active. Experimental.",
     "files": [
+      "DS4Windows/DS4Forms/ProfileEditor.xaml"
+    ]
+  },
+  "UI_F9F5196A5ACCAE02": {
+    "source": "Follow headphone jack",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml",
       "DS4Windows/DS4Forms/ProfileEditor.xaml"
     ]
   }

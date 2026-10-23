@@ -7961,4 +7961,7 @@ X axis: {0}, Y axis: {1}</value>
     <value>Dead zone Y</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>
   </data>
+  <data name="UI_F9F5196A5ACCAE02" xml:space="preserve">
+    <value>Follow headphone jack</value>
+  </data>
 </root>
