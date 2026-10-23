@@ -66,8 +66,13 @@ and connection.
   profile output rather than an unrelated desktop endpoint.
 - **USB DualSense speaker** selects the physical Windows endpoint for a USB
   DualSense. Bluetooth streams directly to the supported physical controller.
-- **Headset only (mute controller speaker)** keeps the stream on the AUX headset
-  route while muting the built-in speaker.
+- **Audio output** chooses **Controller speaker**, **Headset only**, or
+  **Follow headphone jack**. Follow switches to AUX headphones when the physical
+  controller reports headphones connected, then returns to the speaker on unplug.
+  It is available for managed DualSense/Edge USB and Bluetooth audio and genuine
+  DualShock 4 Bluetooth audio. DualShock 4 USB audio is handled by Windows.
+  The manual choices remain available, and existing profiles retain their choice.
+  An active Audio Haptics app-audio route override keeps its own routing choice.
 - **Speaker volume** and the separate headset/AUX controls adjust their respective
   routes. Start at a low level, then raise it while testing the chosen endpoint.
 

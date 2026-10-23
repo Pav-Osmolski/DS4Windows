@@ -302,7 +302,7 @@ internal sealed class BatteryAlertService
         if (!Current(slot, device)) throw new BatteryAlertUnavailableException(global::DS4Windows.UiText.Get("Connect the controller before previewing its speaker."));
         if (device.DeviceType is not (InputDeviceType.DS4 or InputDeviceType.DualSense))
             throw new BatteryAlertUnavailableException(global::DS4Windows.UiText.Get("This controller does not have a supported built-in speaker route. Select a headset or Windows audio device."));
-        if (!Global.DualSenseEnableSpeakerOutput[slot] || Global.DualSenseHeadsetOnlyAudio[slot])
+        if (!Global.DualSenseEnableSpeakerOutput[slot] || hub.IsControllerHeadsetOnlyAudio(slot))
             throw new BatteryAlertUnavailableException(global::DS4Windows.UiText.Get("Enable 'Stream audio to controller' in Profile Editor > Advanced > Audio and turn off 'Headset only'."));
         if (device is DualSenseDevice usb && usb.ConnectionType == ConnectionType.USB)
         {

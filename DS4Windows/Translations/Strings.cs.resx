@@ -6297,4 +6297,7 @@ Zálohování : </value>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Mrtvá zóna a</value>
   </data>
+  <data name="UI_F9F5196A5ACCAE02" xml:space="preserve">
+    <value>Podle připojení sluchátek</value>
+  </data>
 </root>

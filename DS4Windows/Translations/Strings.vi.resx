@@ -6302,4 +6302,7 @@ Backup : </value>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Khu vực chết và</value>
   </data>
+  <data name="UI_F9F5196A5ACCAE02" xml:space="preserve">
+    <value>Theo kết nối tai nghe</value>
+  </data>
 </root>

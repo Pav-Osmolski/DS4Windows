@@ -76,7 +76,7 @@ public sealed class ControllerOverviewAudioTests
         var xml = LoadOverview();
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
-        foreach (string binding in new[] { "SpeakerOutputEnabled", "HeadsetOnlyAudio",
+        foreach (string binding in new[] { "SpeakerOutputEnabled", "ControllerAudioRoute",
             "SpeakerVolumePercent", "HeadphoneVolumePercent", "MicrophoneInputEnabled",
             "MicrophoneVolumePercent", "SpeakerCompressionIndex", "SpeakerBassBoostDb",
             "MicrophoneNoiseSuppressionIndex", "ControllerAudioSourceId" })

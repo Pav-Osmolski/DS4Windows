@@ -6322,4 +6322,7 @@ Untuk backup: </value>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Zona mati dan</value>
   </data>
+  <data name="UI_F9F5196A5ACCAE02" xml:space="preserve">
+    <value>Ikuti sambungan headphone</value>
+  </data>
 </root>

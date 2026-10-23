@@ -5,6 +5,23 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+## [5.0.46](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.46) - 2026-10-23
+
+### Controller audio
+
+- Add **Audio output > Follow headphone jack** in Overview and **Profile Editor > Advanced > Audio**. Automatically switch to headphones when connected and return to the controller speaker when unplugged. Keep manual speaker/headset choices and existing profiles unchanged. Supports managed DualSense/Edge USB and Bluetooth audio and genuine DualShock 4 Bluetooth audio; Windows manages DualShock 4 USB audio. An active Audio Haptics app-audio override keeps its own routing choice. Thanks to [@Jobima1st](https://github.com/Jobima1st) for [issue #74](https://github.com/Pav-Osmolski/DS4Windows/issues/74) and [upstream #79](https://github.com/hbashton/DS4Windows/issues/79).
+- Translate the new routing choice in all 24 language packs and preserve it when saving/reopening profiles.
+
+### Virtual battery status
+
+- Forward reliable physical battery and charging state to virtual DualShock 4, DualSense/Edge and Switch 2 Pro through the paired VIIPER **0.1.13** status API. Preserve native DualSense status passthrough and Switch 2 measured-voltage reporting. Values follow each virtual protocol's battery bands; Xbox outputs remain wired USB controllers. Thanks to [@Jobima1st](https://github.com/Jobima1st) for [issue #75](https://github.com/Pav-Osmolski/DS4Windows/issues/75) and [upstream #111](https://github.com/hbashton/DS4Windows/issues/111).
+- Clarify that a browser tester's factory build date describes emulated controller firmware, not the DS4Windows application build date.
+- Include VIIPER's reviewed management-reply completion and split UTF-8 fixes. These preserve the server wire format and do not establish a root cause for the reporter's intermittent connection resets. Thanks to [@cns00](https://github.com/cns00) for the diagnostic reports in [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66) and [upstream #153](https://github.com/hbashton/DS4Windows/issues/153).
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating so the paired backend can be replaced. USB/IP remains **0.9.8.1**; no driver version change is required. The maintainer successfully tested the paired preview. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
 ## [5.0.45](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.45) - 2026-10-23
 
 ### Appearance and languages
