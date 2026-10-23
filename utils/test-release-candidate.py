@@ -5,7 +5,9 @@ import importlib.util
 import json
 from pathlib import Path
 import tempfile
+from types import SimpleNamespace
 import unittest
+from unittest.mock import patch
 import zipfile
 
 spec=importlib.util.spec_from_file_location('candidate',Path(__file__).with_name('release-candidate.py'))
@@ -100,6 +102,34 @@ class CandidateTests(unittest.TestCase):
                 for a in record['assets']:z.write(root/a['name'],a['name'])
             with self.assertRaises(ValueError):c.extract_candidate(archive,dest,record,'sha256:'+c.digest(archive).lower())
             self.assertEqual([],list(dest.iterdir()));self.assertFalse((root/'escape.txt').exists())
+
+    def test_full_read_only_retrieval_binds_real_api_shapes_and_original_bytes(self):
+        with tempfile.TemporaryDirectory() as t:
+            root=Path(t);record=self.fixtures(root);archive=root/'original-artifact.zip'
+            with zipfile.ZipFile(archive,'w') as z:
+                z.writestr(c.RECEIPT,json.dumps(record))
+                for asset in record['assets']:z.write(root/asset['name'],asset['name'])
+            run,jobs=self.run_and_jobs();run['run_attempt']=2
+            artifact={'id':987,'name':f'DS4Windows_Release_Candidate_{COMMIT}_2','expired':False,
+                      'size_in_bytes':archive.stat().st_size,'digest':'sha256:'+c.digest(archive).lower()}
+            def github(path):
+                if path.endswith('/123'):return run
+                if '/jobs?' in path:return {'jobs':jobs}
+                if '/artifacts?' in path:return {'artifacts':[artifact]}
+                self.fail('Unexpected API path: '+path)
+            def download(command,**kwargs):
+                self.assertEqual(['gh','api',f'repos/{c.REPOSITORY}/actions/artifacts/987/zip'],command)
+                kwargs['stdout'].write(archive.read_bytes())
+            args=SimpleNamespace(run_id='123',output=root/'retrieved')
+            with patch.object(c,'api',side_effect=github),patch.object(c.subprocess,'run',side_effect=download):
+                actual=c.obtain(args,COMMIT,'5.0.45')
+            self.assertEqual(987,actual['artifactId'])
+            for asset in record['assets']:
+                self.assertEqual((root/asset['name']).read_bytes(),(args.output/asset['name']).read_bytes())
+            artifact['expired']=True;args.output=root/'expired'
+            with patch.object(c,'api',side_effect=github),patch.object(c.subprocess,'run') as network:
+                with self.assertRaises(ValueError):c.obtain(args,COMMIT,'5.0.45')
+                network.assert_not_called();self.assertFalse(args.output.exists())
 
 
 if __name__=='__main__':unittest.main()
