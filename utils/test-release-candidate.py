@@ -103,6 +103,26 @@ class CandidateTests(unittest.TestCase):
             with self.assertRaises(ValueError):c.extract_candidate(archive,dest,record,'sha256:'+c.digest(archive).lower())
             self.assertEqual([],list(dest.iterdir()));self.assertFalse((root/'escape.txt').exists())
 
+    def test_promotion_handoff_exports_verified_provenance_and_extracts_payload(self):
+        with tempfile.TemporaryDirectory() as t:
+            root=Path(t);output=root/'candidate';output.mkdir()
+            record=self.fixtures(output);record['artifactId']=987
+            envfile=root/'github-env'
+            args=SimpleNamespace(run_id='123',tag='5.0.45',output=output)
+            with patch.dict(c.os.environ,{'GITHUB_REPOSITORY':c.REPOSITORY,
+                    'GITHUB_EVENT_NAME':'workflow_dispatch','GITHUB_SHA':COMMIT,'GITHUB_ENV':str(envfile)}), \
+                    patch.object(c,'api',return_value={'sha':COMMIT}), \
+                    patch.object(c,'obtain',return_value=record) as obtain:
+                c.fetch(args)
+            obtain.assert_called_once_with(args,COMMIT,'5.0.45')
+            exports=dict(line.split('=',1) for line in envfile.read_text(encoding='utf-8').splitlines())
+            self.assertEqual('2',exports['CANDIDATE_RUN_ATTEMPT'])
+            self.assertEqual('987',exports['CANDIDATE_ARTIFACT_ID'])
+            self.assertEqual('123',exports['CANDIDATE_RUN_ID'])
+            self.assertEqual(b'synthetic-backend',(Path(exports['CANDIDATE_PUBLISH_ROOT'])/'viiper.exe').read_bytes())
+            for asset in record['assets']:
+                self.assertEqual(asset['sha256'],c.digest(output/asset['name']))
+
     def test_full_read_only_retrieval_binds_real_api_shapes_and_original_bytes(self):
         with tempfile.TemporaryDirectory() as t:
             root=Path(t);record=self.fixtures(root);archive=root/'original-artifact.zip'

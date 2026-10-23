@@ -185,7 +185,7 @@ def fetch(args):
     exports={'VERSION':args.tag,'BINARY_VERSION':record['binaryVersion'],
              'RELEASE_ASSET':str(portable.resolve()),'INSTALLER_ASSET':str((args.output/f"DS4Windows_{record['binaryVersion']}_Setup_x64.exe").resolve()),
              'CANDIDATE_PUBLISH_ROOT':str(publish.resolve()),'CANDIDATE_RUN_ID':args.run_id,
-             'CANDIDATE_RUN_ATTEMPT':str(attempt),'CANDIDATE_ARTIFACT_ID':str(matches[0]['id'])}
+             'CANDIDATE_RUN_ATTEMPT':str(record['runAttempt']),'CANDIDATE_ARTIFACT_ID':str(record['artifactId'])}
     with Path(os.environ['GITHUB_ENV']).open('a',encoding='utf-8') as env:
         for key,value in exports.items():
             require('\n' not in value and '\r' not in value, 'Unsafe output metadata')
