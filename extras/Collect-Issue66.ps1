@@ -59,6 +59,7 @@ function Capture-Native([string]$Name, [string]$Exe, [string[]]$Arguments) {
         if (-not $p.WaitForExit(30000)) { $p.Kill(); throw 'Metadata command exceeded deadline.' }
         $text = $stdout.GetAwaiter().GetResult() + $stderr.GetAwaiter().GetResult()
         [IO.File]::WriteAllText((Join-Path $evidence $Name), $text, [Text.UTF8Encoding]::new($false))
+        if ($p.ExitCode -ne 0) { $gaps.Add($Name + ': command exit ' + $p.ExitCode) }
         return $p.ExitCode
     } catch { $gaps.Add($Name + ': ' + $_.Exception.GetType().Name); return -1 }
 }
@@ -75,7 +76,7 @@ function Save-Snapshot([string]$Suffix) {
     } catch { $gaps.Add('Snapshot ' + $Suffix + ': ' + $_.Exception.GetType().Name) }
 }
 function Run-Probes([string]$Label, [int]$Port) {
-    $phaseStart = [DateTimeOffset]::UtcNow
+    $phaseStart = [DateTimeOffset]::UtcNow.ToString('o')
     try {
         $resultPath = Join-Path $data 'probe-results.json'
         if (Test-Path -LiteralPath $resultPath) { Remove-Item -LiteralPath $resultPath }
@@ -84,7 +85,7 @@ function Run-Probes([string]$Label, [int]$Port) {
         Copy-Item -LiteralPath $resultPath -Destination (Join-Path $evidence ($Label + '-dotnet.json'))
     } catch { $gaps.Add($Label + ' .NET: ' + $_.Exception.GetType().Name) }
     $goExit = Capture-Native ($Label + '-go.json') (Join-Path $root 'extras\VIIPER-API-PROBE.exe') @('--key-file',(Join-Path $data 'viiper.key.txt'),'--port',"$Port",'--count','20')
-    $outcomes.Add([ordered]@{ phase=$Label; port=$Port; startedUtc=$phaseStart; finishedUtc=[DateTimeOffset]::UtcNow; goExitCode=$goExit })
+    $outcomes.Add([ordered]@{ phase=$Label; port=$Port; startedUtc=$phaseStart; finishedUtc=[DateTimeOffset]::UtcNow.ToString('o'); goExitCode=$goExit })
     Write-Json $outcomes.ToArray() 'phases.json'
 }
 
@@ -104,7 +105,7 @@ try {
     Write-Host 'Collecting issue #66 diagnostics. Keep this window open.'
     Write-Host 'No driver, firewall, antivirus or power settings will be changed.'
     Write-Host 'The ZIP includes diagnostic logs and Windows network/system metadata. Share it privately.'
-    Write-Json ([ordered]@{ session=$sessionId; startedUtc=[DateTimeOffset]::UtcNow; utcOffset=[DateTimeOffset]::Now.Offset.ToString(); os=[Environment]::OSVersion.VersionString;
+    Write-Json ([ordered]@{ session=$sessionId; startedUtc=[DateTimeOffset]::UtcNow.ToString('o'); utcOffset=[DateTimeOffset]::Now.Offset.ToString(); os=[Environment]::OSVersion.VersionString;
         elevated=([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator);
         processId=$PID; applicationVersion=[Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $root 'DS4Windows.exe')).ProductVersion }) 'session.json'
     Write-Json @(Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $root 'DS4Windows.exe'),(Join-Path $root 'DS4Windows.dll'),(Join-Path $root 'viiper.exe'),(Join-Path $root 'extras\VIIPER-API-PROBE.exe') |
@@ -118,7 +119,7 @@ try {
     # Diagnostic event metadata only; no NDIS/packet-capture provider or payload capture.
     # Do not request Packet/PiiPresent keywords; restrict to connection diagnostics. Unique bounded session, no global netsh trace.
     $providers = Join-Path $private 'providers.txt'
-    [IO.File]::WriteAllLines($providers, @('Microsoft-Windows-TCPIP 0x000001170040068F 5','Microsoft-Windows-WFP 0x0000011F00000001 5'), [Text.Encoding]::ASCII)
+    [IO.File]::WriteAllLines($providers, @('{2F07E2EE-15DB-40F1-90EF-9D7BA282188A} 0x000001170040068F 5','{0C478C5B-0351-41B1-8C58-4A6737DA32E3} 0x0000011F00000001 5'), [Text.Encoding]::ASCII)
     $exit = Capture-Native 'trace-start.txt' 'logman.exe' @('create','trace',$traceName,'-ets','-o',(Join-Path $evidence 'tcpip.etl'),'-f','bincirc','-max','64','-rf','00:08:00',
         '-pf',$providers)
     $traceActive = $exit -eq 0
@@ -192,7 +193,7 @@ finally {
                 }
             } catch { $gaps.Add('Log copy ' + $name + ': ' + $_.Exception.GetType().Name) }
         }
-        Write-Json ([ordered]@{ finishedUtc=[DateTimeOffset]::UtcNow; gaps=$gaps.ToArray(); phaseCount=$outcomes.Count; traceStarted=$traceActive }) 'completion.json'
+        Write-Json ([ordered]@{ finishedUtc=[DateTimeOffset]::UtcNow.ToString('o'); gaps=$gaps.ToArray(); phaseCount=$outcomes.Count; traceStarted=$traceActive }) 'completion.json'
         [IO.File]::WriteAllText((Join-Path $evidence 'READ-ME.txt'), "Issue #66 private diagnostic bundle. Includes Windows network/filter metadata and device/system logs, which can contain account paths and network endpoints. No key files or packet payload capture are included. See completion.json for unavailable evidence. A successful run does not establish resolution.")
         # Archive only the explicit evidence directory, never the private work/key directory.
         $zip = Join-Path (Split-Path $session -Parent) ($sessionId + '.zip')

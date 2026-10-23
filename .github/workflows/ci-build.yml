@@ -226,6 +226,11 @@ jobs:
       - name: Package ${{ matrix.platform }}
         run: python .\utils\post-build.py .\bin\${{ matrix.platform }}\Release\output . ${{ env.VERSION }}
 
+      - name: Verify issue 66 collector with Windows TCP tracing
+        if: github.ref == 'refs/heads/fix/issue66-comprehensive-diagnostics'
+        shell: pwsh
+        run: .\utils\test-issue66-collector.ps1 -PreviewRoot '.\bin\x64\Release\DS4Windows'
+
       - name: Verify packaged translations from different launch directories
         shell: pwsh
         run: |

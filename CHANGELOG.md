@@ -10,6 +10,12 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Use cached Python 3.12 for packaging and avoid compressing package archives again during artifact upload. Clarify the legacy RC4.5.5 upgrade-test name and also verify upgrades from pinned numeric stable 5.0.43, preserving profiles across repair/uninstall.
 - Document issue classifications, distinct closure outcomes and genuine dependencies separately from general cross-references.
 
+## [5.0.44-issue66-connection-preview20261023](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44-issue66-connection-preview20261023) - 2026-10-23
+
+- Testing-only connection diagnostics for [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), also tracked in [upstream issue #153](https://github.com/hbashton/DS4Windows/issues/153). Thanks to [@cns00](https://github.com/cns00) for paired successful/failed logs and the new recording. Both independent clients reproduced connection resets; this is **not a confirmed fix**. Stable 5.0.44 remains Latest.
+- Test bounded graceful send shutdown after complete VIIPER management replies. Keep the original close mode for controlled comparisons; streaming connections, authentication, encrypted framing and state-changing request retry policy remain unchanged.
+- **Log > Collect VIIPER diagnostics** compares both clients in original/graceful/graceful/original phases on one isolated port, checks the live server before and after a reproduction window, and records Windows TCP/filtering metadata, relevant system events and driver/power/security snapshots. Package one private ZIP with matching client/server traces, phase timestamps and explicit unavailable-evidence reporting. Do not include authentication keys or change drivers, power, firewall or security settings.
+
 ## [5.0.44-issue66-server-trace-preview20261023](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44-issue66-server-trace-preview20261023) - 2026-10-23
 
 - Second diagnostic pre-release for [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), also reported in [upstream issue #153](https://github.com/hbashton/DS4Windows/issues/153). Thanks to [@cns00](https://github.com/cns00) for the additional logs, video and intermittent successful runs. This is **not a confirmed fix**; stable 5.0.44 remains Latest.

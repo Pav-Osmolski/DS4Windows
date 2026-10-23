@@ -1966,8 +1966,10 @@ Suspend support not enabled.", true);
                 "2. Fully exit DS4Windows and VIIPER. If VIIPER has no tray icon and remains running, " +
                 "end viiper.exe in Task Manager. " +
                 "Reopen DS4Windows normally; do not launch VIIPER separately.\n\n" +
-                "3. Reproduce the problem, then use Open log folder. Share viiper-debug.log " +
-                "together with ds4windows_log.txt. The preceding capture is kept as viiper-debug-previous.log.\n\n" +
+                "3. Click Collect VIIPER diagnostics and allow the administrator prompt. " +
+                "Follow the diagnostic window and try Stop > Start three times when asked. " +
+                "Share the single ZIP created in the preview folder\'s Diagnostics directory privately. " +
+                "It contains network/system metadata and logs, but no authentication keys.\n\n" +
                 "4. Turn the option off and restart both applications after testing. " +
                 "Changing it does not interrupt the current session.\n\n" +
                 "Installed copies may ask for Windows permission to start the diagnostic session. " +
