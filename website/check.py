@@ -2,6 +2,7 @@
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1] / ".pages/site"
@@ -30,12 +31,26 @@ class Page(HTMLParser):
 
 
 def main():
+    errors = []
+    verification_files = set()
+    static = Path(__file__).resolve().parent / "static"
+    for source in static.glob("google*.html"):
+        target = ROOT / source.name
+        expected = f"google-site-verification: {source.name}".encode("ascii")
+        if (not re.fullmatch(r"google[0-9a-f]+\.html", source.name)
+                or source.read_bytes().strip() != expected):
+            errors.append(f"Invalid Google verification file: {source.name}")
+        if not target.is_file() or target.read_bytes() != source.read_bytes():
+            errors.append(f"Missing or changed verification output: {source.name}")
+        verification_files.add(target.resolve())
     pages = {}
     for path in ROOT.rglob("*.html"):
+        # Google's exact plain-text HTML files intentionally have no page title.
+        if path.resolve() in verification_files:
+            continue
         page = Page()
         page.feed(path.read_text(encoding="utf-8"))
         pages[path.resolve()] = page
-    errors = []
     checked = 0
     for source, page in pages.items():
         if page.titles != 1 or page.missing_alt:
