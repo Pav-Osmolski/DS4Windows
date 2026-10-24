@@ -118,7 +118,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     ControllerRuntimeLaneState.NotRequired,
                     ControllerRuntimeLaneState.NotRequired,
                     ControllerRuntimeLaneState.NotRequired,
-                    "virtual controller"));
+                    global::DS4Windows.UiText.Get("virtual controller")));
 
         public CompositeDeviceModel SelectedController
         {
@@ -161,6 +161,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler HapticStrengthPercentChanged;
         public event EventHandler SpeakerOutputEnabledChanged;
         public event EventHandler HeadsetOnlyAudioChanged;
+        public event EventHandler ControllerAudioRouteChanged;
         public event EventHandler ControllerAudioSourceChoicesChanged;
         public event EventHandler ControllerAudioSourceIdChanged;
         public event EventHandler AudioHapticsSpeakerOverrideActiveChanged;
@@ -228,7 +229,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     return new ControllerMicrophoneUiState(
                         ControllerMicrophoneUiStatus.RequiresCompatibleController,
                         canEnable: false,
-                        "Select a compatible PlayStation controller to configure microphone input.");
+                        global::DS4Windows.UiText.Get("Select a compatible PlayStation controller to configure microphone input."));
                 }
 
                 int deviceIndex = selectedController.DevIndex;
@@ -391,7 +392,25 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 int deviceIndex = selectedController.DevIndex;
                 Global.DualSenseHeadsetOnlyAudio[deviceIndex] = value;
                 HeadsetOnlyAudioChanged?.Invoke(this, EventArgs.Empty);
+                ControllerAudioRouteChanged?.Invoke(this, EventArgs.Empty);
                 RaiseQuickProfileSettingChanged(deviceIndex);
+            }
+        }
+
+        public int ControllerAudioRoute
+        {
+            get => HasValidSelectedDevice ? ControllerAudioRoutingPolicy.Selection(
+                Global.DualSenseHeadsetOnlyAudio[selectedController.DevIndex],
+                Global.DualSenseFollowHeadphoneJack[selectedController.DevIndex]) : 0;
+            set
+            {
+                if (!HasEditableControllerAudio || value < 0 || value > 2 || ControllerAudioRoute == value) return;
+                int slot = selectedController.DevIndex;
+                Global.DualSenseHeadsetOnlyAudio[slot] = value == 1;
+                Global.DualSenseFollowHeadphoneJack[slot] = value == 2;
+                ControllerAudioRouteChanged?.Invoke(this, EventArgs.Empty);
+                HeadsetOnlyAudioChanged?.Invoke(this, EventArgs.Empty);
+                RaiseQuickProfileSettingChanged(slot);
             }
         }
 
@@ -637,6 +656,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             HapticStrengthPercentChanged?.Invoke(this, EventArgs.Empty);
             SpeakerOutputEnabledChanged?.Invoke(this, EventArgs.Empty);
             HeadsetOnlyAudioChanged?.Invoke(this, EventArgs.Empty);
+            ControllerAudioRouteChanged?.Invoke(this, EventArgs.Empty);
             if (refreshControllerAudioChoices)
             {
                 ControllerAudioSourceChoicesChanged?.Invoke(this,
@@ -736,6 +756,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 SpeakerOutputEnabledChanged?.Invoke(this, EventArgs.Empty);
             }
+            if (previous.ControllerAudioRoute != snapshot.ControllerAudioRoute)
+                ControllerAudioRouteChanged?.Invoke(this, EventArgs.Empty);
             if (previous.HeadsetOnlyAudio != snapshot.HeadsetOnlyAudio)
             {
                 HeadsetOnlyAudioChanged?.Invoke(this, EventArgs.Empty);
@@ -871,13 +893,13 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                             ControllerRuntimeLaneState.NotRequired,
                             ControllerRuntimeLaneState.NotRequired,
                             ControllerRuntimeLaneState.NotRequired,
-                            "virtual controller"));
+                            global::DS4Windows.UiText.Get("virtual controller")));
 
             return new OverviewRuntimeSnapshot(CurrentProfileName,
                 SelectedControllerConnection, SelectedControllerLatency,
                 SelectedControllerBattery, SelectedOutputController,
                 HapticStrengthPercent, SpeakerOutputEnabled,
-                HeadsetOnlyAudio, ControllerAudioSourceId,
+                HeadsetOnlyAudio, ControllerAudioRoute, ControllerAudioSourceId,
                 AudioHapticsSpeakerOverrideActive, MicrophoneInputEnabled,
                 SpeakerVolumePercent,
                 HeadphoneVolumePercent, SpeakerCompressionIndex,
@@ -890,7 +912,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             public OverviewRuntimeSnapshot(string profileName,
                 string connection, string latency, string battery,
                 OutContType outputController, int hapticStrength,
-                bool speakerEnabled, bool headsetOnlyAudio,
+                bool speakerEnabled, bool headsetOnlyAudio, int controllerAudioRoute,
                 string controllerAudioSourceId,
                 bool audioHapticsSpeakerOverrideActive,
                 bool microphoneEnabled,
@@ -907,6 +929,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 HapticStrength = hapticStrength;
                 SpeakerEnabled = speakerEnabled;
                 HeadsetOnlyAudio = headsetOnlyAudio;
+                ControllerAudioRoute = controllerAudioRoute;
                 ControllerAudioSourceId = controllerAudioSourceId ??
                     string.Empty;
                 AudioHapticsSpeakerOverrideActive =
@@ -929,6 +952,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             public int HapticStrength { get; }
             public bool SpeakerEnabled { get; }
             public bool HeadsetOnlyAudio { get; }
+            public int ControllerAudioRoute { get; }
             public string ControllerAudioSourceId { get; }
             public bool AudioHapticsSpeakerOverrideActive { get; }
             public bool MicrophoneEnabled { get; }
@@ -1114,7 +1138,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
         public event EventHandler ProfileEditorNavigationIndexChanged;
 
-        private string profileEditorSectionTitle = "Button Mapping";
+        private string profileEditorSectionTitle = global::DS4Windows.UiText.Get("Button Mapping");
 
         public string ProfileEditorSectionTitle
         {
@@ -1129,7 +1153,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler ProfileEditorSectionTitleChanged;
 
         private string profileEditorSectionDescription =
-            "Assign controller buttons, sticks, touch gestures, and shortcuts.";
+            global::DS4Windows.UiText.Get("Assign controller buttons, sticks, touch gestures, and shortcuts.");
 
         public string ProfileEditorSectionDescription
         {

@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:schema id="root">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xs:element name="root" ns1:IsDataSet="true">
+      <xs:complexType>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="metadata">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" />
+              </xs:sequence>
+              <xs:attribute name="name" use="required" type="xsd:string" />
+              <xs:attribute name="type" type="xsd:string" />
+              <xs:attribute name="mimetype" type="xsd:string" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="assembly">
+            <xs:complexType>
+              <xs:attribute name="alias" type="xsd:string" />
+              <xs:attribute name="name" type="xsd:string" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="data">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+              <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+              <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="resheader">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" />
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionExists" xml:space="preserve">
+    <value>Název této akce již existuje</value>
+  </data>
+  <data name="AddingToList" xml:space="preserve">
+    <value>Přidat do seznamu...</value>
+  </data>
+  <data name="AddPrograms" xml:space="preserve">
+    <value>Přidat programy</value>
+  </data>
+  <data name="ALocactionNeeded" xml:space="preserve">
+    <value>Místo musí být vybráno pro pokračování</value>
+  </data>
+  <data name="AlwaysRainbow" xml:space="preserve">
+    <value>Vždy v módě Rainbow</value>
+  </data>
+  <data name="AssignProfile" xml:space="preserve">
+    <value>Přidělení kontroloru *číslo*</value>
+  </data>
+  <data name="Battery" xml:space="preserve">
+    <value>Počet baterií: * číslo* %</value>
+  </data>
+  <data name="BestUsedRightSide" xml:space="preserve">
+    <value>Nejlépe se používá s pravou stranou jako funkce myši</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="BTPollRate" xml:space="preserve">
+    <value>Určuje rychlost průzkumu použitou pro hardwarové zařízení DS4 při připojení přes Bluetooth. (Použije se pro ukládání profilu)</value>
+  </data>
+  <data name="CannotMoveFiles" xml:space="preserve">
+    <value>Nelze přesunout soubory na nové místo, Přejmenujte složku DS4Tool na "DS4Windows"</value>
+  </data>
+  <data name="CannotWriteHere" xml:space="preserve">
+    <value>Nelze psát v aktuálním umístění. Kopírování nastavení na appdata?</value>
+  </data>
+  <data name="ChargeController" xml:space="preserve">
+    <value>Nabíjejte baterii</value>
+  </data>
+  <data name="Charged" xml:space="preserve">
+    <value>Nabíjení</value>
+  </data>
+  <data name="Charging" xml:space="preserve">
+    <value>Nabíjení: * číslo* %</value>
+  </data>
+  <data name="CheckBattery" xml:space="preserve">
+    <value>Zkontrolujte baterii</value>
+  </data>
+  <data name="CloseConfirm" xml:space="preserve">
+    <value>Tím se odpojí všechny vaše připojené ovladače.</value>
+  </data>
+  <data name="CloseDS4W" xml:space="preserve">
+    <value>Jak na DS4Windows?</value>
+  </data>
+  <data name="CloseMinimize" xml:space="preserve">
+    <value>Zavření hlavního okna minimalizuje aplikaci.</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Barva</value>
+  </data>
+  <data name="ColorByBattery" xml:space="preserve">
+    <value>Barva baterie %</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Potvrďte...</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>Propojení...</value>
+  </data>
+  <data name="ContextEdit" xml:space="preserve">
+    <value>Edit Profile for Controller *číslo*</value>
+  </data>
+  <data name="ContextNew" xml:space="preserve">
+    <value>Vytvořte profil pro ovladače *číslo*</value>
+  </data>
+  <data name="ControllerWasRemoved" xml:space="preserve">
+    <value>Ovládací prvek *Adresa Mac* byla odstraněna nebo ztraceno připojení</value>
+  </data>
+  <data name="CopyComplete" xml:space="preserve">
+    <value>Kompletní kopírování, prosím restartujte DS4Windows a odstraňte nastavení z adresáře programů</value>
+  </data>
+  <data name="CopyFullColor" xml:space="preserve">
+    <value>Klikněte pro kopírování celé barvy</value>
+  </data>
+  <data name="CouldNotOpenDS4" xml:space="preserve">
+    <value>Upozornění: Nelze otevřít DS4 *Mac adresu* výhradně.</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>den</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dny</value>
+  </data>
+  <data name="DeleteProfile" xml:space="preserve">
+    <value>Odstranění profilu ?</value>
+  </data>
+  <data name="DimByBattery" xml:space="preserve">
+    <value>Dim podle baterie %</value>
+  </data>
+  <data name="DisconnectBT" xml:space="preserve">
+    <value>Odstranění BT</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Odpojený</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Stáhnout *číslo *%</value>
+  </data>
+  <data name="DownloadVersion" xml:space="preserve">
+    <value>Download verze *číslo* nyní?</value>
+  </data>
+  <data name="DownText" xml:space="preserve">
+    <value>dolů</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DS4Update" xml:space="preserve">
+    <value>DS4Windows Aktualizace je k dispozici!</value>
+  </data>
+  <data name="DS4WindowsCannotEditHere" xml:space="preserve">
+    <value>DS4Windows zde nemůže upravovat nastavení, toto bude nyní uzavřeno</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="FallBack" xml:space="preserve">
+    <value>Pád zpět</value>
+  </data>
+  <data name="FallBackTo" xml:space="preserve">
+    <value>Zpět na tlačítko *</value>
+  </data>
+  <data name="FifthMouseDown" xml:space="preserve">
+    <value>5. myš tlačítko dolů</value>
+  </data>
+  <data name="FifthMouseUp" xml:space="preserve">
+    <value>5. myš tlačítko nahoru</value>
+  </data>
+  <data name="FlashAtTip" xml:space="preserve">
+    <value>Klikněte na změnu barvy blesku. Černá = výchozí barva</value>
+  </data>
+  <data name="FlushHID" xml:space="preserve">
+    <value>Flush skrýt</value>
+  </data>
+  <data name="FlushHIDTip" xml:space="preserve">
+    <value>Flush HID po každém čtení</value>
+  </data>
+  <data name="FoundController" xml:space="preserve">
+    <value>Nalezený kontrolér :</value>
+  </data>
+  <data name="FourthMouseDown" xml:space="preserve">
+    <value>4. myš tlačítko dolů</value>
+  </data>
+  <data name="FourthMouseUp" xml:space="preserve">
+    <value>4. myš tlačítko nahoru</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Plná</value>
+  </data>
+  <data name="GyroReadout" xml:space="preserve">
+    <value>Klikněte pro přečtení Sixaxis Gyro</value>
+  </data>
+  <data name="GyroTriggerBehavior" xml:space="preserve">
+    <value>Zkontrolujte, zda je gyro aktivní, když je spouštěč aktivní. Zrušte kontrolu, abyste deaktivovali gyro, když je spouštěč aktivní.</value>
+  </data>
+  <data name="GyroX" xml:space="preserve">
+    <value>GyroX, levý a pravý svah</value>
+  </data>
+  <data name="GyroY" xml:space="preserve">
+    <value>GyroY, vzadu a dopředu</value>
+  </data>
+  <data name="GyroZ" xml:space="preserve">
+    <value>GyroZ, nahoře a dolů</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>hodinu</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>hodiny</value>
+  </data>
+  <data name="HoverOverItems" xml:space="preserve">
+    <value>Přejít na položky pro zobrazení popisu nebo více o</value>
+  </data>
+  <data name="IfRemovingDS4Windows" xml:space="preserve">
+    <value>Pokud odinstalujete DS4Windows, můžete odstranit nastavení následujícím odkazem profilu složky</value>
+  </data>
+  <data name="InputDelay" xml:space="preserve">
+    <value>Interval pozorovaného fyzického výkazu: {0:0.00} ms</value>
+  </data>
+  <data name="InstallComplete" xml:space="preserve">
+    <value>Kompletní instalace</value>
+  </data>
+  <data name="InstallDriver" xml:space="preserve">
+    <value>Instalace řidičů zde</value>
+  </data>
+  <data name="InstallFailed" xml:space="preserve">
+    <value>Instalace se nezdařila, prosím obnovte</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Instalace...</value>
+  </data>
+  <data name="Jitter" xml:space="preserve">
+    <value>Použijte Sixaxis k výpočtu pohybu dotykového panelu</value>
+  </data>
+  <data name="KeepThisSize" xml:space="preserve">
+    <value>Udržujte tuto velikost okna po zavření</value>
+  </data>
+  <data name="LanguagePackApplyRestartRequired" xml:space="preserve">
+    <value>Změna jazykového balíčku nabude účinku po restartování aplikace DS4Windows.</value>
+  </data>
+  <data name="LatencyNotOverTen" xml:space="preserve">
+    <value>latence ovládacího prvku *číslo* je nyní pod 10 ms</value>
+  </data>
+  <data name="LatencyOverTen" xml:space="preserve">
+    <value>latence ovládacího prvku {0} přes 10 ms ({1} ms)</value>
+  </data>
+  <data name="LaunchProgram" xml:space="preserve">
+    <value>Zahájení programu *</value>
+  </data>
+  <data name="LightByBatteryTip" xml:space="preserve">
+    <value>Také ztmavnou světlo, pokud je DS4 plně nabitý</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Nabíjení...</value>
+  </data>
+  <data name="LoadProfile" xml:space="preserve">
+    <value>Load * profil *</value>
+  </data>
+  <data name="Macro" xml:space="preserve">
+    <value>Makro</value>
+  </data>
+  <data name="MacroRecorded" xml:space="preserve">
+    <value>Makro nahrávky</value>
+  </data>
+  <data name="MakeNewProfile" xml:space="preserve">
+    <value>Vytvořte nový profil</value>
+  </data>
+  <data name="MultiAction" xml:space="preserve">
+    <value>Mutli-akční tlačítko</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Nový</value>
+  </data>
+  <data name="NoMacroRecorded" xml:space="preserve">
+    <value>Makro nebylo zaznamenáno</value>
+  </data>
+  <data name="noneProfile" xml:space="preserve">
+    <value>(Žádný z nich)</value>
+  </data>
+  <data name="NoneText" xml:space="preserve">
+    <value>žádný</value>
+  </data>
+  <data name="NoProfileLoaded" xml:space="preserve">
+    <value>Žádný profil nainstalován</value>
+  </data>
+  <data name="NotUsingProfile" xml:space="preserve">
+    <value>Ovladač {0} nepoužívá profil. Úroveň baterie je {1}%</value>
+  </data>
+  <data name="NotValid" xml:space="preserve">
+    <value>Není platný</value>
+  </data>
+  <data name="OpeningInstaller" xml:space="preserve">
+    <value>Otevření instalátoru</value>
+  </data>
+  <data name="OpenScpDriver" xml:space="preserve">
+    <value>Otevřete Nastavení &gt; Ovladače a vyberte možnost Instalace / Oprava VIIPER.</value>
+  </data>
+  <data name="OtherFileLocation" xml:space="preserve">
+    <value>Ostatní lokální soubory budou odstraněny.</value>
+  </data>
+  <data name="PleaseDownloadUpdater" xml:space="preserve">
+    <value>Stáhněte si aktualizátor nyní, vložte jej do složky programů a přejmenujte na DS4Updater.exe, pokud je na x86, pak znovu zkontrolujte aktualizaci. DS4Windows se pokusí otevřít stránku DS4Updater Release, když je toto okno zavřeno.</value>
+  </data>
+  <data name="PleaseImport" xml:space="preserve">
+    <value>Prosím, importujte nebo vytvořte profil</value>
+  </data>
+  <data name="PlusNewProfile" xml:space="preserve">
+    <value>Nový profil</value>
+  </data>
+  <data name="ProfileCannotRestore" xml:space="preserve">
+    <value>*Název profilu* nelze obnovit.</value>
+  </data>
+  <data name="ProfileFolderMoved" xml:space="preserve">
+    <value>Profilové složky Přemístěno do programového složky</value>
+  </data>
+  <data name="Programs" xml:space="preserve">
+    <value>programů</value>
+  </data>
+  <data name="QuickCharge" xml:space="preserve">
+    <value>Automatické vypnutí BT při připojení k USB</value>
+  </data>
+  <data name="QuitOtherPrograms" xml:space="preserve">
+    <value>Zavřete aplikace, které v současné době drží fyzický ovladač před povolením "Use HidHide to Prevent Double Input".</value>
+  </data>
+  <data name="RecordText" xml:space="preserve">
+    <value>Nahrát</value>
+  </data>
+  <data name="RightClickPresets" xml:space="preserve">
+    <value>Kliknutím vpravo nastavte přednastavení pro sadu ovládacích prvků</value>
+  </data>
+  <data name="RunAtStartup" xml:space="preserve">
+    <value>Řekne Windows spustit DS4Windows po přihlášení</value>
+  </data>
+  <data name="SaveRecordedMacro" xml:space="preserve">
+    <value>Zachránit nahrané makro?</value>
+  </data>
+  <data name="ScanCode" xml:space="preserve">
+    <value>Skenovací kód</value>
+  </data>
+  <data name="SearchingController" xml:space="preserve">
+    <value>Hledání kontrolorů...</value>
+  </data>
+  <data name="SelectActionTitle" xml:space="preserve">
+    <value>Vyberte akci pro *akce*</value>
+  </data>
+  <data name="SelectMacro" xml:space="preserve">
+    <value>Vyberte si makro</value>
+  </data>
+  <data name="SetRegularTrigger" xml:space="preserve">
+    <value>Pravidelný trigger</value>
+  </data>
+  <data name="SetUnloadTrigger" xml:space="preserve">
+    <value>Nastavení Unload Trigger</value>
+  </data>
+  <data name="Shortcuts" xml:space="preserve">
+    <value>Shortcuts</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrate" xml:space="preserve">
+    <value>Kalibrace emulace koleček sixaxis</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction1" xml:space="preserve">
+    <value>(1) Střed ovládacího prvku, podržte jej a stiskněte "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction2" xml:space="preserve">
+    <value>(2) Otočte do polohy 90° vlevo (nebo vpravo) a stiskněte "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction3" xml:space="preserve">
+    <value>(3) Otočte do polohy 90° vpravo (nebo vlevo) a stiskněte "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction" xml:space="preserve">
+    <value>Všechny body kalibrace jsou nastaveny, když se barva světla změní na zelenou. Při otáčení ovladače barva světla bliká, když je ovladač v bodě kalibrace.</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoControllerError" xml:space="preserve">
+    <value>Nemůžete kalibrovat hodnoty emulace volantu gyro (sixaxis) bez ovladače. Připojte ovladač přes Bluetooth nebo USB</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoneAxisError" xml:space="preserve">
+    <value>Volba osy emulace volantu Gyro je nastavena na NONE (emulace se nepoužívá). Před kalibrací sixaxis gyro emulace volantu vyberte možnost osy</value>
+  </data>
+  <data name="SixAxisReading" xml:space="preserve">
+    <value>Klikněte pro pokročilé čtení Sixaxis</value>
+  </data>
+  <data name="Starting" xml:space="preserve">
+    <value>Začíná...</value>
+  </data>
+  <data name="StartText" xml:space="preserve">
+    <value>Začátek</value>
+  </data>
+  <data name="Step1" xml:space="preserve">
+    <value>Krok 1: Instalace VIIPER a USB/IP</value>
+  </data>
+  <data name="StopHText" xml:space="preserve">
+    <value>Zastavte těžké</value>
+  </data>
+  <data name="StopLText" xml:space="preserve">
+    <value>Zastavte světlo</value>
+  </data>
+  <data name="StoppedDS4Windows" xml:space="preserve">
+    <value>Stáhnout DS4Windows</value>
+  </data>
+  <data name="StoppingDS4" xml:space="preserve">
+    <value>Zastavení vstupních ovladačů DS4</value>
+  </data>
+  <data name="StoppingX360" xml:space="preserve">
+    <value>Zastavení virtuálních ovladačů výstupu</value>
+  </data>
+  <data name="StopText" xml:space="preserve">
+    <value>Zastavit</value>
+  </data>
+  <data name="SwipeDown" xml:space="preserve">
+    <value>Swipe dolů</value>
+  </data>
+  <data name="SwipeLeft" xml:space="preserve">
+    <value>Šipka vlevo</value>
+  </data>
+  <data name="SwipeRight" xml:space="preserve">
+    <value>Šipka vpravo</value>
+  </data>
+  <data name="SwipeTouchpad" xml:space="preserve">
+    <value>Swipe Touchpad pro změnu profilu</value>
+  </data>
+  <data name="SwipeUp" xml:space="preserve">
+    <value>Swipe nahoru</value>
+  </data>
+  <data name="TapAndHold" xml:space="preserve">
+    <value>Klepněte a podržte, aby se přetáhlo, mírné zpoždění s jedním klepnutím</value>
+  </data>
+  <data name="TestHText" xml:space="preserve">
+    <value>Těžký test</value>
+  </data>
+  <data name="TestLText" xml:space="preserve">
+    <value>Testování světla</value>
+  </data>
+  <data name="TestText" xml:space="preserve">
+    <value>Testování</value>
+  </data>
+  <data name="TextDocs" xml:space="preserve">
+    <value>Textový dokument (*.txt)</value>
+  </data>
+  <data name="TiltDown" xml:space="preserve">
+    <value>Tilt dolů</value>
+  </data>
+  <data name="TiltLeft" xml:space="preserve">
+    <value>Tilt vlevo</value>
+  </data>
+  <data name="TiltRight" xml:space="preserve">
+    <value>Tilt vpravo</value>
+  </data>
+  <data name="TiltUp" xml:space="preserve">
+    <value>Tilt nahoru</value>
+  </data>
+  <data name="TouchpadMovementOff" xml:space="preserve">
+    <value>Touchpad Movement je nyní vypnutý</value>
+  </data>
+  <data name="TouchpadMovementOn" xml:space="preserve">
+    <value>Touchpad Movement je nyní na</value>
+  </data>
+  <data name="TouchpadOffTip" xml:space="preserve">
+    <value>Znovu aktivovat stisknutím PS+Touchpad</value>
+  </data>
+  <data name="TwoFingerSwipe" xml:space="preserve">
+    <value>2 prsty touchpad posuňte vlevo nebo vpravo</value>
+  </data>
+  <data name="TypeNewName" xml:space="preserve">
+    <value>Nový název zde</value>
+  </data>
+  <data name="TypeProfileName" xml:space="preserve">
+    <value>Název profilu zde</value>
+  </data>
+  <data name="UACTask" xml:space="preserve">
+    <value>Musíte spustit DS4Windows jako správce, abyste mohli tento režim aktivovat.</value>
+  </data>
+  <data name="Unassigned" xml:space="preserve">
+    <value>Nepřidělené</value>
+  </data>
+  <data name="UpText" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="UpToDate" xml:space="preserve">
+    <value>Aplikace DS4Windows je aktuální.</value>
+  </data>
+  <data name="UseControllerForMapping" xml:space="preserve">
+    <value>Můžete také použít ovladač pro změnu ovládacích prvků</value>
+  </data>
+  <data name="UsingExclusive" xml:space="preserve">
+    <value>Použití exkluzivního módu</value>
+  </data>
+  <data name="UsingProfile" xml:space="preserve">
+    <value>Ovládací prvek {0} používá profil "{1}". úroveň baterie je {2}%</value>
+  </data>
+  <data name="UsingShared" xml:space="preserve">
+    <value>Použití sdíleného módu</value>
+  </data>
+  <data name="UsingTPSwipes" xml:space="preserve">
+    <value>To vypne Touchpad jako myš</value>
+  </data>
+  <data name="ValidName" xml:space="preserve">
+    <value>Zadejte prosím platné jméno</value>
+  </data>
+  <data name="WaitMS" xml:space="preserve">
+    <value>Čekání *číslo *ms</value>
+  </data>
+  <data name="WillKeep" xml:space="preserve">
+    <value>Bude zůstat</value>
+  </data>
+  <data name="XMLFiles" xml:space="preserve">
+    <value>Soubory XML (*.xml)</value>
+  </data>
+  <data name="EnableTouchToggle" xml:space="preserve">
+    <value>Umožněte funkci myši touchpad pro přepínání pomocí PS + Touchpad Click.</value>
+  </data>
+  <data name="UdpServer" xml:space="preserve">
+    <value>Umožněte serveru UDP poslouchat adresu a port. Možnosti hodnoty adresy: 127.0.0.1 localhost pouze 10.0.0.0 všechny adresy 10 Specifické jméno hostitele nebo IP adresa.</value>
+  </data>
+  <data name="AutoProfilePathAndWindowTitleEditTip" xml:space="preserve">
+    <value>↑ ABC = Zápas na začátku řetězce (^) Ebay ABC$ = Zápas na konci řetězce ($) Ebay * ABC = Obsahuje řetězce (*)</value>
+  </data>
+  <data name="ShowAutoProfileDebugLogTip" xml:space="preserve">
+    <value>Pokud je zapnutá, pak stránka Log tab zobrazuje podrobné zprávy o událostech automatického profilu.</value>
+  </data>
+  <data name="MacroScanCodeTip" xml:space="preserve">
+    <value>Použití hodnoty kódu pro skenování kláves kláves na klávesnici v makru</value>
+  </data>
+  <data name="MacroRunOnReleaseTip" xml:space="preserve">
+    <value>Spusťte makro na uvolnění klíče</value>
+  </data>
+  <data name="MacroSynchronizedRunTip" xml:space="preserve">
+    <value>Spusťte více makr v synchronizovaném pořadí, pokud má stejný spouštěč několik makr (makro klávesnice dokončené před spuštěním makra uvolnění klíče)</value>
+  </data>
+  <data name="MacroRepeatTip" xml:space="preserve">
+    <value>Opakujte makro, zatímco je klíč spouště ponechán</value>
+  </data>
+  <data name="MacroKeepKeyStateTip" xml:space="preserve">
+    <value>Udržujte stav posledního klíče po dokončení spuštění makra (tj. pokud je klíč ponechán ve stavu dolů, není automaticky resetován zpět na výchozí stav)</value>
+  </data>
+  <data name="SquareStickRoundness" xml:space="preserve">
+    <value>Roundness of Square Stick rohů</value>
+  </data>
+  <data name="XMLActionsCorrupt" xml:space="preserve">
+    <value>Soubor Actions.xml byl poškozen. Začínáme od nuly.</value>
+  </data>
+  <data name="OscServer" xml:space="preserve">
+    <value>Povolení serveru OSC Poslouchejte port na všech adresách.</value>
+  </data>
+  <data name="UsingAutoTempProfile" xml:space="preserve">
+    <value>Ovládací prvek {0} používá profil temp "{1}"</value>
+  </data>
+  <data name="DinputOnly" xml:space="preserve">
+    <value>Vypnutí virtuálního ovladače</value>
+  </data>
+  <data name="OutContNotice" xml:space="preserve">
+    <value>Vyberte hry virtuálního ovladače by měly být detekovány. Uložit profil aplikovat změnu.</value>
+  </data>
+  <data name="TouchStarted" xml:space="preserve">
+    <value>Dotyk začíná</value>
+  </data>
+  <data name="TouchEnded" xml:space="preserve">
+    <value>Dotyk končí</value>
+  </data>
+  <data name="ProfileNameInvalid" xml:space="preserve">
+    <value>Zadejte platné jméno profilu bez zadního místa nebo bodu.</value>
+  </data>
+  <data name="ProfileRenameCollision" xml:space="preserve">
+    <value>Profil s tímto jménem již existuje. Vyberte jiné jméno. Profil nebyl změněn.</value>
+  </data>
+  <data name="ProfileRenameFailed" xml:space="preserve">
+    <value>Profil nelze přejmenovat. Jeho název se nezměnil. Zkontrolujte oprávnění souborů nebo zda jej používá jiný program.</value>
+  </data>
+  <data name="ResolvePendingProfileSave" xml:space="preserve">
+    <value>Tento profil má nezapsané změny přehledu. Před úpravou nebo přejmenováním jej obnovte nebo zlikvidujte jeho čekající ukládání na přehled.</value>
+  </data>
+</root>

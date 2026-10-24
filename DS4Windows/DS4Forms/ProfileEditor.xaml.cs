@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -525,7 +525,7 @@ namespace DS4WinWPF.DS4Forms
                     InputDeviceType.Switch2JoyConRight or InputDeviceType.Switch2JoyConJoined or
                     InputDeviceType.JoyConL or InputDeviceType.JoyConR or InputDeviceType.JoyConGrip;
             controllerDiagramSelector.IsEnabled = !automatic;
-            controllerDiagramSelector.ToolTip = automatic ? "Follows this Joy-Con's holding style." : null;
+            controllerDiagramSelector.ToolTip = automatic ? global::DS4Windows.UiText.Get("Follows this Joy-Con's holding style.") : null;
             if (automatic)
             {
                 InputDeviceType type = diagramPhysicalController is JoyConDevice { ProfileConnection.Group.Joined: true } ?
@@ -2279,7 +2279,7 @@ namespace DS4WinWPF.DS4Forms
                 }
                 else
                 {
-                    MessageBox.Show("The app has to be restarted for DS3 gyro simulation to work.",
+                    MessageBox.Show(global::DS4Windows.UiText.Get("The app has to be restarted for DS3 gyro simulation to work."),
                         "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -2340,9 +2340,9 @@ namespace DS4WinWPF.DS4Forms
 
         private void ShowProfileSaveError()
         {
-            MessageBox.Show("The profile could not be saved. The editor will remain open. " +
-                "Check write permissions, free disk space, and whether the name is already in use. " +
-                "For rename errors, check Logs for details about any preserved copies.",
+            MessageBox.Show(global::DS4Windows.UiText.Get("The profile could not be saved. The editor will remain open. ") +
+                global::DS4Windows.UiText.Get("Check write permissions, free disk space, and whether the name is already in use. ") +
+                global::DS4Windows.UiText.Get("For rename errors, check Logs for details about any preserved copies."),
                 "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
@@ -2575,8 +2575,8 @@ namespace DS4WinWPF.DS4Forms
             dialog.Multiselect = false;
             dialog.AddExtension = true;
             dialog.DefaultExt = ".exe";
-            dialog.Filter = "Program (*.exe)|*.exe";
-            dialog.Title = "Select Program";
+            dialog.Filter = global::DS4Windows.UiText.FileFilter("Program (*.exe)|*.exe");
+            dialog.Title = global::DS4Windows.UiText.Get("Select Program");
 
             dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             if (dialog.ShowDialog() == true)
@@ -2779,17 +2779,17 @@ namespace DS4WinWPF.DS4Forms
             {
                 OutContType.ViiperGenericJoystick => "Experimental DirectInput joystick for older games. Requires the matched portable preview; no XInput emulation or force feedback.",
                 OutContType.ViiperSwitch2Pro =>
-                    "Switch 2 layout: Cross -> B, Circle -> A, Square -> Y, Triangle -> X, Share -> Minus, Options -> Plus, PS -> Home, Capture -> Capture.",
+                    global::DS4Windows.UiText.Get("Switch 2 layout: Cross -> B, Circle -> A, Square -> Y, Triangle -> X, Share -> Minus, Options -> Plus, PS -> Home, Capture -> Capture."),
                 OutContType.ViiperDualSense =>
-                    "DualSense output supports touch, motion, rumble, advanced haptics, adaptive triggers, and controller lighting. Available effects depend on your game and physical controller.",
+                    global::DS4Windows.UiText.Get("DualSense output supports touch, motion, rumble, advanced haptics, adaptive triggers, and controller lighting. Available effects depend on your game and physical controller."),
                 OutContType.ViiperDualSenseEdge =>
-                    "DualSense Edge output adds Fn buttons and back paddles alongside DualSense feedback. Available effects depend on your game and physical controller. Onboard profile editing is not supported on the virtual controller.",
+                    global::DS4Windows.UiText.Get("DualSense Edge output adds Fn buttons and back paddles alongside DualSense feedback. Available effects depend on your game and physical controller. Onboard profile editing is not supported on the virtual controller."),
                 OutContType.ViiperDS4 =>
-                    "DualShock 4 output provides DS4 buttons, touch, gyro, rumble, lightbar, and flash feedback.",
+                    global::DS4Windows.UiText.Get("DualShock 4 output provides DS4 buttons, touch, gyro, rumble, lightbar, and flash feedback."),
                 OutContType.ViiperX360 =>
-                    "Xbox 360 output provides standard XInput-style buttons, sticks, triggers, and rumble.",
+                    global::DS4Windows.UiText.Get("Xbox 360 output provides standard XInput-style buttons, sticks, triggers, and rumble."),
                 OutContType.ViiperXboxOne =>
-                    "Xbox One / Series output preserves Guide, Share, ten-bit triggers, and four independent feedback channels through VIIPER. Windows compatibility still requires an explicitly authorized USB identity.",
+                    global::DS4Windows.UiText.Get("Xbox One / Series output preserves Guide, Share, ten-bit triggers, and four independent feedback channels through VIIPER. Windows compatibility still requires an explicitly authorized USB identity."),
                 _ => string.Empty,
             };
 
@@ -3198,8 +3198,8 @@ namespace DS4WinWPF.DS4Forms
             }
             else
             {
-                MessageBox.Show("Connect and select a DualSense or DualSense Edge controller to reapply its indicator lights.",
-                    "Indicator LEDs", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(global::DS4Windows.UiText.Get("Connect and select a DualSense or DualSense Edge controller to reapply its indicator lights."),
+                    global::DS4Windows.UiText.Get("Indicator LEDs"), MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -3234,15 +3234,15 @@ namespace DS4WinWPF.DS4Forms
             var source = ResolveControllerContext(deviceNum, profileSettingsVM.FuncDevNum);
             if (source is JoyConDevice)
             {
-                MessageBox.Show("Original Joy-Cons use their built-in stick calibration. This PC calibration tool currently supports Switch 2 controllers only. You can still adjust dead zones and stick response in this profile.",
-                    "Stick calibration", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(global::DS4Windows.UiText.Get("Original Joy-Cons use their built-in stick calibration. This PC calibration tool currently supports Switch 2 controllers only. You can still adjust dead zones and stick response in this profile."),
+                    global::DS4Windows.UiText.Get("Stick calibration"), MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             var runtime = source as Switch2RuntimeInputDevice;
             if (runtime == null || runtime.RuntimeState != Switch2RuntimeInputDeviceState.Active)
             {
-                MessageBox.Show("Connect and select an active Switch 2 Pro or Joy-Con 2 controller before calibrating its sticks.",
-                    "Switch 2 stick calibration", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(global::DS4Windows.UiText.Get("Connect and select an active Switch 2 Pro or Joy-Con 2 controller before calibrating its sticks."),
+                    global::DS4Windows.UiText.Get("Switch 2 stick calibration"), MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             var window = new Switch2StickCalibrationWindow(runtime);
@@ -3257,15 +3257,15 @@ namespace DS4WinWPF.DS4Forms
             var source = ResolveControllerContext(deviceNum, profileSettingsVM.FuncDevNum);
             if (source is JoyConDevice)
             {
-                MessageBox.Show("Original Joy-Cons do not have a compass sensor. Gyro aiming and horizon stabilization still work; use Calibrate gyro to correct motion drift.",
-                    "Compass calibration", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(global::DS4Windows.UiText.Get("Original Joy-Cons do not have a compass sensor. Gyro aiming and horizon stabilization still work; use Calibrate gyro to correct motion drift."),
+                    global::DS4Windows.UiText.Get("Compass calibration"), MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             Switch2RuntimeInputDevice runtime = source as Switch2RuntimeInputDevice;
             if (runtime == null)
             {
-                MessageBox.Show("Connect and select a Switch 2 Pro or Joy-Con 2 controller before calibrating its magnetometer.",
-                    "Switch 2 magnetometer calibration", MessageBoxButton.OK,
+                MessageBox.Show(global::DS4Windows.UiText.Get("Connect and select a Switch 2 Pro or Joy-Con 2 controller before calibrating its magnetometer."),
+                    global::DS4Windows.UiText.Get("Switch 2 magnetometer calibration"), MessageBoxButton.OK,
                     MessageBoxImage.Information);
                 return;
             }
@@ -3274,8 +3274,8 @@ namespace DS4WinWPF.DS4Forms
             {
                 if (!runtime.StartMagnetometerCalibration())
                 {
-                    MessageBox.Show("Calibration could not start while the controller was changing lifecycle or publishing another profile action. Try again once it is active.",
-                        "Switch 2 magnetometer calibration",
+                    MessageBox.Show(global::DS4Windows.UiText.Get("Calibration could not start while the controller was changing lifecycle or publishing another profile action. Try again once it is active."),
+                        global::DS4Windows.UiText.Get("Switch 2 magnetometer calibration"),
                         MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
@@ -3284,7 +3284,7 @@ namespace DS4WinWPF.DS4Forms
                 Switch2MagnetometerCalibrationCancelButton.Visibility =
                     Visibility.Visible;
                 Switch2MagnetometerCalibrationStatus.Text =
-                    "Collecting: rotate the controller through a broad figure-eight in every orientation, then click Complete.";
+                    global::DS4Windows.UiText.Get("Collecting: rotate the controller through a broad figure-eight in every orientation, then click Complete.");
                 return;
             }
 
@@ -3309,7 +3309,7 @@ namespace DS4WinWPF.DS4Forms
                 if (!persisted)
                 {
                     Switch2MagnetometerCalibrationStatus.Text +=
-                        " The fit is active for this connection, but its persistent controller identity was unavailable; reconnect persistence is not yet guaranteed.";
+                        global::DS4Windows.UiText.Get(" The fit is active for this connection, but its persistent controller identity was unavailable; reconnect persistence is not yet guaranteed.");
                 }
                 return;
             }
@@ -3319,9 +3319,9 @@ namespace DS4WinWPF.DS4Forms
                     $"{rightQuality.FullFitFailure}." :
                 $"Fit rejected: {leftQuality.FullFitFailure}.";
             Switch2MagnetometerCalibrationStatus.Text =
-                $"{failure} The previous calibration remains active. Collected {leftSamples}" +
+                global::DS4Windows.UiText.Format("{0} The previous calibration remains active. Collected {1}", failure, leftSamples) +
                 (rightSamples > 0 ? $"/{rightSamples}" : string.Empty) +
-                " samples; rotate through more orientations and try again.";
+                global::DS4Windows.UiText.Get(" samples; rotate through more orientations and try again.");
         }
 
         private void Switch2MagnetometerCalibrationCancel_Click(object sender,
@@ -3336,7 +3336,7 @@ namespace DS4WinWPF.DS4Forms
             Switch2MagnetometerCalibrationCancelButton.Visibility =
                 Visibility.Collapsed;
             Switch2MagnetometerCalibrationStatus.Text =
-                "Calibration cancelled; ordinary controller output is active and the previous calibration was preserved.";
+                global::DS4Windows.UiText.Get("Calibration cancelled; ordinary controller output is active and the previous calibration was preserved.");
         }
 
         private static string FormatMagnetometerCalibrationQuality(
@@ -3345,8 +3345,8 @@ namespace DS4WinWPF.DS4Forms
             string model = quality.AdoptedModel ==
                     Switch2MagnetometerCalibrationModel.FullEllipsoidV1 ?
                 "full ellipsoid" : "diagonal min/max fallback";
-            return $"Adopted {model} for {label}: {quality.SampleCount} samples, " +
-                $"{quality.OctantCount}/8 octants, RMS {quality.RmsRelativeResidual:P1}, " +
+            return global::DS4Windows.UiText.Format("Adopted {0} for {1}: {2} samples, ", model, label, quality.SampleCount) +
+                global::DS4Windows.UiText.Format("{0}/8 octants, RMS {1:P1}, ", quality.OctantCount, quality.RmsRelativeResidual) +
                 $"P95 {quality.P95RelativeResidual:P1}.";
         }
 
@@ -3413,8 +3413,8 @@ namespace DS4WinWPF.DS4Forms
         {
             if (deviceNum == 8)
             {
-                MessageBox.Show("Stick recalibration is only available if the profile editor is opened " +
-                                "with the Edit button next to the controller you want to recalibrate in the main " +
+                MessageBox.Show(global::DS4Windows.UiText.Get("Stick recalibration is only available if the profile editor is opened ") +
+                                global::DS4Windows.UiText.Get("with the Edit button next to the controller you want to recalibrate in the main ") +
                                 "window.",
                     "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
@@ -3426,7 +3426,7 @@ namespace DS4WinWPF.DS4Forms
             {
                 0 => Stick.Left,
                 1 => Stick.Right,
-                _ => throw new IndexOutOfRangeException("Wrong stick index. Must be 0 for left or 1 for right.")
+                _ => throw new IndexOutOfRangeException(global::DS4Windows.UiText.Get("Wrong stick index. Must be 0 for left or 1 for right."))
             };
 
             StickCalibrationWindow window = new(stick, deviceNum, profileSettingsVM)
@@ -3442,7 +3442,7 @@ namespace DS4WinWPF.DS4Forms
             dialog.AddExtension = true;
             dialog.DefaultExt = ".xml";
             dialog.FileName = "Actions";
-            dialog.Filter = "DS4Windows Special Actions (*.xml)|*.xml";
+            dialog.Filter = global::DS4Windows.UiText.FileFilter("DS4Windows Special Actions (*.xml)|*.xml");
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 var profileStream = new StreamReader(@$"{Global.appdatapath}\Actions.xml").BaseStream;

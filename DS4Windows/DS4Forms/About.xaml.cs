@@ -34,7 +34,7 @@ namespace DS4WinWPF.DS4Forms
             string version = string.IsNullOrWhiteSpace(Global.exeDisplayVersion)
                 ? typeof(About).Assembly.GetName().Version?.ToString(3)
                 : Global.exeDisplayVersion;
-            versionText.Text = $"Version {version}";
+            versionText.Text = global::DS4Windows.UiText.Format("Version {0}", version);
             licenseText.Text = LoadLicenseText();
             SourceInitialized += (_, _) => FitToWorkArea();
         }
@@ -42,7 +42,7 @@ namespace DS4WinWPF.DS4Forms
         internal static string LoadLicenseText()
         {
             using Stream stream = typeof(About).Assembly.GetManifestResourceStream("DS4Windows.License.txt")
-                ?? throw new InvalidOperationException("The bundled GNU GPL licence is missing.");
+                ?? throw new InvalidOperationException(global::DS4Windows.UiText.Get("The bundled GNU GPL licence is missing."));
             using var reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }

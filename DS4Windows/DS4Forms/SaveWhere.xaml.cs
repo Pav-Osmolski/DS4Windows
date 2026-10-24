@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -34,7 +34,7 @@ namespace DS4WinWPF.DS4Forms
         public SaveWhere(bool multisavespots)
         {
             if (DS4Windows.PortableLabContext.IsActive)
-                throw new InvalidOperationException("Portable lab configuration location is fixed.");
+                throw new InvalidOperationException(global::DS4Windows.UiText.Get("Portable lab configuration location is fixed."));
             InitializeComponent();
             multisaves = multisavespots;
             if (!multisavespots)
@@ -84,7 +84,7 @@ namespace DS4WinWPF.DS4Forms
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    MessageBox.Show("Cannot Delete old settings, please manaully delete", "DS4Windows");
+                    MessageBox.Show(global::DS4Windows.UiText.Get("Cannot Delete old settings, please manaully delete"), "DS4Windows");
                 }
             }
             else if (!multisaves)

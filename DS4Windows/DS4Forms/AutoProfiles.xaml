@@ -111,16 +111,16 @@
                         <CollectionViewSource x:Key="profileCollection" Source="{Binding ProfileList.ProfileListCol,Mode=OneWay}" />
                     </StackPanel.Resources>
 
-                    <TextBlock Text="Rule editor" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" Margin="0,0,0,12"/>
+                    <TextBlock Text="{lex:Loc Strings:UI_D9A387F19034F499}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" Margin="0,0,0,12"/>
                     <StackPanel x:Name="editControlsPanel" IsEnabled="False">
                         <UniformGrid Columns="3" Height="34" Margin="0,0,0,10">
-                            <Button x:Name="removeAutoBtn" Content="Delete" Margin="0,0,6,0"
-                                    ToolTip="Remove this program and its saved rule" Click="RemoveAutoBtn_Click" />
-                            <Button x:Name="duplicateAutoBtn" Content="Duplicate" Margin="0,0,6,0" Click="DuplicateAutoBtn_Click" />
-                            <Button x:Name="saveAutoBtn" Content="Save rule" Click="SaveAutoBtn_Click" />
+                            <Button x:Name="removeAutoBtn" Content="{lex:Loc Strings:UI_E2D0A54968EAD24E}" Margin="0,0,6,0"
+                                    ToolTip="{lex:Loc Strings:UI_064606C4AF0F2BEB}" Click="RemoveAutoBtn_Click" />
+                            <Button x:Name="duplicateAutoBtn" Content="{lex:Loc Strings:UI_02CDAABFCA805D6A}" Margin="0,0,6,0" Click="DuplicateAutoBtn_Click" />
+                            <Button x:Name="saveAutoBtn" Content="{lex:Loc Strings:UI_4E62C225ADB2E2AA}" Click="SaveAutoBtn_Click" />
                         </UniformGrid>
-                        <CheckBox Content="Rule enabled" IsChecked="{Binding Enabled}" Margin="0,0,0,8"/>
-                        <TextBlock Text="Save applies your changes. Disable a rule to keep it without switching profiles." TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,12"/>
+                        <CheckBox Content="{lex:Loc Strings:UI_57993E10706C49EB}" IsChecked="{Binding Enabled}" Margin="0,0,0,8"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_0AF7A2AC67B38866}" TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,12"/>
                         <Grid x:Name="autoProfilesGrid" Margin="0,8">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -139,7 +139,7 @@
 
                             <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
                                 <Label Content="{lex:Loc Controller1Text}" Padding="0" VerticalAlignment="Center" />
-                                <CheckBox Content="All" Margin="10,0,0,0" VerticalAlignment="Center"
+                                <CheckBox Content="{lex:Loc Strings:UI_A52ACE420F2175D0}" Margin="10,0,0,0" VerticalAlignment="Center"
                                           IsChecked="{Binding ApplyToAllControllers}" />
                             </StackPanel>
                             <ComboBox x:Name="cont1AutoProf" Grid.Column="1" Margin="{StaticResource spaceMargin}"
@@ -155,7 +155,7 @@
                                 </ComboBox.Resources>
                                 <ComboBox.ItemsSource>
                                     <CompositeCollection>
-                                        <ComboBoxItem Content="(none)"/>
+                                        <ComboBoxItem Content="{lex:Loc Strings:UI_552E423045FCBD94}"/>
                                         <CollectionContainer x:Name="cont1AutoProfCol" Collection="{Binding Source={StaticResource profileCollection}}" />
                                     </CompositeCollection>
                                 </ComboBox.ItemsSource>
@@ -177,7 +177,7 @@
                                 </ComboBox.Resources>
                                 <ComboBox.ItemsSource>
                                     <CompositeCollection>
-                                        <ComboBoxItem Content="(none)"/>
+                                        <ComboBoxItem Content="{lex:Loc Strings:UI_552E423045FCBD94}"/>
                                         <CollectionContainer x:Name="cont2AutoProfCol" Collection="{Binding Source={StaticResource profileCollection}}" />
                                     </CompositeCollection>
                                 </ComboBox.ItemsSource>
@@ -199,7 +199,7 @@
                                 </ComboBox.Resources>
                                 <ComboBox.ItemsSource>
                                     <CompositeCollection>
-                                        <ComboBoxItem Content="(none)"/>
+                                        <ComboBoxItem Content="{lex:Loc Strings:UI_552E423045FCBD94}"/>
                                         <CollectionContainer x:Name="cont3AutoProfCol" Collection="{Binding Source={StaticResource profileCollection}}" />
                                     </CompositeCollection>
                                 </ComboBox.ItemsSource>
@@ -221,7 +221,7 @@
                                 </ComboBox.Resources>
                                 <ComboBox.ItemsSource>
                                     <CompositeCollection>
-                                        <ComboBoxItem Content="(none)"/>
+                                        <ComboBoxItem Content="{lex:Loc Strings:UI_552E423045FCBD94}"/>
                                         <CollectionContainer x:Name="cont4AutoProfCol" Collection="{Binding Source={StaticResource profileCollection}}" />
                                     </CompositeCollection>
                                 </ComboBox.ItemsSource>
@@ -241,7 +241,7 @@
                                 </ComboBox.Resources>
                                 <ComboBox.ItemsSource>
                                     <CompositeCollection>
-                                        <ComboBoxItem Content="(none)"/>
+                                        <ComboBoxItem Content="{lex:Loc Strings:UI_552E423045FCBD94}"/>
                                         <CollectionContainer Collection="{Binding Source={StaticResource profileCollection}}" />
                                     </CompositeCollection>
                                 </ComboBox.ItemsSource>
@@ -261,7 +261,7 @@
                                 </ComboBox.Resources>
                                 <ComboBox.ItemsSource>
                                     <CompositeCollection>
-                                        <ComboBoxItem Content="(none)"/>
+                                        <ComboBoxItem Content="{lex:Loc Strings:UI_552E423045FCBD94}"/>
                                         <CollectionContainer Collection="{Binding Source={StaticResource profileCollection}}" />
                                     </CompositeCollection>
                                 </ComboBox.ItemsSource>
@@ -282,7 +282,7 @@
                                 </ComboBox.Resources>
                                 <ComboBox.ItemsSource>
                                     <CompositeCollection>
-                                        <ComboBoxItem Content="(none)"/>
+                                        <ComboBoxItem Content="{lex:Loc Strings:UI_552E423045FCBD94}"/>
                                         <CollectionContainer Collection="{Binding Source={StaticResource profileCollection}}" />
                                     </CompositeCollection>
                                 </ComboBox.ItemsSource>
@@ -302,7 +302,7 @@
                                 </ComboBox.Resources>
                                 <ComboBox.ItemsSource>
                                     <CompositeCollection>
-                                        <ComboBoxItem Content="(none)"/>
+                                        <ComboBoxItem Content="{lex:Loc Strings:UI_552E423045FCBD94}"/>
                                         <CollectionContainer Collection="{Binding Source={StaticResource profileCollection}}" />
                                     </CompositeCollection>
                                 </ComboBox.ItemsSource>
@@ -317,21 +317,21 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="Device" Padding="0" VerticalAlignment="Center" />
+                            <Label Content="{lex:Loc Strings:UI_6BA0BDECCB426D7B}" Padding="0" VerticalAlignment="Center" />
                             <ComboBox Grid.Column="1" ItemsSource="{Binding DataContext.DeviceOptionList, ElementName=outerEditControlsPanel}"
                                       DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue"
                                       SelectedValue="{Binding DeviceOption}" />
                         </Grid>
-                        <TextBlock Text="Program path" Foreground="{DynamicResource MutedForegroundColor}" FontSize="12" Margin="0,4,0,4"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_232A4A0F585E2AA1}" Foreground="{DynamicResource MutedForegroundColor}" FontSize="12" Margin="0,4,0,4"/>
                         <TextBox Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}" Margin="{StaticResource spaceMargin}" ToolTip="{lex:Loc AutoProfPathTip}"
                                  TextWrapping="Wrap" AcceptsReturn="False" VerticalScrollBarVisibility="Auto" MaxHeight="90"/>
 
-                        <TextBlock Text="Window title" Foreground="{DynamicResource MutedForegroundColor}" FontSize="12" Margin="0,4,0,4"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_534837B3B824387D}" Foreground="{DynamicResource MutedForegroundColor}" FontSize="12" Margin="0,4,0,4"/>
                         <Grid x:Name="ruleTitleField" Margin="0">
                             <TextBox x:Name="mainTxtBox" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                                      VerticalContentAlignment="Center" ToolTip="{lex:Loc AutoProfTitleTip}" />
 
-                            <TextBlock Margin="7,0" VerticalAlignment="Center" MinWidth="50" Text="Window title..." Foreground="{DynamicResource ForegroundColor}" Opacity="0.7" IsHitTestVisible="False">
+                            <TextBlock Margin="7,0" VerticalAlignment="Center" MinWidth="50" Text="{lex:Loc Strings:UI_E1567DADDDA59464}" Foreground="{DynamicResource ForegroundColor}" Opacity="0.7" IsHitTestVisible="False">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
@@ -370,8 +370,8 @@
 
         <DockPanel>
             <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
-                <TextBlock Text="Automatic profile switching" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}"/>
-                <TextBlock Text="Add a program, select its controller profiles, then Save rule. Enabled rules are evaluated from top to bottom; move specific rules above broader matches." TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,6,0,0"/>
+                <TextBlock Text="{lex:Loc Strings:UI_12A8368DDC6AB065}" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}"/>
+                <TextBlock Text="{lex:Loc Strings:UI_0E26CF3AB2092F53}" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,6,0,0"/>
             </StackPanel>
             <Border DockPanel.Dock="Top" Width="390" MaxWidth="390"
                     HorizontalAlignment="Left" Margin="0,0,0,10"
@@ -390,11 +390,11 @@
                     <TextBox x:Name="autoProfilesSearchTextBox" Grid.Column="1"
                              Style="{DynamicResource BridgeSearchTextBoxStyle}"
                              TextChanged="AutoProfilesSearchTextBox_TextChanged"
-                             ToolTip="Search by profile, window title, executable, or path" />
+                             ToolTip="{lex:Loc Strings:UI_B8C5A26D50EC2E90}" />
                     <Button x:Name="clearAutoProfilesSearchBtn" Grid.Column="2" Content="&#xE711;"
                             FontFamily="Segoe Fluent Icons" FontSize="11"
                             Background="Transparent" BorderThickness="0"
-                            Visibility="Collapsed" ToolTip="Clear search"
+                            Visibility="Collapsed" ToolTip="{lex:Loc Strings:UI_3B7EA51793E9D906}"
                             Click="ClearAutoProfilesSearchBtn_Click" />
                 </Grid>
             </Border>
@@ -412,18 +412,18 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
-                <Button x:Name="hideUncheckedBtn" Content="Clear unsaved programs" Click="HideUncheckedBtn_Click"
-                        Style="{StaticResource AutoProfileToolbarButtonStyle}" ToolTip="Remove discovered programs that have not been saved as rules"/>
-                <Button x:Name="moveRuleUpBtn" Content="Move up" Click="MoveUpDownAutoBtn_Click" IsEnabled="False"
-                        Style="{StaticResource AutoProfileToolbarButtonStyle}" ToolTip="Raise rule priority. Clear search before reordering."/>
-                <Button x:Name="moveRuleDownBtn" Content="Move down" Click="MoveUpDownAutoBtn_Click" IsEnabled="False"
-                        Style="{StaticResource AutoProfileToolbarButtonStyle}" Margin="0,0,0,6" ToolTip="Lower rule priority. Clear search before reordering."/>
+                <Button x:Name="hideUncheckedBtn" Content="{lex:Loc Strings:UI_48B4990A496045D5}" Click="HideUncheckedBtn_Click"
+                        Style="{StaticResource AutoProfileToolbarButtonStyle}" ToolTip="{lex:Loc Strings:UI_E2A091C4B37E0D7C}"/>
+                <Button x:Name="moveRuleUpBtn" Content="{lex:Loc Strings:UI_C66FEB5EB8F217C7}" Click="MoveUpDownAutoBtn_Click" IsEnabled="False"
+                        Style="{StaticResource AutoProfileToolbarButtonStyle}" ToolTip="{lex:Loc Strings:UI_97AB945C87A40F90}"/>
+                <Button x:Name="moveRuleDownBtn" Content="{lex:Loc Strings:UI_40BB50DA160CDC21}" Click="MoveUpDownAutoBtn_Click" IsEnabled="False"
+                        Style="{StaticResource AutoProfileToolbarButtonStyle}" Margin="0,0,0,6" ToolTip="{lex:Loc Strings:UI_D065DC63CFA2371E}"/>
             </WrapPanel>
             <Border x:Name="scanStatusPanel" DockPanel.Dock="Top" Visibility="Collapsed" Margin="0,0,0,12" Padding="12"
                     Background="{DynamicResource RaisedBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="5">
                 <StackPanel>
                     <DockPanel>
-                        <Button x:Name="cancelScanBtn" Content="Cancel" Visibility="Collapsed" DockPanel.Dock="Right" Click="CancelScanBtn_Click" Style="{StaticResource BridgeSecondaryButtonStyle}" MinWidth="68" Padding="8,4" Margin="12,0,0,0"/>
+                        <Button x:Name="cancelScanBtn" Content="{lex:Loc Strings:UI_19766ED6CCB2F4A3}" Visibility="Collapsed" DockPanel.Dock="Right" Click="CancelScanBtn_Click" Style="{StaticResource BridgeSecondaryButtonStyle}" MinWidth="68" Padding="8,4" Margin="12,0,0,0"/>
                         <TextBlock x:Name="scanStatusText" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundColor}" AutomationProperties.LiveSetting="Polite"/>
                     </DockPanel>
                     <TextBlock x:Name="scanLocationText" Foreground="{DynamicResource MutedForegroundColor}" TextWrapping="Wrap" MaxHeight="60" Margin="0,6,0,0"/>
@@ -483,7 +483,7 @@
                                     <TextBlock Text="{lex:Loc Path}" Style="{StaticResource AutoProfileMetaLabelStyle}" />
                                     <TextBlock Grid.Column="1" Text="{Binding Path}" ToolTip="{Binding Path}"
                                                Style="{StaticResource AutoProfileMetaValueStyle}" />
-                                    <TextBlock Grid.Row="1" Text="DEVICE" Style="{StaticResource AutoProfileMetaLabelStyle}" />
+                                    <TextBlock Grid.Row="1" Text="{lex:Loc Strings:UI_F92FC83B9B091613}" Style="{StaticResource AutoProfileMetaLabelStyle}" />
                                     <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DeviceOption}"
                                                Style="{StaticResource AutoProfileMetaValueStyle}" />
                                     <TextBlock Grid.Row="2" Text="{lex:Loc WindowTitle}"

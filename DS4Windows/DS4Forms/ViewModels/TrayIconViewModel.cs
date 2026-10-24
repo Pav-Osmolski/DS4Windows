@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -95,18 +95,18 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             contextMenu = new ContextMenu();
             iconSource = Global.iconChoiceResources[Global.UseIconChoice];
             Global.BatteryChanged += UpdateTrayBattery;
-            changeServiceItem = new MenuItem() { Header = "Start" };
+            changeServiceItem = new MenuItem() { Header = global::DS4Windows.UiText.Get("Start") };
             changeServiceItem.Click += ChangeControlServiceItem_Click;
             changeServiceItem.IsEnabled = false;
 
-            openItem = new MenuItem() { Header = "Open",
+            openItem = new MenuItem() { Header = global::DS4Windows.UiText.Get("Open"),
                 FontWeight = FontWeights.Bold };
             openItem.Click += OpenMenuItem_Click;
-            minimizeItem = new MenuItem() { Header = "Minimize" };
+            minimizeItem = new MenuItem() { Header = global::DS4Windows.UiText.Get("Minimize") };
             minimizeItem.Click += MinimizeMenuItem_Click;
-            openProgramItem = new MenuItem() { Header = "Open Program Folder" };
+            openProgramItem = new MenuItem() { Header = global::DS4Windows.UiText.Get("Open Program Folder") };
             openProgramItem.Click += OpenProgramFolderItem_Click;
-            closeItem = new MenuItem() { Header = "Exit" };
+            closeItem = new MenuItem() { Header = global::DS4Windows.UiText.Get("Exit") };
             closeItem.Click += ExitMenuItem_Click;
 
             PopulateControllerList();
@@ -217,7 +217,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 foreach (ControllerHolder holder in controllerList)
                 {
                     DS4Device currentDev = holder.Device;
-                    item = new MenuItem() { Header = $"Controller {idx + 1}" };
+                    item = new MenuItem() { Header = global::DS4Windows.UiText.Format("Controller {0}", idx + 1) };
                     item.Tag = idx;
                     //item.ContextMenu = new ContextMenu();
                     ItemCollection subitems = item.Items;
@@ -242,14 +242,14 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     idx++;
                 }
 
-                item = new MenuItem() { Header = "Disconnect Menu" };
+                item = new MenuItem() { Header = global::DS4Windows.UiText.Get("Disconnect Menu") };
                 idx = 0;
                 foreach (ControllerHolder holder in controllerList)
                 {
                     DS4Device tempDev = holder.Device;
                     if (tempDev.Synced && !tempDev.Charging)
                     {
-                        MenuItem subitem = new MenuItem() { Header = $"Disconnect Controller {idx + 1}" };
+                        MenuItem subitem = new MenuItem() { Header = global::DS4Windows.UiText.Format("Disconnect Controller {0}", idx + 1) };
                         subitem.Click += DisconnectMenuItem_Click;
                         subitem.Tag = idx;
                         item.Items.Add(subitem);

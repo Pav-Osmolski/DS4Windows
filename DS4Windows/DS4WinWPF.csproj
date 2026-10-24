@@ -22,20 +22,22 @@
 		     a SustainedLowLatency lease in the process. -->
 		<ServerGarbageCollection>false</ServerGarbageCollection>
 		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
-		<AssemblyVersion>5.0.44.0</AssemblyVersion>
-		<FileVersion>5.0.44.0</FileVersion>
-		<Version>5.0.44</Version>
-		<InformationalVersion>5.0.44</InformationalVersion>
+		<AssemblyVersion>5.0.47.0</AssemblyVersion>
+		<FileVersion>5.0.47.0</FileVersion>
+		<Version>5.0.47</Version>
+		<InformationalVersion>5.0.47</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-		<Copyright>Copyright Â© Scarlet.Crush Productions 2012, 2013; InhexSTER, HecticSeptic, electrobrains 2013, 2014; Jays2Kings 2013, 2014, 2015, 2016; Ryochan7 2017-2023, schmaldeo 2024</Copyright>
-		<Description>Sony DualShock 4 to Microsoft Xinput controller mapper</Description>
-		<Authors>hbashton</Authors>
-		<Company>hbashton</Company>
-		<PackageProjectUrl>https://github.com/hbashton/DS4Windows</PackageProjectUrl>
+		<Copyright>Copyright © Scarlet.Crush Productions 2012, 2013; InhexSTER, HecticSeptic, electrobrains 2013, 2014; Jays2Kings 2013, 2014, 2015, 2016; Ryochan7 2017-2023, schmaldeo 2024</Copyright>
+		<Product>DS4Windows</Product>
+		<AssemblyTitle>DS4Windows</AssemblyTitle>
+		<Description>Controller mapping and virtual-controller output for Windows - Pav-Osmolski fork</Description>
+		<Authors>Pav-Osmolski and DS4Windows contributors</Authors>
+		<Company>Pav-Osmolski</Company>
+		<PackageProjectUrl>https://github.com/Pav-Osmolski/DS4Windows</PackageProjectUrl>
 		<PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.txt</PackageLicenseUrl>
-		<RepositoryUrl>https://github.com/hbashton/DS4Windows</RepositoryUrl>
+		<RepositoryUrl>https://github.com/Pav-Osmolski/DS4Windows</RepositoryUrl>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -92,7 +94,7 @@
 		AfterTargets="Publish"
 		BeforeTargets="GenerateManagedFileManifest">
 		<PropertyGroup>
-			<_BundledViiperName>VIIPER-0.1.12-x64.exe</_BundledViiperName>
+			<_BundledViiperName>VIIPER-0.1.14-x64.exe</_BundledViiperName>
 			<_BundledViiperPath>$(PublishDir)extras\$(_BundledViiperName)</_BundledViiperPath>
 			<_BundledViiperHashPath>$(_BundledViiperPath).sha256</_BundledViiperHashPath>
 		</PropertyGroup>
@@ -137,8 +139,8 @@
 		<EmbeddedResource Include="..\extras\install-viiper-backend.ps1">
 			<LogicalName>DS4Windows.install-viiper-backend.ps1</LogicalName>
 		</EmbeddedResource>
-		<Content Include="..\extras\VIIPER-0.1.12-x64.exe">
-			<Link>extras\VIIPER-0.1.12-x64.exe</Link>
+		<Content Include="..\extras\VIIPER-0.1.14-x64.exe">
+			<Link>extras\VIIPER-0.1.14-x64.exe</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
@@ -154,28 +156,28 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.12-LICENSES.txt">
-			<Link>extras\VIIPER-0.1.12-LICENSES.txt</Link>
+		<Content Include="..\extras\VIIPER-0.1.14-LICENSES.txt">
+			<Link>extras\VIIPER-0.1.14-LICENSES.txt</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.12-BUILD-INFO.json">
-			<Link>extras\VIIPER-0.1.12-BUILD-INFO.json</Link>
+		<Content Include="..\extras\VIIPER-0.1.14-BUILD-INFO.json">
+			<Link>extras\VIIPER-0.1.14-BUILD-INFO.json</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.12-PROVENANCE.txt">
-			<Link>extras\VIIPER-0.1.12-PROVENANCE.txt</Link>
+		<Content Include="..\extras\VIIPER-0.1.14-PROVENANCE.txt">
+			<Link>extras\VIIPER-0.1.14-PROVENANCE.txt</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.12-SOURCE.zip">
-			<Link>extras\VIIPER-0.1.12-SOURCE.zip</Link>
+		<Content Include="..\extras\VIIPER-0.1.14-SOURCE.zip">
+			<Link>extras\VIIPER-0.1.14-SOURCE.zip</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.12-BUILD-NOTES.txt">
-			<Link>extras\VIIPER-0.1.12-BUILD-NOTES.txt</Link>
+		<Content Include="..\extras\VIIPER-0.1.14-BUILD-NOTES.txt">
+			<Link>extras\VIIPER-0.1.14-BUILD-NOTES.txt</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
@@ -578,7 +580,7 @@
 		<EmbeddedResource Update="Translations\Strings.hu-HU.resx">
 			<DependentUpon>Strings.resx</DependentUpon>
 		</EmbeddedResource>
-		<EmbeddedResource Update="Translations\Strings.idn.resx">
+		<EmbeddedResource Update="Translations\Strings.id.resx">
 			<DependentUpon>Strings.resx</DependentUpon>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Translations\Strings.it.resx">
@@ -605,7 +607,7 @@
 		<EmbeddedResource Update="Translations\Strings.ru.resx">
 			<DependentUpon>Strings.resx</DependentUpon>
 		</EmbeddedResource>
-		<EmbeddedResource Update="Translations\Strings.se.resx">
+		<EmbeddedResource Update="Translations\Strings.sv.resx">
 			<DependentUpon>Strings.resx</DependentUpon>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Translations\Strings.tr.resx">

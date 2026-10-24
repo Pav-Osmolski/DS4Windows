@@ -86,7 +86,7 @@ public sealed class LogViewVirtualizationTests
         // cell templates and theme; only remove shell event/data hookup.
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-        XElement source = XDocument.Load(SourcePath("DS4Forms/MainWindow.xaml"))
+        XElement source = LocalizedSource.Load(SourcePath("DS4Forms/MainWindow.xaml"))
             .Descendants(wpf + "ListView")
             .Single(element => (string)element.Attribute(x + "Name") == "logListView");
         var markup = new XElement(source);
@@ -94,7 +94,7 @@ public sealed class LogViewVirtualizationTests
         markup.Attribute("MouseDoubleClick")?.Remove();
         markup.Attribute("ItemsSource")?.Remove();
         markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
-        var list = (ListView)XamlReader.Parse(markup.ToString());
+        var list = (ListView)XamlReader.Parse(LocalizedSource.Markup(markup));
         list.Resources.MergedDictionaries.Add(new ResourceDictionary
         {
             Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{themeName}.xaml", UriKind.Relative)
@@ -207,15 +207,13 @@ public sealed class LogViewVirtualizationTests
     private static void OnSta(Action action)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try { action(); }
             catch (Exception exception) { failure = exception; }
-            finally { Dispatcher.CurrentDispatcher.InvokeShutdown(); }
-        }) { IsBackground = true };
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(30)), "Bounded isolated log-list layout timed out.");
+
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 }

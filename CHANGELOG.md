@@ -5,10 +5,52 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+## [5.0.47](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.47) - 2026-10-24
+
+### Important fixes: controller startup and installer readiness
+
+- Resolve the reported intermittent virtual-controller startup failure with the paired VIIPER **0.1.14** backend: finish complete management replies gracefully before closing their connections. Keep cleanup bounded and interruptible by shutdown, and preserve controller/audio streaming, authentication and the existing single stream-open retry. Thanks to [@cns00](https://github.com/cns00) for the diagnostic captures and final successful testing in [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), also reported in [upstream #153](https://github.com/hbashton/DS4Windows/issues/153). On 24 October the reporter confirmed consistently reaching **Ready** in the final paired preview, and the maintainer approved this release. The earlier isolated comparison improved from 77/400 failed requests to 3/400 with graceful closing; those measurements describe the diagnostic session, not a guarantee against every future reset. No hardware fault or machine-specific underlying cause has been established.
+- Correct a separate fast-completion race in both the application's readiness probe and the installer's final health-check probe, replacing legacy shared connection wait handles with cancellable deadlines. Add 256 rapid loopback checks for each real probe. Thanks again to [@cns00](https://github.com/cns00) for the installer follow-up: setup helpers succeeded but a separate final check failed, and Retry succeeded. The supplied installer diagnostics do not distinguish that race from a transient reset. Driver, version, hash and health validation remain enforced.
+- Retain all stable 5.0.46 features and translations. Temporary diagnostic collectors, independent testers and experimental server switches are excluded. Implementation: [DS4Windows PR #77](https://github.com/Pav-Osmolski/DS4Windows/pull/77) and [VIIPER PR #9](https://github.com/Pav-Osmolski/VIIPER/pull/9).
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating so the matching backend can be replaced. USB/IP remains **0.9.8.1**; no driver version change is required. Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
+## [5.0.46](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.46) - 2026-10-23
+
+### Controller audio
+
+- Add **Audio output > Follow headphone jack** in Overview and **Profile Editor > Advanced > Audio**. Automatically switch to headphones when connected and return to the controller speaker when unplugged. Keep manual speaker/headset choices and existing profiles unchanged. Supports managed DualSense/Edge USB and Bluetooth audio and genuine DualShock 4 Bluetooth audio; Windows manages DualShock 4 USB audio. An active Audio Haptics app-audio override keeps its own routing choice. Thanks to [@Jobima1st](https://github.com/Jobima1st) for [issue #74](https://github.com/Pav-Osmolski/DS4Windows/issues/74) and [upstream #79](https://github.com/hbashton/DS4Windows/issues/79).
+- Translate the new routing choice in all 24 language packs and preserve it when saving/reopening profiles.
+
+### Virtual battery status
+
+- Forward reliable physical battery and charging state to virtual DualShock 4, DualSense/Edge and Switch 2 Pro through the paired VIIPER **0.1.13** status API. Preserve native DualSense status passthrough and Switch 2 measured-voltage reporting. Values follow each virtual protocol's battery bands; Xbox outputs remain wired USB controllers. Thanks to [@Jobima1st](https://github.com/Jobima1st) for [issue #75](https://github.com/Pav-Osmolski/DS4Windows/issues/75) and [upstream #111](https://github.com/hbashton/DS4Windows/issues/111).
+- Clarify that a browser tester's factory build date describes emulated controller firmware, not the DS4Windows application build date.
+- Include VIIPER's reviewed management-reply completion and split UTF-8 fixes. These preserve the server wire format and do not establish a root cause for the reporter's intermittent connection resets. Thanks to [@cns00](https://github.com/cns00) for the diagnostic reports in [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66) and [upstream #153](https://github.com/hbashton/DS4Windows/issues/153).
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating so the paired backend can be replaced. USB/IP remains **0.9.8.1**; no driver version change is required. The maintainer successfully tested the paired preview. These Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
+## [5.0.45](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.45) - 2026-10-23
+
+### Appearance and languages
+
+- Correct the executable's company, authors, description and project/repository links for the Pav-Osmolski fork, retaining the original copyright credits.
+- Add Graphite, Paper, Midnight and High contrast app themes, palette previews, preset accents and a custom accent picker. Follow Windows replaces the ambiguous Default label; Windows contrast settings take priority. Theme and accent choices apply immediately and persist across restarts.
+- Complete both language resource sets for all 24 supported languages and make newer interface screens translatable. Preserve existing translations where suitable, fill gaps with offline machine-assisted translations, repair placeholder errors and update obsolete driver/setup guidance. Correct Swedish and Indonesian culture identifiers with migration of saved choices; consistently capitalize native language names. Resource coverage and formatting are checked automatically; wording remains open to native-speaker improvements.
+### Build and maintenance
+
 - Avoid duplicate push/PR tests, retain full tests on WIP updates, and offer explicit portable/installer previews. Packaging and infrastructure PRs keep pre-merge installer validation; known documentation-only changes use text/site checks.
 - Build final-version release candidates once on main. Release preparation verifies the exact successful main CI run, artifact and package hashes, then promotes those same portable/installer bytes. Keep an explicit fully validated rebuild fallback, schema-1 updater compatibility, signing policy and no-overwrite protection.
 - Use cached Python 3.12 for packaging and avoid compressing package archives again during artifact upload. Clarify the legacy RC4.5.5 upgrade-test name and also verify upgrades from pinned numeric stable 5.0.43, preserving profiles across repair/uninstall.
 - Document issue classifications, distinct closure outcomes and genuine dependencies separately from general cross-references.
+
+Themes, language coverage and fork metadata are tracked in [PR #73](https://github.com/Pav-Osmolski/DS4Windows/pull/73).
+
+The build and release improvements are tracked in [PR #72](https://github.com/Pav-Osmolski/DS4Windows/pull/72).
 
 ## [5.0.44](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.44) - 2026-10-22
 

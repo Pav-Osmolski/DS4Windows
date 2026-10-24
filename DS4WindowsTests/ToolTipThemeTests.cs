@@ -36,7 +36,7 @@ public sealed class ToolTipThemeTests
         OnSta(() =>
         {
             XNamespace presentation = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
-            XElement localStyle = XDocument.Load(SourcePath("DS4Forms/ProfileEditor.xaml"))
+            XElement localStyle = LocalizedSource.Load(SourcePath("DS4Forms/ProfileEditor.xaml"))
                 .Descendants(presentation + "Style")
                 .Single(element => (string)element.Attribute("TargetType") == "ToolTip");
             var dictionaryXml = new XElement(presentation + "ResourceDictionary",
@@ -44,7 +44,7 @@ public sealed class ToolTipThemeTests
                 new XElement(presentation + "ResourceDictionary.MergedDictionaries",
                     new XElement(presentation + "ResourceDictionary",
                         new XAttribute("Source", ThemeUri(themeName)))), new XElement(localStyle));
-            var resources = (ResourceDictionary)XamlReader.Parse(dictionaryXml.ToString());
+            var resources = (ResourceDictionary)XamlReader.Parse(LocalizedSource.Markup(dictionaryXml));
             var style = (Style)resources[typeof(ToolTip)];
             Assert.AreSame(resources["ToolTipStyle"], style.BasedOn,
                 "The wrapping override must extend, not replace, themed tooltip chrome.");
@@ -76,7 +76,7 @@ public sealed class ToolTipThemeTests
     {
         foreach (string path in Directory.EnumerateFiles(SourcePath("DS4Forms"), "*.xaml", SearchOption.AllDirectories))
         {
-            XDocument document = XDocument.Load(path);
+            XDocument document = LocalizedSource.Load(path);
             foreach (XElement content in document.Descendants().Where(element =>
                          element.Name.LocalName == "ToolTip" || element.Name.LocalName.EndsWith(".ToolTip")))
             foreach (XAttribute color in content.DescendantsAndSelf().Attributes().Where(attribute =>
@@ -139,7 +139,7 @@ public sealed class ToolTipThemeTests
     private static void OnSta(Action action)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -148,10 +148,8 @@ public sealed class ToolTipThemeTests
                 action();
             }
             catch (Exception exception) { failure = exception; }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(30)), "Isolated tooltip resource test timed out.");
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(failure).Throw();
     }
 }

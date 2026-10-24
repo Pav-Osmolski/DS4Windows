@@ -101,8 +101,8 @@ namespace DS4WinWPF.DS4Forms
                 if (!File.Exists(target))
                 {
                     throw new FileNotFoundException(
-                        $"The offline DS4Windows package is incomplete: " +
-                        $"{bundledFileName} is missing.", target);
+                        global::DS4Windows.UiText.Format("The offline DS4Windows package is incomplete: ") +
+                        global::DS4Windows.UiText.Format("{0} is missing.", bundledFileName), target);
                 }
 
                 button.Content = $"Verifying bundled {componentName}…";
@@ -110,8 +110,8 @@ namespace DS4WinWPF.DS4Forms
                     expectedSha256))
                 {
                     throw new InvalidDataException(
-                        $"The bundled {componentName} installer failed its " +
-                        "SHA-256 integrity check.");
+                        global::DS4Windows.UiText.Format("The bundled {0} installer failed its ", componentName) +
+                        global::DS4Windows.UiText.Get("SHA-256 integrity check."));
                 }
 
                 button.Content = $"Installing {componentName}…";
@@ -121,7 +121,7 @@ namespace DS4WinWPF.DS4Forms
                     UseShellExecute = true,
                     Verb = "runas",
                 }) ?? throw new InvalidOperationException(
-                    $"Windows did not start the {componentName} installer.");
+                    global::DS4Windows.UiText.Format("Windows did not start the {0} installer.", componentName));
                 await process.WaitForExitAsync();
 
                 const int RestartRequiredExitCode = 3010;
@@ -130,7 +130,7 @@ namespace DS4WinWPF.DS4Forms
                 if (process.ExitCode != 0 && !restartRequired)
                 {
                     throw new InvalidOperationException(
-                        $"The {componentName} installer exited with code {process.ExitCode}.");
+                        global::DS4Windows.UiText.Format("The {0} installer exited with code {1}.", componentName, process.ExitCode));
                 }
 
                 if (componentName == "HidHide")
@@ -147,8 +147,8 @@ namespace DS4WinWPF.DS4Forms
                 if (restartRequired)
                 {
                     MessageBox.Show(this,
-                        $"{componentName} was installed successfully. Restart Windows to finish setup.",
-                        $"{componentName} setup", MessageBoxButton.OK,
+                        global::DS4Windows.UiText.Format("{0} was installed successfully. Restart Windows to finish setup.", componentName),
+                        global::DS4Windows.UiText.Format("{0} setup", componentName), MessageBoxButton.OK,
                         MessageBoxImage.Information);
                 }
             }
@@ -156,8 +156,8 @@ namespace DS4WinWPF.DS4Forms
             {
                 button.Content = $"{componentName} setup failed";
                 MessageBox.Show(this,
-                    $"Could not install {componentName}: {ex.Message}",
-                    $"{componentName} setup", MessageBoxButton.OK,
+                    global::DS4Windows.UiText.Format("Could not install {0}: {1}", componentName, ex.Message),
+                    global::DS4Windows.UiText.Format("{0} setup", componentName), MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
             finally

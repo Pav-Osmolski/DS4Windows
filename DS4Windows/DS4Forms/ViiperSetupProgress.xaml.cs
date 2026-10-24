@@ -32,7 +32,7 @@ namespace DS4WinWPF.DS4Forms
 
         public void ShowPreparing()
         {
-            phaseText.Text = "Verifying the DS4Windows package...";
+            phaseText.Text = global::DS4Windows.UiText.Get("Verifying the DS4Windows package...");
             Show();
             logTimer.Start();
             // Render the window before the protected package snapshot begins.
@@ -87,14 +87,14 @@ namespace DS4WinWPF.DS4Forms
             setupProgress.Value = success ? 100 : 0;
             statusGlyph.Text = success ? "\u2713" : "!";
             headingText.Text = success
-                ? "VIIPER is ready"
-                : "VIIPER setup needs attention";
+                ? global::DS4Windows.UiText.Get("VIIPER is ready")
+                : global::DS4Windows.UiText.Get("VIIPER setup needs attention");
             phaseText.Text = success
-                ? "Setup completed successfully."
-                : "Setup stopped safely before verification completed.";
+                ? global::DS4Windows.UiText.Get("Setup completed successfully.")
+                : global::DS4Windows.UiText.Get("Setup stopped safely before verification completed.");
             detailText.Text = success
-                ? "DS4Windows will continue automatically."
-                : "A detailed error and the diagnostic log will appear next.";
+                ? global::DS4Windows.UiText.Get("DS4Windows will continue automatically.")
+                : global::DS4Windows.UiText.Get("A detailed error and the diagnostic log will appear next.");
             Dispatcher.Invoke(() => { }, DispatcherPriority.Background);
             allowClose = true;
             Close();

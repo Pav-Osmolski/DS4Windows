@@ -10,7 +10,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private readonly ProfileSettingsViewModel owner;
         private readonly int slot;
         private static readonly string[] Triggers = { "-1", "5", "7" };
-        private static readonly string[] Labels = { "Always On", "L2", "R2" };
+        private static readonly string[] Labels = { global::DS4Windows.UiText.Get("Always On"), "L2", "R2" };
 
         internal Switch2AimSetupViewModel(ProfileSettingsViewModel owner, int slot)
         {
@@ -26,11 +26,11 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public bool CanChooseActivation => IsMouse || Global.GyroOutputMode[slot] == GyroOutMode.MouseJoystick;
         public string Description => Global.GyroOutputMode[slot] switch
         {
-            GyroOutMode.Mouse => "Tilt to move the mouse. Use this for precise aim in games that accept mouse input alongside a controller.",
-            GyroOutMode.MouseJoystick => "Tilt to move the virtual aiming stick. Use this when a game only accepts controller aiming.",
-            GyroOutMode.DirectionalSwipe => "Quick tilts trigger actions you assign in Gyro settings. This does not move the mouse.",
-            GyroOutMode.Passthru => "Let a compatible game or emulator use your motion directly. The game decides what it does.",
-            _ => "Tilts use your button mappings. To move the mouse by tilting, choose Mouse pointer above.",
+            GyroOutMode.Mouse => global::DS4Windows.UiText.Get("Tilt to move the mouse. Use this for precise aim in games that accept mouse input alongside a controller."),
+            GyroOutMode.MouseJoystick => global::DS4Windows.UiText.Get("Tilt to move the virtual aiming stick. Use this when a game only accepts controller aiming."),
+            GyroOutMode.DirectionalSwipe => global::DS4Windows.UiText.Get("Quick tilts trigger actions you assign in Gyro settings. This does not move the mouse."),
+            GyroOutMode.Passthru => global::DS4Windows.UiText.Get("Let a compatible game or emulator use your motion directly. The game decides what it does."),
+            _ => global::DS4Windows.UiText.Get("Tilts use your button mappings. To move the mouse by tilting, choose Mouse pointer above."),
         };
 
         // Custom is a read-only summary; visiting this page never overwrites a

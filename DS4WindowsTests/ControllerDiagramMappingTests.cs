@@ -14,7 +14,7 @@ public sealed class ControllerDiagramMappingTests
     [TestMethod]
     public void ProCButtonHasAnInteractiveTargetAndCanonicalHighlightIndex()
     {
-        XDocument xaml = XDocument.Load(SourcePath("ProfileEditor.xaml"));
+        XDocument xaml = LocalizedSource.Load(SourcePath("ProfileEditor.xaml"));
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
         XElement button = xaml.Descendants().SingleOrDefault(element =>
             (string)element.Attribute(x + "Name") == "switch2CConBtn");

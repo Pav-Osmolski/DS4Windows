@@ -1,4 +1,4 @@
-﻿<UserControl x:Name="userControl" x:Class="DS4WinWPF.DS4Forms.OutputSlotManagerControl"
+<UserControl x:Name="userControl" x:Class="DS4WinWPF.DS4Forms.OutputSlotManagerControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -39,12 +39,12 @@
         <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
         <Border Style="{DynamicResource BridgeCardStyle}">
             <StackPanel>
-                <TextBlock Text="Virtual controller slots" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-                <TextBlock Text="See which physical controller feeds each virtual output. Dynamic slots are allocated when needed; permanent slots retain their reservation." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                <TextBlock Text="{lex:Loc Strings:UI_6B97024D842D405D}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                <TextBlock Text="{lex:Loc Strings:UI_D83E0EDAD97CFE06}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                 <WrapPanel>
-                    <Button Content="Fit columns" ToolTip="Fit to this window; long controller names wrap." Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="FitColumns_Click" Margin="0,0,16,8"/>
-                    <CheckBox x:Name="autoFitCheck" Content="Auto-fit columns" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" VerticalAlignment="Center" Margin="0,0,16,8" Checked="AutoFit_Changed" Unchecked="AutoFit_Changed"/>
-                    <TextBlock Text="Manual column sizes are saved. Long controller names wrap." Style="{DynamicResource BridgeSectionDescriptionStyle}" VerticalAlignment="Center" Margin="0,0,0,8"/>
+                    <Button Content="{lex:Loc Strings:UI_2C30EFA12D311CE4}" ToolTip="{lex:Loc Strings:UI_B5A108D45C9AF25F}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="FitColumns_Click" Margin="0,0,16,8"/>
+                    <CheckBox x:Name="autoFitCheck" Content="{lex:Loc Strings:UI_91D4D5CB7E8D5C63}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" VerticalAlignment="Center" Margin="0,0,16,8" Checked="AutoFit_Changed" Unchecked="AutoFit_Changed"/>
+                    <TextBlock Text="{lex:Loc Strings:UI_CC0426E67C95476D}" Style="{DynamicResource BridgeSectionDescriptionStyle}" VerticalAlignment="Center" Margin="0,0,0,8"/>
                 </WrapPanel>
             </StackPanel>
         </Border>
@@ -55,11 +55,11 @@
                   Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Slot" Binding="{Binding SlotNumber}" MinWidth="60" Width="Auto" ElementStyle="{StaticResource SlotTextStyle}"/>
-                <DataGridTextColumn Header="Input controller" Binding="{Binding InputSlotDisplayString}" MinWidth="220" Width="*" ElementStyle="{StaticResource SlotTextStyle}"/>
-                <DataGridTextColumn Header="Current output" Binding="{Binding CurrentType}" MinWidth="140" Width="Auto" ElementStyle="{StaticResource SlotTextStyle}"/>
-                <DataGridTextColumn Header="Reservation" Binding="{Binding DesiredType}" MinWidth="140" Width="Auto" ElementStyle="{StaticResource SlotTextStyle}"/>
-                <DataGridTemplateColumn Header="Input bound" MinWidth="110" Width="Auto">
+                <DataGridTextColumn Header="{lex:Loc Strings:UI_79689782061DEC13}" Binding="{Binding SlotNumber}" MinWidth="60" Width="Auto" ElementStyle="{StaticResource SlotTextStyle}"/>
+                <DataGridTextColumn Header="{lex:Loc Strings:UI_5F9E3599B7795DFF}" Binding="{Binding InputSlotDisplayString}" MinWidth="220" Width="*" ElementStyle="{StaticResource SlotTextStyle}"/>
+                <DataGridTextColumn Header="{lex:Loc Strings:UI_08C59E23FAA90329}" Binding="{Binding CurrentType}" MinWidth="140" Width="Auto" ElementStyle="{StaticResource SlotTextStyle}"/>
+                <DataGridTextColumn Header="{lex:Loc Strings:UI_B456E6D5AE43D16C}" Binding="{Binding DesiredType}" MinWidth="140" Width="Auto" ElementStyle="{StaticResource SlotTextStyle}"/>
+                <DataGridTemplateColumn Header="{lex:Loc Strings:UI_B6455D90D2F0B6FF}" MinWidth="110" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate><CheckBox IsChecked="{Binding BoundInput,Mode=OneWay}" IsHitTestVisible="False" Focusable="False" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,8"/></DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -68,8 +68,8 @@
         </DataGrid>
         <Border Grid.Row="2" Style="{DynamicResource BridgeCardStyle}" Margin="0,14,0,0">
             <StackPanel>
-                <TextBlock Text="Selected slot" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-                <TextBlock Text="Select a row to plug or unplug an output, or change its reservation." Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                <TextBlock Text="{lex:Loc Strings:UI_62BCC940CCD7F75B}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                <TextBlock Text="{lex:Loc Strings:UI_E2B4189369D9208D}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                 <WrapPanel>
                     <StackPanel x:Name="plugDevStackPanel" Orientation="Horizontal" Margin="0,0,24,8">
                         <Button x:Name="pluginBtn" Content="{lex:Loc Plug}" IsEnabled="{Binding PluginEnabled}" Click="PluginBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>

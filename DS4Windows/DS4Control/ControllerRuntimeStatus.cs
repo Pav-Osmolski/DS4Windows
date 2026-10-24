@@ -151,55 +151,55 @@ namespace DS4Windows
             if (!signals.PhysicalPresent)
             {
                 return new ControllerStartupStatus(
-                    ControllerStartupStage.Disconnected, "Disconnected",
-                    "No physical controller is assigned to this slot.");
+                    ControllerStartupStage.Disconnected, global::DS4Windows.UiText.Get("Disconnected"),
+                    global::DS4Windows.UiText.Get("No physical controller is assigned to this slot."));
             }
 
             if (signals.PhysicalCleanupQuarantined)
             {
                 return new ControllerStartupStatus(ControllerStartupStage.Attention,
-                    "Needs attention", "This controller session ended, but its cleanup is incomplete. Check the log before retrying; the slot remains reserved for safe cleanup.");
+                    global::DS4Windows.UiText.Get("Needs attention"), global::DS4Windows.UiText.Get("This controller session ended, but its cleanup is incomplete. Check the log before retrying; the slot remains reserved for safe cleanup."));
             }
 
             if (!signals.PhysicalSynced || !signals.PhysicalAlive)
             {
                 return new ControllerStartupStatus(
-                    ControllerStartupStage.Connecting, "Connecting",
-                    "Waiting for stable input from the physical controller.");
+                    ControllerStartupStage.Connecting, global::DS4Windows.UiText.Get("Connecting"),
+                    global::DS4Windows.UiText.Get("Waiting for stable input from the physical controller."));
             }
 
             if (!signals.ProfileSelected)
             {
                 return new ControllerStartupStatus(ControllerStartupStage.ProfileRequired,
-                    "Select a profile", "Choose an Active Profile under Controllers. No virtual controller will start until a profile is selected.");
+                    global::DS4Windows.UiText.Get("Select a profile"), global::DS4Windows.UiText.Get("Choose an Active Profile under Controllers. No virtual controller will start until a profile is selected."));
             }
 
             if (signals.VirtualRequired && signals.VirtualFailed)
             {
                 return new ControllerStartupStatus(ControllerStartupStage.Attention,
-                    "Needs attention", $"The virtual {signals.VirtualControllerName} pad failed to start or its connection ended. Check the log, then retry the output connection.");
+                    global::DS4Windows.UiText.Get("Needs attention"), global::DS4Windows.UiText.Format("The virtual {0} pad failed to start or its connection ended. Check the log, then retry the output connection.", signals.VirtualControllerName));
             }
 
             if (signals.VirtualRequired && !signals.VirtualConnected)
             {
                 return new ControllerStartupStatus(
                     ControllerStartupStage.CreatingVirtualController,
-                    "Connected",
-                    $"Creating the virtual {signals.VirtualControllerName} pad.");
+                    global::DS4Windows.UiText.Get("Connected"),
+                    global::DS4Windows.UiText.Format("Creating the virtual {0} pad.", signals.VirtualControllerName));
             }
 
             if (signals.VirtualRequired && !signals.VirtualTypeMatches)
             {
                 return new ControllerStartupStatus(
                     ControllerStartupStage.CreatingVirtualController,
-                    "Connected",
-                    $"Switching to the virtual {signals.VirtualControllerName} pad.");
+                    global::DS4Windows.UiText.Get("Connected"),
+                    global::DS4Windows.UiText.Format("Switching to the virtual {0} pad.", signals.VirtualControllerName));
             }
 
             ControllerStartupStatus laneStatus = EvaluateLane(
                 signals.AdvancedHaptics,
                 ControllerStartupStage.ArmingAdvancedHaptics,
-                "Arming haptics", "advanced haptics lane");
+                global::DS4Windows.UiText.Get("Arming haptics"), global::DS4Windows.UiText.Get("advanced haptics lane"));
             if (laneStatus.Stage != ControllerStartupStage.Ready)
             {
                 return laneStatus;
@@ -207,7 +207,7 @@ namespace DS4Windows
 
             laneStatus = EvaluateLane(signals.Speaker,
                 ControllerStartupStage.StartingSpeaker,
-                "Starting speaker", "controller speaker and headset audio");
+                global::DS4Windows.UiText.Get("Starting speaker"), global::DS4Windows.UiText.Get("controller speaker and headset audio"));
             if (laneStatus.Stage != ControllerStartupStage.Ready)
             {
                 return laneStatus;
@@ -215,7 +215,7 @@ namespace DS4Windows
 
             laneStatus = EvaluateLane(signals.Microphone,
                 ControllerStartupStage.StartingMicrophone,
-                "Starting microphone", "controller microphone");
+                global::DS4Windows.UiText.Get("Starting microphone"), global::DS4Windows.UiText.Get("controller microphone"));
             if (laneStatus.Stage != ControllerStartupStage.Ready)
             {
                 return laneStatus;
@@ -223,7 +223,7 @@ namespace DS4Windows
 
             laneStatus = EvaluateLane(signals.AudioHaptics,
                 ControllerStartupStage.StartingAudioHaptics,
-                "Starting Audio Haptics", "Audio Haptics capture");
+                global::DS4Windows.UiText.Get("Starting Audio Haptics"), global::DS4Windows.UiText.Get("Audio Haptics capture"));
             if (laneStatus.Stage != ControllerStartupStage.Ready)
             {
                 return laneStatus;
@@ -233,7 +233,7 @@ namespace DS4Windows
                 ? "Physical input, virtual pad, and enabled media lanes are stable."
                 : "Physical input and every enabled media lane are stable.";
             return new ControllerStartupStatus(ControllerStartupStage.Ready,
-                "Ready", detail);
+                global::DS4Windows.UiText.Get("Ready"), detail);
         }
 
         private static ControllerStartupStatus EvaluateLane(
@@ -244,13 +244,13 @@ namespace DS4Windows
             {
                 ControllerRuntimeLaneState.Starting =>
                     new ControllerStartupStatus(stage, startingTitle,
-                        $"Waiting for the {laneName} to become stable."),
+                        global::DS4Windows.UiText.Format("Waiting for the {0} to become stable.", laneName)),
                 ControllerRuntimeLaneState.Unavailable =>
                     new ControllerStartupStatus(ControllerStartupStage.Attention,
-                        "Needs attention",
-                        $"The enabled {laneName} could not be armed."),
+                        global::DS4Windows.UiText.Get("Needs attention"),
+                        global::DS4Windows.UiText.Format("The enabled {0} could not be armed.", laneName)),
                 _ => new ControllerStartupStatus(
-                    ControllerStartupStage.Ready, "Ready", string.Empty),
+                    ControllerStartupStage.Ready, global::DS4Windows.UiText.Get("Ready"), string.Empty),
             };
         }
     }

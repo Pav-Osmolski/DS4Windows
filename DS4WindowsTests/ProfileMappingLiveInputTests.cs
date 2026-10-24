@@ -13,7 +13,7 @@ public sealed class ProfileMappingLiveInputTests
     [TestMethod]
     public void ControlsPreviewIsOptionalAndSpansTheMappingWorkspace()
     {
-        var markup = XDocument.Load(SourcePath("ProfileEditor.xaml"));
+        var markup = LocalizedSource.Load(SourcePath("ProfileEditor.xaml"));
         var preview = Named(markup, "mappingLiveInput");
         Assert.AreEqual("MappingLiveInputControl", preview.Name.LocalName);
         Assert.AreEqual("Collapsed", (string)preview.Attribute("Visibility"));

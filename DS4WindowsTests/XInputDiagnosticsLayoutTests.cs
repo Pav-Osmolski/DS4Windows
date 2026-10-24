@@ -26,18 +26,18 @@ public sealed class XInputDiagnosticsLayoutTests
         {
             XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
             XNamespace xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
-            var document = XDocument.Load(SourcePath());
+            var document = LocalizedSource.Load(SourcePath());
             var markup = new XElement(document.Root.Element(wpf + "DockPanel"));
             markup.SetAttributeValue(XNamespace.Xmlns + "x", xaml.NamespaceName);
             markup.Descendants().Attributes("Click").Remove();
             // This is the production content with production bindings. No window is
             // shown, timer started, or native XInput queried by the render test.
-            var styles = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath()), "Themes", "BridgeShellStyles.xaml")).Root;
+            var styles = LocalizedSource.Load(Path.Combine(Path.GetDirectoryName(SourcePath()), "Themes", "BridgeShellStyles.xaml")).Root;
             styles.AddFirst(new XElement(wpf + "ResourceDictionary.MergedDictionaries",
                 new XElement(wpf + "ResourceDictionary", new XAttribute("Source",
                     $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))));
             markup.AddFirst(new XElement(wpf + "DockPanel.Resources", styles));
-            var content = (DockPanel)XamlReader.Parse(markup.ToString());
+            var content = (DockPanel)XamlReader.Parse(LocalizedSource.Markup(markup));
             content.Margin = new Thickness(0);
             var host = new Border { Child = content };
             host.Background = (Brush)content.FindResource("SurfaceBackgroundColor");

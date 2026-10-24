@@ -30,7 +30,7 @@ public sealed class ProfileSettingsPagesLayoutTests
     public void EveryModeRemainsReachableAndPreservesUnsavedEdits(string page, string theme, double width)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -90,9 +90,8 @@ public sealed class ProfileSettingsPagesLayoutTests
                 Assert.IsTrue(rendered >= 2, "Exercise alternate output modes, not just the first page.");
             }
             catch (Exception error) { failure = error; }
-        });
-        thread.SetApartmentState(ApartmentState.STA);thread.Start();thread.Join();
-        if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
+        };
+HeadlessWpfDispatcher.Invoke(thread);        if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
     private static IEnumerable<DependencyObject> Logical(DependencyObject root)

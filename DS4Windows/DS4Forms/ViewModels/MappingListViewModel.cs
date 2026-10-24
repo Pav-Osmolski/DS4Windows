@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -307,9 +307,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             IsAvailableOnPhysicalController = available;
             IsControllerMapListOnly = available && controllerMapListOnly;
             PhysicalControllerAvailabilityHint = !available
-                ? $"{ControlName} is not available on {physicalControllerName}. The saved backend mapping is preserved."
+                ? global::DS4Windows.UiText.Format("{0} is not available on {1}. The saved backend mapping is preserved.", ControlName, physicalControllerName)
                 : IsControllerMapListOnly
-                    ? $"{ControlName} is fully remappable from this list."
+                    ? global::DS4Windows.UiText.Format("{0} is fully remappable from this list.", ControlName)
                     : null;
         }
 
@@ -317,7 +317,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             if (!IsAvailableOnPhysicalController || IsControllerMapListOnly == !present) return;
             IsControllerMapListOnly = !present;
-            PhysicalControllerAvailabilityHint = present ? null : $"{ControlName} is fully remappable from this list.";
+            PhysicalControllerAvailabilityHint = present ? null : global::DS4Windows.UiText.Format("{0} is fully remappable from this list.", ControlName);
             IsControllerMapListOnlyChanged?.Invoke(this, EventArgs.Empty);
             PhysicalControllerAvailabilityHintChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -409,16 +409,16 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             switch (trigger)
             {
-                case 1: return "Cross";
-                case 2: return "Circle";
-                case 3: return "Square";
-                case 4: return "Triangle";
-                case 5: return "Options";
-                case 6: return "Share";
-                case 7: return "Dpad Up";
-                case 8: return "Dpad Down";
-                case 9: return "Dpad Left";
-                case 10: return "Dpad Right";
+                case 1: return global::DS4Windows.UiText.Get("Cross");
+                case 2: return global::DS4Windows.UiText.Get("Circle");
+                case 3: return global::DS4Windows.UiText.Get("Square");
+                case 4: return global::DS4Windows.UiText.Get("Triangle");
+                case 5: return global::DS4Windows.UiText.Get("Options");
+                case 6: return global::DS4Windows.UiText.Get("Share");
+                case 7: return global::DS4Windows.UiText.Get("Dpad Up");
+                case 8: return global::DS4Windows.UiText.Get("Dpad Down");
+                case 9: return global::DS4Windows.UiText.Get("Dpad Left");
+                case 10: return global::DS4Windows.UiText.Get("Dpad Right");
                 case 11: return "PS";
                 case 12: return "L1";
                 case 13: return "R1";
@@ -426,31 +426,31 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 case 15: return "R2";
                 case 16: return "L3";
                 case 17: return "R3";
-                case 18: return "Left Touch";
-                case 19: return "Upper Touch";
-                case 20: return "Multi Touch";
-                case 21: return "Right Touch";
+                case 18: return global::DS4Windows.UiText.Get("Left Touch");
+                case 19: return global::DS4Windows.UiText.Get("Upper Touch");
+                case 20: return global::DS4Windows.UiText.Get("Multi Touch");
+                case 21: return global::DS4Windows.UiText.Get("Right Touch");
                 case 22: return Properties.Resources.TiltUp;
                 case 23: return Properties.Resources.TiltDown;
                 case 24: return Properties.Resources.TiltLeft;
                 case 25: return Properties.Resources.TiltRight;
-                case 26: return "Finger on Touchpad";
-                case 27: return "Mute";
-                case 28: return "Function Left";
-                case 29: return "Function Right";
-                case 30: return "Bottom Left Paddle";
-                case 31: return "Bottom Right Paddle";
-                case 32: return "Capture";
-                case 33: return "Side L";
-                case 34: return "Side R";
-                case 35: return "Switch 2 Joy-Con Left IR Sensor";
-                case 36: return "Switch 2 Joy-Con Right IR Sensor";
-                case 37: return "Switch 2 Mode Shift";
-                case 38: return "Switch 2 Joy-Con Left SL";
-                case 39: return "Switch 2 Joy-Con Left SR";
-                case 40: return "Switch 2 Joy-Con Right SL";
-                case 41: return "Switch 2 Joy-Con Right SR";
-                case 42: return "Switch 2 C / Chat";
+                case 26: return global::DS4Windows.UiText.Get("Finger on Touchpad");
+                case 27: return global::DS4Windows.UiText.Get("Mute");
+                case 28: return global::DS4Windows.UiText.Get("Function Left");
+                case 29: return global::DS4Windows.UiText.Get("Function Right");
+                case 30: return global::DS4Windows.UiText.Get("Bottom Left Paddle");
+                case 31: return global::DS4Windows.UiText.Get("Bottom Right Paddle");
+                case 32: return global::DS4Windows.UiText.Get("Capture");
+                case 33: return global::DS4Windows.UiText.Get("Side L");
+                case 34: return global::DS4Windows.UiText.Get("Side R");
+                case 35: return global::DS4Windows.UiText.Get("Switch 2 Joy-Con Left IR Sensor");
+                case 36: return global::DS4Windows.UiText.Get("Switch 2 Joy-Con Right IR Sensor");
+                case 37: return global::DS4Windows.UiText.Get("Switch 2 Mode Shift");
+                case 38: return global::DS4Windows.UiText.Get("Switch 2 Joy-Con Left SL");
+                case 39: return global::DS4Windows.UiText.Get("Switch 2 Joy-Con Left SR");
+                case 40: return global::DS4Windows.UiText.Get("Switch 2 Joy-Con Right SL");
+                case 41: return global::DS4Windows.UiText.Get("Switch 2 Joy-Con Right SR");
+                case 42: return global::DS4Windows.UiText.Get("Switch 2 C / Chat");
                 default: return "";
             }
         }

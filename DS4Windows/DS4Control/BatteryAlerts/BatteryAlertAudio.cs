@@ -22,15 +22,15 @@ internal static class BatteryAlertAudio
     internal static string SoundDirectory => Path.Combine(Global.appdatapath, "BatteryAlertSounds");
 
     internal static IReadOnlyList<BatteryAlertChoice> Voices() =>
-        new[] { new BatteryAlertChoice("", "System default") }.Concat(
+        new[] { new BatteryAlertChoice("", global::DS4Windows.UiText.Get("System default")) }.Concat(
             SpeechSynthesizer.AllVoices.OrderBy(v => v.Language).ThenBy(v => v.DisplayName)
                 .Select(v => new BatteryAlertChoice(v.Id, $"{v.DisplayName} ({v.Language})"))).ToArray();
 
     internal static IReadOnlyList<BatteryAlertChoice> Outputs()
     {
         using var enumerator = new MMDeviceEnumerator();
-        var result = new List<BatteryAlertChoice> { new("", "Windows default audio device"),
-            new("controller", "Controller speaker (enabled native audio route)") };
+        var result = new List<BatteryAlertChoice> { new("", global::DS4Windows.UiText.Get("Windows default audio device")),
+            new("controller", global::DS4Windows.UiText.Get("Controller speaker (enabled native audio route)")) };
         var devices = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
         foreach (var device in devices)
         {
@@ -54,7 +54,7 @@ internal static class BatteryAlertAudio
     internal static float[] Decode(ISampleProvider source, CancellationToken token)
     {
         if (source.WaveFormat.Channels == 2) source = new StereoToMonoSampleProvider(source);
-        if (source.WaveFormat.Channels != 1) throw new InvalidDataException("Choose a mono or stereo sound file.");
+        if (source.WaveFormat.Channels != 1) throw new InvalidDataException(global::DS4Windows.UiText.Get("Choose a mono or stereo sound file."));
         if (source.WaveFormat.SampleRate != SampleRate) source = new WdlResamplingSampleProvider(source, SampleRate);
         var samples = new List<float>();
         var buffer = new float[4096];
@@ -63,14 +63,14 @@ internal static class BatteryAlertAudio
         {
             token.ThrowIfCancellationRequested();
             if (samples.Count + read > MaximumSeconds * SampleRate)
-                throw new InvalidDataException($"Choose an alert sound no longer than {MaximumSeconds} seconds.");
+                throw new InvalidDataException(global::DS4Windows.UiText.Format("Choose an alert sound no longer than {0} seconds.", MaximumSeconds));
             for (int i = 0; i < read; i++)
             {
-                if (!float.IsFinite(buffer[i])) throw new InvalidDataException("The sound contains invalid audio samples.");
+                if (!float.IsFinite(buffer[i])) throw new InvalidDataException(global::DS4Windows.UiText.Get("The sound contains invalid audio samples."));
                 samples.Add(Math.Clamp(buffer[i], -1, 1));
             }
         }
-        if (samples.Count == 0) throw new InvalidDataException("The sound file contains no audio.");
+        if (samples.Count == 0) throw new InvalidDataException(global::DS4Windows.UiText.Get("The sound file contains no audio."));
         return samples.ToArray();
     }
 
@@ -80,8 +80,8 @@ internal static class BatteryAlertAudio
         {
             string extension = Path.GetExtension(filename).ToLowerInvariant();
             if (extension is not (".wav" or ".mp3" or ".aif" or ".aiff"))
-                throw new InvalidDataException("Choose a WAV, MP3 or AIFF sound.");
-            if (new FileInfo(filename).Length > MaximumFileBytes) throw new InvalidDataException("Choose a sound smaller than 64 MB.");
+                throw new InvalidDataException(global::DS4Windows.UiText.Get("Choose a WAV, MP3 or AIFF sound."));
+            if (new FileInfo(filename).Length > MaximumFileBytes) throw new InvalidDataException(global::DS4Windows.UiText.Get("Choose a sound smaller than 64 MB."));
             using var reader = new AudioFileReader(filename);
             float[] samples = Decode(reader, token);
             using var encoded = new MemoryStream();
@@ -110,15 +110,15 @@ internal static class BatteryAlertAudio
     {
         if (name == null || name.Length != 68 || !name.EndsWith(".wav", StringComparison.Ordinal) ||
             name[..64].Any(c => !Uri.IsHexDigit(c)))
-            throw new InvalidDataException("Import a sound file for this alert first.");
+            throw new InvalidDataException(global::DS4Windows.UiText.Get("Import a sound file for this alert first."));
         return Path.Combine(directory, name);
     }
 
     internal static float[] ReadSound(string name, CancellationToken token)
     {
         string path = ResolveSound(SoundDirectory, name);
-        if (!File.Exists(path)) throw new FileNotFoundException("The imported sound is missing. Import it again.");
-        if (new FileInfo(path).Length > MaximumFileBytes) throw new InvalidDataException("The imported sound is too large.");
+        if (!File.Exists(path)) throw new FileNotFoundException(global::DS4Windows.UiText.Get("The imported sound is missing. Import it again."));
+        if (new FileInfo(path).Length > MaximumFileBytes) throw new InvalidDataException(global::DS4Windows.UiText.Get("The imported sound is too large."));
         using var reader = new WaveFileReader(path);
         return Decode(reader.ToSampleProvider(), token);
     }
@@ -136,7 +136,7 @@ internal static class BatteryAlertAudio
         var mix = device.AudioClient.MixFormat;
         bool controller = DualSenseAudioPassthrough.IsControllerAudioEndpoint(device);
         if (controller && (device.AudioEndpointVolume.Mute || device.AudioEndpointVolume.MasterVolumeLevelScalar <= 0))
-            throw new BatteryAlertUnavailableException("The selected controller audio device is muted or at zero volume in Windows sound settings.");
+            throw new BatteryAlertUnavailableException(global::DS4Windows.UiText.Get("The selected controller audio device is muted or at zero volume in Windows sound settings."));
         AppLogger.LogToGui($"Battery alert playback: {device.FriendlyName}; {mix.SampleRate} Hz, {mix.Channels} channels; alert volume {volume}%.", false);
         if (mix.SampleRate != SampleRate) source = new WdlResamplingSampleProvider(source, mix.SampleRate);
         source = new BatteryAlertChannelProvider(source, mix.Channels,
@@ -195,7 +195,7 @@ internal sealed class BatteryAlertOutputProvider : IWaveProvider
         if (source.WaveFormat.SampleRate != format.SampleRate || source.WaveFormat.Channels != format.Channels ||
             !(floatingPoint && format.BitsPerSample is 32 or 64 ||
               standard.Encoding == WaveFormatEncoding.Pcm && format.BitsPerSample is 16 or 24 or 32))
-            throw new NotSupportedException("The selected audio device has an unsupported playback format.");
+            throw new NotSupportedException(global::DS4Windows.UiText.Get("The selected audio device has an unsupported playback format."));
         this.source = source;
         WaveFormat = format;
     }
@@ -234,7 +234,7 @@ internal sealed class BatteryAlertChannelProvider : ISampleProvider
     public WaveFormat WaveFormat { get; }
     internal BatteryAlertChannelProvider(ISampleProvider source, int channels, bool controller)
     {
-        if (source.WaveFormat.Channels != 1 || channels < 1) throw new ArgumentException("A mono alert source is required.");
+        if (source.WaveFormat.Channels != 1 || channels < 1) throw new ArgumentException(global::DS4Windows.UiText.Get("A mono alert source is required."));
         this.source = source;
         this.controller = controller;
         WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(source.WaveFormat.SampleRate, channels);

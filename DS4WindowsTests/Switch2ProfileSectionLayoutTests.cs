@@ -347,7 +347,7 @@ public sealed class Switch2ProfileSectionLayoutTests
         {
             string path = Path.Combine(new[] { root.FullName, "DS4Windows", "DS4Forms" }
                 .Concat(relative).ToArray());
-            if (File.Exists(path)) return XDocument.Load(path);
+            if (File.Exists(path)) return LocalizedSource.Load(path);
         }
         throw new FileNotFoundException("Production markup not found: " + Path.Combine(relative));
     }

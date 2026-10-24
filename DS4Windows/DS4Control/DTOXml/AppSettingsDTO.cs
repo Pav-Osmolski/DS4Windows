@@ -479,10 +479,12 @@ namespace DS4WinWPF.DS4Control.DTOXml
         }
 
         // Default UseLang to empty string. Not null
+        private string useLang = "";
         public string UseLang
         {
-            get; set;
-        } = "";
+            get => useLang;
+            set => useLang = LanguagePackPolicy.Normalize(value);
+        }
 
         [XmlIgnore]
         public bool DownloadLang
@@ -550,6 +552,12 @@ namespace DS4WinWPF.DS4Control.DTOXml
         public SidebarIconChoice SidebarIcon { get; private set; } = SidebarIconChoice.BlueTile;
 
         public double SidebarIconHue { get; set; }
+        private string appAccent = "Theme";
+        public string AppAccent
+        {
+            get => appAccent;
+            set => appAccent = DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.NormalizeAccent(value);
+        }
         public BatteryAlertSettings BatteryAlerts { get; set; } = new();
 
         [XmlElement("SidebarIcon")]
@@ -573,7 +581,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             {
                 if (Enum.TryParse(value, out AppThemeChoice temp))
                 {
-                    AppTheme = temp;
+                    AppTheme = DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.Normalize(temp);
                 }
             }
         }
@@ -997,6 +1005,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             SidebarIconHue = SidebarIconPolicy.NormalizeHue(source.sidebarIconHue);
             BatteryAlerts = source.batteryAlerts?.Clone() ?? new();
             AppTheme = source.useCurrentTheme;
+            AppAccent = source.appAccent;
             UseOSCServer = source.useOSCServ;
             OSCServerPort = source.oscServPort;
             InterpretingOscMonitoring = source.interpretingOscMonitoring;
@@ -1118,6 +1127,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.sidebarIconHue = SidebarIconPolicy.NormalizeHue(SidebarIconHue);
             destination.batteryAlerts = BatteryAlerts?.Clone() ?? new();
             destination.useCurrentTheme = AppTheme;
+            destination.appAccent = AppAccent;
             destination.useOSCServ = UseOSCServer;
             destination.oscServPort = OSCServerPort;
             destination.interpretingOscMonitoring = InterpretingOscMonitoring;

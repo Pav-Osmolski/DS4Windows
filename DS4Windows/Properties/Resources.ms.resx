@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:schema id="root">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xs:element name="root" ns1:IsDataSet="true">
+      <xs:complexType>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="metadata">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" />
+              </xs:sequence>
+              <xs:attribute name="name" use="required" type="xsd:string" />
+              <xs:attribute name="type" type="xsd:string" />
+              <xs:attribute name="mimetype" type="xsd:string" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="assembly">
+            <xs:complexType>
+              <xs:attribute name="alias" type="xsd:string" />
+              <xs:attribute name="name" type="xsd:string" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="data">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+              <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+              <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="resheader">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" />
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionExists" xml:space="preserve">
+    <value>Nama aktiviti ini sudah wujud</value>
+  </data>
+  <data name="AddingToList" xml:space="preserve">
+    <value>Menambah kepada senarai...</value>
+  </data>
+  <data name="AddPrograms" xml:space="preserve">
+    <value>Tambah Program</value>
+  </data>
+  <data name="ALocactionNeeded" xml:space="preserve">
+    <value>Lokasi perlu dipilih untuk meneruskan</value>
+  </data>
+  <data name="AlwaysRainbow" xml:space="preserve">
+    <value>Sentiasa dalam Rainbow Mode</value>
+  </data>
+  <data name="AssignProfile" xml:space="preserve">
+    <value>Tentukan nombor pengawal *</value>
+  </data>
+  <data name="Battery" xml:space="preserve">
+    <value>Baterai : * Jumlah *%</value>
+  </data>
+  <data name="BestUsedRightSide" xml:space="preserve">
+    <value>Digunakan dengan sisi kanan sebagai fungsi tetikus</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="BTPollRate" xml:space="preserve">
+    <value>Menentukan kadar soalan yang digunakan untuk perkakasan DS4 apabila disambungkan melalui Bluetooth. (Dapat digunakan pada simpan profil)</value>
+  </data>
+  <data name="CannotMoveFiles" xml:space="preserve">
+    <value>Tidak boleh memindahkan fail ke lokasi baru, Sila menamakan semula folder DS4Tool kepada "DS4Windows"</value>
+  </data>
+  <data name="CannotWriteHere" xml:space="preserve">
+    <value>Tidak boleh menulis di lokasi semasa. menyalin Settings kepada appdata?</value>
+  </data>
+  <data name="ChargeController" xml:space="preserve">
+    <value>Mengecas Baterai</value>
+  </data>
+  <data name="Charged" xml:space="preserve">
+    <value>Tertanggung</value>
+  </data>
+  <data name="Charging" xml:space="preserve">
+    <value>Pengecasan: * nombor *%</value>
+  </data>
+  <data name="CheckBattery" xml:space="preserve">
+    <value>Periksa Baterai</value>
+  </data>
+  <data name="CloseConfirm" xml:space="preserve">
+    <value>Ini akan mematikan semua kawalan anda yang disambungkan.</value>
+  </data>
+  <data name="CloseDS4W" xml:space="preserve">
+    <value>berhampiran DS4Windows?</value>
+  </data>
+  <data name="CloseMinimize" xml:space="preserve">
+    <value>Menutup tetingkap utama akan meminimalkan aplikasi.</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Warna</value>
+  </data>
+  <data name="ColorByBattery" xml:space="preserve">
+    <value>Warna mengikut Bateri %</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Mengesahkan...</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>Menghubungkan ...</value>
+  </data>
+  <data name="ContextEdit" xml:space="preserve">
+    <value>Edit Profile untuk Controller *number*</value>
+  </data>
+  <data name="ContextNew" xml:space="preserve">
+    <value>Buat Profil Pengawal *Nombor*</value>
+  </data>
+  <data name="ControllerWasRemoved" xml:space="preserve">
+    <value>Pengendali *Adres Mac* telah dipadamkan atau rangkaian hilang</value>
+  </data>
+  <data name="CopyComplete" xml:space="preserve">
+    <value>Salin lengkap, sila mulakan semula DS4Windows dan hapuskan seting daripada Direktori Program</value>
+  </data>
+  <data name="CopyFullColor" xml:space="preserve">
+    <value>Klik untuk menyalin warna penuh</value>
+  </data>
+  <data name="CouldNotOpenDS4" xml:space="preserve">
+    <value>Amaran: Tidak boleh membuka DS4 * Alamat Mac* secara eksklusif.</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>hari</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>hari</value>
+  </data>
+  <data name="DeleteProfile" xml:space="preserve">
+    <value>Menghapuskan profil ?</value>
+  </data>
+  <data name="DimByBattery" xml:space="preserve">
+    <value>Dim oleh Bateri %</value>
+  </data>
+  <data name="DisconnectBT" xml:space="preserve">
+    <value>Penyambung BT</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Disambungkan</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Mengunduh * Jumlah *%</value>
+  </data>
+  <data name="DownloadVersion" xml:space="preserve">
+    <value>Download versi *number* sekarang?</value>
+  </data>
+  <data name="DownText" xml:space="preserve">
+    <value>bawah</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DS4Update" xml:space="preserve">
+    <value>DS4Windows Update Disediakan!</value>
+  </data>
+  <data name="DS4WindowsCannotEditHere" xml:space="preserve">
+    <value>DS4Windows tidak boleh mengedit tetapan di sini, Ini kini akan ditutup</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Sunting</value>
+  </data>
+  <data name="FallBack" xml:space="preserve">
+    <value>Kembali jatuh</value>
+  </data>
+  <data name="FallBackTo" xml:space="preserve">
+    <value>Kembali kepada *button*</value>
+  </data>
+  <data name="FifthMouseDown" xml:space="preserve">
+    <value>5th Mouse Button Turun</value>
+  </data>
+  <data name="FifthMouseUp" xml:space="preserve">
+    <value>Tombol tetikus ke-5</value>
+  </data>
+  <data name="FlashAtTip" xml:space="preserve">
+    <value>Klik untuk mengubah warna flash. hitam = warna lalai</value>
+  </data>
+  <data name="FlushHID" xml:space="preserve">
+    <value>Flush menyembunyikan</value>
+  </data>
+  <data name="FlushHIDTip" xml:space="preserve">
+    <value>Flush HID Queue selepas setiap bacaan</value>
+  </data>
+  <data name="FoundController" xml:space="preserve">
+    <value>Pengawal yang ditemui:</value>
+  </data>
+  <data name="FourthMouseDown" xml:space="preserve">
+    <value>Tombol tetikus keempat</value>
+  </data>
+  <data name="FourthMouseUp" xml:space="preserve">
+    <value>Tombol tetikus keempat</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Penuh</value>
+  </data>
+  <data name="GyroReadout" xml:space="preserve">
+    <value>Klik untuk melihat readout daripada Sixaxis Gyro</value>
+  </data>
+  <data name="GyroTriggerBehavior" xml:space="preserve">
+    <value>Periksa untuk mempunyai gyro aktif semasa trigger aktif. Uncheck untuk mematikan gyro semasa trigger aktif.</value>
+  </data>
+  <data name="GyroX" xml:space="preserve">
+    <value>GyroX, Tilt kiri dan kanan</value>
+  </data>
+  <data name="GyroY" xml:space="preserve">
+    <value>GyroY, ke hadapan dan belakang Tilt</value>
+  </data>
+  <data name="GyroZ" xml:space="preserve">
+    <value>GyroZ, Tilt Atas dan Turun</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>jam yang</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>jam yang</value>
+  </data>
+  <data name="HoverOverItems" xml:space="preserve">
+    <value>Menjelajah item untuk melihat penerangan atau lebih banyak tentang</value>
+  </data>
+  <data name="IfRemovingDS4Windows" xml:space="preserve">
+    <value>Jika anda memadamkan DS4Windows, anda boleh memadamkan tetapan mengikut pautan folder profil</value>
+  </data>
+  <data name="InputDelay" xml:space="preserve">
+    <value>Interval laporan fizikal yang diamati: {0:0.00} ms</value>
+  </data>
+  <data name="InstallComplete" xml:space="preserve">
+    <value>Pembinaan lengkap</value>
+  </data>
+  <data name="InstallDriver" xml:space="preserve">
+    <value>Masukkan driver di sini</value>
+  </data>
+  <data name="InstallFailed" xml:space="preserve">
+    <value>Pemasangan gagal, sila retry</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Memasang...</value>
+  </data>
+  <data name="Jitter" xml:space="preserve">
+    <value>Gunakan Sixaxis untuk membantu mengira pergerakan touchpad</value>
+  </data>
+  <data name="KeepThisSize" xml:space="preserve">
+    <value>Simpan saiz tetingkap ini selepas ditutup</value>
+  </data>
+  <data name="LanguagePackApplyRestartRequired" xml:space="preserve">
+    <value>Perubahan paket bahasa akan berkuatkuasa selepas aplikasi DS4Windows dimulakan semula.</value>
+  </data>
+  <data name="LatencyNotOverTen" xml:space="preserve">
+    <value>Latens controller *number* kini di bawah 10ms</value>
+  </data>
+  <data name="LatencyOverTen" xml:space="preserve">
+    <value>Latensi pengawal {0} lebih daripada 10ms ({1} ms)</value>
+  </data>
+  <data name="LaunchProgram" xml:space="preserve">
+    <value>Melancarkan * Program*</value>
+  </data>
+  <data name="LightByBatteryTip" xml:space="preserve">
+    <value>Juga gelap cahaya oleh timeout kosong jika diaktifkan apabila DS4 diisi penuh</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Pengecasan ...</value>
+  </data>
+  <data name="LoadProfile" xml:space="preserve">
+    <value>Load * profil anda *</value>
+  </data>
+  <data name="Macro" xml:space="preserve">
+    <value>Makro</value>
+  </data>
+  <data name="MacroRecorded" xml:space="preserve">
+    <value>Makro tercatat</value>
+  </data>
+  <data name="MakeNewProfile" xml:space="preserve">
+    <value>Buat profil baru</value>
+  </data>
+  <data name="MultiAction" xml:space="preserve">
+    <value>Tombol Tindakan</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Baharu</value>
+  </data>
+  <data name="NoMacroRecorded" xml:space="preserve">
+    <value>Makro tidak disenaraikan</value>
+  </data>
+  <data name="noneProfile" xml:space="preserve">
+    <value>(Tiada yang</value>
+  </data>
+  <data name="NoneText" xml:space="preserve">
+    <value>Tiada</value>
+  </data>
+  <data name="NoProfileLoaded" xml:space="preserve">
+    <value>Tiada profil yang diletakkan</value>
+  </data>
+  <data name="NotUsingProfile" xml:space="preserve">
+    <value>Pengawal {0} tidak menggunakan profil. tahap bateri ialah {1}%</value>
+  </data>
+  <data name="NotValid" xml:space="preserve">
+    <value>Tidak valid</value>
+  </data>
+  <data name="OpeningInstaller" xml:space="preserve">
+    <value>Pembukaan Installer</value>
+  </data>
+  <data name="OpenScpDriver" xml:space="preserve">
+    <value>Buka Settings &gt; Controller dan pilih Install / Repair VIIPER.</value>
+  </data>
+  <data name="OtherFileLocation" xml:space="preserve">
+    <value>fail lokasi lain akan dipadamkan</value>
+  </data>
+  <data name="PleaseDownloadUpdater" xml:space="preserve">
+    <value>Sila muat turun Updater sekarang, letakkan dalam folder program dan menamakan semula kepada DS4Updater.exe jika pada x86, kemudian semak untuk kemas kini lagi. DS4Windows akan cuba membuka halaman Rilis DS4Updater apabila tetingkap ini ditutup.</value>
+  </data>
+  <data name="PleaseImport" xml:space="preserve">
+    <value>Sila import atau buat profil</value>
+  </data>
+  <data name="PlusNewProfile" xml:space="preserve">
+    <value>Profil Baharu</value>
+  </data>
+  <data name="ProfileCannotRestore" xml:space="preserve">
+    <value>*Nama profil* tidak boleh dipulihkan.</value>
+  </data>
+  <data name="ProfileFolderMoved" xml:space="preserve">
+    <value>Profil Folder Dipindahkan ke folder program</value>
+  </data>
+  <data name="Programs" xml:space="preserve">
+    <value>program</value>
+  </data>
+  <data name="QuickCharge" xml:space="preserve">
+    <value>Auto-Disable BT apabila menyambung ke USB</value>
+  </data>
+  <data name="QuitOtherPrograms" xml:space="preserve">
+    <value>Menutup aplikasi yang kini memegang kawalan fizikal sebelum mengaktifkan 'Use HidHide to Prevent Double Input'.</value>
+  </data>
+  <data name="RecordText" xml:space="preserve">
+    <value>Rekod Teks</value>
+  </data>
+  <data name="RightClickPresets" xml:space="preserve">
+    <value>Klik kanan untuk menetapkan preset untuk set kawalan</value>
+  </data>
+  <data name="RunAtStartup" xml:space="preserve">
+    <value>Beritahu Windows untuk memulakan DS4Windows selepas log masuk</value>
+  </data>
+  <data name="SaveRecordedMacro" xml:space="preserve">
+    <value>Menyimpan rekod makro?</value>
+  </data>
+  <data name="ScanCode" xml:space="preserve">
+    <value>Scan kod</value>
+  </data>
+  <data name="SearchingController" xml:space="preserve">
+    <value>Mencari pengawal...</value>
+  </data>
+  <data name="SelectActionTitle" xml:space="preserve">
+    <value>Pilih tindakan untuk *action*</value>
+  </data>
+  <data name="SelectMacro" xml:space="preserve">
+    <value>Pilih Makro</value>
+  </data>
+  <data name="SetRegularTrigger" xml:space="preserve">
+    <value>Menentukan Trigger biasa</value>
+  </data>
+  <data name="SetUnloadTrigger" xml:space="preserve">
+    <value>Menyelamatkan Trigger</value>
+  </data>
+  <data name="Shortcuts" xml:space="preserve">
+    <value>Pendekatan</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrate" xml:space="preserve">
+    <value>Pengukuran emulasi roda sixaxis</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction1" xml:space="preserve">
+    <value>(1) Pusat kawalan, tahan ia stabil dan tekan "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction2" xml:space="preserve">
+    <value>(2) Berbalik ke kedudukan 90° kiri (atau kanan) dan tekan "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction3" xml:space="preserve">
+    <value>(3) Berbalik ke kedudukan 90° kanan (atau kiri) dan tekan "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction" xml:space="preserve">
+    <value>Semua titik kalibraton ditetapkan apabila warna bar lampu berubah kepada hijau. Semasa memutar kawalan, warna bar lampu berkedip apabila kawalan berada pada titik kalibrasi. Menerima kalibrasi dengan butang OK</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoControllerError" xml:space="preserve">
+    <value>Tidak boleh mengkalibrasi giro (sixaxis) nilai emulasi roda pandu tanpa kawalan. Sambungkan kawalan melalui Bluetooth atau usb</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoneAxisError" xml:space="preserve">
+    <value>Opsyen emulasi sumbu roda gyro ditetapkan kepada NONE (emulasi tidak digunakan). Sila pilih opsyen sumbu sebelum mengkalibrasi emulasi roda gyro sixaxis</value>
+  </data>
+  <data name="SixAxisReading" xml:space="preserve">
+    <value>Klik untuk membaca Sixaxis lanjutan</value>
+  </data>
+  <data name="Starting" xml:space="preserve">
+    <value>Mulakan...</value>
+  </data>
+  <data name="StartText" xml:space="preserve">
+    <value>Mula</value>
+  </data>
+  <data name="Step1" xml:space="preserve">
+    <value>Langkah 1: Memasang VIIPER dan USB/IP</value>
+  </data>
+  <data name="StopHText" xml:space="preserve">
+    <value>Berhenti berat</value>
+  </data>
+  <data name="StopLText" xml:space="preserve">
+    <value>Hentikan cahaya</value>
+  </data>
+  <data name="StoppedDS4Windows" xml:space="preserve">
+    <value>Menghentikan DS4Windows</value>
+  </data>
+  <data name="StoppingDS4" xml:space="preserve">
+    <value>Menghentikan DS4 Input Controller</value>
+  </data>
+  <data name="StoppingX360" xml:space="preserve">
+    <value>Menghentikan pengawal output virtual</value>
+  </data>
+  <data name="StopText" xml:space="preserve">
+    <value>Berhenti</value>
+  </data>
+  <data name="SwipeDown" xml:space="preserve">
+    <value>Swipe ke bawah</value>
+  </data>
+  <data name="SwipeLeft" xml:space="preserve">
+    <value>Punggung kiri</value>
+  </data>
+  <data name="SwipeRight" xml:space="preserve">
+    <value>Sukan kanan</value>
+  </data>
+  <data name="SwipeTouchpad" xml:space="preserve">
+    <value>Swipe Touchpad untuk mengubah profil</value>
+  </data>
+  <data name="SwipeUp" xml:space="preserve">
+    <value>Swipe ke atas</value>
+  </data>
+  <data name="TapAndHold" xml:space="preserve">
+    <value>Tekan dan tahan untuk drag, sedikit penundaan dengan tekan tunggal</value>
+  </data>
+  <data name="TestHText" xml:space="preserve">
+    <value>Ujian berat</value>
+  </data>
+  <data name="TestLText" xml:space="preserve">
+    <value>Ujian Cahaya</value>
+  </data>
+  <data name="TestText" xml:space="preserve">
+    <value>Ujian</value>
+  </data>
+  <data name="TextDocs" xml:space="preserve">
+    <value>Teks Dokumen (*.txt)</value>
+  </data>
+  <data name="TiltDown" xml:space="preserve">
+    <value>Tilt turun</value>
+  </data>
+  <data name="TiltLeft" xml:space="preserve">
+    <value>Tilt Kiri</value>
+  </data>
+  <data name="TiltRight" xml:space="preserve">
+    <value>Tilt kanan</value>
+  </data>
+  <data name="TiltUp" xml:space="preserve">
+    <value>Meningkatkan</value>
+  </data>
+  <data name="TouchpadMovementOff" xml:space="preserve">
+    <value>Touchpad Movement kini telah dimatikan</value>
+  </data>
+  <data name="TouchpadMovementOn" xml:space="preserve">
+    <value>Touchpad Movement kini telah</value>
+  </data>
+  <data name="TouchpadOffTip" xml:space="preserve">
+    <value>Mengaktifkan semula dengan tekan PS+Touchpad</value>
+  </data>
+  <data name="TwoFingerSwipe" xml:space="preserve">
+    <value>2 jari touchpad gulung kiri atau kanan</value>
+  </data>
+  <data name="TypeNewName" xml:space="preserve">
+    <value>Tag: nama baru di sini</value>
+  </data>
+  <data name="TypeProfileName" xml:space="preserve">
+    <value>Nama Profil Di Sini</value>
+  </data>
+  <data name="UACTask" xml:space="preserve">
+    <value>Anda perlu menjalankan DS4Windows sebagai pentadbir untuk mengaktifkan mod ini.</value>
+  </data>
+  <data name="Unassigned" xml:space="preserve">
+    <value>Tidak disenaraikan</value>
+  </data>
+  <data name="UpText" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="UpToDate" xml:space="preserve">
+    <value>DS4Windows aplikasi adalah up-to-date.</value>
+  </data>
+  <data name="UseControllerForMapping" xml:space="preserve">
+    <value>Anda juga boleh menggunakan kawalan anda untuk mengubah kawalan</value>
+  </data>
+  <data name="UsingExclusive" xml:space="preserve">
+    <value>Menggunakan mode eksklusif</value>
+  </data>
+  <data name="UsingProfile" xml:space="preserve">
+    <value>Pengawal {0} menggunakan Profil "{1}". tahap bateri ialah {2}%</value>
+  </data>
+  <data name="UsingShared" xml:space="preserve">
+    <value>Menggunakan mod berkongsi</value>
+  </data>
+  <data name="UsingTPSwipes" xml:space="preserve">
+    <value>Ini mematikan Touchpad sebagai tetikus</value>
+  </data>
+  <data name="ValidName" xml:space="preserve">
+    <value>Sila masukkan nama yang sah</value>
+  </data>
+  <data name="WaitMS" xml:space="preserve">
+    <value>Tunggu * nombor * ms</value>
+  </data>
+  <data name="WillKeep" xml:space="preserve">
+    <value>akan kekal</value>
+  </data>
+  <data name="XMLFiles" xml:space="preserve">
+    <value>Fail XML (*.xml)</value>
+  </data>
+  <data name="EnableTouchToggle" xml:space="preserve">
+    <value>Membolehkan fungsi tetikus touchpad untuk get toggled dengan PS + Touchpad Klik.</value>
+  </data>
+  <data name="UdpServer" xml:space="preserve">
+    <value>Mengaktifkan pelayan UDP. Pelayan mendengar alamat dan port. Opsyen nilai alamat: 127.0.0.1 localhost hanya 10.0.0.0 semua alamat 10 Nama host tertentu atau alamat IP.</value>
+  </data>
+  <data name="AutoProfilePathAndWindowTitleEditTip" xml:space="preserve">
+    <value>^ABC = Match at the beginning of string (^) Ebay ABC$ = Match at the end of string ($) Ebay *ABC =Ia mengandungi string (*)</value>
+  </data>
+  <data name="ShowAutoProfileDebugLogTip" xml:space="preserve">
+    <value>Jika diaktifkan, halaman tab Log memaparkan mesej terperinci peristiwa auto-profile.</value>
+  </data>
+  <data name="MacroScanCodeTip" xml:space="preserve">
+    <value>Menggunakan nilai kod pemindaian kunci keyboard dalam makro</value>
+  </data>
+  <data name="MacroRunOnReleaseTip" xml:space="preserve">
+    <value>Menjalankan makro pada release trigger key</value>
+  </data>
+  <data name="MacroSynchronizedRunTip" xml:space="preserve">
+    <value>Menjalankan pelbagai makro dalam urutan disegerakkan jika pemicu yang sama mempunyai beberapa makro (makro kunci keluar selesai sebelum makro pembebasan kunci dijalankan)</value>
+  </data>
+  <data name="MacroRepeatTip" xml:space="preserve">
+    <value>Mengulang makro semasa kunci pemicu ditahan</value>
+  </data>
+  <data name="MacroKeepKeyStateTip" xml:space="preserve">
+    <value>Mengekalkan keadaan kunci terakhir apabila pelaksanaan makro selesai (iaitu jika kunci ditinggalkan dalam keadaan turun maka ia tidak secara automatik dipulihkan semula ke keadaan lalai)</value>
+  </data>
+  <data name="SquareStickRoundness" xml:space="preserve">
+    <value>Gambaran keseluruhan Square Stick corners</value>
+  </data>
+  <data name="XMLActionsCorrupt" xml:space="preserve">
+    <value>Fail .xml telah rosak. bermula daripada awal.</value>
+  </data>
+  <data name="OscServer" xml:space="preserve">
+    <value>Membolehkan OSC Server. Dengarkan port pada semua alamat.</value>
+  </data>
+  <data name="UsingAutoTempProfile" xml:space="preserve">
+    <value>Pengendali {0} menggunakan profil temp "{1}"</value>
+  </data>
+  <data name="DinputOnly" xml:space="preserve">
+    <value>Menonaktifkan output pengawal maya</value>
+  </data>
+  <data name="OutContNotice" xml:space="preserve">
+    <value>Pilih permainan pengawal maya yang perlu dideteksi. simpan profil untuk memohon perubahan.</value>
+  </data>
+  <data name="TouchStarted" xml:space="preserve">
+    <value>sentuhan bermula</value>
+  </data>
+  <data name="TouchEnded" xml:space="preserve">
+    <value>sentuhan berakhir</value>
+  </data>
+  <data name="ProfileNameInvalid" xml:space="preserve">
+    <value>Masukkan nama profil yang sah tanpa ruang belakang atau titik.</value>
+  </data>
+  <data name="ProfileRenameCollision" xml:space="preserve">
+    <value>Profil dengan nama itu sudah wujud. Pilih nama lain.</value>
+  </data>
+  <data name="ProfileRenameFailed" xml:space="preserve">
+    <value>Profil ini tidak boleh dinamakan semula.Namanya tidak berubah.Periksa keizinan fail atau sama ada program lain sedang menggunakannya.</value>
+  </data>
+  <data name="ResolvePendingProfileSave" xml:space="preserve">
+    <value>Profil ini mempunyai perubahan Keseluruhan yang tidak disimpan. Retry atau membuang penyimpanan yang menunggu pada Keseluruhan sebelum mengedit atau menamakan semula.</value>
+  </data>
+</root>

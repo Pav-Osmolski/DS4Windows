@@ -46,7 +46,7 @@ namespace DS4WinWPF.DS4Forms
                     top + frameHeight > atlas.PixelHeight)
                 {
                     throw new ArgumentOutOfRangeException(nameof(frameIndex),
-                        $"Frame {frameIndex} is outside {resourceName}.");
+                        global::DS4Windows.UiText.Format("Frame {0} is outside {1}.", frameIndex, resourceName));
                 }
 
                 var frame = new CroppedBitmap(atlas,
@@ -133,7 +133,7 @@ namespace DS4WinWPF.DS4Forms
             if (resource?.Stream == null)
             {
                 throw new InvalidOperationException(
-                    $"Controller highlight atlas '{resourceName}' could not be loaded.");
+                    global::DS4Windows.UiText.Format("Controller highlight atlas '{0}' could not be loaded.", resourceName));
             }
 
             BitmapSource source;

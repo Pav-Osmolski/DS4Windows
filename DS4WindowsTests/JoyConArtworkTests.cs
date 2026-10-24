@@ -252,10 +252,8 @@ public sealed class JoyConArtworkTests
     private static void RunSta(Action action)
     {
         Exception failure = null;
-        var thread = new Thread(() => { try { action(); } catch (Exception e) { failure = e; } });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(30)), "UI check timed out.");
+        Action thread = () => { try { action(); } catch (Exception e) { failure = e; } };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) System.Runtime.ExceptionServices.ExceptionDispatchInfo.Capture(failure).Throw();
     }
 

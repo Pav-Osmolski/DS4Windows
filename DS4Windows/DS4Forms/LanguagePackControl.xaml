@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DS4WinWPF.DS4Forms.LanguagePackControl"
+<UserControl x:Class="DS4WinWPF.DS4Forms.LanguagePackControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -31,7 +31,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <TextBlock x:Name="languageRestartHint" Grid.Row="1" Grid.ColumnSpan="2"
-                   Text="Restart required to apply the selected language."
+                   Text="{lex:Loc Strings:UI_E9AE264A16C8A601}"
                    Visibility="Collapsed" Margin="0,12,0,0" TextWrapping="Wrap"
                    FontWeight="SemiBold" Foreground="{DynamicResource AccentColor}" />
     </Grid>

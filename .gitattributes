@@ -82,6 +82,6 @@ extras/VIIPER-0.1.11-BUILD-NOTES.txt -text whitespace=cr-at-eol
 extras/VIIPER-0.1.11-BUILD-INFO.json -text whitespace=cr-at-eol
 
 # Immutable paired issue #47 candidate inputs.
-extras/VIIPER-0.1.12-LICENSES.txt -text whitespace=cr-at-eol,-blank-at-eof
-extras/VIIPER-0.1.12-BUILD-NOTES.txt -text whitespace=cr-at-eol
-extras/VIIPER-0.1.12-BUILD-INFO.json -text whitespace=cr-at-eol
+extras/VIIPER-0.1.13-LICENSES.txt -text whitespace=cr-at-eol,-blank-at-eof
+extras/VIIPER-0.1.13-BUILD-NOTES.txt -text whitespace=cr-at-eol
+extras/VIIPER-0.1.13-BUILD-INFO.json -text whitespace=cr-at-eol

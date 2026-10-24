@@ -2725,6 +2725,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
                 {
                     EnableSpeakerOutput = source.dualSenseEnableSpeakerOutput[deviceIndex],
                     HeadsetOnlyAudio = source.dualSenseHeadsetOnlyAudio[deviceIndex],
+                    FollowHeadphoneJack = source.dualSenseFollowHeadphoneJack[deviceIndex],
                     SpeakerVolume = source.dualSenseSpeakerVolume[deviceIndex],
                     SpeakerCompression = Math.Min(source.dualSenseSpeakerCompression[deviceIndex],
                         (byte)DualSenseSpeakerCompression.Strong),
@@ -3635,6 +3636,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
                 {
                     destination.dualSenseEnableSpeakerOutput[deviceIndex] = DualSenseControllerSettings.AudioSettingsGroup.EnableSpeakerOutput;
                     destination.dualSenseHeadsetOnlyAudio[deviceIndex] = DualSenseControllerSettings.AudioSettingsGroup.HeadsetOnlyAudio;
+                    destination.dualSenseFollowHeadphoneJack[deviceIndex] = DualSenseControllerSettings.AudioSettingsGroup.FollowHeadphoneJack;
                     destination.dualSenseSpeakerVolume[deviceIndex] = DualSenseControllerSettings.AudioSettingsGroup.SpeakerVolume;
                     destination.dualSenseSpeakerCompression[deviceIndex] = Math.Min(
                         DualSenseControllerSettings.AudioSettingsGroup.SpeakerCompression,
@@ -4474,6 +4476,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
             {
                 get; set;
             }
+
+            [XmlElement("FollowHeadphoneJack")]
+            public bool FollowHeadphoneJack { get; set; }
 
             [XmlElement("HeadsetOnlyAudio")]
             public bool HeadsetOnlyAudio

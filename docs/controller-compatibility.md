@@ -98,3 +98,23 @@ For detailed setup, use [Controller audio and feedback](controller-audio.md),
 and [Nintendo Options](nintendo-options.md). Technical transport contracts and
 dated hardware investigations are linked from [Technical reference](reference.md);
 their validation claims apply to the recorded hardware and build.
+
+## Virtual controller battery reporting
+
+The virtual DualShock 4, DualSense/Edge and Switch 2 Pro can receive the selected
+physical controller's reliable battery and power state. Sony reports expose
+approximately ten-percent bands; Nintendo reports use coarser bands. A source
+without a reliable reading cannot provide a real percentage. Native DualSense
+status passthrough remains authoritative, and physical Switch 2's existing
+runtime-status route preserves its measured voltage.
+
+Virtual Xbox 360 and Xbox One devices identify as wired USB controllers. Windows
+and games can therefore show wired/no battery; this is different from reporting
+the physical controller as fully charged. DirectInput and keyboard/mouse output
+have no universal battery display. The DS4/DualSense browser tester does not
+establish battery support for those other protocols.
+
+A browser tester's **Factory info > Build Time** is the emulated controller's
+firmware/factory date. It is independent of the DS4Windows application's build
+or release date. The fixed, valid factory date is intentionally retained rather
+than replaced with an invented physical manufacturing date.

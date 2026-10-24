@@ -102,7 +102,7 @@ public sealed class ControllerOverviewAudioTests
         var xml = LoadOverview();
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace xaml = "http://schemas.microsoft.com/winfx/2006/xaml";
-        foreach (string binding in new[] { "SpeakerOutputEnabled", "HeadsetOnlyAudio",
+        foreach (string binding in new[] { "SpeakerOutputEnabled", "ControllerAudioRoute",
             "SpeakerVolumePercent", "HeadphoneVolumePercent", "MicrophoneInputEnabled",
             "MicrophoneVolumePercent", "SpeakerCompressionIndex", "SpeakerBassBoostDb",
             "MicrophoneNoiseSuppressionIndex", "ControllerAudioSourceId" })
@@ -293,7 +293,7 @@ public sealed class ControllerOverviewAudioTests
         for (var root = new DirectoryInfo(AppContext.BaseDirectory); root != null; root = root.Parent)
         {
             string file = Path.Combine(root.FullName, "DS4Windows", "DS4Forms", "ControllerOverviewControl.xaml");
-            if (File.Exists(file)) return XDocument.Load(file);
+            if (File.Exists(file)) return LocalizedSource.Load(file);
         }
         throw new FileNotFoundException("Production Overview markup not found.");
     }

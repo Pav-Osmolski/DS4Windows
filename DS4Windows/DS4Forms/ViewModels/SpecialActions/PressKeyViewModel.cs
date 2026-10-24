@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -51,7 +51,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
         {
             get
             {
-                string result = "Select a Key";
+                string result = global::DS4Windows.UiText.Get("Select a Key");
                 if (!string.IsNullOrEmpty(describeText))
                 {
                     result = describeText;
@@ -88,7 +88,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
         {
             describeText = KeyInterop.KeyFromVirtualKey(value).ToString() +
                 (keyType.HasFlag(DS4KeyType.ScanCode) ? " (SC)" : "") +
-                (keyType.HasFlag(DS4KeyType.Toggle) ? " (Toggle)" : "");
+                (keyType.HasFlag(DS4KeyType.Toggle) ? global::DS4Windows.UiText.Get(" (Toggle)") : "");
 
             DescribeTextChanged?.Invoke(this, EventArgs.Empty);
         }

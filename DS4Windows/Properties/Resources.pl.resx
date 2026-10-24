@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:schema id="root">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xs:element name="root" ns1:IsDataSet="true">
+      <xs:complexType>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="metadata">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" />
+              </xs:sequence>
+              <xs:attribute name="name" use="required" type="xsd:string" />
+              <xs:attribute name="type" type="xsd:string" />
+              <xs:attribute name="mimetype" type="xsd:string" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="assembly">
+            <xs:complexType>
+              <xs:attribute name="alias" type="xsd:string" />
+              <xs:attribute name="name" type="xsd:string" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="data">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+              <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+              <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="resheader">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" />
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionExists" xml:space="preserve">
+    <value>Nazwa tej akcji już istnieje</value>
+  </data>
+  <data name="AddingToList" xml:space="preserve">
+    <value>Dodaj do listy...</value>
+  </data>
+  <data name="AddPrograms" xml:space="preserve">
+    <value>Dodaj programy</value>
+  </data>
+  <data name="ALocactionNeeded" xml:space="preserve">
+    <value>Miejsce należy wybrać, aby kontynuować</value>
+  </data>
+  <data name="AlwaysRainbow" xml:space="preserve">
+    <value>Zawsze w trybie Rainbow</value>
+  </data>
+  <data name="AssignProfile" xml:space="preserve">
+    <value>Przypisanie do kontrolera *numer*</value>
+  </data>
+  <data name="Battery" xml:space="preserve">
+    <value>Pojemność baterii: * liczba*%</value>
+  </data>
+  <data name="BestUsedRightSide" xml:space="preserve">
+    <value>Najlepiej używać z prawą stroną jako funkcji myszki</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="BTPollRate" xml:space="preserve">
+    <value>Określa współczynnik ankiet stosowany dla sprzętu DS4, gdy jest on podłączony za pośrednictwem Bluetooth. (Dotyczy zapisywania profilu)</value>
+  </data>
+  <data name="CannotMoveFiles" xml:space="preserve">
+    <value>Nie można przenieść plików do nowej lokalizacji, Proszę zmienić nazwę folderu DS4Tool na "DS4Windows"</value>
+  </data>
+  <data name="CannotWriteHere" xml:space="preserve">
+    <value>Nie można pisać w bieżącej lokalizacji. Kopiowanie ustawień do aplikacji?</value>
+  </data>
+  <data name="ChargeController" xml:space="preserve">
+    <value>Ładuj baterię</value>
+  </data>
+  <data name="Charged" xml:space="preserve">
+    <value>załadowany</value>
+  </data>
+  <data name="Charging" xml:space="preserve">
+    <value>Ładowanie: * liczba *%</value>
+  </data>
+  <data name="CheckBattery" xml:space="preserve">
+    <value>Sprawdź baterię</value>
+  </data>
+  <data name="CloseConfirm" xml:space="preserve">
+    <value>Odłączy to wszystkie podłączone kontrolery.</value>
+  </data>
+  <data name="CloseDS4W" xml:space="preserve">
+    <value>Zakończenie DS4Windows?</value>
+  </data>
+  <data name="CloseMinimize" xml:space="preserve">
+    <value>Zamknięcie okna głównego minimalizuje aplikację.</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Kolor</value>
+  </data>
+  <data name="ColorByBattery" xml:space="preserve">
+    <value>Kolor baterii w %</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Potwierdź...</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>Łącząc...</value>
+  </data>
+  <data name="ContextEdit" xml:space="preserve">
+    <value>Edytuj profil kontrolera *numer*</value>
+  </data>
+  <data name="ContextNew" xml:space="preserve">
+    <value>Utwórz profil dla kontrolera *numer*</value>
+  </data>
+  <data name="ControllerWasRemoved" xml:space="preserve">
+    <value>Kontroler *Adres Mac* został usunięty lub utracone połączenie</value>
+  </data>
+  <data name="CopyComplete" xml:space="preserve">
+    <value>Kopiowanie kompletne, proszę ponownie uruchomić DS4Windows i usunąć ustawienia z katalogu programów</value>
+  </data>
+  <data name="CopyFullColor" xml:space="preserve">
+    <value>Kliknij aby skopiować pełny kolor</value>
+  </data>
+  <data name="CouldNotOpenDS4" xml:space="preserve">
+    <value>Ostrzeżenie: Nie można otworzyć DS4 * adres Mac* wyłącznie.</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>Dzień</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>dni</value>
+  </data>
+  <data name="DeleteProfile" xml:space="preserve">
+    <value>Wyłączenie profilu ?</value>
+  </data>
+  <data name="DimByBattery" xml:space="preserve">
+    <value>Dim na baterię %</value>
+  </data>
+  <data name="DisconnectBT" xml:space="preserve">
+    <value>Odłączenie BT</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Odłączone</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Pobierz *liczba *%</value>
+  </data>
+  <data name="DownloadVersion" xml:space="preserve">
+    <value>Pobierz wersję *numer* teraz?</value>
+  </data>
+  <data name="DownText" xml:space="preserve">
+    <value>w dół</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DS4Update" xml:space="preserve">
+    <value>DS4Windows Aktualizacja dostępna!</value>
+  </data>
+  <data name="DS4WindowsCannotEditHere" xml:space="preserve">
+    <value>DS4Windows nie może edytować ustawień tutaj, to teraz zostanie zamknięte</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
+  <data name="FallBack" xml:space="preserve">
+    <value>Spadek z powrotem</value>
+  </data>
+  <data name="FallBackTo" xml:space="preserve">
+    <value>Wróć do *button*</value>
+  </data>
+  <data name="FifthMouseDown" xml:space="preserve">
+    <value>Piąty przycisk myszy</value>
+  </data>
+  <data name="FifthMouseUp" xml:space="preserve">
+    <value>Piąty przycisk myszki</value>
+  </data>
+  <data name="FlashAtTip" xml:space="preserve">
+    <value>Kliknij, aby zmienić kolor błysku. Czarny = domyślny kolor</value>
+  </data>
+  <data name="FlushHID" xml:space="preserve">
+    <value>Flush ukryć</value>
+  </data>
+  <data name="FlushHIDTip" xml:space="preserve">
+    <value>Flush HID po każdej lekturze</value>
+  </data>
+  <data name="FoundController" xml:space="preserve">
+    <value>Znaleziono kontrolerów:</value>
+  </data>
+  <data name="FourthMouseDown" xml:space="preserve">
+    <value>czwarty przycisk myszy</value>
+  </data>
+  <data name="FourthMouseUp" xml:space="preserve">
+    <value>czwarty przycisk myszy up</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Pełny</value>
+  </data>
+  <data name="GyroReadout" xml:space="preserve">
+    <value>Kliknij, aby zobaczyć czytanie Sixaxis Gyro</value>
+  </data>
+  <data name="GyroTriggerBehavior" xml:space="preserve">
+    <value>Sprawdź, czy gyro jest aktywne, gdy wyzwalacz jest aktywny.</value>
+  </data>
+  <data name="GyroX" xml:space="preserve">
+    <value>GyroX, Left i Right Tilt</value>
+  </data>
+  <data name="GyroY" xml:space="preserve">
+    <value>GyroY, Tilt do przodu i do tyłu</value>
+  </data>
+  <data name="GyroZ" xml:space="preserve">
+    <value>GyroZ - W górę i w dół</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>godzina</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>godziny</value>
+  </data>
+  <data name="HoverOverItems" xml:space="preserve">
+    <value>Przewiń elementy, aby zobaczyć opis lub więcej o</value>
+  </data>
+  <data name="IfRemovingDS4Windows" xml:space="preserve">
+    <value>Jeśli usuniesz DS4Windows, możesz usunąć ustawienia podając link do folderu profilu</value>
+  </data>
+  <data name="InputDelay" xml:space="preserve">
+    <value>Obserwowany interwał raportów fizycznych: {0:0.00} ms</value>
+  </data>
+  <data name="InstallComplete" xml:space="preserve">
+    <value>Instalacja kompletna</value>
+  </data>
+  <data name="InstallDriver" xml:space="preserve">
+    <value>Instalacja kierowców TUTAJ</value>
+  </data>
+  <data name="InstallFailed" xml:space="preserve">
+    <value>Instalacja nie powiodła się, prosimy o przywrócenie</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Instalacja...</value>
+  </data>
+  <data name="Jitter" xml:space="preserve">
+    <value>Użyj Sixaxis, aby pomóc obliczyć ruch touchpad</value>
+  </data>
+  <data name="KeepThisSize" xml:space="preserve">
+    <value>Utrzymuj ten rozmiar okna po zamknięciu</value>
+  </data>
+  <data name="LanguagePackApplyRestartRequired" xml:space="preserve">
+    <value>Zmiana pakietu językowego wejdzie w życie po ponownym uruchomieniu aplikacji DS4Windows.</value>
+  </data>
+  <data name="LatencyNotOverTen" xml:space="preserve">
+    <value>Latentność kontrolera *numer* poniżej 10 ms</value>
+  </data>
+  <data name="LatencyOverTen" xml:space="preserve">
+    <value>latentność kontrolera {0} powyżej 10 ms ({1} ms)</value>
+  </data>
+  <data name="LaunchProgram" xml:space="preserve">
+    <value>Rozpoczęcie programu *</value>
+  </data>
+  <data name="LightByBatteryTip" xml:space="preserve">
+    <value>Również osłabienie światła przez opóźnienie czasu, jeśli jest włączone, gdy DS4 jest w pełni naładowany</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Ładowanie...</value>
+  </data>
+  <data name="LoadProfile" xml:space="preserve">
+    <value>Ładowanie * Profil *</value>
+  </data>
+  <data name="Macro" xml:space="preserve">
+    <value>makro</value>
+  </data>
+  <data name="MacroRecorded" xml:space="preserve">
+    <value>Makro nagrywane</value>
+  </data>
+  <data name="MakeNewProfile" xml:space="preserve">
+    <value>Stwórz nowy profil</value>
+  </data>
+  <data name="MultiAction" xml:space="preserve">
+    <value>Mutli-Action przycisk</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Nowy</value>
+  </data>
+  <data name="NoMacroRecorded" xml:space="preserve">
+    <value>Macro nie jest zapisywane</value>
+  </data>
+  <data name="noneProfile" xml:space="preserve">
+    <value>(w żadnym wypadku)</value>
+  </data>
+  <data name="NoneText" xml:space="preserve">
+    <value>żaden</value>
+  </data>
+  <data name="NoProfileLoaded" xml:space="preserve">
+    <value>Profil nie załadowany</value>
+  </data>
+  <data name="NotUsingProfile" xml:space="preserve">
+    <value>Kontroler {0} nie korzysta z profilu. Poziom baterii jest {1}%</value>
+  </data>
+  <data name="NotValid" xml:space="preserve">
+    <value>Nie ważna</value>
+  </data>
+  <data name="OpeningInstaller" xml:space="preserve">
+    <value>Instalator otwierający</value>
+  </data>
+  <data name="OpenScpDriver" xml:space="preserve">
+    <value>Otwórz Ustawienia &gt; Sterowniki i wybierz Instaluj / Napraw VIIPER.</value>
+  </data>
+  <data name="OtherFileLocation" xml:space="preserve">
+    <value>inne pliki lokalizacji zostaną usunięte</value>
+  </data>
+  <data name="PleaseDownloadUpdater" xml:space="preserve">
+    <value>Proszę pobrać aktualizator teraz, umieścić go w folderze programów i zmienić nazwę na DS4Updater.exe jeśli na x86, a następnie sprawdzić aktualizację ponownie. DS4Windows spróbuje otworzyć stronę wydania DS4Updater po zamknięciu tego okna.</value>
+  </data>
+  <data name="PleaseImport" xml:space="preserve">
+    <value>Proszę zaimportować lub utworzyć profil</value>
+  </data>
+  <data name="PlusNewProfile" xml:space="preserve">
+    <value>Nowy profil</value>
+  </data>
+  <data name="ProfileCannotRestore" xml:space="preserve">
+    <value>*Nazwa profilu nie może zostać przywrócona.</value>
+  </data>
+  <data name="ProfileFolderMoved" xml:space="preserve">
+    <value>Profile Folder Przenoszone do folderu programu</value>
+  </data>
+  <data name="Programs" xml:space="preserve">
+    <value>programów</value>
+  </data>
+  <data name="QuickCharge" xml:space="preserve">
+    <value>Automatyczne wyłączenie BT przy podłączaniu do USB</value>
+  </data>
+  <data name="QuitOtherPrograms" xml:space="preserve">
+    <value>Zamknij aplikacje, które obecnie trzymają kontroler fizyczny przed włączeniem funkcji "Użyj HidHide do zapobiegania podwójnemu wejściu".</value>
+  </data>
+  <data name="RecordText" xml:space="preserve">
+    <value>Nagraj</value>
+  </data>
+  <data name="RightClickPresets" xml:space="preserve">
+    <value>Kliknij prawym przyciskiem, aby ustawić ustawienia wstępne dla zestawu kontrolek</value>
+  </data>
+  <data name="RunAtStartup" xml:space="preserve">
+    <value>Mówi Windows do uruchomienia DS4Windows po zalogowaniu</value>
+  </data>
+  <data name="SaveRecordedMacro" xml:space="preserve">
+    <value>Zapisywanie zapisanych makr?</value>
+  </data>
+  <data name="ScanCode" xml:space="preserve">
+    <value>Skanowanie kodu</value>
+  </data>
+  <data name="SearchingController" xml:space="preserve">
+    <value>W poszukiwaniu kontrolera...</value>
+  </data>
+  <data name="SelectActionTitle" xml:space="preserve">
+    <value>Wybierz akcję dla *akcja*</value>
+  </data>
+  <data name="SelectMacro" xml:space="preserve">
+    <value>Wybierz makro</value>
+  </data>
+  <data name="SetRegularTrigger" xml:space="preserve">
+    <value>Regularny wyzwalacz</value>
+  </data>
+  <data name="SetUnloadTrigger" xml:space="preserve">
+    <value>Pobierz Unload Trigger</value>
+  </data>
+  <data name="Shortcuts" xml:space="preserve">
+    <value>skróty</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrate" xml:space="preserve">
+    <value>Emulacja koła sixaxis</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction1" xml:space="preserve">
+    <value>(1) Pośrodku kontrolera, trzymaj go stabilnie i naciśnij "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction2" xml:space="preserve">
+    <value>(2) Obróć pozycję o 90° w lewo (lub w prawo) i naciśnij "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction3" xml:space="preserve">
+    <value>(3) Obróć pozycję 90° w prawo (lub w lewo) i naciśnij "X"</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction" xml:space="preserve">
+    <value>Wszystkie punkty kalibracyjne są ustawiane, gdy kolor paska światła zmienia się na zielony. Podczas obracania sterownika kolor paska światła świeci, gdy kontroler znajduje się w punkcie kalibracji.</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoControllerError" xml:space="preserve">
+    <value>Nie można kalibrować wartości emulacji koła kierowniczego gyro (sixaxis) bez kontrolera. Podłącz kontroler za pośrednictwem Bluetooth lub USB</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoneAxisError" xml:space="preserve">
+    <value>Opcja osi emulacji kierownicy Gyro jest ustawiona na NONE (emulacja nie jest używana). Proszę wybrać opcję osi przed kalibracją emulacji kierownicy Gyro Sixaxis</value>
+  </data>
+  <data name="SixAxisReading" xml:space="preserve">
+    <value>Kliknij, aby uzyskać zaawansowane czytanie Sixaxis</value>
+  </data>
+  <data name="Starting" xml:space="preserve">
+    <value>Rozpoczęcie...</value>
+  </data>
+  <data name="StartText" xml:space="preserve">
+    <value>Rozpoczęcie</value>
+  </data>
+  <data name="Step1" xml:space="preserve">
+    <value>Krok 1: Zainstaluj VIIPER i USB/IP</value>
+  </data>
+  <data name="StopHText" xml:space="preserve">
+    <value>Zatrzymaj ciężkie</value>
+  </data>
+  <data name="StopLText" xml:space="preserve">
+    <value>Zatrzymaj światło</value>
+  </data>
+  <data name="StoppedDS4Windows" xml:space="preserve">
+    <value>Wyłączanie DS4Windows</value>
+  </data>
+  <data name="StoppingDS4" xml:space="preserve">
+    <value>Zatrzymanie kontrolerów wejść DS4</value>
+  </data>
+  <data name="StoppingX360" xml:space="preserve">
+    <value>Wyłączanie wirtualnych kontrolerów wyjściowych</value>
+  </data>
+  <data name="StopText" xml:space="preserve">
+    <value>zatrzymać</value>
+  </data>
+  <data name="SwipeDown" xml:space="preserve">
+    <value>Swipe w dół</value>
+  </data>
+  <data name="SwipeLeft" xml:space="preserve">
+    <value>Swipe Lewica</value>
+  </data>
+  <data name="SwipeRight" xml:space="preserve">
+    <value>Szybkie prawo</value>
+  </data>
+  <data name="SwipeTouchpad" xml:space="preserve">
+    <value>Swipe Touchpad, aby zmienić profile</value>
+  </data>
+  <data name="SwipeUp" xml:space="preserve">
+    <value>Swipe w górę</value>
+  </data>
+  <data name="TapAndHold" xml:space="preserve">
+    <value>Dotknij i przytrzymaj, aby przeciągnąć, lekkie opóźnienie z pojedynczymi dotykami</value>
+  </data>
+  <data name="TestHText" xml:space="preserve">
+    <value>Test ciężki</value>
+  </data>
+  <data name="TestLText" xml:space="preserve">
+    <value>Test światła</value>
+  </data>
+  <data name="TestText" xml:space="preserve">
+    <value>Testy</value>
+  </data>
+  <data name="TextDocs" xml:space="preserve">
+    <value>Dokumenty tekstowe (*.txt)</value>
+  </data>
+  <data name="TiltDown" xml:space="preserve">
+    <value>Tilt w dół</value>
+  </data>
+  <data name="TiltLeft" xml:space="preserve">
+    <value>Tilt Left</value>
+  </data>
+  <data name="TiltRight" xml:space="preserve">
+    <value>Tilt prawo</value>
+  </data>
+  <data name="TiltUp" xml:space="preserve">
+    <value>Podnieś się</value>
+  </data>
+  <data name="TouchpadMovementOff" xml:space="preserve">
+    <value>Touchpad Movement jest już wyłączony</value>
+  </data>
+  <data name="TouchpadMovementOn" xml:space="preserve">
+    <value>Touchpad Movement jest już dostępny</value>
+  </data>
+  <data name="TouchpadOffTip" xml:space="preserve">
+    <value>Aby ponownie włączyć, naciśnij PS+Touchpad</value>
+  </data>
+  <data name="TwoFingerSwipe" xml:space="preserve">
+    <value>2 palce touchpad swipe w lewo lub w prawo</value>
+  </data>
+  <data name="TypeNewName" xml:space="preserve">
+    <value>Nowe nazwisko tutaj</value>
+  </data>
+  <data name="TypeProfileName" xml:space="preserve">
+    <value>Nazwa profilu tutaj</value>
+  </data>
+  <data name="UACTask" xml:space="preserve">
+    <value>Musisz uruchomić DS4Windows jako administratora, aby aktywować ten tryb.</value>
+  </data>
+  <data name="Unassigned" xml:space="preserve">
+    <value>Nieprzydzielony</value>
+  </data>
+  <data name="UpText" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="UpToDate" xml:space="preserve">
+    <value>Aplikacja DS4Windows jest aktualna.</value>
+  </data>
+  <data name="UseControllerForMapping" xml:space="preserve">
+    <value>Możesz również użyć kontrolera do zmiany sterowników</value>
+  </data>
+  <data name="UsingExclusive" xml:space="preserve">
+    <value>Korzystanie z ekskluzywnego trybu</value>
+  </data>
+  <data name="UsingProfile" xml:space="preserve">
+    <value>Kontroler {0} korzysta z profilu "{1}". poziom baterii jest {2}%</value>
+  </data>
+  <data name="UsingShared" xml:space="preserve">
+    <value>Korzystanie ze wspólnego trybu</value>
+  </data>
+  <data name="UsingTPSwipes" xml:space="preserve">
+    <value>To wyłącza Touchpad jako mysz</value>
+  </data>
+  <data name="ValidName" xml:space="preserve">
+    <value>Proszę podać ważną nazwę</value>
+  </data>
+  <data name="WaitMS" xml:space="preserve">
+    <value>Poczekaj *liczba *ms</value>
+  </data>
+  <data name="WillKeep" xml:space="preserve">
+    <value>Będzie trzymać</value>
+  </data>
+  <data name="XMLFiles" xml:space="preserve">
+    <value>Pliki XML (*.xml)</value>
+  </data>
+  <data name="EnableTouchToggle" xml:space="preserve">
+    <value>Pozwól funkcji myszy dotykowej, aby uzyskać toggled z PS + Touchpad Kliknij.</value>
+  </data>
+  <data name="UdpServer" xml:space="preserve">
+    <value>Włącz serwer UDP. Adres serwera i port. Opcje wartości adresu: 127.0.0.1 localhost tylko Ebay 0.0.0.0 wszystkie adresy Ebay Specyficzne nazwy hostów lub adresy IP.</value>
+  </data>
+  <data name="AutoProfilePathAndWindowTitleEditTip" xml:space="preserve">
+    <value>↑ ABC = Porównanie na początku wiersza (^) Ebay ABC$ = Porównanie na końcu wiersza ($) Ebay * ABC = Zawiera wiersz (*)</value>
+  </data>
+  <data name="ShowAutoProfileDebugLogTip" xml:space="preserve">
+    <value>Jeśli jest włączona, strona Tab dziennika wyświetla szczegółowe wiadomości o zdarzeniach automatycznego profilu.</value>
+  </data>
+  <data name="MacroScanCodeTip" xml:space="preserve">
+    <value>Użyj wartości kodu skanowania klawiszy klawiaturowych w makrze</value>
+  </data>
+  <data name="MacroRunOnReleaseTip" xml:space="preserve">
+    <value>Uruchom makro na wydaniu klucza wyzwalającego</value>
+  </data>
+  <data name="MacroSynchronizedRunTip" xml:space="preserve">
+    <value>Uruchamianie wielu makr w zsynchronizowanej kolejności, jeśli ten sam wyzwalacz ma kilka makr (makro kluczowe zakończone przed uruchomieniem makra uwalniania klucza)</value>
+  </data>
+  <data name="MacroRepeatTip" xml:space="preserve">
+    <value>Powtórzenie makra, gdy klucz wyzwalający jest przytrzymywany</value>
+  </data>
+  <data name="MacroKeepKeyStateTip" xml:space="preserve">
+    <value>Zachowaj stan ostatniego klucza po zakończeniu wykonywania makra (tj. jeśli klucz pozostaje w stanie dolnym, nie zostanie automatycznie przywrócony do stanu domyślnego)</value>
+  </data>
+  <data name="SquareStickRoundness" xml:space="preserve">
+    <value>Okrągłość narożników Square Stick</value>
+  </data>
+  <data name="XMLActionsCorrupt" xml:space="preserve">
+    <value>Plik .xml był uszkodzony. Począwszy od zera.</value>
+  </data>
+  <data name="OscServer" xml:space="preserve">
+    <value>Włącz OSC Server. Słuchaj portów na wszystkich adresach.</value>
+  </data>
+  <data name="UsingAutoTempProfile" xml:space="preserve">
+    <value>Kontroler {0} korzysta z profilu temp "{1}"</value>
+  </data>
+  <data name="DinputOnly" xml:space="preserve">
+    <value>Wyłączenie wyjścia wirtualnego kontrolera</value>
+  </data>
+  <data name="OutContNotice" xml:space="preserve">
+    <value>Wybierz gry wirtualny kontroler powinien wykryć. Zapisz profil, aby zastosować zmianę.</value>
+  </data>
+  <data name="TouchStarted" xml:space="preserve">
+    <value>Dotyk zaczął</value>
+  </data>
+  <data name="TouchEnded" xml:space="preserve">
+    <value>Dotyk zakończony</value>
+  </data>
+  <data name="ProfileNameInvalid" xml:space="preserve">
+    <value>Wpisz ważną nazwę profilu bez spacji lub punktu.</value>
+  </data>
+  <data name="ProfileRenameCollision" xml:space="preserve">
+    <value>Profil z tą nazwą już istnieje. Wybierz inną nazwę. Profil nie został zmieniony.</value>
+  </data>
+  <data name="ProfileRenameFailed" xml:space="preserve">
+    <value>Nie można zmienić nazwy profilu. jego nazwa nie uległa zmianie. Sprawdź uprawnienia plików lub czy inny program go używa.</value>
+  </data>
+  <data name="ResolvePendingProfileSave" xml:space="preserve">
+    <value>Ten profil nie ma zapisanych zmian w przeglądzie. Przed edytowaniem lub przemianą nazwy przechowuj go ponownie lub odrzuć pozostałe zapisy na przeglądzie.</value>
+  </data>
+</root>

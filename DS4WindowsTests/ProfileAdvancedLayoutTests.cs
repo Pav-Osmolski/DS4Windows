@@ -21,7 +21,7 @@ public sealed class ProfileAdvancedLayoutTests
     public void CategoriesKeepEditsAndControlsInsideTheAvailableWidth(string theme, double width)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -62,10 +62,8 @@ public sealed class ProfileAdvancedLayoutTests
                 }
             }
             catch (Exception error) { failure = error; }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        thread.Join();
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
@@ -77,19 +75,19 @@ public sealed class ProfileAdvancedLayoutTests
         System.Reflection.Assembly.Load("DotNetProjects.Wpf.Extended.Toolkit");
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-        XDocument source = XDocument.Load(SourcePath());
+        XDocument source = LocalizedSource.Load(SourcePath());
         XElement selected = page == "NintendoSetup"
-            ? XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "MainWindow.xaml")).Descendants(wpf + "Expander").Single(e => (string)e.Attribute("Header") == "Nintendo Switch 2 controllers")
+            ? LocalizedSource.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "MainWindow.xaml")).Descendants(wpf + "Expander").Single(e => LocalizedSource.Resolve((string)e.Attribute("Header")) == "Nintendo Switch 2 controllers")
             : page is "ControllerReadings" or "OutputSlots"
-            ? XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, page == "OutputSlots" ? "OutputSlotManagerControl.xaml" : "ControllerReadingsControl.xaml")).Root
+            ? LocalizedSource.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, page == "OutputSlots" ? "OutputSlotManagerControl.xaml" : "ControllerReadingsControl.xaml")).Root
             : source.Descendants(wpf + "TabItem")
-                .Single(e => (string)e.Attribute("Header") == (page is "Advanced" or "Special Actions" or "Nintendo Options" ? page : "{lex:Loc " + page + "}"));
+                .Single(e => LocalizedSource.Resolve((string)e.Attribute("Header")) == (page == "AxisConfig" ? "Axis Config" : page));
         XElement content = selected.Elements().First(e => !e.Name.LocalName.EndsWith(".Resources"));
         var markup = content.Name == wpf + "Grid" ? new XElement(content) : new XElement(wpf + "Grid", new XElement(content));
         // Render the actual shared axial layout without its controller wiring.
         foreach (XElement axial in markup.Descendants().Where(e => e.Name.LocalName == "AxialStickUserControl").ToArray())
         {
-            XElement axialGrid = new XElement(XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "AxialStickUserControl.xaml")).Root.Element(wpf + "Grid"));
+            XElement axialGrid = new XElement(LocalizedSource.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "AxialStickUserControl.xaml")).Root.Element(wpf + "Grid"));
             axialGrid.SetAttributeValue(x + "Name", (string)axial.Attribute(x + "Name"));
             axial.ReplaceWith(axialGrid);
         }
@@ -97,7 +95,7 @@ public sealed class ProfileAdvancedLayoutTests
         markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
         markup.SetAttributeValue(XNamespace.Xmlns + "xctk", "http://schemas.xceed.com/wpf/xaml/toolkit");
         markup.SetAttributeValue(XNamespace.Xmlns + "local", "clr-namespace:DS4WinWPF.DS4Forms;assembly=DS4Windows");
-        var strings = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "..", "Translations", "Strings.resx"))
+        var strings = LocalizedSource.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "..", "Translations", "Strings.resx"))
             .Descendants("data").ToDictionary(e => (string)e.Attribute("name"), e => e.Element("value")?.Value ?? "");
         foreach (XElement element in markup.DescendantsAndSelf())
         foreach (XAttribute attribute in element.Attributes().ToArray())
@@ -105,8 +103,7 @@ public sealed class ProfileAdvancedLayoutTests
             if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged" or "Loaded" or "Unloaded" or "SizeChanged" or "Checked" or "Unchecked" || attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
             else if (attribute.Value.StartsWith("{lex:Loc "))
             {
-                string key = attribute.Value[9..^1];
-                attribute.Value = strings.TryGetValue(key, out string value) ? value : key;
+                attribute.Value = LocalizedSource.Resolve(attribute.Value);
             }
             else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && attribute.Value != "{Binding}" && !(page is "Nintendo Options" or "NintendoSetup" && attribute.Value is "{Binding Label}" or "{Binding IsSelected}" or "{Binding ActualWidth, ElementName=switch2SetupContent}") && !(page == "Nintendo Options" && attribute.Value is "{Binding Switch2DualGyroEditor.ModeDescription}" or "{Binding Switch2DualGyroEditor.ButtonActionDescription}" or "{Binding Switch2DualGyroEditor.ButtonSelectionHint}") && !attribute.Value.Contains("ElementName=profileAdvanced") && !attribute.Value.Contains("ElementName=profileAxis") && !((page == "OutputSlots" || page == "Special Actions") && (attribute.Name.LocalName == "Binding" || attribute.Value.Contains("BoundInput") || attribute.Value.Contains("Active"))) && !(page == "ControllerReadings" && (attribute.Value.Contains("ElementName=") || attribute.Value.Contains("Source={StaticResource ForegroundColor}"))))
             {
@@ -114,7 +111,7 @@ public sealed class ProfileAdvancedLayoutTests
                 else attribute.Remove();
             }
         }
-        XElement bridge = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "Themes", "BridgeShellStyles.xaml")).Root;
+        XElement bridge = LocalizedSource.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "Themes", "BridgeShellStyles.xaml")).Root;
         bridge.AddFirst(new XElement(wpf + "ResourceDictionary.MergedDictionaries",
             new XElement(wpf + "ResourceDictionary", new XAttribute("Source", $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))));
         XElement existingResources = markup.Element(wpf + "Grid.Resources");
@@ -135,7 +132,7 @@ public sealed class ProfileAdvancedLayoutTests
             Directory.CreateDirectory(artifactDirectory);
             File.WriteAllText(Path.Combine(artifactDirectory, $"{page}-{theme}-markup.xaml"), markup.ToString());
         }
-        var root = (Grid)XamlReader.Parse(markup.ToString());
+        var root = (Grid)XamlReader.Parse(LocalizedSource.Markup(markup));
         root.Background = (Brush)root.FindResource("SurfaceBackgroundColor");
         return root;
     }

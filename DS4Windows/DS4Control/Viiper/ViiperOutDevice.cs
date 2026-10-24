@@ -521,6 +521,7 @@ namespace DS4Windows
         private ViiperMicrophoneBufferSnapshot virtualMicrophoneBufferSnapshot =
             ViiperMicrophoneBufferSnapshot.Empty;
         private Switch2RuntimeInputDevice switch2RuntimeStatusSource;
+        private ViiperBatteryStatusBridge batteryStatusBridge;
         private ViiperSwitch2RuntimeStatusV1 pendingSwitch2RuntimeStatus;
         private bool hasPendingSwitch2RuntimeStatus;
         private int switch2RuntimeStatusFailureLogged;
@@ -1335,6 +1336,25 @@ namespace DS4Windows
                 StartFeedbackReader();
             }
             StartSwitch2RuntimeStatusBridge();
+            if (!audioOnlySidecar && viiperType is ViiperVirtualDeviceType.DualShock4 or
+                    ViiperVirtualDeviceType.DualSense or ViiperVirtualDeviceType.DualSenseEdge or
+                    ViiperVirtualDeviceType.Switch2Pro)
+            {
+                ViiperDeviceStream statusStream = deviceStream;
+                batteryStatusBridge = new ViiperBatteryStatusBridge(() =>
+                {
+                    int slot = Volatile.Read(ref lastInputDeviceIndex);
+                    DS4Device source = Program.rootHub != null && slot >= 0 &&
+                        slot < Program.rootHub.DS4Controllers.Length ? Program.rootHub.DS4Controllers[slot] : null;
+                    // The native Switch 2 bridge preserves its measured voltage.
+                    return viiperType == ViiperVirtualDeviceType.Switch2Pro &&
+                        source is Switch2RuntimeInputDevice ? null : source;
+                }, status =>
+                {
+                    if (connected && ReferenceEquals(statusStream, deviceStream))
+                        client.UpdateBatteryStatus(statusStream.BusId, statusStream.DevId, status);
+                }, ex => AppLogger.LogToGui($"VIIPER battery status update failed: {ex.Message}", true));
+            }
             if (stateWriteRateHz > 0)
             {
                 string queuePolicy = UsesXbox360EgressScheduler() ?
@@ -2080,6 +2100,7 @@ namespace DS4Windows
                 Volatile.Write(ref publishedPhysicalControllerTargetDevice,
                     null);
             }
+            Interlocked.Exchange(ref batteryStatusBridge, null)?.Dispose();
             StopSwitch2RuntimeStatusBridge();
             // A worker generation is an ownership boundary. Never carry a
             // failed disable into a replacement VIIPER device where the same
@@ -10733,6 +10754,14 @@ namespace DS4Windows
         {
             ArgumentNullException.ThrowIfNull(request);
             return JsonSerializer.Serialize(request, JsonOptions);
+        }
+
+        internal void UpdateBatteryStatus(uint busId, string devId, ViiperBatteryStatus status)
+        {
+            ViiperRuntimeStatusUpdateResponse response = SendRequest<ViiperRuntimeStatusUpdateResponse>(
+                $"bus/{busId}/{devId}/battery-status-v1", JsonSerializer.Serialize(status, JsonOptions));
+            if (response == null || response.Version != 1 || !response.Updated)
+                throw new IOException("VIIPER did not acknowledge battery status v1.");
         }
 
         internal static string SerializeNS2ProRuntimeStatusV1(

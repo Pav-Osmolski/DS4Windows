@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -537,8 +537,8 @@ namespace DS4WinWPF.DS4Forms
             dialog.Multiselect = false;
             dialog.AddExtension = true;
             dialog.DefaultExt = ".exe";
-            dialog.Filter = "Exe (*.exe)|*.exe|Scripts (*.bat,*.cmd,*.ps1)|*.bat;*.cmd;*.ps1|All Files (*.*)|*.*";
-            dialog.Title = "Select Program";
+            dialog.Filter = global::DS4Windows.UiText.FileFilter("Exe (*.exe)|*.exe|Scripts (*.bat,*.cmd,*.ps1)|*.bat;*.cmd;*.ps1|All Files (*.*)|*.*");
+            dialog.Title = global::DS4Windows.UiText.Get("Select Program");
 
             dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             if (dialog.ShowDialog() == true)

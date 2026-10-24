@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,7 +20,7 @@ public sealed class AudioHapticsFilterLayoutTests
     public void ExpandedFiltersFitBothThemesAndKeepValuesWhenCollapsed(string theme, double width)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -61,10 +61,8 @@ public sealed class AudioHapticsFilterLayoutTests
                 Assert.AreEqual(20d, high.Value);
             }
             catch (Exception error) { failure = error; }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start(); thread.Join();
-        if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
+        };
+        HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
     private static UserControl Load(string theme, [CallerFilePath] string source = "")
@@ -72,12 +70,12 @@ public sealed class AudioHapticsFilterLayoutTests
         string forms = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(source)!, "..", "DS4Windows", "DS4Forms"));
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-        XElement markup = XDocument.Load(Path.Combine(forms, "AudioHapticsControl.xaml")).Root!;
+        XElement markup = LocalizedSource.Load(Path.Combine(forms, "AudioHapticsControl.xaml")).Root!;
         markup.Attribute(x + "Class")!.Remove();
         markup.Attribute("Width")!.Remove();
         foreach (var attribute in markup.DescendantsAndSelf().Attributes().ToArray())
             if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged") attribute.Remove();
-        XElement bridge = XDocument.Load(Path.Combine(forms, "Themes", "BridgeShellStyles.xaml")).Root!;
+        XElement bridge = LocalizedSource.Load(Path.Combine(forms, "Themes", "BridgeShellStyles.xaml")).Root!;
         bridge.AddFirst(new XElement(wpf + "ResourceDictionary.MergedDictionaries",
             new XElement(wpf + "ResourceDictionary", new XAttribute("Source", $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))));
         XElement resources = markup.Element(wpf + "UserControl.Resources")!;
@@ -85,6 +83,6 @@ public sealed class AudioHapticsFilterLayoutTests
         resources.RemoveNodes();
         resources.Add(new XElement(wpf + "ResourceDictionary",
             new XElement(wpf + "ResourceDictionary.MergedDictionaries", bridge), existing));
-        return (UserControl)XamlReader.Parse(markup.ToString());
+        return (UserControl)XamlReader.Parse(LocalizedSource.Markup(markup));
     }
 }

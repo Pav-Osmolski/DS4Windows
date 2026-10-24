@@ -45,16 +45,16 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
                 new[] { Switch2StickSide.Left, Switch2StickSide.Right },
             InputDeviceType.Switch2JoyConLeft => new[] { Switch2StickSide.Left },
             InputDeviceType.Switch2JoyConRight => new[] { Switch2StickSide.Right },
-            _ => throw new ArgumentException("A Switch 2 controller is required.", nameof(runtime)),
+            _ => throw new ArgumentException(global::DS4Windows.UiText.Get("A Switch 2 controller is required."), nameof(runtime)),
         };
-        SideLabels = Array.ConvertAll(sides, side => side == Switch2StickSide.Left ? "Left stick" : "Right stick");
+        SideLabels = Array.ConvertAll(sides, side => side == Switch2StickSide.Left ? global::DS4Windows.UiText.Get("Left stick") : global::DS4Windows.UiText.Get("Right stick"));
         ControllerLabel = runtime.DeviceType switch
         {
-            InputDeviceType.Switch2Pro => "Switch 2 Pro Controller",
-            InputDeviceType.Switch2JoyConJoined => "Joined Joy-Con 2",
-            InputDeviceType.Switch2JoyConLeft => "Joy-Con 2 (Left)",
-            _ => "Joy-Con 2 (Right)",
-        } + (runtime.Transport == Switch2Transport.Usb ? " · USB" : " · Bluetooth");
+            InputDeviceType.Switch2Pro => global::DS4Windows.UiText.Get("Switch 2 Pro Controller"),
+            InputDeviceType.Switch2JoyConJoined => global::DS4Windows.UiText.Get("Joined Joy-Con 2"),
+            InputDeviceType.Switch2JoyConLeft => global::DS4Windows.UiText.Get("Joy-Con 2 (Left)"),
+            _ => global::DS4Windows.UiText.Get("Joy-Con 2 (Right)"),
+        } + (runtime.Transport == Switch2Transport.Usb ? global::DS4Windows.UiText.Get(" · USB") : global::DS4Windows.UiText.Get(" · Bluetooth"));
         Heading = "Choose a physical stick";
         Instructions = "Rotate the selected stick around its full edge, then let it rest in the center. Nothing is saved until you choose Save calibration.";
         Poll();
@@ -76,12 +76,12 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
     public string SelectedSideLabel => SideLabels[selectedSideIndex];
     public string CalibrationStatus => (sides[selectedSideIndex] == Switch2StickSide.Left ?
         runtime.HasLocalLeftStickCalibration : runtime.HasLocalRightStickCalibration) ?
-        "PC calibration is active for this stick." : "Using original controller calibration, or defaults if unavailable.";
+        global::DS4Windows.UiText.Get("PC calibration is active for this stick.") : global::DS4Windows.UiText.Get("Using original controller calibration, or defaults if unavailable.");
     public string Heading { get; private set; }
     public string Instructions { get; private set; }
     public string ResultText { get; private set; } = string.Empty;
     public double Progress { get; private set; }
-    public string ProgressLabel { get; private set; } = "Not started";
+    public string ProgressLabel { get; private set; } = global::DS4Windows.UiText.Get("Not started");
     public bool IsBusy => busy;
     public bool CanStart => !closed && !busy && operation == null && ContextIsCurrent;
     public bool CanChooseSide => CanStart;
@@ -112,7 +112,7 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
         Heading = reset ? "Preparing reset" : "Preparing calibration";
         Instructions = "Releasing this controller's mapped input…";
         Progress = 0;
-        ProgressLabel = "Please wait";
+        ProgressLabel = global::DS4Windows.UiText.Get("Please wait");
         RaiseAll();
         Switch2RawStickCalibrationOperation started = null;
         var beginCancellation = new CancellationTokenSource();
@@ -130,7 +130,7 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
             {
                 Heading = "Calibration could not start";
                 Instructions = "Wait for live controller input and finish any other calibration, then try again. A remembered controller identity and writable PC calibration store are required.";
-                ProgressLabel = "Not started";
+                ProgressLabel = global::DS4Windows.UiText.Get("Not started");
                 return false;
             }
             operation = started;
@@ -140,7 +140,7 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
         catch
         {
             if (started != null) runtime.CancelRawStickCalibration(started);
-            if (!closed) ResultText = "Calibration could not start. No calibration was saved.";
+            if (!closed) ResultText = global::DS4Windows.UiText.Get("Calibration could not start. No calibration was saved.");
             return false;
         }
         finally
@@ -161,7 +161,7 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
         Heading = saving.Reset ? "Resetting PC calibration" : "Saving PC calibration";
         Instructions = "Controller input remains released while the result is stored and applied.";
         ResultText = string.Empty;
-        ProgressLabel = "Please wait";
+        ProgressLabel = global::DS4Windows.UiText.Get("Please wait");
         RaiseAll();
         try
         {
@@ -173,19 +173,19 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
                 operation = null;
                 Heading = saving.Reset ? "PC calibration reset" : "Calibration saved";
                 Instructions = "You can calibrate another stick or close this window.";
-                ResultText = saving.Reset ? $"{side}: the PC override was removed. Source calibration is active again." :
-                    $"{side}: saved on this PC and applied to this controller connection.";
+                ResultText = saving.Reset ? global::DS4Windows.UiText.Format("{0}: the PC override was removed. Source calibration is active again.", side) :
+                    global::DS4Windows.UiText.Format("{0}: saved on this PC and applied to this controller connection.", side);
                 Progress = 100;
-                ProgressLabel = "Complete";
+                ProgressLabel = global::DS4Windows.UiText.Get("Complete");
             }
             else if (result == Switch2RawStickCalibrationCommitResult.StorageFailed && stillOwnsReceipt)
             {
-                ResultText = "The PC calibration file could not be updated. The previous live calibration is unchanged. Retry Save calibration or cancel.";
+                ResultText = global::DS4Windows.UiText.Get("The PC calibration file could not be updated. The previous live calibration is unchanged. Retry Save calibration or cancel.");
                 UpdateProgress();
             }
             else if ((result is Switch2RawStickCalibrationCommitResult.NotReady or Switch2RawStickCalibrationCommitResult.Busy) && stillOwnsReceipt)
             {
-                ResultText = "The operation is not ready to finish. Wait for valid samples or cancel and retry.";
+                ResultText = global::DS4Windows.UiText.Get("The operation is not ready to finish. Wait for valid samples or cancel and retry.");
                 UpdateProgress();
             }
             else
@@ -194,17 +194,17 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
                 operation = null;
                 Heading = "Calibration ended";
                 Instructions = "Close this window and reopen calibration from the current controller before trying again.";
-                ProgressLabel = "Not applied";
+                ProgressLabel = global::DS4Windows.UiText.Get("Not applied");
                 ResultText = result == Switch2RawStickCalibrationCommitResult.StoredNotApplied ?
-                    "The PC file was updated, but the change was not applied to the active connection. Reconnect to load it, or explicitly reset it. Cancellation cannot undo a write already in progress." :
-                    "This operation is no longer current. It did not complete a calibration change.";
+                    global::DS4Windows.UiText.Get("The PC file was updated, but the change was not applied to the active connection. Reconnect to load it, or explicitly reset it. Cancellation cannot undo a write already in progress.") :
+                    global::DS4Windows.UiText.Get("This operation is no longer current. It did not complete a calibration change.");
             }
         }
         catch
         {
             runtime.CancelRawStickCalibration(saving);
             operation = null;
-            if (!closed) ResultText = "Calibration could not finish. The file outcome could not be confirmed; reconnect and check the selected stick before retrying.";
+            if (!closed) ResultText = global::DS4Windows.UiText.Get("Calibration could not finish. The file outcome could not be confirmed; reconnect and check the selected stick before retrying.");
         }
         finally
         {
@@ -220,9 +220,9 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
         operation = null;
         Heading = "Calibration cancelled";
         Instructions = "Ordinary controller input can resume. You can start again when ready.";
-        ResultText = busy ? "A save already in progress may still update the PC file. Its final result will appear here." :
-            "The unsaved capture was discarded; the existing calibration was not changed.";
-        ProgressLabel = "Cancelled";
+        ResultText = busy ? global::DS4Windows.UiText.Get("A save already in progress may still update the PC file. Its final result will appear here.") :
+            global::DS4Windows.UiText.Get("The unsaved capture was discarded; the existing calibration was not changed.");
+        ProgressLabel = global::DS4Windows.UiText.Get("Cancelled");
         Progress = 0;
         RaiseAll();
     }
@@ -242,22 +242,22 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
             operation = null;
             Heading = "Calibration ended";
             Instructions = "The controller or calibration changed. Start again from the current controller.";
-            ProgressLabel = "Not saved";
+            ProgressLabel = global::DS4Windows.UiText.Get("Not saved");
             return;
         }
         stage = progress.Stage;
         Progress = (stage == Switch2RawStickCalibrationStage.Rotate ? progress.RotationProgress : progress.StationaryProgress) * 100;
         (Heading, Instructions, ProgressLabel) = stage switch
         {
-            Switch2RawStickCalibrationStage.Rotate => ($"1 · Rotate the {SelectedSideLabel.ToLowerInvariant()}",
-                "Move slowly around the full outer edge in both directions. Keep moving until this step completes; pauses do not count.",
-                $"{Math.Max(0, Math.Ceiling(10 * (1 - progress.RotationProgress))):0} moving seconds remaining"),
-            Switch2RawStickCalibrationStage.Settle => ("2 · Release the stick", "Take your hand off the stick and let it return to center.", "Waiting for 2 seconds of rest"),
-            Switch2RawStickCalibrationStage.Center => ("3 · Hold still", "Leave the stick untouched while its center is measured. Touching it restarts the rest period.",
-                $"{Math.Max(0, Math.Ceiling(3 * (1 - progress.StationaryProgress))):0} still seconds remaining"),
-            Switch2RawStickCalibrationStage.Ready => (progress.Reset ? "Ready to reset" : "Ready to save", "Choose Save calibration to apply this result, or Cancel to discard it.", "Ready"),
-            Switch2RawStickCalibrationStage.InsufficientTravel => ("More stick travel is needed", "Cancel and try again. Reach the full edge in every direction, then let the stick center itself.", "Calibration rejected"),
-            _ => ("Calibration cancelled", "Start a new calibration when the controller is ready.", "Cancelled"),
+            Switch2RawStickCalibrationStage.Rotate => (global::DS4Windows.UiText.Format("1 · Rotate the {0}", SelectedSideLabel.ToLowerInvariant()),
+                global::DS4Windows.UiText.Get("Move slowly around the full outer edge in both directions. Keep moving until this step completes; pauses do not count."),
+                global::DS4Windows.UiText.Format("{0:0} moving seconds remaining", Math.Max(0, Math.Ceiling(10 * (1 - progress.RotationProgress))))),
+            Switch2RawStickCalibrationStage.Settle => (global::DS4Windows.UiText.Get("2 · Release the stick"), global::DS4Windows.UiText.Get("Take your hand off the stick and let it return to center."), global::DS4Windows.UiText.Get("Waiting for 2 seconds of rest")),
+            Switch2RawStickCalibrationStage.Center => (global::DS4Windows.UiText.Get("3 · Hold still"), global::DS4Windows.UiText.Get("Leave the stick untouched while its center is measured. Touching it restarts the rest period."),
+                global::DS4Windows.UiText.Format("{0:0} still seconds remaining", Math.Max(0, Math.Ceiling(3 * (1 - progress.StationaryProgress))))),
+            Switch2RawStickCalibrationStage.Ready => (progress.Reset ? global::DS4Windows.UiText.Get("Ready to reset") : global::DS4Windows.UiText.Get("Ready to save"), global::DS4Windows.UiText.Get("Choose Save calibration to apply this result, or Cancel to discard it."), global::DS4Windows.UiText.Get("Ready")),
+            Switch2RawStickCalibrationStage.InsufficientTravel => (global::DS4Windows.UiText.Get("More stick travel is needed"), global::DS4Windows.UiText.Get("Cancel and try again. Reach the full edge in every direction, then let the stick center itself."), global::DS4Windows.UiText.Get("Calibration rejected")),
+            _ => (global::DS4Windows.UiText.Get("Calibration cancelled"), global::DS4Windows.UiText.Get("Start a new calibration when the controller is ready."), global::DS4Windows.UiText.Get("Cancelled")),
         };
     }
 
@@ -269,7 +269,7 @@ public sealed class Switch2StickCalibrationViewModel : INotifyPropertyChanged
         operation = null;
         Heading = "Controller context changed";
         Instructions = "The controller, profile or pair changed. Close this window and reopen calibration from the controller you want to use.";
-        ProgressLabel = "Calibration stopped";
+        ProgressLabel = global::DS4Windows.UiText.Get("Calibration stopped");
         // Preserve the explicit asynchronous disk outcome, if one exists.
     }
 

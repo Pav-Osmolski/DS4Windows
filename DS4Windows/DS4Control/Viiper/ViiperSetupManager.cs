@@ -164,12 +164,12 @@ namespace DS4Windows
             "--run-embedded-viiper-installer";
         private const string InstallerResourceName =
             "DS4Windows.install-viiper-backend.ps1";
-        internal const string BundledViiperName = "VIIPER-0.1.12-x64.exe";
-        internal const string SupportedViiperReleaseTag = "v0.1.12";
+        internal const string BundledViiperName = "VIIPER-0.1.14-x64.exe";
+        internal const string SupportedViiperReleaseTag = "v0.1.14";
         private const string BundledViiperHashName =
             BundledViiperName + ".sha256";
         internal const string SupportedViiperSha256 =
-            "FA1716E581E7A9E85ED593B7573D51221A223D6A0F291D1DD9A2BB4F6E77C785";
+            "4A893F73E0A7CD9DAD933F61885E336F83B25B445AD71F18593ADDB2FDF2B9D8";
         private const string BundledUsbipName = "USBip-0.9.8.1-x64.exe";
         private const string BundledHidHideName =
             "HidHide_1.5.230_x64.exe";
@@ -435,7 +435,7 @@ namespace DS4Windows
             {
                 if (!status.Ready || forcePrompt)
                     MessageBox.Show(status.DisplayText + "\n\nPortable lab never installs, repairs, replaces, or starts a backend. Start its exact verified viiper.exe with the lab-local key first. Installed drivers must already pass the normal checks.",
-                        "Portable controller lab", MessageBoxButton.OK, status.Ready ? MessageBoxImage.Information : MessageBoxImage.Warning);
+                        global::DS4Windows.UiText.Get("Portable controller lab"), MessageBoxButton.OK, status.Ready ? MessageBoxImage.Information : MessageBoxImage.Warning);
                 return status.Ready;
             }
             bool verifiedUpdateRequired = RequiresVerifiedViiperUpdate(status);
@@ -620,11 +620,11 @@ namespace DS4Windows
                     "Setup does not download missing components.";
                 if (owner != null)
                 {
-                    MessageBox.Show(owner, message, "VIIPER setup", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(owner, message, global::DS4Windows.UiText.Get("VIIPER setup"), MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 else
                 {
-                    MessageBox.Show(message, "VIIPER setup", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(message, global::DS4Windows.UiText.Get("VIIPER setup"), MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 return false;
             }
@@ -902,15 +902,15 @@ namespace DS4Windows
             catch (Win32Exception error) when (error.NativeErrorCode == 1223)
             {
                 exitCode = 1223;
-                MessageBox.Show("Setup was canceled and is not finished yet. Open DS4Windows, go to Settings, and select Install / Repair VIIPER when you're ready.",
-                    "DS4Windows setup", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(global::DS4Windows.UiText.Get("Setup was canceled and is not finished yet. Open DS4Windows, go to Settings, and select Install / Repair VIIPER when you're ready."),
+                    global::DS4Windows.UiText.Get("DS4Windows setup"), MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception error)
             {
                 exitCode = 1;
                 WriteInstallerHostLog("Automatic setup resume failed: " + error);
-                MessageBox.Show("Setup could not finish automatically. Open DS4Windows, go to Settings, and select Install / Repair VIIPER. Details have been saved in the setup log.",
-                    "DS4Windows setup", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(global::DS4Windows.UiText.Get("Setup could not finish automatically. Open DS4Windows, go to Settings, and select Install / Repair VIIPER. Details have been saved in the setup log."),
+                    global::DS4Windows.UiText.Get("DS4Windows setup"), MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             return true;
         }
@@ -1140,9 +1140,9 @@ namespace DS4Windows
                         Installation.StartupSetupRecovery.Register(pending);
                         keepForResume = true;
                         MessageBox.Show(
-                            "Restart Windows to finish VIIPER setup. Setup will resume at your next sign-in " +
-                            "and Windows may request administrator permission. Automatic startup remains paused until setup checks succeed.",
-                            "Restart required", MessageBoxButton.OK,
+                            global::DS4Windows.UiText.Get("Restart Windows to finish VIIPER setup. Setup will resume at your next sign-in ") +
+                            global::DS4Windows.UiText.Get("and Windows may request administrator permission. Automatic startup remains paused until setup checks succeed."),
+                            global::DS4Windows.UiText.Get("Restart required"), MessageBoxButton.OK,
                             MessageBoxImage.Warning);
                     }
                     else if (exitCode == 0)
@@ -1163,7 +1163,7 @@ namespace DS4Windows
                         MessageBox.Show(
                             BuildInstallerFailureMessage(exitCode,
                                 scriptLogPath),
-                            "VIIPER setup failed", MessageBoxButton.OK,
+                            global::DS4Windows.UiText.Get("VIIPER setup failed"), MessageBoxButton.OK,
                             MessageBoxImage.Error);
                     }
                 }
@@ -1191,9 +1191,9 @@ namespace DS4Windows
                 try
                 {
                     MessageBox.Show(
-                        $"VIIPER setup host failed: {ex.Message}\n\n" +
-                        $"Diagnostics were saved to:\n{hostLogPath}",
-                        "VIIPER setup", MessageBoxButton.OK,
+                        global::DS4Windows.UiText.Format("VIIPER setup host failed: {0}\n\n", ex.Message) +
+                        global::DS4Windows.UiText.Format("Diagnostics were saved to:\n{0}", hostLogPath),
+                        global::DS4Windows.UiText.Get("VIIPER setup"), MessageBoxButton.OK,
                         MessageBoxImage.Error);
                 }
                 catch { }
@@ -3156,26 +3156,17 @@ namespace DS4Windows
                     try { tcp.Dispose(); } catch (ObjectDisposedException) { }
                 });
 
-                // Match the main API client's cancellable connect path. APM
-                // completion handles are not owned by this probe and can be
-                // disposed/reused by another completion, producing a false
-                // ObjectDisposedException while the broker is healthy.
+                // A fast connect can retire the legacy APM wait handle before
+                // the probe waits on it. Own the deadline instead of borrowing
+                // the socket's completion handle.
                 using (var connectDeadline = CancellationTokenSource.CreateLinkedTokenSource(totalDeadline.Token))
                 {
-                    connectDeadline.CancelAfter(750);
-                    try
-                    {
-                        tcp.ConnectAsync(host, port, connectDeadline.Token)
-                            .AsTask().GetAwaiter().GetResult();
-                    }
-                    catch (Exception exception) when (connectDeadline.IsCancellationRequested &&
-                        (exception is OperationCanceledException || exception is ObjectDisposedException || exception is SocketException))
-                    {
-                        failure = "Connect: timeout";
-                        return false;
-                    }
+                    connectDeadline.CancelAfter(Math.Min(750, budgetMilliseconds));
+                    tcp.ConnectAsync(host, port, connectDeadline.Token).AsTask()
+                        .GetAwaiter().GetResult();
                 }
 
+                phase = "CompleteConnect";
                 using var transport = new ViiperProbeDeadlineStream(tcp.GetStream(),
                     probeStarted, budgetMilliseconds);
                 phase = authenticated ? "Authenticate" : "OpenStream";

@@ -18,7 +18,7 @@ namespace DS4WindowsTests
             Exception failure = null;
             var renderedFiles = new System.Collections.Generic.List<string>();
             string resultsDirectory = TestContext.TestResultsDirectory;
-            Thread thread = new Thread(() =>
+            Action thread = () =>
             {
                 try
                 {
@@ -101,23 +101,20 @@ namespace DS4WindowsTests
                     AutoProfileLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     BatteryAlertsLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     ProfileAudioSelectionValidation.Validate();
+                    AppThemeValidation.Validate(application, resultsDirectory, renderedFiles);
                 }
                 catch (Exception ex)
                 {
                     failure = ex;
                 }
-            });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-            Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(30)),
-                "Theme resource loading did not finish.");
+            };
+            HeadlessWpfDispatcher.Invoke(thread);
             if (failure != null)
             {
                 Assert.Fail(failure.ToString());
             }
-            // Include both main's missing-profile views and this branch's
-            // DirectInput views in the light/dark render coverage.
-            Assert.AreEqual(28, renderedFiles.Count);
+            // Main's theme coverage plus this branch's two DirectInput views.
+            Assert.AreEqual(32, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

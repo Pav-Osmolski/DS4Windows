@@ -91,7 +91,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 new(BuildAutomaticControllerAudioName(automaticOutputType,
                     automaticUsbipPort), string.Empty),
-                new("Default · all system audio",
+                new(global::DS4Windows.UiText.Get("Default · all system audio"),
                     DualSenseAudioPassthrough.DefaultSystemAudioEndpointId),
             };
 
@@ -108,7 +108,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     continue;
                 }
                 choices.Add(new AudioEndpointChoice(
-                    $"{app.Name} · app only",
+                    global::DS4Windows.UiText.Format("{0} · app only", app.Name),
                     endpointId));
             }
 
@@ -156,8 +156,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 .FirstOrDefault();
 
             return endpoint == null || string.IsNullOrWhiteSpace(endpoint.Name)
-                ? "Game Audio (virtual controller endpoint)"
-                : $"Game Audio ({endpoint.Name})";
+                ? global::DS4Windows.UiText.Get("Game Audio (virtual controller endpoint)")
+                : global::DS4Windows.UiText.Format("Game Audio ({0})", endpoint.Name);
         }
 
         public static Task RefreshAsync(bool forceRefresh = false)

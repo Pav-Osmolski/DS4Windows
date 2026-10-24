@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:schema id="root">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xs:element name="root" ns1:IsDataSet="true">
+      <xs:complexType>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="metadata">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" />
+              </xs:sequence>
+              <xs:attribute name="name" use="required" type="xsd:string" />
+              <xs:attribute name="type" type="xsd:string" />
+              <xs:attribute name="mimetype" type="xsd:string" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="assembly">
+            <xs:complexType>
+              <xs:attribute name="alias" type="xsd:string" />
+              <xs:attribute name="name" type="xsd:string" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="data">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+                <xs:element name="comment" type="xsd:string" minOccurs="0" ns1:Ordinal="2" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" ns1:Ordinal="1" />
+              <xs:attribute name="type" type="xsd:string" ns1:Ordinal="3" />
+              <xs:attribute name="mimetype" type="xsd:string" ns1:Ordinal="4" />
+              <xs:attribute ref="xml:space" />
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="resheader">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="value" type="xsd:string" minOccurs="0" ns1:Ordinal="1" />
+              </xs:sequence>
+              <xs:attribute name="name" type="xsd:string" use="required" />
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionExists" xml:space="preserve">
+    <value>Az akció neve már létezik</value>
+  </data>
+  <data name="AddingToList" xml:space="preserve">
+    <value>Hozzáadás a listához...</value>
+  </data>
+  <data name="AddPrograms" xml:space="preserve">
+    <value>Programok hozzáadása</value>
+  </data>
+  <data name="ALocactionNeeded" xml:space="preserve">
+    <value>A helyszínt ki kell választani a folytatáshoz</value>
+  </data>
+  <data name="AlwaysRainbow" xml:space="preserve">
+    <value>Mindig Rainbow mód</value>
+  </data>
+  <data name="AssignProfile" xml:space="preserve">
+    <value>Adja meg a vezérlő számát *</value>
+  </data>
+  <data name="Battery" xml:space="preserve">
+    <value>Akkumulátor: *szám *%</value>
+  </data>
+  <data name="BestUsedRightSide" xml:space="preserve">
+    <value>Legjobb jobb oldali használata egérfunkcióként</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="BTPollRate" xml:space="preserve">
+    <value>Határozza meg a DS4 hardverhez használt közvélemény-kutatási arányt, amikor Bluetooth-on keresztül csatlakozik. (A profil mentésére alkalmazható)</value>
+  </data>
+  <data name="CannotMoveFiles" xml:space="preserve">
+    <value>Nem tudja áthelyezni a fájlokat az új helyre, Kérjük, a DS4Tool mappát "DS4Windows" -re változtassa</value>
+  </data>
+  <data name="CannotWriteHere" xml:space="preserve">
+    <value>Nem tudod megírni az aktuális helyet. Másolja a Beállításokat az appdata-ra?</value>
+  </data>
+  <data name="ChargeController" xml:space="preserve">
+    <value>Töltse fel az akkumulátort</value>
+  </data>
+  <data name="Charged" xml:space="preserve">
+    <value>töltött</value>
+  </data>
+  <data name="Charging" xml:space="preserve">
+    <value>Töltés: *szám *%</value>
+  </data>
+  <data name="CheckBattery" xml:space="preserve">
+    <value>Ellenőrizze az akkumulátort</value>
+  </data>
+  <data name="CloseConfirm" xml:space="preserve">
+    <value>Ez kikapcsolja az összes csatlakoztatott vezérlőt.</value>
+  </data>
+  <data name="CloseDS4W" xml:space="preserve">
+    <value>Közel DS4Windows?</value>
+  </data>
+  <data name="CloseMinimize" xml:space="preserve">
+    <value>A főablak bezárása minimalizálja az alkalmazást.</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Szín</value>
+  </data>
+  <data name="ColorByBattery" xml:space="preserve">
+    <value>Akkumulátor színe %</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Megerősítse...</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>összekötő...</value>
+  </data>
+  <data name="ContextEdit" xml:space="preserve">
+    <value>Profil szerkesztése Controller *number*</value>
+  </data>
+  <data name="ContextNew" xml:space="preserve">
+    <value>Hozzon létre egy profilot a Controller számára *szám*</value>
+  </data>
+  <data name="ControllerWasRemoved" xml:space="preserve">
+    <value>A vezérlő *Mac-cím* eltávolításra került, vagy a kapcsolat elveszett</value>
+  </data>
+  <data name="CopyComplete" xml:space="preserve">
+    <value>Másolja be, kérjük, indítsa újra a DS4Windows és távolítsa el a beállításokat a Program Directory</value>
+  </data>
+  <data name="CopyFullColor" xml:space="preserve">
+    <value>Kattintson a teljes szín megtekintéséhez</value>
+  </data>
+  <data name="CouldNotOpenDS4" xml:space="preserve">
+    <value>Figyelmeztetés: Nem lehet kizárólagosan megnyitni a DS4 *Mac címet.</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>nap</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Napok</value>
+  </data>
+  <data name="DeleteProfile" xml:space="preserve">
+    <value>Távolítsa el a profilt?</value>
+  </data>
+  <data name="DimByBattery" xml:space="preserve">
+    <value>Dim per akkumulátor %</value>
+  </data>
+  <data name="DisconnectBT" xml:space="preserve">
+    <value>Kapcsolattartó BT</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Elszigetelt</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Letöltés *szám *%</value>
+  </data>
+  <data name="DownloadVersion" xml:space="preserve">
+    <value>Letöltés verzió *szám* most?</value>
+  </data>
+  <data name="DownText" xml:space="preserve">
+    <value>lefelé</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="DS4Update" xml:space="preserve">
+    <value>DS4Windows Update elérhető!</value>
+  </data>
+  <data name="DS4WindowsCannotEditHere" xml:space="preserve">
+    <value>DS4Windows nem tudja szerkeszteni a beállításokat itt, Ez most bezárul</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Szerkesztés</value>
+  </data>
+  <data name="FallBack" xml:space="preserve">
+    <value>Visszaesés</value>
+  </data>
+  <data name="FallBackTo" xml:space="preserve">
+    <value>Vissza a * gombra</value>
+  </data>
+  <data name="FifthMouseDown" xml:space="preserve">
+    <value>5. egér gomb lefelé</value>
+  </data>
+  <data name="FifthMouseUp" xml:space="preserve">
+    <value>5. egér gomb felfelé</value>
+  </data>
+  <data name="FlashAtTip" xml:space="preserve">
+    <value>Kattintson a szín megváltoztatásához. fekete = alapértelmezett szín</value>
+  </data>
+  <data name="FlushHID" xml:space="preserve">
+    <value>Flush elrejtés</value>
+  </data>
+  <data name="FlushHIDTip" xml:space="preserve">
+    <value>Flush HID Körutazás minden olvasás után</value>
+  </data>
+  <data name="FoundController" xml:space="preserve">
+    <value>Megtalált vezérlő:</value>
+  </data>
+  <data name="FourthMouseDown" xml:space="preserve">
+    <value>4. egér gomb lefelé</value>
+  </data>
+  <data name="FourthMouseUp" xml:space="preserve">
+    <value>4. egér gomb felfelé</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Teljes</value>
+  </data>
+  <data name="GyroReadout" xml:space="preserve">
+    <value>Kattintson a Sixaxis Gyro leolvasásához</value>
+  </data>
+  <data name="GyroTriggerBehavior" xml:space="preserve">
+    <value>Ellenőrizze, hogy a gyro aktív-e, miközben a trigger aktív.</value>
+  </data>
+  <data name="GyroX" xml:space="preserve">
+    <value>GyroX, bal és jobb hegyek</value>
+  </data>
+  <data name="GyroY" xml:space="preserve">
+    <value>GyroY, előre és hátra</value>
+  </data>
+  <data name="GyroZ" xml:space="preserve">
+    <value>GyroZ - Felső és lefelé</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>órák</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>órák</value>
+  </data>
+  <data name="HoverOverItems" xml:space="preserve">
+    <value>Húzza át az elemeket a leírás vagy több megtekintéséhez</value>
+  </data>
+  <data name="IfRemovingDS4Windows" xml:space="preserve">
+    <value>Ha eltávolítja a DS4Windows, akkor törölheti a beállításokat a profil mappát link</value>
+  </data>
+  <data name="InputDelay" xml:space="preserve">
+    <value>Megfigyelt fizikai jelentési intervallum: {0:0.00} ms</value>
+  </data>
+  <data name="InstallComplete" xml:space="preserve">
+    <value>Teljes telepítés</value>
+  </data>
+  <data name="InstallDriver" xml:space="preserve">
+    <value>Járművezetők telepítése itt</value>
+  </data>
+  <data name="InstallFailed" xml:space="preserve">
+    <value>A telepítés sikertelen, kérjük, állítsa vissza</value>
+  </data>
+  <data name="Installing" xml:space="preserve">
+    <value>Beépítés...</value>
+  </data>
+  <data name="Jitter" xml:space="preserve">
+    <value>A Sixaxis segítségével kiszámíthatja az érintőképernyő mozgását</value>
+  </data>
+  <data name="KeepThisSize" xml:space="preserve">
+    <value>Tartsa ezt az ablakméretet bezárás után</value>
+  </data>
+  <data name="LanguagePackApplyRestartRequired" xml:space="preserve">
+    <value>A nyelvi csomag megváltoztatása a DS4Windows alkalmazás újraindítása után lép hatályba.</value>
+  </data>
+  <data name="LatencyNotOverTen" xml:space="preserve">
+    <value>A vezérlő *szám* késleltetése most 10 ms alatt van</value>
+  </data>
+  <data name="LatencyOverTen" xml:space="preserve">
+    <value>A {0} vezérlő 10 ms feletti késleltetése ({1} ms)</value>
+  </data>
+  <data name="LaunchProgram" xml:space="preserve">
+    <value>Indítsa el a programot *</value>
+  </data>
+  <data name="LightByBatteryTip" xml:space="preserve">
+    <value>Szintén elhomályosítja a fényt az üres időzítéssel, ha a DS4 teljesen feltöltve van</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Töltés...</value>
+  </data>
+  <data name="LoadProfile" xml:space="preserve">
+    <value>Töltse fel *profil *</value>
+  </data>
+  <data name="Macro" xml:space="preserve">
+    <value>makró</value>
+  </data>
+  <data name="MacroRecorded" xml:space="preserve">
+    <value>Macro felvételek</value>
+  </data>
+  <data name="MakeNewProfile" xml:space="preserve">
+    <value>Hozzon létre új profilt</value>
+  </data>
+  <data name="MultiAction" xml:space="preserve">
+    <value>Mutli-Action gomb</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Új</value>
+  </data>
+  <data name="NoMacroRecorded" xml:space="preserve">
+    <value>Nincs feltüntetve a makró</value>
+  </data>
+  <data name="noneProfile" xml:space="preserve">
+    <value>(Egyik sem</value>
+  </data>
+  <data name="NoneText" xml:space="preserve">
+    <value>Nincs</value>
+  </data>
+  <data name="NoProfileLoaded" xml:space="preserve">
+    <value>Nincs feltöltött profil</value>
+  </data>
+  <data name="NotUsingProfile" xml:space="preserve">
+    <value>A {0} vezérlő nem használ profilot. Az akkumulátorszint {1}%</value>
+  </data>
+  <data name="NotValid" xml:space="preserve">
+    <value>Nem érvényes</value>
+  </data>
+  <data name="OpeningInstaller" xml:space="preserve">
+    <value>A telepítő megnyitása</value>
+  </data>
+  <data name="OpenScpDriver" xml:space="preserve">
+    <value>Nyissa meg a Beállítások &gt; Vezérlők lehetőséget, majd válassza az Install / Repair VIIPER lehetőséget.</value>
+  </data>
+  <data name="OtherFileLocation" xml:space="preserve">
+    <value>Egyéb helyfájlok törlésre kerülnek</value>
+  </data>
+  <data name="PleaseDownloadUpdater" xml:space="preserve">
+    <value>Kérjük, töltse le a frissítőt most, helyezze a programok mappájába, és átnevezze a(z) DS4Updater.exe-ra, ha x86-on van, majd ellenőrizze a frissítést. DS4Windows megpróbálja megnyitni a DS4Updater kiadás oldalát, amikor bezárja ezt az ablakot.</value>
+  </data>
+  <data name="PleaseImport" xml:space="preserve">
+    <value>Kérjük, importáljon vagy készítsen profilot</value>
+  </data>
+  <data name="PlusNewProfile" xml:space="preserve">
+    <value>Új profil</value>
+  </data>
+  <data name="ProfileCannotRestore" xml:space="preserve">
+    <value>*Profil neve* nem állítható vissza.</value>
+  </data>
+  <data name="ProfileFolderMoved" xml:space="preserve">
+    <value>Profil Mappát áthelyeztek programmappába</value>
+  </data>
+  <data name="Programs" xml:space="preserve">
+    <value>programok</value>
+  </data>
+  <data name="QuickCharge" xml:space="preserve">
+    <value>Automatikusan kikapcsolja a BT-t, amikor csatlakozik az USB-hez</value>
+  </data>
+  <data name="QuitOtherPrograms" xml:space="preserve">
+    <value>Zárja be azokat az alkalmazásokat, amelyek jelenleg a fizikai vezérlőt tartják, mielőtt engedélyezné a "HidHide használata a kettős bemenet megakadályozására" lehetőséget.</value>
+  </data>
+  <data name="RecordText" xml:space="preserve">
+    <value>Felvétel</value>
+  </data>
+  <data name="RightClickPresets" xml:space="preserve">
+    <value>Jobbra kattintva beállíthatja az előbeállításokat egy vezérlőkészlethez</value>
+  </data>
+  <data name="RunAtStartup" xml:space="preserve">
+    <value>Megmondja a Windowsnak, hogy indítsa el a DS4Windows bejelentkezés után</value>
+  </data>
+  <data name="SaveRecordedMacro" xml:space="preserve">
+    <value>Megszűnik a Macro felvétel?</value>
+  </data>
+  <data name="ScanCode" xml:space="preserve">
+    <value>Kód szkennelés</value>
+  </data>
+  <data name="SearchingController" xml:space="preserve">
+    <value>Ellenőrzőket keresünk...</value>
+  </data>
+  <data name="SelectActionTitle" xml:space="preserve">
+    <value>Válasszon egy műveletet * akció *</value>
+  </data>
+  <data name="SelectMacro" xml:space="preserve">
+    <value>Válassza ki a macro</value>
+  </data>
+  <data name="SetRegularTrigger" xml:space="preserve">
+    <value>Rendszeres trigger</value>
+  </data>
+  <data name="SetUnloadTrigger" xml:space="preserve">
+    <value>Letöltés Trigger</value>
+  </data>
+  <data name="Shortcuts" xml:space="preserve">
+    <value>rövidítések</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrate" xml:space="preserve">
+    <value>Sixaxis kerék emuláció kalibrálása</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction1" xml:space="preserve">
+    <value>(1) A vezérlő középpontjában tartsa állandóan, és nyomja meg az "X" billentyűt</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction2" xml:space="preserve">
+    <value>(2) Forduljon 90°-ra balra (vagy jobbra) és nyomja meg az "X" billentyűt.</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction3" xml:space="preserve">
+    <value>(3) Forduljon 90°-ra jobbra (vagy balra) és nyomja meg az "X" billentyűt.</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateInstruction" xml:space="preserve">
+    <value>Minden kalibrációs pont be van állítva, amikor a lámpa színe zöldre változik. A vezérlő forgatása közben a lámpa színe villog, amikor a vezérlő a kalibrálási ponton van. Az OK gombbal fogadja el a kalibrálást</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoControllerError" xml:space="preserve">
+    <value>A gyro (sixaxis) kormánykerék emulációs értékeit nem lehet vezérlő nélkül kalibrálni.</value>
+  </data>
+  <data name="SASteeringWheelEmulationCalibrateNoneAxisError" xml:space="preserve">
+    <value>A Gyro kormánykerék emulációs tengely opciója NEM (nem használják az emulációt). Kérjük, válasszon egy tengely opciót a sixaxis gyro kormánykerék emulációjának kalibrálása előtt</value>
+  </data>
+  <data name="SixAxisReading" xml:space="preserve">
+    <value>Kattintson a továbbfejlesztett Sixaxis olvasáshoz</value>
+  </data>
+  <data name="Starting" xml:space="preserve">
+    <value>Kezdőlap...</value>
+  </data>
+  <data name="StartText" xml:space="preserve">
+    <value>Indítás</value>
+  </data>
+  <data name="Step1" xml:space="preserve">
+    <value>1. lépés: A VIIPER és az USB/IP telepítése</value>
+  </data>
+  <data name="StopHText" xml:space="preserve">
+    <value>Nehéz megállás</value>
+  </data>
+  <data name="StopLText" xml:space="preserve">
+    <value>Megáll a fény</value>
+  </data>
+  <data name="StoppedDS4Windows" xml:space="preserve">
+    <value>Megszűnt a DS4Windows</value>
+  </data>
+  <data name="StoppingDS4" xml:space="preserve">
+    <value>DS4 bemeneti vezérlők leállítása</value>
+  </data>
+  <data name="StoppingX360" xml:space="preserve">
+    <value>Virtuális kimeneti vezérlők</value>
+  </data>
+  <data name="StopText" xml:space="preserve">
+    <value>Megállítás</value>
+  </data>
+  <data name="SwipeDown" xml:space="preserve">
+    <value>Svájc lefelé</value>
+  </data>
+  <data name="SwipeLeft" xml:space="preserve">
+    <value>Baloldali svájci</value>
+  </data>
+  <data name="SwipeRight" xml:space="preserve">
+    <value>Szivárvány jobb</value>
+  </data>
+  <data name="SwipeTouchpad" xml:space="preserve">
+    <value>Touchpad a profilok megváltoztatásához</value>
+  </data>
+  <data name="SwipeUp" xml:space="preserve">
+    <value>Sütés felfelé</value>
+  </data>
+  <data name="TapAndHold" xml:space="preserve">
+    <value>Érintse meg és tartsa lenyomva, enyhe késleltetés egyetlen kattintással</value>
+  </data>
+  <data name="TestHText" xml:space="preserve">
+    <value>Súlyos teszt</value>
+  </data>
+  <data name="TestLText" xml:space="preserve">
+    <value>Fény teszt</value>
+  </data>
+  <data name="TestText" xml:space="preserve">
+    <value>tesztelés</value>
+  </data>
+  <data name="TextDocs" xml:space="preserve">
+    <value>Szöveges dokumentumok (*.txt)</value>
+  </data>
+  <data name="TiltDown" xml:space="preserve">
+    <value>Tilt lefelé</value>
+  </data>
+  <data name="TiltLeft" xml:space="preserve">
+    <value>Tilt balra</value>
+  </data>
+  <data name="TiltRight" xml:space="preserve">
+    <value>Tilt jobb</value>
+  </data>
+  <data name="TiltUp" xml:space="preserve">
+    <value>Tilt fel</value>
+  </data>
+  <data name="TouchpadMovementOff" xml:space="preserve">
+    <value>A Touchpad Movement már ki van kapcsolva</value>
+  </data>
+  <data name="TouchpadMovementOn" xml:space="preserve">
+    <value>A Touchpad Movement mostantól elérhető</value>
+  </data>
+  <data name="TouchpadOffTip" xml:space="preserve">
+    <value>Nyomja meg a PS+Touchpad gombot</value>
+  </data>
+  <data name="TwoFingerSwipe" xml:space="preserve">
+    <value>2 ujj érintőképernyő csavarja balra vagy jobbra</value>
+  </data>
+  <data name="TypeNewName" xml:space="preserve">
+    <value>Az új név itt</value>
+  </data>
+  <data name="TypeProfileName" xml:space="preserve">
+    <value>Profil neve itt</value>
+  </data>
+  <data name="UACTask" xml:space="preserve">
+    <value>A DS4Windows rendszergazdaként kell futtatnia, hogy aktiválhassa ezt a módot.</value>
+  </data>
+  <data name="Unassigned" xml:space="preserve">
+    <value>El nem küldött</value>
+  </data>
+  <data name="UpText" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="UpToDate" xml:space="preserve">
+    <value>A DS4Windows alkalmazás naprakész.</value>
+  </data>
+  <data name="UseControllerForMapping" xml:space="preserve">
+    <value>Használhatja a vezérlőjét a vezérlők módosítására is</value>
+  </data>
+  <data name="UsingExclusive" xml:space="preserve">
+    <value>Exkluzív mód használata</value>
+  </data>
+  <data name="UsingProfile" xml:space="preserve">
+    <value>A {0} vezérlő a "{1}" profilt használja. Az akkumulátorszint {2}%</value>
+  </data>
+  <data name="UsingShared" xml:space="preserve">
+    <value>Megosztott mód használata</value>
+  </data>
+  <data name="UsingTPSwipes" xml:space="preserve">
+    <value>Ez kikapcsolja az érintőképernyőt egérként</value>
+  </data>
+  <data name="ValidName" xml:space="preserve">
+    <value>Kérjük, adjon meg érvényes nevet</value>
+  </data>
+  <data name="WaitMS" xml:space="preserve">
+    <value>Várakozás *szám * ms</value>
+  </data>
+  <data name="WillKeep" xml:space="preserve">
+    <value>Megtartja</value>
+  </data>
+  <data name="XMLFiles" xml:space="preserve">
+    <value>XML fájlok (*.xml)</value>
+  </data>
+  <data name="EnableTouchToggle" xml:space="preserve">
+    <value>Engedélyezze az egér érintőképernyős funkcióját a PS + Touchpad Click segítségével.</value>
+  </data>
+  <data name="UdpServer" xml:space="preserve">
+    <value>Az UDP-kiszolgáló engedélyezése. a kiszolgáló meghallgatja a címet és a portot. a címérték beállításai: 127.0.0.1 localhost csak 10.0.0.0 az összes címet.</value>
+  </data>
+  <data name="AutoProfilePathAndWindowTitleEditTip" xml:space="preserve">
+    <value>↑ ABC = Match at the beginning of string (^) Ebből az ABC$ = Match at the end of string ($) Ebből az ABC = Contains a string (*)</value>
+  </data>
+  <data name="ShowAutoProfileDebugLogTip" xml:space="preserve">
+    <value>Ha engedélyezve van, a napló lap részletes üzeneteket jelenít meg az automatikus profil eseményekről.</value>
+  </data>
+  <data name="MacroScanCodeTip" xml:space="preserve">
+    <value>A billentyűzetkulcsok szkennelési kódértékének használata egy makróban</value>
+  </data>
+  <data name="MacroRunOnReleaseTip" xml:space="preserve">
+    <value>Macro futtatása a trigger kulcs kiadásán</value>
+  </data>
+  <data name="MacroSynchronizedRunTip" xml:space="preserve">
+    <value>Több makró futtatása szinkronizált sorrendben, ha ugyanazon a triggernek több makrója van (a kulcsmentes makró futtatása előtt befejezett kulcstartó makró)</value>
+  </data>
+  <data name="MacroRepeatTip" xml:space="preserve">
+    <value>Ismételje meg a makrot, amíg a kiváltó kulcs le van tartva</value>
+  </data>
+  <data name="MacroKeepKeyStateTip" xml:space="preserve">
+    <value>Tartsa az utolsó kulcsállapotot, amikor a makró végrehajtása befejeződik (azaz ha egy kulcs le van hagyva, akkor nem állítja vissza automatikusan az alapértelmezett állapotba).</value>
+  </data>
+  <data name="SquareStickRoundness" xml:space="preserve">
+    <value>A Square Stick szögek körvonala</value>
+  </data>
+  <data name="XMLActionsCorrupt" xml:space="preserve">
+    <value>A .xml fájl sérült. kezdve a semmiből.</value>
+  </data>
+  <data name="OscServer" xml:space="preserve">
+    <value>Az OSC Server engedélyezése. Hallgassa meg a portot az összes címre.</value>
+  </data>
+  <data name="UsingAutoTempProfile" xml:space="preserve">
+    <value>A {0} vezérlő használja a temp Profile "{1}"</value>
+  </data>
+  <data name="DinputOnly" xml:space="preserve">
+    <value>A virtuális vezérlő kimenetének letiltása</value>
+  </data>
+  <data name="OutContNotice" xml:space="preserve">
+    <value>Válassza ki a virtuális vezérlő játékokat kell észlelni. mentse a profilt, hogy alkalmazza a változást.</value>
+  </data>
+  <data name="TouchStarted" xml:space="preserve">
+    <value>Kezdődik az érintés</value>
+  </data>
+  <data name="TouchEnded" xml:space="preserve">
+    <value>Érintés vége</value>
+  </data>
+  <data name="ProfileNameInvalid" xml:space="preserve">
+    <value>Adjon meg egy érvényes profilnévet nyomkövető hely vagy pont nélkül.</value>
+  </data>
+  <data name="ProfileRenameCollision" xml:space="preserve">
+    <value>Ezzel a névvel rendelkező profil már létezik. Válasszon másik nevet.</value>
+  </data>
+  <data name="ProfileRenameFailed" xml:space="preserve">
+    <value>A profil nevet nem lehetett átnevezni. a neve nem változott. Ellenőrizze a fájl engedélyét, vagy hogy egy másik program használja-e.</value>
+  </data>
+  <data name="ResolvePendingProfileSave" xml:space="preserve">
+    <value>Ez a profil nem mentette meg az Áttekintés változásait. Újratölteni vagy eltávolítani az áttekintésre váró mentéseket, mielőtt szerkesztené vagy átnevezné.</value>
+  </data>
+</root>

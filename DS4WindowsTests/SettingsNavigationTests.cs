@@ -22,7 +22,7 @@ public sealed class SettingsNavigationTests
     public void ActualSettingsNavigationPreservesEditsAndKeepsEverySectionReachable(string theme, double width)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -78,10 +78,8 @@ public sealed class SettingsNavigationTests
                 Assert.AreEqual(@"C:\Games\Steam", steam.Text);
             }
             catch (Exception error) { failure = error; }
-        });
-        thread.SetApartmentState(ApartmentState.STA);
-        thread.Start();
-        Assert.IsTrue(thread.Join(TimeSpan.FromSeconds(30)), "Settings rendering did not finish.");
+        };
+        HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
@@ -93,7 +91,7 @@ public sealed class SettingsNavigationTests
     public void EverySettingsSectionStartsAtTheSamePosition(string theme, double width)
     {
         Exception failure = null;
-        var thread = new Thread(() =>
+        Action thread = () =>
         {
             try
             {
@@ -144,9 +142,8 @@ public sealed class SettingsNavigationTests
                 }
             }
             catch (Exception error) { failure = error; }
-        });
-        thread.SetApartmentState(ApartmentState.STA); thread.Start(); thread.Join();
-        if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
+        };
+HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
     private static Grid LoadSettings(string theme)
@@ -156,7 +153,7 @@ public sealed class SettingsNavigationTests
         System.Reflection.Assembly.Load("DotNetProjects.Wpf.Extended.Toolkit");
         XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
-        XElement settings = XDocument.Load(SourcePath()).Descendants(wpf + "TabItem")
+        XElement settings = LocalizedSource.Load(SourcePath()).Descendants(wpf + "TabItem")
             .Single(element => (string)element.Attribute(x + "Name") == "settingsTab");
         var markup = new XElement(settings.Element(wpf + "Grid"));
         markup.SetAttributeValue(XNamespace.Xmlns + "x", x.NamespaceName);
@@ -177,18 +174,18 @@ public sealed class SettingsNavigationTests
             {
                 if (attribute.Name.LocalName is "Click" or "Checked" or "SelectionChanged" or "TextChanged" or "PreviewKeyDown" ||
                     attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
-                else if (attribute.Value.StartsWith("{lex:Loc ")) attribute.Value = attribute.Value[9..^1];
+                else if (attribute.Value.StartsWith("{lex:Loc ")) attribute.Value = LocalizedSource.Resolve(attribute.Value);
                 else if (attribute.Value.StartsWith("{Binding") && !attribute.Value.Contains("ElementName=settings"))
                     attribute.Remove();
             }
         }
         // Give the dictionary its own base theme instead of relying on a
         // process-wide Application (which may belong to another STA test).
-        XElement bridge = XDocument.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "Themes", "BridgeShellStyles.xaml")).Root;
+        XElement bridge = LocalizedSource.Load(Path.Combine(Path.GetDirectoryName(SourcePath())!, "Themes", "BridgeShellStyles.xaml")).Root;
         bridge.AddFirst(new XElement(wpf + "ResourceDictionary.MergedDictionaries",
             new XElement(wpf + "ResourceDictionary", new XAttribute("Source", $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml"))));
-        var resources = (ResourceDictionary)XamlReader.Parse(bridge.ToString());
-        var root = (Grid)XamlReader.Parse(markup.ToString());
+        var resources = (ResourceDictionary)XamlReader.Parse(LocalizedSource.Markup(bridge));
+        var root = (Grid)XamlReader.Parse(LocalizedSource.Markup(markup));
         root.Resources.MergedDictionaries.Add(resources);
         ((ContentControl)root.FindName("batteryAlertsTestHost")).Content =
             new DS4WinWPF.DS4Forms.BatteryAlertsControl(false, new DS4Windows.BatteryAlertSettings());
