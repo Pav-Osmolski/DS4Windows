@@ -9,6 +9,17 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.48](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.48) - 2026-10-24
+
+#### Controller factory information
+
+- Correct the emulated DualShock 4 factory build date/time with the paired VIIPER **0.1.15** backend. The time occupied the final byte of the date field, so tools could display `Sep 17 20211 1:34:00` instead of `Sep 17 2021 11:34:00`. The original emulated build date is retained; it describes controller firmware, not the DS4Windows application. Thanks again to [@Jobima1st](https://github.com/Jobima1st) for the follow-up in [issue #75](https://github.com/Pav-Osmolski/DS4Windows/issues/75).
+- Audit the other emulated controller metadata formats and add independent host-decoding regression coverage for DualShock 4, DualSense and DualSense Edge. Default/custom dates, date/time padding, version-field boundaries and short reads are covered; no corresponding date/time overlap was found in the other output types. Battery/charging propagation and the 5.0.47 connection reliability fixes are retained. Backend implementation: [VIIPER PR #10](https://github.com/Pav-Osmolski/VIIPER/pull/10).
+
+#### Updating
+
+- Fully exit DS4Windows and VIIPER before updating to replace the paired backend. USB/IP remains **0.9.8.1**; no driver version change is required. Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
 ### [5.0.47](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.47) - 2026-10-24
 
 #### Important fixes: controller startup and installer readiness
