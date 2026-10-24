@@ -11,9 +11,9 @@ namespace DS4Windows.Bootstrapper
 {
     internal static class InfrastructureProbe
     {
-        private const string ExpectedMarker = "VIIPER-0.1.14+USBIP-0.9.8.1";
-        private const string ExpectedViiperVersion = "0.1.14";
-        private const string ExpectedViiperHash = "4A893F73E0A7CD9DAD933F61885E336F83B25B445AD71F18593ADDB2FDF2B9D8";
+        private const string ExpectedMarker = "VIIPER-0.1.15+USBIP-0.9.8.1";
+        private const string ExpectedViiperVersion = "0.1.15";
+        private const string ExpectedViiperHash = "0745D71ED6091905EFC3C2585FAB424A6ACBC35C06644EDE15E7D380510A1DA8";
         private const string ExpectedUsbipVersion = "0.9.8.1";
         private const string ExpectedUsbipHash = "817DA219FA153B4B37C3BC1AA8FCC63F33E046188C57CC3DD2C60A6EF0883C56";
         private const string ExpectedUsbipLibraryHash = "F123EF5D288B817A890CBE39A3C2D212B3D8B1765C691C8703CCB76C7337986C";
