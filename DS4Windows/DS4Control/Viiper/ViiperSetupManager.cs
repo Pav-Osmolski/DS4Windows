@@ -164,12 +164,12 @@ namespace DS4Windows
             "--run-embedded-viiper-installer";
         private const string InstallerResourceName =
             "DS4Windows.install-viiper-backend.ps1";
-        internal const string BundledViiperName = "VIIPER-0.1.13-x64.exe";
-        internal const string SupportedViiperReleaseTag = "v0.1.13";
+        internal const string BundledViiperName = "VIIPER-0.1.14-x64.exe";
+        internal const string SupportedViiperReleaseTag = "v0.1.14";
         private const string BundledViiperHashName =
             BundledViiperName + ".sha256";
         internal const string SupportedViiperSha256 =
-            "9069FBC73D7263A0C25E1CE2279F107A4F23DC25746B3B7FA20B3B3D07C4B259";
+            "4A893F73E0A7CD9DAD933F61885E336F83B25B445AD71F18593ADDB2FDF2B9D8";
         private const string BundledUsbipName = "USBip-0.9.8.1-x64.exe";
         private const string BundledHidHideName =
             "HidHide_1.5.230_x64.exe";
@@ -3156,19 +3156,17 @@ namespace DS4Windows
                     try { tcp.Dispose(); } catch (ObjectDisposedException) { }
                 });
 
-                IAsyncResult result = tcp.BeginConnect(host, port, null, null);
-                using (result.AsyncWaitHandle)
+                // A fast connect can retire the legacy APM wait handle before
+                // the probe waits on it. Own the deadline instead of borrowing
+                // the socket's completion handle.
+                using (var connectDeadline = CancellationTokenSource.CreateLinkedTokenSource(totalDeadline.Token))
                 {
-                    if (!result.AsyncWaitHandle.WaitOne(
-                            TimeSpan.FromMilliseconds(750)))
-                    {
-                        failure = "Connect: timeout";
-                        return false;
-                    }
+                    connectDeadline.CancelAfter(Math.Min(750, budgetMilliseconds));
+                    tcp.ConnectAsync(host, port, connectDeadline.Token).AsTask()
+                        .GetAwaiter().GetResult();
                 }
 
                 phase = "CompleteConnect";
-                tcp.EndConnect(result);
                 using var transport = new ViiperProbeDeadlineStream(tcp.GetStream(),
                     probeStarted, budgetMilliseconds);
                 phase = authenticated ? "Authenticate" : "OpenStream";

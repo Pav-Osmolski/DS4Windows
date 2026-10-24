@@ -5,6 +5,18 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+## [5.0.47](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.47) - 2026-10-24
+
+### Important fixes: controller startup and installer readiness
+
+- Resolve the reported intermittent virtual-controller startup failure with the paired VIIPER **0.1.14** backend: finish complete management replies gracefully before closing their connections. Keep cleanup bounded and interruptible by shutdown, and preserve controller/audio streaming, authentication and the existing single stream-open retry. Thanks to [@cns00](https://github.com/cns00) for the diagnostic captures and final successful testing in [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), also reported in [upstream #153](https://github.com/hbashton/DS4Windows/issues/153). On 24 October the reporter confirmed consistently reaching **Ready** in the final paired preview, and the maintainer approved this release. The earlier isolated comparison improved from 77/400 failed requests to 3/400 with graceful closing; those measurements describe the diagnostic session, not a guarantee against every future reset. No hardware fault or machine-specific underlying cause has been established.
+- Correct a separate fast-completion race in both the application's readiness probe and the installer's final health-check probe, replacing legacy shared connection wait handles with cancellable deadlines. Add 256 rapid loopback checks for each real probe. Thanks again to [@cns00](https://github.com/cns00) for the installer follow-up: setup helpers succeeded but a separate final check failed, and Retry succeeded. The supplied installer diagnostics do not distinguish that race from a transient reset. Driver, version, hash and health validation remain enforced.
+- Retain all stable 5.0.46 features and translations. Temporary diagnostic collectors, independent testers and experimental server switches are excluded. Implementation: [DS4Windows PR #77](https://github.com/Pav-Osmolski/DS4Windows/pull/77) and [VIIPER PR #9](https://github.com/Pav-Osmolski/VIIPER/pull/9).
+
+### Updating
+
+- Close games, DS4Windows and VIIPER before updating so the matching backend can be replaced. USB/IP remains **0.9.8.1**; no driver version change is required. Windows packages are unsigned; matching source archives, checksums and build records accompany the downloads.
+
 ## [5.0.46](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.46) - 2026-10-23
 
 ### Controller audio
