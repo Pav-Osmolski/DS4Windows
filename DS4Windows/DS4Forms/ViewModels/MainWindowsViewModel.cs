@@ -33,14 +33,16 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 {
     public sealed class OverviewOutputControllerChoice
     {
-        public OverviewOutputControllerChoice(string name, OutContType type)
+        public OverviewOutputControllerChoice(string name, OutContType type, bool isEnabled = true)
         {
             Name = name;
             Type = type;
+            IsEnabled = isEnabled;
         }
 
         public string Name { get; }
         public OutContType Type { get; }
+        public bool IsEnabled { get; }
     }
 
     public sealed class QuickProfileSettingChangedEventArgs : EventArgs
@@ -103,6 +105,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 new("DualSense", OutContType.ViiperDualSense),
                 new("DualSense Edge", OutContType.ViiperDualSenseEdge),
                 new("Switch 2 Pro", OutContType.ViiperSwitch2Pro),
+                new("Generic joystick (preview)", OutContType.ViiperGenericJoystick, PortableLabContext.IsActive),
             };
 
         private CompositeDeviceModel selectedController;
@@ -271,6 +274,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 value = value.Normalize();
                 if (!HasSelectedProfile || value == OutContType.None ||
+                    value == OutContType.ViiperGenericJoystick && !PortableLabContext.IsActive ||
                     Global.OutContType[selectedController.DevIndex].Normalize() == value)
                 {
                     return;

@@ -113,7 +113,8 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(30, renderedFiles.Count);
+            // Main's theme coverage plus this branch's two DirectInput views.
+            Assert.AreEqual(32, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);
