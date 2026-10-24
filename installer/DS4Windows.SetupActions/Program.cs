@@ -21,7 +21,7 @@ namespace DS4Windows.SetupActions
         private const string InfrastructureVersion =
             "VIIPER-0.1.14+USBIP-0.9.8.1";
         private const string CurrentBundledViiperName =
-            "VIIPER-0.1.14-connection-preview20261023-x64.exe";
+            "VIIPER-0.1.14-x64.exe";
         private static string CorrelationId =
             Guid.NewGuid().ToString("N");
         private static readonly string InstallerLogRoot = Path.Combine(

@@ -1,21 +1,21 @@
 {
   "SchemaVersion": 1,
-  "SourceCommit": "5e09cdef39d0ed2b4c1a8499ab8b284fa6d79398",
-  "Version": "v0.1.14-connection-preview20261023",
-  "ProductVersion": "0.1.14-connection-preview20261023",
+  "SourceCommit": "e830f69479f6d55952ff50f7635517be9e9914bd",
+  "Version": "v0.1.14",
+  "ProductVersion": "0.1.14",
   "FileVersion": "0.1.14.0",
-  "BuildDate": "2026-10-23T19:15:01Z",
-  "GitHubRunId": null,
-  "GitHubRunAttempt": null,
+  "BuildDate": "2026-10-24T07:47:14Z",
+  "GitHubRunId": "40075269598",
+  "GitHubRunAttempt": "1",
   "Binary": {
-    "Name": "VIIPER-0.1.14-connection-preview20261023-x64.exe",
+    "Name": "viiper.exe",
     "Size": 9492480,
-    "Sha256": "2BF705A5C65A741E895B5A5F517F7C44B4934AE6C80D26E9118051472AF54797"
+    "Sha256": "4A893F73E0A7CD9DAD933F61885E336F83B25B445AD71F18593ADDB2FDF2B9D8"
   },
   "LicenseFiles": [
     {
       "Name": "licenses.txt",
-      "Sha256": "6C7B8BF7C333439D5B5B4673F704AFDE0AB333CEA8C5A758A2C3733D2506A49A"
+      "Sha256": "62CA1C6CCF6E32B11099E74D9555D15A15320785CAF49C1DE315FC295538DE8C"
     },
     {
       "Name": "LICENSE.txt",
@@ -39,7 +39,7 @@
     "Path": "github.com/Alia5/VIIPER/cmd/viiper",
     "Main": {
       "Path": "github.com/Alia5/VIIPER",
-      "Version": "v0.1.14-0.20261023191447-5e09cdef39d0"
+      "Version": "v0.1.14"
     },
     "Deps": [
       {
@@ -127,11 +127,11 @@
       },
       {
         "Key": "vcs.revision",
-        "Value": "5e09cdef39d0ed2b4c1a8499ab8b284fa6d79398"
+        "Value": "e830f69479f6d55952ff50f7635517be9e9914bd"
       },
       {
         "Key": "vcs.time",
-        "Value": "2026-10-23T19:14:47Z"
+        "Value": "2026-10-24T07:43:31Z"
       },
       {
         "Key": "vcs.modified",
@@ -144,57 +144,8 @@
     "",
     "Virtual Input over IP EmulatoR",
     "",
-    "    Version: v0.1.13 (2c0546b)",
-    "             2026-10-23T17:35:39Z",
-    "    Source:  https://github.com/hbashton/VIIPER",
-    "    License: GPLv3",
-    "",
-    "Flags:",
-    "  -h, --help                    Show context-sensitive help.",
-    "      --config=STRING           Path to configuration file (json|yaml|toml)",
-    "                                ($VIIPER_CONFIG)",
-    "      --config-only             Load only the explicit absolute --config file;",
-    "                                never search default locations",
-    "      --update-notify=\"none\"    Deprecated and ignored; built-in self-updates",
-    "                                have been removed ($VIIPER_UPDATE_NOTIFY)",
-    "      --log.level=\"info\"        Log level: trace, debug, info, warn, error",
-    "                                ($VIIPER_LOG_LEVEL)",
-    "      --log.file=STRING         Log file path (default: none; logs only to",
-    "                                console) ($VIIPER_LOG_FILE)",
-    "      --log.raw-file=STRING     Raw packet log file path (default: none)",
-    "                                ($VIIPER_LOG_RAW_FILE)",
-    "",
-    "Commands:",
-    "  server [flags]",
-    "    Start the VIIPER USB-IP server",
-    "",
-    "  proxy --upstream-addr=STRING [flags]",
-    "    Start the VIIPER USB-IP proxy",
-    "",
-    "  config init <command> [flags]",
-    "    Generate a configuration template",
-    "",
-    "  install [flags]",
-    "    Add the current VIIPER executable to system startup and runs it (creates a",
-    "    Systemd service on Linux)",
-    "",
-    "  uninstall [flags]",
-    "    Remove any VIIPER system startup configuration / Systemd service",
-    "",
-    "Run \"VIIPER <command> --help\" for more information on a command."
-  ],
-  "BuildKind": "local-testing-candidate",
-  "SourceArchive": {
-    "Name": "VIIPER-0.1.14-connection-preview20261023-SOURCE.zip",
-    "Sha256": "7A1A0B0EFAE6E6769DFBF8355D42A30D762E31B7CB7AE65C0E4C0BD14C506DA9"
-  },
-  "HelpOutput": [
-    "Usage: VIIPER <command> [flags]",
-    "",
-    "Virtual Input over IP EmulatoR",
-    "",
-    "    Version: v0.1.14-connection-preview20261023 (5e09cdef39d0ed2b4c1a8499ab8b284fa6d79398)",
-    "             2026-10-23T19:15:01Z",
+    "    Version: v0.1.14 (e830f69)",
+    "             2026-10-24T07:47:14Z",
     "    Source:  https://github.com/hbashton/VIIPER",
     "    License: GPLv3",
     "",

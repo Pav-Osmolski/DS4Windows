@@ -106,7 +106,7 @@ $script:UsbipUdeDriverSha256 =
 $script:UsbipFilterDriverSha256 =
     "b93a5fc3c23d56f9b49634742374e32f269e53f764caa2d5fcb43e3259f7eced"
 $script:BundledViiperPath = Join-Path $script:PackageExtrasRoot `
-    "VIIPER-0.1.14-connection-preview20261023-x64.exe"
+    "VIIPER-0.1.14-x64.exe"
 $script:BundledViiperSha256Path = $script:BundledViiperPath + ".sha256"
 $script:BundledUsbipInstallerPath = Join-Path $script:PackageExtrasRoot `
     "USBip-0.9.8.1-x64.exe"

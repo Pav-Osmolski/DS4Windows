@@ -51,3 +51,12 @@ the maintainer's working computer as part of automated checks.
 
 Stable 5.0.46 remains Latest. Maintainer and reporter acceptance are pending;
 do not close issue 66 or claim every reset is fixed on the basis of these checks.
+
+## Acceptance — 24 October 2026
+
+The reporter tested the final 5.0.47 paired pre-release and confirmed consistently
+reaching Ready. The maintainer authorized merging and publishing the normal
+5.0.47 release with VIIPER 0.1.14, including the installer readiness correction.
+The preceding candidate status is the historical test-stage record. The released
+fix resolves the reported behaviour; it does not establish a hardware fault,
+identify the host-specific underlying trigger, or eliminate all possible resets.
