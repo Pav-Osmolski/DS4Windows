@@ -705,7 +705,7 @@ namespace DS4WindowsTests
                 for (ulong sequence = 1_001;
                     sequence <= iterations + 1_000; sequence++)
                     RunAllocationCycle(mailbox, cursor, packet, sequence);
-                if (positiveControl) GC.KeepAlive(new byte[128]);
+                if (positiveControl) GC.KeepAlive(AllocateMeasurementPositiveControl());
                 allocated = GC.GetAllocatedBytesForCurrentThread() - before;
             }
 
@@ -716,6 +716,9 @@ namespace DS4WindowsTests
                 Assert.AreEqual(0L, allocated,
                     $"Canonical feedback publication allocated {allocated} bytes after warmup.");
         }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+        private static byte[] AllocateMeasurementPositiveControl() => new byte[128];
 
         private static void RunAllocationCycle(ControllerFeedbackMailbox mailbox,
             ControllerFeedbackClaimCursor cursor, Span<byte> packet,
