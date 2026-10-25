@@ -64,3 +64,5 @@ contributors. Use the feature guides above for everyday setup.
 Release history belongs in [CHANGELOG.md](../CHANGELOG.md). Keep one canonical
 page per topic, and link directly to it. A dated investigation describes its
 recorded source and hardware; it does not establish the status of a newer build.
+
+- [Controller info](controller-info.md): physical and emulated identity, battery/status and available firmware details.

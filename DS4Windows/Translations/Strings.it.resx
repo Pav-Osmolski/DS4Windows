@@ -6301,4 +6301,142 @@ Il backup: </value>
   <data name="UI_F9F5196A5ACCAE02" xml:space="preserve">
     <value>Segui il collegamento delle cuffie</value>
   </data>
+  <data name="UI_12F67F8539C46701" xml:space="preserve">
+    <value>Disponibilità</value>
+  </data>
+  <data name="UI_39D6C91B57CE2F3B" xml:space="preserve">
+    <value>Tensione della batteria</value>
+  </data>
+  <data name="UI_8BB29098B369BFCD" xml:space="preserve">
+    <value>Bluetooth</value>
+  </data>
+  <data name="UI_4816CBFD74AA8297" xml:space="preserve">
+    <value>Consiglio</value>
+  </data>
+  <data name="UI_76C6D2CECF3EF256" xml:space="preserve">
+    <value>Versione del firmware Bootloader</value>
+  </data>
+  <data name="UI_DA36D849C8B49668" xml:space="preserve">
+    <value>Caricamento completo</value>
+  </data>
+  <data name="UI_95072AA1A3FE11F5" xml:space="preserve">
+    <value>Controller disconnesso. Mostra l'ultimo snapshot.</value>
+  </data>
+  <data name="UI_55026208AB1964FE" xml:space="preserve">
+    <value>Controllo info</value>
+  </data>
+  <data name="UI_C4A065BCABC2A601" xml:space="preserve">
+    <value>Controller Info copiato.</value>
+  </data>
+  <data name="UI_8D380282ADEDB6D9" xml:space="preserve">
+    <value>Copia info</value>
+  </data>
+  <data name="UI_F65918E90A917B0E" xml:space="preserve">
+    <value>Versione firmware DSP</value>
+  </data>
+  <data name="UI_F20FD54567ABF468" xml:space="preserve">
+    <value>Identificazione del dispositivo</value>
+  </data>
+  <data name="UI_F7D61802A4172ECC" xml:space="preserve">
+    <value>Dispositivo Info</value>
+  </data>
+  <data name="UI_03B89FA880E6095E" xml:space="preserve">
+    <value>Informazioni di fabbrica</value>
+  </data>
+  <data name="UI_950EEBFBADA780A3" xml:space="preserve">
+    <value>Firmware per costruire il tempo</value>
+  </data>
+  <data name="UI_24EB04667515759D" xml:space="preserve">
+    <value>Tipo Firmware</value>
+  </data>
+  <data name="UI_9D0328BD2B3A5649" xml:space="preserve">
+    <value>Versione firmware</value>
+  </data>
+  <data name="UI_6663DFC9F3F1CA08" xml:space="preserve">
+    <value>Hardware Informazioni</value>
+  </data>
+  <data name="UI_9D7DA81A1E5FFB14" xml:space="preserve">
+    <value>Versione hardware</value>
+  </data>
+  <data name="UI_6D906D1A654F5178" xml:space="preserve">
+    <value>Headphones connessi</value>
+  </data>
+  <data name="UI_999F23FCD7BEC707" xml:space="preserve">
+    <value>Identità</value>
+  </data>
+  <data name="UI_5418EF17129415EA" xml:space="preserve">
+    <value>Le date del firmware descrivono il firmware emulato, non DS4Windows.</value>
+  </data>
+  <data name="UI_64733AE1C4198363" xml:space="preserve">
+    <value>Informazioni riportate dal tuo controllore fisico connesso.</value>
+  </data>
+  <data name="UI_B7F8E9D985AF700A" xml:space="preserve">
+    <value>Intervallo Input Report</value>
+  </data>
+  <data name="UI_3F45AE9E280D7991" xml:space="preserve">
+    <value>Controllore di carico info...</value>
+  </data>
+  <data name="UI_1F04763D7BCD609C" xml:space="preserve">
+    <value>Versione del firmware MCU DSP</value>
+  </data>
+  <data name="UI_E49AFACABFC81F9C" xml:space="preserve">
+    <value>Versione principale del firmware</value>
+  </data>
+  <data name="UI_1AF384C577F294D4" xml:space="preserve">
+    <value>produttore</value>
+  </data>
+  <data name="UI_1EA442A134B2A184" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="UI_E172ACC04C1A5E4C" xml:space="preserve">
+    <value>Controllo fisico</value>
+  </data>
+  <data name="UI_C76C9E7682BC84B6" xml:space="preserve">
+    <value>Prodotto ID</value>
+  </data>
+  <data name="UI_F2307BAF1C858F10" xml:space="preserve">
+    <value>Numero di serie</value>
+  </data>
+  <data name="UI_7339FF9FC26A552E" xml:space="preserve">
+    <value>Snapshot aggiornato a {0}.</value>
+  </data>
+  <data name="UI_801CD0692B68DE33" xml:space="preserve">
+    <value>Software di serie</value>
+  </data>
+  <data name="UI_920E413C7D411B61" xml:space="preserve">
+    <value>Stato</value>
+  </data>
+  <data name="UI_B958CE8B871AB36B" xml:space="preserve">
+    <value>Temperatura</value>
+  </data>
+  <data name="UI_BD6F093129971F07" xml:space="preserve">
+    <value>Il sito web è occupato. si prega di riprovare.</value>
+  </data>
+  <data name="UI_FF0A3616B61AC476" xml:space="preserve">
+    <value>Questo controller non espone i dettagli del firmware.</value>
+  </data>
+  <data name="UI_7BC04149A530604E" xml:space="preserve">
+    <value>Controllo dei dispositivi USB</value>
+  </data>
+  <data name="UI_A24FFD8E9805081E" xml:space="preserve">
+    <value>Versione aggiornata</value>
+  </data>
+  <data name="UI_BBBC715D79EB1147" xml:space="preserve">
+    <value>Venditore ID</value>
+  </data>
+  <data name="UI_D4944E4ACC601E42" xml:space="preserve">
+    <value>L'uscita virtuale è cambiata. Rifresca per leggere il controller corrente.</value>
+  </data>
+  <data name="UI_A68FF52175258D4D" xml:space="preserve">
+    <value>L'output virtuale non è attivo.</value>
+  </data>
+  <data name="UI_184D8D78A71837F8" xml:space="preserve">
+    <value>Batterie band</value>
+  </data>
+  <data name="UI_BFF4A010E2B21B09" xml:space="preserve">
+    <value>Potere esterno</value>
+  </data>
+  <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
+    <value>I dettagli del controller emulato non possono essere letti. Aggiorna per riprovare.</value>
+  </data>
 </root>

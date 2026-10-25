@@ -19,9 +19,9 @@ namespace DS4Windows.SetupActions
     {
         private const string RegistryKeyPath = @"SOFTWARE\DS4Windows";
         private const string InfrastructureVersion =
-            "VIIPER-0.1.15+USBIP-0.9.8.1";
+            "VIIPER-0.1.16+USBIP-0.9.8.1";
         private const string CurrentBundledViiperName =
-            "VIIPER-0.1.15-x64.exe";
+            "VIIPER-0.1.16-x64.exe";
         private static string CorrelationId =
             Guid.NewGuid().ToString("N");
         private static readonly string InstallerLogRoot = Path.Combine(

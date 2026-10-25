@@ -6310,4 +6310,142 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_F9F5196A5ACCAE02" xml:space="preserve">
     <value>跟隨耳機插孔</value>
   </data>
+  <data name="UI_12F67F8539C46701" xml:space="preserve">
+    <value>可用性</value>
+  </data>
+  <data name="UI_39D6C91B57CE2F3B" xml:space="preserve">
+    <value>電池電壓</value>
+  </data>
+  <data name="UI_8BB29098B369BFCD" xml:space="preserve">
+    <value>Bluetooth</value>
+  </data>
+  <data name="UI_4816CBFD74AA8297" xml:space="preserve">
+    <value>董事會</value>
+  </data>
+  <data name="UI_76C6D2CECF3EF256" xml:space="preserve">
+    <value>Bootloader 韌體版本</value>
+  </data>
+  <data name="UI_DA36D849C8B49668" xml:space="preserve">
+    <value>充電完整</value>
+  </data>
+  <data name="UI_95072AA1A3FE11F5" xml:space="preserve">
+    <value>控制器已關閉.顯示最後一張截圖。</value>
+  </data>
+  <data name="UI_55026208AB1964FE" xml:space="preserve">
+    <value>控制員資訊</value>
+  </data>
+  <data name="UI_C4A065BCABC2A601" xml:space="preserve">
+    <value>控制器資訊複製。</value>
+  </data>
+  <data name="UI_8D380282ADEDB6D9" xml:space="preserve">
+    <value>影印資訊</value>
+  </data>
+  <data name="UI_F65918E90A917B0E" xml:space="preserve">
+    <value>DSP 韌體版本</value>
+  </data>
+  <data name="UI_F20FD54567ABF468" xml:space="preserve">
+    <value>裝置識別</value>
+  </data>
+  <data name="UI_F7D61802A4172ECC" xml:space="preserve">
+    <value>裝置資訊</value>
+  </data>
+  <data name="UI_03B89FA880E6095E" xml:space="preserve">
+    <value>工廠資訊</value>
+  </data>
+  <data name="UI_950EEBFBADA780A3" xml:space="preserve">
+    <value>建立 Firmware 時間</value>
+  </data>
+  <data name="UI_24EB04667515759D" xml:space="preserve">
+    <value>韌體型別</value>
+  </data>
+  <data name="UI_9D0328BD2B3A5649" xml:space="preserve">
+    <value>韌體版本</value>
+  </data>
+  <data name="UI_6663DFC9F3F1CA08" xml:space="preserve">
+    <value>硬體資訊</value>
+  </data>
+  <data name="UI_9D7DA81A1E5FFB14" xml:space="preserve">
+    <value>硬體版本</value>
+  </data>
+  <data name="UI_6D906D1A654F5178" xml:space="preserve">
+    <value>連線的耳機</value>
+  </data>
+  <data name="UI_999F23FCD7BEC707" xml:space="preserve">
+    <value>身份</value>
+  </data>
+  <data name="UI_5418EF17129415EA" xml:space="preserve">
+    <value>由模擬控制器報告的資訊 韌體日期描述模擬韌體,而不是 DS4Windows。</value>
+  </data>
+  <data name="UI_64733AE1C4198363" xml:space="preserve">
+    <value>由您的連線物理控制器報告的資訊。</value>
+  </data>
+  <data name="UI_B7F8E9D985AF700A" xml:space="preserve">
+    <value>入口報告間隔</value>
+  </data>
+  <data name="UI_3F45AE9E280D7991" xml:space="preserve">
+    <value>裝載控制器資訊...</value>
+  </data>
+  <data name="UI_1F04763D7BCD609C" xml:space="preserve">
+    <value>MCU DSP 韌體版本</value>
+  </data>
+  <data name="UI_E49AFACABFC81F9C" xml:space="preserve">
+    <value>主要 firmware 版本</value>
+  </data>
+  <data name="UI_1AF384C577F294D4" xml:space="preserve">
+    <value>製造商</value>
+  </data>
+  <data name="UI_1EA442A134B2A184" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="UI_E172ACC04C1A5E4C" xml:space="preserve">
+    <value>物理控制器</value>
+  </data>
+  <data name="UI_C76C9E7682BC84B6" xml:space="preserve">
+    <value>產品ID</value>
+  </data>
+  <data name="UI_F2307BAF1C858F10" xml:space="preserve">
+    <value>系列號碼</value>
+  </data>
+  <data name="UI_7339FF9FC26A552E" xml:space="preserve">
+    <value>Snapshot 更新至 {0}。</value>
+  </data>
+  <data name="UI_801CD0692B68DE33" xml:space="preserve">
+    <value>軟體系列</value>
+  </data>
+  <data name="UI_920E413C7D411B61" xml:space="preserve">
+    <value>狀態</value>
+  </data>
+  <data name="UI_B958CE8B871AB36B" xml:space="preserve">
+    <value>溫度</value>
+  </data>
+  <data name="UI_BD6F093129971F07" xml:space="preserve">
+    <value>卡片已經忙了,請再試。</value>
+  </data>
+  <data name="UI_FF0A3616B61AC476" xml:space="preserve">
+    <value>此控制器不曝光韌體細節。</value>
+  </data>
+  <data name="UI_7BC04149A530604E" xml:space="preserve">
+    <value>USB 裝置修復</value>
+  </data>
+  <data name="UI_A24FFD8E9805081E" xml:space="preserve">
+    <value>更新版本</value>
+  </data>
+  <data name="UI_BBBC715D79EB1147" xml:space="preserve">
+    <value>賣家ID</value>
+  </data>
+  <data name="UI_D4944E4ACC601E42" xml:space="preserve">
+    <value>虛擬輸出更改. 更新以讀取當前控制器。</value>
+  </data>
+  <data name="UI_A68FF52175258D4D" xml:space="preserve">
+    <value>虛擬輸出不活躍。</value>
+  </data>
+  <data name="UI_184D8D78A71837F8" xml:space="preserve">
+    <value>電池樂隊</value>
+  </data>
+  <data name="UI_BFF4A010E2B21B09" xml:space="preserve">
+    <value>外部力量</value>
+  </data>
+  <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
+    <value>模擬的控制器細節無法讀取. 更新以再次嘗試。</value>
+  </data>
 </root>

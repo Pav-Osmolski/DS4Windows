@@ -4750,6 +4750,7 @@ namespace DS4Windows.InputDevices
 
             if (featureFirmRead)
             {
+                CacheControllerFactoryReport(firmwareInfoData);
                 hwVersion = firmwareInfoData[24] |
                     (uint)(firmwareInfoData[25] << 8) |
                     (uint)(firmwareInfoData[26] << 16) |

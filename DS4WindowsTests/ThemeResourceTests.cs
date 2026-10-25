@@ -102,6 +102,7 @@ namespace DS4WindowsTests
                     BatteryAlertsLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     ProfileAudioSelectionValidation.Validate();
                     AppThemeValidation.Validate(application, resultsDirectory, renderedFiles);
+                    ControllerInfoWindowValidation.Validate(application, resultsDirectory, renderedFiles);
                 }
                 catch (Exception ex)
                 {
@@ -113,7 +114,7 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(30, renderedFiles.Count);
+            Assert.AreEqual(42, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

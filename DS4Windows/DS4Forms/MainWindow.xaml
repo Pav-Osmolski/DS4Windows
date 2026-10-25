@@ -58,6 +58,7 @@
                 <local:ControllerOverviewControl x:Name="controllerOverviewControl"
                                                  EditProfileRequested="ControllerOverview_EditProfileRequested"
                                                  ControllerDetailsRequested="ControllerOverview_ControllerDetailsRequested"
+                                                 ControllerInfoRequested="ControllerOverview_ControllerInfoRequested"
                                                  LightbarRequested="ControllerOverview_LightbarRequested"
                                                  DisconnectRequested="ControllerOverview_DisconnectRequested" />
                 </DockPanel>
@@ -71,7 +72,7 @@
                     </Grid.RowDefinitions>
                     <Label x:Name="noContLb" Grid.Row="0" Visibility="Hidden" Content="{lex:Loc NoControllersConnected}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                     <ListView x:Name="controllerLV" Grid.Row="0" ItemsSource="{Binding ControllerCol}" SelectionMode="Single"
-                              SelectedIndex="{Binding CurrentIndex, Mode=OneWayToSource}" Margin="0"
+                              SelectedIndex="{Binding CurrentIndex, Mode=OneWayToSource}" Margin="0" Padding="8,0,8,0"
                               SelectedItem="{Binding DataContext.SelectedController, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay}"
                               ItemContainerStyle="{StaticResource BridgeControllerCardItemStyle}"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -152,7 +153,8 @@
                                             </Button>
                                         </StackPanel>
                                     </Grid>
-                                    <Border Grid.Column="1" Background="{DynamicResource CardBackgroundColor}"
+                                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                    <Border Background="{DynamicResource CardBackgroundColor}"
                                             BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                                             CornerRadius="3" Padding="10,5" VerticalAlignment="Top">
                                         <StackPanel Orientation="Horizontal">
@@ -161,6 +163,14 @@
                                                        Foreground="{DynamicResource SuccessColor}" />
                                         </StackPanel>
                                     </Border>
+<Button x:Name="controllerCardInfoButton" Style="{DynamicResource ControllerInfoButtonStyle}"
+                                    HorizontalAlignment="Right" Margin="0,9,0,0" Click="ControllerCardInfo_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE946;" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_55026208AB1964FE}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                                    </StackPanel>
 
                                     <Separator Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15,0,14"
                                                Background="{DynamicResource BorderColor}" />

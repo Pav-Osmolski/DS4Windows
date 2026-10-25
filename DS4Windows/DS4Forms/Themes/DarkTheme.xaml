@@ -651,6 +651,7 @@
         <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="0,0,8,0"/>
         <Setter Property="Foreground" Value="{DynamicResource SecondaryColor}"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
@@ -674,7 +675,7 @@
                             </VisualBrush>
                         </Border.OpacityMask>
                         <ScrollViewer Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}"
-                                      Padding="0,0,8,0">
+                                      Padding="{TemplateBinding Padding}">
                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </ScrollViewer>
                     </Border>
