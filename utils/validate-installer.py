@@ -850,7 +850,7 @@ def main() -> int:
             raise SystemExit("Bundled VIIPER source commit mismatch.")
 
     functional_version_contracts = [
-        (probe, r'ExpectedViiperVersion\s*=\s*"([^"]+)"', "0.1.17-issue80-preview20261025", "probe version"),
+        (probe, r'ExpectedViiperVersion\s*=\s*"([^"]+)"', VIIPER_RELEASE["Version"].removeprefix("v"), "probe version"),
         (probe, r'ExpectedMarker\s*=\s*"([^"]+)"', VIIPER_INFRASTRUCTURE_MARKER, "probe marker"),
         (backend_script, r'\$script:InfrastructureVersion\s*=\s*"([^"]+)"', VIIPER_INFRASTRUCTURE_MARKER, "backend marker"),
         (setup_actions, r'InfrastructureVersion\s*=\s*\r?\n?\s*"([^"]+)"', VIIPER_INFRASTRUCTURE_MARKER, "setup marker"),
@@ -870,6 +870,13 @@ def main() -> int:
         / "Viiper"
         / "ViiperSetupManager.cs"
     ).read_text(encoding="utf-8")
+    for field, expected in (
+        ("SupportedViiperReleaseTag", VIIPER_RELEASE["Version"]),
+        ("BundledViiperName", VIIPER_RELEASE["Binary"]),
+    ):
+        matches = re.findall(r'\b' + field + r'\s*=\s*"([^"]+)"', setup_manager)
+        if matches != [expected]:
+            raise SystemExit("Built-in setup VIIPER " + field + " does not match its packaged release.")
     manager_hash = re.search(
         r'SupportedViiperSha256\s*=\s*\n?\s*"([0-9A-F]{64})"',
         setup_manager,
