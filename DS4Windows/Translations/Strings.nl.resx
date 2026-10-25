@@ -6471,4 +6471,115 @@ De backup: </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Gemanipuleerde controllergegevens konden niet worden gelezen.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Wijzigen van locatie...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Bewaar of verwijder uw profielwijzigingen en sluit de profieleditor voordat u de instellingen wijzigt of back-up.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Laatste wijziging</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows kon de instellingen niet opslaan in de geselecteerde map. Er werden geen bestanden gekopieerd of verwijderd. Op de pagina Profielen kunt u Instellingen &amp; profielen gebruiken om AppData te selecteren of uw opgeslagen instellingen te migreren.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Programma folder</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Dit bestand is geen DS4Windows profiel.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>De instellingenoperatie kon niet worden voltooid. Uw huidige locatie blijft actief.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>De locatie van de instellingen kon niet worden gewijzigd. Uw vorige locatie blijft geselecteerd.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Instellingen &amp; profielen</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Kopieer uw huidige instellingen en profielen naar deze locatie? Selecteer Nee om de instellingen al daar te gebruiken.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Zorg voor locatie</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Lees alleen. profielwijzigingen kunnen niet worden opgeslagen. Selecteer AppData of stel de machtigingen van deze map aan.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData - aanbevolen</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>Er zijn geen instellingen in de geselecteerde locatie. Selecteer Kopieer huidige instellingen in plaats daarvan.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>De bestemming bevat al instellingen. Kopieer vervangt de volledige instellingen die zijn ingesteld na een geverifieerde back-up.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Gewijzigd {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Settings backup opgeslagen.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Kies waar profielen en applicatie-instellingen worden bewaard.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Migreren naar AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Open profielen folder</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>In gebruik</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Een wijziging van de instellingen is in afwachting.Sluit DS4Windows volledig en open het opnieuw om het toe te passen.De huidige locatie blijft tot dan actief.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Het wijzigen van de locatie vereist een herstart; originele bestanden worden bewaard.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>Een profiel met de naam {0} bestaat al. Vervang het?</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows instellingen back-up (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Backup herstellen...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Naam A-Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Gebruik Settings &amp; profiles om naar AppData te migreren voordat wijzigingen worden opgeslagen.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Herstellen van deze volledige instellingen back-up bij de volgende start? Huidige instellingen zullen worden geconfigureerd voor het vervangen.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Beide locaties worden bewaard. U kunt de locatie later wijzigen op de pagina Profielen.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>De wijziging wordt toegepast de volgende keer dat DS4Windows begint.Sluit DS4Windows nu?</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Annuleren wachtend op wijziging</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>De huidige applicatie-instellingen konden niet worden opgeslagen.Blijf de laatste opgeslagen bestanden gebruiken?Onopgeslagen wijzigingen worden niet opgenomen.</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>De bestemming is niet schrijfbaar.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Terug naar alle...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Importprofielen</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Export geselecteerd</value>
+  </data>
 </root>

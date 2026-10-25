@@ -6438,4 +6438,115 @@ Zálohování : </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Emulované detaily ovladače nelze přečíst.Znovu zkusit.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Změna místa...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Uložit nebo zrušit změny profilu a zavřít editor profilu před změnou nebo zálohování nastavení.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Poslední modifikace</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows nemohl uložit nastavení ve vybrané složce. Žádné soubory nebyly zkopírovány nebo odstraněny. Na stránce Profily použijte Nastavení a profily k výběru AppData nebo k migraci uložených nastavení.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Programové složky</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Tento soubor není profil DS4Windows.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>Operaci nastavení nelze dokončit. Vaše aktuální umístění zůstává aktivní.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>Umístění nastavení nelze změnit. Vaše předchozí umístění zůstává vybrané. Přezkoumání Nastavení a profily na stránce Profily.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Nastavení a profily</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Zkopírujte aktuální nastavení a profily do tohoto umístění? Vyberte možnost Ne, abyste použili nastavení již tam.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Ušetřete lokalitu</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Změny profilu nelze uložit. Vyberte AppData nebo upravte oprávnění této složky.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData – doporučeno</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>V vybraném umístění nejsou žádné nastavení. Místo toho vyberte možnost Kopírovat aktuální nastavení.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>Místo určení již obsahuje nastavení. Kopírování nahrazuje úplná nastavení nastavená po ověřené záloze.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Změna {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Nastavení zálohy uloženo.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Vyberte, kde jsou uchovávány profily a nastavení aplikací.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Migrace do AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Otevřené profily</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>Využití</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Změnu nastavení čeká. Úplně zavřete DS4Windows a znovu ji otevřete, abyste ji mohli použít.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Změna umístění vyžaduje restart; původní soubory jsou zachovány.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>Profil s názvem {0} již existuje.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows zálohování nastavení (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Obnovení zálohy...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Název: A – Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Použijte Nastavení a profily k migraci do AppData před uložením změn.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Obnovit toto úplné zálohování nastavení při příštím spuštění? Aktuální nastavení budou zálohována před nahrazením.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Oba místa jsou zachována. Můžete změnit umístění později na stránce Profily.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>Změna se použije při příštím spuštění DS4Windows. Zavřít DS4Windows nyní?</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Zrušení čekajících změn</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Aktuální nastavení aplikace nelze uložit. Pokračovat v používání posledních uložených souborů?Nezapsané změny nebudou zahrnuty.</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>Destinace není písemná.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Zpět na všechny...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Importní profily</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Vývoz vybraný</value>
+  </data>
 </root>

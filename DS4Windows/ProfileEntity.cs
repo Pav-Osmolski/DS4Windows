@@ -25,8 +25,39 @@ using System.Threading.Tasks;
 
 namespace DS4WinWPF
 {
-    public class ProfileEntity
+    public class ProfileEntity : System.ComponentModel.INotifyPropertyChanged
     {
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public string Summary { get; private set; }
+        public DateTime ModifiedUtc { get; private set; }
+        public string ModifiedDescription => ModifiedUtc == default ? string.Empty :
+            DS4Windows.UiText.Format("Modified {0:g}", ModifiedUtc.ToLocalTime());
+
+        internal void RefreshMetadata()
+        {
+            Summary = DS4Windows.UiText.Get("Controller profile");
+            ModifiedUtc = default;
+            try
+            {
+                string path = Path.Combine(DS4Windows.Global.appdatapath, "Profiles", name + ".xml");
+                if (File.Exists(path))
+                {
+                    ModifiedUtc = File.GetLastWriteTimeUtc(path);
+                    var document = new System.Xml.XmlDocument { XmlResolver = null };
+                    using var reader = System.Xml.XmlReader.Create(path, new System.Xml.XmlReaderSettings
+                        { DtdProcessing = System.Xml.DtdProcessing.Prohibit, XmlResolver = null, MaxCharactersInDocument = 16 * 1024 * 1024 });
+                    document.Load(reader);
+                    Summary = document.DocumentElement?.SelectSingleNode("OutputContDevice")?.InnerText ?? Summary;
+                    if (App.rootHub != null && Enumerable.Range(0, Math.Min(DS4Windows.Global.ProfilePath.Length, App.rootHub.DS4Controllers.Length))
+                        .Any(index => App.rootHub.DS4Controllers[index] != null && DS4Windows.Global.ProfilePath[index] == name))
+                        Summary += " · " + DS4Windows.UiText.Get("In use");
+                }
+            }
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException or System.Xml.XmlException or ArgumentException) { }
+            PropertyChanged?.Invoke(this, new(nameof(Summary)));
+            PropertyChanged?.Invoke(this, new(nameof(ModifiedUtc)));
+            PropertyChanged?.Invoke(this, new(nameof(ModifiedDescription)));
+        }
         private string name;
         public string Name
         {
@@ -35,6 +66,8 @@ namespace DS4WinWPF
             {
                 if (name == value) return;
                 name = value;
+                RefreshMetadata();
+                PropertyChanged?.Invoke(this, new(nameof(Name)));
                 NameChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -45,6 +78,8 @@ namespace DS4WinWPF
 
         public void DeleteFile()
         {
+            if (!DS4Windows.SettingsStorage.CanWrite(Path.Combine(DS4Windows.Global.appdatapath, "Profiles"), out string reason))
+                throw new IOException(reason);
             if (!string.IsNullOrWhiteSpace(name))
             {
                 string filepath = DS4Windows.Global.appdatapath + @"\Profiles\" + name + ".xml";
@@ -73,12 +108,14 @@ namespace DS4WinWPF
 
         public void FireSaved()
         {
+            RefreshMetadata();
             ProfileSaved?.Invoke(this, EventArgs.Empty);
         }
 
         public bool RenameProfile(string newProfileName, out string error)
         {
             error = null;
+            if (!DS4Windows.SettingsStorage.CanWrite(Path.Combine(DS4Windows.Global.appdatapath, "Profiles"), out error)) return false;
             string target;
             try { target = DS4Windows.ProfileName.Normalize(newProfileName,
                 existingIdentity: string.Equals(newProfileName, name, StringComparison.OrdinalIgnoreCase)); }

@@ -6609,4 +6609,115 @@
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>模拟的控制器细节无法读取. 更新以再次尝试。</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>改变地点...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>保存或丢弃您的个人资料更改,并关闭个人资料编辑器,然后更改或备份设置。</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>最后修改</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows 无法在所选文件夹中保存设置. 未复制或删除任何文件. 在“配置文件”页面上,使用“设置和配置文件”来选择 AppData 或迁移已保存的设置。</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>程序文件</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>这个文件不是一个 DS4Windows 配置文件。</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>无法完成设置操作. 您的当前位置仍然活跃。</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>设置的位置无法更改. 您以前的位置仍然被选中. 在“个人资料”页面上查看设置和配置文件。</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>设置 &amp; 配置文件</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>将当前设置和配置文件复制到此位置吗?选择“不”以使用已经存在的设置。</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>保存位置</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>只阅读. 无法保存配置文件更改. 选择 AppData 或调整此文件夹的权限。</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData - 推荐</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>在所选位置中没有设置,而选择复制当前设置。</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>目的地已包含设置. 复制取代经过验证备份后设置的完整设置. 文件不会合并。</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>变更 {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>设置备份保存。</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>选择配置文件和应用设置的位置。</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>迁移到AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>开放档案文件夹</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>在使用</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>设置更改正在进行中。完全关闭 DS4Windows 并重新打开以应用它。</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>可编写:要更改位置,需要重新启动;保留原始文件。</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>一个名为 {0} 的配置文件已经存在,可以替代它吗?</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows 设置备份(*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>恢复备份...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>姓名:A - Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>此配置文件夹仅供阅读。 使用设置和配置文件将更改保存前迁移到 AppData。</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>下次启动时可以恢复完整的设置备份吗? 更换前会备份当前的设置。</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>两个位置都保留了,您可以在“个人资料”页面上稍后更改位置。</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>改變將在下次適用 DS4Windows 开始,关闭 DS4Windows 然后再打开,然后继续。</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>取消等待变更</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>无法保存当前的应用程序设置. 继续使用最近保存的文件? 未保存的更改将不包括在内。</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>目的地是不可写的。</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>回归所有...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>进口资料</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>出口选择</value>
+  </data>
 </root>

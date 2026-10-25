@@ -6465,4 +6465,115 @@ Le backup : </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Les détails du contrôleur émulé ne pouvaient pas être lus.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Changement de localisation...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Enregistrez ou rejetez les modifications de votre profil et fermez l’éditeur de profil avant de modifier ou de sauvegarder les paramètres.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Dernière modification</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows ne pouvait pas enregistrer les paramètres dans le dossier sélectionné. Aucun fichier n'a été copié ou supprimé. Sur la page Profils, utilisez Paramètres et profils pour choisir AppData ou migrer vos paramètres enregistrés.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Programme Follet</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Ce fichier n'est pas un profil DS4Windows.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>L'opération de configuration n'a pas pu être terminée. Votre emplacement actuel reste actif.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>L'emplacement des paramètres n'a pas pu être modifié. Votre emplacement précédent reste sélectionné. Examen des paramètres et profils sur la page Profils.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Réglages et profils</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Copiez vos paramètres et profils actuels vers cet emplacement? Choisissez Non pour utiliser les paramètres déjà existants.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Sauvegarder la localisation</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Les modifications de profil ne peuvent pas être enregistrées. Choisissez AppData ou ajustez les autorisations de ce dossier.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData - Recommandé</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>Il n'y a pas de paramètres dans l'emplacement sélectionné. Choisissez Copier les paramètres actuels à la place.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>La destination contient déjà des paramètres. Copier remplace ses paramètres complets définis après une sauvegarde vérifiée. Les fichiers ne seront pas fusionnés.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Modifié {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Settings backup sauvegardé.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Choisissez l'endroit où les profils et les paramètres d'application sont conservés.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Migrés vers l’AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Fichier de profil ouvert</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>en usage</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Un changement de paramètres est en attente. Fermez complètement DS4Windows et ouvrez-le à nouveau pour l'appliquer.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Changement d'emplacement nécessite un redémarrage; les fichiers originaux sont conservés.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>Un profil nommé {0} existe déjà.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows sauvegarde des paramètres (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Rétablir le backup...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Nom : A-Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Utilisez les paramètres et profils pour migrer vers AppData avant d'enregistrer les modifications.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Restaurer cette sauvegarde complète des paramètres au prochain démarrage? Les paramètres actuels seront sauvegardés avant le remplacement.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Les deux emplacements sont conservés. Vous pouvez modifier l'emplacement plus tard sur la page Profils.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>La modification sera appliquée la prochaine fois que DS4Windows démarre. Fermer DS4Windows maintenant?</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Annuler en attente de changement</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Les paramètres de l'application actuelle ne peuvent pas être enregistrés. Continuer à utiliser les derniers fichiers enregistrés?</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>La destination n’est pas écrite.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Retour sur tout...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Profils d’importation</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Exportations sélectionnées</value>
+  </data>
 </root>

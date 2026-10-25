@@ -36,6 +36,43 @@ after changing output type if it does not detect the new virtual controller.
 
 You can rename, duplicate, import and export profiles from the Profiles page.
 
+### Settings and profiles location (preview)
+
+The **Settings & profiles** card shows the active profiles folder and whether it
+is writable. **Open profiles folder** opens that exact folder. **Back up all**
+saves a complete settings ZIP, including profile assignments, actions, output
+slots, Nintendo pairing data and imported battery-alert sounds. Executables,
+drivers and logs are excluded. **Restore backup** validates a ZIP created here
+and schedules a restore for the next start, keeping a verified backup of the
+current destination first.
+
+Choose **AppData — recommended** for per-user storage in
+`%APPDATA%\DS4Windows`, or **Program folder** beside the running executable.
+New registered installations default to AppData. Existing locations remain
+selected until you choose to change them. Program Files commonly requires
+administrator access to save; the page checks actual folder access and explains
+when it is read-only. Profiles can still be viewed and exported there.
+
+**Migrate to AppData** is offered for installed copies using settings in their
+program folder. Migration is optional. Close the editor and save or discard
+pending edits before proceeding. Choose whether to copy your current saved
+settings or use the destination's existing settings. Replacing existing settings
+requires confirmation: the complete set is backed up, then replaced rather than
+merged. Your source folder remains intact. Fully quit DS4Windows and reopen it
+to apply the change; **Cancel pending change** cancels it before the next start.
+The remembered location takes precedence over old files left beside the EXE.
+
+Copies are staged and verified before publication. A journal supports rollback
+after an interrupted copy. If recovery finds unexpected changes, DS4Windows
+preserves them and reports the backup location instead of overwriting them.
+Automatic destination backups are kept beneath
+`%LOCALAPPDATA%\DS4Windows\Settings locations\<installation-id>\<operation-id>\backup`.
+Keep a separate **Back up all** ZIP for convenient long-term recovery.
+
+Sort profiles by name or last modified time. Cards show their output type,
+modification time and whether a connected controller is using them. Importing a
+same-named profile asks before replacing it.
+
 If saving fails, the editor stays open and the last valid profile file is kept.
 Check Log for the file error, resolve permissions or free space, and retry.
 A rename collision leaves both existing profiles unchanged; the Rename dialog

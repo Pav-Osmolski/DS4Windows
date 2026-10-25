@@ -5,7 +5,9 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Add optional settings/profile location controls to the Profiles page, with explicit AppData/program-folder selection, actual write-access checks, Open profiles folder, verified backup/restore, and safe migration on the next start. Preserve source files, back up an existing destination before an explicitly approved replacement, and recover interrupted copies without silently merging settings. New installed copies default to AppData; existing choices remain optional. Thanks to [@1hezio](https://github.com/1hezio) for reporting the Program Files permission problem in [issue #80](https://github.com/Pav-Osmolski/DS4Windows/issues/80).
+- Show profile output type, last modification time and in-use status, add sorting, and ask before replacing an imported profile. Keep the new controls readable across all six themes and translated in all 24 language packs.
+- Pair a testing-only VIIPER correction that exposes the DualShock 4 microphone capture status required to arm the physical Bluetooth microphone, including audio companions used with Xbox emulation. The reporter's logs showed the status request being rejected; the corrected endpoint is covered through every DS4 registration alias. Physical headset capture still requires preview confirmation. Thanks again to [@1hezio](https://github.com/1hezio) for the follow-up logs in [issue #80](https://github.com/Pav-Osmolski/DS4Windows/issues/80).
 
 ## Released
 

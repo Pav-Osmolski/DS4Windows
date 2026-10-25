@@ -1,0 +1,34 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.17-issue80-preview20261025
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: 7923e1e9e3dbae08e4e08979bd3dd4cdef01f37f
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: 7923e1e9e3dbae08e4e08979bd3dd4cdef01f37f
+Embedded build date: 2026-10-25T16:51:58Z
+Embedded VCS revision: 7923e1e9e3dbae08e4e08979bd3dd4cdef01f37f
+Embedded VCS time: 2026-10-25T16:51:45Z
+Embedded VCS modified: false
+PE file version: 0.1.17.0
+PE product version: 0.1.17-issue80-preview20261025
+Binary: VIIPER-0.1.17-issue80-preview20261025-x64.exe
+Binary SHA-256: ED1E2F8278353E3ED0BAA661232C31CCF47DC3FE544AF3FEF29AB302B9E3DED1
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.17-issue80-preview20261025-LICENSES.txt
+License notice SHA-256: AAD87A9DCAB8F5A3F95A61F4A5B20173A121A3ADD75FF1743F7C149F612E534D
+
+Testing-only local preview, built from a clean fix/issue80-ds4-microphone-status checkout.
+Source archive: VIIPER-0.1.17-issue80-preview20261025-SOURCE.zip
+Source archive SHA-256: 5EE9BD7DAB393C147A28D0C3A51CCDACBD411C952EA6BE908A55FE2EECEDD16B
+
+Expose the existing DualShock 4 microphone capture status through the narrow
+microphone-interface API for all DS4 aliases, including audio-only companions.
+
+Built using Go 1.27.2 windows/amd64, CGO_ENABLED=0, release tag, trimpath,
+stripped symbols and explicit version/commit/date linker fields. This is a local
+build, not a published stable release or a hosted workflow artifact.
+
+Complete GPL and dependency grants, systray notices and WDL attribution remain
+in this package. Dependencies are unchanged from 0.1.16. Default and release-tag
+Go test suites passed. The Windows executable is unsigned.

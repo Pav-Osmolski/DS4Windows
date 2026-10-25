@@ -6442,4 +6442,115 @@ i backup: </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Emulowanych szczegółów sterownika nie można odczytać.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Zmiana lokalizacji...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Zapisz lub odrzuć zmiany profilu i zamknij edytor profilu przed zmianą lub tworzeniem kopii zapasowej ustawień.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Ostatnia modyfikacja</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows nie udało się zapisać ustawień w wybranym folderze. żadne pliki nie zostały skopiowane lub usunięte. Na stronie Profile użyj Ustawienia i profile, aby wybrać AppData lub przenieść zapisane ustawienia.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Program folderowy</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Ten plik nie jest profilem DS4Windows.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>Operacja ustawień nie została zakończona. Twoja bieżąca lokalizacja pozostaje aktywna.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>Nie można zmienić lokalizacji ustawień. Twoja poprzednia lokalizacja pozostaje wybrana. Przegląd Ustawienia i profile na stronie Profile.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Ustawienia &amp; profile</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Skopiuj bieżące ustawienia i profile do tej lokalizacji? Wybierz pozycję Nie, aby użyć ustawień już tam.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Oszczędź lokalizację</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Nie można zapisać zmian profilu. Wybierz aplikację AppData lub dostosuj uprawnienia tego folderu.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData – zalecane</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>W wybranej lokalizacji nie ma żadnych ustawień. Zamiast tego wybierz pozycję Kopiuj bieżące ustawienia.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>Miejsce docelowe zawiera już ustawienia. Kopiowanie zastępuje pełne ustawienia ustawione po zweryfikowanej kopii zapasowej.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Zmiany {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Ustawienia backup są zapisywane.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Wybierz, gdzie są przechowywane profile i ustawienia aplikacji.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Migracja do AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Profil otwarty folder</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>W użyciu</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Zamknij DS4Windows całkowicie i otwórz go ponownie, aby go zastosować.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Zmiana lokalizacji wymaga ponownego uruchomienia; oryginalne pliki są zachowane.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>Profil o nazwie {0} już istnieje.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows kopia zapasowa ustawień (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Przywracanie backup...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Imię i nazwisko A-Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Ten folder profili jest tylko do odczytu.Użyj ustawień i profili, aby przejść do AppData przed zapisaniem zmian.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Przywróć pełną kopię zapasową ustawień przy następnym uruchomieniu? Aktualne ustawienia zostaną zabezpieczone przed wymianą.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Obie lokalizacje są zachowane. Możesz zmienić lokalizację później na stronie Profile.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>Zmiana zostanie zastosowana następnym razem, gdy zacznie się DS4Windows. Zamknij DS4Windows teraz?</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Odwołanie czekającej zmiany</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Nie można zapisać bieżących ustawień aplikacji. kontynuuj korzystanie z ostatnich zapisanych plików?</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>Miejsce przeznaczenia nie jest pisane.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Powrót do wszystkich...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Profile importowe</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Eksport wybrany</value>
+  </data>
 </root>
