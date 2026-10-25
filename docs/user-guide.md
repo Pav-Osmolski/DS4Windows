@@ -36,7 +36,7 @@ after changing output type if it does not detect the new virtual controller.
 
 You can rename, duplicate, import and export profiles from the Profiles page.
 
-### Settings and profiles location (preview)
+### Settings and profiles location
 
 The **Settings & profiles** card shows the active profiles folder and whether it
 is writable. **Open profiles folder** opens that exact folder. **Back up all**
