@@ -2323,6 +2323,7 @@ namespace DS4WinWPF.DS4Forms
         // Apply and Save on the same failure path, without closing the editor.
         internal bool SaveProfileChanges(string profileName)
         {
+            if (!DS4Windows.SettingsStorage.CanWrite(System.IO.Path.Combine(Global.appdatapath, "Profiles"), out _)) return false;
             try { profileName = DS4Windows.ProfileName.Normalize(profileName,
                 existingIdentity: currentProfile != null && profileName == currentProfile.Name); }
             catch (ArgumentException) { return false; }

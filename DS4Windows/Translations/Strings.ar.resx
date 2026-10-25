@@ -6446,4 +6446,115 @@ Backup : </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>لم يتمكن من قراءة تفاصيل التحكم التي تم إبداؤها.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>تغيير الموقع...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>قم بتخزين أو إلغاء التغييرات على ملفك وتغلق إعداد ملفك قبل تغيير أو تحديث الإعدادات.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>آخر تعديل</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>لم يتمكن DS4Windows من حفظ الإعدادات في المجلد المختار. لم يتم نسخ أي ملفات أو إزالتها. على صفحة الملفات، استخدم الإعدادات و الملفات لتحديد AppData أو نقل الإعدادات المختارة.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>برنامج فوركس</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>هذه الملفات ليست رسالة DS4Windows.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>لا يمكن الانتهاء من العملية الإعدادية، وتظل موقعك الحالي فعالًا.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>لم تتمكن من تغيير موقع الإعدادات. لا يزال موقعك السنوي مختصاً. مراجعة الإعدادات و الملفات على صفحة الوظائف.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>الإعدادات &amp; الملفات</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>قم بتسجيل إعداداتك الحالية وتحديثاتك إلى هذا الموقع؟ اختر لا لاستخدام الإعدادات الموجودة هناك.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>حفظ الموقع</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>لا يمكن تخزين التغييرات على الملف. اختر AppData أو تعديل الإمكانيات لهذه المجلد.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData - الموصى بها</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>لا توجد إعدادات في الموقع المختار. اختر نسخ الإعدادات الحالية بدلاً من ذلك.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>يحتوي الهدف على إعدادات بالفعل. يستبدل الكشف الإعدادات الكاملة التي تم إعدادها بعد تسجيل خزينة مجهولة. لن يتم دمج الملفات.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>التعديل {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>إعدادات الباب المفتوح.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>اختر أين يتم حفظ الملفات والتطبيقات.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>الهبوط إلى AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>الملفات المفتوحة</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>في الاستخدام</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>يتم إغلاق DS4Windows بالكامل وفتحها مرة أخرى لتطبيقها.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>تغيير الموقع يتطلب إعادة تشغيل؛ يتم الحفاظ على الملفات الأصلية.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>يوجد بالفعل ملف يسمى {0}، هل يمكن استبداله؟</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows إزالة الإعدادات (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>إعادة تأمين ...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>الاسم : A-Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>تستخدم Settings &amp; profiles لتنقل إلى AppData قبل حفظ التغييرات.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>كيفية إعادة بناء خزينة الإعدادات الكاملة في البدء التالي؟ سيتم فتح خزينة الإعدادات الحالية قبل استبدالها. لن يتم تجميع الملفات.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>يمكنك تغيير الموقع في وقت لاحق على صفحة الملفات.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>سيتم تطبيق التغيير في المرة القادمة التي تبدأ فيها DS4Windows.إغلاق DS4Windows الآن؟إعادة فتحها بعد ذلك من أجل الاستمرار.</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>إلغاء التغيير المتوقع</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>لا يمكن تخزين إعدادات التطبيق الحالي.استمر في استخدام الملفات التي تم تخزينها الأخيرة؟ لن تتضمن التغييرات التي لم يتم تخزينها.</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>المكان لا يكتب.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>إعادة تقييم جميع...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>مبيعات الملفات</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>الإيرادات المختارة</value>
+  </data>
 </root>

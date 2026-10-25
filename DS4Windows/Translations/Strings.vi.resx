@@ -6443,4 +6443,115 @@ Backup : </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Các chi tiết điều khiển mô phỏng không thể đọc được.Cải thiện để thử lại.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Thay đổi vị trí...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Lưu hoặc loại bỏ các thay đổi hồ sơ của bạn và đóng trình soạn thảo hồ sơ trước khi thay đổi hoặc sao lưu cài đặt.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>sửa đổi mới nhất</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows không thể lưu cài đặt trong thư mục đã chọn. Không có tệp nào được sao chép hoặc xóa. Trên trang Hồ sơ, sử dụng Cài đặt &amp; hồ sơ để chọn AppData hoặc di chuyển cài đặt đã lưu của bạn.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Chương trình Folder</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Tệp này không phải là hồ sơ DS4Windows.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>Hoạt động cài đặt không thể hoàn thành. Vị trí hiện tại của bạn vẫn hoạt động.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>Vị trí cài đặt không thể thay đổi. Vị trí trước của bạn vẫn được chọn. Xem lại Cài đặt &amp; hồ sơ trên trang Hồ sơ.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Cài đặt &amp; Profiles</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Sao chép cài đặt và hồ sơ hiện tại của bạn đến vị trí này? Chọn Không để sử dụng cài đặt đã có ở đó.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Save địa điểm</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Chỉ đọc.Thay đổi hồ sơ không thể lưu được.Chọn AppData hoặc điều chỉnh quyền của thư mục này.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData - Đề nghị</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>Không có cài đặt trong vị trí đã chọn. Chọn Sao chép cài đặt hiện tại thay vào đó.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>Mục tiêu đã chứa cài đặt. Sao chép thay thế các cài đặt hoàn chỉnh được thiết lập sau khi sao lưu đã được xác minh. Các tệp sẽ không được sáp nhập.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Thay đổi {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Cài đặt backup được lưu.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Chọn nơi hồ sơ và cài đặt ứng dụng được giữ.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Chuyển sang AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Mở Profile folder</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>Trong sử dụng</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Một thay đổi cài đặt đang chờ. Đóng DS4Windows hoàn toàn và mở lại để áp dụng nó. vị trí hiện tại vẫn hoạt động cho đến khi đó.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Thay đổi vị trí yêu cầu khởi động lại; các tệp gốc được giữ lại.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>Một hồ sơ có tên {0} đã tồn tại.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows cài đặt sao lưu (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Khôi phục backup...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Tên khác: A-Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Thư mục hồ sơ này chỉ đọc được. Sử dụng Cài đặt &amp; hồ sơ để di chuyển sang AppData trước khi lưu các thay đổi.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Khôi phục bản sao lưu cài đặt đầy đủ này khi khởi động tiếp theo? Cài đặt hiện tại sẽ được sao lưu trước khi thay thế.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Cả hai vị trí được giữ lại. Bạn có thể thay đổi vị trí sau đó trên trang Hồ sơ.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>Thay đổi sẽ được áp dụng vào lần tiếp theo DS4Windows bắt đầu. Đóng DS4Windows bây giờ? Mở lại sau đó để tiếp tục.</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Hủy chờ thay đổi</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Cài đặt ứng dụng hiện tại không thể lưu được.Tiếp tục sử dụng các tệp đã lưu cuối cùng?Thay đổi chưa lưu sẽ không được bao gồm.</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>Điểm đến không viết được.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Back up tất cả...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Profile nhập khẩu</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Export chọn</value>
+  </data>
 </root>

@@ -6,6 +6,23 @@ namespace DS4Windows;
 
 internal static class InstallationModeInfo
 {
+    internal static bool IsInstalled
+    {
+        get
+        {
+            try
+            {
+                using var machine = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine,
+                    Environment.Is64BitOperatingSystem ? RegistryView.Registry64 : RegistryView.Registry32);
+                using var registration = machine.OpenSubKey(@"SOFTWARE\DS4Windows");
+                string installed = registration?.GetValue("InstallPath") as string;
+                return !string.IsNullOrWhiteSpace(installed) && string.Equals(
+                    CanonicalFolder(Path.GetDirectoryName(Global.exelocation)), CanonicalFolder(installed), StringComparison.OrdinalIgnoreCase);
+            }
+            catch (Exception error) when (error is System.Security.SecurityException or UnauthorizedAccessException or IOException or ArgumentException)
+            { return false; }
+        }
+    }
     internal static string Read()
     {
         try

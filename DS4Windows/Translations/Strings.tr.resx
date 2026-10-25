@@ -6465,4 +6465,115 @@ backup için: </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Emülatör ayrıntıları okunamadı. tekrar deneyin.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Yer değiştirme...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Profil değişikliklerinizi kaydedin veya atın ve ayarları değiştirmeden veya yedeklemeden önce profil editörü kapatın.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Son Değiştirilmiş</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows seçilen klasörde ayarları kaydedemedi. Hiçbir dosya kopyalanmadı veya kaldırılmadı. Profiller sayfasında, AppData'yı seçmek için Ayarlar ve profilleri kullanın veya kaydedilen ayarları aktarın.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Program Dosyası</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Bu dosya DS4Windows profili değildir.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>Ayarlar işlemi tamamlanamadı. Mevcut konumunuz aktif kalır.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>Ayarların konumunu değiştiremezsiniz. Önceki konumunuz seçilmiş kalır. Profiller sayfasındaki Ayarlar ve profilleri gözden geçirin.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Ayarlar &amp; Profiller</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Mevcut ayarlarınızı ve profilleri bu konumda kopyalayın? Var olan ayarları kullanmak için Hayır'ı seçin.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Kurtarma Yerleri</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Profil değişiklikleri kaydedilemez. AppData'yı seçin veya bu klasörün izinlerini ayarlayın.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>Önerilen - Önerilen</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>Seçilen konumda herhangi bir ayar bulunmamaktadır. Bunun yerine Mevcut ayarları kopyalamayı seçin.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>Hedef zaten ayarları içerir. Kopyalamak, doğrulanmış bir yedekleme sonrasında ayarlanan tam ayarlarını değiştirir. Dosyalar birleştirilmeyecek. Devam?</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Değiştirilmiş {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Settings Backup kaydedildi.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Profillerin ve uygulama ayarlarının nerede tutulduğunu seçin.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>AppData’ya geçiş...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Açık Profil Dosyaları</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>Kullanımında</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Ayar değişikliği bekleniyor. DS4Windows'i tamamen kapatın ve yeniden açın.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Yer değiştirmek yeniden başlatılmalıdır; orijinal dosyalar saklanır.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>{0} adı verilen bir profil zaten var.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows ayarları yedekleme (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Geri Dönüşüm Backup...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Adı Soyadı : A-Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Bu profiller klasörü sadece okunabilir. değişiklikleri kaydetmeden önce Ayarlar ve profilleri kullanarak AppData'ya geçin.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Bir sonraki başlangıçta bu tam ayar yedeklemeyi geri yükleyin? Güncel ayarları değiştirmeden önce yedekleme yapılacaktır.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Her iki konum da saklanır. Daha sonra Profiller sayfasında konumunu değiştirebilirsiniz.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>Sonraki DS4Windows başlangıcında bu değişiklik uygulanır. DS4Windows şimdi kapatın? devam etmek için daha sonra yeniden açın.</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Değişiklik bekleyen iptal</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Mevcut uygulama ayarları kaydedilemez. Son kaydedilen dosyaları kullanmaya devam edin.</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>Hedef yazılı değildir.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Geri Dön Tüm...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>İthalat Profili</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Seçilen ihracat</value>
+  </data>
 </root>

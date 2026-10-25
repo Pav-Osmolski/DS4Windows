@@ -6463,4 +6463,115 @@ Untuk backup: </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Detail kontroler yang diimulasikan tidak dapat dibaca. memperbarui untuk mencoba lagi.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Mengubah Lokasi...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Simpan atau membuang perubahan profil Anda dan tutup editor profil sebelum mengubah atau menyimpan pengaturan.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Modifikasi terakhir</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows tidak dapat menyimpan pengaturan di folder yang dipilih. tidak ada file yang disalin atau disalin. Pada halaman Profil, gunakan Pengaturan &amp; profil untuk memilih AppData atau memindahkan pengaturan yang disimpan.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Program folder</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>File ini bukan profil DS4Windows.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>Operasi pengaturan tidak dapat diselesaikan. lokasi Anda saat ini tetap aktif.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>Lokasi pengaturan tidak dapat diubah. lokasi sebelumnya Anda tetap dipilih. Periksa Pengaturan &amp; profil di halaman Profil.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Pengaturan &amp; Profil</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Salin pengaturan dan profil Anda saat ini ke lokasi ini? Pilih Tidak untuk menggunakan pengaturan yang sudah ada di sana.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Simpan Lokasi</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Perubahan profil tidak dapat disimpan. pilih AppData atau menyesuaikan izin folder ini.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData - direkomendasikan</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>Tidak ada pengaturan di lokasi yang dipilih. pilih Salin pengaturan saat ini.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>Destinasi sudah berisi pengaturan. Copying menggantikan pengaturan lengkap yang ditetapkan setelah backup terverifikasi.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Modifikasi {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Settings backup yang disimpan.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Pilih di mana profil dan pengaturan aplikasi disimpan.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Migrasi ke AppData</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Daftar Profil Terbuka</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>Dalam penggunaan</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Perubahan pengaturan sedang menunggu. Tutup DS4Windows sepenuhnya dan buka lagi untuk menerapkannya. lokasi saat ini tetap aktif sampai saat itu.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Mengubah lokasi memerlukan restart; file asli disimpan.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>Profil yang bernama {0} sudah ada.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows pengaturan cadangan (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Mengembalikan Backup...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Nama : A – Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Gunakan Settings &amp; profiles untuk bermigrasi ke AppData sebelum menyimpan perubahan.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Mengembalikan cadangan pengaturan lengkap ini pada awal berikutnya? pengaturan saat ini akan disimpan sebelum penggantian.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Kedua lokasi tetap. Anda dapat mengubah lokasi nanti di halaman Profil.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>Perubahan ini akan diterapkan saat DS4Windows dimulai berikutnya.Tutup DS4Windows sekarang?Buka kembali setelah itu untuk melanjutkan.</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Membatalkan perubahan yang menunggu</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Pengaturan aplikasi saat ini tidak dapat disimpan. terus menggunakan file terakhir yang disimpan? perubahan yang belum disimpan tidak akan dimasukkan.</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>Tujuan tidak dapat ditulis.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Kembali ke semua...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Profil Impor</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Ekspor yang dipilih</value>
+  </data>
 </root>

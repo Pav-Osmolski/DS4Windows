@@ -6439,4 +6439,115 @@ A háttérben: </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Az emulált vezérlő részletei nem olvashatók. Frissítse újra.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>A helyszín megváltoztatása...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Mentse vagy törölje a profilváltozásokat, és zárja be a profilszerkesztőt a beállítások módosítása vagy biztonsági mentése előtt.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Utolsó módosítás</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows nem tudta menteni a beállításokat a kiválasztott mappában. Nem másolták vagy törölték a fájlokat. A Profilok oldalon a Beállítások és profilok segítségével válassza ki az AppData-t, vagy áttelepítse a mentett beállításokat.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Programfüzet</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Ez a fájl nem DS4Windows profil.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>A beállítási művelet nem fejeződött be. Az aktuális hely továbbra is aktív.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>A beállítások helyét nem lehetett megváltoztatni. Az előző hely továbbra is kiválasztva marad. Ellenőrizze a Beállításokat és profilokat a Profilok oldalon.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Beállítások &amp; profilok</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Másolja az aktuális beállításokat és profilokat erre a helyre? Válassza a Nem lehetőséget a már ott lévő beállítások használatához.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Mentse el a helyét</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Csak olvassa el. A profilváltozások nem menthetők. Válassza az AppData lehetőséget, vagy állítsa be a mappák engedélyét.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData – ajánlott</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>A kiválasztott helyen nincs beállítás. Válassza a Jelenlegi beállítások másolása lehetőséget.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>A rendeltetési hely már tartalmazza a beállításokat. A másolás helyettesíti az ellenőrzött biztonsági mentés után beállított teljes beállításokat.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Módosított {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Backup beállítások mentve.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Válassza ki, hogy hol tartják meg a profilokat és az alkalmazásbeállításokat.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>A migráció az AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Nyitott profilok</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>Használatában</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>A beállítások módosítása várakozás alatt áll. Zárja le teljesen a DS4Windows-ot, majd nyissa meg újra, hogy alkalmazza azt.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>A hely megváltoztatása újraindítást igényel; az eredeti fájlok megmaradnak.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>A {0} nevű profil már létezik.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows beállítások biztonsági mentése (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>A Backup visszaállítása...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Név: A – Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Ez a profilok mappája csak olvasható. A módosítások mentése előtt használja a Beállítások és profilok alkalmazást az AppData-ra való áttelepítéshez.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Visszaállítsa ezt a teljes beállítások biztonsági mentését a következő indításnál? Az aktuális beállításokat a helyettesítés előtt biztonsági mentésben részesítik.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Mindkét hely megmarad. A profilok oldalon később módosíthatja a helyet.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>A módosítás a következő alkalommal kerül alkalmazásra, amikor a DS4Windows kezdődik. Zárja be a DS4Windows gombot most?</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Változásra váró lemondás</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Az aktuális alkalmazásbeállítások nem menthetők. Folytassa az utolsó mentett fájlok használatát?</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>A rendeltetési hely nem írható.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Vissza az összes...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Import profilok</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>kiválasztott export</value>
+  </data>
 </root>

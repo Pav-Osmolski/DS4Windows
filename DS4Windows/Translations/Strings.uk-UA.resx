@@ -6438,4 +6438,115 @@
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Деталі емітованого контролера не можна було прочитати. Оновлення, щоб спробувати знову.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Змінити місцезнаходження...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Збережіть або відкиньте зміни в профілі та закрийте редактор профілю, перш ніж змінювати або резервувати налаштування.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Остання зміна</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows не вдалося зберегти налаштування в обраній папці. жодних файлів не було скопійовано або видалено. На сторінці Профіли використовуйте Налаштування та профілі, щоб вибрати AppData або перемістити збережені налаштування.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Програма фольги</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Цей файл не є профілем DS4Windows.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>Операція налаштування не могла бути завершена. Ваше поточне розташування залишається активним.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>Місце розташування налаштувань не можна було змінити. попереднє місце розташування залишається вибраним. Переглянути Налаштування та профілі на сторінці Профіли.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Налаштування &amp; профілі</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Скопіюйте поточні налаштування та профілі в це місце? Виберіть «Ні», щоб використовувати налаштування, які вже є там.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>зберегти місцезнаходження</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Зміни профілю не можна зберегти. Виберіть AppData або налаштуйте дозволи цієї папки.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData — рекомендується</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>У вибраному місці немає налаштувань. Замість цього виберіть Копіювати поточні налаштування.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>Копіювання замінює його повні налаштування, встановлені після перевіреного резервного копіювання.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Зміни {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Налаштування резервного копіювання збережено.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Виберіть, де зберігаються профілі та налаштування додатків.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Міграція до AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Відкритий профіль</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>У використанні</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Закрийте DS4Windows повністю і відкрийте його знову, щоб застосувати його.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Зміна розташування вимагає перезапуску; оригінальні файли зберігаються.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>Профіль під назвою {0} вже існує.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>Захист налаштувань DS4Windows (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Відновлення резервного...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Назва: А – З</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Використовуйте Налаштування та профілі, щоб перейти до AppData перед збереженням змін.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Відновити це повне резервне копіювання налаштувань при наступному запуску? Поточні налаштування будуть захищені до заміни.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Обидва місця зберігаються. Ви можете змінити місцезнаходження пізніше на сторінці Профіли.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>Зміна буде застосована наступного разу, коли DS4Windows почнеться. Закрити DS4Windows зараз?</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Скасувати очікувані зміни</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Теперішні налаштування програми не вдалося зберегти.Продовжуйте використовувати останні збережені файли?Незбережені зміни не будуть включені.</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>Місце призначення не пишеться.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Повернутись вгору все...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Профіль імпорту</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Вибраний експорт</value>
+  </data>
 </root>

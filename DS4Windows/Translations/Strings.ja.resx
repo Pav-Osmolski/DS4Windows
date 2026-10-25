@@ -6442,4 +6442,115 @@ Backup : </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>エミュレートされたコントローラの詳細は読み取れませんでした. Refresh to try again.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>場所変更...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>プロフィールの変更を保存または削除し、設定を変更またはバックアップする前にプロフィールエディターを閉じます。</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>最後の修正</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows は選択したフォルダに設定を保存できませんでした. ファイルはコピーまたは削除されませんでした. プロフィールページでは、設定とプロフィールを使用して AppData を選択したり、保存された設定を移行したりします。</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>プログラムフォルダー</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>このファイルは DS4Windows プロフィールではありません。</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>設定操作は完了できませんでした 現在の場所はアクティブです。</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>設定の位置は変更できませんでした. 前の場所は選択されていません. プロフィールページの設定とプロフィールのレビュー。</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Settings &amp; プロフィール</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>現在の設定とプロフィールをこの場所にコピーしますか? No を選択して、既にそこにある設定を使用します。</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>保存場所</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>読むだけです プロフィールの変更は保存できません AppData を選択するか、このフォルダの許可を調整します。</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData - Recommended</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>選択した場所には設定がありません。代わりに現在の設定をコピーするを選択します。</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>目的地には既に設定が含まれています。コピーは、検証済みのバックアップ後に設定された完全な設定を置き換えます。</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>{0:g}の変更</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Settings Backup 保存済み</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>プロファイルとアプリケーション設定が保存されている場所を選択します。</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>AppDataに移行する...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>オープンプロフィールフォルダー</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>使用中</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>設定の変更が待機中です DS4Windows を完全に閉じ、再度開いて適用します。</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>場所を変更するには、再起動が必要ですが、元のファイルは保存されます。</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>{0} というプロフィールは既に存在しています。</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows 設定バックアップ (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>バックアップ復元...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>タイトル:A-Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>このプロフィール フォルダは読み込みのみです. Settings &amp; profiles を使用して、変更を保存する前に AppData に移行します。</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>この完全な設定のバックアップを次のスタート時に復元しますか? 現在の設定は置き換える前にバックアップされます。</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>両方の位置は保持されます. プロフィールのページで後で場所を変更できます。</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>次回 DS4Windows が起動すると、変更が適用されます。 DS4Windows を今すぐ閉じますか? その後再開して続行します。</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>変更待ちキャンセル</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>現在のアプリケーション設定は保存できませんでした。 最後に保存したファイルを使用し続けますか? 保存されていない変更は含まれません。</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>目的地は書けない。</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Back up all...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>輸入プロフィール</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>輸出選択</value>
+  </data>
 </root>

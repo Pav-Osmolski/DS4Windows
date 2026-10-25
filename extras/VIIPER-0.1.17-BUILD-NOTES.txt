@@ -1,0 +1,43 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.17
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: 66d65de8eb2eee873ea03d753f47597672971f7f
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: 66d65de8eb2eee873ea03d753f47597672971f7f
+Embedded build date: 2026-10-25T17:25:28Z
+Embedded VCS revision: 66d65de8eb2eee873ea03d753f47597672971f7f
+Embedded VCS time: 2026-10-25T17:21:42Z
+Embedded VCS modified: false
+PE file version: 0.1.17.0
+PE product version: 0.1.17
+Binary: VIIPER-0.1.17-x64.exe
+Binary SHA-256: FEA0ADA448A39FF474B8E1B808BE0A0BA272D0ADAA135C9D2C6B06670930FAEF
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.17-LICENSES.txt
+License notice SHA-256: 3FF3DD4DA4FFEE6850EB8EC5B26A79F1F039CDF27E2A1D0C8FE6D727BFA59622
+
+VIIPER 0.1.17 corresponding-source and build record
+
+Release workflow: https://github.com/Pav-Osmolski/VIIPER/actions/runs/40216096809
+DS4Windows pull request: https://github.com/Pav-Osmolski/DS4Windows/pull/82
+Source archive: VIIPER-0.1.17-SOURCE.zip
+Source archive SHA-256: 11CB488AB864A0D2016BE9155F8C9481B30BCD3162182FB1C355E11B345E536D
+
+This is the clean tagged Windows amd64 Release-workflow executable, not a local
+rebuild. Expose the existing DualShock 4 microphone capture status through the
+narrow microphone-interface endpoint for every DS4 registration alias, including
+the audio companion used with Xbox output. DS4Windows can detect when Windows
+opens the microphone and arm the physical Bluetooth microphone route. Existing
+input/output and controller connection ownership are preserved. Paired
+DS4Windows release: 5.0.50.
+
+API regression tests cover actual registered full DS4, duplex V3 and audio-only
+duplex V3 implementations, exact-device selection, inactive/active transitions,
+queued PCM delivery and status reads that do not consume audio.
+
+Full GPL/dependency grants, systray modification notices and WDL attribution
+are retained byte-for-byte from the release package. Windows/Linux tests, lint,
+generated-client checks and cross-platform builds gate the release. The Windows
+executable is unsigned. No universal hardware/game compatibility is claimed.

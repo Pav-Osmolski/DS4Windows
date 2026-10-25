@@ -333,8 +333,12 @@
 
             <TabItem x:Name="profilesTab" Header="{lex:Loc Profiles}" Tag="&#xE8A5;">
                 <Grid x:Name="profDockPanel">
-                    <Grid x:Name="profilesBrowserPanel">
+                    <ScrollViewer x:Name="profilesBrowserScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                                  BorderThickness="0" Padding="0" CanContentScroll="False"
+                                  Visibility="{Binding ElementName=profilesBrowserPanel, Path=Visibility}">
+                    <Grid x:Name="profilesBrowserPanel" MinHeight="{Binding ActualHeight, ElementName=profilesBrowserScrollViewer}">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -383,25 +387,27 @@
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE8B5;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Import}" VerticalAlignment="Center" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Strings:UI_02B3630D80342B2E}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="exportProfBtn" IsEnabled="False" Click="ExportProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,0,6">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE8B6;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Export}" VerticalAlignment="Center" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Strings:UI_AC909944B8B33F4B}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                             </WrapPanel>
                         </Border>
 
-                        <Border x:Name="dupBoxBar" Grid.Row="1" Style="{StaticResource BridgeCardStyle}"
+                        <local:SettingsStorageControl x:Name="settingsStorageControl" Grid.Row="1" />
+
+                        <Border x:Name="dupBoxBar" Grid.Row="2" Style="{StaticResource BridgeCardStyle}"
                                 Padding="14,10" Margin="0,0,0,14" Visibility="Collapsed">
                             <local:DupBox x:Name="dupBox" HorizontalAlignment="Center" />
                         </Border>
 
-                        <Border Grid.Row="2" Background="{DynamicResource CardBackgroundColor}"
+                        <Border Grid.Row="3" Background="{DynamicResource CardBackgroundColor}"
                                 BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                                 CornerRadius="5">
                             <Grid>
@@ -452,6 +458,19 @@
                                                          Style="{DynamicResource BridgeSearchTextBoxStyle}"
                                                          TextChanged="ProfilesSearchTextBox_TextChanged"
                                                          ToolTip="{lex:Loc Strings:UI_1B4F158537520CEB}" />
+                                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_1B4F158537520CEB}" IsHitTestVisible="False"
+                                                           Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource MutedForegroundColor}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ElementName=profilesSearchTextBox, Path=Text}" Value="">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
                                                 <Button x:Name="clearProfilesSearchBtn" Grid.Column="2" Content="&#xE711;"
                                                         FontFamily="Segoe Fluent Icons" FontSize="11"
                                                         Background="Transparent" BorderThickness="0"
@@ -459,6 +478,9 @@
                                                         Click="ClearProfilesSearchBtn_Click" />
                                             </Grid>
                                         </Border>
+                                        <ComboBox x:Name="profileSortCombo" Grid.Row="1" Grid.Column="1" Margin="12,12,0,0"
+                                                  MinWidth="150" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                  Loaded="ProfileSortCombo_Loaded" SelectionChanged="ProfileSortCombo_SelectionChanged" />
                                     </Grid>
                                 </Border>
 
@@ -479,7 +501,7 @@
                                         <ListBox.ItemContainerStyle>
                                             <Style TargetType="ListBoxItem">
                                                 <Setter Property="Width" Value="270" />
-                                                <Setter Property="Height" Value="88" />
+                                                <Setter Property="Height" Value="100" />
                                                 <Setter Property="Margin" Value="6" />
                                                 <Setter Property="Padding" Value="0" />
                                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -528,7 +550,9 @@
                                                         <TextBlock Text="{Binding Name, Mode=OneWay, Converter={StaticResource escapeAccessConvert}}"
                                                                    FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
                                                                    ToolTip="{Binding Name}" />
-                                                        <TextBlock Text="{lex:Loc Strings:UI_9231F21B0FCA0E73}" Margin="0,4,0,0" FontSize="10"
+                                                        <TextBlock Text="{Binding Summary}" ToolTip="{Binding Summary}" TextTrimming="CharacterEllipsis" Margin="0,4,0,0" FontSize="10"
+                                                                   Foreground="{DynamicResource MutedForegroundColor}" />
+                                                        <TextBlock Text="{Binding ModifiedDescription}" TextTrimming="CharacterEllipsis" FontSize="10" Margin="0,3,0,0"
                                                                    Foreground="{DynamicResource MutedForegroundColor}" />
                                                     </StackPanel>
                                                     <TextBlock Grid.Column="2" Text="&#x203A;" FontSize="22"
@@ -568,6 +592,7 @@
                         </Border>
                     </Grid>
 
+                    </ScrollViewer>
                     <Border x:Name="profileEditorLoadingPanel" Visibility="Collapsed" Panel.ZIndex="2"
                             Background="{DynamicResource CardBackgroundColor}"
                             BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"

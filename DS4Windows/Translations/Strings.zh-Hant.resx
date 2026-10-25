@@ -6448,4 +6448,115 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>模擬的控制器細節無法讀取. 更新以再次嘗試。</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>改變地點...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>儲存或丟棄您的個人資料更改,並關閉個人資料編輯器,然後更改或備份設定。</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>最後修改</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows 無法在所選資料夾中儲存設定. 未複製或刪除任何檔案. 在“配置檔案”頁面上,使用“設定和配置檔案”來選擇 AppData 或遷移已儲存的設定。</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>程式檔案</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>這個檔案不是一個 DS4Windows 配置檔案。</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>無法完成設定操作. 您的當前位置仍然活躍。</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>設定的位置無法更改. 您以前的位置仍然被選中. 在“個人資料”頁面上檢視設定和配置檔案。</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>設定 &amp; 配置檔案</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>將當前設定和配置檔案複製到此位置嗎?選擇“不”以使用已經存在的設定。</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>儲存位置</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>只閱讀. 無法儲存配置檔案更改. 選擇 AppData 或調整此資料夾的許可權。</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData - 推薦</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>在所選位置中沒有設定,而選擇複製當前設定。</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>目的地已包含設定. 複製取代經過驗證備份後設定的完整設定. 檔案不會合並。</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>變更 {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>設定備份儲存。</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>選擇配置檔案和應用設定的位置。</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>遷移到AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>開放檔案資料夾</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>在使用</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>設定更改正在進行中。完全關閉 DS4Windows 並重新開啟以應用它。</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>可編寫:要更改位置,需要重新啟動;保留原始檔案。</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>一個名為 {0} 的配置檔案已經存在,可以替代它嗎?</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows 設定備份(*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>恢復備份...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>姓名:A - Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>此配置資料夾僅供閱讀。 使用設定和配置檔案將更改儲存前遷移到 AppData。</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>下次啟動時可以恢復完整的設定備份嗎? 更換前會備份當前的設定。</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>兩個位置都保留了,您可以在“個人資料”頁面上稍後更改位置。</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>改變將在下次適用 DS4Windows 開始,關閉 DS4Windows 然後再開啟,然後繼續。</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>取消等待變更</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>無法儲存當前的應用程式設定. 繼續使用最近儲存的檔案? 未儲存的更改將不包括在內。</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>目的地是不可寫的。</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>迴歸所有...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>進口資料</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>出口選擇</value>
+  </data>
 </root>

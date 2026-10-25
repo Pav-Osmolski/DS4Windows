@@ -6440,4 +6440,115 @@ Das Backup: </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Emulierte Steuerungsdetails konnten nicht gelesen werden. Aktualisieren, um es erneut zu versuchen.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Wechsel des Standorts...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Speichern oder verwerfen Sie Ihre Profiländerungen und schließen Sie den Profileditor, bevor Sie die Einstellungen ändern oder sichern.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Letzte Änderung</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows konnte keine Einstellungen im ausgewählten Ordner speichern. Keine Dateien wurden kopiert oder entfernt. Auf der Seite Profile können Sie mit Einstellungen &amp; Profile AppData auswählen oder Ihre gespeicherten Einstellungen migrieren.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Programm Folder</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Diese Datei ist kein DS4Windows Profil.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>Der Einstellungsvorgang konnte nicht abgeschlossen werden. Ihr aktuellen Standort bleibt aktiv.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>Der Standort der Einstellungen konnte nicht geändert werden. Ihr vorheriger Standort bleibt ausgewählt. Überprüfen Sie Einstellungen &amp; Profile auf der Seite Profile.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Einstellungen &amp; Profile</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Kopieren Sie Ihre aktuellen Einstellungen und Profile an diesen Ort? Wählen Sie Nein, um die bereits vorhandenen Einstellungen zu verwenden.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Speichern Sie den Standort</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Profiländerungen können nicht gespeichert werden. Wählen Sie AppData oder ändern Sie die Berechtigungen für diesen Ordner.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData – empfohlen</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>In der ausgewählten Position gibt es keine Einstellungen. Wählen Sie stattdessen Aktuelle Einstellungen kopieren aus.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>Das Ziel enthält bereits Einstellungen. Das Kopieren ersetzt die vollständigen Einstellungen, die nach einer verifizierten Sicherung festgelegt wurden.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Änderung {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Einstellungen Backup gespeichert.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Wählen Sie, wo Profile und Anwendungseinstellungen gespeichert werden.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Migration nach AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Offene Profile Folder</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>In der Verwendung</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Eine Änderung der Einstellungen steht bevor. Schließen Sie DS4Windows vollständig und öffnen Sie es erneut, um es anzuwenden.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Das Ändern des Standorts erfordert einen Neustart; die ursprünglichen Dateien werden beibehalten.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>Ein Profil mit dem Namen {0} existiert bereits.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows Backup der Einstellungen (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Backup wiederherstellen...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Name: A – Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Verwenden Sie Einstellungen &amp; Profile, um zu AppData zu migrieren, bevor Sie Änderungen speichern.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Wiederherstellen dieser vollständigen Einstellungen-Backup beim nächsten Start? Aktuelle Einstellungen werden vor dem Austausch gesichert.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Beide Standorte werden beibehalten. Sie können den Standort später auf der Seite Profile ändern.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>Die Änderung wird beim nächsten Start von DS4Windows angewendet. Schließen Sie DS4Windows jetzt?</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Stornierung warten auf Änderung</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Aktuelle Anwendungseinstellungen konnten nicht gespeichert werden.Fortsetzung der Verwendung der letzten gespeicherten Dateien?Nicht gespeicherte Änderungen werden nicht enthalten.</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>Das Ziel ist nicht schreibbar.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Zurück auf alle...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Profile importieren</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Export ausgewählt</value>
+  </data>
 </root>

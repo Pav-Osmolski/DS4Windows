@@ -6441,4 +6441,115 @@ och backup: </value>
   <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
     <value>Emulerade kontrollerdetaljer kunde inte läsas. Uppdatera för att försöka igen.</value>
   </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Ändra plats...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Spara eller kassera dina profiländringar och stäng profilredigeraren innan du ändrar eller säkerhetskopierar inställningarna.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Senast ändrad</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows kunde inte spara inställningar i den valda mappen. Inga filer kopierades eller tas bort. På profilsidan kan du använda Inställningar &amp; profiler för att välja AppData eller migrera dina sparade inställningar.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Programförteckning</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Den här filen är inte en DS4Windows profil.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>Inställningsoperationen kunde inte slutföras. Din aktuella plats förblir aktiv.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>Inställningarna kunde inte ändras.Din tidigare plats förblir vald.Visa inställningar och profiler på profilsidan.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Inställningar &amp; profiler</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Kopiera dina nuvarande inställningar och profiler till den här platsen? Välj Nej för att använda inställningarna redan där.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Spara plats</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Endast läs.Profiländringar kan inte sparas. Välj AppData eller justera behörigheterna för den här mappen.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>AppData - rekommenderas</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>Det finns inga inställningar i den valda platsen. Välj Kopiera aktuella inställningar istället.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>Destinationen innehåller redan inställningar. Kopiering ersätter de fullständiga inställningarna som har ställts in efter en verifierad säkerhetskopia. Filer kommer inte att slås samman.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Förändrad {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Inställningar backup sparade.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Välj var profiler och applikationsinställningar hålls.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Migrera till AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Öppna profilfiler</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>i användning</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>En inställningsändring väntar. Stäng DS4Windows helt och öppna den igen för att tillämpa den.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Att byta plats kräver en omstart; ursprungliga filer behålls.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>En profil som heter {0} finns redan.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows säkerhetskopiera inställningar (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Återställ backup...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Namn: A – Z</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Använd Inställningar &amp; profiler för att migrera till AppData innan du sparar ändringar.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Återställa denna fullständiga inställningar backup vid nästa start? Aktuella inställningar kommer att säkerhetskopieras före ersättning.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Båda platserna behålls. Du kan ändra platsen senare på profilsidan.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>Ändringen kommer att tillämpas nästa gång DS4Windows startar. Stäng DS4Windows nu?</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Avbryt väntande förändring</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Det går inte att spara aktuella applikationsinställningar. Fortsätt använda de senast sparade filerna?</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>Destinationen är inte skrivbar.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Back up alla...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Importprofiler</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>Exporten väljs</value>
+  </data>
 </root>

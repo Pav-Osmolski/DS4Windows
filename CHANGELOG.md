@@ -9,6 +9,20 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.50](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.50) - 2026-10-25
+
+#### Settings and profile management
+
+- Add **Settings & profiles** controls to the Profiles page: choose AppData or the current program folder, see the active path and actual write-access status, open the profiles folder, and back up or restore the complete settings set. New installed copies default to AppData; existing choices remain optional. Thanks to [@1hezio](https://github.com/1hezio) for reporting the Program Files save error in [issue #80](https://github.com/Pav-Osmolski/DS4Windows/issues/80).
+- Offer optional **Migrate to AppData** for installed copies using their program folder. Stage and verify copies before applying them on the next start, keep the source files, require explicit confirmation before replacing an existing destination, and preserve a verified destination backup. A recovery journal supports interrupted copies and refuses to overwrite unexpected competing edits. Settings sets are not silently merged.
+- Remember the selected location independently of legacy files beside the EXE. Remove the old chooser's deletion of the other settings folder and its unreliable copy-complete message. Clearly block profile writes when the selected folder is read-only.
+- Show profile output type, modified time and in-use status; add name/modified sorting and a search hint; confirm import replacements. Make the full page scroll at smaller window sizes. Include the new controls in all six themes and all 24 language packs. Implemented in [PR #82](https://github.com/Pav-Osmolski/DS4Windows/pull/82).
+
+#### DualShock 4 Bluetooth headset microphone
+
+- Pair VIIPER **0.1.17** to correct the rejected microphone-status request exposed by the reporter's logs. DS4Windows can now detect when Windows opens the virtual DualShock 4 microphone and arm the physical Bluetooth microphone route, including the audio companion used with Xbox output. Thanks again to [@1hezio](https://github.com/1hezio) for the follow-up logs in [issue #80](https://github.com/Pav-Osmolski/DS4Windows/issues/80).
+- Cover all three DS4 registration aliases, exact-device selection, capture-state transitions, buffered PCM delivery and status reads that do not drain the audio buffer. Include the matching backend source, notices, hashes and build provenance.
+
 ### [5.0.49](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.49) - 2026-10-25
 
 #### Controller information

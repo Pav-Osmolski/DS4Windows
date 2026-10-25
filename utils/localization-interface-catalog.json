@@ -10202,5 +10202,227 @@
     "files": [
       "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
     ]
+  },
+  "UI_0C2C7FF55EF39657": {
+    "source": "Change location…",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_0CA56CD50F9C03ED": {
+    "source": "Save or discard your profile changes and close the profile editor before changing or backing up settings.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_0FE1058FEB9F7E16": {
+    "source": "Last modified",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_133F3F162C1C1D7E": {
+    "source": "DS4Windows could not save settings in the selected folder. No files were copied or removed. On the Profiles page, use Settings & profiles to choose AppData or migrate your saved settings.",
+    "files": [
+      "DS4Windows/App.xaml.cs"
+    ]
+  },
+  "UI_17C75C0B93CF1D4C": {
+    "source": "Program folder",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_1D3DE4B5E858F04F": {
+    "source": "This file is not a DS4Windows profile.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml.cs"
+    ]
+  },
+  "UI_1E8F0D47C8DAB05C": {
+    "source": "The settings operation could not be completed. Your current location remains active.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_221EBEEFF1B1EC51": {
+    "source": "The settings location could not be changed. Your previous location remains selected. Review Settings & profiles on the Profiles page.",
+    "files": [
+      "DS4Windows/App.xaml.cs"
+    ]
+  },
+  "UI_24DB99347AA1C7E5": {
+    "source": "Settings & profiles",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_31120B1AF220C67D": {
+    "source": "Copy your current settings and profiles to this location? Choose No to use the settings already there. The current folder will be kept.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_311E149E6E2BEC65": {
+    "source": "Save location",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_3681E8450DAA413B": {
+    "source": "Read only. Profile changes cannot be saved. Choose AppData or adjust this folder's permissions.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_3F8AC13C7A3FFD77": {
+    "source": "AppData — recommended",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_4FEC09637F7F3808": {
+    "source": "There are no settings in the selected location. Choose Copy current settings instead.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_58C142D711BFD10B": {
+    "source": "The destination already contains settings. Copying replaces its complete settings set after a verified backup. Files will not be merged. Continue?",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_59BAF167CB71413D": {
+    "source": "Modified {0:g}",
+    "files": [
+      "DS4Windows/ProfileEntity.cs"
+    ]
+  },
+  "UI_69E699FD2332BFAA": {
+    "source": "Settings backup saved.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_6C3786B82DCF12A1": {
+    "source": "Choose where profiles and application settings are kept.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_6F6EC70F39543AD5": {
+    "source": "Migrate to AppData…",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_744C0BF59BEC5D87": {
+    "source": "Open profiles folder",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_750AF77AA42EEA62": {
+    "source": "In use",
+    "files": [
+      "DS4Windows/ProfileEntity.cs"
+    ]
+  },
+  "UI_84F9B85EC020DD31": {
+    "source": "A settings change is pending. Fully close DS4Windows and open it again to apply it. The current location remains active until then.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_89138B5D77049FDE": {
+    "source": "Writable. Changing location requires a restart; original files are kept.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_89437522D13E8517": {
+    "source": "A profile named {0} already exists. Replace it?",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml.cs"
+    ]
+  },
+  "UI_9435DBE760FC2C2D": {
+    "source": "DS4Windows settings backup (*.zip)",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_A0083C0A6DEBF0A5": {
+    "source": "Restore backup…",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_BB05620585B66BE5": {
+    "source": "Name: A–Z",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_C4DDA1DBE3427538": {
+    "source": "This profiles folder is read-only. Use Settings & profiles to migrate to AppData before saving changes.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_CC1B0341BE6D01E0": {
+    "source": "Restore this complete settings backup on the next start? Current settings will be backed up before replacement. Files will not be merged.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_D60332E11AD41552": {
+    "source": "Both locations are kept. You can change location later on the Profiles page.",
+    "files": [
+      "DS4Windows/DS4Forms/SaveWhere.xaml.cs"
+    ]
+  },
+  "UI_DBB36ABC8213D32C": {
+    "source": "The change will be applied the next time DS4Windows starts. Close DS4Windows now? Reopen it afterwards to continue.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_DEE0800861C769B2": {
+    "source": "Cancel pending change",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_E8E37165E114E4B3": {
+    "source": "Current application settings could not be saved. Continue using the last saved files? Unsaved changes will not be included.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_ED43FE750AC60A73": {
+    "source": "The destination is not writable.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_F4009999A1981329": {
+    "source": "Back up all…",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_02B3630D80342B2E": {
+    "source": "Import profiles",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_AC909944B8B33F4B": {
+    "source": "Export selected",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
   }
 }

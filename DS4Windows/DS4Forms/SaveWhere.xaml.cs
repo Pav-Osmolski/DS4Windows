@@ -37,64 +37,43 @@ namespace DS4WinWPF.DS4Forms
                 throw new InvalidOperationException(global::DS4Windows.UiText.Get("Portable lab configuration location is fixed."));
             InitializeComponent();
             multisaves = multisavespots;
+            dontDeleteCk.Visibility = Visibility.Collapsed;
+            pickWhereTxt.Text += "\n" + global::DS4Windows.UiText.Get("Both locations are kept. You can change location later on the Profiles page.");
             if (!multisavespots)
             {
                 multipleSavesDockP.Visibility = Visibility.Collapsed;
                 pickWhereTxt.Text += Properties.Resources.OtherFileLocation;
             }
 
-            if (DS4Windows.Global.AdminNeeded())
+            if (!DS4Windows.SettingsStorage.CanWrite(DS4Windows.Global.exedirpath, out _))
             {
                 progFolderPanel.IsEnabled = false;
             }
         }
 
-        private void ProgFolderBtn_Click(object sender, RoutedEventArgs e)
+        private void ProgFolderBtn_Click(object sender, RoutedEventArgs e) => Choose(DS4Windows.SettingsFolder.Program);
+
+        private void AppdataBtn_Click(object sender, RoutedEventArgs e) => Choose(DS4Windows.SettingsFolder.AppData);
+
+        private void Choose(DS4Windows.SettingsFolder folder)
         {
-            DS4Windows.Global.SaveWhere(DS4Windows.Global.exedirpath);
-            if (multisaves && dontDeleteCk.IsChecked == false)
+            try
             {
-                try
-                {
-                    if (Directory.Exists(DS4Windows.Global.appDataPpath))
-                    {
-                        Directory.Delete(DS4Windows.Global.appDataPpath, true);
-                    }
-                }
-                catch { }
+                var storage = DS4Windows.SettingsStorage.Current;
+                string root = storage.Root(folder);
+                if (!DS4Windows.SettingsStorage.CanWrite(root, out string reason)) throw new IOException(reason);
+                bool existing = storage.HasSettings(folder);
+                DS4Windows.Global.SaveWhere(root);
+                DS4Windows.Global.firstRun = !existing;
+                if (!existing && !DS4Windows.Global.SaveDefault(Path.Combine(root, "Profiles.xml"))) throw new IOException(root);
+                storage.Remember(folder);
+                ChoiceMade = true;
+                Close();
             }
-            else if (!multisaves)
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException or System.Text.Json.JsonException or System.Xml.XmlException)
             {
-                DS4Windows.Global.SaveDefault(DS4Windows.Global.exedirpath + "\\Profiles.xml");
+                MessageBox.Show(error.Message, "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-
-            ChoiceMade = true;
-            Close();
-        }
-
-        private void AppdataBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (multisaves && dontDeleteCk.IsChecked == false)
-            {
-                try
-                {
-                    Directory.Delete(DS4Windows.Global.exedirpath + "\\Profiles", true);
-                    File.Delete(DS4Windows.Global.exedirpath + "\\Profiles.xml");
-                    File.Delete(DS4Windows.Global.exedirpath + "\\Auto Profiles.xml");
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    MessageBox.Show(global::DS4Windows.UiText.Get("Cannot Delete old settings, please manaully delete"), "DS4Windows");
-                }
-            }
-            else if (!multisaves)
-            {
-                DS4Windows.Global.SaveDefault(Path.Combine(DS4Windows.Global.appDataPpath, "Profiles.xml"));
-            }
-
-            DS4Windows.Global.SaveWhere(DS4Windows.Global.appDataPpath);
-            ChoiceMade = true;
-            Close();
         }
     }
 }
