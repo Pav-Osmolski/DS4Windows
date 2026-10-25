@@ -20,6 +20,7 @@ nav = [
   { "Guides" = [
     { "All guides" = "docs/README.md" },
     { "Profile Editor" = "docs/profile-editor.md" },
+    { "Controller info" = "docs/controller-info.md" },
     { "Audio & native game feedback" = "docs/controller-audio.md" },
     { "Nintendo controllers" = "docs/nintendo-options.md" },
     { "Flick stick" = "docs/flick-stick-calibration.md" },

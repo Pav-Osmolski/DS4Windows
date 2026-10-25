@@ -1,0 +1,43 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.16
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: 32b02f26b6fd6570ab0dac44226405678f65561a
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: 32b02f26b6fd6570ab0dac44226405678f65561a
+Embedded build date: 2026-10-25T12:30:05Z
+Embedded VCS revision: 32b02f26b6fd6570ab0dac44226405678f65561a
+Embedded VCS time: 2026-10-25T12:26:27Z
+Embedded VCS modified: false
+PE file version: 0.1.16.0
+PE product version: 0.1.16
+Binary: VIIPER-0.1.16-x64.exe
+Binary SHA-256: BBB7AFDC4E42231B2B64880461D29F5E2BBB95F773C1799374D3734E7FEF5B66
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.16-LICENSES.txt
+License notice SHA-256: BCEF12BC7F5A6E4147AA3F8AF62CA27DC1302767022ADA97D713D98F541C29D2
+
+VIIPER 0.1.16 corresponding-source and build record
+
+Release workflow: https://github.com/Pav-Osmolski/VIIPER/actions/runs/40193116016
+Pull request: https://github.com/Pav-Osmolski/VIIPER/pull/11
+Source archive: VIIPER-0.1.16-SOURCE.zip
+Source archive SHA-256: DC6898F42B8020F07E58B086318A2873D0009A900B27F11B31C1DFB5D3AA72DB
+
+This is the clean tagged Windows amd64 Release-workflow executable, not a local
+rebuild. Add a read-only controller-info-v1 query for all emulated controller
+types, actual Sony factory reports, public Xbox One versions and supported
+status metadata. Missing USB identity-string indices do not expose language IDs
+as serial numbers. Registration, input/output and connection ownership remain
+unchanged. Paired DS4Windows release: 5.0.49.
+
+API regression tests cover actual registered DS4, DualSense, Edge, Xbox 360,
+Xbox One and Switch 2 Pro implementations, unchanged metadata/ownership, invalid
+requests and zero/nonzero identity-string indices. DS4Windows tests verify Sony
+wire decoding, optional serial fallback, unsupported fields and all-theme UI.
+
+Full GPL/dependency grants, systray modification notices and WDL attribution
+are retained byte-for-byte from the release package. Windows/Linux tests, lint,
+generated-client checks and cross-platform builds gate the release. The Windows
+executable is unsigned. No universal hardware/game compatibility is claimed.

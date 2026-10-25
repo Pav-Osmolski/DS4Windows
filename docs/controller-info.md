@@ -31,8 +31,8 @@ If the output controller changes, refresh to read its new information. If the
 physical controller disconnects, the last snapshot remains available to copy.
 Review identifiers such as serial numbers before sharing copied information.
 
-## Local preview
+## Backend requirement
 
-The Controller info preview must be used with its bundled VIIPER backend.
-Fully exit DS4Windows and VIIPER before opening the preview from its extracted
-folder. Existing stable VIIPER versions do not have this read-only endpoint.
+Controller info requires the matching VIIPER 0.1.16 backend bundled with
+DS4Windows 5.0.49. Use the complete installer or portable package when upgrading.
+Earlier backends do not provide this information endpoint.

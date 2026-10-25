@@ -5,12 +5,23 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- Add **Controller info** buttons to Overview and Controllers, with separate physical and emulated controller tabs, selectable values, Refresh and Copy info. Display actual descriptor identity, battery/status data and available firmware details for all supported emulated controller types.
-- Use cached physical controller information and a read-only VIIPER query; unavailable firmware fields are identified rather than invented. Include the matching testing-only VIIPER backend.
-- Match the selected controller card's left and right margins in light and dark themes.
-- Translate the new interface strings across all 24 supported language packs.
+There are currently no unreleased changes.
 
 ## Released
+
+### [5.0.49](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.49) - 2026-10-25
+
+#### Controller information
+
+- Add **Controller info** buttons to Overview and each Controllers card. A shared window separates the connected physical controller from the emulated controller, with selectable values, manual Refresh and Copy info.
+- Show available USB identity, battery/status and factory/firmware fields for all six emulated output types: DualShock 4, DualSense, DualSense Edge, Xbox 360, Xbox One and Switch 2 Pro. Unsupported fields remain unavailable; emulated firmware dates are clearly distinguished from physical hardware and DS4Windows versions. Switch 2 battery bands retain their reported precision.
+- Pair VIIPER **0.1.16** with a read-only information endpoint and regression coverage across the actual controller implementations. Correctly treat USB string index zero as language information rather than a serial number. Backend: [VIIPER PR #11](https://github.com/Pav-Osmolski/VIIPER/pull/11).
+
+#### Interface refinements
+
+- Match the selected controller card's left and right margins in light and dark themes.
+- Use rounded, themed information tabs with readable selected/unselected labels across all six app themes. Tighten the information rows, remove the unnecessary bottom rule, and avoid the automatic blue focus outline on Controller info while retaining keyboard focus feedback.
+- Include the new interface strings in all 24 supported language packs.
 
 ### [5.0.48](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.48) - 2026-10-24
 
