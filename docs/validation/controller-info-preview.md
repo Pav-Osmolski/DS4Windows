@@ -35,3 +35,7 @@ Default and release-tag API tests cover absent and present strings across actual
 registered controller types. Frontend tests check optional metadata serial
 fallback. The info API bypasses Windows USB/IP string descriptor completion, so
 this display correction is independent of usbip-win2 commit a2a1159.
+
+Preview revision 4 removes the solid accent border caused by automatic or
+restored focus on Controller info buttons. Native keyboard-only focus visuals
+remain enabled, together with hover/pressed states. The 10 focused tests pass.

@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$PublishRoot,
     [string]$ProductVersion = "5.0.49.0",
-    [string]$DisplayVersion = "5.0.49-controllerinfo-preview20261025.3",
+    [string]$DisplayVersion = "5.0.49-controllerinfo-preview20261025.4",
     [string]$BundleVersion,
     [string]$OutputDirectory,
     [switch]$SkipApplicationPublish,
