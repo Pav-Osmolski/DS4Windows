@@ -28,3 +28,10 @@ Layout revision 2: custom rounded tabs replace the native tab header, with no
 bottom rule. Render/contrast assertions cover both selected and unselected
 labels under Light, Dark, Graphite, Paper, Midnight and High contrast. Single-line
 values are limited to compact content height; 9 focused tests pass.
+
+Preview revision 3 excludes descriptor index zero from manufacturer/product/serial
+identity strings: index zero contains USB language IDs, not a serial number.
+Default and release-tag API tests cover absent and present strings across actual
+registered controller types. Frontend tests check optional metadata serial
+fallback. The info API bypasses Windows USB/IP string descriptor completion, so
+this display correction is independent of usbip-win2 commit a2a1159.

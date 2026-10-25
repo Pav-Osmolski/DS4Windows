@@ -53,6 +53,17 @@ public sealed class ControllerInfoTests
     }
 
     [TestMethod]
+    public void MissingUsbSerialUsesOnlyAnAvailableMetadataSerial()
+    {
+        var info=VirtualSample();info.Serial="";
+        var pane=ControllerInfo.Emulated(info);
+        Assert.IsFalse(pane.Sections.SelectMany(s=>s.Rows).Any(r=>r.Name=="Serial number"));
+        info.Metadata=JsonSerializer.SerializeToElement(new { serial_number="A1B2C3D4" });
+        pane=ControllerInfo.Emulated(info);
+        Assert.AreEqual("A1B2C3D4",pane.Sections.SelectMany(s=>s.Rows).Single(r=>r.Name=="Serial number").Value);
+    }
+
+    [TestMethod]
     public void MalformedOrUnsupportedReportsDoNotManufactureFactoryValues()
     {
         foreach(byte[] report in new[]{Array.Empty<byte>(),new byte[]{0xff},new byte[49],new byte[64],DualSenseReport()[..63]})

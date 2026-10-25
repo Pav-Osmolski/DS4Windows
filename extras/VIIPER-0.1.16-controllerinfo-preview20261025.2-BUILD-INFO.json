@@ -1,22 +1,22 @@
 {
   "SchemaVersion": 1,
-  "Version": "v0.1.16-controllerinfo-preview20261025",
-  "SourceCommit": "a09e463f991728f8dc0b9cdc8e9426e319309c69",
-  "BuildDate": "2026-10-25T11:10:38Z",
-  "ProductVersion": "0.1.16-controllerinfo-preview20261025",
+  "Version": "v0.1.16-controllerinfo-preview20261025.2",
+  "BuildDate": "2026-10-25T11:55:11Z",
+  "SourceCommit": "907a91363136afcced8e01f5a63cf1640f080a57",
+  "ProductVersion": "0.1.16-controllerinfo-preview20261025.2",
   "FileVersion": "0.1.16.0",
   "BuildOrigin": "Local clean checkout; testing only",
   "Binary": {
     "Name": "viiper.exe",
-    "Size": 9500672,
-    "Sha256": "6CF77E43A9E0340DBEA817548B63A9FE405F282F0A0FF6649A74D8E90F00B484"
+    "Size": 9501184,
+    "Sha256": "C99AFFAD2F713494BE87605F7E791DEF466883E0B8F512F37572CB6D971A399D"
   },
   "GoBuildInfo": {
     "GoVersion": "go1.27.2",
     "Path": "github.com/Alia5/VIIPER/cmd/viiper",
     "Main": {
       "Path": "github.com/Alia5/VIIPER",
-      "Version": "v0.1.16-0.20261025110517-a09e463f9917"
+      "Version": "v0.1.16-0.20261025115453-907a91363136"
     },
     "Deps": [
       {
@@ -104,11 +104,11 @@
       },
       {
         "Key": "vcs.revision",
-        "Value": "a09e463f991728f8dc0b9cdc8e9426e319309c69"
+        "Value": "907a91363136afcced8e01f5a63cf1640f080a57"
       },
       {
         "Key": "vcs.time",
-        "Value": "2026-10-25T11:05:17Z"
+        "Value": "2026-10-25T11:54:53Z"
       },
       {
         "Key": "vcs.modified",

@@ -86,7 +86,7 @@ def validate_payload(directory: Path, record):
         require(z.read('DS4Windows/DS4Windows.release').decode().strip() == record['version'], 'Portable identity mismatch')
         require(z.read('DS4Windows/DS4Windows.portable') == b'DS4Windows portable package v1\n', 'Portable deployment marker mismatch')
         backend = z.read('DS4Windows/viiper.exe')
-        require(backend == z.read('DS4Windows/extras/VIIPER-0.1.16-controllerinfo-preview20261025-x64.exe'), 'Portable backend aliases differ')
+        require(backend == z.read('DS4Windows/extras/VIIPER-0.1.16-controllerinfo-preview20261025.2-x64.exe'), 'Portable backend aliases differ')
         backend_hash = hashlib.sha256(backend).hexdigest().upper()
         require(backend_hash == record.get('backendSha256') and z.read('DS4Windows/viiper.exe.sha256').decode().split()[0].upper() == backend_hash, 'Candidate backend pin mismatch')
 

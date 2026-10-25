@@ -1,26 +1,26 @@
 VIIPER bundled artifact provenance
 
-Version: v0.1.16-controllerinfo-preview20261025
+Version: v0.1.16-controllerinfo-preview20261025.2
 Source: https://github.com/Pav-Osmolski/VIIPER
-Source commit: a09e463f991728f8dc0b9cdc8e9426e319309c69
+Source commit: 907a91363136afcced8e01f5a63cf1640f080a57
 Toolchain: Go 1.27.2 windows/amd64
 Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
-Embedded commit: a09e463f991728f8dc0b9cdc8e9426e319309c69
-Embedded build date: 2026-10-25T11:10:38Z
-Embedded VCS revision: a09e463f991728f8dc0b9cdc8e9426e319309c69
-Embedded VCS time: 2026-10-25T11:05:17Z
+Embedded commit: 907a91363136afcced8e01f5a63cf1640f080a57
+Embedded build date: 2026-10-25T11:55:11Z
+Embedded VCS revision: 907a91363136afcced8e01f5a63cf1640f080a57
+Embedded VCS time: 2026-10-25T11:54:53Z
 Embedded VCS modified: false
 PE file version: 0.1.16.0
-PE product version: 0.1.16-controllerinfo-preview20261025
-Binary: VIIPER-0.1.16-controllerinfo-preview20261025-x64.exe
-Binary SHA-256: 6CF77E43A9E0340DBEA817548B63A9FE405F282F0A0FF6649A74D8E90F00B484
+PE product version: 0.1.16-controllerinfo-preview20261025.2
+Binary: VIIPER-0.1.16-controllerinfo-preview20261025.2-x64.exe
+Binary SHA-256: C99AFFAD2F713494BE87605F7E791DEF466883E0B8F512F37572CB6D971A399D
 Authenticode status at packaging: NotSigned
-License notice: VIIPER-0.1.16-controllerinfo-preview20261025-LICENSES.txt
-License notice SHA-256: 58ECB3A201709F1D03B913811B72452F4CC51225B054908E911919308A87C6E3
+License notice: VIIPER-0.1.16-controllerinfo-preview20261025.2-LICENSES.txt
+License notice SHA-256: 2A4B9C659FEAE0D09B4FE486E02D8B66BF7FC3614660FB0FE812653B1E3731A2
 
 Testing-only local preview, built from a clean feature/controller-info checkout.
-Source archive: VIIPER-0.1.16-controllerinfo-preview20261025-SOURCE.zip
-Source archive SHA-256: D3F1F9DAF3AA3957A648D3A31FC0789588BD3905BE57BABCBA2880B8AFE842B3
+Source archive: VIIPER-0.1.16-controllerinfo-preview20261025.2-SOURCE.zip
+Source archive SHA-256: ACC2AA8555003974F2DF97900A69C67B6318EF8736FDBFE5453694BA3935FDA7
 
 Read-only controller-info-v1 exposes descriptor identity, allowlisted metadata,
 actual Sony factory reports and public Xbox One versions. Existing registration,
