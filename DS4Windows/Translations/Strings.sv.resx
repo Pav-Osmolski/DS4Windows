@@ -6303,4 +6303,142 @@ och backup: </value>
   <data name="UI_F9F5196A5ACCAE02" xml:space="preserve">
     <value>Följ hörlursanslutningen</value>
   </data>
+  <data name="UI_12F67F8539C46701" xml:space="preserve">
+    <value>Tillgänglighet</value>
+  </data>
+  <data name="UI_39D6C91B57CE2F3B" xml:space="preserve">
+    <value>Batteriets spänning</value>
+  </data>
+  <data name="UI_8BB29098B369BFCD" xml:space="preserve">
+    <value>Bluetooth</value>
+  </data>
+  <data name="UI_4816CBFD74AA8297" xml:space="preserve">
+    <value>styrelse</value>
+  </data>
+  <data name="UI_76C6D2CECF3EF256" xml:space="preserve">
+    <value>Bootloader firmware version</value>
+  </data>
+  <data name="UI_DA36D849C8B49668" xml:space="preserve">
+    <value>Full laddning</value>
+  </data>
+  <data name="UI_95072AA1A3FE11F5" xml:space="preserve">
+    <value>Controller avstängd. Visar senaste snapshot.</value>
+  </data>
+  <data name="UI_55026208AB1964FE" xml:space="preserve">
+    <value>Kontrollera info</value>
+  </data>
+  <data name="UI_C4A065BCABC2A601" xml:space="preserve">
+    <value>Inspektör info kopierad.</value>
+  </data>
+  <data name="UI_8D380282ADEDB6D9" xml:space="preserve">
+    <value>Kopiera info</value>
+  </data>
+  <data name="UI_F65918E90A917B0E" xml:space="preserve">
+    <value>DSP firmware version</value>
+  </data>
+  <data name="UI_F20FD54567ABF468" xml:space="preserve">
+    <value>Enhetsidentifierare</value>
+  </data>
+  <data name="UI_F7D61802A4172ECC" xml:space="preserve">
+    <value>Anläggning info</value>
+  </data>
+  <data name="UI_03B89FA880E6095E" xml:space="preserve">
+    <value>Fabriksinformation</value>
+  </data>
+  <data name="UI_950EEBFBADA780A3" xml:space="preserve">
+    <value>Firmware bygger tid</value>
+  </data>
+  <data name="UI_24EB04667515759D" xml:space="preserve">
+    <value>Firmware typ</value>
+  </data>
+  <data name="UI_9D0328BD2B3A5649" xml:space="preserve">
+    <value>Firmware version</value>
+  </data>
+  <data name="UI_6663DFC9F3F1CA08" xml:space="preserve">
+    <value>Hårdvara info</value>
+  </data>
+  <data name="UI_9D7DA81A1E5FFB14" xml:space="preserve">
+    <value>Hardware version</value>
+  </data>
+  <data name="UI_6D906D1A654F5178" xml:space="preserve">
+    <value>Kopplade hörlurar</value>
+  </data>
+  <data name="UI_999F23FCD7BEC707" xml:space="preserve">
+    <value>Identitet</value>
+  </data>
+  <data name="UI_5418EF17129415EA" xml:space="preserve">
+    <value>Information rapporterad av den emulerade handkontrollen. Firmware-datum beskriver emulerad firmware, inte DS4Windows.</value>
+  </data>
+  <data name="UI_64733AE1C4198363" xml:space="preserve">
+    <value>Information som rapporteras av din anslutna fysiska kontroller.</value>
+  </data>
+  <data name="UI_B7F8E9D985AF700A" xml:space="preserve">
+    <value>Ingångsrapport Intervall</value>
+  </data>
+  <data name="UI_3F45AE9E280D7991" xml:space="preserve">
+    <value>Laddning Controller Info ...</value>
+  </data>
+  <data name="UI_1F04763D7BCD609C" xml:space="preserve">
+    <value>MCU DSP firmware version</value>
+  </data>
+  <data name="UI_E49AFACABFC81F9C" xml:space="preserve">
+    <value>Huvudversion av firmware</value>
+  </data>
+  <data name="UI_1AF384C577F294D4" xml:space="preserve">
+    <value>tillverkare</value>
+  </data>
+  <data name="UI_1EA442A134B2A184" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="UI_E172ACC04C1A5E4C" xml:space="preserve">
+    <value>Fysisk kontroll</value>
+  </data>
+  <data name="UI_C76C9E7682BC84B6" xml:space="preserve">
+    <value>Produkt ID</value>
+  </data>
+  <data name="UI_F2307BAF1C858F10" xml:space="preserve">
+    <value>Serienummer</value>
+  </data>
+  <data name="UI_7339FF9FC26A552E" xml:space="preserve">
+    <value>Snapshot uppdaterat till {0}.</value>
+  </data>
+  <data name="UI_801CD0692B68DE33" xml:space="preserve">
+    <value>mjukvaruserie</value>
+  </data>
+  <data name="UI_920E413C7D411B61" xml:space="preserve">
+    <value>statusen</value>
+  </data>
+  <data name="UI_B958CE8B871AB36B" xml:space="preserve">
+    <value>temperaturen</value>
+  </data>
+  <data name="UI_BD6F093129971F07" xml:space="preserve">
+    <value>Skärmen är upptagen.Vänligen försök igen.</value>
+  </data>
+  <data name="UI_FF0A3616B61AC476" xml:space="preserve">
+    <value>Den här handkontrollen avslöjar inte detaljer om firmware.</value>
+  </data>
+  <data name="UI_7BC04149A530604E" xml:space="preserve">
+    <value>USB-enhetskontroll</value>
+  </data>
+  <data name="UI_A24FFD8E9805081E" xml:space="preserve">
+    <value>Uppdaterad version</value>
+  </data>
+  <data name="UI_BBBC715D79EB1147" xml:space="preserve">
+    <value>Säljare ID</value>
+  </data>
+  <data name="UI_D4944E4ACC601E42" xml:space="preserve">
+    <value>Den virtuella utgången ändrades. Uppdatera för att läsa den aktuella handkontrollen.</value>
+  </data>
+  <data name="UI_A68FF52175258D4D" xml:space="preserve">
+    <value>Virtuell utgång är inte aktiv.</value>
+  </data>
+  <data name="UI_184D8D78A71837F8" xml:space="preserve">
+    <value>Batteriband</value>
+  </data>
+  <data name="UI_BFF4A010E2B21B09" xml:space="preserve">
+    <value>yttre makt</value>
+  </data>
+  <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
+    <value>Emulerade kontrollerdetaljer kunde inte läsas. Uppdatera för att försöka igen.</value>
+  </data>
 </root>

@@ -113,6 +113,8 @@ namespace DS4WinWPF.DS4Forms
 
         public event EventHandler EditProfileRequested;
         public event EventHandler ControllerDetailsRequested;
+        public event EventHandler ControllerInfoRequested;
+        private void ControllerInfoBtn_Click(object sender, RoutedEventArgs e) => ControllerInfoRequested?.Invoke(this, EventArgs.Empty);
         public event EventHandler LightbarRequested;
         public event EventHandler DisconnectRequested;
 

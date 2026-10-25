@@ -337,6 +337,12 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ControllerInfoButtonStyle" TargetType="Button" BasedOn="{StaticResource BridgeSecondaryButtonStyle}">
+        <Setter Property="MinWidth" Value="124"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Padding" Value="9,3"/>
+    </Style>
+
     <Style x:Key="BridgeControllerCardItemStyle" TargetType="ListViewItem">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Background" Value="Transparent" />

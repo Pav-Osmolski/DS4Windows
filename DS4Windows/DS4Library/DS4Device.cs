@@ -213,6 +213,10 @@ namespace DS4Windows
         internal const int BATTERY_MAX_USB = 11;
         public const string BLANK_SERIAL = "00:00:00:00:00:00";
         public const byte SERIAL_FEATURE_ID = 18;
+        private byte[] controllerFactoryReport;
+        internal byte[] GetControllerFactoryReport() => Volatile.Read(ref controllerFactoryReport)?.ToArray();
+        protected void CacheControllerFactoryReport(byte[] report) =>
+            Volatile.Write(ref controllerFactoryReport, report?.ToArray());
         protected HidDevice hDevice;
         protected string Mac;
         private readonly bool hasHidInterface;
@@ -1011,6 +1015,20 @@ namespace DS4Windows
             //{
             //    CheckOutputReportTypes();
             //}
+
+            // Read the genuine Sony DS4 factory report once, before input/output
+            // loops start. The info window only consumes this immutable cache.
+            if (HasHidInterface && hDevice?.Attributes.VendorId == 0x054C)
+            {
+                try
+                {
+                    var factory = new byte[49];
+                    factory[0] = 0xA3;
+                    if (hDevice.readFeatureData(factory) && factory[0] == 0xA3)
+                        CacheControllerFactoryReport(factory);
+                }
+                catch (Exception error) when (error is System.IO.IOException or ObjectDisposedException) { }
+            }
 
             sendOutputReport(true, true, false); // initialize the output report (don't force disconnect the gamepad on initialization even if writeData fails because some fake DS4 gamepads don't support writeData over BT)
         }

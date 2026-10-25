@@ -1,0 +1,35 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.16-controllerinfo-preview20261025
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: a09e463f991728f8dc0b9cdc8e9426e319309c69
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: a09e463f991728f8dc0b9cdc8e9426e319309c69
+Embedded build date: 2026-10-25T11:10:38Z
+Embedded VCS revision: a09e463f991728f8dc0b9cdc8e9426e319309c69
+Embedded VCS time: 2026-10-25T11:05:17Z
+Embedded VCS modified: false
+PE file version: 0.1.16.0
+PE product version: 0.1.16-controllerinfo-preview20261025
+Binary: VIIPER-0.1.16-controllerinfo-preview20261025-x64.exe
+Binary SHA-256: 6CF77E43A9E0340DBEA817548B63A9FE405F282F0A0FF6649A74D8E90F00B484
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.16-controllerinfo-preview20261025-LICENSES.txt
+License notice SHA-256: 58ECB3A201709F1D03B913811B72452F4CC51225B054908E911919308A87C6E3
+
+Testing-only local preview, built from a clean feature/controller-info checkout.
+Source archive: VIIPER-0.1.16-controllerinfo-preview20261025-SOURCE.zip
+Source archive SHA-256: D3F1F9DAF3AA3957A648D3A31FC0789588BD3905BE57BABCBA2880B8AFE842B3
+
+Read-only controller-info-v1 exposes descriptor identity, allowlisted metadata,
+actual Sony factory reports and public Xbox One versions. Existing registration,
+connection ownership and controller input/output paths are unchanged.
+
+Built using Go 1.27.2 windows/amd64, CGO_ENABLED=0, release tag, trimpath,
+stripped symbols and explicit version/commit/date linker fields. This is a local
+build, not a published stable release or a hosted workflow artifact.
+
+Complete GPL and dependency grants, systray notices and WDL attribution remain
+in this package. Dependencies are unchanged from 0.1.15. Default and release-tag
+Go test suites passed. The Windows executable is unsigned.

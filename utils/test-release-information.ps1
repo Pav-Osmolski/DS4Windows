@@ -20,8 +20,8 @@ $oldEnvironment = @{}
 foreach ($name in @('VERSION', 'RELEASE_TAG', 'UNSIGNED_RELEASE')) { $oldEnvironment[$name] = [Environment]::GetEnvironmentVariable($name) }
 try {
     New-Item -ItemType Directory -Path $records, (Join-Path $publish 'extras') | Out-Null
-    $names = @('VIIPER-0.1.15-LICENSES.txt', 'VIIPER-0.1.15-PROVENANCE.txt',
-        'VIIPER-0.1.15-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md',
+    $names = @('VIIPER-0.1.16-controllerinfo-preview20261025-LICENSES.txt', 'VIIPER-0.1.16-controllerinfo-preview20261025-PROVENANCE.txt',
+        'VIIPER-0.1.16-controllerinfo-preview20261025-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md',
         'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')
     foreach ($name in $names) { [IO.File]::WriteAllText((Join-Path $publish "extras/$name"), "Fixture $name`r`nUnicode: ©`r`n") }
     $env:VERSION = $env:RELEASE_TAG = '5.0.28'

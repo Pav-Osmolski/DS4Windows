@@ -1,0 +1,25 @@
+# Controller info preview validation
+
+- Production WPF window rendered under default/light and dark resources with
+  separate physical and emulated snapshots. Values remain selectable.
+- Real controller card template measured for matching left/right inset under
+  both base themes; other list defaults retained.
+- Synthetic Sony reports exercise correct report IDs, date/time boundaries,
+  hardware/firmware values, malformed/truncated data and unknown battery states.
+- Xbox public versions and Nintendo battery bands/voltage are checked without
+  manufacturing unsupported Sony fields.
+- Backend tests query actual registered DS4, DualSense, Edge, Xbox 360, Xbox One
+  and Switch 2 Pro devices, reject invalid requests, distinguish identical model
+  instances, and check that queries preserve metadata and device ownership.
+- Backend default and release-tag suites pass. These synthetic tests do not
+  establish firmware availability on every physical controller model.
+- New strings are present in all 24 supported language packs; structural coverage
+  and UTF-8 checks pass. Native speaker review remains welcome.
+
+This is a local testing preview, pending maintainer hardware/UI review.
+
+Local results: application suite 7,793 passed / 16 opt-in hardware tests skipped;
+standalone verification suite 75 passed; final information/theme tests 9 passed.
+Packaging tests: 34 passed with one platform-specific skip; release-candidate
+contracts: 8 passed. All 48 language/family pairs pass validation. The portable
+ZIP passed integrity, exact managed-manifest, locale and paired-backend hash checks.

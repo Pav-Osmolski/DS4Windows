@@ -543,7 +543,8 @@
     "source": "Close",
     "files": [
       "DS4Windows/DS4Forms/About.xaml",
-      "DS4Windows/DS4Forms/ViiperSetupPrompt.xaml"
+      "DS4Windows/DS4Forms/ViiperSetupPrompt.xaml",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
     ]
   },
   "UI_92C1CDFDF4CB9CF6": {
@@ -1810,7 +1811,9 @@
   "UI_B7A098F1ABCAC8A2": {
     "source": "Emulated controller",
     "files": [
-      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml"
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
     ]
   },
   "UI_8ED4DCE8B648CE47": {
@@ -2624,7 +2627,8 @@
   "UI_0E91610117029A62": {
     "source": "Refresh",
     "files": [
-      "DS4Windows/DS4Forms/MainWindow.xaml"
+      "DS4Windows/DS4Forms/MainWindow.xaml",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
     ]
   },
   "UI_8D6119ABAE8F59DF": {
@@ -3318,7 +3322,8 @@
   "UI_85A39AB345D672FF": {
     "source": "Yes",
     "files": [
-      "DS4Windows/DS4Forms/PresetOptionWindow.xaml"
+      "DS4Windows/DS4Forms/PresetOptionWindow.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs"
     ]
   },
   "UI_6AEC8557B33FBAD5": {
@@ -3881,7 +3886,8 @@
   "UI_74271BB9C08C4874": {
     "source": "Battery level",
     "files": [
-      "DS4Windows/DS4Forms/ProfileEditor.xaml"
+      "DS4Windows/DS4Forms/ProfileEditor.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs"
     ]
   },
   "UI_44151A75A94774EB": {
@@ -3961,7 +3967,8 @@
   "UI_22B693223FCB3BE3": {
     "source": "Charging",
     "files": [
-      "DS4Windows/DS4Forms/ProfileEditor.xaml"
+      "DS4Windows/DS4Forms/ProfileEditor.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs"
     ]
   },
   "UI_D253F5438699D548": {
@@ -5732,7 +5739,8 @@
   "UI_639A40E82B9A96F0": {
     "source": "Connection",
     "files": [
-      "DS4Windows/DS4Forms/ProfileEditor.xaml"
+      "DS4Windows/DS4Forms/ProfileEditor.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs"
     ]
   },
   "UI_A515680B15783021": {
@@ -9475,7 +9483,9 @@
   "UI_31DF66DC9F060166": {
     "source": "Controller",
     "files": [
-      "DS4Windows/DS4Forms/SidebarIconCatalog.cs"
+      "DS4Windows/DS4Forms/SidebarIconCatalog.cs",
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
     ]
   },
   "UI_14D33BD014E6B4E7": {
@@ -9911,6 +9921,286 @@
     "files": [
       "DS4Windows/DS4Forms/ControllerOverviewControl.xaml",
       "DS4Windows/DS4Forms/ProfileEditor.xaml"
+    ]
+  },
+  "UI_12F67F8539C46701": {
+    "source": "Availability",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_39D6C91B57CE2F3B": {
+    "source": "Battery voltage",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_8BB29098B369BFCD": {
+    "source": "Bluetooth",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_4816CBFD74AA8297": {
+    "source": "Board",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_76C6D2CECF3EF256": {
+    "source": "Bootloader firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_DA36D849C8B49668": {
+    "source": "Charging complete",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_95072AA1A3FE11F5": {
+    "source": "Controller disconnected. Showing the last snapshot.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_55026208AB1964FE": {
+    "source": "Controller info",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_C4A065BCABC2A601": {
+    "source": "Controller info copied.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_8D380282ADEDB6D9": {
+    "source": "Copy info",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_F65918E90A917B0E": {
+    "source": "DSP firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_F20FD54567ABF468": {
+    "source": "Device identifier",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_F7D61802A4172ECC": {
+    "source": "Device info",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_03B89FA880E6095E": {
+    "source": "Factory information",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_950EEBFBADA780A3": {
+    "source": "Firmware build time",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_24EB04667515759D": {
+    "source": "Firmware type",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_9D0328BD2B3A5649": {
+    "source": "Firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_6663DFC9F3F1CA08": {
+    "source": "Hardware info",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_9D7DA81A1E5FFB14": {
+    "source": "Hardware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_6D906D1A654F5178": {
+    "source": "Headphones connected",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_999F23FCD7BEC707": {
+    "source": "Identity",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_5418EF17129415EA": {
+    "source": "Information reported by the emulated controller. Firmware dates describe emulated firmware, not DS4Windows.",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_64733AE1C4198363": {
+    "source": "Information reported by your connected physical controller.",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_B7F8E9D985AF700A": {
+    "source": "Input report interval",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_3F45AE9E280D7991": {
+    "source": "Loading controller info...",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_1F04763D7BCD609C": {
+    "source": "MCU DSP firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_E49AFACABFC81F9C": {
+    "source": "Main firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_1AF384C577F294D4": {
+    "source": "Manufacturer",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_1EA442A134B2A184": {
+    "source": "No",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_E172ACC04C1A5E4C": {
+    "source": "Physical controller",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_C76C9E7682BC84B6": {
+    "source": "Product ID",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_F2307BAF1C858F10": {
+    "source": "Serial number",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_7339FF9FC26A552E": {
+    "source": "Snapshot updated at {0}.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_801CD0692B68DE33": {
+    "source": "Software series",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_920E413C7D411B61": {
+    "source": "Status",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_B958CE8B871AB36B": {
+    "source": "Temperature",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_BD6F093129971F07": {
+    "source": "The clipboard is busy. Please try again.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_FF0A3616B61AC476": {
+    "source": "This controller does not expose firmware details.",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_7BC04149A530604E": {
+    "source": "USB device revision",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_A24FFD8E9805081E": {
+    "source": "Update version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_BBBC715D79EB1147": {
+    "source": "Vendor ID",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_D4944E4ACC601E42": {
+    "source": "Virtual output changed. Refresh to read the current controller.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_A68FF52175258D4D": {
+    "source": "Virtual output is not active.",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_184D8D78A71837F8": {
+    "source": "Battery band",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_BFF4A010E2B21B09": {
+    "source": "External power",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_C520C36A0F8B8CAB": {
+    "source": "Emulated controller details could not be read. Refresh to try again.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
     ]
   }
 }

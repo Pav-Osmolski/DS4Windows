@@ -1008,6 +1008,17 @@ namespace DS4Windows
         internal bool SupportsActiveVirtualMicrophone =>
             connected && activeStreamSupportsMicrophone;
 
+        internal ViiperControllerInfoV1 ReadControllerInfo()
+        {
+            ViiperDeviceStream stream = Volatile.Read(ref deviceStream);
+            if (stream == null || !IsRuntimeConnected) throw new IOException("Virtual output is not active.");
+            var info = client.ReadControllerInfo(stream.BusId, stream.DevId);
+            if (!ReferenceEquals(stream, Volatile.Read(ref deviceStream)) || !IsRuntimeConnected ||
+                info == null || info.Version != 1 || info.BusId != stream.BusId || info.DevId != stream.DevId)
+                throw new IOException("Virtual controller changed during snapshot.");
+            return info;
+        }
+
         internal OutContType OutputType => outputType;
 
         internal bool IsAudioOnlySidecar => audioOnlySidecar;
@@ -10712,6 +10723,9 @@ namespace DS4Windows
             ArgumentNullException.ThrowIfNull(request);
             return JsonSerializer.Serialize(request, JsonOptions);
         }
+
+        internal ViiperControllerInfoV1 ReadControllerInfo(uint busId, string devId) =>
+            SendRequest<ViiperControllerInfoV1>($"bus/{busId}/{devId}/controller-info-v1", null, RuntimeStatusReceiveTimeoutMs);
 
         internal void UpdateBatteryStatus(uint busId, string devId, ViiperBatteryStatus status)
         {

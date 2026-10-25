@@ -1781,6 +1781,29 @@ Suspend support not enabled.", true);
             }
         }
 
+        private readonly System.Collections.Generic.Dictionary<DS4Device, ControllerInfoWindow> controllerInfoWindows = new();
+
+        private void ControllerOverview_ControllerInfoRequested(object sender, EventArgs e) =>
+            ShowControllerInfo(mainWinVM.SelectedController);
+
+        private void ControllerCardInfo_Click(object sender, RoutedEventArgs e) =>
+            ShowControllerInfo((sender as FrameworkElement)?.DataContext as CompositeDeviceModel);
+
+        private void ShowControllerInfo(CompositeDeviceModel controller)
+        {
+            if (controller?.Device == null) return;
+            DS4Device device = controller.Device;
+            int index = controller.DevIndex;
+            if (controllerInfoWindows.TryGetValue(device, out var open)) { open.Activate(); return; }
+            var window = new ControllerInfoWindow(device,
+                () => index >= 0 && index < App.rootHub.DS4Controllers.Length && ReferenceEquals(App.rootHub.DS4Controllers[index], device),
+                () => index >= 0 && index < App.rootHub.outputDevices.Length ? App.rootHub.outputDevices[index] : null)
+            { Owner = this };
+            controllerInfoWindows.Add(device, window);
+            window.Closed += (_, _) => controllerInfoWindows.Remove(device);
+            window.Show();
+        }
+
         private void ControllerOverview_ControllerDetailsRequested(object sender, EventArgs e)
         {
             mainTabCon.SelectedItem = controllersTab;

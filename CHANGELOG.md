@@ -5,7 +5,10 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Add **Controller info** buttons to Overview and Controllers, with separate physical and emulated controller tabs, selectable values, Refresh and Copy info. Display actual descriptor identity, battery/status data and available firmware details for all supported emulated controller types.
+- Use cached physical controller information and a read-only VIIPER query; unavailable firmware fields are identified rather than invented. Include the matching testing-only VIIPER backend.
+- Match the selected controller card's left and right margins in light and dark themes.
+- Translate the new interface strings across all 24 supported language packs.
 
 ## Released
 
