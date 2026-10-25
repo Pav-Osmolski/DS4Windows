@@ -682,7 +682,10 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        public void PublishReadAndSpanSerializationAllocateZeroAfterWarmup()
+        [DataRow(false)]
+        [DataRow(true)]
+        public void PublishReadAndSpanSerializationAllocateZeroAfterWarmup(
+            bool positiveControl = false)
         {
             const ulong iterations = 20_000;
             ControllerFeedbackMailbox mailbox = new();
@@ -691,40 +694,52 @@ namespace DS4WindowsTests
                 ControllerFeedbackFrame.SerializedLength];
 
             for (ulong sequence = 1; sequence <= 1_000; sequence++)
+                RunAllocationCycle(mailbox, cursor, packet, sequence);
+
+            long allocated;
+            // Measure controller work only. Assertions also run framework
+            // telemetry, which can allocate after its counters are reset.
+            using (StrictAllocationMeasurementScope.Begin())
             {
-                ControllerFeedbackFrame frame = CreatePatternFrame(sequence);
-                mailbox.TryPublish(frame);
-                mailbox.TryReadLatest(out _, out _);
+                long before = GC.GetAllocatedBytesForCurrentThread();
+                for (ulong sequence = 1_001;
+                    sequence <= iterations + 1_000; sequence++)
+                    RunAllocationCycle(mailbox, cursor, packet, sequence);
+                if (positiveControl) GC.KeepAlive(AllocateMeasurementPositiveControl());
+                allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            }
+
+            if (positiveControl)
+                Assert.IsTrue(allocated >= 128,
+                    "The measurement must detect a real heap allocation.");
+            else
+                Assert.AreEqual(0L, allocated,
+                    $"Canonical feedback publication allocated {allocated} bytes after warmup.");
+        }
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+        private static byte[] AllocateMeasurementPositiveControl() => new byte[128];
+
+        private static void RunAllocationCycle(ControllerFeedbackMailbox mailbox,
+            ControllerFeedbackClaimCursor cursor, Span<byte> packet,
+            ulong sequence)
+        {
+            // Keep framework assertions outside both the warmup and measured
+            // workload. Failures still abort the test without relaxing limits.
+            if (!TryCreate(out ControllerFeedbackFrame frame,
+                    bodyLow: Pattern(sequence, 1), bodyHigh: Pattern(sequence, 2),
+                    leftTrigger: Pattern(sequence, 3), rightTrigger: Pattern(sequence, 4),
+                    sequence: sequence, timestampMicroseconds: 100_000 + sequence) ||
+                !mailbox.TryPublish(frame) ||
+                !mailbox.TryReadLatest(out ControllerFeedbackFrame observed, out _) ||
+                observed.Sequence != sequence ||
                 mailbox.Claim(frame.TimestampMicroseconds, cursor,
-                    out _, out ulong claimToken);
-                mailbox.Complete(cursor, claimToken, delivered: true);
-                frame.TryWriteTo(packet);
-                ControllerFeedbackFrame.TryReadFrom(packet, out _);
-            }
-
-            long before = GC.GetAllocatedBytesForCurrentThread();
-            for (ulong sequence = 1_001;
-                sequence <= iterations + 1_000; sequence++)
-            {
-                ControllerFeedbackFrame frame = CreatePatternFrame(sequence);
-                mailbox.TryPublish(frame);
-                mailbox.TryReadLatest(out _, out _);
-                if (mailbox.Claim(frame.TimestampMicroseconds, cursor,
-                    out _, out ulong claimToken) !=
-                        ControllerFeedbackClaimDisposition.Frame ||
-                    !mailbox.Complete(cursor, claimToken,
-                        delivered: true))
-                {
-                    throw new InvalidOperationException(
-                        "claim completion failed");
-                }
-                frame.TryWriteTo(packet);
-                ControllerFeedbackFrame.TryReadFrom(packet, out _);
-            }
-            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-
-            Assert.AreEqual(0L, allocated,
-                $"Canonical feedback publication allocated {allocated} bytes after warmup.");
+                    out _, out ulong claimToken) != ControllerFeedbackClaimDisposition.Frame ||
+                !mailbox.Complete(cursor, claimToken, delivered: true) ||
+                !frame.TryWriteTo(packet) ||
+                !ControllerFeedbackFrame.TryReadFrom(packet, out ControllerFeedbackFrame decoded) ||
+                decoded.Sequence != sequence)
+                throw new InvalidOperationException("Feedback allocation cycle failed.");
         }
 
         private static ControllerFeedbackFrame CreatePatternFrame(
