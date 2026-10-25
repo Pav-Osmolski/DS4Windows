@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using DS4Windows;
 using DS4Windows.InputDevices;
 using DS4WinWPF.DS4Forms;
+using DS4WinWPF.DS4Forms.Themes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DS4WindowsTests;
@@ -133,11 +134,12 @@ internal static class ControllerInfoWindowValidation
         System.IO.Directory.CreateDirectory(directory);
         try
         {
-            foreach(string theme in new[]{"DefaultTheme","DarkTheme"})
+            foreach(var choice in new[]{AppThemeChoice.Light,AppThemeChoice.Dark,AppThemeChoice.Graphite,AppThemeChoice.Paper,AppThemeChoice.Midnight,AppThemeChoice.HighContrast})
             {
+                string theme=choice.ToString();
                 application.Resources.MergedDictionaries.Clear();
-                foreach(string name in new[]{theme,"BridgeShellStyles"})
-                    application.Resources.MergedDictionaries.Add(new ResourceDictionary{Source=new Uri("/DS4Windows;component/DS4Forms/Themes/"+name+".xaml",UriKind.Relative)});
+                application.Resources.MergedDictionaries.Add(AppThemeCatalog.Create(choice,highContrast:false));
+                application.Resources.MergedDictionaries.Add(new ResourceDictionary{Source=new Uri("/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml",UriKind.Relative)});
                 var snapshot=new ControllerInfoSnapshot(
                     new("Information reported by your connected physical controller.",new[]{new ControllerInfoSection("Identity",new[]{new ControllerInfoRow("Controller","Physical DualSense"),new ControllerInfoRow("Connection","USB")})}),
                     ControllerInfo.Emulated(ControllerInfoTests.VirtualSample()));
@@ -150,7 +152,19 @@ internal static class ControllerInfoWindowValidation
                     tabs.SelectedIndex=tab;content.Measure(new Size(820,740));content.Arrange(new Rect(0,0,820,740));content.UpdateLayout();
                     var textboxes=ThemeConsistencyValidation.Visuals(content).OfType<TextBox>().ToArray();
                     Assert.IsTrue(textboxes.Length>0,"Controller info rows must render.");
-                    Assert.IsTrue(textboxes.All(t=>t.IsReadOnly && t.ActualWidth>120));
+                    Assert.IsTrue(textboxes.All(t=>t.IsReadOnly && t.ActualWidth>120),theme+" tab "+tab+": "+string.Join(", ",textboxes.Select(t=>$"{t.Text}={t.ActualWidth}")));
+                    Assert.IsTrue(textboxes.All(t=>t.ActualHeight<=24),"Single-line info values should remain compact.");
+                    Assert.AreEqual(new Thickness(0),tabs.BorderThickness,"No bottom tab-control rule is needed.");
+                    foreach(TabItem tabItem in tabs.Items)
+                    {
+                        tabItem.ApplyTemplate();
+                        var chrome=(Border)tabItem.Template.FindName("TabChrome",tabItem);
+                        var background=(SolidColorBrush)(tabItem.IsSelected?chrome.Background:application.FindResource("RaisedBackgroundColor"));
+                        var label=ThemeConsistencyValidation.Visuals(tabItem).OfType<TextBlock>().Single(t=>t.Text==tabItem.Header.ToString());
+                        Assert.IsTrue(label.ActualWidth>0 && label.ActualHeight>0,"Both tab labels must be visible.");
+                        Assert.IsTrue(AppThemeCatalog.Contrast(((SolidColorBrush)label.Foreground).Color,background.Color)>=4.5,
+                            $"{theme}: {tabItem.Header} must be readable in both selection states.");
+                    }
                     string path=System.IO.Path.Combine(directory,$"Controller-info-{theme}-{tab}.png");
                     ThemeConsistencyValidation.Save(content,path,820,740);files.Add(path);
                 }

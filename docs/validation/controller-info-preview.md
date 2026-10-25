@@ -23,3 +23,8 @@ standalone verification suite 75 passed; final information/theme tests 9 passed.
 Packaging tests: 34 passed with one platform-specific skip; release-candidate
 contracts: 8 passed. All 48 language/family pairs pass validation. The portable
 ZIP passed integrity, exact managed-manifest, locale and paired-backend hash checks.
+
+Layout revision 2: custom rounded tabs replace the native tab header, with no
+bottom rule. Render/contrast assertions cover both selected and unselected
+labels under Light, Dark, Graphite, Paper, Midnight and High contrast. Single-line
+values are limited to compact content height; 9 focused tests pass.
