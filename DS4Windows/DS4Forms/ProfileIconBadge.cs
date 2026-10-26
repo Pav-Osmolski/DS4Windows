@@ -7,9 +7,16 @@ namespace DS4WinWPF.DS4Forms;
 
 public sealed class ProfileIconBadge : Grid
 {
+    static ProfileIconBadge()
+    {
+        // Metadata defaults allow a DataTemplate to request a smaller badge.
+        // Constructor-local Width/Height values override template attributes.
+        WidthProperty.OverrideMetadata(typeof(ProfileIconBadge), new FrameworkPropertyMetadata(38.0));
+        HeightProperty.OverrideMetadata(typeof(ProfileIconBadge), new FrameworkPropertyMetadata(38.0));
+    }
+
     public ProfileIconBadge()
     {
-        Width = Height = 38;
         var visibility = new BooleanToVisibilityConverter();
         var letters = new Grid();
         letters.SetBinding(VisibilityProperty, new Binding("UsesLetterIcon") { Converter = visibility });

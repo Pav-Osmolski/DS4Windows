@@ -91,6 +91,9 @@ internal static class SettingsStorageLayoutValidation
                     Assert.AreEqual(tileInset.Y, rowInset.Y, 0.5, "Rows and tiles must have the same top inset below their header.");
                     foreach (var badge in ThemeConsistencyValidation.Visuals(list).OfType<ProfileIconBadge>())
                     {
+                        double expectedSize = view == ProfileViewChoice.List ? 30 : 28;
+                        Assert.AreEqual(expectedSize, badge.ActualWidth, 0.1, "The row must use the requested reduced icon width.");
+                        Assert.AreEqual(expectedSize, badge.ActualHeight, 0.1, "The row must use the requested reduced icon height.");
                         var fill = ThemeConsistencyValidation.Visuals(badge).OfType<Border>().First();
                         Rect drawing = fill.TransformToAncestor(badge).TransformBounds(new Rect(fill.RenderSize));
                         Assert.IsTrue(drawing.Left >= -0.5 && drawing.Top >= -0.5 &&
