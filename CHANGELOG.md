@@ -5,6 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Clarify standard-setup removal with a component-by-component uninstall summary, explicit profile/settings preservation, and shortcuts to existing profiles folders and Windows Installed apps for separately managing shared drivers.
+
 - Include HidHide and FakerInput in the installer's installation-status list. Preselect HidHide only when it is missing, keep FakerInput opt-in, preserve user choices across re-detection, and leave existing shared drivers untouched during app installation/repair. Recognise HidHide's driver service across product versions and related FakerInput MSI installations. Show the target DS4Windows version and the actual installed optional-driver versions (or bundled versions for missing drivers); report unavailable metadata instead of guessing. Derive the VIIPER label from the verified bundled version instead of a stale hard-coded label.
 
 ## Released

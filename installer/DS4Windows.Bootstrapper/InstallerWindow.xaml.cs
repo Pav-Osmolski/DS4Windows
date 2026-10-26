@@ -1,6 +1,11 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows;
 using System.Windows.Media;
 using WixToolset.BootstrapperApplicationApi;
@@ -75,6 +80,77 @@ namespace DS4Windows.Bootstrapper
             HidHideCheckBox.ToolTip = HidHideCheckBox.IsEnabled ? null : "HidHide is already installed and will be kept unchanged.";
             FakerInputCheckBox.ToolTip = FakerInputCheckBox.IsEnabled ? null : "FakerInput is already installed and will be kept unchanged.";
             UpdateOptionalStatuses();
+            bool uninstall = mode == InstallerMode.Uninstall;
+            StatusHeading.Text = uninstall ? "Uninstall summary" : "Installation status";
+            ProfileSummary.Visibility = UninstallTools.Visibility = uninstall ? Visibility.Visible : Visibility.Collapsed;
+            InstallLocationNote.Visibility = StartupTasksNote.Visibility = uninstall ? Visibility.Collapsed : Visibility.Visible;
+            UninstallToolMessage.Visibility = Visibility.Collapsed;
+            if (uninstall)
+            {
+                Ds4Status.Text = packages.TryGetValue("DS4WindowsMsi", out var appState) && appState == PackageState.Present
+                    ? "Will remove" : "Not installed";
+                ViiperStatus.Text = File.Exists(Path.Combine(ProgramRoot, "VIIPER", "viiper.exe"))
+                    ? "Will remove — managed copy" : "Will remove managed files, if present";
+                UsbipStatus.Text = "Will keep — shared component";
+                HidHideStatus.Text = KeptDriverStatus(optionalDrivers.HidHide);
+                FakerInputStatus.Text = KeptDriverStatus(optionalDrivers.FakerInput);
+            }
+        }
+
+        private static string ProgramRoot => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "DS4Windows");
+
+        private static string KeptDriverStatus(OptionalDriverPresence presence) => presence switch
+        {
+            OptionalDriverPresence.Missing => "Not installed",
+            OptionalDriverPresence.Installed => "Will keep — shared driver",
+            _ => "Will keep — if installed"
+        };
+
+        private void OpenProfiles_Click(object sender, RoutedEventArgs e)
+        {
+            // Show both existing locations when necessary. Do not guess which
+            // configuration is active or create a new folder during uninstall.
+            var locations = new[]
+            {
+                (Name: "AppData", Path: Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DS4Windows", "Profiles")),
+                (Name: "Program folder", Path: Path.Combine(ProgramRoot, "Profiles"))
+            }.Where(item => Directory.Exists(item.Path)).ToArray();
+            if (locations.Length == 0)
+            {
+                ShowUninstallToolMessage("No profiles folder was found for this Windows user or in the installed program folder. Profiles belonging to other Windows users are also preserved.");
+                return;
+            }
+            if (locations.Length == 1) { OpenUninstallTarget(locations[0].Path); return; }
+            var menu = new ContextMenu { PlacementTarget = (Button)sender, Placement = PlacementMode.Bottom };
+            foreach (var location in locations)
+            {
+                string path = location.Path;
+                var item = new MenuItem { Header = location.Name + " — " + path };
+                item.Click += (_, __) => OpenUninstallTarget(path);
+                menu.Items.Add(item);
+            }
+            menu.IsOpen = true;
+        }
+
+        private void ManageDrivers_Click(object sender, RoutedEventArgs e) => OpenUninstallTarget("ms-settings:appsfeatures");
+
+        private void OpenUninstallTarget(string target)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(target) { UseShellExecute = true })?.Dispose();
+                UninstallToolMessage.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception error) when (error is System.ComponentModel.Win32Exception or InvalidOperationException or IOException or UnauthorizedAccessException)
+            {
+                ShowUninstallToolMessage("Windows could not open this location. You can open it manually: " + target);
+            }
+        }
+
+        private void ShowUninstallToolMessage(string message)
+        {
+            UninstallToolMessage.Text = message;
+            UninstallToolMessage.Visibility = Visibility.Visible;
         }
 
         private void OptionalDriver_Click(object sender, RoutedEventArgs e)
