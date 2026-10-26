@@ -7,7 +7,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Make **Settings & profiles** expand/collapse immediately. Debounce and coalesce remembered-state writes off the UI thread, skip writes when the final choice matches the saved state, and keep presentation-state persistence separate from location/migration and update-retention preferences. Retain older saved choices and finish pending writes with a bound during application shutdown.
 
-- Add remembered **Tiles**, **List** and **Details** profile views, keeping Tiles as the default and preserving selection, search, sorting and profile actions across view changes. Details shows the emulated controller and last-modified time. Match row insets to Tiles, scale complete badges to fit each view, and balance the spacing above and below the Details headings.
+- Add remembered **Tiles**, **List** and **Details** profile views, keeping Tiles as the default and preserving selection, search, sorting and profile actions across view changes. Details shows the emulated controller and last-modified time. Match row insets to Tiles, scale complete badges to fit each view, balance the spacing above and below the Details headings, and match the search field height to the sorting and view controls.
 - Use each profile name's first Unicode character for its badge. Add **Profile icon…** to choose a fill colour or a transparent ICO/PNG image, preview changes, and restore the default. Embed bounded PNG thumbnails in the profile XML so appearance survives normal saves, rename, duplicate, import/export, backups and migration. Include the new interface text in all 24 language packs. ([PR #86](https://github.com/Pav-Osmolski/DS4Windows/pull/86))
 
 ## Released

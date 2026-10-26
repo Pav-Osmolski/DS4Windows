@@ -70,6 +70,19 @@ internal static class SettingsStorageLayoutValidation
                 ThemeConsistencyValidation.Layout(host, 1200, 820);
                 foreach (var button in ThemeConsistencyValidation.Visuals(content).OfType<Button>().Where(button => button.IsEnabled && button.Visibility == Visibility.Visible && button.ActualWidth > 0))
                     Assert.IsTrue(button.ActualHeight >= 20, button.Name + " must have a usable height.");
+                var searchFrame = (Border)content.FindName("profilesSearchFrame");
+                Assert.AreEqual(sort.ActualHeight, searchFrame.ActualHeight, 0.5,
+                    "The profile search frame must match the neighbouring dropdown height.");
+                double searchTop = searchFrame.TranslatePoint(new Point(), host).Y;
+                Assert.AreEqual(searchTop, sort.TranslatePoint(new Point(), host).Y, 0.5,
+                    "The search field and dropdown must share their top edge.");
+                foreach (var viewButton in ((WrapPanel)content.FindName("profileViewChoices")).Children.OfType<RadioButton>())
+                {
+                    Assert.AreEqual(viewButton.ActualHeight, searchFrame.ActualHeight, 0.5,
+                        "The search field must match the view button heights.");
+                    Assert.AreEqual(searchTop, viewButton.TranslatePoint(new Point(), host).Y, 0.5,
+                        "The search field and view buttons must share their top edge.");
+                }
                 string path = Path.Combine(directory, "profiles-" + choice + ".png");
                 ThemeConsistencyValidation.Save(host, path, 1200, 820);
                 files.Add(path);
