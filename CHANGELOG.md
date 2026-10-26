@@ -5,11 +5,19 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- Clarify standard-setup removal with a component-by-component uninstall summary, explicit profile/settings preservation, and shortcuts to existing profiles folders and Windows Installed apps for separately managing shared drivers.
-
-- Include HidHide and FakerInput in the installer's installation-status list. Preselect HidHide only when it is missing, keep FakerInput opt-in, preserve user choices across re-detection, and leave existing shared drivers untouched during app installation/repair. Recognise HidHide's driver service across product versions and related FakerInput MSI installations. Show the target DS4Windows version and the actual installed optional-driver versions (or bundled versions for missing drivers); report unavailable metadata instead of guessing. Derive the VIIPER label from the verified bundled version instead of a stale hard-coded label.
+There are currently no unreleased changes.
 
 ## Released
+
+### [5.0.52](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.52) - 2026-10-26
+
+#### Installer and uninstaller
+
+- Include HidHide and FakerInput in the installation-status list. Select HidHide by default only when it is missing, keep FakerInput opt-in, retain choices across re-detection, and keep existing shared drivers unchanged during application installation and repair. Detect HidHide through its driver service across product versions and recognise related FakerInput MSI versions, including newer installations.
+- Show the DS4Windows version being installed and the detected installed HidHide/FakerInput versions. Missing drivers show the bundled version; unreadable installed metadata is reported as unavailable rather than guessed. Derive the VIIPER label from the verified version constant instead of a stale label.
+- Give uninstall its own component summary: remove DS4Windows and its managed VIIPER copy while preserving USB/IP, HidHide, FakerInput, profiles and settings. Hide installation-only options and instructions during uninstall.
+- Add **Open profiles folder** and **Manage shared drivers…** shortcuts to the uninstall confirmation. Offer both existing AppData and program-folder profile locations when present; open Windows Installed apps for separately managing shared drivers. These controls do not change the existing removal policy.
+- Implemented in [PR #85](https://github.com/Pav-Osmolski/DS4Windows/pull/85).
 
 ### [5.0.51](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.51) - 2026-10-26
 
