@@ -6578,4 +6578,76 @@ Example: whyme_DS4Windows</value>
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>ΕΞΑΓΩΓΗ ΕΠΙΛΟΓΗ</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>Καθαρίστε τώρα...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>Προηγούμενες εκδόσεις για να διατηρηθεί</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>Διατηρεί τα τρέχοντα αρχεία και τον επιλεγμένο αριθμό προηγούμενων εκδόσεων για κάθε στοιχείο.</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>γραπτώς</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>Δεν υπάρχουν παλιά αρχεία ενημέρωσης για να καθαρίσετε.</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>Μερικοί φάκελοι δεν μπορούσαν να σαρωθούν. ανανέωση για επαναφορά.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>Περιλαμβάνει αναγνωρισμένες λήψεις DS4Windows, VIIPER, USB/IP και updater.</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>Αφαίρεση {0} Ενημερωτικά αρχεία και δωρεάν {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>Προβολή αποθηκευμένων αρχείων</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Καθαρίστε αποθηκευμένες ενημερώσεις</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>Αφαίρεσε αρχεία {0} και απελευθέρωσε αρχεία {1}. Αφαίρεσε αρχεία {2} που ήταν σε χρήση, άλλαξε ή δεν μπορούσε να αφαιρεθεί.</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>Διαχείριση λήψης ενημερώσεων και παλαιότερων αρχείων υποστήριξης.</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>Η ενημέρωση καθαρισμού δεν μπορούσε να ολοκληρωθεί.</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>Δεν υπάρχουν αποθηκευμένα αρχεία ενημέρωσης.</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 προηγούμενη έκδοση (συνιστάται)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>Ενημέρωση αποθήκευσης</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>Ενημερωτικά αρχεία</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>Μπορεί να καθαριστεί</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>Διαβάστε μόνο</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>Αυτόματη εκκαθάριση μετά την ενημέρωση</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>Κρατήστε όλα</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>Τα παλαιότερα αρχεία διαγράφονται μετά την επιτυχή εκκίνηση της ενημερωμένης εφαρμογής.</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>Επιλέξτε έναν αριθμό</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η πρόσβαση στην αποθήκευση ενημερώσεων.</value>
+  </data>
 </root>

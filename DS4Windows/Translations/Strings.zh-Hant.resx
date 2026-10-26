@@ -6559,4 +6559,76 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>出口選擇</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>清理一下現在...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>以前的版本要保留</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>保留當前檔案和每個元件選擇的以前版本的數量. 配置檔案和設定保留。</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>寫作</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>沒有舊的更新檔案可以清理。</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>某些資料夾無法掃描。</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>包括已識別的 DS4Windows、 VIIPER、 USB/IP 和更新下載。</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>刪除 {0} 舊更新檔案和免費 {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>檢視儲存檔案</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>清理儲存的更新</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>刪除 {0} 檔案並釋放 {1}. 刪除正在使用、修改或無法刪除的 {2} 檔案。</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>管理下載的更新和舊支援檔案。</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>更新清理不能完成。</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>沒有儲存的更新檔案。</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 以前版本(推薦)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>儲存更新</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>儲存更新檔案</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>可以清理</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>只讀</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>更新後自動清理</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>保持一切</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>更新後的應用程式成功啟動後刪除舊檔案。</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>選擇一個號碼</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>無法訪問更新儲存。</value>
+  </data>
 </root>

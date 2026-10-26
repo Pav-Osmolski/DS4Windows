@@ -6550,4 +6550,76 @@ Il backup: </value>
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>Esportazioni selezionate</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>Pulitevi adesso...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>Versioni precedenti da mantenere</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>Conserva i file correnti e il numero selezionato di versioni precedenti per ciascun componente.</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>scritta</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>Non ci sono vecchi file di aggiornamento da pulire.</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>Alcune cartelle non possono essere scansionate. Rifresca per ripristinare.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>Include download riconosciuti DS4Windows, VIIPER, USB/IP e aggiornamenti.</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>Rimuovere {0} vecchi file di aggiornamento e libero {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>Visualizza i file archiviati</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Pulire gli aggiornamenti archiviati</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>Rimozione dei file {0} e rilascio dei file {1}. Rimuovere i file {2} che erano in uso, modificati o non potevano essere rimossi.</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>Gestire aggiornamenti scaricati e file di supporto più vecchi.</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>L'aggiornamento di pulizia non è stato completato.</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>Non ci sono file di aggiornamento memorizzati.</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 versione precedente (consigliato)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>Aggiornamento Storage</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>archiviati file di aggiornamento</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>Può essere pulito</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>Leggi solo</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>Pulizia automatica dopo l'aggiornamento</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>Tieni tutto</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>I file più vecchi vengono rimossi dopo un avvio di successo dell'app aggiornata.</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>Scegli un numero</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>Non è stato possibile accedere all'archiviazione di aggiornamenti.</value>
+  </data>
 </root>

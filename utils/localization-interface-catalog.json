@@ -10424,5 +10424,151 @@
     "files": [
       "DS4Windows/DS4Forms/MainWindow.xaml"
     ]
+  },
+  "UI_00B77B26EF805FA0": {
+    "source": "Clean up now…",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs",
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_0F88B21FB062E41F": {
+    "source": "Previous versions to keep",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_10D36152FB769314": {
+    "source": "Keeps current files and the selected number of previous versions for each component. Profiles and settings are preserved.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_18685C640B42ED54": {
+    "source": "Writable",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_206A57CF90B957D9": {
+    "source": "There are no old update files to clean up.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_32839824A10B577C": {
+    "source": "Some folders could not be scanned. Refresh to retry.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_39E6D9F27FD2310C": {
+    "source": "Includes recognised DS4Windows, VIIPER, USB/IP and updater downloads.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_4BF41910A9472B0E": {
+    "source": "Remove {0} old update files and free {1}?",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_4DAD65EA7CD19103": {
+    "source": "View stored files",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_62F03122DFE37A68": {
+    "source": "Clean up stored updates",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_66A34F5BCC79EE79": {
+    "source": "Removed {0} files and freed {1}. Skipped {2} files that were in use, changed or could not be removed.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_6EBC7FE7289381A2": {
+    "source": "Manage downloaded updates and older support files.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_71CFF61AEB197E8C": {
+    "source": "Update cleanup could not be completed.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_7AC9EEBD3C4A5543": {
+    "source": "There are no stored update files.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_7F481133737773D2": {
+    "source": "1 previous version (recommended)",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_7F6868B2BAC4D0FB": {
+    "source": "Update storage",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_7FA38E74C274B4FB": {
+    "source": "Stored update files",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_8644E9F7A6635925": {
+    "source": "Can be cleaned up",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_8AC767353080EAE7": {
+    "source": "Read only",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_8C7A2C65FFAC2C68": {
+    "source": "Automatically clean up after updating",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_9B80A7419EA5284A": {
+    "source": "Keep all",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_CD1B31048C7CC28C": {
+    "source": "Older files are removed after a successful start of the updated app.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_D1F656AC6C2F9ACD": {
+    "source": "Choose a number",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_FF523D3DC0C2D4E0": {
+    "source": "Update storage could not be accessed.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs",
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
   }
 }

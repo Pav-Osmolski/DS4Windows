@@ -9,6 +9,19 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.51](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.51) - 2026-10-26
+
+#### Update storage
+
+- Add update storage management under **Settings > Updates & tools > Updates**: retain one previous version per component by default, choose none/a custom number/all, see stored and reclaimable space, preview manual cleanup, and inspect stored files. Automatically prune recognised older packages after a successful startup with healthy VIIPER/USB/IP prerequisites. Thanks to [@Jobima1st](https://github.com/Jobima1st) for reporting accumulated update files in [issue #83](https://github.com/Pav-Osmolski/DS4Windows/issues/83).
+- Keep current/future packages, current package-owned files, profiles, settings, backups, unknown files and nested content. Recheck policy and ownership before cleanup, and skip files that are in use, changed or inaccessible. Unknown updater versions are preserved rather than guessed.
+
+#### Interface improvements
+
+- Collapse **Settings & profiles** by default, show a compact location/access summary, and remember the user's expanded state across restarts. Automatically expand read-only folders and pending settings operations so their recovery controls remain visible.
+- Use a standard circular expander arrow with native hover/pressed feedback and a stationary, vertically centred position. Keep the full rounded header highlighted while hovering the arrow, with a separate keyboard-focus outline.
+- Match update storage and Nintendo discovery dividers to the theme's outline colour, remove empty status spacing, and balance the Nintendo divider's margins. Include all six themes and all 24 language packs. Implemented in [PR #84](https://github.com/Pav-Osmolski/DS4Windows/pull/84).
+
 ### [5.0.50](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.50) - 2026-10-25
 
 #### Settings and profile management

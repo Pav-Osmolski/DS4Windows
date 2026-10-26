@@ -6554,4 +6554,76 @@ Backup : </value>
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>Export chọn</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>Hãy dọn dẹp ngay bây giờ...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>Các phiên bản trước để giữ</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>Giữ lại các tập tin hiện tại và số phiên bản trước được chọn cho mỗi thành phần.</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>Viết</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>Không có các tập tin cập nhật cũ để làm sạch.</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>Một số thư mục không thể được quét. Refresh to retry.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>Bao gồm nhận dạng DS4Windows, VIIPER, USB/IP và updater tải xuống.</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>Loại bỏ {0} các tập tin cập nhật cũ và miễn phí {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>Xem các file lưu trữ</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Dọn dẹp các bản cập nhật được lưu trữ</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>Loại bỏ tệp {0} và giải phóng tệp {1}. Loại bỏ tệp {2} đã được sử dụng, thay đổi hoặc không thể xóa.</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>Quản lý các bản cập nhật đã tải xuống và các tệp hỗ trợ cũ hơn.</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>Update cleanup không thể hoàn thành.</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>Không có file update được lưu trữ.</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 phiên bản trước (đề nghị)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>Update lưu trữ</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>Update file lưu trữ</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>Có thể dọn dẹp</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>Đọc chỉ</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>Tự động làm sạch sau khi cập nhật</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>giữ tất cả</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>Các tệp cũ hơn sẽ bị xóa sau khi ứng dụng được cập nhật thành công.</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>Chọn một số</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>Update Storage không thể truy cập được.</value>
+  </data>
 </root>

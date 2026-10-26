@@ -30,6 +30,22 @@ public class NintendoSettingsLayoutTests
                 candidates.Items.Add(new Choice { Label = "Joy-Con 2 (Left) — already associated; reconnect available" });
                 candidates.Items.Add(new Choice { Label = "Switch 2 Pro Controller" });
                 Layout(setup, width, 840);
+                var divider = (Border)setup.FindName("switch2DiscoveryDivider");
+                var associationStatus = (TextBlock)setup.FindName("switch2AssociationStatusText");
+                var refresh = (Button)setup.FindName("switch2AssociationRefreshBtn");
+                var sections = (StackPanel)LogicalTreeHelper.GetParent(divider);
+                var joinHeading = (TextBlock)sections.Children[sections.Children.IndexOf(divider) + 1];
+                Assert.AreEqual(((SolidColorBrush)setup.FindResource("BorderColor")).Color,
+                    ((SolidColorBrush)divider.Background).Color, "Discovery divider must match the themed outlines.");
+                Assert.AreEqual(Visibility.Collapsed, associationStatus.Visibility, "An empty association status must not reserve space above the divider.");
+                double aboveDivider = divider.TranslatePoint(new Point(), setup).Y - refresh.TranslatePoint(new Point(0, refresh.ActualHeight), setup).Y;
+                double belowDivider = joinHeading.TranslatePoint(new Point(), setup).Y - divider.TranslatePoint(new Point(0, divider.ActualHeight), setup).Y;
+                Assert.AreEqual(belowDivider, aboveDivider, 0.5, "The divider must have equal visible spacing above and below.");
+                associationStatus.Text = "Controller associated.";
+                Layout(setup, width, 840);
+                Assert.AreEqual(Visibility.Visible, associationStatus.Visibility, "Association results must still appear when available.");
+                associationStatus.Text = "";
+                Layout(setup, width, 840);
                 FrameworkElement content = (FrameworkElement)setup.FindName("switch2SetupContent");
                 Assert.AreEqual(content.TranslatePoint(new Point(), setup).X,
                     candidates.TranslatePoint(new Point(), setup).X, 1d, "Discovery results must align with the section's left edge.");

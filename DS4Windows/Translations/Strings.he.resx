@@ -6552,4 +6552,76 @@
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>ייצוא נבחרים</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>ניקיון עכשיו...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>גרסאות קודמות לשמור</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>שומר את הקבצים הנוכחיים ואת מספר הגירסאות הקודמות שנבחרו עבור כל רכיב.</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>כתיבה</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>אין קבצי עדכון ישנים לנקות.</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>חלק מהתיקיות לא יכלו להיות סורקות.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>כולל הורדות DS4Windows, VIIPER, USB/IP ו-updater מוכרות.</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>הסר {0} קבצי עדכון ישנים ו-free {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>הצג קבצים מאוחסנים</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>לנקות עדכונים מאוחסנים</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>הוסרה {0} קבצים ושחררו {1}סקיפד {2} קבצים שהיו בשימוש, השתנו או לא יכלו להסיר.</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>ניהול עדכונים שהורדו וקבצי תמיכה ישנים יותר.</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>לא ניתן להשלים את ניקוי העדכון.</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>אין קבצים עדכניים מאוחסנים.</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 גרסה קודמת (מומלץ)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>עדכון אחסון</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>עדכון קבצים</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>ניתן לנקות</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>קרא רק</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>ניקוי אוטומטי לאחר עדכון</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>שמור הכל</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>קבצים ישנים נמחקו לאחר הפעלה מוצלחת של האפליקציה המעודכנת.</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>בחר מספר</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>לא ניתן היה לגשת לאחסון עדכונים.</value>
+  </data>
 </root>

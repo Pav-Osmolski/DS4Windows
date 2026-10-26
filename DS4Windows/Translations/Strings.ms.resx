@@ -6576,4 +6576,76 @@ Sokongan : </value>
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>Pengeksport dipilih</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>Bersihkan sekarang...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>Versi terdahulu untuk disimpan</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>Menyimpan fail semasa dan bilangan versi terdahulu yang dipilih untuk setiap komponen. profil dan tetapan disimpan.</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>Penulisan</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>Tiada fail update lama untuk dibersihkan.</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>Sesetengah folder tidak boleh dipindai. Refresh untuk retry.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>Termasuk pengenalan DS4Windows, VIIPER, USB/IP dan muat turun updater.</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>Menghapuskan {0} fail kemas kini lama dan percuma {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>Lihat fail yang disimpan</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Membersihkan kemas kini yang disimpan</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>Menghapuskan {0} fail dan dibebaskan {1}· Skipped {2} fail yang sedang digunakan, diubah atau tidak boleh dipadamkan.</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>Menguruskan kemas kini yang dimuat turun dan fail sokongan lama.</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>Pembersihan pembaharuan tidak boleh diselesaikan.</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>Tiada fail kemas kini disimpan.</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 versi terdahulu (disyorkan)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>Pembaruan Penyimpanan</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>Menyimpan fail kemas kini</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>boleh dibersihkan</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>Baca sahaja</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>Membersihkan secara automatik selepas kemas kini</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>simpan semua</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>Fail yang lebih tua dipadamkan selepas memulakan aplikasi yang dikemas kini dengan berjaya.</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>Pilih nombor</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>Penyimpanan kemas kini tidak boleh diakses.</value>
+  </data>
 </root>

@@ -635,6 +635,7 @@ Suspend support not enabled.", true);
 
         private void ControlServiceStarted(object sender, EventArgs e)
         {
+            Dispatcher.BeginInvoke((Action)ScheduleUpdateCleanup);
             if (Global.SwipeProfiles)
             {
                 ChangeHotkeysStatus(true);
