@@ -2185,6 +2185,10 @@ Suspend support not enabled.", true);
 
         private void MainDS4Window_Closed(object sender, EventArgs e)
         {
+            // The window is closed: finish only its outstanding presentation
+            // preference write, with a bound, before the process can exit.
+            if (settingsStorageControl != null && !settingsStorageControl.DisclosureSaved.Wait(TimeSpan.FromSeconds(2)))
+                NLog.LogManager.GetLogger("SettingsStorage").Warn("Timed out remembering Settings & profiles expansion state during shutdown.");
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= TrayDisplaySettingsChanged;
             logAutoScroller?.Dispose();
             DisposePowerLifecycle();

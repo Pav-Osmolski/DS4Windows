@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Make **Settings & profiles** expand/collapse immediately. Debounce and coalesce remembered-state writes off the UI thread, skip writes when the final choice matches the saved state, and keep presentation-state persistence separate from location/migration and update-retention preferences. Retain older saved choices and finish pending writes with a bound during application shutdown.
 
 ## Released
 

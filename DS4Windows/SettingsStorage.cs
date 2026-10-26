@@ -26,7 +26,7 @@ internal sealed class SettingsStorage
     private static readonly string[] DataDirectories = { "Profiles", "Nintendo", "Switch2", "BatteryAlertSounds", "Macros" };
     private const long MaximumBytes = 512L * 1024 * 1024;
     private const int MaximumFiles = 10000;
-    private readonly string program, appData, stateDirectory, preferencePath;
+    private readonly string program, appData, stateDirectory, preferencePath, disclosurePath;
     internal Action<int> AfterPublishForTest;
 
     internal SettingsStorage(string program, string appData, string preferences)
@@ -36,6 +36,7 @@ internal sealed class SettingsStorage
         string identity = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(this.program.ToUpperInvariant())))[..24];
         stateDirectory = Path.Combine(Path.GetFullPath(preferences), identity);
         preferencePath = Path.Combine(stateDirectory, "location.json");
+        disclosurePath = Path.Combine(stateDirectory, "profiles-disclosure.json");
     }
 
     internal string Root(SettingsFolder folder) => folder switch
@@ -91,12 +92,29 @@ internal sealed class SettingsStorage
     }
     internal SettingsFolder? Selected => Read().Active;
     internal bool HasPending => Read().Pending != null;
-    internal bool StorageExpanded => Read().StorageExpanded;
+    private sealed class DisclosurePreference
+    {
+        public int Version { get; set; } = 1;
+        public bool Expanded { get; set; }
+    }
+    internal bool StorageExpanded
+    {
+        get
+        {
+            // Keep older choices, but isolate subsequent background UI-state
+            // writes from migration and update-retention transactions.
+            if (!File.Exists(disclosurePath)) return Read().StorageExpanded;
+            RejectLink(disclosurePath);
+            var preference = JsonSerializer.Deserialize<DisclosurePreference>(File.ReadAllText(disclosurePath));
+            if (preference == null || preference.Version != 1) throw new InvalidDataException("Unsupported disclosure preference.");
+            return preference.Expanded;
+        }
+    }
     internal void SetStorageExpanded(bool value)
     {
-        var preference = Read();
-        preference.StorageExpanded = value;
-        Save(preferencePath, preference);
+        RejectLink(stateDirectory);
+        RejectLink(disclosurePath);
+        Save(disclosurePath, new DisclosurePreference { Expanded = value });
     }
     internal (int Keep, bool Automatic) UpdateRetention
     {
