@@ -143,7 +143,7 @@ The build and release improvements are tracked in [PR #72](https://github.com/Pa
 #### Fixed
 
 - Finish reading VIIPER management replies at their newline terminator instead of waiting for the connection to close. A connection reset after a complete reply could otherwise discard a successful response and trigger virtual-controller cleanup. Preserve response validation and failures for incomplete or damaged encrypted replies. Thanks to [@cns00](https://github.com/cns00) for the reports and diagnostic logs. ([Issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), [upstream issue #153](https://github.com/hbashton/DS4Windows/issues/153))
-- Add regression coverage for completed replies followed by connection resets, fragmented encrypted records, incomplete or invalid responses, and TCP connections that stay open after sending a reply. The maintainer tested the preview successfully; issue #66 remains open pending confirmation on the reporter's computer.
+- Add regression coverage for completed replies followed by connection resets, fragmented encrypted records, incomplete or invalid responses, and TCP connections that stay open after sending a reply. The maintainer tested the preview successfully; [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66) remains open pending confirmation on the reporter's computer.
 
 #### Updating
 
