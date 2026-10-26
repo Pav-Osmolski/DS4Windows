@@ -33,7 +33,7 @@ Assert-Throws { Get-LabPorts "Port 1: device in use`n -> usbip://localhost:49461
 Assert-Throws { Get-LabPorts 'Port 1: device in use' }
 Assert-Throws { Get-LabPorts "Port 1: device in use`n -> usbip://localhost:49461/1-1`nPort 1: device in use`n -> usbip://localhost:49461/1-1" }
 Assert-Throws { Get-LabPorts "Port 1: device in use`n -> usbip://user@localhost:49461/1-1" }
-$reading = [pscustomobject]@{ axes = @(0, 0, 32767, -32767, 0, 0); buttons = 1; hat = 8; axisCount = 6; buttonCount = 12; hatCount = 1 }
+$reading = [pscustomobject]@{ axes = @(0, 0, 32767, -32767, 0, 0); buttons = 1; hat = 8; axisCount = 6; buttonCount = 16; hatCount = 1 }
 $expected = [pscustomobject]@{ axes = $reading.axes; buttons = 1; hat = 8 }
 $probe = [pscustomobject]@{ error = $false; directInput = @($reading); winMM = @($reading) }
 Assert (@(Get-LabReadingErrors $probe $expected).Count -eq 0) 'Matching readings rejected.'

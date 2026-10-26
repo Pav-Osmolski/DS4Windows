@@ -15,7 +15,8 @@ internal sealed class GenericJoystickProfileSettings
         Options.Validate();
         var node = document.CreateElement("GenericJoystick");
         void Set(string name, object value) => node.SetAttribute(name, Convert.ToString(value, CultureInfo.InvariantCulture));
-        Set("Version", 1); Set("Layout", Options.Layout); Set("TriggerMode", Options.TriggerMode);
+        Set("Version", 2); Set("Layout", Options.Layout); Set("TriggerMode", Options.TriggerMode);
+        Set("ButtonMap", Options.ButtonMap.ToString("X16", CultureInfo.InvariantCulture));
         Set("ButtonCount", Options.ButtonCount); Set("ButtonThreshold", Options.ButtonThreshold);
         Set("InvertLeftTrigger", Options.InvertLeftTrigger); Set("InvertRightTrigger", Options.InvertRightTrigger);
         Set("InvertCombinedAxis", Options.InvertCombinedAxis);
@@ -29,14 +30,21 @@ internal sealed class GenericJoystickProfileSettings
         try
         {
             string Get(string name) => node.Attributes?[name]?.Value ?? throw new FormatException("Missing joystick field.");
-            if (Get("Version") != "1") throw new FormatException("Unknown joystick profile version.");
+            string version = Get("Version");
+            int count = int.Parse(Get("ButtonCount"), CultureInfo.InvariantCulture);
+            if (version is not ("1" or "2") || (version == "1" ? count is not (12 or 16) : count != 16))
+                throw new FormatException("Unknown joystick profile version or button count.");
+            // Preserve all old assignments; newly exposed buttons start unassigned
+            // when migrating an existing twelve-button profile.
+            ulong map = version == "2" ? ulong.Parse(Get("ButtonMap"), NumberStyles.HexNumber, CultureInfo.InvariantCulture)
+                : count == 12 ? 0x0000CBA987654321UL : GenericJoystickOptions.Default.ButtonMap;
             var options = new GenericJoystickOptions(
                 Enum.Parse<GenericJoystickLayout>(Get("Layout"), false),
                 Enum.Parse<GenericJoystickTriggerMode>(Get("TriggerMode"), false),
-                int.Parse(Get("ButtonCount"), CultureInfo.InvariantCulture),
+                16,
                 int.Parse(Get("ButtonThreshold"), CultureInfo.InvariantCulture),
                 bool.Parse(Get("InvertLeftTrigger")), bool.Parse(Get("InvertRightTrigger")),
-                bool.Parse(Get("InvertCombinedAxis")));
+                bool.Parse(Get("InvertCombinedAxis")), map);
             options.Validate();
             result.Options = options;
         }

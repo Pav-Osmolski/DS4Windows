@@ -11,21 +11,34 @@ namespace DS4Windows
     internal readonly record struct GenericJoystickOptions(
         GenericJoystickLayout Layout = GenericJoystickLayout.Legacy,
         GenericJoystickTriggerMode TriggerMode = GenericJoystickTriggerMode.Centred,
-        int ButtonCount = 12,
+        int ButtonCount = 16,
         int ButtonThreshold = 128,
         bool InvertLeftTrigger = false,
         bool InvertRightTrigger = false,
-        bool InvertCombinedAxis = false)
+        bool InvertCombinedAxis = false,
+        ulong ButtonMap = 0x00EDCBA987654321UL)
     {
         public static GenericJoystickOptions Default => new(
-            GenericJoystickLayout.Legacy, GenericJoystickTriggerMode.Centred, 12, 128);
+            GenericJoystickLayout.Legacy, GenericJoystickTriggerMode.Centred, 16, 128);
+
+        // Four bits per output button: 0 is unassigned, 1..14 select a mapped
+        // source. Value semantics keep profile/reuse comparisons allocation-free.
+        public int SourceFor(int output) => (int)((ButtonMap >> (output * 4)) & 15);
+        public GenericJoystickOptions WithButtonSource(int output, int source)
+        {
+            if (output < 0 || output >= 16 || source < 0 || source > 14)
+                throw new ArgumentOutOfRangeException();
+            return this with { ButtonMap = (ButtonMap & ~(15UL << (output * 4))) | ((ulong)source << (output * 4)) };
+        }
 
         public void Validate()
         {
             if (!Enum.IsDefined(Layout) || !Enum.IsDefined(TriggerMode) ||
-                (ButtonCount != 12 && ButtonCount != 16) ||
+                ButtonCount != 16 ||
                 ButtonThreshold < 1 || ButtonThreshold > 255)
                 throw new ArgumentException("Invalid experimental joystick configuration.");
+            for (int output = 0; output < 16; output++)
+                if (SourceFor(output) > 14) throw new ArgumentException("Unknown joystick button source.");
             if (TriggerMode == GenericJoystickTriggerMode.Combined &&
                 (InvertLeftTrigger || InvertRightTrigger))
                 throw new ArgumentException("Use combined-axis inversion for combined triggers.");
@@ -84,7 +97,7 @@ namespace DS4Windows
             if (mapped.L3) buttons |= 1 << 10;
             if (mapped.R3) buttons |= 1 << 11;
             if (mapped.PS) buttons |= 1 << 12;
-            if (mapped.TouchButton) buttons |= 1 << 13;
+            if (mapped.OutputTouchButton) buttons |= 1 << 13;
             byte dpad = (byte)((mapped.DpadUp ? 1 : 0) | (mapped.DpadRight ? 2 : 0) |
                 (mapped.DpadDown ? 4 : 0) | (mapped.DpadLeft ? 8 : 0));
             return Build(new GenericJoystickInput(mapped.LX, mapped.LY, mapped.RX, mapped.RY,
@@ -113,13 +126,21 @@ namespace DS4Windows
                     break;
             }
 
-            ushort buttons = (ushort)(mapped.Buttons & (options.ButtonCount == 12 ? 0x0F3F : 0x3F3F));
+            ushort buttons = (ushort)(mapped.Buttons & 0x3F3F);
             // Do not inherit Sony's digital trigger followers in analog modes.
             if (options.TriggerMode == GenericJoystickTriggerMode.Buttons)
             {
                 if (mapped.L2 >= options.ButtonThreshold) buttons |= 1 << 6;
                 if (mapped.R2 >= options.ButtonThreshold) buttons |= 1 << 7;
             }
+            ushort assigned = 0;
+            for (int output = 0; output < 16; output++)
+            {
+                int source = options.SourceFor(output);
+                if (source != 0 && (buttons & (1 << (source - 1))) != 0)
+                    assigned |= (ushort)(1 << output);
+            }
+            buttons = assigned;
             byte hat = Hat((mapped.Dpad & 1) != 0, (mapped.Dpad & 2) != 0, (mapped.Dpad & 4) != 0, (mapped.Dpad & 8) != 0);
             return options.Layout == GenericJoystickLayout.Legacy
                 ? new GenericJoystickFrame(lx, ly, rx, lt, rt, ry, buttons, hat)

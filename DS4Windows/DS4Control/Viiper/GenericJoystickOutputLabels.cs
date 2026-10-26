@@ -4,7 +4,7 @@ namespace DS4Windows;
 // mapping targets must not promise a particular Z/Rx/Ry role.
 internal static class GenericJoystickOutputLabels
 {
-    internal const string DiagramHint = "Generic joystick: the diagram shows mapping targets. Buttons 1-6 and 9-12 follow the numbered labels; the selected joystick layout and trigger mode determine stick axes and L2/R2 output. Guide and touchpad click are not sent by the twelve-button device.";
+    internal const string DiagramHint = "Generic joystick: the diagram shows mapping targets. The diagram labels show default output assignments; the selected joystick layout and trigger mode determine stick axes and L2/R2 output. The fixed device has sixteen output buttons. The assignments below are the default; the profileâ€™s numbered button assignments can override them.";
 
     internal static string Get(X360Controls control) => control switch
     {
@@ -32,8 +32,8 @@ internal static class GenericJoystickOutputLabels
         X360Controls.DpadRight => "POV right",
         X360Controls.DpadDown => "POV down",
         X360Controls.DpadLeft => "POV left",
-        X360Controls.Guide => "Guide (not sent by twelve-button joystick)",
-        X360Controls.TouchpadClick => "Touchpad click (not sent by twelve-button joystick)",
+        X360Controls.Guide => "Button 13 (PS / Guide)",
+        X360Controls.TouchpadClick => "Button 14 (touchpad click)",
         X360Controls.None => "Unassigned",
         _ => Global.xboxDefaultNames.TryGetValue(control, out var name) ? name : "Unassigned",
     };

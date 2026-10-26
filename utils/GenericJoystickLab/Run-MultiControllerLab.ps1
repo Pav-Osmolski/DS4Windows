@@ -1,4 +1,4 @@
-﻿param([switch]$ValidateOnly)
+param([switch]$ValidateOnly)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 . "$PSScriptRoot/Lab.Helpers.ps1"

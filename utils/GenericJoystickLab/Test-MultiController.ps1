@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 . "$PSScriptRoot/Lab.Helpers.ps1"
 . "$PSScriptRoot/MultiController.Helpers.ps1"
-function Reading($Id,$Axes) { [pscustomobject]@{instance=$Id; axes=$Axes; buttons=0; hat=8; axisCount=6; buttonCount=12; hatCount=1} }
+function Reading($Id,$Axes) { [pscustomobject]@{instance=$Id; axes=$Axes; buttons=0; hat=8; axisCount=6; buttonCount=16; hatCount=1} }
 $a = Reading 'A' @(100,0,0,0,0,0); $b = Reading 'B' @(-100,0,0,0,0,0)
 $expected = @([pscustomobject]@{name='A';state=$a},[pscustomobject]@{name='B';state=$b})
 $probe = [pscustomobject]@{error=$false;directInput=@($b,$a);winMM=@($a,$b)}
@@ -37,7 +37,7 @@ foreach ($function in $ast.FindAll({param($node) $node -is [Management.Automatio
 $root = $PSScriptRoot; $run = Join-Path ([IO.Path]::GetTempPath()) ('joystick-lab-test-' + [Guid]::NewGuid().ToString('N'))
 $null = New-Item -ItemType Directory $run
 $keyPath='unused'; $apiPort=12345; $devices=@{}; $cleanupErrors=New-Object 'Collections.Generic.List[string]'
-$plan=[pscustomobject]@{options=[pscustomobject]@{version=1;experimental=$true;buttonCount=12;neutralAxes=@(0,0,0,0,0,0)}}
+$plan=[pscustomobject]@{options=[pscustomobject]@{version=1;experimental=$true;buttonCount=16;neutralAxes=@(0,0,0,0,0,0)}}
 $allocatedBus=0; $failReceipt=$false; $removed=New-Object 'Collections.Generic.List[int]'; $stopped=New-Object 'Collections.Generic.List[int]'
 function Start-LabProcess {
     $script:allocatedBus++

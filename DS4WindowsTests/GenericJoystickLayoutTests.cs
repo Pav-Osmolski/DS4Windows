@@ -57,11 +57,25 @@ public class GenericJoystickLayoutTests
                     Point point = control.TranslatePoint(new Point(), root);
                     Assert.IsTrue(point.X >= 0 && point.X + control.ActualWidth <= width + 1, "Joystick control extends beyond the card.");
                 }
+                var assignments = Logical(root).OfType<Expander>().Single();
+                assignments.IsExpanded = true;
+                root.Measure(new Size(width, double.PositiveInfinity));
+                root.Arrange(new Rect(0, 0, width, root.DesiredSize.Height)); root.UpdateLayout();
+                var numbered = Visual(root).OfType<ComboBox>().Where(c => c.DataContext is JoystickButtonAssignment).ToArray();
+                Assert.AreEqual(16, numbered.Length, "Every numbered output needs an editable source.");
+                foreach (var combo in numbered)
+                {
+                    Assert.AreEqual(15, combo.Items.Count);
+                    Point position = combo.TranslatePoint(new Point(), root);
+                    Assert.IsTrue(position.X >= 0 && position.X + combo.ActualWidth <= width + 1);
+                }
+                numbered[15].SelectedIndex = 13; root.UpdateLayout();
+                Assert.AreEqual(13, Global.GenericJoystickSettings[slot].Options.SourceFor(15));
                 string output = Environment.GetEnvironmentVariable("DS4W_JOYSTICK_UI_ARTIFACTS");
                 if (!string.IsNullOrEmpty(output))
                 {
                     Directory.CreateDirectory(output);
-                    var bitmap = new RenderTargetBitmap((int)width, 620, 96, 96, PixelFormats.Pbgra32);
+                    var bitmap = new RenderTargetBitmap((int)width, (int)Math.Ceiling(root.ActualHeight), 96, 96, PixelFormats.Pbgra32);
                     bitmap.Render(root);
                     var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
                     using var file = File.Create(Path.Combine(output, $"joystick-{theme}-{width}.png")); encoder.Save(file);
@@ -69,6 +83,15 @@ public class GenericJoystickLayoutTests
             }
             finally { Global.GenericJoystickSettings[slot] = previous; }
         });
+    }
+
+    private static IEnumerable<DependencyObject> Visual(DependencyObject root)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+        {
+            var child = VisualTreeHelper.GetChild(root, i); yield return child;
+            foreach (var item in Visual(child)) yield return item;
+        }
     }
 
     private static IEnumerable<DependencyObject> Logical(DependencyObject root)

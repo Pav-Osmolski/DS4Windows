@@ -22,6 +22,13 @@ foreach (var mode in Enum.GetValues<GenericJoystickTriggerMode>())
         Add("Right stick left/up", new() { RX = 0, RY = 0 });
         Add("Right stick right/down", new() { RX = 255, RY = 255 });
         Add("All ten non-trigger buttons", new() { Cross = true, Circle = true, Square = true, Triangle = true, L1 = true, R1 = true, Share = true, Options = true, L3 = true, R3 = true });
+        Add("PS and touchpad click", new() { PS = true, OutputTouchButton = true });
+        for (int button = 0; button < 16; button++)
+        {
+            var frame = GenericJoystickMapping.Neutral(options) with { Buttons = (ushort)(1 << button) };
+            byte[] wire = new byte[GenericJoystickFrame.Size]; frame.WriteWire(wire);
+            steps.Add(new { label = $"Output button {button + 1} only", wire = Convert.ToHexString(wire), axes = frame.AxisValues, buttons = frame.Buttons, hat = frame.Hat });
+        }
         Add("Hat north-east", new() { DpadUp = true, DpadRight = true });
         Add("Hat south-west", new() { DpadDown = true, DpadLeft = true });
     }
@@ -33,7 +40,7 @@ foreach (var mode in Enum.GetValues<GenericJoystickTriggerMode>())
     plans.Add(new
     {
         name = $"{layout} layout / {mode} triggers",
-        options = new { version = 1, experimental = true, buttonCount = 12, neutralAxes = neutral.AxisValues },
+        options = new { version = 1, experimental = true, buttonCount = 16, neutralAxes = neutral.AxisValues },
         neutral = new { axes = neutral.AxisValues, buttons = 0, hat = 8 },
         steps
     });
@@ -50,6 +57,6 @@ namespace DS4Windows
         public byte LX = 128, LY = 128, RX = 128, RY = 128, L2, R2;
         public bool Cross, Circle, Square, Triangle, L1, R1, Share, Options,
             L3, R3, DpadUp, DpadRight, DpadDown, DpadLeft;
-        public bool PS = false, TouchButton = false;
+        public bool PS = false, OutputTouchButton = false;
     }
 }

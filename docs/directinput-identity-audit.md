@@ -1,5 +1,12 @@
 # DirectInput joystick identity investigation
 
+## Current design
+
+The current feature uses a fixed sixteen-button device with per-profile numbered
+assignments. See [the current design and migration rules](directinput-development.md#fixed-sixteen-button-design-2026-10-26).
+Earlier dated evidence retains its original scope; native/game acceptance of the
+sixteen-button candidate is still required before release.
+
 Date: 2026-10-15. Scope: the paired generic-joystick feature branches, USB/IP
 0.9.8.1, and the owner's Windows build 26300. Status: input isolation validated;
 DirectInput GUID persistence during output removal remains unresolved.

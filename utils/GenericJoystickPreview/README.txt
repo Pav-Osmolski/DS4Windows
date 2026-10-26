@@ -28,7 +28,7 @@ folder layout. The lab deliberately disables automatic HidHide configuration.
    The launcher cleans up its imports, stops its backend and prints a report ZIP
    under results. Inspect logs before sharing; keys/profiles are excluded.
 
-Expected first-stage output: six axes, twelve buttons, one direction hat.
+Expected first-stage output: six axes, sixteen buttons, one direction hat.
 No force feedback, virtual rumble, audio or XInput. Only this matched portable
 preview enables the option. USB DualSense Windows tests and initial gameplay
 in BeamNG.drive and current Steam FlatOut 2 passed; other configurations still

@@ -11,7 +11,7 @@ internal static class GenericJoystickContract
             args.TryGetProperty("contract", out var contract) && contract.ValueKind == JsonValueKind.String && contract.GetString() == "genericjoystick-v1" &&
             args.TryGetProperty("version", out var version) && version.ValueKind == JsonValueKind.Number && version.TryGetInt32(out int v) && v == 1 &&
             args.TryGetProperty("experimental", out var experimental) && experimental.ValueKind == JsonValueKind.True &&
-            args.TryGetProperty("buttonCount", out var count) && count.ValueKind == JsonValueKind.Number && count.TryGetInt32(out int buttons) && buttons == 12;
+            args.TryGetProperty("buttonCount", out var count) && count.ValueKind == JsonValueKind.Number && count.TryGetInt32(out int buttons) && buttons == 16;
         if (!valid || !args.TryGetProperty("neutralAxes", out var axes) || axes.ValueKind != JsonValueKind.Array || axes.GetArrayLength() != 6)
             throw new IOException("VIIPER does not support the required experimental joystick contract. Use the complete matched DirectInput preview package, including its VIIPER backend.");
         if (expectedInstanceId != null && (!args.TryGetProperty("instanceId", out var instanceId) ||

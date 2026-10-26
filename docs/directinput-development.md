@@ -1,8 +1,52 @@
 # Generic joystick development
 
+## Fixed sixteen-button design (2026-10-26)
+
+The current DS4Windows feature uses one fixed shape: six axes, sixteen buttons
+and one POV hat. Earlier dated results below describe their original test builds;
+they do not establish native Windows or game acceptance of the sixteen-button
+candidate. Repeat those checks with the current matched preview before release.
+
+New profiles retain buttons 1–12 in their existing order, with PS/Guide on 13,
+touchpad click on 14 and 15–16 unassigned. The numbered-button editor can assign
+any of the fourteen mapped input channels to any output, duplicate an assignment,
+or leave it unassigned. Capacity never changes with the physical controller or
+profile. Inputs run through normal DS4Windows mapping first; missing inputs stay
+inactive. Touchpad output respects the mapper's output-click policy. Trigger
+button sources require Buttons trigger mode. A Panther XL game preset remains
+separate work; this change does not yet add its axis arrangement or preset.
+
+Profile schema 2 stores all sixteen assignments. Schema-1 twelve-button profiles
+upgrade to sixteen with outputs 13–16 unassigned, retaining their old behaviour.
+Unknown versions, invalid sources and mismatched backend counts fail closed.
+The existing sixteen-button backend uses lab PID `FFFF:D110`; the requested
+production identity `1209:D10C` remains pending and must not be used yet. The
+PID request now describes the fixed sixteen-button production descriptor.
+Changing from the earlier lab device can require rebinding games.
+
+Normal activation stays gated to the matched portable preview. Supporting every
+currently supported physical controller means using the shared mapped-input
+path, not requiring sixteen physical buttons. Synthetic checks cannot certify
+every model/transport or every game; native and physical acceptance remain release
+gates, along with normal installation, HidHide and multi-controller identity work.
+
+
 Status: experimental foundation on `feature/directinput-output` in both
 DS4Windows and VIIPER. This is **not yet a selectable Profile Editor output**
 and is not included in the current release.
+
+### Validation of this change
+
+- Full Release/x64 application suite: 7,883 passed, 16 existing opt-in skips.
+- Final focused joystick checks: 38 passed, including all fourteen mapped input
+  channels routed to all sixteen outputs, release/unassigned behaviour, profile
+  migration, malformed metadata and light/dark expanded-editor rendering.
+- Synthetic runner orchestration: 224 expected observations, plus timeout,
+  cleanup/ownership and report-privacy cases. These use mocked Windows readers;
+  they are not a native sixteen-button attachment or game acceptance result.
+- VIIPER normal and release-mode suites passed. Its new sixteen-button case
+  checks every press/release bit and neutralization on producer loss; descriptor
+  parsing already verifies sixteen declared button usages.
 
 ## Implemented foundation
 

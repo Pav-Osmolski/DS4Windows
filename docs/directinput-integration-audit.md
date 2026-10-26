@@ -1,5 +1,12 @@
 # Generic joystick integration audit — 2026-10-15
 
+## Current design
+
+The current feature uses a fixed sixteen-button device with per-profile numbered
+assignments. See [the current design and migration rules](directinput-development.md#fixed-sixteen-button-design-2026-10-26).
+Earlier dated evidence retains its original scope; native/game acceptance of the
+sixteen-button candidate is still required before release.
+
 Scope: the twelve-button output on `feature/directinput-output`, following the
 owner's successful r4 preview check. This is a source review with targeted
 regression tests; it does not establish normal-installation hardware behaviour.

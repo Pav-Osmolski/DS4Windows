@@ -33,8 +33,8 @@ FIRST LAUNCH AND PROFILE
    on Dynamic. Verify the Overview shows the generic joystick output.
 4. Open Windows joy.cpl. Select VIIPER Experimental Legacy Joystick rather than
    Wireless Controller/the physical pad. Test sticks, triggers, buttons and POV.
-   Expect six axes, twelve buttons and a direction hat. Buttons 7/8 are reserved
-   for Buttons trigger mode; PS/Guide and touchpad click have no native button.
+   Expect six axes, sixteen buttons and a direction hat. Buttons 7/8 are reserved
+   for Buttons trigger mode; PS/Guide defaults to 13 and touchpad click to 14.
 
 LEGACY GAME TEST
 
@@ -108,3 +108,9 @@ There is no XInput, force feedback/virtual rumble, audio or sixteen-button mode.
 Two-device synthetic input isolation passed, but removing the first device
 changed the remaining device's DirectInput GUID/slot on the tested machine.
 Stable multi-controller game bindings are not promised. Start with one device.
+
+Current device: fixed sixteen buttons. PS/Guide defaults to 13, touchpad click
+to 14, and 15/16 are unassigned. The numbered-button assignments in Profile
+Editor can reassign or clear any output. Existing twelve-button profiles retain
+their previous mappings with new outputs unassigned. The lab identity changes;
+existing game bindings may need to be recreated. This is still a testing preview.

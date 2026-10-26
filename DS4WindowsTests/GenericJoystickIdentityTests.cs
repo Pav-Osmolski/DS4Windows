@@ -68,7 +68,7 @@ public class GenericJoystickIdentityTests
     public void BackendMustEchoTheRequestedInstanceBeforeInputAdmission()
     {
         const string identity = "0123456789ABCDEF0123456789ABCDEF";
-        const string response = "{\"contract\":\"genericjoystick-v1\",\"version\":1,\"experimental\":true,\"buttonCount\":12,\"neutralAxes\":[0,0,0,0,0,0],\"inputConfigured\":true,\"instanceId\":\"0123456789ABCDEF0123456789ABCDEF\"}";
+        const string response = "{\"contract\":\"genericjoystick-v1\",\"version\":1,\"experimental\":true,\"buttonCount\":16,\"neutralAxes\":[0,0,0,0,0,0],\"inputConfigured\":true,\"instanceId\":\"0123456789ABCDEF0123456789ABCDEF\"}";
         using var matching = JsonDocument.Parse(response);
         Assert.IsTrue(GenericJoystickContract.ReadConfigured(matching.RootElement, new short[6], identity));
         Assert.ThrowsExactly<IOException>(() => GenericJoystickContract.ReadConfigured(matching.RootElement, new short[6], new string('F', 32)));

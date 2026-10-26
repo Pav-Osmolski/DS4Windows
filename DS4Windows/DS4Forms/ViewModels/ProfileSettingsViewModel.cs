@@ -1311,12 +1311,19 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
 
         public bool ExperimentalJoystickAvailable => PortableLabContext.IsActive;
+        private System.Collections.Generic.IReadOnlyList<JoystickButtonAssignment> joystickButtonAssignments;
+        public System.Collections.Generic.IReadOnlyList<JoystickButtonAssignment> JoystickButtonAssignments =>
+            joystickButtonAssignments ??= Enumerable.Range(0, 16).Select(index =>
+                new JoystickButtonAssignment(index, () => JoystickOptions, SetJoystickOptions)).ToArray();
         private GenericJoystickOptions JoystickOptions => Global.GenericJoystickSettings[device].Options;
         private void SetJoystickOptions(GenericJoystickOptions value)
         {
             value.Validate();
             var settings = Global.GenericJoystickSettings[device];
+            if (settings.Valid && settings.Options == value) return;
             settings.Options = value; settings.Valid = true;
+            if (joystickButtonAssignments != null)
+                foreach (var assignment in joystickButtonAssignments) assignment.Refresh();
             JoystickLayoutIndexChanged?.Invoke(this, EventArgs.Empty);
             JoystickTriggerModeIndexChanged?.Invoke(this, EventArgs.Empty);
             JoystickAxisHintChanged?.Invoke(this, EventArgs.Empty);

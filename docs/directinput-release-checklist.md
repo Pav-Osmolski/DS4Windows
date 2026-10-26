@@ -1,6 +1,13 @@
 # Generic joystick release preparation
 
-Status: **working twelve-button preview; not ready for a normal release**.
+## Current design
+
+The current feature uses a fixed sixteen-button device with per-profile numbered
+assignments. See [the current design and migration rules](directinput-development.md#fixed-sixteen-button-design-2026-10-26).
+Earlier dated evidence retains its original scope; native/game acceptance of the
+sixteen-button candidate is still required before release.
+
+Status: **fixed sixteen-button feature; native acceptance pending; not ready for a normal release**.
 The paired `feature/directinput-output` branches remain the development path.
 Do not remove the portable-lab gate or replace the released backend independently.
 
@@ -41,8 +48,8 @@ automated checks and the distinction between logs and user observations.
   submitted on 2026-10-15. Allocation remains pending.
 - [ ] Confirm acceptance and record the registry entry/request URL. The proposed
   `1209:D10C` is **not assigned**. Existing `FFFF:D10C`/`FFFF:D110` remain lab IDs.
-- [ ] Change only the approved twelve-button descriptor. Leave sixteen buttons
-  lab-only; it needs separate validation and a different approved identity.
+- [ ] Freeze the approved sixteen-button descriptor and validate its native
+  enumeration and game bindings before enabling normal activation.
 - [ ] Freeze the production descriptor, strings and versioning policy; document
   that old preview game bindings may need to be recreated for the new identity.
 - [ ] Repeat native enumeration, resting-axis checks and binding persistence
@@ -53,7 +60,7 @@ automated checks and the distinction between logs and user observations.
 
 The allocation, saved-profile and mapped-input paths already support the preview.
 The Profile Editor and Overview show it, but deliberately prevent normal-mode
-activation. Backend creation verifies the versioned joystick contract, twelve
+activation. Backend creation verifies the versioned joystick contract, sixteen
 buttons, requested resting axes and accepted native USB configuration.
 
 - [ ] Admit normal activation only with the approved identity and the matched,
@@ -95,7 +102,7 @@ activation is available, check:
 - [ ] Test a clean install, upgrade, repair and portable extraction, without
   changing an existing user's output selection or enabling extra device support.
 - [ ] Publish setup guidance, axis-layout tables and tested game configurations.
-  State input-only support, no force feedback/audio, twelve buttons and limits of
+  State input-only support, no force feedback/audio, sixteen buttons and limits of
   evidence. NFS Underground 2, Serious Sam and Jedi Knight remain unverified.
 - [ ] Supply the matched candidate for owner testing before merge/release approval.
 

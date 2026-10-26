@@ -1,6 +1,13 @@
 # Generic joystick: remaining acceptance tests
 
-Use this checklist once a matched normal candidate has the approved twelve-button
+## Current design
+
+The current feature uses a fixed sixteen-button device with per-profile numbered
+assignments. See [the current design and migration rules](directinput-development.md#fixed-sixteen-button-design-2026-10-26).
+Earlier dated evidence retains its original scope; native/game acceptance of the
+sixteen-button candidate is still required before release.
+
+Use this checklist once a matched normal candidate has the approved sixteen-button
 USB identity and verified backend pins. The current portable preview bypasses
 automatic HidHide and cannot validate these installation tests. Do not replace
 the released backend by hand to create a candidate.
@@ -17,7 +24,7 @@ multi-controller binding stability.
 ## Normal candidate installation and upgrade
 
 1. On a clean test installation, install the matched candidate using its normal
-   setup. Confirm normal startup, backend verification and twelve-button joystick
+   setup. Confirm normal startup, backend verification and sixteen-button joystick
    creation. Record any reboot request and resume through the normal setup path.
 2. Separately upgrade an existing installation containing Xbox/Sony profiles.
    Check profile names, selected outputs, mappings and settings before selecting

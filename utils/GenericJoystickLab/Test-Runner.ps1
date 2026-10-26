@@ -64,7 +64,7 @@ function Start-LabProcess([string]$File, [string[]]$Arguments, [string]$Director
 function Read-LabReply($Process, [int]$Timeout = 15000) {
     if ($Process.PSObject.Properties['Kind'] -and $Process.Kind -eq 'probe') {
         if ($env:LAB_MOCK_SCENARIO -eq 'probe-failure') { throw 'Simulated probe timeout.' }
-        $reading = [pscustomobject]@{ axes = $script:MockExpected.axes; buttons = $script:MockExpected.buttons; hat = $script:MockExpected.hat; axisCount = 6; buttonCount = 12; hatCount = 1 }
+        $reading = [pscustomobject]@{ axes = $script:MockExpected.axes; buttons = $script:MockExpected.buttons; hat = $script:MockExpected.hat; axisCount = 6; buttonCount = 16; hatCount = 1 }
         return [pscustomobject]@{ kind = 'reading'; error = $false; directInput = @($reading); winMM = @($reading) }
     }
     $script:MockReply++
@@ -105,7 +105,7 @@ function Invoke-LabProcess([string]$File, [string[]]$Arguments, [string]$Directo
         }
     } else {
         if ($env:LAB_MOCK_SCENARIO -eq 'probe-failure') { throw 'Simulated probe timeout.' }
-        $reading = [pscustomobject]@{ axes = $script:MockExpected.axes; buttons = $script:MockExpected.buttons; hat = $script:MockExpected.hat; axisCount = 6; buttonCount = 12; hatCount = 1 }
+        $reading = [pscustomobject]@{ axes = $script:MockExpected.axes; buttons = $script:MockExpected.buttons; hat = $script:MockExpected.hat; axisCount = 6; buttonCount = 16; hatCount = 1 }
         $output = [pscustomobject]@{ error = $false; directInput = @($reading); winMM = @($reading) } | ConvertTo-Json -Depth 6
     }
     [pscustomobject]@{ Code = 0; Output = $output; Errors = '' }
@@ -129,7 +129,7 @@ foreach ($scenario in @('success', 'probe-failure', 'attach-failure', 'foreign')
     if ($summaries.Count -ne 1) { throw "Missing summary for $scenario" }
     $summary = Get-Content $summaries[0].FullName -Raw | ConvertFrom-Json
     if ($scenario -eq 'success') {
-        if ($exitCode -ne 0 -or -not $summary.passed -or $summary.observations -ne 156) { throw 'Success orchestration failed.' }
+        if ($exitCode -ne 0 -or -not $summary.passed -or $summary.observations -ne 224) { throw 'Success orchestration failed.' }
     } elseif ($exitCode -eq 0 -or $summary.passed) { throw "Failure was missed: $scenario" }
     if ($scenario -ne 'foreign' -and @($summary.cleanupErrors).Count -ne 0) { throw "Owned cleanup failed: $scenario" }
     if ($scenario -eq 'foreign' -and @($summary.cleanupErrors).Count -eq 0) { throw 'Foreign import was silently ignored.' }

@@ -17,8 +17,8 @@ public class GenericJoystickOutputIntegrationAuditTests
         Assert.AreEqual("Button 1 (Cross)", Global.getX360ControlString(X360Controls.A, OutContType.ViiperGenericJoystick));
         Assert.AreEqual("Button 3 (Square)", Global.getX360ControlString(X360Controls.X, OutContType.ViiperGenericJoystick));
         Assert.AreEqual("Button 12 (R3)", Global.getX360ControlString(X360Controls.RS, OutContType.ViiperGenericJoystick));
-        StringAssert.Contains(Global.getX360ControlString(X360Controls.Guide, OutContType.ViiperGenericJoystick), "not sent");
-        StringAssert.Contains(Global.getX360ControlString(X360Controls.TouchpadClick, OutContType.ViiperGenericJoystick), "not sent");
+        StringAssert.Contains(Global.getX360ControlString(X360Controls.Guide, OutContType.ViiperGenericJoystick), "Button 13");
+        StringAssert.Contains(Global.getX360ControlString(X360Controls.TouchpadClick, OutContType.ViiperGenericJoystick), "Button 14");
         StringAssert.Contains(Global.getX360ControlString(X360Controls.LT, OutContType.ViiperGenericJoystick), "profile trigger mode");
         // A mouse binding must remain a mouse binding when the output changes.
         Assert.AreEqual(Global.xboxDefaultNames[X360Controls.LeftMouse], Global.getX360ControlString(X360Controls.LeftMouse, OutContType.ViiperGenericJoystick));

@@ -1046,8 +1046,8 @@ namespace DS4Windows
             {
                 var settings = Global.GenericJoystickSettings[deviceIndex];
                 string instanceId = GenericJoystickIdentity.ForController(deviceIndex);
-                if (!settings.Valid || settings.Options.ButtonCount != 12)
-                    throw new InvalidOperationException("The experimental joystick requires valid twelve-button profile settings.");
+                if (!settings.Valid || settings.Options.ButtonCount != 16)
+                    throw new InvalidOperationException("The experimental joystick requires valid sixteen-button profile settings.");
                 settings.Options.Validate();
                 if (connected && (genericJoystickOptions != settings.Options || genericJoystickInstanceId != instanceId))
                     throw new InvalidOperationException("Joystick layout changes require a new output device.");
@@ -1408,7 +1408,7 @@ namespace DS4Windows
                 activeFeedbackLength = 0;
                 return client.CreateDeviceAndOpenStream("genericjoystick", deviceSpecific: new
                 {
-                    version = 1, experimental = true, buttonCount = 12, instanceId = genericJoystickInstanceId,
+                    version = 1, experimental = true, buttonCount = 16, instanceId = genericJoystickInstanceId,
                     neutralAxes = GenericJoystickMapping.Neutral(genericJoystickOptions).AxisValues
                 });
             }

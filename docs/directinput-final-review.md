@@ -1,5 +1,12 @@
 # Generic joystick pre-release review — 2026-10-15
 
+## Current design
+
+The current feature uses a fixed sixteen-button device with per-profile numbered
+assignments. See [the current design and migration rules](directinput-development.md#fixed-sixteen-button-design-2026-10-26).
+Earlier dated evidence retains its original scope; native/game acceptance of the
+sixteen-button candidate is still required before release.
+
 Result: the matched preview has positive single-controller evidence. Normal
 release is still gated; USB ID allocation alone does not complete acceptance.
 
@@ -57,12 +64,12 @@ or physical validation of normal installation.
 
 | Requirement | Current evidence / next action |
 |---|---|
-| Production USB identity | pid.codes PR #1317 remains open without reviews; proposed `1209:D10C` must not be used until assigned. Adopt only the approved twelve-button identity, then repeat enumeration/resting-axis/binding acceptance with it. |
+| Production USB identity | pid.codes PR #1317 remains open without reviews; proposed `1209:D10C` must not be used until assigned. Adopt only the approved sixteen-button identity, then repeat enumeration/resting-axis/binding acceptance with it. |
 | Matched normal backend | Normal packages intentionally retain released VIIPER 0.1.11 and reject joystick activation. Produce verified feature release assets, promote all coordinated pins and validate both normal formats before enabling output. |
 | Installed integration | Clean install, upgrade/repair and actual built-in HidHide remain untested for generic output. Follow the installed acceptance checklist; portable preview cannot prove cloaking or hiding-policy restoration. |
 | Multi-controller bindings | Input isolation passed, but removing A changed B's DirectInput GUID/slot. Resolve with a supported validated change or obtain explicit approval of a documented initial compatibility scope. Do not claim stable multi-controller saved bindings. |
 | USB/IP retest | Latest published release checked remains v.0.9.8.1. When a packaged driver containing the upstream serial-completion fix exists, verify inclusion and repeat the controlled two-device comparison. A future fix is not assumed to resolve the GUID issue. |
-| Candidate approval | Repeat required CI and owner acceptance on the actual matched production-identity candidate before merge/release. Sixteen buttons remain lab-only. |
+| Candidate approval | Repeat required CI and owner acceptance on the actual matched production-identity candidate before merge/release. The sixteen-button candidate still needs native and game acceptance. |
 
 The owner-reported r8 BeamNG/FlatOut 2 restart/reconnect binding follow-up is
 positive single-controller evidence. It does not remove any requirement above.

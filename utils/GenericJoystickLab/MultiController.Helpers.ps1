@@ -1,4 +1,4 @@
-﻿function Get-MultiControllerReadingErrors($Probe, [object[]]$Expected, $Baseline, [switch]$EnumerationOnly) {
+function Get-MultiControllerReadingErrors($Probe, [object[]]$Expected, $Baseline, [switch]$EnumerationOnly) {
     if ($Probe.error) { 'Native probe reported an API error.' }
     foreach ($api in @('directInput','winMM')) {
         $readings = @($Probe.$api)

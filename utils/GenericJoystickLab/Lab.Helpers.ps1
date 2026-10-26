@@ -94,8 +94,8 @@ function Get-LabReadingErrors($Probe, $Expected) {
         $readings = @($Probe.$api)
         if ($readings.Count -ne 1) { "$api found $($readings.Count) devices; expected exactly one."; continue }
         $reading = $readings[0]
-        if ($reading.axisCount -ne 6 -or $reading.buttonCount -ne 12 -or $reading.hatCount -ne 1) {
-            "$api capabilities differ from six axes, twelve buttons and one hat."
+        if ($reading.axisCount -ne 6 -or $reading.buttonCount -ne 16 -or $reading.hatCount -ne 1) {
+            "$api capabilities differ from six axes, sixteen buttons and one hat."
         }
         if (@($reading.axes).Count -ne 6) { "$api did not return six axis values."; continue }
         for ($i = 0; $i -lt 6; $i++) {

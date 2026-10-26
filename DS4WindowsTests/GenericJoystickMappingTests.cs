@@ -84,10 +84,10 @@ public class GenericJoystickMappingTests
     }
 
     [TestMethod]
-    public void TwelveButtonLayoutDoesNotLeakExtraButtons()
+    public void SixteenButtonLayoutExposesGuideAndTouchpadWithoutInventingInputs()
     {
-        var state = AtRest(); state.PS = state.TouchButton = true;
-        Assert.AreEqual((ushort)0, GenericJoystickMapping.Build(state, GenericJoystickOptions.Default).Buttons);
+        var state = AtRest(); state.PS = state.OutputTouchButton = true;
+        Assert.AreEqual((ushort)0x3000, GenericJoystickMapping.Build(state, GenericJoystickOptions.Default).Buttons);
         Assert.AreEqual((ushort)0x3000, GenericJoystickMapping.Build(state, GenericJoystickOptions.Default with { ButtonCount = 16 }).Buttons);
     }
 

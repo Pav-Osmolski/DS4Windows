@@ -1,9 +1,16 @@
 # Generic joystick preview guide
 
+## Current design
+
+The current feature uses a fixed sixteen-button device with per-profile numbered
+assignments. See [the current design and migration rules](directinput-development.md#fixed-sixteen-button-design-2026-10-26).
+Earlier dated evidence retains its original scope; native/game acceptance of the
+sixteen-button candidate is still required before release.
+
 This experimental output presents an input-only USB HID joystick to games using
 DirectInput or WinMM. It is available only in the matched portable preview on
 `feature/directinput-output`; it is not yet a normal-installation feature.
-It provides six axes, twelve buttons and a POV hat. It provides no XInput
+It provides six axes, sixteen buttons and a POV hat. It provides no XInput
 emulation, game force feedback or audio interfaces.
 
 ## Start with a separate profile
@@ -51,12 +58,15 @@ after changing axis roles or resting positions.
 | 7, 8 | L2, R2 in Buttons trigger mode |
 | 9, 10 | Share, Options |
 | 11, 12 | L3, R3 |
+| 13, 14 | PS/Guide, touchpad click |
+| 15, 16 | Unassigned by default |
 | POV | D-pad |
 
 The mapping editor uses canonical controller targets and labels their joystick
-button numbers. Its diagram does not change the selected output type. Guide/PS
-and touchpad click have no output button in this twelve-button descriptor;
-remap their physical inputs to a supported target or keyboard action if needed.
+default button numbers. Its diagram does not change the selected output type.
+Expand **Numbered button assignments** in the joystick settings to reassign or
+clear any of the sixteen outputs. These assignments use the already-mapped
+controller channels, so unavailable physical inputs remain inactive.
 
 ## Configurations already tested by the owner
 
@@ -81,7 +91,7 @@ configuration is automatically applied by this launcher.
 The USB identity is still experimental. The requested production identity is
 [pending allocation](https://github.com/pidcodes/pidcodes.github.com/pull/1317).
 When it changes, Windows and games can see a new device and require new bindings.
-Sixteen buttons, force feedback and arbitrary HID descriptors are outside this
+Force feedback and arbitrary HID descriptors are outside this
 preview. See the [release checklist](directinput-release-checklist.md) for the
 remaining normal-installation validation.
 

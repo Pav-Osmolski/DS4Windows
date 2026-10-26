@@ -1,5 +1,12 @@
 # Normal packaging preparation for generic joystick output
 
+## Current design
+
+The current feature uses a fixed sixteen-button device with per-profile numbered
+assignments. See [the current design and migration rules](directinput-development.md#fixed-sixteen-button-design-2026-10-26).
+Earlier dated evidence retains its original scope; native/game acceptance of the
+sixteen-button candidate is still required before release.
+
 This work prepares and checks the standard package paths while keeping generic
 joystick activation restricted to the matched preview. The generated normal
 artifacts are **packaging proofs**, not a generic-joystick release candidate.

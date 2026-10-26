@@ -13,13 +13,13 @@ public class GenericJoystickIntegrationTests
     [TestMethod]
     public void BackendContractRejectsWrongRestAndMalformedReadiness()
     {
-        const string response = "{\"contract\":\"genericjoystick-v1\",\"version\":1,\"experimental\":true,\"buttonCount\":12,\"neutralAxes\":[0,0,0,-32767,-32767,0],\"inputConfigured\":true}";
+        const string response = "{\"contract\":\"genericjoystick-v1\",\"version\":1,\"experimental\":true,\"buttonCount\":16,\"neutralAxes\":[0,0,0,-32767,-32767,0],\"inputConfigured\":true}";
         using var valid = System.Text.Json.JsonDocument.Parse(response);
         Assert.IsTrue(GenericJoystickContract.ReadConfigured(valid.RootElement, new short[] { 0, 0, 0, -32767, -32767, 0 }));
         Assert.ThrowsExactly<IOException>(() => GenericJoystickContract.ReadConfigured(valid.RootElement, new short[6]));
         foreach (string malformed in new[] { response.Replace("\"version\":1", "\"version\":\"1\""),
             response.Replace("\"inputConfigured\":true", "\"inputConfigured\":\"true\""),
-            response.Replace("\"buttonCount\":12", "\"buttonCount\":16"), response.Replace("-32767", "-32768") })
+            response.Replace("\"buttonCount\":16", "\"buttonCount\":12"), response.Replace("-32767", "-32768") })
         {
             using var doc = System.Text.Json.JsonDocument.Parse(malformed);
             Assert.ThrowsExactly<IOException>(() => GenericJoystickContract.ReadConfigured(doc.RootElement));
@@ -90,7 +90,7 @@ public class GenericJoystickIntegrationTests
                 L2 = (byte)random.Next(256), R2 = (byte)random.Next(256),
                 Cross = random.Next(2) == 1, Circle = random.Next(2) == 1, Square = random.Next(2) == 1, Triangle = random.Next(2) == 1,
                 L1 = random.Next(2) == 1, R1 = random.Next(2) == 1, Share = random.Next(2) == 1, Options = random.Next(2) == 1,
-                L3 = random.Next(2) == 1, R3 = random.Next(2) == 1,
+                L3 = random.Next(2) == 1, R3 = random.Next(2) == 1, PS = random.Next(2) == 1, OutputTouchButton = random.Next(2) == 1,
                 DpadUp = random.Next(2) == 1, DpadRight = random.Next(2) == 1, DpadDown = random.Next(2) == 1, DpadLeft = random.Next(2) == 1
             };
             var options = GenericJoystickOptions.Default with { Layout = layout, TriggerMode = mode };
