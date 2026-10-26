@@ -24,6 +24,22 @@ Starting with **5.0.14**, new releases use numeric versions and are marked
 **Latest**. Check the release notes for limitations and signing status;
 this fork currently publishes unsigned builds.
 
+### Uninstalling the standard installation
+
+Run **DS4Windows Setup** from Windows Installed apps and choose Uninstall.
+The confirmation shows what will be removed and what will be kept:
+
+- DS4Windows and its managed VIIPER copy are removed, along with their owned
+  shortcuts and startup tasks.
+- USB/IP, HidHide and FakerInput are kept because other applications may use them.
+- Profiles, application settings and user-created files are preserved.
+
+**Open profiles folder** opens an existing Profiles folder for the current
+Windows user or the installed program folder. If both exist, choose which one
+to open. This shortcut does not create folders or change the storage location.
+**Manage shared drivers…** opens Windows Installed apps; remove a shared driver
+through its own uninstaller only if you no longer need it for any application.
+
 ### Moving from another fork
 
 If you are moving from another DS4Windows distribution, including forks by
@@ -107,8 +123,17 @@ fork rather than independently upgrading or downgrading it.
 
 1. Close games, exit DS4Windows, and quit any running VIIPER from its tray icon.
 2. Run the release's **x64 Setup EXE** and follow the prompts.
-3. Include **HidHide** to prevent games from seeing both your real controller
-   and its emulated counterpart. **FakerInput** is optional for keyboard/mouse output.
+3. Review the **Installation status** list, including **HidHide** and
+   **FakerInput**. Missing HidHide is selected by default to prevent double
+   input; an existing installation is shown as **Installed — kept unchanged**
+   and left unticked. Setup also recognises HidHide driver installations from
+   other releases. **FakerInput** remains opt-in when missing. Existing optional
+   drivers are preserved during application installation and repair, and a
+   newer related FakerInput MSI is not replaced by the bundled older package.
+   The status list shows the DS4Windows version being installed. Optional
+   drivers show their detected installed version when kept, or their bundled
+   version when missing. If installed-version metadata is unavailable, setup
+   says so rather than showing the bundled version as the installed version.
 4. Restart Windows if setup requests it, then complete any requested repair.
 
 The installer places DS4Windows and VIIPER under

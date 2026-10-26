@@ -39,6 +39,8 @@ namespace DS4Windows.Bootstrapper
         private bool bundleMutexOwned;
         private int planStarted;
         private bool requestedSetupResume;
+        private bool relatedFakerInput;
+        private string relatedFakerInputVersion;
 
         internal IEngine Engine => engine;
 
@@ -469,6 +471,17 @@ namespace DS4Windows.Bootstrapper
                     }
                 }
             };
+            DetectBegin += (_, __) => { relatedFakerInput = false; relatedFakerInputVersion = null; };
+            DetectRelatedMsiPackage += (_, e) =>
+            {
+                if (string.Equals(e.PackageId, "FakerInput", StringComparison.OrdinalIgnoreCase))
+                {
+                    relatedFakerInput = true;
+                    if (Version.TryParse(e.Version, out var detected) &&
+                        (!Version.TryParse(relatedFakerInputVersion, out var previous) || detected > previous))
+                        relatedFakerInputVersion = e.Version;
+                }
+            };
             DetectPackageComplete += (_, e) => packageStates[e.PackageId] = e.State;
             DetectComplete += OnDetectComplete;
             PlanPackageBegin += OnPlanPackageBegin;
@@ -644,7 +657,9 @@ namespace DS4Windows.Bootstrapper
                 return;
             }
 
-            Ui(() => window.ShowConfirmation(mode, packageStates, infrastructureHealthy));
+            string hidHideVersion = OptionalDriverVersions.Installed("HidHide");
+            string fakerInputVersion = relatedFakerInputVersion ?? OptionalDriverVersions.Installed("FakerInput");
+            Ui(() => window.ShowConfirmation(mode, packageStates, infrastructureHealthy, relatedFakerInput, hidHideVersion, fakerInputVersion));
 
             if (command.Display != Display.Full)
             {
@@ -662,6 +677,13 @@ namespace DS4Windows.Bootstrapper
 
         private void OnPlanPackageBegin(object sender, PlanPackageBeginEventArgs e)
         {
+            if (OptionalDriverSelection.PreserveExisting(plannedAction, e.PackageId, packageStates, relatedFakerInput))
+            {
+                // These are shared, optional drivers. Do not repair/reinstall
+                // an existing or newer installation as part of app maintenance.
+                e.State = RequestState.None;
+                return;
+            }
             if (UninstallHelperPackagePlan.TryGetState(e.PackageId,
                     plannedAction, command.Relation, infrastructureRecoveryPass,
                     out RequestState helperState))

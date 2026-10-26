@@ -9,6 +9,16 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.52](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.52) - 2026-10-26
+
+#### Installer and uninstaller
+
+- Include HidHide and FakerInput in the installation-status list. Select HidHide by default only when it is missing, keep FakerInput opt-in, retain choices across re-detection, and keep existing shared drivers unchanged during application installation and repair. Detect HidHide through its driver service across product versions and recognise related FakerInput MSI versions, including newer installations.
+- Show the DS4Windows version being installed and the detected installed HidHide/FakerInput versions. Missing drivers show the bundled version; unreadable installed metadata is reported as unavailable rather than guessed. Derive the VIIPER label from the verified version constant instead of a stale label.
+- Give uninstall its own component summary: remove DS4Windows and its managed VIIPER copy while preserving USB/IP, HidHide, FakerInput, profiles and settings. Hide installation-only options and instructions during uninstall.
+- Add **Open profiles folder** and **Manage shared drivers…** shortcuts to the uninstall confirmation. Offer both existing AppData and program-folder profile locations when present; open Windows Installed apps for separately managing shared drivers. These controls do not change the existing removal policy.
+- Implemented in [PR #85](https://github.com/Pav-Osmolski/DS4Windows/pull/85).
+
 ### [5.0.51](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.51) - 2026-10-26
 
 #### Update storage
@@ -133,7 +143,7 @@ The build and release improvements are tracked in [PR #72](https://github.com/Pa
 #### Fixed
 
 - Finish reading VIIPER management replies at their newline terminator instead of waiting for the connection to close. A connection reset after a complete reply could otherwise discard a successful response and trigger virtual-controller cleanup. Preserve response validation and failures for incomplete or damaged encrypted replies. Thanks to [@cns00](https://github.com/cns00) for the reports and diagnostic logs. ([Issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66), [upstream issue #153](https://github.com/hbashton/DS4Windows/issues/153))
-- Add regression coverage for completed replies followed by connection resets, fragmented encrypted records, incomplete or invalid responses, and TCP connections that stay open after sending a reply. The maintainer tested the preview successfully; issue #66 remains open pending confirmation on the reporter's computer.
+- Add regression coverage for completed replies followed by connection resets, fragmented encrypted records, incomplete or invalid responses, and TCP connections that stay open after sending a reply. The maintainer tested the preview successfully; [issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66) remains open pending confirmation on the reporter's computer.
 
 #### Updating
 
