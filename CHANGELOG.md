@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Include HidHide and FakerInput in the installer's installation-status list. Preselect HidHide only when it is missing, keep FakerInput opt-in, preserve user choices across re-detection, and leave existing shared drivers untouched during app installation/repair. Recognise HidHide's driver service across product versions and related FakerInput MSI installations. Derive the VIIPER label from the verified bundled version instead of a stale hard-coded label.
 
 ## Released
 

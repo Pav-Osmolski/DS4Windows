@@ -105,8 +105,10 @@
               <StackPanel>
                 <TextBlock Text="Installation status" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,11" />
                 <Grid Margin="0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="DS4Windows" FontWeight="SemiBold"/><TextBlock x:Name="Ds4Status" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
-                <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="VIIPER 0.1.10" FontWeight="SemiBold"/><TextBlock x:Name="ViiperStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
+                <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="ViiperLabel" Text="VIIPER" FontWeight="SemiBold"/><TextBlock x:Name="ViiperStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
                 <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="USB-IP 0.9.8.1" FontWeight="SemiBold"/><TextBlock x:Name="UsbipStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
+                <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="HidHide" FontWeight="SemiBold"/><TextBlock x:Name="HidHideStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
+                <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="FakerInput" FontWeight="SemiBold"/><TextBlock x:Name="FakerInputStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
               </StackPanel>
             </Border>
 
@@ -114,9 +116,9 @@
               <StackPanel>
                 <TextBlock Text="Options" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,7" />
                 <CheckBox x:Name="DesktopShortcutCheckBox" IsChecked="True" Content="Create a desktop shortcut" />
-                <CheckBox x:Name="HidHideCheckBox" IsChecked="True" Content="Install HidHide (recommended — prevents double input)" />
+                <CheckBox x:Name="HidHideCheckBox" IsChecked="False" Content="Install HidHide (recommended — prevents double input)" Click="OptionalDriver_Click" />
                 <TextBlock Text="Optional system driver. Existing healthy installations are left unchanged." Foreground="{DynamicResource MutedBrush}" FontSize="12" Margin="24,-2,0,5" />
-                <CheckBox x:Name="FakerInputCheckBox" IsChecked="False" Content="Install FakerInput (virtual keyboard and mouse)" />
+                <CheckBox x:Name="FakerInputCheckBox" IsChecked="False" Content="Install FakerInput (virtual keyboard and mouse)" Click="OptionalDriver_Click" />
                 <TextBlock Text="Useful for profiles that send keyboard or mouse input to elevated games." Foreground="{DynamicResource MutedBrush}" FontSize="12" Margin="24,-2,0,0" />
               </StackPanel>
             </Border>

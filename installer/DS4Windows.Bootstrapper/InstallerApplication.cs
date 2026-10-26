@@ -39,6 +39,7 @@ namespace DS4Windows.Bootstrapper
         private bool bundleMutexOwned;
         private int planStarted;
         private bool requestedSetupResume;
+        private bool relatedFakerInput;
 
         internal IEngine Engine => engine;
 
@@ -469,6 +470,11 @@ namespace DS4Windows.Bootstrapper
                     }
                 }
             };
+            DetectBegin += (_, __) => relatedFakerInput = false;
+            DetectRelatedMsiPackage += (_, e) =>
+            {
+                if (string.Equals(e.PackageId, "FakerInput", StringComparison.OrdinalIgnoreCase)) relatedFakerInput = true;
+            };
             DetectPackageComplete += (_, e) => packageStates[e.PackageId] = e.State;
             DetectComplete += OnDetectComplete;
             PlanPackageBegin += OnPlanPackageBegin;
@@ -644,7 +650,7 @@ namespace DS4Windows.Bootstrapper
                 return;
             }
 
-            Ui(() => window.ShowConfirmation(mode, packageStates, infrastructureHealthy));
+            Ui(() => window.ShowConfirmation(mode, packageStates, infrastructureHealthy, relatedFakerInput));
 
             if (command.Display != Display.Full)
             {
@@ -662,6 +668,13 @@ namespace DS4Windows.Bootstrapper
 
         private void OnPlanPackageBegin(object sender, PlanPackageBeginEventArgs e)
         {
+            if (OptionalDriverSelection.PreserveExisting(plannedAction, e.PackageId, packageStates, relatedFakerInput))
+            {
+                // These are shared, optional drivers. Do not repair/reinstall
+                // an existing or newer installation as part of app maintenance.
+                e.State = RequestState.None;
+                return;
+            }
             if (UninstallHelperPackagePlan.TryGetState(e.PackageId,
                     plannedAction, command.Relation, infrastructureRecoveryPass,
                     out RequestState helperState))

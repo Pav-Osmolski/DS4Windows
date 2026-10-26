@@ -107,8 +107,13 @@ fork rather than independently upgrading or downgrading it.
 
 1. Close games, exit DS4Windows, and quit any running VIIPER from its tray icon.
 2. Run the release's **x64 Setup EXE** and follow the prompts.
-3. Include **HidHide** to prevent games from seeing both your real controller
-   and its emulated counterpart. **FakerInput** is optional for keyboard/mouse output.
+3. Review the **Installation status** list, including **HidHide** and
+   **FakerInput**. Missing HidHide is selected by default to prevent double
+   input; an existing installation is shown as **Installed — kept unchanged**
+   and left unticked. Setup also recognises HidHide driver installations from
+   other releases. **FakerInput** remains opt-in when missing. Existing optional
+   drivers are preserved during application installation and repair, and a
+   newer related FakerInput MSI is not replaced by the bundled older package.
 4. Restart Windows if setup requests it, then complete any requested repair.
 
 The installer places DS4Windows and VIIPER under

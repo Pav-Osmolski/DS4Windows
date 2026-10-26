@@ -12,6 +12,7 @@ namespace DS4Windows.Bootstrapper
         private readonly InstallerApplication application;
         private InstallerMode mode;
         private bool applying;
+        private readonly OptionalDriverSelection optionalDrivers = new OptionalDriverSelection();
 
         internal InstallerWindow(InstallerApplication application)
         {
@@ -25,7 +26,7 @@ namespace DS4Windows.Bootstrapper
             Closed += (_, __) => application.OnWindowClosed();
         }
 
-        internal void ShowConfirmation(InstallerMode detectedMode, IReadOnlyDictionary<string, PackageState> packages, bool infrastructureHealthy)
+        internal void ShowConfirmation(InstallerMode detectedMode, IReadOnlyDictionary<string, PackageState> packages, bool infrastructureHealthy, bool relatedFakerInput = false)
         {
             mode = detectedMode;
             HidePages();
@@ -59,8 +60,30 @@ namespace DS4Windows.Bootstrapper
             }
 
             Ds4Status.Text = PackageStatus(packages, "DS4WindowsMsi");
+            ViiperLabel.Text = InfrastructureProbe.ViiperDisplayName;
             ViiperStatus.Text = infrastructureHealthy ? "Ready" : "Will install or repair";
             UsbipStatus.Text = infrastructureHealthy ? "Ready" : "Will verify before changing";
+            optionalDrivers.Detect(packages, relatedFakerInput);
+            HidHideCheckBox.IsChecked = optionalDrivers.InstallHidHide;
+            FakerInputCheckBox.IsChecked = optionalDrivers.InstallFakerInput;
+            HidHideCheckBox.IsEnabled = optionalDrivers.HidHide != OptionalDriverPresence.Installed;
+            FakerInputCheckBox.IsEnabled = optionalDrivers.FakerInput != OptionalDriverPresence.Installed;
+            HidHideCheckBox.ToolTip = HidHideCheckBox.IsEnabled ? null : "HidHide is already installed and will be kept unchanged.";
+            FakerInputCheckBox.ToolTip = FakerInputCheckBox.IsEnabled ? null : "FakerInput is already installed and will be kept unchanged.";
+            UpdateOptionalStatuses();
+        }
+
+        private void OptionalDriver_Click(object sender, RoutedEventArgs e)
+        {
+            optionalDrivers.InstallHidHide = HidHideCheckBox.IsChecked == true;
+            optionalDrivers.InstallFakerInput = FakerInputCheckBox.IsChecked == true;
+            UpdateOptionalStatuses();
+        }
+
+        private void UpdateOptionalStatuses()
+        {
+            HidHideStatus.Text = OptionalDriverSelection.Status(optionalDrivers.HidHide, optionalDrivers.InstallHidHide, mode == InstallerMode.Uninstall);
+            FakerInputStatus.Text = OptionalDriverSelection.Status(optionalDrivers.FakerInput, optionalDrivers.InstallFakerInput, mode == InstallerMode.Uninstall);
         }
 
         internal void ShowPlanning()
