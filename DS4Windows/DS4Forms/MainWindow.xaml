@@ -414,6 +414,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Border Padding="18,14" BorderBrush="{DynamicResource BorderColor}"
@@ -440,7 +441,8 @@
                                                        FontSize="11" FontWeight="SemiBold"
                                                        Foreground="{DynamicResource MutedForegroundColor}" />
                                         </Border>
-                                        <Border Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0"
+                                        <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0">
+                                        <Border Margin="0,0,12,6"
                                                 Width="340" MaxWidth="340" HorizontalAlignment="Left"
                                                 Background="{DynamicResource CardBackgroundColor}"
                                                 BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
@@ -478,14 +480,24 @@
                                                         Click="ClearProfilesSearchBtn_Click" />
                                             </Grid>
                                         </Border>
-                                        <ComboBox x:Name="profileSortCombo" Grid.Row="1" Grid.Column="1" Margin="12,12,0,0"
-                                                  MinWidth="150" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                                  Loaded="ProfileSortCombo_Loaded" SelectionChanged="ProfileSortCombo_SelectionChanged" />
+                                        <WrapPanel VerticalAlignment="Center">
+                                            <ComboBox x:Name="profileSortCombo" MinWidth="150" Margin="0,0,10,6"
+                                                      Loaded="ProfileSortCombo_Loaded" SelectionChanged="ProfileSortCombo_SelectionChanged" />
+                                            <WrapPanel x:Name="profileViewChoices" Loaded="ProfileViewChoices_Loaded" />
+                                        </WrapPanel>
+                                        </WrapPanel>
                                     </Grid>
                                 </Border>
 
                                 <Grid Grid.Row="1">
-                                    <ListBox x:Name="profilesListBox" Background="Transparent" BorderThickness="0"
+                                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                                    <Grid x:Name="profileDetailsHeader" Visibility="Collapsed" Margin="30,10,30,0">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="170"/><ColumnDefinition Width="160"/></Grid.ColumnDefinitions>
+                                        <TextBlock x:Name="profileNameHeader" Margin="44,0,0,0" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock x:Name="profileOutputHeader" Grid.Column="1" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock x:Name="profileModifiedHeader" Grid.Column="2" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                    </Grid>
+                                    <ListBox Grid.Row="1" x:Name="profilesListBox" Background="Transparent" BorderThickness="0"
                                              Padding="10" SelectionChanged="ProfilesListBox_SelectionChanged"
                                              MouseDoubleClick="ProfilesListBox_MouseDoubleClick"
                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -541,13 +553,9 @@
                                                         <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
-                                                    <Border Width="38" Height="38" CornerRadius="5"
-                                                            Background="{DynamicResource AccentColor}" VerticalAlignment="Center">
-                                                        <TextBlock Text="P" Foreground="White" FontSize="16" FontWeight="Bold"
-                                                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                                    </Border>
+                                                    <local:ProfileIconBadge VerticalAlignment="Center" />
                                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="4,0,8,0">
-                                                        <TextBlock Text="{Binding Name, Mode=OneWay, Converter={StaticResource escapeAccessConvert}}"
+                                                        <TextBlock Text="{Binding Name, Mode=OneWay}"
                                                                    FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
                                                                    ToolTip="{Binding Name}" />
                                                         <TextBlock Text="{Binding Summary}" ToolTip="{Binding Summary}" TextTrimming="CharacterEllipsis" Margin="0,4,0,0" FontSize="10"
@@ -563,7 +571,7 @@
                                         </ListBox.ItemTemplate>
                                     </ListBox>
 
-                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                                                 IsHitTestVisible="False">
                                         <StackPanel.Style>
                                             <Style TargetType="StackPanel">
@@ -588,6 +596,12 @@
                                                    Foreground="{DynamicResource MutedForegroundColor}" />
                                     </StackPanel>
                                 </Grid>
+                                <Border Grid.Row="2" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="18,10">
+                                    <DockPanel>
+                                        <Button x:Name="profileIconBtn" DockPanel.Dock="Right" IsEnabled="False" Click="ProfileIconBtn_Click" Style="{StaticResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Right" />
+                                        <TextBlock Text="{Binding ElementName=profilesListBox, Path=SelectedItem.Name}" Foreground="{DynamicResource MutedForegroundColor}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                    </DockPanel>
+                                </Border>
                             </Grid>
                         </Border>
                     </Grid>

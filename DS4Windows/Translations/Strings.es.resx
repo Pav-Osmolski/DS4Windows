@@ -6624,4 +6624,73 @@ El backup: </value>
   <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
     <value>No se pudo acceder al almacenamiento de actualizaciones.</value>
   </data>
+  <data name="UI_443D37F3A1F6013B" xml:space="preserve">
+    <value>Seleccione una imagen ICO o PNG.</value>
+  </data>
+  <data name="UI_DCC6BBD741580C9A" xml:space="preserve">
+    <value>Seleccione una imagen más pequeña que 2 MB.</value>
+  </data>
+  <data name="UI_12A1137C6D79CA4A" xml:space="preserve">
+    <value>La imagen es demasiado grande para usar como un icono de perfil.</value>
+  </data>
+  <data name="UI_7F5096197E224CAB" xml:space="preserve">
+    <value>Seleccione una imagen no mayor de 2048 × 2048 píxeles.</value>
+  </data>
+  <data name="UI_AFE4F505B369EBED" xml:space="preserve">
+    <value>Primera Carta</value>
+  </data>
+  <data name="UI_032747A5D15926E7" xml:space="preserve">
+    <value>Imagen personalizada</value>
+  </data>
+  <data name="UI_E90146D539BEAA48" xml:space="preserve">
+    <value>Icono de perfil</value>
+  </data>
+  <data name="UI_5386C28080A66F48" xml:space="preserve">
+    <value>Iconos de color</value>
+  </data>
+  <data name="UI_598104707437A0F5" xml:space="preserve">
+    <value>Color personalizado...</value>
+  </data>
+  <data name="UI_BF1D4510A062903B" xml:space="preserve">
+    <value>La carta sigue el nombre del perfil.</value>
+  </data>
+  <data name="UI_44CE6E4A2F8D9596" xml:space="preserve">
+    <value>Elige la imagen...</value>
+  </data>
+  <data name="UI_2A5DB09C1D9DB184" xml:space="preserve">
+    <value>ICO o PNG. La transparencia se conserva.</value>
+  </data>
+  <data name="UI_19D66A2331B54332" xml:space="preserve">
+    <value>Restablecer el defecto</value>
+  </data>
+  <data name="UI_31E392D1C0378BEC" xml:space="preserve">
+    <value>Aplicar</value>
+  </data>
+  <data name="UI_495FED05ED6FEE23" xml:space="preserve">
+    <value>No hay imagen seleccionada</value>
+  </data>
+  <data name="UI_2B47F2E2A828B69A" xml:space="preserve">
+    <value>Imagen incorporada</value>
+  </data>
+  <data name="UI_9E2244CB6701F028" xml:space="preserve">
+    <value>Iconos de perfil (*.ico;*.png)</value>
+  </data>
+  <data name="UI_470CFA3EFC56E382" xml:space="preserve">
+    <value>La imagen no se pudo abrir.</value>
+  </data>
+  <data name="UI_63F14D2E7F10AEE7" xml:space="preserve">
+    <value>El icono del perfil no se pudo guardar.</value>
+  </data>
+  <data name="UI_2ECBB0BF0A4C74A6" xml:space="preserve">
+    <value>Iconos de perfil...</value>
+  </data>
+  <data name="UI_4DA22A362D386464" xml:space="preserve">
+    <value>Mosaicos</value>
+  </data>
+  <data name="UI_6F202F54A7B2D8FE" xml:space="preserve">
+    <value>Lista</value>
+  </data>
+  <data name="UI_45989DE49FB7F66D" xml:space="preserve">
+    <value>Detalles</value>
+  </data>
 </root>

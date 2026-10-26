@@ -59,12 +59,42 @@ internal static class SettingsStorageLayoutValidation
                 var host = new Border { Padding = new Thickness(18), Child = content };
                 host.SetResourceReference(Border.BackgroundProperty, "SurfaceBackgroundColor");
                 host.SetResourceReference(System.Windows.Documents.TextElement.ForegroundProperty, "ForegroundColor");
+                ((TextBlock)content.FindName("profileNameHeader")).Text = "Name";
+                ((TextBlock)content.FindName("profileOutputHeader")).Text = "Emulated controller";
+                ((TextBlock)content.FindName("profileModifiedHeader")).Text = "Last modified";
+                ((Button)content.FindName("profileIconBtn")).Content = "Profile icon…";
+                var header = (Grid)content.FindName("profileDetailsHeader");
+                var browser = new ProfileBrowserViews(list, header);
+                ((Button)content.FindName("profileIconBtn")).IsEnabled = true;
+                ProfileBrowserViews.CreatePicker((WrapPanel)content.FindName("profileViewChoices"), ProfileViewChoice.Tiles, browser.Apply);
                 ThemeConsistencyValidation.Layout(host, 1200, 820);
                 foreach (var button in ThemeConsistencyValidation.Visuals(content).OfType<Button>().Where(button => button.IsEnabled && button.Visibility == Visibility.Visible && button.ActualWidth > 0))
                     Assert.IsTrue(button.ActualHeight >= 20, button.Name + " must have a usable height.");
                 string path = Path.Combine(directory, "profiles-" + choice + ".png");
                 ThemeConsistencyValidation.Save(host, path, 1200, 820);
                 files.Add(path);
+                var selected = list.SelectedItem;
+                foreach (var view in new[] { ProfileViewChoice.List, ProfileViewChoice.Details })
+                {
+                    browser.Apply(view);
+                    ThemeConsistencyValidation.Layout(host, 1200, 820);
+                    browser.AlignHeader();
+                    ThemeConsistencyValidation.Layout(host, 1200, 820);
+                    Assert.AreSame(selected, list.SelectedItem, "Changing view must preserve selection and actions.");
+                    Assert.AreEqual(view == ProfileViewChoice.Details ? Visibility.Visible : Visibility.Collapsed, header.Visibility);
+                    foreach (var item in list.Items.Cast<ProfileEntity>()) Assert.AreNotEqual("P", item.IconLetter);
+                    path = Path.Combine(directory, "profiles-" + view + "-" + choice + ".png");
+                    ThemeConsistencyValidation.Save(host, path, 1200, 820); files.Add(path);
+                }
+                var iconWindow = new ProfileIconWindow((ProfileEntity)selected);
+                var dialogHost = (FrameworkElement)iconWindow.Content;
+                iconWindow.Content = null;
+                var dialogSurface = new Border { Child = dialogHost };
+                dialogSurface.SetResourceReference(Border.BackgroundProperty, "SurfaceBackgroundColor");
+                ThemeConsistencyValidation.Layout(dialogSurface, 480, 480);
+                path = Path.Combine(directory, "profile-icon-" + choice + ".png");
+                ThemeConsistencyValidation.Save(dialogSurface, path, 480, 480); files.Add(path);
+                browser.Apply(ProfileViewChoice.Tiles);
                 if (choice is AppThemeChoice.Light or AppThemeChoice.Dark)
                 {
                     ThemeConsistencyValidation.Layout(host, 620, 500);

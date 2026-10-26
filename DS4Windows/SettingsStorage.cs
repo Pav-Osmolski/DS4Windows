@@ -116,6 +116,30 @@ internal sealed class SettingsStorage
         RejectLink(disclosurePath);
         Save(disclosurePath, new DisclosurePreference { Expanded = value });
     }
+    private sealed class ProfileViewPreference
+    {
+        public int Version { get; set; } = 1;
+        public DS4WinWPF.DS4Forms.ProfileViewChoice View { get; set; }
+    }
+    internal DS4WinWPF.DS4Forms.ProfileViewChoice ProfileView
+    {
+        get
+        {
+            string file = Path.Combine(stateDirectory, "profiles-view.json");
+            if (!File.Exists(file)) return DS4WinWPF.DS4Forms.ProfileViewChoice.Tiles;
+            RejectLink(file);
+            var preference = JsonSerializer.Deserialize<ProfileViewPreference>(File.ReadAllText(file));
+            return preference?.Version == 1 && Enum.IsDefined(preference.View) ? preference.View : DS4WinWPF.DS4Forms.ProfileViewChoice.Tiles;
+        }
+    }
+    internal void SetProfileView(DS4WinWPF.DS4Forms.ProfileViewChoice value)
+    {
+        if (!Enum.IsDefined(value)) throw new ArgumentOutOfRangeException(nameof(value));
+        RejectLink(stateDirectory);
+        string file = Path.Combine(stateDirectory, "profiles-view.json");
+        RejectLink(file);
+        Save(file, new ProfileViewPreference { View = value });
+    }
     internal (int Keep, bool Automatic) UpdateRetention
     {
         get

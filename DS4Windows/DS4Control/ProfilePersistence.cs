@@ -6,9 +6,28 @@ namespace DS4Windows
 {
     internal static class ProfilePersistence
     {
+        private static readonly object WriteGate = new();
+
         internal static void Save(string path, string xml,
             Action<string, string> writeTemporary = null,
             string originalPath = null, bool overwrite = true)
+        {
+            lock (WriteGate) SaveCore(path, xml, writeTemporary, originalPath, overwrite);
+        }
+
+        internal static void SaveAppearance(string path, ProfileAppearance appearance)
+        {
+            lock (WriteGate)
+            {
+                var document = ProfileAppearance.Load(path);
+                appearance.Apply(document);
+                SaveCore(path, document.ToString(), preserveAppearance: false);
+            }
+        }
+
+        private static void SaveCore(string path, string xml,
+            Action<string, string> writeTemporary = null,
+            string originalPath = null, bool overwrite = true, bool preserveAppearance = true)
         {
             path = Path.GetFullPath(path);
             originalPath = originalPath == null ? null : Path.GetFullPath(originalPath);
@@ -20,6 +39,7 @@ namespace DS4Windows
             if ((rename || !overwrite) && File.Exists(path))
                 throw new IOException("A profile with the requested name already exists.");
 
+            if (preserveAppearance) xml = ProfileAppearance.Preserve(xml, originalPath ?? path);
             string temporary = Path.Combine(Path.GetDirectoryName(path),
                 $".{Path.GetFileName(path)}.{Guid.NewGuid():N}.tmp");
             try

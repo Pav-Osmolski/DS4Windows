@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -29,6 +29,15 @@ namespace DS4WinWPF
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public string Summary { get; private set; }
+        private DS4Windows.ProfileAppearance appearance = new();
+        public string IconLetter => DS4Windows.ProfileAppearance.Initial(Name);
+        public System.Windows.Media.Brush IconFill { get; private set; }
+        public System.Windows.Media.Imaging.BitmapSource IconImage { get; private set; }
+        public bool UsesLetterIcon => IconImage == null;
+        public string ModifiedDate => ModifiedUtc == default ? string.Empty : ModifiedUtc.ToLocalTime().ToString("g");
+        public string OutputDescription { get; private set; }
+        internal DS4Windows.ProfileAppearance Appearance => appearance;
+        internal string FilePath => Path.Combine(DS4Windows.Global.appdatapath, "Profiles", Name + ".xml");
         public DateTime ModifiedUtc { get; private set; }
         public string ModifiedDescription => ModifiedUtc == default ? string.Empty :
             DS4Windows.UiText.Format("Modified {0:g}", ModifiedUtc.ToLocalTime());
@@ -37,6 +46,8 @@ namespace DS4WinWPF
         {
             Summary = DS4Windows.UiText.Get("Controller profile");
             ModifiedUtc = default;
+            OutputDescription = Summary;
+            var loadedAppearance = new DS4Windows.ProfileAppearance();
             try
             {
                 string path = Path.Combine(DS4Windows.Global.appdatapath, "Profiles", name + ".xml");
@@ -48,12 +59,24 @@ namespace DS4WinWPF
                         { DtdProcessing = System.Xml.DtdProcessing.Prohibit, XmlResolver = null, MaxCharactersInDocument = 16 * 1024 * 1024 });
                     document.Load(reader);
                     Summary = document.DocumentElement?.SelectSingleNode("OutputContDevice")?.InnerText ?? Summary;
+                    if (Enum.TryParse<DS4Windows.OutContType>(Summary, out var output) && Enum.IsDefined(output))
+                        Summary = DS4Windows.OutContTypeCompatibility.ToDisplayName(output);
+                    OutputDescription = Summary;
+                    loadedAppearance = DS4Windows.ProfileAppearance.Read(document.DocumentElement);
                     if (App.rootHub != null && Enumerable.Range(0, Math.Min(DS4Windows.Global.ProfilePath.Length, App.rootHub.DS4Controllers.Length))
                         .Any(index => App.rootHub.DS4Controllers[index] != null && DS4Windows.Global.ProfilePath[index] == name))
                         Summary += " · " + DS4Windows.UiText.Get("In use");
                 }
             }
             catch (Exception error) when (error is IOException or UnauthorizedAccessException or System.Xml.XmlException or ArgumentException) { }
+            if (appearance != loadedAppearance)
+            {
+                appearance = loadedAppearance;
+                IconFill = appearance.Brush;
+                IconImage = appearance.Image;
+            }
+            foreach (string property in new[] { nameof(IconLetter), nameof(IconFill), nameof(IconImage), nameof(UsesLetterIcon), nameof(OutputDescription), nameof(ModifiedDate) })
+                PropertyChanged?.Invoke(this, new(property));
             PropertyChanged?.Invoke(this, new(nameof(Summary)));
             PropertyChanged?.Invoke(this, new(nameof(ModifiedUtc)));
             PropertyChanged?.Invoke(this, new(nameof(ModifiedDescription)));
