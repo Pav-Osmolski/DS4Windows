@@ -58,7 +58,12 @@ internal static class UpdateStorageLayoutValidation
                 var idle = ThemeConsistencyValidation.Visuals(nativeToggle).OfType<System.Windows.Shapes.Ellipse>()
                     .Select(circle => ((System.Windows.Media.SolidColorBrush)circle.Fill).Color).ToArray();
                 nativeToggle.SetValue(hoverKey, true);
+                var sharedHeader = (Grid)System.Windows.Media.VisualTreeHelper.GetParent(header);
+                sharedHeader.SetValue(hoverKey, true);
                 ThemeConsistencyValidation.Layout(host, 1000, 130);
+                Assert.IsFalse(header.IsMouseOver, "This case must exercise pointer-over-arrow rather than pointer-over-header-button.");
+                Assert.AreEqual(((System.Windows.Media.SolidColorBrush)application.FindResource("RaisedBackgroundColor")).Color,
+                    ((System.Windows.Media.SolidColorBrush)chrome.Background).Color, "Hovering the arrow must also highlight the whole header.");
                 var hovered = ThemeConsistencyValidation.Visuals(nativeToggle).OfType<System.Windows.Shapes.Ellipse>()
                     .Select(circle => ((System.Windows.Media.SolidColorBrush)circle.Fill).Color).ToArray();
                 Assert.IsTrue(idle.Length > 0 && !idle.SequenceEqual(hovered), "The circular indicator must retain its native hover colour change.");
@@ -71,6 +76,10 @@ internal static class UpdateStorageLayoutValidation
                 Save("profiles-circle-pressed", host, 1000, 130);
                 typeof(System.Windows.Controls.Primitives.ButtonBase).GetProperty("IsPressed").SetValue(nativeToggle, false);
                 nativeToggle.SetValue(hoverKey, false);
+                sharedHeader.SetValue(hoverKey, false);
+                ThemeConsistencyValidation.Layout(host, 1000, 130);
+                Assert.AreEqual((byte)0, ((System.Windows.Media.SolidColorBrush)chrome.Background).Color.A,
+                    "The header highlight must clear after leaving both header and arrow.");
                 var toggleMethod = typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle",
                     System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
                 toggleMethod.Invoke(nativeToggle, null);

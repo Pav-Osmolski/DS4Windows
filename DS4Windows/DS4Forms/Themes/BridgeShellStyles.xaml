@@ -75,6 +75,13 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <!-- The native arrow is a sibling, so use their shared header's
+                 hover state to keep the full rounded surface highlighted. -->
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" Value="True">
+                <Setter Property="Background" Value="{DynamicResource RaisedBackgroundColor}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="BridgePrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
