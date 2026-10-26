@@ -26,7 +26,8 @@ namespace DS4Windows.Bootstrapper
             Closed += (_, __) => application.OnWindowClosed();
         }
 
-        internal void ShowConfirmation(InstallerMode detectedMode, IReadOnlyDictionary<string, PackageState> packages, bool infrastructureHealthy, bool relatedFakerInput = false)
+        internal void ShowConfirmation(InstallerMode detectedMode, IReadOnlyDictionary<string, PackageState> packages, bool infrastructureHealthy, bool relatedFakerInput = false,
+            string hidHideVersion = null, string fakerInputVersion = null)
         {
             mode = detectedMode;
             HidePages();
@@ -64,6 +65,9 @@ namespace DS4Windows.Bootstrapper
             ViiperStatus.Text = infrastructureHealthy ? "Ready" : "Will install or repair";
             UsbipStatus.Text = infrastructureHealthy ? "Ready" : "Will verify before changing";
             optionalDrivers.Detect(packages, relatedFakerInput);
+            Ds4Label.Text = "DS4Windows " + typeof(InstallerWindow).Assembly.GetName().Version.ToString(3);
+            HidHideLabel.Text = OptionalDriverVersions.Label("HidHide", optionalDrivers.HidHide, hidHideVersion, OptionalDriverVersions.BundledHidHide);
+            FakerInputLabel.Text = OptionalDriverVersions.Label("FakerInput", optionalDrivers.FakerInput, fakerInputVersion, OptionalDriverVersions.BundledFakerInput);
             HidHideCheckBox.IsChecked = optionalDrivers.InstallHidHide;
             FakerInputCheckBox.IsChecked = optionalDrivers.InstallFakerInput;
             HidHideCheckBox.IsEnabled = optionalDrivers.HidHide != OptionalDriverPresence.Installed;

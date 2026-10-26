@@ -40,6 +40,7 @@ namespace DS4Windows.Bootstrapper
         private int planStarted;
         private bool requestedSetupResume;
         private bool relatedFakerInput;
+        private string relatedFakerInputVersion;
 
         internal IEngine Engine => engine;
 
@@ -470,10 +471,16 @@ namespace DS4Windows.Bootstrapper
                     }
                 }
             };
-            DetectBegin += (_, __) => relatedFakerInput = false;
+            DetectBegin += (_, __) => { relatedFakerInput = false; relatedFakerInputVersion = null; };
             DetectRelatedMsiPackage += (_, e) =>
             {
-                if (string.Equals(e.PackageId, "FakerInput", StringComparison.OrdinalIgnoreCase)) relatedFakerInput = true;
+                if (string.Equals(e.PackageId, "FakerInput", StringComparison.OrdinalIgnoreCase))
+                {
+                    relatedFakerInput = true;
+                    if (Version.TryParse(e.Version, out var detected) &&
+                        (!Version.TryParse(relatedFakerInputVersion, out var previous) || detected > previous))
+                        relatedFakerInputVersion = e.Version;
+                }
             };
             DetectPackageComplete += (_, e) => packageStates[e.PackageId] = e.State;
             DetectComplete += OnDetectComplete;
@@ -650,7 +657,9 @@ namespace DS4Windows.Bootstrapper
                 return;
             }
 
-            Ui(() => window.ShowConfirmation(mode, packageStates, infrastructureHealthy, relatedFakerInput));
+            string hidHideVersion = OptionalDriverVersions.Installed("HidHide");
+            string fakerInputVersion = relatedFakerInputVersion ?? OptionalDriverVersions.Installed("FakerInput");
+            Ui(() => window.ShowConfirmation(mode, packageStates, infrastructureHealthy, relatedFakerInput, hidHideVersion, fakerInputVersion));
 
             if (command.Display != Display.Full)
             {

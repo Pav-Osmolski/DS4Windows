@@ -114,6 +114,10 @@ fork rather than independently upgrading or downgrading it.
    other releases. **FakerInput** remains opt-in when missing. Existing optional
    drivers are preserved during application installation and repair, and a
    newer related FakerInput MSI is not replaced by the bundled older package.
+   The status list shows the DS4Windows version being installed. Optional
+   drivers show their detected installed version when kept, or their bundled
+   version when missing. If installed-version metadata is unavailable, setup
+   says so rather than showing the bundled version as the installed version.
 4. Restart Windows if setup requests it, then complete any requested repair.
 
 The installer places DS4Windows and VIIPER under

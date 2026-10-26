@@ -76,6 +76,16 @@ public class OptionalDriverSelectionTests
     }
 
     [TestMethod]
+    public void VersionLabelsUseDetectedVersionsInsteadOfBundledVersionsForInstalledDrivers()
+    {
+        Assert.AreEqual("HidHide 1.4.181.0", OptionalDriverVersions.Label("HidHide", OptionalDriverPresence.Installed, "1.4.181.0", OptionalDriverVersions.BundledHidHide));
+        Assert.AreEqual("FakerInput 0.1.1", OptionalDriverVersions.Label("FakerInput", OptionalDriverPresence.Installed, "0.1.1", OptionalDriverVersions.BundledFakerInput));
+        Assert.AreEqual("FakerInput 0.1.0", OptionalDriverVersions.Label("FakerInput", OptionalDriverPresence.Missing, null, OptionalDriverVersions.BundledFakerInput));
+        Assert.AreEqual("HidHide (version unavailable)", OptionalDriverVersions.Label("HidHide", OptionalDriverPresence.Installed, null, OptionalDriverVersions.BundledHidHide));
+        Assert.AreEqual("HidHide (version unavailable)", OptionalDriverVersions.Label("HidHide", OptionalDriverPresence.Unknown, "invalid", OptionalDriverVersions.BundledHidHide));
+    }
+
+    [TestMethod]
     [DataRow(LaunchAction.Install)]
     [DataRow(LaunchAction.Repair)]
     public void ExistingOptionalDriversAreExcludedFromForwardMaintenance(LaunchAction action)
@@ -101,6 +111,9 @@ public class OptionalDriverSelectionTests
         Assert.AreEqual("always64", (string)search.Attribute("Bitness"));
         var hidHide = bundle.Descendants().Single(e => e.Name.LocalName == "ExePackage" && (string)e.Attribute("Id") == "HidHide");
         Assert.AreEqual("HidHideInstalled OR HidHideDriverInstalled", (string)hidHide.Attribute("DetectCondition"));
+        Assert.IsTrue(((string)hidHide.Attribute("SourceFile")).Contains("HidHide_" + OptionalDriverVersions.BundledHidHide + "_"));
+        var faker = bundle.Descendants().Single(e => e.Name.LocalName == "MsiPackage" && (string)e.Attribute("Id") == "FakerInput");
+        Assert.IsTrue(((string)faker.Attribute("SourceFile")).Contains("FakerInput_" + OptionalDriverVersions.BundledFakerInput + "_"));
         var xaml = XDocument.Load(Path.Combine(root, "installer/DS4Windows.Bootstrapper/InstallerWindow.xaml"));
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
         foreach (string name in new[] { "HidHideStatus", "FakerInputStatus", "ViiperLabel" })
