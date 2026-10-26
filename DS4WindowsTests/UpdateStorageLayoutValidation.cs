@@ -37,7 +37,8 @@ internal static class UpdateStorageLayoutValidation
                 Assert.IsTrue(profiles.ActualHeight < 110, "Collapsed storage should be a compact disclosure header.");
                 Save("profiles-collapsed", host, 1000, 130);
                 header ??= ThemeConsistencyValidation.Visuals(profiles).OfType<Button>().First();
-                var indicator = ThemeConsistencyValidation.Visuals(header).OfType<Expander>().Single();
+                var indicator = ThemeConsistencyValidation.Visuals(profiles).OfType<Expander>().Single();
+                Assert.IsTrue(indicator.IsHitTestVisible, "The native circular toggle must receive hover and pressed input.");
                 var collapsedArrowPosition = indicator.TransformToAncestor(profiles).Transform(new Point(indicator.ActualWidth / 2, indicator.ActualHeight / 2));
                 var headerCenter = header.TransformToAncestor(profiles).Transform(new Point(header.ActualWidth / 2, header.ActualHeight / 2));
                 Assert.AreEqual(headerCenter.Y, collapsedArrowPosition.Y, 0.5, "The circle indicator must be vertically centred in the collapsed header.");
@@ -51,13 +52,39 @@ internal static class UpdateStorageLayoutValidation
                 Assert.IsNotNull(header.FocusVisualStyle, "Keyboard navigation needs its own visible focus outline.");
                 Save("profiles-collapsed-hover", host, 1000, 130);
                 header.SetValue(hoverKey, false);
-                header.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                // Exercise the native toggle's command, including both state
+                // synchronization and persistence, rather than only the header.
+                var nativeToggle = ThemeConsistencyValidation.Visuals(indicator).OfType<System.Windows.Controls.Primitives.ToggleButton>().Single();
+                var idle = ThemeConsistencyValidation.Visuals(nativeToggle).OfType<System.Windows.Shapes.Ellipse>()
+                    .Select(circle => ((System.Windows.Media.SolidColorBrush)circle.Fill).Color).ToArray();
+                nativeToggle.SetValue(hoverKey, true);
+                ThemeConsistencyValidation.Layout(host, 1000, 130);
+                var hovered = ThemeConsistencyValidation.Visuals(nativeToggle).OfType<System.Windows.Shapes.Ellipse>()
+                    .Select(circle => ((System.Windows.Media.SolidColorBrush)circle.Fill).Color).ToArray();
+                Assert.IsTrue(idle.Length > 0 && !idle.SequenceEqual(hovered), "The circular indicator must retain its native hover colour change.");
+                Save("profiles-circle-hover", host, 1000, 130);
+                typeof(System.Windows.Controls.Primitives.ButtonBase).GetProperty("IsPressed").SetValue(nativeToggle, true);
+                ThemeConsistencyValidation.Layout(host, 1000, 130);
+                var pressed = ThemeConsistencyValidation.Visuals(nativeToggle).OfType<System.Windows.Shapes.Ellipse>()
+                    .Select(circle => ((System.Windows.Media.SolidColorBrush)circle.Fill).Color).ToArray();
+                Assert.IsFalse(idle.SequenceEqual(pressed), "The circular indicator must retain its native pressed colour change.");
+                Save("profiles-circle-pressed", host, 1000, 130);
+                typeof(System.Windows.Controls.Primitives.ButtonBase).GetProperty("IsPressed").SetValue(nativeToggle, false);
+                nativeToggle.SetValue(hoverKey, false);
+                var toggleMethod = typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                toggleMethod.Invoke(nativeToggle, null);
                 Assert.IsTrue(settings.StorageExpanded, "User expansion must be persisted.");
                 ThemeConsistencyValidation.Layout(host, 1000, 350);
                 var expandedArrowPosition = indicator.TransformToAncestor(profiles).Transform(new Point(indicator.ActualWidth / 2, indicator.ActualHeight / 2));
                 Assert.AreEqual(collapsedArrowPosition.X, expandedArrowPosition.X, 0.1, "Expanding must not move the indicator horizontally.");
                 Assert.AreEqual(collapsedArrowPosition.Y, expandedArrowPosition.Y, 0.1, "Expanding must not move the indicator vertically.");
                 Assert.IsTrue(indicator.IsExpanded);
+                toggleMethod.Invoke(nativeToggle, null);
+                Assert.IsFalse(profiles.IsExpanded, "The native arrow must collapse once, without double toggling the header.");
+                Assert.IsFalse(settings.StorageExpanded);
+                header.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                ThemeConsistencyValidation.Layout(host, 1000, 350);
                 Save("profiles-expanded", host, 1000, 350);
                 header.SetValue(hoverKey, true);
                 ThemeConsistencyValidation.Layout(host, 1000, 350);

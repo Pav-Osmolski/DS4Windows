@@ -18,11 +18,13 @@ public sealed class SettingsStorageControl : Border
     private readonly StackPanel details = new();
     private readonly TextBlock summary = new();
     // Reuse the platform Expander indicator used elsewhere in the app. The
-    // surrounding disclosure button remains the single keyboard/click target.
-    private readonly Expander chevron = new() { MinWidth = 24, MinHeight = 24, IsHitTestVisible = false,
-        Focusable = false, IsTabStop = false, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
+    // native toggle receives pointer input so its hover/pressed feedback matches
+    // the other expanders. It sits beside, not inside, the header button.
+    private readonly Expander chevron = new() { MinWidth = 24, MinHeight = 24,
+        Focusable = false, IsTabStop = false, HorizontalAlignment = HorizontalAlignment.Right,
+        VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
     private string locationSummary;
-    private bool expanded, initialized;
+    private bool expanded, initialized, synchronizingIndicator;
     internal Func<SettingsStorage> Storage = () => SettingsStorage.Current;
     internal bool IsExpanded => expanded;
     internal Func<bool> BeforeChange;
@@ -45,9 +47,10 @@ public sealed class SettingsStorageControl : Border
         summary.SetResourceReference(TextBlock.ForegroundProperty, "MutedForegroundColor");
         labels.Children.Add(summary);
         heading.Children.Add(labels);
-        Grid.SetColumn(chevron, 1);
+        var indicatorSpace = new Border { Width = 36 };
+        Grid.SetColumn(indicatorSpace, 1);
+        heading.Children.Add(indicatorSpace);
         System.Windows.Input.KeyboardNavigation.SetTabNavigation(chevron, System.Windows.Input.KeyboardNavigationMode.None);
-        heading.Children.Add(chevron);
         // A real button makes the entire header keyboard and screen-reader accessible.
         var disclosure = new Button { Content = heading };
         disclosure.SetResourceReference(StyleProperty, "BridgeDisclosureHeaderButtonStyle");
@@ -58,7 +61,12 @@ public sealed class SettingsStorageControl : Border
             Storage().SetStorageExpanded(expanded);
             UpdateDisclosure();
         });
-        panel.Children.Add(disclosure);
+        chevron.Expanded += IndicatorChanged;
+        chevron.Collapsed += IndicatorChanged;
+        var header = new Grid();
+        header.Children.Add(disclosure);
+        header.Children.Add(chevron);
+        panel.Children.Add(header);
         panel.Children.Add(details);
         panel = details;
         details.Margin = new Thickness(0, 12, 0, 0);
@@ -131,7 +139,20 @@ public sealed class SettingsStorageControl : Border
         details.Visibility = expanded ? Visibility.Visible : Visibility.Collapsed;
         summary.Text = expanded ? UiText.Get("Choose where profiles and application settings are kept.") : locationSummary;
         summary.ToolTip = summary.Text;
-        chevron.IsExpanded = expanded;
+        synchronizingIndicator = true;
+        try { chevron.IsExpanded = expanded; }
+        finally { synchronizingIndicator = false; }
+    }
+
+    private void IndicatorChanged(object sender, RoutedEventArgs e)
+    {
+        if (synchronizingIndicator) return;
+        Run(() =>
+        {
+            expanded = chevron.IsExpanded;
+            Storage().SetStorageExpanded(expanded);
+            UpdateDisclosure();
+        });
     }
 
     private bool CanChange() => BeforeChange?.Invoke() != false;
