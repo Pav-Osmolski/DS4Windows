@@ -933,11 +933,21 @@
                                                 </ListBox.ItemTemplate>
                                             </ListBox>
                                             <WrapPanel Margin="0,12,0,0">
-                                                <Button x:Name="switch2AssociationRefreshBtn" Content="{lex:Loc Strings:UI_0E91610117029A62}" Click="Switch2AssociationRefreshBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,10,10" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                                <Button x:Name="switch2AssociateBtn" Content="{lex:Loc Strings:UI_107931F651CE5723}" IsEnabled="False" Margin="0,0,10,10" Click="Switch2AssociateBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                                <Button x:Name="switch2AssociationRefreshBtn" Content="{lex:Loc Strings:UI_0E91610117029A62}" Click="Switch2AssociationRefreshBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                                <Button x:Name="switch2AssociateBtn" Content="{lex:Loc Strings:UI_107931F651CE5723}" IsEnabled="False" Margin="0,0,10,0" Click="Switch2AssociateBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                             </WrapPanel>
-                                            <TextBlock x:Name="switch2AssociationStatusText" TextWrapping="Wrap" Margin="0,8,0,0" />
-                                            <Separator Margin="0,16,0,16" />
+                                            <TextBlock x:Name="switch2AssociationStatusText" TextWrapping="Wrap" Margin="0,8,0,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <Border x:Name="switch2DiscoveryDivider" Height="1" Background="{DynamicResource BorderColor}" Margin="0,16,0,16" SnapsToDevicePixels="True" />
                                             <TextBlock Text="{lex:Loc Strings:UI_35565BAA94CE6434}" Style="{DynamicResource BridgeSectionTitleStyle}" />
                                             <TextBlock Text="{lex:Loc Strings:UI_8AB28A7A2F2C3605}" Style="{DynamicResource BridgeSectionDescriptionStyle}" />
                                             <TextBlock x:Name="switch2JoyConCandidateStatusText" Text="{lex:Loc Strings:UI_007D04AA395125D7}" TextWrapping="Wrap" Margin="0,0,0,8" />
