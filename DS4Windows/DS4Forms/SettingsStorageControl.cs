@@ -17,8 +17,11 @@ public sealed class SettingsStorageControl : Border
     private readonly Button migrate, cancel;
     private readonly StackPanel details = new();
     private readonly TextBlock summary = new();
-    private readonly System.Windows.Shapes.Path chevron = new() { StrokeThickness = 2, Width = 12, Height = 7,
-        VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
+    // Reuse the platform Expander indicator used elsewhere in the app. The
+    // surrounding disclosure button remains the single keyboard/click target.
+    private readonly Expander chevron = new() { MinWidth = 24, MinHeight = 24, IsHitTestVisible = false,
+        Focusable = false, IsTabStop = false, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
+    private string locationSummary;
     private bool expanded, initialized;
     internal Func<SettingsStorage> Storage = () => SettingsStorage.Current;
     internal bool IsExpanded => expanded;
@@ -32,17 +35,18 @@ public sealed class SettingsStorageControl : Border
         Margin = new Thickness(0, 0, 0, 14);
         var panel = new StackPanel();
         Child = panel;
-        var heading = new Grid();
+        var heading = new Grid { Height = 42 };
         heading.ColumnDefinitions.Add(new ColumnDefinition());
         heading.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        var labels = new StackPanel();
+        var labels = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
         labels.Children.Add(new TextBlock { Text = UiText.Get("Settings & profiles"), FontSize = 16, FontWeight = FontWeights.SemiBold });
         summary.Margin = new Thickness(0, 3, 0, 0);
+        summary.TextTrimming = TextTrimming.CharacterEllipsis;
         summary.SetResourceReference(TextBlock.ForegroundProperty, "MutedForegroundColor");
         labels.Children.Add(summary);
         heading.Children.Add(labels);
         Grid.SetColumn(chevron, 1);
-        chevron.SetResourceReference(System.Windows.Shapes.Shape.StrokeProperty, "ForegroundColor");
+        System.Windows.Input.KeyboardNavigation.SetTabNavigation(chevron, System.Windows.Input.KeyboardNavigationMode.None);
         heading.Children.Add(chevron);
         // A real button makes the entire header keyboard and screen-reader accessible.
         var disclosure = new Button { Content = heading };
@@ -57,9 +61,7 @@ public sealed class SettingsStorageControl : Border
         panel.Children.Add(disclosure);
         panel.Children.Add(details);
         panel = details;
-        var description = new TextBlock { Text = UiText.Get("Choose where profiles and application settings are kept."), Margin = new Thickness(0, 3, 0, 12), TextWrapping = TextWrapping.Wrap };
-        description.SetResourceReference(TextBlock.ForegroundProperty, "MutedForegroundColor");
-        panel.Children.Add(description);
+        details.Margin = new Thickness(0, 12, 0, 0);
         var row = new WrapPanel();
         row.Children.Add(new TextBlock { Text = UiText.Get("Save location"), VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 14, 6) });
         location.Items.Add(UiText.Get("AppData — recommended"));
@@ -107,7 +109,7 @@ public sealed class SettingsStorageControl : Border
             // Warnings and pending operations must remain discoverable. Do not overwrite
             // the user's remembered preference when expanding for a warning.
             if (!writable || pending) expanded = true;
-            summary.Text = (active == SettingsFolder.AppData ? UiText.Get("AppData — recommended") : UiText.Get("Program folder")) +
+            locationSummary = (active == SettingsFolder.AppData ? UiText.Get("AppData — recommended") : UiText.Get("Program folder")) +
                 " · " + (writable ? UiText.Get("Writable") : UiText.Get("Read only"));
             summary.SetResourceReference(TextBlock.ForegroundProperty, writable ? "MutedForegroundColor" : "DangerColor");
             UpdateDisclosure();
@@ -127,8 +129,9 @@ public sealed class SettingsStorageControl : Border
     private void UpdateDisclosure()
     {
         details.Visibility = expanded ? Visibility.Visible : Visibility.Collapsed;
-        summary.Visibility = expanded ? Visibility.Collapsed : Visibility.Visible;
-        chevron.Data = Geometry.Parse(expanded ? "M 0,6 L 6,0 L 12,6" : "M 0,0 L 6,6 L 12,0");
+        summary.Text = expanded ? UiText.Get("Choose where profiles and application settings are kept.") : locationSummary;
+        summary.ToolTip = summary.Text;
+        chevron.IsExpanded = expanded;
     }
 
     private bool CanChange() => BeforeChange?.Invoke() != false;

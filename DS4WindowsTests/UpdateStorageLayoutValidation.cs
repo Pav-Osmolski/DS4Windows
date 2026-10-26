@@ -37,6 +37,10 @@ internal static class UpdateStorageLayoutValidation
                 Assert.IsTrue(profiles.ActualHeight < 110, "Collapsed storage should be a compact disclosure header.");
                 Save("profiles-collapsed", host, 1000, 130);
                 header ??= ThemeConsistencyValidation.Visuals(profiles).OfType<Button>().First();
+                var indicator = ThemeConsistencyValidation.Visuals(header).OfType<Expander>().Single();
+                var collapsedArrowPosition = indicator.TransformToAncestor(profiles).Transform(new Point(indicator.ActualWidth / 2, indicator.ActualHeight / 2));
+                var headerCenter = header.TransformToAncestor(profiles).Transform(new Point(header.ActualWidth / 2, header.ActualHeight / 2));
+                Assert.AreEqual(headerCenter.Y, collapsedArrowPosition.Y, 0.5, "The circle indicator must be vertically centred in the collapsed header.");
                 var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey",
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).GetValue(null);
                 header.SetValue(hoverKey, true);
@@ -50,6 +54,10 @@ internal static class UpdateStorageLayoutValidation
                 header.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
                 Assert.IsTrue(settings.StorageExpanded, "User expansion must be persisted.");
                 ThemeConsistencyValidation.Layout(host, 1000, 350);
+                var expandedArrowPosition = indicator.TransformToAncestor(profiles).Transform(new Point(indicator.ActualWidth / 2, indicator.ActualHeight / 2));
+                Assert.AreEqual(collapsedArrowPosition.X, expandedArrowPosition.X, 0.1, "Expanding must not move the indicator horizontally.");
+                Assert.AreEqual(collapsedArrowPosition.Y, expandedArrowPosition.Y, 0.1, "Expanding must not move the indicator vertically.");
+                Assert.IsTrue(indicator.IsExpanded);
                 Save("profiles-expanded", host, 1000, 350);
                 header.SetValue(hoverKey, true);
                 ThemeConsistencyValidation.Layout(host, 1000, 350);
