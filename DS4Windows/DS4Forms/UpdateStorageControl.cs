@@ -23,7 +23,9 @@ public sealed class UpdateStorageControl : StackPanel
     public UpdateStorageControl()
     {
         Margin = new Thickness(0, 12, 0, 0);
-        Children.Add(new Separator { Margin = new Thickness(0, 0, 0, 12) });
+        var divider = new Border { Height = 1, Margin = new Thickness(0, 0, 0, 12), SnapsToDevicePixels = true };
+        divider.SetResourceReference(Border.BackgroundProperty, "BorderColor");
+        Children.Add(divider);
         Children.Add(Label(UiText.Get("Update storage"), "BridgeSectionTitleStyle"));
         Children.Add(Label(UiText.Get("Manage downloaded updates and older support files."), "BridgeSectionDescriptionStyle"));
         var row = new WrapPanel { Margin = new Thickness(0, 6, 0, 0) };
@@ -49,7 +51,17 @@ public sealed class UpdateStorageControl : StackPanel
         actions.Children.Add(Button(UiText.Get("View stored files"), async (_, _) => await ViewAsync()));
         actions.Children.Add(Button(UiText.Get("Refresh"), async (_, _) => await RefreshAsync()));
         Children.Add(actions);
-        Children.Add(Label(UiText.Get("Keeps current files and the selected number of previous versions for each component. Profiles and settings are preserved."), "BridgeSectionDescriptionStyle"));
+        var footer = Label(UiText.Get("Keeps current files and the selected number of previous versions for each component. Profiles and settings are preserved."), "BridgeSectionDescriptionStyle");
+        footer.Margin = new Thickness(0, 0, 0, 8);
+        Children.Add(footer);
+        var statusStyle = new Style(typeof(TextBlock));
+        statusStyle.Setters.Add(new Setter(MarginProperty, new Thickness(0, 0, 0, 8)));
+        statusStyle.Triggers.Add(new DataTrigger
+        {
+            Binding = new System.Windows.Data.Binding("Text") { RelativeSource = System.Windows.Data.RelativeSource.Self }, Value = "",
+            Setters = { new Setter(VisibilityProperty, Visibility.Collapsed) }
+        });
+        result.Style = statusStyle;
         Children.Add(result);
         keep = 1;
         retention.SelectedIndex = 1;

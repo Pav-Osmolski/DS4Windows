@@ -45,9 +45,8 @@ public sealed class SettingsStorageControl : Border
         chevron.SetResourceReference(System.Windows.Shapes.Shape.StrokeProperty, "ForegroundColor");
         heading.Children.Add(chevron);
         // A real button makes the entire header keyboard and screen-reader accessible.
-        var disclosure = new Button { Content = heading, HorizontalContentAlignment = HorizontalAlignment.Stretch,
-            Padding = new Thickness(0), BorderThickness = new Thickness(0), Background = Brushes.Transparent };
-        disclosure.SetResourceReference(Control.ForegroundProperty, "ForegroundColor");
+        var disclosure = new Button { Content = heading };
+        disclosure.SetResourceReference(StyleProperty, "BridgeDisclosureHeaderButtonStyle");
         disclosure.SetValue(System.Windows.Automation.AutomationProperties.NameProperty, UiText.Get("Settings & profiles"));
         disclosure.Click += (_, _) => Run(() =>
         {
