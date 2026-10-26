@@ -1,10 +1,46 @@
+using System;
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Threading.Tasks;
 using DS4Windows;
 
 namespace DS4WinWPF.DS4Forms;
 
 public partial class MainWindow
 {
+    private ProfileBrowserViews profileBrowserViews;
+    private LatestPreferenceWriter<ProfileViewChoice> profileViewWriter;
+    private void ProfileViewChoices_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (profileBrowserViews != null) return;
+        profileBrowserViews = new ProfileBrowserViews(profilesListBox, profileDetailsHeader);
+        profileIconBtn.Content = UiText.Get("Profile icon…");
+        profileNameHeader.Text = UiText.Get("Name");
+        profileOutputHeader.Text = UiText.Get("Emulated controller");
+        profileModifiedHeader.Text = UiText.Get("Last modified");
+        var choice = ProfileViewChoice.Tiles;
+        try { choice = SettingsStorage.Current.ProfileView; }
+        catch (Exception error) when (error is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+        { NLog.LogManager.GetLogger("Profiles").Warn(error, "Could not read the profile view preference."); }
+        profileViewWriter = new(value => SettingsStorage.Current.SetProfileView(value),
+            error => NLog.LogManager.GetLogger("Profiles").Warn(error, "Could not remember the profile view."));
+        profileViewWriter.Initialize(choice);
+        ProfileBrowserViews.CreatePicker(profileViewChoices, choice,
+            value => { profileBrowserViews.Apply(value); profileViewWriter.Queue(value); });
+        profileBrowserViews.Apply(choice);
+    }
+
+    private void ProfileIconBtn_Click(object sender, RoutedEventArgs e)
+    {
+        if (profilesListBox.SelectedItem is not ProfileEntity profile || !RequireWritableProfiles()) return;
+        foreach (var controller in conLvViewModel.ControllerCol)
+            if (controller.SelectedProfile == profile.Name) FlushOverviewQuickSettings(controller.DevIndex, false);
+        if (HasPendingOverviewSave(profile.Name)) return;
+        if (new ProfileIconWindow(profile) { Owner = this }.ShowDialog() == true)
+            profilesCollectionView?.Refresh();
+    }
+
     private void ProfileSortCombo_Loaded(object sender, RoutedEventArgs e)
     {
         if (profileSortCombo.Items.Count > 0) return;

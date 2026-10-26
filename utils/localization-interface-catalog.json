@@ -1022,7 +1022,8 @@
       "DS4Windows/DS4Forms/MainWindow.xaml.cs",
       "DS4Windows/DS4Forms/PortableRepairProgress.cs",
       "DS4Windows/DS4Forms/TriggerLabControl.xaml.cs",
-      "DS4Windows/DS4Forms/ViewModels/ControllerListViewModel.cs"
+      "DS4Windows/DS4Forms/ViewModels/ControllerListViewModel.cs",
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
     ]
   },
   "UI_F92FC83B9B091613": {
@@ -1813,7 +1814,8 @@
     "files": [
       "DS4Windows/DS4Forms/ControllerOverviewControl.xaml",
       "DS4Windows/DS4Control/ControllerInfo.cs",
-      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs",
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
     ]
   },
   "UI_8ED4DCE8B648CE47": {
@@ -3383,7 +3385,8 @@
   "UI_DCD1D5223F73B3A9": {
     "source": "Name",
     "files": [
-      "DS4Windows/DS4Forms/ProfileEditor.xaml"
+      "DS4Windows/DS4Forms/ProfileEditor.xaml",
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
     ]
   },
   "UI_21B111CBFE6E8FCA": {
@@ -10569,6 +10572,144 @@
     "files": [
       "DS4Windows/DS4Forms/UpdateStorageControl.cs",
       "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_443D37F3A1F6013B": {
+    "source": "Choose an ICO or PNG image.",
+    "files": [
+      "DS4Windows/ProfileAppearance.cs"
+    ]
+  },
+  "UI_DCC6BBD741580C9A": {
+    "source": "Choose an image smaller than 2 MB.",
+    "files": [
+      "DS4Windows/ProfileAppearance.cs"
+    ]
+  },
+  "UI_12A1137C6D79CA4A": {
+    "source": "The image is too large to use as a profile icon.",
+    "files": [
+      "DS4Windows/ProfileAppearance.cs"
+    ]
+  },
+  "UI_7F5096197E224CAB": {
+    "source": "Choose an image no larger than 2048 × 2048 pixels.",
+    "files": [
+      "DS4Windows/ProfileAppearance.cs"
+    ]
+  },
+  "UI_AFE4F505B369EBED": {
+    "source": "First letter",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_032747A5D15926E7": {
+    "source": "Custom image",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_E90146D539BEAA48": {
+    "source": "Profile icon",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_5386C28080A66F48": {
+    "source": "Icon fill colour",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_598104707437A0F5": {
+    "source": "Custom colour…",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_BF1D4510A062903B": {
+    "source": "The letter follows the profile name.",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_44CE6E4A2F8D9596": {
+    "source": "Choose image…",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_2A5DB09C1D9DB184": {
+    "source": "ICO or PNG. Transparency is preserved.",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_19D66A2331B54332": {
+    "source": "Restore default",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_31E392D1C0378BEC": {
+    "source": "Apply",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_495FED05ED6FEE23": {
+    "source": "No image selected",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_2B47F2E2A828B69A": {
+    "source": "Embedded image",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_9E2244CB6701F028": {
+    "source": "Profile icons (*.ico;*.png)",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_470CFA3EFC56E382": {
+    "source": "The image could not be opened.",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_63F14D2E7F10AEE7": {
+    "source": "The profile icon could not be saved.",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_2ECBB0BF0A4C74A6": {
+    "source": "Profile icon…",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_4DA22A362D386464": {
+    "source": "Tiles",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileBrowserViews.cs"
+    ]
+  },
+  "UI_6F202F54A7B2D8FE": {
+    "source": "List",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileBrowserViews.cs"
+    ]
+  },
+  "UI_45989DE49FB7F66D": {
+    "source": "Details",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileBrowserViews.cs"
     ]
   }
 }

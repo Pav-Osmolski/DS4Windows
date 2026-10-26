@@ -6621,4 +6621,73 @@
   <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
     <value>Доступ до облікового запису не вдався.</value>
   </data>
+  <data name="UI_443D37F3A1F6013B" xml:space="preserve">
+    <value>Виберіть ICO або PNG зображення.</value>
+  </data>
+  <data name="UI_DCC6BBD741580C9A" xml:space="preserve">
+    <value>Виберіть зображення менше 2 Мб.</value>
+  </data>
+  <data name="UI_12A1137C6D79CA4A" xml:space="preserve">
+    <value>Зображення занадто велике, щоб використовувати його як іконку профілю.</value>
+  </data>
+  <data name="UI_7F5096197E224CAB" xml:space="preserve">
+    <value>Виберіть зображення не більше 2048 × 2048 пікселів.</value>
+  </data>
+  <data name="UI_AFE4F505B369EBED" xml:space="preserve">
+    <value>Перший лист</value>
+  </data>
+  <data name="UI_032747A5D15926E7" xml:space="preserve">
+    <value>Custom зображення</value>
+  </data>
+  <data name="UI_E90146D539BEAA48" xml:space="preserve">
+    <value>Профіль ікона</value>
+  </data>
+  <data name="UI_5386C28080A66F48" xml:space="preserve">
+    <value>Icon Fill колір</value>
+  </data>
+  <data name="UI_598104707437A0F5" xml:space="preserve">
+    <value>Космічний колір...</value>
+  </data>
+  <data name="UI_BF1D4510A062903B" xml:space="preserve">
+    <value>Назва посилається на профіль.</value>
+  </data>
+  <data name="UI_44CE6E4A2F8D9596" xml:space="preserve">
+    <value>Виберіть зображення...</value>
+  </data>
+  <data name="UI_2A5DB09C1D9DB184" xml:space="preserve">
+    <value>ICO або PNG. Прозорість збережена.</value>
+  </data>
+  <data name="UI_19D66A2331B54332" xml:space="preserve">
+    <value>Відновлення дефолту</value>
+  </data>
+  <data name="UI_31E392D1C0378BEC" xml:space="preserve">
+    <value>Застосувати</value>
+  </data>
+  <data name="UI_495FED05ED6FEE23" xml:space="preserve">
+    <value>Фото не вибрано</value>
+  </data>
+  <data name="UI_2B47F2E2A828B69A" xml:space="preserve">
+    <value>Вбудований образ</value>
+  </data>
+  <data name="UI_9E2244CB6701F028" xml:space="preserve">
+    <value>Ікони профілю (*.ico;*.png)</value>
+  </data>
+  <data name="UI_470CFA3EFC56E382" xml:space="preserve">
+    <value>Зображення не можна було відкрити.</value>
+  </data>
+  <data name="UI_63F14D2E7F10AEE7" xml:space="preserve">
+    <value>Ікону профілю не вдалося зберегти.</value>
+  </data>
+  <data name="UI_2ECBB0BF0A4C74A6" xml:space="preserve">
+    <value>Профільний ікон...</value>
+  </data>
+  <data name="UI_4DA22A362D386464" xml:space="preserve">
+    <value>Плитки</value>
+  </data>
+  <data name="UI_6F202F54A7B2D8FE" xml:space="preserve">
+    <value>Список</value>
+  </data>
+  <data name="UI_45989DE49FB7F66D" xml:space="preserve">
+    <value>Докладно</value>
+  </data>
 </root>

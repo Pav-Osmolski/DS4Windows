@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -23,6 +24,9 @@ public sealed class SettingsStorageControl : Border
     private readonly Expander chevron = new() { MinWidth = 24, MinHeight = 24,
         Focusable = false, IsTabStop = false, HorizontalAlignment = HorizontalAlignment.Right,
         VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
+    private readonly DisclosurePreferenceWriter disclosureWriter;
+    internal Action<bool> PersistExpanded;
+    internal Task DisclosureSaved => disclosureWriter.Saved;
     private string locationSummary;
     private bool expanded, initialized, synchronizingIndicator;
     internal Func<SettingsStorage> Storage = () => SettingsStorage.Current;
@@ -32,6 +36,11 @@ public sealed class SettingsStorageControl : Border
 
     public SettingsStorageControl()
     {
+        disclosureWriter = new(value =>
+        {
+            if (PersistExpanded != null) PersistExpanded(value);
+            else Storage().SetStorageExpanded(value);
+        }, error => NLog.LogManager.GetLogger("SettingsStorage").Warn(error, "Could not remember Settings & profiles expansion state."));
         SetResourceReference(StyleProperty, "BridgeCardStyle");
         Padding = new Thickness(18, 14, 18, 14);
         Margin = new Thickness(0, 0, 0, 14);
@@ -55,12 +64,7 @@ public sealed class SettingsStorageControl : Border
         var disclosure = new Button { Content = heading };
         disclosure.SetResourceReference(StyleProperty, "BridgeDisclosureHeaderButtonStyle");
         disclosure.SetValue(System.Windows.Automation.AutomationProperties.NameProperty, UiText.Get("Settings & profiles"));
-        disclosure.Click += (_, _) => Run(() =>
-        {
-            expanded = !expanded;
-            Storage().SetStorageExpanded(expanded);
-            UpdateDisclosure();
-        });
+        disclosure.Click += (_, _) => SetExpanded(!expanded);
         chevron.Expanded += IndicatorChanged;
         chevron.Collapsed += IndicatorChanged;
         var header = new Grid();
@@ -113,7 +117,7 @@ public sealed class SettingsStorageControl : Border
             path.Text = Path.Combine(Global.appdatapath, "Profiles");
             bool writable = SettingsStorage.CanWrite(Global.appdatapath, out string reason);
             bool pending = storage.HasPending;
-            if (!initialized) { expanded = storage.StorageExpanded; initialized = true; }
+            if (!initialized) { expanded = storage.StorageExpanded; disclosureWriter.Initialize(expanded); initialized = true; }
             // Warnings and pending operations must remain discoverable. Do not overwrite
             // the user's remembered preference when expanding for a warning.
             if (!writable || pending) expanded = true;
@@ -147,12 +151,14 @@ public sealed class SettingsStorageControl : Border
     private void IndicatorChanged(object sender, RoutedEventArgs e)
     {
         if (synchronizingIndicator) return;
-        Run(() =>
-        {
-            expanded = chevron.IsExpanded;
-            Storage().SetStorageExpanded(expanded);
-            UpdateDisclosure();
-        });
+        SetExpanded(chevron.IsExpanded);
+    }
+
+    private void SetExpanded(bool value)
+    {
+        expanded = value;
+        UpdateDisclosure();
+        disclosureWriter.Queue(value);
     }
 
     private bool CanChange() => BeforeChange?.Invoke() != false;

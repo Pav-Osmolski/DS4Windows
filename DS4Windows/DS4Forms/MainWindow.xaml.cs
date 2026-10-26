@@ -1933,6 +1933,7 @@ Suspend support not enabled.", true);
 
         private void ProfilesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (profileIconBtn != null) profileIconBtn.IsEnabled = profilesListBox.SelectedItem is ProfileEntity;
             bool hasSelection = profilesListBox.SelectedIndex >= 0;
             newProfListBtn.IsEnabled = true;
             editProfBtn.IsEnabled = hasSelection;
@@ -2185,6 +2186,12 @@ Suspend support not enabled.", true);
 
         private void MainDS4Window_Closed(object sender, EventArgs e)
         {
+            // The window is closed: finish only its outstanding presentation
+            // preference write, with a bound, before the process can exit.
+            if (settingsStorageControl != null && !settingsStorageControl.DisclosureSaved.Wait(TimeSpan.FromSeconds(2)))
+                NLog.LogManager.GetLogger("SettingsStorage").Warn("Timed out remembering Settings & profiles expansion state during shutdown.");
+            if (profileViewWriter != null && !profileViewWriter.Saved.Wait(TimeSpan.FromSeconds(2)))
+                NLog.LogManager.GetLogger("Profiles").Warn("Timed out remembering the profile view during shutdown.");
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= TrayDisplaySettingsChanged;
             logAutoScroller?.Dispose();
             DisposePowerLifecycle();
@@ -3560,6 +3567,7 @@ Suspend support not enabled.", true);
                         finally { if (File.Exists(temporary)) File.Delete(temporary); }
                         if (!profileListHolder.ProfileListCol.Any(item => item.Name.Equals(basename, StringComparison.OrdinalIgnoreCase)))
                             profileListHolder.AddProfileSort(basename);
+                        else profileListHolder.ProfileListCol.First(item => item.Name.Equals(basename, StringComparison.OrdinalIgnoreCase)).FireSaved();
                     }
                     catch (Exception error) when (error is IOException or UnauthorizedAccessException or System.Xml.XmlException)
                     { MessageBox.Show(this, error.Message, "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Warning); }

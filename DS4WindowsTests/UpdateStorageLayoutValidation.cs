@@ -38,6 +38,31 @@ internal static class UpdateStorageLayoutValidation
                 Save("profiles-collapsed", host, 1000, 130);
                 header ??= ThemeConsistencyValidation.Visuals(profiles).OfType<Button>().First();
                 var indicator = ThemeConsistencyValidation.Visuals(profiles).OfType<Expander>().Single();
+                if (choice == AppThemeChoice.Dark)
+                {
+                    using var entered = new System.Threading.ManualResetEventSlim();
+                    using var release = new System.Threading.ManualResetEventSlim();
+                    profiles.PersistExpanded = value =>
+                    {
+                        entered.Set();
+                        if (!release.Wait(5000)) throw new TimeoutException("Synthetic slow preference save was not released.");
+                        settings.SetStorageExpanded(value);
+                    };
+                    try
+                    {
+                        header.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                        Assert.IsTrue(profiles.IsExpanded, "Opening must update immediately, before preference persistence.");
+                        Assert.IsTrue(entered.Wait(2000));
+                        Assert.IsFalse(profiles.DisclosureSaved.IsCompleted, "The synthetic disk write must still be blocked.");
+                        var blockedToggle = ThemeConsistencyValidation.Visuals(indicator).OfType<System.Windows.Controls.Primitives.ToggleButton>().Single();
+                        typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle",
+                            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(blockedToggle, null);
+                        Assert.IsFalse(profiles.IsExpanded, "The circular arrow must close immediately while the header's previous write is blocked.");
+                    }
+                    finally { release.Set(); profiles.DisclosureSaved.GetAwaiter().GetResult(); profiles.PersistExpanded = null; }
+                    Assert.IsFalse(settings.StorageExpanded, "After slow I/O, the last visible state must win.");
+                    ThemeConsistencyValidation.Layout(host, 1000, 130);
+                }
                 Assert.IsTrue(indicator.IsHitTestVisible, "The native circular toggle must receive hover and pressed input.");
                 var collapsedArrowPosition = indicator.TransformToAncestor(profiles).Transform(new Point(indicator.ActualWidth / 2, indicator.ActualHeight / 2));
                 var headerCenter = header.TransformToAncestor(profiles).Transform(new Point(header.ActualWidth / 2, header.ActualHeight / 2));
@@ -83,6 +108,7 @@ internal static class UpdateStorageLayoutValidation
                 var toggleMethod = typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle",
                     System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
                 toggleMethod.Invoke(nativeToggle, null);
+                profiles.DisclosureSaved.GetAwaiter().GetResult();
                 Assert.IsTrue(settings.StorageExpanded, "User expansion must be persisted.");
                 ThemeConsistencyValidation.Layout(host, 1000, 350);
                 var expandedArrowPosition = indicator.TransformToAncestor(profiles).Transform(new Point(indicator.ActualWidth / 2, indicator.ActualHeight / 2));
@@ -91,6 +117,7 @@ internal static class UpdateStorageLayoutValidation
                 Assert.IsTrue(indicator.IsExpanded);
                 toggleMethod.Invoke(nativeToggle, null);
                 Assert.IsFalse(profiles.IsExpanded, "The native arrow must collapse once, without double toggling the header.");
+                profiles.DisclosureSaved.GetAwaiter().GetResult();
                 Assert.IsFalse(settings.StorageExpanded);
                 header.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
                 ThemeConsistencyValidation.Layout(host, 1000, 350);
@@ -99,6 +126,7 @@ internal static class UpdateStorageLayoutValidation
                 ThemeConsistencyValidation.Layout(host, 1000, 350);
                 Save("profiles-expanded-hover", host, 1000, 350);
                 header.SetValue(hoverKey, false);
+                profiles.DisclosureSaved.GetAwaiter().GetResult();
                 var recreated = new SettingsStorageControl { Storage = () => settings };
                 recreated.Refresh();
                 Assert.IsTrue(recreated.IsExpanded, "A recreated page must read the saved choice.");

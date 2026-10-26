@@ -36,6 +36,24 @@ after changing output type if it does not detect the new virtual controller.
 
 You can rename, duplicate, import and export profiles from the Profiles page.
 
+### Profile views and icons
+
+**Tiles** is the default profile view. Switch to **List** for compact rows or
+**Details** for columns showing the profile name, emulated controller and
+last-modified time. Your view choice is remembered; selection, search, sorting,
+and the profile actions work in every view.
+
+Select a profile and choose **Profile icon…** below the list. The default badge
+uses the first character of the profile name. Choose a fill colour, use a custom
+ICO/PNG image, or choose **Restore default**. Changes are previewed until you
+select **Apply**; Cancel leaves the saved appearance unchanged.
+
+Images must be smaller than 2 MB and no larger than 2048 × 2048 pixels. They are
+stored as small PNG thumbnails inside the profile, preserving transparency.
+There is no dependency on the original image file: rename, duplicate, profile
+import/export, settings backups and settings migration retain the icon. Editing
+and saving controller settings also preserves profile appearance.
+
 ### Settings and profiles location
 
 The **Settings & profiles** card shows the active profiles folder and whether it

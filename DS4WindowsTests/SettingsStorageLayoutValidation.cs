@@ -59,12 +59,91 @@ internal static class SettingsStorageLayoutValidation
                 var host = new Border { Padding = new Thickness(18), Child = content };
                 host.SetResourceReference(Border.BackgroundProperty, "SurfaceBackgroundColor");
                 host.SetResourceReference(System.Windows.Documents.TextElement.ForegroundProperty, "ForegroundColor");
+                ((TextBlock)content.FindName("profileNameHeader")).Text = "Name";
+                ((TextBlock)content.FindName("profileOutputHeader")).Text = "Emulated controller";
+                ((TextBlock)content.FindName("profileModifiedHeader")).Text = "Last modified";
+                ((Button)content.FindName("profileIconBtn")).Content = "Profile icon…";
+                var header = (Grid)content.FindName("profileDetailsHeader");
+                var browser = new ProfileBrowserViews(list, header);
+                ((Button)content.FindName("profileIconBtn")).IsEnabled = true;
+                ProfileBrowserViews.CreatePicker((WrapPanel)content.FindName("profileViewChoices"), ProfileViewChoice.Tiles, browser.Apply);
                 ThemeConsistencyValidation.Layout(host, 1200, 820);
                 foreach (var button in ThemeConsistencyValidation.Visuals(content).OfType<Button>().Where(button => button.IsEnabled && button.Visibility == Visibility.Visible && button.ActualWidth > 0))
                     Assert.IsTrue(button.ActualHeight >= 20, button.Name + " must have a usable height.");
+                var searchFrame = (Border)content.FindName("profilesSearchFrame");
+                Assert.AreEqual(sort.ActualHeight, searchFrame.ActualHeight, 0.5,
+                    "The profile search frame must match the neighbouring dropdown height.");
+                double searchTop = searchFrame.TranslatePoint(new Point(), host).Y;
+                Assert.AreEqual(searchTop, sort.TranslatePoint(new Point(), host).Y, 0.5,
+                    "The search field and dropdown must share their top edge.");
+                foreach (var viewButton in ((WrapPanel)content.FindName("profileViewChoices")).Children.OfType<RadioButton>())
+                {
+                    Assert.AreEqual(viewButton.ActualHeight, searchFrame.ActualHeight, 0.5,
+                        "The search field must match the view button heights.");
+                    Assert.AreEqual(searchTop, viewButton.TranslatePoint(new Point(), host).Y, 0.5,
+                        "The search field and view buttons must share their top edge.");
+                }
                 string path = Path.Combine(directory, "profiles-" + choice + ".png");
                 ThemeConsistencyValidation.Save(host, path, 1200, 820);
                 files.Add(path);
+                var selected = list.SelectedItem;
+                var tileItem = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(0);
+                Point tileInset = tileItem.TranslatePoint(new Point(), list);
+                foreach (var view in new[] { ProfileViewChoice.List, ProfileViewChoice.Details })
+                {
+                    browser.Apply(view);
+                    ThemeConsistencyValidation.Layout(host, 1200, 820);
+                    browser.AlignHeader();
+                    ThemeConsistencyValidation.Layout(host, 1200, 820);
+                    Assert.AreSame(selected, list.SelectedItem, "Changing view must preserve selection and actions.");
+                    Assert.AreEqual(view == ProfileViewChoice.Details ? Visibility.Visible : Visibility.Collapsed, header.Visibility);
+                    foreach (var item in list.Items.Cast<ProfileEntity>()) Assert.AreNotEqual("P", item.IconLetter);
+                    var firstRow = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(0);
+                    Point rowInset = firstRow.TranslatePoint(new Point(), list);
+                    Assert.AreEqual(tileInset.X, rowInset.X, 0.5, "Rows and tiles must have the same left inset.");
+                    Assert.AreEqual(tileInset.Y, rowInset.Y, 0.5, "Rows and tiles must have the same top inset below their header.");
+                    foreach (var badge in ThemeConsistencyValidation.Visuals(list).OfType<ProfileIconBadge>())
+                    {
+                        double expectedSize = view == ProfileViewChoice.List ? 30 : 28;
+                        Assert.AreEqual(expectedSize, badge.ActualWidth, 0.1, "The row must use the requested reduced icon width.");
+                        Assert.AreEqual(expectedSize, badge.ActualHeight, 0.1, "The row must use the requested reduced icon height.");
+                        var fill = ThemeConsistencyValidation.Visuals(badge).OfType<Border>().First();
+                        Rect drawing = fill.TransformToAncestor(badge).TransformBounds(new Rect(fill.RenderSize));
+                        Assert.IsTrue(drawing.Left >= -0.5 && drawing.Top >= -0.5 &&
+                            drawing.Right <= badge.ActualWidth + 0.5 && drawing.Bottom <= badge.ActualHeight + 0.5,
+                            "The complete rounded badge must fit inside the reduced row icon, without clipping.");
+                    }
+                    if (view == ProfileViewChoice.Details)
+                    {
+                        var parent = (FrameworkElement)list.Parent;
+                        Rect labels = header.TransformToAncestor(parent).TransformBounds(new Rect(header.RenderSize));
+                        double rowTop = firstRow.TranslatePoint(new Point(), parent).Y;
+                        Assert.AreEqual(labels.Top, rowTop - labels.Bottom, 0.5,
+                            "Details headings need equal space above and below their text.");
+                    }
+
+                    path = Path.Combine(directory, "profiles-" + view + "-" + choice + ".png");
+                    ThemeConsistencyValidation.Save(host, path, 1200, 820); files.Add(path);
+                    if (choice == AppThemeChoice.Dark)
+                    {
+                        var scaled = new System.Windows.Media.Imaging.RenderTargetBitmap(2400, 1640, 192, 192, PixelFormats.Pbgra32);
+                        scaled.Render(host);
+                        var encoder = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                        encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(scaled));
+                        path = Path.Combine(directory, "profiles-" + view + "-Dark-200pct.png");
+                        using (var stream = File.Create(path)) encoder.Save(stream);
+                        files.Add(path);
+                    }
+                }
+                var iconWindow = new ProfileIconWindow((ProfileEntity)selected);
+                var dialogHost = (FrameworkElement)iconWindow.Content;
+                iconWindow.Content = null;
+                var dialogSurface = new Border { Child = dialogHost };
+                dialogSurface.SetResourceReference(Border.BackgroundProperty, "SurfaceBackgroundColor");
+                ThemeConsistencyValidation.Layout(dialogSurface, 480, 480);
+                path = Path.Combine(directory, "profile-icon-" + choice + ".png");
+                ThemeConsistencyValidation.Save(dialogSurface, path, 480, 480); files.Add(path);
+                browser.Apply(ProfileViewChoice.Tiles);
                 if (choice is AppThemeChoice.Light or AppThemeChoice.Dark)
                 {
                     ThemeConsistencyValidation.Layout(host, 620, 500);

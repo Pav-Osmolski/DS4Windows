@@ -37,6 +37,30 @@ public sealed class SettingsStorageTests
     }
 
     [TestMethod]
+    public void DisclosurePreferenceKeepsLegacyChoiceWithoutRewritingLocationOrRetention()
+    {
+        storage.Remember(SettingsFolder.Program);
+        storage.SetUpdateRetention(5, false);
+        string location = Directory.GetFiles(preferences, "location.json", SearchOption.AllDirectories).Single();
+        var legacy = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(location));
+        legacy["StorageExpanded"] = true;
+        File.WriteAllText(location, legacy.ToJsonString());
+        byte[] original = File.ReadAllBytes(location);
+        Assert.IsTrue(storage.StorageExpanded, "Existing releases' remembered choices must still load.");
+        storage.SetStorageExpanded(false);
+        CollectionAssert.AreEqual(original, File.ReadAllBytes(location), "UI-state saves must not race migration or retention preference writes.");
+        var again = new SettingsStorage(program, appData, preferences);
+        Assert.IsFalse(again.StorageExpanded);
+        Assert.AreEqual(SettingsFolder.Program, again.Selected);
+        Assert.AreEqual((5, false), again.UpdateRetention);
+        again.Queue(SettingsFolder.Program, SettingsFolder.AppData, false, false);
+        again.SetStorageExpanded(true);
+        Assert.IsTrue(again.HasPending);
+        again.CancelPending();
+        Assert.IsTrue(again.StorageExpanded, "Migration changes must not overwrite a newer presentation choice.");
+    }
+
+    [TestMethod]
     public void MigrationPreservesSourceAndCopiesAllSettingsButNeverApplicationFiles()
     {
         foreach (string name in new[] { "Profiles.xml", "Auto Profiles.xml", "Actions.xml", "LinkedProfiles.xml", "ControllerConfigs.xml", "OutputSlots.xml", "Profiles/Example.xml" }) Put(program, name);

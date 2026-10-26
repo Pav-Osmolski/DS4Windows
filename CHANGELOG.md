@@ -9,6 +9,19 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.53](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.53) - 2026-10-26
+
+#### Profile views and icons
+
+- Add remembered **Tiles**, **List** and **Details** profile views, keeping Tiles as the default and preserving selection, search, sorting and profile actions across view changes. Details shows the emulated controller and local last-modified time.
+- Use each profile name's first Unicode character for its badge. Add **Profile icon…** to choose a fill colour or a transparent ICO/PNG image, preview changes, cancel without saving, and restore the default. Embed bounded PNG thumbnails in the profile XML so appearance survives normal saves, rename, duplicate, import/export, backups and migration. Include the new interface text in all 24 language packs.
+- Match row insets to Tiles, scale complete badges to fit List and Details without clipping, balance the spacing above and below the Details headings, and match the search field height to the sorting and view controls. Verify the layouts across all six themes, with additional 200% DPI renders.
+
+#### Settings responsiveness
+
+- Make **Settings & profiles** expand/collapse immediately. Debounce and coalesce remembered-state writes off the UI thread, skip writes when the final choice matches the saved state, and keep presentation-state persistence separate from location/migration and update-retention preferences. Retain older saved choices and finish pending writes with a bound during application shutdown.
+- Implemented in [PR #86](https://github.com/Pav-Osmolski/DS4Windows/pull/86).
+
 ### [5.0.52](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.52) - 2026-10-26
 
 #### Installer and uninstaller

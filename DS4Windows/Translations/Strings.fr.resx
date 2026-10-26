@@ -6648,4 +6648,73 @@ Le backup : </value>
   <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
     <value>Le stockage des mises à jour n'a pas pu être consulté.</value>
   </data>
+  <data name="UI_443D37F3A1F6013B" xml:space="preserve">
+    <value>Choisissez une image ICO ou PNG.</value>
+  </data>
+  <data name="UI_DCC6BBD741580C9A" xml:space="preserve">
+    <value>Choisissez une image de moins de 2 Mo.</value>
+  </data>
+  <data name="UI_12A1137C6D79CA4A" xml:space="preserve">
+    <value>L'image est trop grande pour être utilisée comme icône de profil.</value>
+  </data>
+  <data name="UI_7F5096197E224CAB" xml:space="preserve">
+    <value>Choisissez une image ne dépassant pas 2048 × 2048 pixels.</value>
+  </data>
+  <data name="UI_AFE4F505B369EBED" xml:space="preserve">
+    <value>Première lettre</value>
+  </data>
+  <data name="UI_032747A5D15926E7" xml:space="preserve">
+    <value>Custom image</value>
+  </data>
+  <data name="UI_E90146D539BEAA48" xml:space="preserve">
+    <value>Icône de profil</value>
+  </data>
+  <data name="UI_5386C28080A66F48" xml:space="preserve">
+    <value>Icône de couleur</value>
+  </data>
+  <data name="UI_598104707437A0F5" xml:space="preserve">
+    <value>Couleur personnalisée...</value>
+  </data>
+  <data name="UI_BF1D4510A062903B" xml:space="preserve">
+    <value>La lettre suit le nom du profil.</value>
+  </data>
+  <data name="UI_44CE6E4A2F8D9596" xml:space="preserve">
+    <value>Choisir une image...</value>
+  </data>
+  <data name="UI_2A5DB09C1D9DB184" xml:space="preserve">
+    <value>ICO ou PNG. La transparence est préservée.</value>
+  </data>
+  <data name="UI_19D66A2331B54332" xml:space="preserve">
+    <value>Rétablir le défaut</value>
+  </data>
+  <data name="UI_31E392D1C0378BEC" xml:space="preserve">
+    <value>Appliquer</value>
+  </data>
+  <data name="UI_495FED05ED6FEE23" xml:space="preserve">
+    <value>Aucune image sélectionnée</value>
+  </data>
+  <data name="UI_2B47F2E2A828B69A" xml:space="preserve">
+    <value>Imagerie intégrée</value>
+  </data>
+  <data name="UI_9E2244CB6701F028" xml:space="preserve">
+    <value>Icônes de profil (*.ico ;*.png)</value>
+  </data>
+  <data name="UI_470CFA3EFC56E382" xml:space="preserve">
+    <value>L'image ne pouvait pas être ouverte.</value>
+  </data>
+  <data name="UI_63F14D2E7F10AEE7" xml:space="preserve">
+    <value>L'icône de profil n'a pas pu être enregistrée.</value>
+  </data>
+  <data name="UI_2ECBB0BF0A4C74A6" xml:space="preserve">
+    <value>L’icône de profil...</value>
+  </data>
+  <data name="UI_4DA22A362D386464" xml:space="preserve">
+    <value>Vignettes</value>
+  </data>
+  <data name="UI_6F202F54A7B2D8FE" xml:space="preserve">
+    <value>Liste</value>
+  </data>
+  <data name="UI_45989DE49FB7F66D" xml:space="preserve">
+    <value>Détails</value>
+  </data>
 </root>
