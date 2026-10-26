@@ -15,6 +15,13 @@ public sealed class SettingsStorageControl : Border
     private readonly TextBlock path = new() { TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 8, 0, 0) };
     private readonly TextBlock status = new() { TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 8) };
     private readonly Button migrate, cancel;
+    private readonly StackPanel details = new();
+    private readonly TextBlock summary = new();
+    private readonly System.Windows.Shapes.Path chevron = new() { StrokeThickness = 2, Width = 12, Height = 7,
+        VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
+    private bool expanded, initialized;
+    internal Func<SettingsStorage> Storage = () => SettingsStorage.Current;
+    internal bool IsExpanded => expanded;
     internal Func<bool> BeforeChange;
     internal Action CloseRequested;
 
@@ -25,7 +32,32 @@ public sealed class SettingsStorageControl : Border
         Margin = new Thickness(0, 0, 0, 14);
         var panel = new StackPanel();
         Child = panel;
-        panel.Children.Add(new TextBlock { Text = UiText.Get("Settings & profiles"), FontSize = 16, FontWeight = FontWeights.SemiBold });
+        var heading = new Grid();
+        heading.ColumnDefinitions.Add(new ColumnDefinition());
+        heading.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        var labels = new StackPanel();
+        labels.Children.Add(new TextBlock { Text = UiText.Get("Settings & profiles"), FontSize = 16, FontWeight = FontWeights.SemiBold });
+        summary.Margin = new Thickness(0, 3, 0, 0);
+        summary.SetResourceReference(TextBlock.ForegroundProperty, "MutedForegroundColor");
+        labels.Children.Add(summary);
+        heading.Children.Add(labels);
+        Grid.SetColumn(chevron, 1);
+        chevron.SetResourceReference(System.Windows.Shapes.Shape.StrokeProperty, "ForegroundColor");
+        heading.Children.Add(chevron);
+        // A real button makes the entire header keyboard and screen-reader accessible.
+        var disclosure = new Button { Content = heading, HorizontalContentAlignment = HorizontalAlignment.Stretch,
+            Padding = new Thickness(0), BorderThickness = new Thickness(0), Background = Brushes.Transparent };
+        disclosure.SetResourceReference(Control.ForegroundProperty, "ForegroundColor");
+        disclosure.SetValue(System.Windows.Automation.AutomationProperties.NameProperty, UiText.Get("Settings & profiles"));
+        disclosure.Click += (_, _) => Run(() =>
+        {
+            expanded = !expanded;
+            Storage().SetStorageExpanded(expanded);
+            UpdateDisclosure();
+        });
+        panel.Children.Add(disclosure);
+        panel.Children.Add(details);
+        panel = details;
         var description = new TextBlock { Text = UiText.Get("Choose where profiles and application settings are kept."), Margin = new Thickness(0, 3, 0, 12), TextWrapping = TextWrapping.Wrap };
         description.SetResourceReference(TextBlock.ForegroundProperty, "MutedForegroundColor");
         panel.Children.Add(description);
@@ -66,12 +98,20 @@ public sealed class SettingsStorageControl : Border
         if (PortableLabContext.IsActive || string.IsNullOrWhiteSpace(Global.appdatapath)) return;
         Run(() =>
         {
-            var storage = SettingsStorage.Current;
+            var storage = Storage();
             var active = storage.FolderFor(Global.appdatapath);
             location.SelectedIndex = (int)active;
             path.Text = Path.Combine(Global.appdatapath, "Profiles");
             bool writable = SettingsStorage.CanWrite(Global.appdatapath, out string reason);
             bool pending = storage.HasPending;
+            if (!initialized) { expanded = storage.StorageExpanded; initialized = true; }
+            // Warnings and pending operations must remain discoverable. Do not overwrite
+            // the user's remembered preference when expanding for a warning.
+            if (!writable || pending) expanded = true;
+            summary.Text = (active == SettingsFolder.AppData ? UiText.Get("AppData — recommended") : UiText.Get("Program folder")) +
+                " · " + (writable ? UiText.Get("Writable") : UiText.Get("Read only"));
+            summary.SetResourceReference(TextBlock.ForegroundProperty, writable ? "MutedForegroundColor" : "DangerColor");
+            UpdateDisclosure();
             status.Text = pending ? UiText.Get("A settings change is pending. Fully close DS4Windows and open it again to apply it. The current location remains active until then.") :
                 writable ? UiText.Get("Writable. Changing location requires a restart; original files are kept.") :
                     UiText.Get("Read only. Profile changes cannot be saved. Choose AppData or adjust this folder's permissions.");
@@ -83,6 +123,13 @@ public sealed class SettingsStorageControl : Border
             cancel.Visibility = pending ? Visibility.Visible : Visibility.Collapsed;
             location.IsEnabled = !pending;
         });
+    }
+
+    private void UpdateDisclosure()
+    {
+        details.Visibility = expanded ? Visibility.Visible : Visibility.Collapsed;
+        summary.Visibility = expanded ? Visibility.Collapsed : Visibility.Visible;
+        chevron.Data = Geometry.Parse(expanded ? "M 0,6 L 6,0 L 12,6" : "M 0,0 L 6,6 L 12,0");
     }
 
     private bool CanChange() => BeforeChange?.Invoke() != false;

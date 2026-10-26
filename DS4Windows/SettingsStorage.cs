@@ -55,6 +55,9 @@ internal sealed class SettingsStorage
         public int Version { get; set; } = 1;
         public SettingsFolder? Active { get; set; }
         public PendingChange Pending { get; set; }
+        public bool StorageExpanded { get; set; }
+        public int PreviousUpdatesToKeep { get; set; } = 1;
+        public bool AutomaticUpdateCleanup { get; set; } = true;
     }
     internal sealed class PendingChange
     {
@@ -88,6 +91,29 @@ internal sealed class SettingsStorage
     }
     internal SettingsFolder? Selected => Read().Active;
     internal bool HasPending => Read().Pending != null;
+    internal bool StorageExpanded => Read().StorageExpanded;
+    internal void SetStorageExpanded(bool value)
+    {
+        var preference = Read();
+        preference.StorageExpanded = value;
+        Save(preferencePath, preference);
+    }
+    internal (int Keep, bool Automatic) UpdateRetention
+    {
+        get
+        {
+            var value = Read();
+            return (Math.Clamp(value.PreviousUpdatesToKeep, -1, 100), value.AutomaticUpdateCleanup);
+        }
+    }
+    internal void SetUpdateRetention(int keep, bool automatic)
+    {
+        if (keep is < -1 or > 100) throw new ArgumentOutOfRangeException(nameof(keep));
+        var preference = Read();
+        preference.PreviousUpdatesToKeep = keep;
+        preference.AutomaticUpdateCleanup = automatic;
+        Save(preferencePath, preference);
+    }
     internal void Remember(SettingsFolder folder)
     {
         _ = Root(folder);

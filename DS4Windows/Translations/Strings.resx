@@ -8250,4 +8250,100 @@ X axis: {0}, Y axis: {1}</value>
     <value>Export selected</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/MainWindow.xaml</comment>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>Clean up now…</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs; DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>Previous versions to keep</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>Keeps current files and the selected number of previous versions for each component. Profiles and settings are preserved.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>Writable</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/SettingsStorageControl.cs</comment>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>There are no old update files to clean up.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>Some folders could not be scanned. Refresh to retry.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>Includes recognised DS4Windows, VIIPER, USB/IP and updater downloads.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>Remove {0} old update files and free {1}?</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>View stored files</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Clean up stored updates</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>Removed {0} files and freed {1}. Skipped {2} files that were in use, changed or could not be removed.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>Manage downloaded updates and older support files.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>Update cleanup could not be completed.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>There are no stored update files.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 previous version (recommended)</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>Update storage</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>Stored update files</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>Can be cleaned up</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>Read only</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/SettingsStorageControl.cs</comment>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>Automatically clean up after updating</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>Keep all</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>Older files are removed after a successful start of the updated app.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>Choose a number</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>Update storage could not be accessed.</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/UpdateStorageControl.cs; DS4Windows/DS4Forms/UpdateStorageControl.cs</comment>
+  </data>
 </root>

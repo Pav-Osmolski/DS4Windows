@@ -990,6 +990,7 @@
                                             <Button x:Name="checkUpdatesBtn" Margin="0,0,10,10" Style="{DynamicResource BridgeSecondaryButtonStyle}" IsEnabled="{Binding SystemIntegrationEnabled}" Click="CheckUpdatesBtn_Click" HorizontalAlignment="Left" Content="{lex:Loc CheckUpdateNow}" VerticalAlignment="Center" />
                                             <Button x:Name="checklogViewBtn" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ChecklogViewBtn_Click" Margin="0,0,10,10" HorizontalAlignment="Left" Content="{lex:Loc Changelog}" VerticalAlignment="Center" />
                                         </WrapPanel>
+                                        <local:UpdateStorageControl x:Name="updateStorageControl" />
                                     </StackPanel>
                                 </Border>
                                 <Border Style="{DynamicResource BridgeCardStyle}">

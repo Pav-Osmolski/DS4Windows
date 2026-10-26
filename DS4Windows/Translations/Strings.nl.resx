@@ -6582,4 +6582,76 @@ De backup: </value>
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>Export geselecteerd</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>Schoonmaken nu...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>Vorige versies te bewaren</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>Behoudt de huidige bestanden en het geselecteerde aantal eerdere versies voor elke component.</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>geschreven</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>Er zijn geen oude update-bestanden om schoon te maken.</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>Sommige mappen konden niet worden gescand.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>Inclusief herkenbare DS4Windows, VIIPER, USB/IP en updater downloads.</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>Verwijder {0} oude update bestanden en gratis {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>Bekijk opgeslagen bestanden</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Schoonmaken opgeslagen updates</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>Verwijderde {0} bestanden en bevrijdde {1}. Verwijderde {2} bestanden die in gebruik waren, gewijzigd of niet konden worden verwijderd.</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>Beheer gedownloade updates en oudere ondersteuningsbestanden.</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>Update schoonmaken kon niet worden voltooid.</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>Er zijn geen opgeslagen update-bestanden.</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 eerdere versie (aanbevolen)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>Update opslag</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>Update bestanden opgeslagen</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>Kan worden schoongemaakt</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>Lees alleen</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>Automatisch schoonmaken na update</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>Houd alles</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>Oudere bestanden worden verwijderd na een succesvolle start van de bijgewerkte app.</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>Kies een nummer</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>Update opslag is niet toegankelijk.</value>
+  </data>
 </root>

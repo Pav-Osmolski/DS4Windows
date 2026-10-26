@@ -5,7 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Collapse **Settings & profiles** by default, show a compact location/access summary, and remember the user's expanded state across restarts. Automatically expand read-only folders and pending settings operations so their recovery controls remain visible.
+- Add update storage management under **Settings > Updates & tools > Updates**: retain one previous version per component by default, choose none/a custom number/all, see stored and reclaimable space, preview manual cleanup, and inspect stored files. Automatically prune recognised older packages after a successful startup with healthy VIIPER/USB/IP prerequisites. Keep current/future packages, package-owned files, profiles, settings, unknown files and in-use downloads. Thanks to [@Jobima1st](https://github.com/Jobima1st) for reporting accumulated update files in [issue #83](https://github.com/Pav-Osmolski/DS4Windows/issues/83).
 
 ## Released
 

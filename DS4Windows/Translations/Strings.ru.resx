@@ -6590,4 +6590,76 @@
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>Выбранный экспорт</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>Очистись сейчас...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>Предыдущие версии сохранить</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>Сохраняет текущие файлы и выбранное количество предыдущих версий для каждого компонента.</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>Письменный</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>Нет старых файлов обновления для очистки.</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>Некоторые папки не могут быть сканированы. Обновить для ретри.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>Включает признанные загрузки DS4Windows, VIIPER, USB/IP и обновления.</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>Удалить {0} старые файлы обновления и бесплатно {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>Смотреть хранимые файлы</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Очистить хранимые обновления</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>Удалили {0} файлы и освободили {1}. Пропустили {2} файлы, которые были в использовании, изменены или не могли быть удалены.</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>Управление загруженными обновлениями и более старыми файлами поддержки.</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>Обновление очистки не удалось завершить.</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>Сохраненных файлов обновления нет.</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 предыдущая версия (рекомендуется)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>Обновление хранилища</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>Сохранение обновленных файлов</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>Можно очистить</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>Читать только</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>Автоматически очищается после обновления</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>Держите все</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>Старые файлы удаляются после успешного запуска обновленного приложения.</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>Выберите номер</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>Доступ к хранилищу обновлений невозможен.</value>
+  </data>
 </root>

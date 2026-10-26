@@ -160,6 +160,8 @@ HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDisp
         markup.SetAttributeValue(XNamespace.Xmlns + "xctk", "http://schemas.xceed.com/wpf/xaml/toolkit");
         foreach (XElement element in markup.DescendantsAndSelf().ToArray())
         {
+            if (element.Name.NamespaceName == "clr-namespace:DS4WinWPF.DS4Forms")
+                element.Name = XName.Get(element.Name.LocalName, "clr-namespace:DS4WinWPF.DS4Forms;assembly=DS4Windows");
             if (element.Name.LocalName == "LanguagePackControl")
             {
                 element.ReplaceWith(new XElement(wpf + "TextBlock", new XAttribute("Text", "Language selector")));

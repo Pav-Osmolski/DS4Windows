@@ -6576,4 +6576,76 @@ backup için: </value>
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>Seçilen ihracat</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>Şimdi Temizle...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>Önceki YazıGörüntüleme</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>Güncel dosyaları ve her bir bileşen için önceki sürümlerin seçilen sayısını saklar.</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>yazan</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>Temizlemek için eski güncellemeler dosyaları yok.</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>Bazı klasörler tarama yapılamadı. yenilemek için güncelleyin.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>Tanınmış DS4Windows, VIIPER, USB/IP ve updater indirmeleri içerir.</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>{0} eski güncelleştirme dosyalarını kaldırın ve ücretsiz {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>depolanan dosyaları görmek</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Güncelleştirilmiş güncellemeleri temizle</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>{0} dosyalarını kaldırdı ve {1} dosyalarını serbest bıraktı. Kullanılan, değiştirilen veya kaldırılamayan {2} dosyaları atladı.</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>İndirilen güncellemeleri ve eski destek dosyalarını yönetin.</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>Güncelleme temizliği tamamlanamadı.</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>Güncelleştirme dosyası yok.</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 Önceki Yazı (Önerilen)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>Depolama Güncellemesi</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>Güncelleme Dosyaları</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>Temizlenebilir</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>Sadece Okumak</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>Güncellemeden sonra otomatik olarak temizlenir</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>hepsini tut</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>Eski dosyalar güncellenmiş uygulamanın başarılı bir şekilde başlatılmasından sonra silinir.</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>Bir Numara Seçin</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>Güncelleştirme depolama erişimi bulunamadı.</value>
+  </data>
 </root>

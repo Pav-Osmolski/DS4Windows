@@ -39,7 +39,12 @@ You can rename, duplicate, import and export profiles from the Profiles page.
 ### Settings and profiles location
 
 The **Settings & profiles** card shows the active profiles folder and whether it
-is writable. **Open profiles folder** opens that exact folder. **Back up all**
+is writable. It starts collapsed to save space; click its header to expand it.
+Your expanded/collapsed choice is remembered across restarts. Read-only folders
+and pending settings changes automatically expand to expose the warning or next
+steps without replacing your saved preference.
+
+**Open profiles folder** opens that exact folder. **Back up all**
 saves a complete settings ZIP, including profile assignments, actions, output
 slots, Nintendo pairing data and imported battery-alert sounds. Executables,
 drivers and logs are excluded. **Restore backup** validates a ZIP created here
@@ -72,6 +77,33 @@ Keep a separate **Back up all** ZIP for convenient long-term recovery.
 Sort profiles by name or last modified time. Cards show their output type,
 modification time and whether a connected controller is using them. Importing a
 same-named profile asks before replacing it.
+
+### Stored updates and cleanup
+
+Open **Settings > Updates & tools > Updates > Update storage** to see the size
+of recognised stored update files and the space reclaimable under your selected
+retention policy. The default keeps one previous version of each component in
+addition to current files. Choose none, a custom count (0–100), or **Keep all**.
+Disable **Automatically clean up after updating** to manage cleanup manually.
+Preferences are per user and application folder and survive settings-location changes.
+
+**Clean up now** lists the exact files and estimated space before confirmation.
+It applies the selected retention policy; choosing none still preserves current
+files. **View stored files** opens the folders containing recognised packages.
+**Refresh** scans again. Locked, changed or inaccessible files are skipped and
+reported rather than blocking the app; an unwritable installed folder may need
+an administrator for manual cleanup.
+
+Automatic cleanup runs in the background after the controller service starts
+and VIIPER/USB/IP readiness checks pass. Failed startup/repair does not trigger
+pruning. It covers recognised versioned DS4Windows/updater downloads and old
+VIIPER/USB/IP support packages in the application folder, its **Updates** and
+**extras** folders, and `%LOCALAPPDATA%\DS4Windows\Updates`. Files belonging to
+the current package, current/newer versions, live executables, installed drivers,
+profiles, settings, backups, transaction folders and unknown/nested content are
+preserved. Unrecognised files are excluded from the displayed totals and are
+not removed; this is not a general disk cleaner. Keeping a download does not
+provide an automatic downgrade or guarantee that an older driver can be restored.
 
 If saving fails, the editor stays open and the last valid profile file is kept.
 Check Log for the file error, resolve permissions or free space, and retry.

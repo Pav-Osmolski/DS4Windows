@@ -104,6 +104,7 @@ namespace DS4WindowsTests
                     AppThemeValidation.Validate(application, resultsDirectory, renderedFiles);
                     ControllerInfoWindowValidation.Validate(application, resultsDirectory, renderedFiles);
                     SettingsStorageLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
+                    UpdateStorageLayoutValidation.Validate(application, renderedFiles);
                 }
                 catch (Exception ex)
                 {
@@ -115,7 +116,7 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(50, renderedFiles.Count);
+            Assert.AreEqual(75, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

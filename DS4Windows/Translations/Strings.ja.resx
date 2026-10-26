@@ -6553,4 +6553,76 @@ Backup : </value>
   <data name="UI_AC909944B8B33F4B" xml:space="preserve">
     <value>輸出選択</value>
   </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>きれいに今...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>以前のバージョンは Keep</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>各コンポーネントの現在のファイルと選択した以前のバージョンの数を保持します。</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>書き方</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>更新する古いファイルはありません。</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>いくつかのフォルダはスキャンできませんでした. Refresh to retry.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>認識された DS4Windows、 VIIPER、 USB/IP、および更新プログラムのダウンロードが含まれています。</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>古い更新ファイル {0} を削除し、無料の {1} を削除します。</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>保存ファイルの表示</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Clean Up Stored Updates(ストレージアップデートをクリア)</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>{0} ファイルを削除し、 {1} を解放しました。使用中、変更または削除できない {2} ファイルを転送しました。</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>ダウンロードした更新プログラムと古いサポートファイルを管理します。</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>更新クリーニングは完了できませんでした。</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>更新ファイルが保存されていません。</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 前のバージョン(推奨)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>ストレージ更新</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>更新ファイルの保存</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>きれいになれます♪</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>読書のみ</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>更新後の自動掃除</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>すべて保持</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>古いファイルは、アップデートされたアプリの成功した起動後に削除されます。</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>番号を選択</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>アップデートストレージにはアクセスできませんでした。</value>
+  </data>
 </root>
