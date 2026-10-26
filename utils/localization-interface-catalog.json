@@ -543,7 +543,8 @@
     "source": "Close",
     "files": [
       "DS4Windows/DS4Forms/About.xaml",
-      "DS4Windows/DS4Forms/ViiperSetupPrompt.xaml"
+      "DS4Windows/DS4Forms/ViiperSetupPrompt.xaml",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
     ]
   },
   "UI_92C1CDFDF4CB9CF6": {
@@ -1021,7 +1022,8 @@
       "DS4Windows/DS4Forms/MainWindow.xaml.cs",
       "DS4Windows/DS4Forms/PortableRepairProgress.cs",
       "DS4Windows/DS4Forms/TriggerLabControl.xaml.cs",
-      "DS4Windows/DS4Forms/ViewModels/ControllerListViewModel.cs"
+      "DS4Windows/DS4Forms/ViewModels/ControllerListViewModel.cs",
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
     ]
   },
   "UI_F92FC83B9B091613": {
@@ -1810,7 +1812,10 @@
   "UI_B7A098F1ABCAC8A2": {
     "source": "Emulated controller",
     "files": [
-      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml"
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs",
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
     ]
   },
   "UI_8ED4DCE8B648CE47": {
@@ -2624,7 +2629,8 @@
   "UI_0E91610117029A62": {
     "source": "Refresh",
     "files": [
-      "DS4Windows/DS4Forms/MainWindow.xaml"
+      "DS4Windows/DS4Forms/MainWindow.xaml",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
     ]
   },
   "UI_8D6119ABAE8F59DF": {
@@ -3318,7 +3324,8 @@
   "UI_85A39AB345D672FF": {
     "source": "Yes",
     "files": [
-      "DS4Windows/DS4Forms/PresetOptionWindow.xaml"
+      "DS4Windows/DS4Forms/PresetOptionWindow.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs"
     ]
   },
   "UI_6AEC8557B33FBAD5": {
@@ -3378,7 +3385,8 @@
   "UI_DCD1D5223F73B3A9": {
     "source": "Name",
     "files": [
-      "DS4Windows/DS4Forms/ProfileEditor.xaml"
+      "DS4Windows/DS4Forms/ProfileEditor.xaml",
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
     ]
   },
   "UI_21B111CBFE6E8FCA": {
@@ -3881,7 +3889,8 @@
   "UI_74271BB9C08C4874": {
     "source": "Battery level",
     "files": [
-      "DS4Windows/DS4Forms/ProfileEditor.xaml"
+      "DS4Windows/DS4Forms/ProfileEditor.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs"
     ]
   },
   "UI_44151A75A94774EB": {
@@ -3961,7 +3970,8 @@
   "UI_22B693223FCB3BE3": {
     "source": "Charging",
     "files": [
-      "DS4Windows/DS4Forms/ProfileEditor.xaml"
+      "DS4Windows/DS4Forms/ProfileEditor.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs"
     ]
   },
   "UI_D253F5438699D548": {
@@ -5732,7 +5742,8 @@
   "UI_639A40E82B9A96F0": {
     "source": "Connection",
     "files": [
-      "DS4Windows/DS4Forms/ProfileEditor.xaml"
+      "DS4Windows/DS4Forms/ProfileEditor.xaml",
+      "DS4Windows/DS4Control/ControllerInfo.cs"
     ]
   },
   "UI_A515680B15783021": {
@@ -9475,7 +9486,9 @@
   "UI_31DF66DC9F060166": {
     "source": "Controller",
     "files": [
-      "DS4Windows/DS4Forms/SidebarIconCatalog.cs"
+      "DS4Windows/DS4Forms/SidebarIconCatalog.cs",
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
     ]
   },
   "UI_14D33BD014E6B4E7": {
@@ -9911,6 +9924,792 @@
     "files": [
       "DS4Windows/DS4Forms/ControllerOverviewControl.xaml",
       "DS4Windows/DS4Forms/ProfileEditor.xaml"
+    ]
+  },
+  "UI_12F67F8539C46701": {
+    "source": "Availability",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_39D6C91B57CE2F3B": {
+    "source": "Battery voltage",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_8BB29098B369BFCD": {
+    "source": "Bluetooth",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_4816CBFD74AA8297": {
+    "source": "Board",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_76C6D2CECF3EF256": {
+    "source": "Bootloader firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_DA36D849C8B49668": {
+    "source": "Charging complete",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_95072AA1A3FE11F5": {
+    "source": "Controller disconnected. Showing the last snapshot.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_55026208AB1964FE": {
+    "source": "Controller info",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_C4A065BCABC2A601": {
+    "source": "Controller info copied.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_8D380282ADEDB6D9": {
+    "source": "Copy info",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_F65918E90A917B0E": {
+    "source": "DSP firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_F20FD54567ABF468": {
+    "source": "Device identifier",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_F7D61802A4172ECC": {
+    "source": "Device info",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_03B89FA880E6095E": {
+    "source": "Factory information",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_950EEBFBADA780A3": {
+    "source": "Firmware build time",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_24EB04667515759D": {
+    "source": "Firmware type",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_9D0328BD2B3A5649": {
+    "source": "Firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_6663DFC9F3F1CA08": {
+    "source": "Hardware info",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_9D7DA81A1E5FFB14": {
+    "source": "Hardware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_6D906D1A654F5178": {
+    "source": "Headphones connected",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_999F23FCD7BEC707": {
+    "source": "Identity",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_5418EF17129415EA": {
+    "source": "Information reported by the emulated controller. Firmware dates describe emulated firmware, not DS4Windows.",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_64733AE1C4198363": {
+    "source": "Information reported by your connected physical controller.",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_B7F8E9D985AF700A": {
+    "source": "Input report interval",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_3F45AE9E280D7991": {
+    "source": "Loading controller info...",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_1F04763D7BCD609C": {
+    "source": "MCU DSP firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_E49AFACABFC81F9C": {
+    "source": "Main firmware version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_1AF384C577F294D4": {
+    "source": "Manufacturer",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_1EA442A134B2A184": {
+    "source": "No",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_E172ACC04C1A5E4C": {
+    "source": "Physical controller",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_C76C9E7682BC84B6": {
+    "source": "Product ID",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_F2307BAF1C858F10": {
+    "source": "Serial number",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_7339FF9FC26A552E": {
+    "source": "Snapshot updated at {0}.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_801CD0692B68DE33": {
+    "source": "Software series",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_920E413C7D411B61": {
+    "source": "Status",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_B958CE8B871AB36B": {
+    "source": "Temperature",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_BD6F093129971F07": {
+    "source": "The clipboard is busy. Please try again.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_FF0A3616B61AC476": {
+    "source": "This controller does not expose firmware details.",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_7BC04149A530604E": {
+    "source": "USB device revision",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_A24FFD8E9805081E": {
+    "source": "Update version",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_BBBC715D79EB1147": {
+    "source": "Vendor ID",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_D4944E4ACC601E42": {
+    "source": "Virtual output changed. Refresh to read the current controller.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_A68FF52175258D4D": {
+    "source": "Virtual output is not active.",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs",
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_184D8D78A71837F8": {
+    "source": "Battery band",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_BFF4A010E2B21B09": {
+    "source": "External power",
+    "files": [
+      "DS4Windows/DS4Control/ControllerInfo.cs"
+    ]
+  },
+  "UI_C520C36A0F8B8CAB": {
+    "source": "Emulated controller details could not be read. Refresh to try again.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerInfoWindow.xaml.cs"
+    ]
+  },
+  "UI_0C2C7FF55EF39657": {
+    "source": "Change location…",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_0CA56CD50F9C03ED": {
+    "source": "Save or discard your profile changes and close the profile editor before changing or backing up settings.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_0FE1058FEB9F7E16": {
+    "source": "Last modified",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_133F3F162C1C1D7E": {
+    "source": "DS4Windows could not save settings in the selected folder. No files were copied or removed. On the Profiles page, use Settings & profiles to choose AppData or migrate your saved settings.",
+    "files": [
+      "DS4Windows/App.xaml.cs"
+    ]
+  },
+  "UI_17C75C0B93CF1D4C": {
+    "source": "Program folder",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_1D3DE4B5E858F04F": {
+    "source": "This file is not a DS4Windows profile.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml.cs"
+    ]
+  },
+  "UI_1E8F0D47C8DAB05C": {
+    "source": "The settings operation could not be completed. Your current location remains active.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_221EBEEFF1B1EC51": {
+    "source": "The settings location could not be changed. Your previous location remains selected. Review Settings & profiles on the Profiles page.",
+    "files": [
+      "DS4Windows/App.xaml.cs"
+    ]
+  },
+  "UI_24DB99347AA1C7E5": {
+    "source": "Settings & profiles",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_31120B1AF220C67D": {
+    "source": "Copy your current settings and profiles to this location? Choose No to use the settings already there. The current folder will be kept.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_311E149E6E2BEC65": {
+    "source": "Save location",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_3681E8450DAA413B": {
+    "source": "Read only. Profile changes cannot be saved. Choose AppData or adjust this folder's permissions.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_3F8AC13C7A3FFD77": {
+    "source": "AppData — recommended",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_4FEC09637F7F3808": {
+    "source": "There are no settings in the selected location. Choose Copy current settings instead.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_58C142D711BFD10B": {
+    "source": "The destination already contains settings. Copying replaces its complete settings set after a verified backup. Files will not be merged. Continue?",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_59BAF167CB71413D": {
+    "source": "Modified {0:g}",
+    "files": [
+      "DS4Windows/ProfileEntity.cs"
+    ]
+  },
+  "UI_69E699FD2332BFAA": {
+    "source": "Settings backup saved.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_6C3786B82DCF12A1": {
+    "source": "Choose where profiles and application settings are kept.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_6F6EC70F39543AD5": {
+    "source": "Migrate to AppData…",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_744C0BF59BEC5D87": {
+    "source": "Open profiles folder",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_750AF77AA42EEA62": {
+    "source": "In use",
+    "files": [
+      "DS4Windows/ProfileEntity.cs"
+    ]
+  },
+  "UI_84F9B85EC020DD31": {
+    "source": "A settings change is pending. Fully close DS4Windows and open it again to apply it. The current location remains active until then.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_89138B5D77049FDE": {
+    "source": "Writable. Changing location requires a restart; original files are kept.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_89437522D13E8517": {
+    "source": "A profile named {0} already exists. Replace it?",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml.cs"
+    ]
+  },
+  "UI_9435DBE760FC2C2D": {
+    "source": "DS4Windows settings backup (*.zip)",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_A0083C0A6DEBF0A5": {
+    "source": "Restore backup…",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_BB05620585B66BE5": {
+    "source": "Name: A–Z",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_C4DDA1DBE3427538": {
+    "source": "This profiles folder is read-only. Use Settings & profiles to migrate to AppData before saving changes.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_CC1B0341BE6D01E0": {
+    "source": "Restore this complete settings backup on the next start? Current settings will be backed up before replacement. Files will not be merged.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_D60332E11AD41552": {
+    "source": "Both locations are kept. You can change location later on the Profiles page.",
+    "files": [
+      "DS4Windows/DS4Forms/SaveWhere.xaml.cs"
+    ]
+  },
+  "UI_DBB36ABC8213D32C": {
+    "source": "The change will be applied the next time DS4Windows starts. Close DS4Windows now? Reopen it afterwards to continue.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_DEE0800861C769B2": {
+    "source": "Cancel pending change",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_E8E37165E114E4B3": {
+    "source": "Current application settings could not be saved. Continue using the last saved files? Unsaved changes will not be included.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_ED43FE750AC60A73": {
+    "source": "The destination is not writable.",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_F4009999A1981329": {
+    "source": "Back up all…",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_02B3630D80342B2E": {
+    "source": "Import profiles",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_AC909944B8B33F4B": {
+    "source": "Export selected",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_00B77B26EF805FA0": {
+    "source": "Clean up now…",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs",
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_0F88B21FB062E41F": {
+    "source": "Previous versions to keep",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_10D36152FB769314": {
+    "source": "Keeps current files and the selected number of previous versions for each component. Profiles and settings are preserved.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_18685C640B42ED54": {
+    "source": "Writable",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_206A57CF90B957D9": {
+    "source": "There are no old update files to clean up.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_32839824A10B577C": {
+    "source": "Some folders could not be scanned. Refresh to retry.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_39E6D9F27FD2310C": {
+    "source": "Includes recognised DS4Windows, VIIPER, USB/IP and updater downloads.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_4BF41910A9472B0E": {
+    "source": "Remove {0} old update files and free {1}?",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_4DAD65EA7CD19103": {
+    "source": "View stored files",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_62F03122DFE37A68": {
+    "source": "Clean up stored updates",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_66A34F5BCC79EE79": {
+    "source": "Removed {0} files and freed {1}. Skipped {2} files that were in use, changed or could not be removed.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_6EBC7FE7289381A2": {
+    "source": "Manage downloaded updates and older support files.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_71CFF61AEB197E8C": {
+    "source": "Update cleanup could not be completed.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_7AC9EEBD3C4A5543": {
+    "source": "There are no stored update files.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_7F481133737773D2": {
+    "source": "1 previous version (recommended)",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_7F6868B2BAC4D0FB": {
+    "source": "Update storage",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_7FA38E74C274B4FB": {
+    "source": "Stored update files",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_8644E9F7A6635925": {
+    "source": "Can be cleaned up",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_8AC767353080EAE7": {
+    "source": "Read only",
+    "files": [
+      "DS4Windows/DS4Forms/SettingsStorageControl.cs"
+    ]
+  },
+  "UI_8C7A2C65FFAC2C68": {
+    "source": "Automatically clean up after updating",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_9B80A7419EA5284A": {
+    "source": "Keep all",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_CD1B31048C7CC28C": {
+    "source": "Older files are removed after a successful start of the updated app.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_D1F656AC6C2F9ACD": {
+    "source": "Choose a number",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_FF523D3DC0C2D4E0": {
+    "source": "Update storage could not be accessed.",
+    "files": [
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs",
+      "DS4Windows/DS4Forms/UpdateStorageControl.cs"
+    ]
+  },
+  "UI_443D37F3A1F6013B": {
+    "source": "Choose an ICO or PNG image.",
+    "files": [
+      "DS4Windows/ProfileAppearance.cs"
+    ]
+  },
+  "UI_DCC6BBD741580C9A": {
+    "source": "Choose an image smaller than 2 MB.",
+    "files": [
+      "DS4Windows/ProfileAppearance.cs"
+    ]
+  },
+  "UI_12A1137C6D79CA4A": {
+    "source": "The image is too large to use as a profile icon.",
+    "files": [
+      "DS4Windows/ProfileAppearance.cs"
+    ]
+  },
+  "UI_7F5096197E224CAB": {
+    "source": "Choose an image no larger than 2048 × 2048 pixels.",
+    "files": [
+      "DS4Windows/ProfileAppearance.cs"
+    ]
+  },
+  "UI_AFE4F505B369EBED": {
+    "source": "First letter",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_032747A5D15926E7": {
+    "source": "Custom image",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_E90146D539BEAA48": {
+    "source": "Profile icon",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_5386C28080A66F48": {
+    "source": "Icon fill colour",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_598104707437A0F5": {
+    "source": "Custom colour…",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_BF1D4510A062903B": {
+    "source": "The letter follows the profile name.",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_44CE6E4A2F8D9596": {
+    "source": "Choose image…",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_2A5DB09C1D9DB184": {
+    "source": "ICO or PNG. Transparency is preserved.",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_19D66A2331B54332": {
+    "source": "Restore default",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_31E392D1C0378BEC": {
+    "source": "Apply",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_495FED05ED6FEE23": {
+    "source": "No image selected",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_2B47F2E2A828B69A": {
+    "source": "Embedded image",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_9E2244CB6701F028": {
+    "source": "Profile icons (*.ico;*.png)",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_470CFA3EFC56E382": {
+    "source": "The image could not be opened.",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_63F14D2E7F10AEE7": {
+    "source": "The profile icon could not be saved.",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileIconWindow.cs"
+    ]
+  },
+  "UI_2ECBB0BF0A4C74A6": {
+    "source": "Profile icon…",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.SettingsStorage.cs"
+    ]
+  },
+  "UI_4DA22A362D386464": {
+    "source": "Tiles",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileBrowserViews.cs"
+    ]
+  },
+  "UI_6F202F54A7B2D8FE": {
+    "source": "List",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileBrowserViews.cs"
+    ]
+  },
+  "UI_45989DE49FB7F66D": {
+    "source": "Details",
+    "files": [
+      "DS4Windows/DS4Forms/ProfileBrowserViews.cs"
     ]
   }
 }

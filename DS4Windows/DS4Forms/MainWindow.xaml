@@ -58,6 +58,7 @@
                 <local:ControllerOverviewControl x:Name="controllerOverviewControl"
                                                  EditProfileRequested="ControllerOverview_EditProfileRequested"
                                                  ControllerDetailsRequested="ControllerOverview_ControllerDetailsRequested"
+                                                 ControllerInfoRequested="ControllerOverview_ControllerInfoRequested"
                                                  LightbarRequested="ControllerOverview_LightbarRequested"
                                                  DisconnectRequested="ControllerOverview_DisconnectRequested" />
                 </DockPanel>
@@ -71,7 +72,7 @@
                     </Grid.RowDefinitions>
                     <Label x:Name="noContLb" Grid.Row="0" Visibility="Hidden" Content="{lex:Loc NoControllersConnected}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                     <ListView x:Name="controllerLV" Grid.Row="0" ItemsSource="{Binding ControllerCol}" SelectionMode="Single"
-                              SelectedIndex="{Binding CurrentIndex, Mode=OneWayToSource}" Margin="0"
+                              SelectedIndex="{Binding CurrentIndex, Mode=OneWayToSource}" Margin="0" Padding="8,0,8,0"
                               SelectedItem="{Binding DataContext.SelectedController, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay}"
                               ItemContainerStyle="{StaticResource BridgeControllerCardItemStyle}"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -152,7 +153,8 @@
                                             </Button>
                                         </StackPanel>
                                     </Grid>
-                                    <Border Grid.Column="1" Background="{DynamicResource CardBackgroundColor}"
+                                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                    <Border Background="{DynamicResource CardBackgroundColor}"
                                             BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                                             CornerRadius="3" Padding="10,5" VerticalAlignment="Top">
                                         <StackPanel Orientation="Horizontal">
@@ -161,6 +163,14 @@
                                                        Foreground="{DynamicResource SuccessColor}" />
                                         </StackPanel>
                                     </Border>
+<Button x:Name="controllerCardInfoButton" Style="{DynamicResource ControllerInfoButtonStyle}"
+                                    HorizontalAlignment="Right" Margin="0,9,0,0" Click="ControllerCardInfo_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE946;" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_55026208AB1964FE}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                                    </StackPanel>
 
                                     <Separator Grid.Row="1" Grid.ColumnSpan="2" Margin="0,15,0,14"
                                                Background="{DynamicResource BorderColor}" />
@@ -323,8 +333,12 @@
 
             <TabItem x:Name="profilesTab" Header="{lex:Loc Profiles}" Tag="&#xE8A5;">
                 <Grid x:Name="profDockPanel">
-                    <Grid x:Name="profilesBrowserPanel">
+                    <ScrollViewer x:Name="profilesBrowserScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
+                                  BorderThickness="0" Padding="0" CanContentScroll="False"
+                                  Visibility="{Binding ElementName=profilesBrowserPanel, Path=Visibility}">
+                    <Grid x:Name="profilesBrowserPanel" MinHeight="{Binding ActualHeight, ElementName=profilesBrowserScrollViewer}">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -373,31 +387,34 @@
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE8B5;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Import}" VerticalAlignment="Center" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Strings:UI_02B3630D80342B2E}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:Name="exportProfBtn" IsEnabled="False" Click="ExportProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,0,6">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE8B6;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Export}" VerticalAlignment="Center" />
+                                        <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Strings:UI_AC909944B8B33F4B}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
                             </WrapPanel>
                         </Border>
 
-                        <Border x:Name="dupBoxBar" Grid.Row="1" Style="{StaticResource BridgeCardStyle}"
+                        <local:SettingsStorageControl x:Name="settingsStorageControl" Grid.Row="1" />
+
+                        <Border x:Name="dupBoxBar" Grid.Row="2" Style="{StaticResource BridgeCardStyle}"
                                 Padding="14,10" Margin="0,0,0,14" Visibility="Collapsed">
                             <local:DupBox x:Name="dupBox" HorizontalAlignment="Center" />
                         </Border>
 
-                        <Border Grid.Row="2" Background="{DynamicResource CardBackgroundColor}"
+                        <Border Grid.Row="3" Background="{DynamicResource CardBackgroundColor}"
                                 BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                                 CornerRadius="5">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <Border Padding="18,14" BorderBrush="{DynamicResource BorderColor}"
@@ -424,8 +441,10 @@
                                                        FontSize="11" FontWeight="SemiBold"
                                                        Foreground="{DynamicResource MutedForegroundColor}" />
                                         </Border>
-                                        <Border Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0"
-                                                Width="340" MaxWidth="340" HorizontalAlignment="Left"
+                                        <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0">
+                                        <Border x:Name="profilesSearchFrame" Margin="0,0,12,6"
+                                                Height="{Binding ElementName=profileSortCombo, Path=ActualHeight}"
+                                                VerticalAlignment="Center" Width="340" MaxWidth="340" HorizontalAlignment="Left"
                                                 Background="{DynamicResource CardBackgroundColor}"
                                                 BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
                                                 CornerRadius="6">
@@ -438,10 +457,23 @@
                                                 <TextBlock Text="&#xE721;" FontFamily="Segoe Fluent Icons"
                                                            Foreground="{DynamicResource MutedForegroundColor}"
                                                            HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                                <TextBox x:Name="profilesSearchTextBox" Grid.Column="1"
+                                                <TextBox x:Name="profilesSearchTextBox" Grid.Column="1" MinHeight="0" Padding="4,4"
                                                          Style="{DynamicResource BridgeSearchTextBoxStyle}"
                                                          TextChanged="ProfilesSearchTextBox_TextChanged"
                                                          ToolTip="{lex:Loc Strings:UI_1B4F158537520CEB}" />
+                                                <TextBlock Grid.Column="1" Text="{lex:Loc Strings:UI_1B4F158537520CEB}" IsHitTestVisible="False"
+                                                           Margin="8,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource MutedForegroundColor}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ElementName=profilesSearchTextBox, Path=Text}" Value="">
+                                                                    <Setter Property="Visibility" Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
                                                 <Button x:Name="clearProfilesSearchBtn" Grid.Column="2" Content="&#xE711;"
                                                         FontFamily="Segoe Fluent Icons" FontSize="11"
                                                         Background="Transparent" BorderThickness="0"
@@ -449,11 +481,24 @@
                                                         Click="ClearProfilesSearchBtn_Click" />
                                             </Grid>
                                         </Border>
+                                        <WrapPanel VerticalAlignment="Center">
+                                            <ComboBox x:Name="profileSortCombo" MinWidth="150" Margin="0,0,10,6"
+                                                      Loaded="ProfileSortCombo_Loaded" SelectionChanged="ProfileSortCombo_SelectionChanged" />
+                                            <WrapPanel x:Name="profileViewChoices" Loaded="ProfileViewChoices_Loaded" />
+                                        </WrapPanel>
+                                        </WrapPanel>
                                     </Grid>
                                 </Border>
 
                                 <Grid Grid.Row="1">
-                                    <ListBox x:Name="profilesListBox" Background="Transparent" BorderThickness="0"
+                                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                                    <Grid x:Name="profileDetailsHeader" Visibility="Collapsed" Margin="30,17,30,0">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="170"/><ColumnDefinition Width="160"/></Grid.ColumnDefinitions>
+                                        <TextBlock x:Name="profileNameHeader" Margin="44,0,0,0" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock x:Name="profileOutputHeader" Grid.Column="1" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                        <TextBlock x:Name="profileModifiedHeader" Grid.Column="2" Foreground="{DynamicResource MutedForegroundColor}"/>
+                                    </Grid>
+                                    <ListBox Grid.Row="1" x:Name="profilesListBox" Background="Transparent" BorderThickness="0"
                                              Padding="10" SelectionChanged="ProfilesListBox_SelectionChanged"
                                              MouseDoubleClick="ProfilesListBox_MouseDoubleClick"
                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -469,7 +514,7 @@
                                         <ListBox.ItemContainerStyle>
                                             <Style TargetType="ListBoxItem">
                                                 <Setter Property="Width" Value="270" />
-                                                <Setter Property="Height" Value="88" />
+                                                <Setter Property="Height" Value="100" />
                                                 <Setter Property="Margin" Value="6" />
                                                 <Setter Property="Padding" Value="0" />
                                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -509,16 +554,14 @@
                                                         <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
-                                                    <Border Width="38" Height="38" CornerRadius="5"
-                                                            Background="{DynamicResource AccentColor}" VerticalAlignment="Center">
-                                                        <TextBlock Text="P" Foreground="White" FontSize="16" FontWeight="Bold"
-                                                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                                    </Border>
+                                                    <local:ProfileIconBadge VerticalAlignment="Center" />
                                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="4,0,8,0">
-                                                        <TextBlock Text="{Binding Name, Mode=OneWay, Converter={StaticResource escapeAccessConvert}}"
+                                                        <TextBlock Text="{Binding Name, Mode=OneWay}"
                                                                    FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
                                                                    ToolTip="{Binding Name}" />
-                                                        <TextBlock Text="{lex:Loc Strings:UI_9231F21B0FCA0E73}" Margin="0,4,0,0" FontSize="10"
+                                                        <TextBlock Text="{Binding Summary}" ToolTip="{Binding Summary}" TextTrimming="CharacterEllipsis" Margin="0,4,0,0" FontSize="10"
+                                                                   Foreground="{DynamicResource MutedForegroundColor}" />
+                                                        <TextBlock Text="{Binding ModifiedDescription}" TextTrimming="CharacterEllipsis" FontSize="10" Margin="0,3,0,0"
                                                                    Foreground="{DynamicResource MutedForegroundColor}" />
                                                     </StackPanel>
                                                     <TextBlock Grid.Column="2" Text="&#x203A;" FontSize="22"
@@ -529,7 +572,7 @@
                                         </ListBox.ItemTemplate>
                                     </ListBox>
 
-                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                                                 IsHitTestVisible="False">
                                         <StackPanel.Style>
                                             <Style TargetType="StackPanel">
@@ -554,10 +597,17 @@
                                                    Foreground="{DynamicResource MutedForegroundColor}" />
                                     </StackPanel>
                                 </Grid>
+                                <Border Grid.Row="2" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="18,10">
+                                    <DockPanel>
+                                        <Button x:Name="profileIconBtn" DockPanel.Dock="Right" IsEnabled="False" Click="ProfileIconBtn_Click" Style="{StaticResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Right" />
+                                        <TextBlock Text="{Binding ElementName=profilesListBox, Path=SelectedItem.Name}" Foreground="{DynamicResource MutedForegroundColor}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                    </DockPanel>
+                                </Border>
                             </Grid>
                         </Border>
                     </Grid>
 
+                    </ScrollViewer>
                     <Border x:Name="profileEditorLoadingPanel" Visibility="Collapsed" Panel.ZIndex="2"
                             Background="{DynamicResource CardBackgroundColor}"
                             BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
@@ -898,11 +948,21 @@
                                                 </ListBox.ItemTemplate>
                                             </ListBox>
                                             <WrapPanel Margin="0,12,0,0">
-                                                <Button x:Name="switch2AssociationRefreshBtn" Content="{lex:Loc Strings:UI_0E91610117029A62}" Click="Switch2AssociationRefreshBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,10,10" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                                <Button x:Name="switch2AssociateBtn" Content="{lex:Loc Strings:UI_107931F651CE5723}" IsEnabled="False" Margin="0,0,10,10" Click="Switch2AssociateBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                                <Button x:Name="switch2AssociationRefreshBtn" Content="{lex:Loc Strings:UI_0E91610117029A62}" Click="Switch2AssociationRefreshBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                                <Button x:Name="switch2AssociateBtn" Content="{lex:Loc Strings:UI_107931F651CE5723}" IsEnabled="False" Margin="0,0,10,0" Click="Switch2AssociateBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                             </WrapPanel>
-                                            <TextBlock x:Name="switch2AssociationStatusText" TextWrapping="Wrap" Margin="0,8,0,0" />
-                                            <Separator Margin="0,16,0,16" />
+                                            <TextBlock x:Name="switch2AssociationStatusText" TextWrapping="Wrap" Margin="0,8,0,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <Border x:Name="switch2DiscoveryDivider" Height="1" Background="{DynamicResource BorderColor}" Margin="0,16,0,16" SnapsToDevicePixels="True" />
                                             <TextBlock Text="{lex:Loc Strings:UI_35565BAA94CE6434}" Style="{DynamicResource BridgeSectionTitleStyle}" />
                                             <TextBlock Text="{lex:Loc Strings:UI_8AB28A7A2F2C3605}" Style="{DynamicResource BridgeSectionDescriptionStyle}" />
                                             <TextBlock x:Name="switch2JoyConCandidateStatusText" Text="{lex:Loc Strings:UI_007D04AA395125D7}" TextWrapping="Wrap" Margin="0,0,0,8" />
@@ -955,6 +1015,7 @@
                                             <Button x:Name="checkUpdatesBtn" Margin="0,0,10,10" Style="{DynamicResource BridgeSecondaryButtonStyle}" IsEnabled="{Binding SystemIntegrationEnabled}" Click="CheckUpdatesBtn_Click" HorizontalAlignment="Left" Content="{lex:Loc CheckUpdateNow}" VerticalAlignment="Center" />
                                             <Button x:Name="checklogViewBtn" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ChecklogViewBtn_Click" Margin="0,0,10,10" HorizontalAlignment="Left" Content="{lex:Loc Changelog}" VerticalAlignment="Center" />
                                         </WrapPanel>
+                                        <local:UpdateStorageControl x:Name="updateStorageControl" />
                                     </StackPanel>
                                 </Border>
                                 <Border Style="{DynamicResource BridgeCardStyle}">

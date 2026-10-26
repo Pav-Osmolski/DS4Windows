@@ -21,6 +21,11 @@ Historical validation and protocol records remain accessible by links, but are
 excluded from built-in search and marked `noindex` so current setup guidance is
 easier to find. No canonical source metadata is rewritten.
 
+Files in `website/static/` are copied unchanged to the project site root.
+Keep Google Search Console verification files there permanently so future
+documentation deployments preserve ownership verification. Site validation
+checks their exact published contents.
+
 ## Preview and validate
 
 Use Python 3.12 in a dedicated virtual environment:

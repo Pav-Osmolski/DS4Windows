@@ -361,13 +361,40 @@ namespace DS4WinWPF
 
             CreateTempWorkerThread();
 
-            DS4Windows.Global.FindConfigLocation();
+            string settingsStorageOutcome = null;
+            if (!DS4Windows.PortableLabContext.IsActive)
+            {
+                try
+                {
+                    var storage = DS4Windows.SettingsStorage.Current;
+                    if (storage.HasPending)
+                    {
+                        string backup = storage.ApplyPending();
+                        settingsStorageOutcome = "Settings storage change completed before controller startup. Destination backup: " + (backup ?? "not required (existing destination selected)");
+                    }
+                }
+                catch (Exception error) when (error is IOException or UnauthorizedAccessException or System.Text.Json.JsonException or System.Xml.XmlException)
+                {
+                    settingsStorageOutcome = "Settings storage change failed: " + error.Message;
+                    MessageBox.Show(global::DS4Windows.UiText.Get("The settings location could not be changed. Your previous location remains selected. Review Settings & profiles on the Profiles page.") + "\n\n" + error.Message,
+                        "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            try { DS4Windows.Global.FindConfigLocation(); }
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+            {
+                MessageBox.Show(error.Message, "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Error);
+                runShutdown = false;
+                Current.Shutdown(1);
+                return;
+            }
             bool firstRun = DS4Windows.Global.firstRun;
 
             // Could not find unique profile location; does not exist or multiple places.
             // Advise user to specify where DS4Windows should save its configuation files
             // and profiles
-            if (firstRun && !DS4Windows.PortableLabContext.IsActive)
+            if (firstRun && !DS4Windows.PortableLabContext.IsActive &&
+                !(DS4Windows.InstallationModeInfo.IsInstalled && DS4Windows.SettingsStorage.Current.Selected.HasValue))
             {
                 DS4Forms.SaveWhere savewh =
                     new DS4Forms.SaveWhere(DS4Windows.Global.multisavespots);
@@ -378,6 +405,7 @@ namespace DS4WinWPF
                     Current.Shutdown();
                     return;
                 }
+                firstRun = DS4Windows.Global.firstRun;
             }
 
             // Exit if base configuration could not be generated
@@ -413,6 +441,7 @@ namespace DS4WinWPF
                 logger.Info(line);
             logger.Info($"System Architecture: {(Environment.Is64BitOperatingSystem ? "x64" : "x86")}");
             logger.Info("Logger created");
+            if (settingsStorageOutcome != null) logger.Info(settingsStorageOutcome);
             if (DS4Windows.PortableLabContext.Current is { } lab)
                 logger.Info($"Portable controller lab: data={lab.DataPath}; VIIPER SHA256={lab.ExpectedSha256}. Startup maintenance, installation, updates, HidHide policy changes and legacy IPC are disabled. The backend is externally managed.");
             StartupDiag(logger, $"App bootstrap pid={Environment.ProcessId} admin={DS4Windows.Global.IsAdministrator()} cwd=\"{Environment.CurrentDirectory}\" cmd=\"{Environment.CommandLine}\"");
@@ -793,31 +822,8 @@ namespace DS4WinWPF
                     Current.Shutdown(1);
                     return;
                 }
-                if (MessageBox.Show("Cannot write at current location\nCopy Settings to appdata?", "DS4Windows",
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        Directory.CreateDirectory(DS4Windows.Global.appDataPpath);
-                        File.Copy(DS4Windows.Global.exedirpath + "\\Profiles.xml",
-                            DS4Windows.Global.appDataPpath + "\\Profiles.xml");
-                        File.Copy(DS4Windows.Global.exedirpath + "\\Auto Profiles.xml",
-                            DS4Windows.Global.appDataPpath + "\\Auto Profiles.xml");
-                        Directory.CreateDirectory(DS4Windows.Global.appDataPpath + "\\Profiles");
-                        foreach (string s in Directory.GetFiles(DS4Windows.Global.exedirpath + "\\Profiles"))
-                        {
-                            File.Copy(s, DS4Windows.Global.appDataPpath + "\\Profiles\\" + Path.GetFileName(s));
-                        }
-                    }
-                    catch { }
-                    MessageBox.Show(global::DS4Windows.UiText.Get("Copy complete, please relaunch DS4Windows and remove settings from Program Directory"),
-                        "DS4Windows");
-                }
-                else
-                {
-                    MessageBox.Show(global::DS4Windows.UiText.Get("DS4Windows cannot edit settings here, This will now close"),
-                        "DS4Windows");
-                }
+                MessageBox.Show(global::DS4Windows.UiText.Get("DS4Windows could not save settings in the selected folder. No files were copied or removed. On the Profiles page, use Settings & profiles to choose AppData or migrate your saved settings."),
+                    "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                 DS4Windows.Global.appdatapath = null;
                 skipSave = true;

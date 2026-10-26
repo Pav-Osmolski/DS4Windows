@@ -60,7 +60,7 @@ class CandidateTests(unittest.TestCase):
         with zipfile.ZipFile(portable,'w') as z:
             z.writestr('DS4Windows/DS4Windows.release',version+'\n')
             z.writestr('DS4Windows/DS4Windows.portable',b'DS4Windows portable package v1\n')
-            z.writestr('DS4Windows/viiper.exe',backend);z.writestr('DS4Windows/extras/VIIPER-0.1.14-x64.exe',backend)
+            z.writestr('DS4Windows/viiper.exe',backend);z.writestr('DS4Windows/extras/VIIPER-0.1.17-x64.exe',backend)
             z.writestr('DS4Windows/viiper.exe.sha256',hashlib.sha256(backend).hexdigest()+' *viiper.exe\n')
         installer.write_bytes(b'synthetic-installer')
         record={'schema':1,'kind':'main-release-candidate','repository':c.REPOSITORY,'sourceCommit':COMMIT,

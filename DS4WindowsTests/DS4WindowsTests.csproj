@@ -25,6 +25,8 @@
     </Reference>
     <Compile Include="..\installer\DS4Windows.Bootstrapper\UninstallHelperPackagePlan.cs" Link="UninstallHelperPackagePlan.cs" />
     <Compile Include="..\installer\DS4Windows.Bootstrapper\InfrastructureProbe.cs" Link="InfrastructureProbe.cs" />
+    <Compile Include="..\installer\DS4Windows.Bootstrapper\OptionalDriverSelection.cs" Link="OptionalDriverSelection.cs" />
+    <Compile Include="..\installer\DS4Windows.Bootstrapper\OptionalDriverVersions.cs" Link="OptionalDriverVersions.cs" />
     <Compile Include="..\installer\DS4Windows.SetupActions\SetupMutationOwnership.cs" Link="SetupMutationOwnership.cs" />
     <Compile Include="..\installer\InstallerStartupTaskPolicy.cs" Link="InstallerStartupTaskPolicy.cs" />
     <Compile Include="..\installer\SetupResumeBundleSource.cs" Link="SetupResumeBundleSource.cs" />

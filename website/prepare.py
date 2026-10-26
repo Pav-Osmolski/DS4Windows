@@ -70,6 +70,8 @@ def main():
     shutil.copytree(ROOT / "website/assets", STAGE / "assets", dirs_exist_ok=True,
                     ignore=shutil.ignore_patterns("README.md"))
     shutil.copyfile(ROOT / "website/index.md", STAGE / "index.md")
+    # Keep ownership-verification files available at the project site root.
+    shutil.copytree(ROOT / "website/static", STAGE, dirs_exist_ok=True)
     version = ET.parse(ROOT / "DS4Windows/DS4WinWPF.csproj").findtext(".//Version")
     (STAGE / "assets/release.json").write_text(json.dumps({"version": version}), encoding="utf-8")
     # The homepage uses one source of version truth as well.

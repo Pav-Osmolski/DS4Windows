@@ -1586,8 +1586,17 @@ namespace DS4Windows
                 multisavespots = false;
                 return;
             }
-            bool programFolderAutoProfilesExists = File.Exists(Path.Combine(exedirpath, "Auto Profiles.xml"));
-            bool appDataAutoProfilesExists = File.Exists(Path.Combine(appDataPpath, "Auto Profiles.xml"));
+            firstRun = false;
+            multisavespots = false;
+            if (SettingsStorage.Current.Selected is { } selectedFolder)
+            {
+                string selectedPath = SettingsStorage.Current.Root(selectedFolder);
+                SaveWhere(selectedPath);
+                firstRun = !SettingsStorage.HasConfiguration(selectedPath);
+                return;
+            }
+            bool programFolderAutoProfilesExists = SettingsStorage.HasConfiguration(exedirpath);
+            bool appDataAutoProfilesExists = SettingsStorage.HasConfiguration(appDataPpath);
             //bool localAppDataAutoProfilesExists = File.Exists(Path.Combine(localAppDataPpath, "Auto Profiles.xml"));
             //bool systemAppConfigExists = appDataAutoProfilesExists || localAppDataAutoProfilesExists;
             bool systemAppConfigExists = appDataAutoProfilesExists;
@@ -1615,6 +1624,11 @@ namespace DS4Windows
             {
                 Global.firstRun = true;
                 Global.multisavespots = false;
+                if (InstallationModeInfo.IsInstalled)
+                {
+                    SettingsStorage.Current.Remember(SettingsFolder.AppData);
+                    SaveWhere(appDataPpath);
+                }
             }
         }
 

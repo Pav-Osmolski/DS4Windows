@@ -36,6 +36,93 @@ after changing output type if it does not detect the new virtual controller.
 
 You can rename, duplicate, import and export profiles from the Profiles page.
 
+### Profile views and icons
+
+**Tiles** is the default profile view. Switch to **List** for compact rows or
+**Details** for columns showing the profile name, emulated controller and
+last-modified time. Your view choice is remembered; selection, search, sorting,
+and the profile actions work in every view.
+
+Select a profile and choose **Profile icon…** below the list. The default badge
+uses the first character of the profile name. Choose a fill colour, use a custom
+ICO/PNG image, or choose **Restore default**. Changes are previewed until you
+select **Apply**; Cancel leaves the saved appearance unchanged.
+
+Images must be smaller than 2 MB and no larger than 2048 × 2048 pixels. They are
+stored as small PNG thumbnails inside the profile, preserving transparency.
+There is no dependency on the original image file: rename, duplicate, profile
+import/export, settings backups and settings migration retain the icon. Editing
+and saving controller settings also preserves profile appearance.
+
+### Settings and profiles location
+
+The **Settings & profiles** card shows the active profiles folder and whether it
+is writable. It starts collapsed to save space; click its header to expand it.
+Your expanded/collapsed choice is remembered across restarts. Read-only folders
+and pending settings changes automatically expand to expose the warning or next
+steps without replacing your saved preference.
+
+**Open profiles folder** opens that exact folder. **Back up all**
+saves a complete settings ZIP, including profile assignments, actions, output
+slots, Nintendo pairing data and imported battery-alert sounds. Executables,
+drivers and logs are excluded. **Restore backup** validates a ZIP created here
+and schedules a restore for the next start, keeping a verified backup of the
+current destination first.
+
+Choose **AppData — recommended** for per-user storage in
+`%APPDATA%\DS4Windows`, or **Program folder** beside the running executable.
+New registered installations default to AppData. Existing locations remain
+selected until you choose to change them. Program Files commonly requires
+administrator access to save; the page checks actual folder access and explains
+when it is read-only. Profiles can still be viewed and exported there.
+
+**Migrate to AppData** is offered for installed copies using settings in their
+program folder. Migration is optional. Close the editor and save or discard
+pending edits before proceeding. Choose whether to copy your current saved
+settings or use the destination's existing settings. Replacing existing settings
+requires confirmation: the complete set is backed up, then replaced rather than
+merged. Your source folder remains intact. Fully quit DS4Windows and reopen it
+to apply the change; **Cancel pending change** cancels it before the next start.
+The remembered location takes precedence over old files left beside the EXE.
+
+Copies are staged and verified before publication. A journal supports rollback
+after an interrupted copy. If recovery finds unexpected changes, DS4Windows
+preserves them and reports the backup location instead of overwriting them.
+Automatic destination backups are kept beneath
+`%LOCALAPPDATA%\DS4Windows\Settings locations\<installation-id>\<operation-id>\backup`.
+Keep a separate **Back up all** ZIP for convenient long-term recovery.
+
+Sort profiles by name or last modified time. Cards show their output type,
+modification time and whether a connected controller is using them. Importing a
+same-named profile asks before replacing it.
+
+### Stored updates and cleanup
+
+Open **Settings > Updates & tools > Updates > Update storage** to see the size
+of recognised stored update files and the space reclaimable under your selected
+retention policy. The default keeps one previous version of each component in
+addition to current files. Choose none, a custom count (0–100), or **Keep all**.
+Disable **Automatically clean up after updating** to manage cleanup manually.
+Preferences are per user and application folder and survive settings-location changes.
+
+**Clean up now** lists the exact files and estimated space before confirmation.
+It applies the selected retention policy; choosing none still preserves current
+files. **View stored files** opens the folders containing recognised packages.
+**Refresh** scans again. Locked, changed or inaccessible files are skipped and
+reported rather than blocking the app; an unwritable installed folder may need
+an administrator for manual cleanup.
+
+Automatic cleanup runs in the background after the controller service starts
+and VIIPER/USB/IP readiness checks pass. Failed startup/repair does not trigger
+pruning. It covers recognised versioned DS4Windows/updater downloads and old
+VIIPER/USB/IP support packages in the application folder, its **Updates** and
+**extras** folders, and `%LOCALAPPDATA%\DS4Windows\Updates`. Files belonging to
+the current package, current/newer versions, live executables, installed drivers,
+profiles, settings, backups, transaction folders and unknown/nested content are
+preserved. Unrecognised files are excluded from the displayed totals and are
+not removed; this is not a general disk cleaner. Keeping a download does not
+provide an automatic downgrade or guarantee that an older driver can be restored.
+
 If saving fails, the editor stays open and the last valid profile file is kept.
 Check Log for the file error, resolve permissions or free space, and retry.
 A rename collision leaves both existing profiles unchanged; the Rename dialog

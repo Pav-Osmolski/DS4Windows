@@ -103,26 +103,38 @@
 
             <Border Style="{StaticResource Card}">
               <StackPanel>
-                <TextBlock Text="Installation status" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,11" />
-                <Grid Margin="0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="DS4Windows" FontWeight="SemiBold"/><TextBlock x:Name="Ds4Status" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
-                <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="VIIPER 0.1.10" FontWeight="SemiBold"/><TextBlock x:Name="ViiperStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
+                <TextBlock x:Name="StatusHeading" Text="Installation status" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,11" />
+                <Grid Margin="0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="Ds4Label" Text="DS4Windows" FontWeight="SemiBold"/><TextBlock x:Name="Ds4Status" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
+                <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="ViiperLabel" Text="VIIPER" FontWeight="SemiBold"/><TextBlock x:Name="ViiperStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
                 <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="USB-IP 0.9.8.1" FontWeight="SemiBold"/><TextBlock x:Name="UsbipStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
+                <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="HidHideLabel" Text="HidHide" FontWeight="SemiBold"/><TextBlock x:Name="HidHideStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
+                <Grid Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="FakerInputLabel" Text="FakerInput" FontWeight="SemiBold"/><TextBlock x:Name="FakerInputStatus" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
+                <Grid x:Name="ProfileSummary" Visibility="Collapsed" Margin="0,7,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="Profiles and settings" FontWeight="SemiBold"/><TextBlock Text="Will keep" Grid.Column="1" Foreground="{StaticResource AccentBrush}"/></Grid>
               </StackPanel>
             </Border>
+
+            <StackPanel x:Name="UninstallTools" Visibility="Collapsed" Margin="0,0,0,14">
+              <WrapPanel>
+                <Button Style="{StaticResource SecondaryButton}" Content="Open profiles folder" Click="OpenProfiles_Click" Margin="0,0,10,8" />
+                <Button Style="{StaticResource SecondaryButton}" Content="Manage shared drivers…" Click="ManageDrivers_Click" Margin="0,0,0,8" />
+              </WrapPanel>
+              <TextBlock Text="Shared drivers may be used by other apps. Remove them separately through Windows Installed apps if you no longer need them." TextWrapping="Wrap" Foreground="{DynamicResource MutedBrush}" FontSize="12" />
+              <TextBlock x:Name="UninstallToolMessage" TextWrapping="Wrap" Foreground="{DynamicResource WarningBrush}" FontSize="12" Margin="0,6,0,0" Visibility="Collapsed" />
+            </StackPanel>
 
             <Border x:Name="OptionsCard" Style="{StaticResource Card}">
               <StackPanel>
                 <TextBlock Text="Options" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,7" />
                 <CheckBox x:Name="DesktopShortcutCheckBox" IsChecked="True" Content="Create a desktop shortcut" />
-                <CheckBox x:Name="HidHideCheckBox" IsChecked="True" Content="Install HidHide (recommended — prevents double input)" />
+                <CheckBox x:Name="HidHideCheckBox" IsChecked="False" Content="Install HidHide (recommended — prevents double input)" Click="OptionalDriver_Click" />
                 <TextBlock Text="Optional system driver. Existing healthy installations are left unchanged." Foreground="{DynamicResource MutedBrush}" FontSize="12" Margin="24,-2,0,5" />
-                <CheckBox x:Name="FakerInputCheckBox" IsChecked="False" Content="Install FakerInput (virtual keyboard and mouse)" />
+                <CheckBox x:Name="FakerInputCheckBox" IsChecked="False" Content="Install FakerInput (virtual keyboard and mouse)" Click="OptionalDriver_Click" />
                 <TextBlock Text="Useful for profiles that send keyboard or mouse input to elevated games." Foreground="{DynamicResource MutedBrush}" FontSize="12" Margin="24,-2,0,0" />
               </StackPanel>
             </Border>
 
-            <TextBlock Text="Installs to C:\Program Files\DS4Windows. Profiles, settings, logs, and user-created files are preserved during updates and repairs." TextWrapping="Wrap" Foreground="{DynamicResource MutedBrush}" FontSize="12" />
-            <TextBlock Text="Setup repairs the reserved RunVIIPER and RunDS4Windows startup tasks after backing up any existing definitions." TextWrapping="Wrap" Foreground="{DynamicResource MutedBrush}" FontSize="12" Margin="0,7,0,0" />
+            <TextBlock x:Name="InstallLocationNote" Text="Installs to C:\Program Files\DS4Windows. Profiles, settings, logs, and user-created files are preserved during updates and repairs." TextWrapping="Wrap" Foreground="{DynamicResource MutedBrush}" FontSize="12" />
+            <TextBlock x:Name="StartupTasksNote" Text="Setup repairs the reserved RunVIIPER and RunDS4Windows startup tasks after backing up any existing definitions." TextWrapping="Wrap" Foreground="{DynamicResource MutedBrush}" FontSize="12" Margin="0,7,0,0" />
           </StackPanel>
         </ScrollViewer>
         <Grid Grid.Row="1" Margin="0,20,0,0">

@@ -160,6 +160,8 @@ HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDisp
         markup.SetAttributeValue(XNamespace.Xmlns + "xctk", "http://schemas.xceed.com/wpf/xaml/toolkit");
         foreach (XElement element in markup.DescendantsAndSelf().ToArray())
         {
+            if (element.Name.NamespaceName == "clr-namespace:DS4WinWPF.DS4Forms")
+                element.Name = XName.Get(element.Name.LocalName, "clr-namespace:DS4WinWPF.DS4Forms;assembly=DS4Windows");
             if (element.Name.LocalName == "LanguagePackControl")
             {
                 element.ReplaceWith(new XElement(wpf + "TextBlock", new XAttribute("Text", "Language selector")));
@@ -175,7 +177,7 @@ HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDisp
                 if (attribute.Name.LocalName is "Click" or "Checked" or "SelectionChanged" or "TextChanged" or "PreviewKeyDown" ||
                     attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
                 else if (attribute.Value.StartsWith("{lex:Loc ")) attribute.Value = LocalizedSource.Resolve(attribute.Value);
-                else if (attribute.Value.StartsWith("{Binding") && !attribute.Value.Contains("ElementName=settings"))
+                else if (attribute.Value.StartsWith("{Binding") && element.Name.LocalName != "DataTrigger" && !attribute.Value.Contains("ElementName=settings"))
                     attribute.Remove();
             }
         }

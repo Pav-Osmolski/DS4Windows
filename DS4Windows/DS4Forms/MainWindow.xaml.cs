@@ -635,6 +635,7 @@ Suspend support not enabled.", true);
 
         private void ControlServiceStarted(object sender, EventArgs e)
         {
+            Dispatcher.BeginInvoke((Action)ScheduleUpdateCleanup);
             if (Global.SwipeProfiles)
             {
                 ChangeHotkeysStatus(true);
@@ -1518,6 +1519,13 @@ Suspend support not enabled.", true);
             {
                 RefreshSwitch2JoyConManualRows(force: true);
             }
+            if (mainTabCon.SelectedItem == profilesTab && settingsStorageControl != null)
+            {
+                settingsStorageControl.BeforeChange = BeforeSettingsLocationChange;
+                settingsStorageControl.CloseRequested = RequestApplicationShutdown;
+                settingsStorageControl.Refresh();
+                foreach (var profile in profileListHolder.ProfileListCol) profile.RefreshMetadata();
+            }
         }
 
         private void MainWinVM_QuickProfileSettingChanged(object sender,
@@ -1781,6 +1789,29 @@ Suspend support not enabled.", true);
             }
         }
 
+        private readonly System.Collections.Generic.Dictionary<DS4Device, ControllerInfoWindow> controllerInfoWindows = new();
+
+        private void ControllerOverview_ControllerInfoRequested(object sender, EventArgs e) =>
+            ShowControllerInfo(mainWinVM.SelectedController);
+
+        private void ControllerCardInfo_Click(object sender, RoutedEventArgs e) =>
+            ShowControllerInfo((sender as FrameworkElement)?.DataContext as CompositeDeviceModel);
+
+        private void ShowControllerInfo(CompositeDeviceModel controller)
+        {
+            if (controller?.Device == null) return;
+            DS4Device device = controller.Device;
+            int index = controller.DevIndex;
+            if (controllerInfoWindows.TryGetValue(device, out var open)) { open.Activate(); return; }
+            var window = new ControllerInfoWindow(device,
+                () => index >= 0 && index < App.rootHub.DS4Controllers.Length && ReferenceEquals(App.rootHub.DS4Controllers[index], device),
+                () => index >= 0 && index < App.rootHub.outputDevices.Length ? App.rootHub.outputDevices[index] : null)
+            { Owner = this };
+            controllerInfoWindows.Add(device, window);
+            window.Closed += (_, _) => controllerInfoWindows.Remove(device);
+            window.Show();
+        }
+
         private void ControllerOverview_ControllerDetailsRequested(object sender, EventArgs e)
         {
             mainTabCon.SelectedItem = controllersTab;
@@ -1902,6 +1933,7 @@ Suspend support not enabled.", true);
 
         private void ProfilesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (profileIconBtn != null) profileIconBtn.IsEnabled = profilesListBox.SelectedItem is ProfileEntity;
             bool hasSelection = profilesListBox.SelectedIndex >= 0;
             newProfListBtn.IsEnabled = true;
             editProfBtn.IsEnabled = hasSelection;
@@ -2154,6 +2186,12 @@ Suspend support not enabled.", true);
 
         private void MainDS4Window_Closed(object sender, EventArgs e)
         {
+            // The window is closed: finish only its outstanding presentation
+            // preference write, with a bound, before the process can exit.
+            if (settingsStorageControl != null && !settingsStorageControl.DisclosureSaved.Wait(TimeSpan.FromSeconds(2)))
+                NLog.LogManager.GetLogger("SettingsStorage").Warn("Timed out remembering Settings & profiles expansion state during shutdown.");
+            if (profileViewWriter != null && !profileViewWriter.Saved.Wait(TimeSpan.FromSeconds(2)))
+                NLog.LogManager.GetLogger("Profiles").Warn("Timed out remembering the profile view during shutdown.");
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= TrayDisplaySettingsChanged;
             logAutoScroller?.Dispose();
             DisposePowerLifecycle();
@@ -3497,15 +3535,13 @@ Suspend support not enabled.", true);
 
         private void ImportProfBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!RequireWritableProfiles()) return;
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.AddExtension = true;
             dialog.DefaultExt = ".xml";
             dialog.Filter = global::DS4Windows.UiText.FileFilter("DS4Windows Profile (*.xml)|*.xml");
             dialog.Title = global::DS4Windows.UiText.Get("Select Profile to Import File");
-            if (Global.appdatapath != Global.exedirpath)
-                dialog.InitialDirectory = Path.Combine(Global.appDataPpath, "Profiles");
-            else
-                dialog.InitialDirectory = Global.exedirpath + @"\Profiles\";
+            dialog.InitialDirectory = Path.Combine(Global.appdatapath, "Profiles");
 
             if (dialog.ShowDialog() == true)
             {
@@ -3514,8 +3550,27 @@ Suspend support not enabled.", true);
                 {
                     string profilename = System.IO.Path.GetFileName(files[i]);
                     string basename = System.IO.Path.GetFileNameWithoutExtension(files[i]);
-                    File.Copy(dialog.FileNames[i], Global.appdatapath + "\\Profiles\\" + profilename, true);
-                    profileListHolder.AddProfileSort(basename);
+                    string destination = Path.Combine(Global.appdatapath, "Profiles", profilename);
+                    if (File.Exists(destination) && MessageBox.Show(this,
+                        UiText.Format("A profile named {0} already exists. Replace it?", basename),
+                        "DS4Windows", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) continue;
+                    try
+                    {
+                        var document = new System.Xml.XmlDocument { XmlResolver = null };
+                        using var reader = System.Xml.XmlReader.Create(dialog.FileNames[i],
+                            new System.Xml.XmlReaderSettings { DtdProcessing = System.Xml.DtdProcessing.Prohibit, XmlResolver = null });
+                        document.Load(reader);
+                        if (document.DocumentElement?.Name != "DS4Windows") throw new IOException(UiText.Get("This file is not a DS4Windows profile."));
+                        byte[] bytes = File.ReadAllBytes(dialog.FileNames[i]);
+                        string temporary = destination + "." + Guid.NewGuid().ToString("N") + ".tmp";
+                        try { File.WriteAllBytes(temporary, bytes); File.Move(temporary, destination, true); }
+                        finally { if (File.Exists(temporary)) File.Delete(temporary); }
+                        if (!profileListHolder.ProfileListCol.Any(item => item.Name.Equals(basename, StringComparison.OrdinalIgnoreCase)))
+                            profileListHolder.AddProfileSort(basename);
+                        else profileListHolder.ProfileListCol.First(item => item.Name.Equals(basename, StringComparison.OrdinalIgnoreCase)).FireSaved();
+                    }
+                    catch (Exception error) when (error is IOException or UnauthorizedAccessException or System.Xml.XmlException)
+                    { MessageBox.Show(this, error.Message, "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Warning); }
                 }
             }
         }
@@ -3545,6 +3600,7 @@ Suspend support not enabled.", true);
 
         private void DupProfBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!RequireWritableProfiles()) return;
             string filename = "";
             if (profilesListBox.SelectedItem is ProfileEntity entity)
             {
@@ -3571,6 +3627,7 @@ Suspend support not enabled.", true);
 
         private void DeleteProfBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!RequireWritableProfiles()) return;
             if (profilesListBox.SelectedItem is ProfileEntity entity)
             {
                 string filename = entity.Name;
@@ -3689,6 +3746,7 @@ Suspend support not enabled.", true);
 
         private void NewProfListBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!RequireWritableProfiles()) return;
             ShowProfileEditor(Global.TEST_PROFILE_INDEX, null);
         }
 
@@ -3955,6 +4013,7 @@ Suspend support not enabled.", true);
 
         private void RenameProfBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!RequireWritableProfiles()) return;
             if (profilesListBox.SelectedItem is ProfileEntity entity)
             {
                 foreach (var controller in conLvViewModel.ControllerCol.Where(item => item.SelectedProfile == entity.Name))
@@ -3990,7 +4049,8 @@ Suspend support not enabled.", true);
 
             string query = profilesSearchTextBox?.Text?.Trim();
             return string.IsNullOrEmpty(query) ||
-                profile.Name?.IndexOf(query, StringComparison.CurrentCultureIgnoreCase) >= 0;
+                profile.Name?.IndexOf(query, StringComparison.CurrentCultureIgnoreCase) >= 0 ||
+                profile.Summary?.IndexOf(query, StringComparison.CurrentCultureIgnoreCase) >= 0;
         }
 
         private void ProfilesSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)

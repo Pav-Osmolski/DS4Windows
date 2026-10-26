@@ -6329,4 +6329,394 @@ Example: whyme_DS4Windows</value>
   <data name="UI_F9F5196A5ACCAE02" xml:space="preserve">
     <value>Ακολουθία σύνδεσης ακουστικών</value>
   </data>
+  <data name="UI_12F67F8539C46701" xml:space="preserve">
+    <value>Διαθεσιμότητα</value>
+  </data>
+  <data name="UI_39D6C91B57CE2F3B" xml:space="preserve">
+    <value>Τάση μπαταρίας</value>
+  </data>
+  <data name="UI_8BB29098B369BFCD" xml:space="preserve">
+    <value>Bluetooth</value>
+  </data>
+  <data name="UI_4816CBFD74AA8297" xml:space="preserve">
+    <value>ΚΟΜΜΑ</value>
+  </data>
+  <data name="UI_76C6D2CECF3EF256" xml:space="preserve">
+    <value>Bootloader έκδοση firmware</value>
+  </data>
+  <data name="UI_DA36D849C8B49668" xml:space="preserve">
+    <value>Πλήρης φόρτιση</value>
+  </data>
+  <data name="UI_95072AA1A3FE11F5" xml:space="preserve">
+    <value>Διακόπτης ελέγχου. Εμφάνιση της τελευταίας στιγμιαίας εικόνας.</value>
+  </data>
+  <data name="UI_55026208AB1964FE" xml:space="preserve">
+    <value>Ελεγκτής Πληροφοριών</value>
+  </data>
+  <data name="UI_C4A065BCABC2A601" xml:space="preserve">
+    <value>Πληροφορίες ελέγχου αντιγράφονται.</value>
+  </data>
+  <data name="UI_8D380282ADEDB6D9" xml:space="preserve">
+    <value>Αντίγραφο info</value>
+  </data>
+  <data name="UI_F65918E90A917B0E" xml:space="preserve">
+    <value>Εκδόσεις firmware DSP</value>
+  </data>
+  <data name="UI_F20FD54567ABF468" xml:space="preserve">
+    <value>Ταυτοποίηση συσκευής</value>
+  </data>
+  <data name="UI_F7D61802A4172ECC" xml:space="preserve">
+    <value>Συσκευή Info</value>
+  </data>
+  <data name="UI_03B89FA880E6095E" xml:space="preserve">
+    <value>Πληροφορίες εργοστασίου</value>
+  </data>
+  <data name="UI_950EEBFBADA780A3" xml:space="preserve">
+    <value>Το firmware χτίζει χρόνο</value>
+  </data>
+  <data name="UI_24EB04667515759D" xml:space="preserve">
+    <value>Τύπος Firmware</value>
+  </data>
+  <data name="UI_9D0328BD2B3A5649" xml:space="preserve">
+    <value>Firmware έκδοση</value>
+  </data>
+  <data name="UI_6663DFC9F3F1CA08" xml:space="preserve">
+    <value>Πληροφορίες υλικού</value>
+  </data>
+  <data name="UI_9D7DA81A1E5FFB14" xml:space="preserve">
+    <value>Έκδοση υλικού</value>
+  </data>
+  <data name="UI_6D906D1A654F5178" xml:space="preserve">
+    <value>Συνδεδεμένα ακουστικά</value>
+  </data>
+  <data name="UI_999F23FCD7BEC707" xml:space="preserve">
+    <value>ταυτότητα</value>
+  </data>
+  <data name="UI_5418EF17129415EA" xml:space="preserve">
+    <value>Πληροφορίες που αναφέρονται από τον εξομοιωμένο ελεγκτή. Οι ημερομηνίες firmware περιγράφουν το εξομοιωμένο firmware, όχι DS4Windows.</value>
+  </data>
+  <data name="UI_64733AE1C4198363" xml:space="preserve">
+    <value>Πληροφορίες που αναφέρονται από τον συνδεδεμένο φυσικό ελεγκτή σας.</value>
+  </data>
+  <data name="UI_B7F8E9D985AF700A" xml:space="preserve">
+    <value>Εισαγωγή αναφοράς διαστήματος</value>
+  </data>
+  <data name="UI_3F45AE9E280D7991" xml:space="preserve">
+    <value>Πληροφορίες ελέγχου φόρτωσης...</value>
+  </data>
+  <data name="UI_1F04763D7BCD609C" xml:space="preserve">
+    <value>MCU DSP έκδοση firmware</value>
+  </data>
+  <data name="UI_E49AFACABFC81F9C" xml:space="preserve">
+    <value>Κύρια έκδοση firmware</value>
+  </data>
+  <data name="UI_1AF384C577F294D4" xml:space="preserve">
+    <value>Κατασκευαστής</value>
+  </data>
+  <data name="UI_1EA442A134B2A184" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="UI_E172ACC04C1A5E4C" xml:space="preserve">
+    <value>Φυσικός ελεγκτής</value>
+  </data>
+  <data name="UI_C76C9E7682BC84B6" xml:space="preserve">
+    <value>Προϊόντα ID</value>
+  </data>
+  <data name="UI_F2307BAF1C858F10" xml:space="preserve">
+    <value>Αριθμός σειράς</value>
+  </data>
+  <data name="UI_7339FF9FC26A552E" xml:space="preserve">
+    <value>Το Snapshot έχει ενημερωθεί στο {0}.</value>
+  </data>
+  <data name="UI_801CD0692B68DE33" xml:space="preserve">
+    <value>Σειρά λογισμικού</value>
+  </data>
+  <data name="UI_920E413C7D411B61" xml:space="preserve">
+    <value>Κατάσταση</value>
+  </data>
+  <data name="UI_B958CE8B871AB36B" xml:space="preserve">
+    <value>Θερμοκρασία</value>
+  </data>
+  <data name="UI_BD6F093129971F07" xml:space="preserve">
+    <value>Ο πίνακας είναι απασχολημένος. παρακαλώ δοκιμάστε ξανά.</value>
+  </data>
+  <data name="UI_FF0A3616B61AC476" xml:space="preserve">
+    <value>Αυτός ο ελεγκτής δεν αποκαλύπτει λεπτομέρειες firmware.</value>
+  </data>
+  <data name="UI_7BC04149A530604E" xml:space="preserve">
+    <value>Αναθεώρηση συσκευών USB</value>
+  </data>
+  <data name="UI_A24FFD8E9805081E" xml:space="preserve">
+    <value>Ενημερωμένη έκδοση</value>
+  </data>
+  <data name="UI_BBBC715D79EB1147" xml:space="preserve">
+    <value>Πωλητής ID</value>
+  </data>
+  <data name="UI_D4944E4ACC601E42" xml:space="preserve">
+    <value>Η εικονική έξοδος έχει αλλάξει. Ανανεώστε για να διαβάσετε τον τρέχοντα ελεγκτή.</value>
+  </data>
+  <data name="UI_A68FF52175258D4D" xml:space="preserve">
+    <value>Η εικονική έξοδος δεν είναι ενεργή.</value>
+  </data>
+  <data name="UI_184D8D78A71837F8" xml:space="preserve">
+    <value>Μπάντα μπαταρίας</value>
+  </data>
+  <data name="UI_BFF4A010E2B21B09" xml:space="preserve">
+    <value>Εξωτερική δύναμη</value>
+  </data>
+  <data name="UI_C520C36A0F8B8CAB" xml:space="preserve">
+    <value>Οι λεπτομέρειες του εξομοιωμένου ελεγκτή δεν μπορούσαν να διαβαστούν.</value>
+  </data>
+  <data name="UI_0C2C7FF55EF39657" xml:space="preserve">
+    <value>Αλλαγή τοποθεσίας...</value>
+  </data>
+  <data name="UI_0CA56CD50F9C03ED" xml:space="preserve">
+    <value>Αποθηκεύστε ή απορρίψτε τις αλλαγές του προφίλ σας και κλείστε τον επεξεργαστή προφίλ πριν αλλάξετε ή δημιουργήσετε αντίγραφα ασφαλείας των ρυθμίσεων.</value>
+  </data>
+  <data name="UI_0FE1058FEB9F7E16" xml:space="preserve">
+    <value>Τελευταία τροποποίηση</value>
+  </data>
+  <data name="UI_133F3F162C1C1D7E" xml:space="preserve">
+    <value>DS4Windows δεν μπορούσε να αποθηκεύσει ρυθμίσεις στον επιλεγμένο φάκελο. Δεν αντιγράφηκαν ή αφαιρέθηκαν αρχεία. Στη σελίδα Προφίλ, χρησιμοποιήστε Ρυθμίσεις &amp; προφίλ για να επιλέξετε AppData ή να μετακινήσετε τις αποθηκευμένες ρυθμίσεις σας.</value>
+  </data>
+  <data name="UI_17C75C0B93CF1D4C" xml:space="preserve">
+    <value>Πρόγραμμα Φόρμουλα</value>
+  </data>
+  <data name="UI_1D3DE4B5E858F04F" xml:space="preserve">
+    <value>Αυτό το αρχείο δεν είναι ένα προφίλ DS4Windows.</value>
+  </data>
+  <data name="UI_1E8F0D47C8DAB05C" xml:space="preserve">
+    <value>Η λειτουργία ρυθμίσεων δεν μπορούσε να ολοκληρωθεί. η τρέχουσα τοποθεσία σας παραμένει ενεργή.</value>
+  </data>
+  <data name="UI_221EBEEFF1B1EC51" xml:space="preserve">
+    <value>Η θέση των ρυθμίσεων δεν μπορούσε να αλλάξει. Η προηγούμενη τοποθεσία σας παραμένει επιλεγμένη. Ελέγξτε τις Ρυθμίσεις και τα προφίλ στη σελίδα Προφίλ.</value>
+  </data>
+  <data name="UI_24DB99347AA1C7E5" xml:space="preserve">
+    <value>Ρυθμίσεις &amp; Προφίλ</value>
+  </data>
+  <data name="UI_31120B1AF220C67D" xml:space="preserve">
+    <value>Αντιγράψτε τις τρέχουσες ρυθμίσεις και τα προφίλ σας σε αυτή τη θέση; Επιλέξτε Όχι για να χρησιμοποιήσετε τις ρυθμίσεις ήδη εκεί.</value>
+  </data>
+  <data name="UI_311E149E6E2BEC65" xml:space="preserve">
+    <value>Αποθηκεύστε τοποθεσία</value>
+  </data>
+  <data name="UI_3681E8450DAA413B" xml:space="preserve">
+    <value>Μόνο ανάγνωση Δεν είναι δυνατή η αποθήκευση αλλαγών προφίλ. Επιλέξτε AppData ή προσαρμόστε τα δικαιώματα αυτού του φακέλου.</value>
+  </data>
+  <data name="UI_3F8AC13C7A3FFD77" xml:space="preserve">
+    <value>Ετικέτες - Συνιστώμενη</value>
+  </data>
+  <data name="UI_4FEC09637F7F3808" xml:space="preserve">
+    <value>Δεν υπάρχουν ρυθμίσεις στην επιλεγμένη θέση. Επιλέξτε Αντ 'αυτού αντιγραφή των τρέχων ρυθμίσεων.</value>
+  </data>
+  <data name="UI_58C142D711BFD10B" xml:space="preserve">
+    <value>Ο προορισμός περιέχει ήδη ρυθμίσεις. Η αντιγραφή αντικαθιστά τις πλήρεις ρυθμίσεις που έχουν οριστεί μετά από μια επαληθευμένη δημιουργία αντιγράφων ασφαλείας.</value>
+  </data>
+  <data name="UI_59BAF167CB71413D" xml:space="preserve">
+    <value>Τροποποίηση {0:g}</value>
+  </data>
+  <data name="UI_69E699FD2332BFAA" xml:space="preserve">
+    <value>Αποθηκεύστε το backup.</value>
+  </data>
+  <data name="UI_6C3786B82DCF12A1" xml:space="preserve">
+    <value>Επιλέξτε πού διατηρούνται τα προφίλ και οι ρυθμίσεις εφαρμογών.</value>
+  </data>
+  <data name="UI_6F6EC70F39543AD5" xml:space="preserve">
+    <value>Μετανάστευση στην AppData...</value>
+  </data>
+  <data name="UI_744C0BF59BEC5D87" xml:space="preserve">
+    <value>Ανοιχτό προφίλ</value>
+  </data>
+  <data name="UI_750AF77AA42EEA62" xml:space="preserve">
+    <value>στη χρήση</value>
+  </data>
+  <data name="UI_84F9B85EC020DD31" xml:space="preserve">
+    <value>Μια αλλαγή ρυθμίσεων αναμένεται. Κλείστε πλήρως το DS4Windows και ανοίξτε το ξανά για να το εφαρμόσετε.</value>
+  </data>
+  <data name="UI_89138B5D77049FDE" xml:space="preserve">
+    <value>Η αλλαγή της θέσης απαιτεί επανεκκίνηση· τα αρχικά αρχεία διατηρούνται.</value>
+  </data>
+  <data name="UI_89437522D13E8517" xml:space="preserve">
+    <value>Ένα προφίλ που ονομάζεται {0} υπάρχει ήδη.</value>
+  </data>
+  <data name="UI_9435DBE760FC2C2D" xml:space="preserve">
+    <value>DS4Windows αντίγραφο ασφαλείας ρυθμίσεων (*.zip)</value>
+  </data>
+  <data name="UI_A0083C0A6DEBF0A5" xml:space="preserve">
+    <value>Επαναφορά backup...</value>
+  </data>
+  <data name="UI_BB05620585B66BE5" xml:space="preserve">
+    <value>Ετικέτες Α-Ζ</value>
+  </data>
+  <data name="UI_C4DDA1DBE3427538" xml:space="preserve">
+    <value>Αυτός ο φάκελος προφίλ είναι μόνο για ανάγνωση.Χρησιμοποιήστε Ρυθμίσεις &amp; προφίλ για να μετακινηθείτε στο AppData πριν αποθηκεύσετε τις αλλαγές.</value>
+  </data>
+  <data name="UI_CC1B0341BE6D01E0" xml:space="preserve">
+    <value>Επαναφέρετε αυτό το πλήρες αντίγραφο ασφαλείας ρυθμίσεων στην επόμενη εκκίνηση; Οι τρέχουσες ρυθμίσεις θα δημιουργηθούν πριν από την αντικατάσταση.</value>
+  </data>
+  <data name="UI_D60332E11AD41552" xml:space="preserve">
+    <value>Και οι δύο τοποθεσίες διατηρούνται.Μπορείτε να αλλάξετε τη θέση αργότερα στη σελίδα Προφίλ.</value>
+  </data>
+  <data name="UI_DBB36ABC8213D32C" xml:space="preserve">
+    <value>Η αλλαγή θα εφαρμοστεί την επόμενη φορά που ξεκινά το DS4Windows. Κλείστε το DS4Windows τώρα; Ανοίξτε ξανά αργότερα για να συνεχίσετε.</value>
+  </data>
+  <data name="UI_DEE0800861C769B2" xml:space="preserve">
+    <value>Ακύρωση αναμενόμενης αλλαγής</value>
+  </data>
+  <data name="UI_E8E37165E114E4B3" xml:space="preserve">
+    <value>Οι τρέχουσες ρυθμίσεις της εφαρμογής δεν μπόρεσαν να αποθηκευτούν. Συνεχίστε να χρησιμοποιείτε τα τελευταία αποθηκευμένα αρχεία; Δεν θα συμπεριληφθούν οι μη αποθηκευμένες αλλαγές.</value>
+  </data>
+  <data name="UI_ED43FE750AC60A73" xml:space="preserve">
+    <value>Ο προορισμός δεν είναι γραπτός.</value>
+  </data>
+  <data name="UI_F4009999A1981329" xml:space="preserve">
+    <value>Επιστροφή σε όλα...</value>
+  </data>
+  <data name="UI_02B3630D80342B2E" xml:space="preserve">
+    <value>Προφίλ εισαγωγών</value>
+  </data>
+  <data name="UI_AC909944B8B33F4B" xml:space="preserve">
+    <value>ΕΞΑΓΩΓΗ ΕΠΙΛΟΓΗ</value>
+  </data>
+  <data name="UI_00B77B26EF805FA0" xml:space="preserve">
+    <value>Καθαρίστε τώρα...</value>
+  </data>
+  <data name="UI_0F88B21FB062E41F" xml:space="preserve">
+    <value>Προηγούμενες εκδόσεις για να διατηρηθεί</value>
+  </data>
+  <data name="UI_10D36152FB769314" xml:space="preserve">
+    <value>Διατηρεί τα τρέχοντα αρχεία και τον επιλεγμένο αριθμό προηγούμενων εκδόσεων για κάθε στοιχείο.</value>
+  </data>
+  <data name="UI_18685C640B42ED54" xml:space="preserve">
+    <value>γραπτώς</value>
+  </data>
+  <data name="UI_206A57CF90B957D9" xml:space="preserve">
+    <value>Δεν υπάρχουν παλιά αρχεία ενημέρωσης για να καθαρίσετε.</value>
+  </data>
+  <data name="UI_32839824A10B577C" xml:space="preserve">
+    <value>Μερικοί φάκελοι δεν μπορούσαν να σαρωθούν. ανανέωση για επαναφορά.</value>
+  </data>
+  <data name="UI_39E6D9F27FD2310C" xml:space="preserve">
+    <value>Περιλαμβάνει αναγνωρισμένες λήψεις DS4Windows, VIIPER, USB/IP και updater.</value>
+  </data>
+  <data name="UI_4BF41910A9472B0E" xml:space="preserve">
+    <value>Αφαίρεση {0} Ενημερωτικά αρχεία και δωρεάν {1}?</value>
+  </data>
+  <data name="UI_4DAD65EA7CD19103" xml:space="preserve">
+    <value>Προβολή αποθηκευμένων αρχείων</value>
+  </data>
+  <data name="UI_62F03122DFE37A68" xml:space="preserve">
+    <value>Καθαρίστε αποθηκευμένες ενημερώσεις</value>
+  </data>
+  <data name="UI_66A34F5BCC79EE79" xml:space="preserve">
+    <value>Αφαίρεσε αρχεία {0} και απελευθέρωσε αρχεία {1}. Αφαίρεσε αρχεία {2} που ήταν σε χρήση, άλλαξε ή δεν μπορούσε να αφαιρεθεί.</value>
+  </data>
+  <data name="UI_6EBC7FE7289381A2" xml:space="preserve">
+    <value>Διαχείριση λήψης ενημερώσεων και παλαιότερων αρχείων υποστήριξης.</value>
+  </data>
+  <data name="UI_71CFF61AEB197E8C" xml:space="preserve">
+    <value>Η ενημέρωση καθαρισμού δεν μπορούσε να ολοκληρωθεί.</value>
+  </data>
+  <data name="UI_7AC9EEBD3C4A5543" xml:space="preserve">
+    <value>Δεν υπάρχουν αποθηκευμένα αρχεία ενημέρωσης.</value>
+  </data>
+  <data name="UI_7F481133737773D2" xml:space="preserve">
+    <value>1 προηγούμενη έκδοση (συνιστάται)</value>
+  </data>
+  <data name="UI_7F6868B2BAC4D0FB" xml:space="preserve">
+    <value>Ενημέρωση αποθήκευσης</value>
+  </data>
+  <data name="UI_7FA38E74C274B4FB" xml:space="preserve">
+    <value>Ενημερωτικά αρχεία</value>
+  </data>
+  <data name="UI_8644E9F7A6635925" xml:space="preserve">
+    <value>Μπορεί να καθαριστεί</value>
+  </data>
+  <data name="UI_8AC767353080EAE7" xml:space="preserve">
+    <value>Διαβάστε μόνο</value>
+  </data>
+  <data name="UI_8C7A2C65FFAC2C68" xml:space="preserve">
+    <value>Αυτόματη εκκαθάριση μετά την ενημέρωση</value>
+  </data>
+  <data name="UI_9B80A7419EA5284A" xml:space="preserve">
+    <value>Κρατήστε όλα</value>
+  </data>
+  <data name="UI_CD1B31048C7CC28C" xml:space="preserve">
+    <value>Τα παλαιότερα αρχεία διαγράφονται μετά την επιτυχή εκκίνηση της ενημερωμένης εφαρμογής.</value>
+  </data>
+  <data name="UI_D1F656AC6C2F9ACD" xml:space="preserve">
+    <value>Επιλέξτε έναν αριθμό</value>
+  </data>
+  <data name="UI_FF523D3DC0C2D4E0" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η πρόσβαση στην αποθήκευση ενημερώσεων.</value>
+  </data>
+  <data name="UI_443D37F3A1F6013B" xml:space="preserve">
+    <value>Επιλέξτε μια εικόνα ICO ή PNG.</value>
+  </data>
+  <data name="UI_DCC6BBD741580C9A" xml:space="preserve">
+    <value>Επιλέξτε μια εικόνα μικρότερη από 2 MB.</value>
+  </data>
+  <data name="UI_12A1137C6D79CA4A" xml:space="preserve">
+    <value>Η εικόνα είναι πολύ μεγάλη για να χρησιμοποιηθεί ως εικονίδιο προφίλ.</value>
+  </data>
+  <data name="UI_7F5096197E224CAB" xml:space="preserve">
+    <value>Επιλέξτε μια εικόνα όχι μεγαλύτερη από 2048 × 2048 pixels.</value>
+  </data>
+  <data name="UI_AFE4F505B369EBED" xml:space="preserve">
+    <value>Πρώτη επιστολή</value>
+  </data>
+  <data name="UI_032747A5D15926E7" xml:space="preserve">
+    <value>Εικόνα Custom</value>
+  </data>
+  <data name="UI_E90146D539BEAA48" xml:space="preserve">
+    <value>Προφίλ Icon</value>
+  </data>
+  <data name="UI_5386C28080A66F48" xml:space="preserve">
+    <value>Icon Fill Χρώματα</value>
+  </data>
+  <data name="UI_598104707437A0F5" xml:space="preserve">
+    <value>ΧΡΩΜΑΤΟΓΡΑΦΙΚΟ...</value>
+  </data>
+  <data name="UI_BF1D4510A062903B" xml:space="preserve">
+    <value>Το γράμμα ακολουθεί το όνομα του προφίλ.</value>
+  </data>
+  <data name="UI_44CE6E4A2F8D9596" xml:space="preserve">
+    <value>Επιλέξτε εικόνα...</value>
+  </data>
+  <data name="UI_2A5DB09C1D9DB184" xml:space="preserve">
+    <value>ICO ή PNG. Διαφάνεια διατηρείται.</value>
+  </data>
+  <data name="UI_19D66A2331B54332" xml:space="preserve">
+    <value>Επαναφορά του ελαττώματος</value>
+  </data>
+  <data name="UI_31E392D1C0378BEC" xml:space="preserve">
+    <value>Εφαρμογή</value>
+  </data>
+  <data name="UI_495FED05ED6FEE23" xml:space="preserve">
+    <value>Καμία εικόνα επιλεγμένη</value>
+  </data>
+  <data name="UI_2B47F2E2A828B69A" xml:space="preserve">
+    <value>Εμπλουτισμένη εικόνα</value>
+  </data>
+  <data name="UI_9E2244CB6701F028" xml:space="preserve">
+    <value>Εικόνες προφίλ (*.ico·*.png)</value>
+  </data>
+  <data name="UI_470CFA3EFC56E382" xml:space="preserve">
+    <value>Η εικόνα δεν μπορούσε να ανοίξει.</value>
+  </data>
+  <data name="UI_63F14D2E7F10AEE7" xml:space="preserve">
+    <value>Το εικονίδιο προφίλ δεν μπόρεσε να αποθηκευτεί.</value>
+  </data>
+  <data name="UI_2ECBB0BF0A4C74A6" xml:space="preserve">
+    <value>Προφίλ Icon...</value>
+  </data>
+  <data name="UI_4DA22A362D386464" xml:space="preserve">
+    <value>Πλακίδια</value>
+  </data>
+  <data name="UI_6F202F54A7B2D8FE" xml:space="preserve">
+    <value>Λίστα</value>
+  </data>
+  <data name="UI_45989DE49FB7F66D" xml:space="preserve">
+    <value>Λεπτομέρειες</value>
+  </data>
 </root>

@@ -102,6 +102,9 @@ namespace DS4WindowsTests
                     BatteryAlertsLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     ProfileAudioSelectionValidation.Validate();
                     AppThemeValidation.Validate(application, resultsDirectory, renderedFiles);
+                    ControllerInfoWindowValidation.Validate(application, resultsDirectory, renderedFiles);
+                    SettingsStorageLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
+                    UpdateStorageLayoutValidation.Validate(application, renderedFiles);
                 }
                 catch (Exception ex)
                 {
@@ -114,7 +117,7 @@ namespace DS4WindowsTests
                 Assert.Fail(failure.ToString());
             }
             // Main's theme coverage plus this branch's two DirectInput views.
-            Assert.AreEqual(32, renderedFiles.Count);
+            Assert.AreEqual(121, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

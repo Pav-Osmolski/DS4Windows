@@ -3,6 +3,13 @@
 ###############################################################################
 * text=auto
 
+# Pinned backend documents are hashed as bytes on Windows and Linux runners.
+extras/VIIPER-*-LICENSES.txt -text whitespace=cr-at-eol,-blank-at-eof
+extras/VIIPER-*-BUILD-NOTES.txt -text whitespace=cr-at-eol
+extras/VIIPER-*-PROVENANCE.txt -text whitespace=cr-at-eol
+extras/VIIPER-*-BUILD-INFO.json -text whitespace=cr-at-eol
+extras/VIIPER-*-x64.exe.sha256 -text whitespace=cr-at-eol
+
 # Release artifact hashes include original document bytes. Do not normalize
 # upstream license or build-note line endings when staging or checking out.
 # The generated aggregate can include CRLF and trailing blank lines. Preserve

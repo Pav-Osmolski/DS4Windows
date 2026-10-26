@@ -34,6 +34,56 @@
         <Setter Property="Margin" Value="0,0,0,16" />
     </Style>
 
+    <!-- Disclosure headers own their template: the platform Button template
+         otherwise paints a solid selection bar on hover/press in some themes. -->
+    <Style x:Key="BridgeDisclosureHeaderButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="8,6" />
+        <Setter Property="Margin" Value="-8,-6,-8,-6" />
+        <Setter Property="FocusVisualStyle">
+            <Setter.Value>
+                <Style TargetType="Control">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Control">
+                                <Border CornerRadius="6" BorderThickness="1" BorderBrush="{DynamicResource AccentColor}" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Chrome" CornerRadius="6" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="Center" RecognizesAccessKey="True" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource RaisedBackgroundColor}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource RaisedBackgroundColor}" />
+                            <Setter Property="Opacity" Value="0.85" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5" /></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <!-- The native arrow is a sibling, so use their shared header's
+                 hover state to keep the full rounded surface highlighted. -->
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" Value="True">
+                <Setter Property="Background" Value="{DynamicResource RaisedBackgroundColor}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="BridgePrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
         <Setter Property="Background" Value="{DynamicResource AccentColor}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
@@ -333,6 +383,38 @@
                                    Foreground="{DynamicResource MutedForegroundColor}" />
                     </StackPanel>
                 </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ControllerInfoButtonStyle" TargetType="Button" BasedOn="{StaticResource BridgeSecondaryButtonStyle}">
+        <Setter Property="MinWidth" Value="124"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Padding" Value="9,3"/>
+        <!-- Native focus visuals appear for keyboard navigation only. A solid
+             accent border on IsKeyboardFocused also highlighted automatic
+             initial focus and focus restored after closing the info window. -->
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Chrome" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource RaisedBackgroundColor}"/>
+                            <Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
