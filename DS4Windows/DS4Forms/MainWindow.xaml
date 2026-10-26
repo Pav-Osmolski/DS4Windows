@@ -491,7 +491,7 @@
 
                                 <Grid Grid.Row="1">
                                     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
-                                    <Grid x:Name="profileDetailsHeader" Visibility="Collapsed" Margin="30,10,30,0">
+                                    <Grid x:Name="profileDetailsHeader" Visibility="Collapsed" Margin="30,17,30,0">
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="170"/><ColumnDefinition Width="160"/></Grid.ColumnDefinitions>
                                         <TextBlock x:Name="profileNameHeader" Margin="44,0,0,0" Foreground="{DynamicResource MutedForegroundColor}"/>
                                         <TextBlock x:Name="profileOutputHeader" Grid.Column="1" Foreground="{DynamicResource MutedForegroundColor}"/>

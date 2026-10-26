@@ -74,6 +74,8 @@ internal static class SettingsStorageLayoutValidation
                 ThemeConsistencyValidation.Save(host, path, 1200, 820);
                 files.Add(path);
                 var selected = list.SelectedItem;
+                var tileItem = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(0);
+                Point tileInset = tileItem.TranslatePoint(new Point(), list);
                 foreach (var view in new[] { ProfileViewChoice.List, ProfileViewChoice.Details })
                 {
                     browser.Apply(view);
@@ -83,8 +85,39 @@ internal static class SettingsStorageLayoutValidation
                     Assert.AreSame(selected, list.SelectedItem, "Changing view must preserve selection and actions.");
                     Assert.AreEqual(view == ProfileViewChoice.Details ? Visibility.Visible : Visibility.Collapsed, header.Visibility);
                     foreach (var item in list.Items.Cast<ProfileEntity>()) Assert.AreNotEqual("P", item.IconLetter);
+                    var firstRow = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(0);
+                    Point rowInset = firstRow.TranslatePoint(new Point(), list);
+                    Assert.AreEqual(tileInset.X, rowInset.X, 0.5, "Rows and tiles must have the same left inset.");
+                    Assert.AreEqual(tileInset.Y, rowInset.Y, 0.5, "Rows and tiles must have the same top inset below their header.");
+                    foreach (var badge in ThemeConsistencyValidation.Visuals(list).OfType<ProfileIconBadge>())
+                    {
+                        var fill = ThemeConsistencyValidation.Visuals(badge).OfType<Border>().First();
+                        Rect drawing = fill.TransformToAncestor(badge).TransformBounds(new Rect(fill.RenderSize));
+                        Assert.IsTrue(drawing.Left >= -0.5 && drawing.Top >= -0.5 &&
+                            drawing.Right <= badge.ActualWidth + 0.5 && drawing.Bottom <= badge.ActualHeight + 0.5,
+                            "The complete rounded badge must fit inside the reduced row icon, without clipping.");
+                    }
+                    if (view == ProfileViewChoice.Details)
+                    {
+                        var parent = (FrameworkElement)list.Parent;
+                        Rect labels = header.TransformToAncestor(parent).TransformBounds(new Rect(header.RenderSize));
+                        double rowTop = firstRow.TranslatePoint(new Point(), parent).Y;
+                        Assert.AreEqual(labels.Top, rowTop - labels.Bottom, 0.5,
+                            "Details headings need equal space above and below their text.");
+                    }
+
                     path = Path.Combine(directory, "profiles-" + view + "-" + choice + ".png");
                     ThemeConsistencyValidation.Save(host, path, 1200, 820); files.Add(path);
+                    if (choice == AppThemeChoice.Dark)
+                    {
+                        var scaled = new System.Windows.Media.Imaging.RenderTargetBitmap(2400, 1640, 192, 192, PixelFormats.Pbgra32);
+                        scaled.Render(host);
+                        var encoder = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                        encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(scaled));
+                        path = Path.Combine(directory, "profiles-" + view + "-Dark-200pct.png");
+                        using (var stream = File.Create(path)) encoder.Save(stream);
+                        files.Add(path);
+                    }
                 }
                 var iconWindow = new ProfileIconWindow((ProfileEntity)selected);
                 var dialogHost = (FrameworkElement)iconWindow.Content;

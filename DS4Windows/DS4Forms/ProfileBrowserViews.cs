@@ -29,8 +29,8 @@ internal sealed class ProfileBrowserViews
         rowsStyle = new Style(typeof(ListBoxItem), tilesStyle);
         rowsStyle.Setters.Add(new Setter(FrameworkElement.WidthProperty, double.NaN));
         rowsStyle.Setters.Add(new Setter(FrameworkElement.HeightProperty, 60.0));
-        rowsStyle.Setters.Add(new Setter(FrameworkElement.MarginProperty, new Thickness(6, 2, 6, 2)));
-        rowsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(VirtualizingStackPanel)));
+        rowsStyle.Setters.Add(new Setter(FrameworkElement.MarginProperty, new Thickness(6)));
+        rowsPanel = new ItemsPanelTemplate(new FrameworkElementFactory(typeof(StackPanel)));
         list.SizeChanged += (_, _) => list.Dispatcher.BeginInvoke((Action)AlignHeader, DispatcherPriority.Loaded);
         list.AddHandler(ScrollViewer.ScrollChangedEvent, new ScrollChangedEventHandler((_, _) => AlignHeader()));
         listTemplate = Template("""
@@ -73,7 +73,12 @@ internal sealed class ProfileBrowserViews
         if (grid == null || grid.ActualWidth <= 0) return;
         double x = grid.TranslatePoint(new Point(), (UIElement)header.Parent).X;
         header.HorizontalAlignment = HorizontalAlignment.Left;
-        header.Margin = new Thickness(x, 10, 0, 0);
+        // Stack-based rows use physical scrolling. Account for the actual
+        // themed list inset (including its border), rather than guessing it.
+        var scroll = Find<ScrollViewer>(list);
+        double inset = item.TranslatePoint(new Point(), list).Y + (scroll?.VerticalOffset ?? 0);
+        double gap = Math.Max(10, inset);
+        header.Margin = new Thickness(x, gap, 0, gap - inset);
         header.Width = grid.ActualWidth;
     }
 

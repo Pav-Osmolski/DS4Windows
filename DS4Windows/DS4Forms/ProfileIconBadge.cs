@@ -22,9 +22,15 @@ public sealed class ProfileIconBadge : Grid
         var letter = new TextBlock { Foreground = Brushes.White, FontSize = 18, FontWeight = FontWeights.SemiBold,
             HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
         letter.SetBinding(TextBlock.TextProperty, new Binding("IconLetter")); letters.Children.Add(letter);
-        Children.Add(letters);
+        // Scale the complete badge, including text and rounded corners, as one
+        // drawing. Row-sized hosts must not crop a full-size internal badge.
+        var drawing = new Grid { Width = 38, Height = 38 };
+        drawing.Children.Add(letters);
         var image = new Image { Stretch = Stretch.Uniform };
-        image.SetBinding(Image.SourceProperty, new Binding("IconImage")); Children.Add(image);
+        image.SetBinding(Image.SourceProperty, new Binding("IconImage")); drawing.Children.Add(image);
+        var scaled = new Viewbox { Stretch = Stretch.Uniform, Child = drawing };
+        RenderOptions.SetBitmapScalingMode(scaled, BitmapScalingMode.HighQuality);
+        Children.Add(scaled);
         SetBinding(System.Windows.Automation.AutomationProperties.NameProperty, new Binding("Name"));
     }
 }
