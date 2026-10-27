@@ -5,10 +5,16 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+There are currently no unreleased changes.
+
+## Released
+
+### [5.0.55](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.55) - 2026-10-27
+
 - Use a compact Contextual header across all sections and profile-editor pages: centre the title and description together in a 72-DIP minimum, grow for wrapped or larger text, and omit empty descriptions. Include the nine section descriptions in every language pack.
 - Remove the Profiles action toolbar enclosure, align its first button with section outlines, match button heights, and balance the 22-DIP gaps above and below even when buttons wrap. Remove the sidebar controller picker's unused right gutter while preserving scrolling for additional controllers.
 
-## Released
+Implemented in [#89](https://github.com/Pav-Osmolski/DS4Windows/pull/89).
 
 ### [5.0.54](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.54) - 2026-10-27
 
