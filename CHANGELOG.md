@@ -5,7 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- Apply the current theme to the About / Hotkeys window and its native background before the first content render, and keep both backgrounds synchronised when the theme changes.
+- Standardise dropdowns throughout the app with an inset arrow, rounded field and popup, animated hover/press/open/focus feedback, selected-item checks, editable and disabled states, and live theme colours. Preserve taller fields, use a 32-DIP minimum, add controller icons to profile selectors and keep a minimal gap before update-storage helper text.
+- Apply the current theme to the About / Hotkeys window before first render, paint the native erase surface and window frame with the current palette, and keep the backgrounds synchronised when the theme changes.
 
 ## Released
 

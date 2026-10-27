@@ -28,7 +28,7 @@ public sealed class UpdateStorageControl : StackPanel
         Children.Add(divider);
         Children.Add(Label(UiText.Get("Update storage"), "BridgeSectionTitleStyle"));
         Children.Add(Label(UiText.Get("Manage downloaded updates and older support files."), "BridgeSectionDescriptionStyle"));
-        var row = new WrapPanel { Margin = new Thickness(0, 6, 0, 0) };
+        var row = new WrapPanel { Margin = new Thickness(0, 6, 0, 4) };
         row.Children.Add(new TextBlock { Text = UiText.Get("Previous versions to keep"), VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 16, 0) });
         foreach (string text in new[] { UiText.Get("None"), UiText.Get("1 previous version (recommended)"), UiText.Get("Choose a number"), UiText.Get("Keep all") }) retention.Items.Add(text);
         row.Children.Add(retention); row.Children.Add(count); Children.Add(row);

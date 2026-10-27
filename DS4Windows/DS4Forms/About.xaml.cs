@@ -22,6 +22,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Runtime.InteropServices;
 using System.Windows.Media;
 
 namespace DS4WinWPF.DS4Forms
@@ -44,6 +45,8 @@ namespace DS4WinWPF.DS4Forms
             // The HWND can be exposed before WPF renders its first content.
             // Set its clear colour before SourceInitialized observers or ShowDialog
             // can reveal the platform's unthemed initial surface.
+            var source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
+            source?.AddHook(PaintNativeBackground);
             UpdateNativeBackground();
             base.OnSourceInitialized(e);
             FitToWorkArea();
@@ -52,7 +55,7 @@ namespace DS4WinWPF.DS4Forms
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
-            if (e.Property == BackgroundProperty) UpdateNativeBackground();
+            if (e.Property == BackgroundProperty || e.Property == ForegroundProperty) UpdateNativeBackground();
         }
 
         private void UpdateNativeBackground()
@@ -61,10 +64,53 @@ namespace DS4WinWPF.DS4Forms
             // handle here just to update a resource during construction.
             IntPtr handle = new WindowInteropHelper(this).Handle;
             if (handle == IntPtr.Zero) return;
-            if (Background is SolidColorBrush brush &&
-                HwndSource.FromHwnd(handle)?.CompositionTarget is HwndTarget target)
+            if (Background is not SolidColorBrush brush) return;
+            if (HwndSource.FromHwnd(handle)?.CompositionTarget is HwndTarget target)
                 target.BackgroundColor = brush.Color;
+            int color = brush.Color.R | (brush.Color.G << 8) | (brush.Color.B << 16);
+            // The DWM frame is painted separately from WPF's client surface.
+            int dark = brush.Color.R * .2126 + brush.Color.G * .7152 + brush.Color.B * .0722 < 128 ? 1 : 0;
+            DwmSetWindowAttribute(handle, 20, ref dark, sizeof(int));
+            DwmSetWindowAttribute(handle, 35, ref color, sizeof(int));
+            if (Foreground is SolidColorBrush foreground)
+            {
+                int text = foreground.Color.R | (foreground.Color.G << 8) | (foreground.Color.B << 16);
+                DwmSetWindowAttribute(handle, 36, ref text, sizeof(int));
+            }
         }
+
+        private IntPtr PaintNativeBackground(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            // Windows may erase the client area before the first WPF render.
+            // Paint that actual native DC with the current theme, rather than
+            // just changing the later composition clear colour.
+            if (message == 0x0014 && wParam != IntPtr.Zero && Background is SolidColorBrush brush &&
+                GetClientRect(hwnd, out NativeRect rect))
+            {
+                int color = brush.Color.R | (brush.Color.G << 8) | (brush.Color.B << 16);
+                IntPtr nativeBrush = CreateSolidBrush(color);
+                if (nativeBrush != IntPtr.Zero)
+                {
+                    try { handled = FillRect(wParam, ref rect, nativeBrush) != 0; }
+                    finally { DeleteObject(nativeBrush); }
+                    if (handled) return new IntPtr(1);
+                }
+            }
+            return IntPtr.Zero;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct NativeRect { public int Left, Top, Right, Bottom; }
+        [DllImport("user32.dll")]
+        private static extern bool GetClientRect(IntPtr hwnd, out NativeRect rect);
+        [DllImport("user32.dll")]
+        private static extern int FillRect(IntPtr dc, ref NativeRect rect, IntPtr brush);
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr CreateSolidBrush(int color);
+        [DllImport("gdi32.dll")]
+        private static extern bool DeleteObject(IntPtr value);
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
 
         internal static string LoadLicenseText()
         {

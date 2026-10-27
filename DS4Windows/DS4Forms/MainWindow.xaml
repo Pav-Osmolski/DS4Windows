@@ -1,6 +1,7 @@
 <Window x:Name="mainDS4Window" x:Class="DS4WinWPF.DS4Forms.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="clr-namespace:DS4WinWPF.DS4Forms.Themes"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:tb="http://www.hardcodet.net/taskbar"
@@ -179,7 +180,7 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{lex:Loc Strings:UI_81805FBA72EB727E}" FontSize="10" FontWeight="Bold"
                                                        Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,5" />
-                                        <ComboBox Grid.Row="1" VerticalAlignment="Center" x:Name="selectProfCombo" Style="{StaticResource BridgeProfileComboBoxStyle}"
+                                        <ComboBox Grid.Row="1" VerticalAlignment="Center" x:Name="selectProfCombo" theme:InsetComboBox.ShowControllerIcon="True" Style="{StaticResource BridgeProfileComboBoxStyle}"
                                                       HorizontalAlignment="Left"
                                                       ItemsSource="{Binding ProfileListCol}" SelectedIndex="{Binding SelectedIndex}"
                                                       Tag="{Binding DevIndex, Mode=OneTime}"
