@@ -1,0 +1,133 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Shared by both base themes. Dynamic brushes also follow custom accents,
+         Windows high contrast and theme changes in already-open windows. -->
+    <Style x:Key="AppSliderRepeatButtonStyle" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Grid Background="Transparent">
+                        <Border x:Name="Rail" Height="6" CornerRadius="3"
+                                VerticalAlignment="Center" Background="{TemplateBinding Background}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=Slider}}" Value="Vertical">
+                            <Setter TargetName="Rail" Property="Height" Value="Auto" />
+                            <Setter TargetName="Rail" Property="Width" Value="6" />
+                            <Setter TargetName="Rail" Property="VerticalAlignment" Value="Stretch" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="AppSliderThumbStyle" TargetType="Thumb">
+        <!-- Keep the layout bounds fixed; the halo never shifts the track. -->
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Grid Background="Transparent">
+                        <Ellipse x:Name="HoverHalo" Width="32" Height="32" Opacity="0"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Fill="{DynamicResource AccentColor}" IsHitTestVisible="False" />
+                        <Border x:Name="Knob" CornerRadius="10" BorderThickness="3"
+                                Background="{DynamicResource SliderThumbColor}"
+                                BorderBrush="{DynamicResource AccentColor}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="HoverHalo" Property="Opacity" Value="0.17" />
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="HoverHalo" Property="Opacity" Value="0.24" />
+                            <Setter TargetName="Knob" Property="BorderThickness" Value="5" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="HoverHalo" Property="Opacity" Value="0" />
+                            <Setter TargetName="Knob" Property="BorderBrush" Value="{DynamicResource MutedForegroundColor}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="AppSliderStyle" TargetType="Slider">
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Slider">
+                    <Grid x:Name="SliderRoot" Background="{TemplateBinding Background}">
+                        <TickBar x:Name="BeforeTicks" Visibility="Collapsed" IsHitTestVisible="False"
+                                 Height="4" Margin="10,0" VerticalAlignment="Top" Placement="Top"
+                                 Fill="{DynamicResource MutedForegroundColor}" />
+                        <TickBar x:Name="AfterTicks" Visibility="Collapsed" IsHitTestVisible="False"
+                                 Height="4" Margin="10,0" VerticalAlignment="Bottom" Placement="Bottom"
+                                 Fill="{DynamicResource MutedForegroundColor}" />
+                        <Track x:Name="PART_Track" VerticalAlignment="Center" Height="20"
+                               Orientation="{TemplateBinding Orientation}"
+                               IsDirectionReversed="{TemplateBinding IsDirectionReversed}">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton x:Name="FilledTrack" Command="{x:Static Slider.DecreaseLarge}"
+                                              Style="{StaticResource AppSliderRepeatButtonStyle}"
+                                              Background="{DynamicResource AccentColor}" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource AppSliderThumbStyle}" />
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource AppSliderRepeatButtonStyle}"
+                                              Command="{x:Static Slider.IncreaseLarge}"
+                                              Background="{DynamicResource BorderColor}" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="TickPlacement" Value="TopLeft">
+                            <Setter TargetName="BeforeTicks" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="TickPlacement" Value="BottomRight">
+                            <Setter TargetName="AfterTicks" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="TickPlacement" Value="Both">
+                            <Setter TargetName="BeforeTicks" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="AfterTicks" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter TargetName="PART_Track" Property="Height" Value="Auto" />
+                            <Setter TargetName="PART_Track" Property="Width" Value="20" />
+                            <Setter TargetName="PART_Track" Property="VerticalAlignment" Value="Stretch" />
+                            <Setter TargetName="BeforeTicks" Property="Height" Value="Auto" />
+                            <Setter TargetName="BeforeTicks" Property="Width" Value="4" />
+                            <Setter TargetName="BeforeTicks" Property="Margin" Value="0,10" />
+                            <Setter TargetName="BeforeTicks" Property="VerticalAlignment" Value="Stretch" />
+                            <Setter TargetName="BeforeTicks" Property="HorizontalAlignment" Value="Left" />
+                            <Setter TargetName="BeforeTicks" Property="Placement" Value="Left" />
+                            <Setter TargetName="AfterTicks" Property="Height" Value="Auto" />
+                            <Setter TargetName="AfterTicks" Property="Width" Value="4" />
+                            <Setter TargetName="AfterTicks" Property="Margin" Value="0,10" />
+                            <Setter TargetName="AfterTicks" Property="VerticalAlignment" Value="Stretch" />
+                            <Setter TargetName="AfterTicks" Property="HorizontalAlignment" Value="Right" />
+                            <Setter TargetName="AfterTicks" Property="Placement" Value="Right" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="FilledTrack" Property="Background" Value="{DynamicResource MutedForegroundColor}" />
+                            <Setter TargetName="SliderRoot" Property="Opacity" Value="0.55" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}" />
+</ResourceDictionary>

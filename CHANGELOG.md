@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Unify sliders across Overview, Audio Haptics, Trigger Lab, battery alerts, controller readings, profile RGB controls and appearance settings. Use a slim rounded track, circular thumb, hover halo, pressed feedback and keyboard focus indication, with live theme/accent colours and consistent disabled states.
 
 ## Released
 
