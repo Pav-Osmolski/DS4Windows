@@ -73,6 +73,10 @@ public class InsetComboBoxTests
                     Assert.AreEqual(4d, popup.VerticalOffset);
                     if (state == "Editable")
                         Assert.AreEqual(Visibility.Visible, ((TextBox)combo.Template.FindName("PART_EditableTextBox", combo)).Visibility);
+                    Assert.IsNull(combo.Template.FindName("FocusLine", combo), "Dropdown focus must use the outer outline, without an underline.");
+                    if (state == "Keyboard focus")
+                        Assert.AreEqual(1d, ((Border)combo.Template.FindName("FocusBorder", combo)).Opacity,
+                            "Removing the underline must retain the outer keyboard focus indicator.");
                     if (state == "Profile")
                         Assert.AreEqual(Visibility.Visible, ((FrameworkElement)combo.Template.FindName("ControllerIcon", combo)).Visibility);
                     if (state == "Open")

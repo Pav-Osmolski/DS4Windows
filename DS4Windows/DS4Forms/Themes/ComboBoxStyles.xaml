@@ -89,13 +89,11 @@
                                 <VisualState x:Name="Unfocused">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="FocusBorder" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
-                                        <DoubleAnimation Storyboard.TargetName="FocusLine" Storyboard.TargetProperty="Opacity" To="0" Duration="0"/>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Focused">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="FocusBorder" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
-                                        <DoubleAnimation Storyboard.TargetName="FocusLine" Storyboard.TargetProperty="Opacity" To="1" Duration="0"/>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -142,7 +140,6 @@
                                 <Path x:Name="ControllerIcon" Visibility="Collapsed" Width="17" Height="17" Margin="0,0,8,0" Stretch="Uniform" Stroke="{DynamicResource AccentColor}" StrokeThickness="1.5" StrokeLineJoin="Round" Data="M 5,5 C 1,5 0,15 2,15 C 4,15 5,12 6,12 L 12,12 C 13,12 14,15 16,15 C 18,15 17,5 13,5 Z M 5,7 L 5,11 M 3,9 L 7,9 M 12,8 L 12,8.1 M 14,10 L 14,10.1"/>
                                 <ContentPresenter x:Name="ContentSite" ClipToBounds="True" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"/>
                             </Grid>
-                            <Border x:Name="FocusLine" Height="1" VerticalAlignment="Bottom" Margin="11,0,4,4" Background="{DynamicResource AccentColor}" Opacity="0"/>
                         </Grid>
                         <TextBox x:Name="PART_EditableTextBox" Margin="12,1,36,1" Visibility="Hidden" Background="Transparent" Foreground="{TemplateBinding Foreground}" CaretBrush="{TemplateBinding Foreground}" BorderThickness="0" Padding="0" VerticalContentAlignment="Center" IsReadOnly="{TemplateBinding IsReadOnly}">
                             <TextBox.Template>
