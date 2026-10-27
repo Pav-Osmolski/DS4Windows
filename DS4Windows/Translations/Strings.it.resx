@@ -6699,4 +6699,31 @@ Il backup: </value>
     <value>Arrestato</value>
     <comment>Controller service state in the application footer.</comment>
   </data>
+  <data name="UI_A063C90272AC00A9" xml:space="preserve">
+    <value>Controller, profilo attivo e uscita a colpo d’occhio.</value>
+  </data>
+  <data name="UI_39D4E2C148238E2E" xml:space="preserve">
+    <value>Gestisci i controller collegati e i relativi profili.</value>
+  </data>
+  <data name="UI_07CD2A0D5B736961" xml:space="preserve">
+    <value>Trasforma l’audio di giochi e app in feedback aptico.</value>
+  </data>
+  <data name="UI_B6A10B8EF33F7607" xml:space="preserve">
+    <value>Crea e prova effetti per i grilletti adattivi.</value>
+  </data>
+  <data name="UI_AF5B046D29032A7C" xml:space="preserve">
+    <value>Crea, organizza e personalizza i profili dei controller.</value>
+  </data>
+  <data name="UI_06242BFBF878FE7A" xml:space="preserve">
+    <value>Cambia automaticamente i profili del controller per giochi e app.</value>
+  </data>
+  <data name="UI_C82F7ECB77AF2005" xml:space="preserve">
+    <value>Gestisci i controller virtuali e i relativi slot di uscita.</value>
+  </data>
+  <data name="UI_B073C83D78CA44C5" xml:space="preserve">
+    <value>Personalizza DS4Windows e configurane il comportamento.</value>
+  </data>
+  <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
+    <value>Consulta l’attività del servizio e i messaggi diagnostici.</value>
+  </data>
 </root>

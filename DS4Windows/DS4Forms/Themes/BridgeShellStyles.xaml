@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:DS4WinWPF.DS4Forms">
 
     <!--
         DS4Windows application shell.
@@ -717,9 +718,14 @@
                                             <ListBox x:Name="SidebarControllerList" ItemsSource="{Binding ControllerCol}"
                                                      SelectedItem="{Binding SelectedController, Mode=TwoWay}"
                                                      ItemContainerStyle="{StaticResource BridgeSidebarControllerItemStyle}"
-                                                     Background="Transparent" BorderThickness="0" MaxHeight="124"
+                                                     Background="Transparent" BorderThickness="0" Padding="0" MaxHeight="124"
                                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                                <ListBox.Resources>
+                                                    <!-- Reuse the compact picker viewport: reserve space
+                                                         only for a visible scrollbar, not an editor gutter. -->
+                                                    <Style TargetType="ScrollViewer" BasedOn="{StaticResource BridgeDropDownScrollViewerStyle}" />
+                                                </ListBox.Resources>
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <Grid>
@@ -891,49 +897,38 @@
 
                         <Grid Grid.Column="1">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" MinHeight="84" />
+                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1"
-                                    Padding="28,16" Background="{DynamicResource SurfaceBackgroundColor}">
-                                <Grid>
-                                    <StackPanel VerticalAlignment="Center">
-                                        <StackPanel.Style>
-                                            <Style TargetType="StackPanel">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ProfileEditorMode}" Value="True">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </StackPanel.Style>
-                                        <ContentControl Content="{Binding SelectedItem.Header, RelativeSource={RelativeSource TemplatedParent}}"
-                                                        Foreground="{DynamicResource ForegroundColor}"
-                                                        FontSize="24" FontWeight="SemiBold" />
-                                        <TextBlock Text="{Binding SelectedItem.ToolTip, RelativeSource={RelativeSource TemplatedParent}}"
-                                                   Margin="0,3,0,0" FontSize="12" TextWrapping="Wrap"
-                                                   Foreground="{DynamicResource MutedForegroundColor}" />
-                                    </StackPanel>
-                                    <StackPanel VerticalAlignment="Center">
-                                        <StackPanel.Style>
-                                            <Style TargetType="StackPanel">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ProfileEditorMode}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </StackPanel.Style>
-                                        <TextBlock Text="{Binding ProfileEditorSectionTitle}"
-                                                   Foreground="{DynamicResource ForegroundColor}"
-                                                   FontSize="24" FontWeight="SemiBold" />
-                                        <TextBlock Text="{Binding ProfileEditorSectionDescription}"
-                                                   Margin="0,3,0,0" FontSize="12" TextWrapping="Wrap"
-                                                   Foreground="{DynamicResource MutedForegroundColor}" />
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
+                            <Grid>
+                                <local:PageHeaderControl x:Name="sectionHeader"
+                                    Title="{Binding SelectedItem.Header, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Description="{Binding SelectedItem.ToolTip, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <local:PageHeaderControl.Style>
+                                        <Style TargetType="local:PageHeaderControl">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ProfileEditorMode}" Value="True">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </local:PageHeaderControl.Style>
+                                </local:PageHeaderControl>
+                                <local:PageHeaderControl x:Name="editorSectionHeader"
+                                    Title="{Binding ProfileEditorSectionTitle}"
+                                    Description="{Binding ProfileEditorSectionDescription}">
+                                    <local:PageHeaderControl.Style>
+                                        <Style TargetType="local:PageHeaderControl">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ProfileEditorMode}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </local:PageHeaderControl.Style>
+                                </local:PageHeaderControl>
+                            </Grid>
                             <ContentPresenter Grid.Row="1" x:Name="PART_SelectedContentHost"
                                               ContentSource="SelectedContent" Margin="28,22"
                                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />

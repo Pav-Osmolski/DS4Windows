@@ -10729,5 +10729,59 @@
     "files": [
       "DS4Windows/DS4Forms/AppFooterControl.xaml.cs"
     ]
+  },
+  "UI_A063C90272AC00A9": {
+    "source": "Your controller, active profile and output at a glance.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_39D4E2C148238E2E": {
+    "source": "Manage connected controllers and their profiles.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_07CD2A0D5B736961": {
+    "source": "Turn game and app audio into haptic feedback.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_B6A10B8EF33F7607": {
+    "source": "Build and preview adaptive trigger effects.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_AF5B046D29032A7C": {
+    "source": "Create, organise and personalise your controller profiles.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_06242BFBF878FE7A": {
+    "source": "Switch controller profiles automatically for games and apps.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_C82F7ECB77AF2005": {
+    "source": "Manage virtual controllers and their output slots.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_B073C83D78CA44C5": {
+    "source": "Personalise DS4Windows and manage its behaviour.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_49A49EABA8ABEE24": {
+    "source": "Review service activity and diagnostic messages.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
   }
 }

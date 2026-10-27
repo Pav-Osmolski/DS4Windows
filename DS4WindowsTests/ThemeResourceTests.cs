@@ -105,6 +105,7 @@ namespace DS4WindowsTests
                     ControllerInfoWindowValidation.Validate(application, resultsDirectory, renderedFiles);
                     SettingsStorageLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     UpdateStorageLayoutValidation.Validate(application, renderedFiles);
+                    new ContextualHeaderTests { TestContext = TestContext }.ValidateProfileActions();
                 }
                 catch (Exception ex)
                 {
