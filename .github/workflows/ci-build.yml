@@ -169,7 +169,7 @@ jobs:
           name: DS4Windows_Test_Results
           path: TestResults/
           if-no-files-found: warn
-          retention-days: ${{ failure() && 14 || 7 }}
+          retention-days: ${{ job.status == 'success' && 7 || 14 }}
 
   build:
     runs-on: windows-2022
@@ -330,7 +330,7 @@ jobs:
             ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/*.log
             ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/previous-extracted/extraction.json
           if-no-files-found: warn
-          retention-days: ${{ failure() && 14 || 7 }}
+          retention-days: ${{ job.status == 'success' && 7 || 14 }}
 
       - name: Compose immutable main release candidate
         if: needs.package_plan.outputs.candidate == 'true'
