@@ -308,7 +308,8 @@ public sealed class BindingWindowLiveInputLayoutTests
                 {
                     var slider = (Slider)surface.Child;
                     slider.ApplyTemplate();
-                    var rail = (FrameworkElement)slider.Template.FindName("RgbRail", slider);
+                    var rail = (FrameworkElement)slider.Template.FindName("PART_Track", slider);
+                    Assert.IsNotNull(rail, "RGB sliders must use the shared slider track.");
                     var center = rail.TranslatePoint(new Point(rail.ActualWidth / 2, rail.ActualHeight / 2), surface);
                     Assert.AreEqual(surface.ActualWidth / 2, center.X, 0.6, "RGB rail is not horizontally centred.");
                     Assert.AreEqual(surface.ActualHeight / 2, center.Y, 0.6, "RGB rail is not vertically centred.");
