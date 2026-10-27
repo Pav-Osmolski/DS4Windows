@@ -201,7 +201,7 @@
                                                           Visibility="{Binding PrimaryDevice, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                           Tag="{Binding DevIndex, Mode=OneTime}" Click="ProfEditSBtn_Click" VerticalAlignment="Center">
                                             <xctk:SplitButton.DropDownContent>
-                                                <Button x:Name="newProfBtn" Content="{lex:Loc NewProfile}" MinWidth="140"
+                                                <Button Style="{DynamicResource AppPopupCommandStyle}" x:Name="newProfBtn" Content="{lex:Loc NewProfile}" MinWidth="140"
                                                         Tag="{Binding DevIndex, Mode=OneTime}" Click="NewProfBtn_Click" />
                                             </xctk:SplitButton.DropDownContent>
                                         </xctk:SplitButton>

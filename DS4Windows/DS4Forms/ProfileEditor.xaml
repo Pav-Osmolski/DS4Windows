@@ -389,6 +389,9 @@
                                      VirtualizingPanel.IsVirtualizing="True"
                                      VirtualizingPanel.VirtualizationMode="Recycling"
                                      MouseDoubleClick="MappingListBox_MouseDoubleClick">
+                                <ListBox.Resources>
+                                    <Style TargetType="ScrollViewer" BasedOn="{StaticResource BridgeDropDownScrollViewerStyle}"/>
+                                </ListBox.Resources>
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />

@@ -5,7 +5,10 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- Dismiss tooltips on clicks, scrolling, keyboard navigation, owner removal and window deactivation, and bound popup lifetime if a normal dismissal is missed. Add an enabled-by-default Show tooltips preference under Settings > Appearance, with translations in every language pack.
+- Unify tray menus, profile submenus, Lightbar controls and the controller Edit popup with themed rounded surfaces and a fixed check column, keeping checked and unchecked labels aligned. Restore consistent padding around button-mapping cards in every theme.
+
+- Keep the Auto Profiles rule editor at the top on initial navigation by making its scroll container the first keyboard stop, instead of focusing a lower checkbox and clipping the heading.
+- Dismiss tooltips on clicks, scrolling, keyboard navigation, owner removal and window deactivation, and respect the configured hover duration. Track the visible hover control when tab content is displayed separately from its tooltip placement target, without closing help on ordinary pointer motion or cursor queries. Add an enabled-by-default Show tooltips preference under Settings > Appearance, with translations in every language pack.
 - Correct Profile Editor spacing: separate the battery dropdown and number field, use the shared animated Nintendo expanders with clear header gaps, and centre Nintendo button-choice checkboxes inside their tiles.
 - Standardise dropdowns throughout the app with an inset arrow, rounded field and popup, animated hover/press/open/focus feedback, selected-item checks, editable and disabled states, and live theme colours. Preserve taller fields, use a 32-DIP minimum, add controller icons to profile selectors and keep a minimal gap before update-storage helper text.
 - Apply the current theme to the About / Hotkeys window before first render, paint the native erase surface and window frame with the current palette, and keep the backgrounds synchronised when the theme changes.

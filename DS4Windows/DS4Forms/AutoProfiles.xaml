@@ -17,46 +17,8 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0,0,8,6"/>
         </Style>
-        <Style x:Key="AutoProfileMenuItemStyle" TargetType="MenuItem">
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-            <Setter Property="Padding" Value="10,6"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Template"><Setter.Value>
-                <ControlTemplate TargetType="MenuItem">
-                    <Border x:Name="ItemChrome" Background="Transparent" Padding="{TemplateBinding Padding}">
-                        <ContentPresenter ContentSource="Header" RecognizesAccessKey="True"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsHighlighted" Value="True"><Setter TargetName="ItemChrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}"/></Trigger>
-                        <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value></Setter>
-        </Style>
-        <Style x:Key="AutoProfileMenuStyle" TargetType="ContextMenu">
-            <Style.Resources>
-                <Style TargetType="MenuItem" BasedOn="{StaticResource AutoProfileMenuItemStyle}"/>
-                <Style TargetType="Separator" x:Key="{x:Static MenuItem.SeparatorStyleKey}">
-                    <Setter Property="Margin" Value="0"/>
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                    <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Separator"><Border Height="1" Background="{DynamicResource MenuSeparatorColor}"/></ControlTemplate></Setter.Value></Setter>
-                </Style>
-            </Style.Resources>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
-            <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="0"/>
-
-            <Setter Property="Template"><Setter.Value>
-                <ControlTemplate TargetType="ContextMenu">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
-                        <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Cycle"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value></Setter>
-        </Style>
+        <Style x:Key="AutoProfileMenuItemStyle" TargetType="MenuItem" BasedOn="{StaticResource AppMenuItemStyle}"/>
+        <Style x:Key="AutoProfileMenuStyle" TargetType="ContextMenu" BasedOn="{StaticResource AppContextMenuStyle}"/>
 
         <Style x:Key="AutoProfileRuleItemStyle" TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -103,7 +65,7 @@
             <Border DockPanel.Dock="Right" Width="304" Margin="12,0,0,0"
                     Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource BorderColor}"
                     BorderThickness="1" CornerRadius="5" Padding="12">
-            <ScrollViewer x:Name="sidebarScrollViewer" Style="{StaticResource BridgeDropDownScrollViewerStyle}" CanContentScroll="False" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer x:Name="sidebarScrollViewer" Focusable="True" IsTabStop="True" Style="{StaticResource BridgeDropDownScrollViewerStyle}" CanContentScroll="False" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <ScrollViewer.Resources>
                     <Thickness x:Key="spaceMargin" Bottom="8" />
                 </ScrollViewer.Resources>

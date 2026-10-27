@@ -48,6 +48,9 @@ internal static class AutoProfileLayoutValidation
                 page.Measure(new Size(1180, 540)); page.Arrange(new Rect(0, 0, 1180, 540)); page.UpdateLayout();
                 var editorScroll = (ScrollViewer)page.FindName("sidebarScrollViewer");
                 var editorContent = (StackPanel)page.FindName("outerEditControlsPanel");
+                Assert.AreSame(editorScroll, Visuals(page).OfType<Control>().First(control => control.Focusable && control.IsTabStop && control.Visibility == Visibility.Visible && control.IsEnabled),
+                    "The rule editor scroll container must receive initial tab focus before its lower checkboxes can scroll the heading out of view.");
+                Assert.AreEqual(0d, editorScroll.VerticalOffset, .01, "The initial rule editor view must show its heading from the top.");
                 var scrollbar = (System.Windows.Controls.Primitives.ScrollBar)editorScroll.Template.FindName("PART_VerticalScrollBar", editorScroll);
                 Assert.AreEqual(Visibility.Visible, scrollbar.Visibility);
                 double contentRight = editorContent.TranslatePoint(new Point(editorContent.ActualWidth, 0), page).X;
