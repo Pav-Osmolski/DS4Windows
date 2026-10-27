@@ -35,7 +35,7 @@
 
         <local:AppFooterControl x:Name="footerControl" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
         <TabControl x:Name="mainTabCon" DockPanel.Dock="Top" SelectionChanged="MainTabCon_SelectionChanged" Style="{StaticResource BridgeMainTabControlStyle}">
-            <TabItem x:Name="overviewTab" Header="{lex:Loc Strings:UI_D4B1EA5708DD5329}" Tag="&#xE80F;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}">
+            <TabItem x:Name="overviewTab" Header="{lex:Loc Strings:UI_D4B1EA5708DD5329}" Tag="&#xE80F;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}" ToolTip="{lex:Loc Strings:UI_A063C90272AC00A9}">
                 <DockPanel>
                     <Border x:Name="overviewSaveFailurePanel" DockPanel.Dock="Top" Visibility="Collapsed" Margin="24,12,24,0" Padding="16" BorderThickness="1" BorderBrush="{DynamicResource BorderColor}">
                         <DockPanel>
@@ -53,7 +53,7 @@
                 </DockPanel>
             </TabItem>
 
-            <TabItem x:Name="controllersTab" Header="{lex:Loc Controllers}" Tag="&#xE7FC;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}">
+            <TabItem x:Name="controllersTab" Header="{lex:Loc Controllers}" Tag="&#xE7FC;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}" ToolTip="{lex:Loc Strings:UI_39D4E2C148238E2E}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -312,15 +312,15 @@
                 </Grid>
             </TabItem>
 
-            <TabItem x:Name="audioHapticsTab" Header="{lex:Loc Strings:UI_7100F6A2F74F84AE}" Tag="&#xE767;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}">
+            <TabItem x:Name="audioHapticsTab" Header="{lex:Loc Strings:UI_7100F6A2F74F84AE}" Tag="&#xE767;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}" ToolTip="{lex:Loc Strings:UI_07CD2A0D5B736961}">
                 <local:AudioHapticsControl x:Name="audioHapticsControl" SettingsChanged="ProfileFeatureControl_SettingsChanged" />
             </TabItem>
 
-            <TabItem x:Name="triggerLabTab" Header="{lex:Loc Strings:UI_4F7722D7B7B04935}" Tag="TriggerPair" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}">
+            <TabItem x:Name="triggerLabTab" Header="{lex:Loc Strings:UI_4F7722D7B7B04935}" Tag="TriggerPair" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}" ToolTip="{lex:Loc Strings:UI_B6A10B8EF33F7607}">
                 <local:TriggerLabControl x:Name="triggerLabControl" SettingsChanged="ProfileFeatureControl_SettingsChanged" />
             </TabItem>
 
-            <TabItem x:Name="profilesTab" Header="{lex:Loc Profiles}" Tag="&#xE8A5;">
+            <TabItem x:Name="profilesTab" Header="{lex:Loc Profiles}" Tag="&#xE8A5;" ToolTip="{lex:Loc Strings:UI_AF5B046D29032A7C}">
                 <Grid x:Name="profDockPanel">
                     <ScrollViewer x:Name="profilesBrowserScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"
                                   BorderThickness="0" Padding="0" CanContentScroll="False"
@@ -333,8 +333,10 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <Border x:Name="profOptsToolbar" Style="{StaticResource BridgeCardStyle}"
-                                Padding="12,10" Margin="0,0,0,14">
+                        <!-- Button bottom margins add 6 DIP to this 16-DIP gap,
+                             matching the content area's 22-DIP top inset. -->
+                        <Border x:Name="profOptsToolbar" Background="Transparent" BorderThickness="0"
+                                Padding="0" Margin="0,0,0,16">
                             <WrapPanel VerticalAlignment="Center">
                                 <Button x:Name="newProfListBtn" Click="NewProfListBtn_Click"
                                         Style="{StaticResource BridgePrimaryButtonStyle}" Margin="0,0,8,6">
@@ -343,28 +345,28 @@
                                         <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Strings:UI_FCF4F3F4D5F73EF8}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
-                                <Button x:Name="editProfBtn" IsEnabled="False" Click="EditProfBtn_Click"
+                                <Button x:Name="editProfBtn" MinHeight="{Binding ElementName=newProfListBtn, Path=ActualHeight}" IsEnabled="False" Click="EditProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
                                         <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Edit}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
-                                <Button x:Name="dupProfBtn" IsEnabled="False" Click="DupProfBtn_Click"
+                                <Button x:Name="dupProfBtn" MinHeight="{Binding ElementName=newProfListBtn, Path=ActualHeight}" IsEnabled="False" Click="DupProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE8C8;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
                                         <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Duplicate}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
-                                <Button x:Name="renameProfBtn" IsEnabled="False" Click="RenameProfBtn_Click"
+                                <Button x:Name="renameProfBtn" MinHeight="{Binding ElementName=newProfListBtn, Path=ActualHeight}" IsEnabled="False" Click="RenameProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
                                         <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc RenameProfile}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
-                                <Button x:Name="deleteProfBtn" IsEnabled="False" Click="DeleteProfBtn_Click"
+                                <Button x:Name="deleteProfBtn" MinHeight="{Binding ElementName=newProfListBtn, Path=ActualHeight}" IsEnabled="False" Click="DeleteProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Foreground="{DynamicResource DangerColor}"
                                         Margin="0,0,16,6">
                                     <StackPanel Orientation="Horizontal">
@@ -372,14 +374,14 @@
                                         <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Delete}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
-                                <Button x:Name="importProfBtn" Click="ImportProfBtn_Click"
+                                <Button x:Name="importProfBtn" MinHeight="{Binding ElementName=newProfListBtn, Path=ActualHeight}" Click="ImportProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,8,6">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE8B5;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
                                         <TextBlock Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Text="{lex:Loc Strings:UI_02B3630D80342B2E}" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Button>
-                                <Button x:Name="exportProfBtn" IsEnabled="False" Click="ExportProfBtn_Click"
+                                <Button x:Name="exportProfBtn" MinHeight="{Binding ElementName=newProfListBtn, Path=ActualHeight}" IsEnabled="False" Click="ExportProfBtn_Click"
                                         Style="{StaticResource BridgeSecondaryButtonStyle}" Margin="0,0,0,6">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#xE8B6;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Margin="0,0,7,0" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
@@ -612,17 +614,17 @@
                     </Border>
                 </Grid>
             </TabItem>
-            <TabItem Header="{lex:Loc AutoProfiles}" Tag="&#xE823;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}">
+            <TabItem Header="{lex:Loc AutoProfiles}" Tag="&#xE823;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}" ToolTip="{lex:Loc Strings:UI_06242BFBF878FE7A}">
                 <local:AutoProfiles x:Name="autoProfControl">
 
                 </local:AutoProfiles>
             </TabItem>
-            <TabItem Header="{lex:Loc OutputSlots}" Tag="&#xE950;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}">
+            <TabItem Header="{lex:Loc OutputSlots}" Tag="&#xE950;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}" ToolTip="{lex:Loc Strings:UI_C82F7ECB77AF2005}">
                 <local:OutputSlotManagerControl x:Name="slotManControl">
 
                 </local:OutputSlotManagerControl>
             </TabItem>
-            <TabItem xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:DS4WinWPF.DS4Forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" PreviewKeyDown="SettingsTab_PreviewKeyDown" x:Name="settingsTab" Header="{lex:Loc Settings}" Tag="" IsEnabled="{Binding ViewEnabled,Mode=OneWay}">
+            <TabItem xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:DS4WinWPF.DS4Forms" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" PreviewKeyDown="SettingsTab_PreviewKeyDown" x:Name="settingsTab" Header="{lex:Loc Settings}" Tag="" IsEnabled="{Binding ViewEnabled,Mode=OneWay}" ToolTip="{lex:Loc Strings:UI_B073C83D78CA44C5}">
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -1180,7 +1182,7 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem x:Name="logTab" Header="{lex:Loc Log}" Tag="&#xE9D9;">
+            <TabItem x:Name="logTab" Header="{lex:Loc Log}" Tag="&#xE9D9;" ToolTip="{lex:Loc Strings:UI_49A49EABA8ABEE24}">
                 <DockPanel>
                     <Border x:Name="logToolsPanel" DockPanel.Dock="Top" Style="{DynamicResource BridgeCardStyle}" Margin="0,0,0,12">
                         <StackPanel>

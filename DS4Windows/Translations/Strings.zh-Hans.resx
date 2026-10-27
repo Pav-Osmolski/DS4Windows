@@ -6869,4 +6869,31 @@
     <value>已停止</value>
     <comment>Controller service state in the application footer.</comment>
   </data>
+  <data name="UI_A063C90272AC00A9" xml:space="preserve">
+    <value>一览控制器、当前配置和输出状态。</value>
+  </data>
+  <data name="UI_39D4E2C148238E2E" xml:space="preserve">
+    <value>管理已连接的控制器及其配置。</value>
+  </data>
+  <data name="UI_07CD2A0D5B736961" xml:space="preserve">
+    <value>将游戏和应用音频转换为触觉反馈。</value>
+  </data>
+  <data name="UI_B6A10B8EF33F7607" xml:space="preserve">
+    <value>创建并预览自适应扳机效果。</value>
+  </data>
+  <data name="UI_AF5B046D29032A7C" xml:space="preserve">
+    <value>创建、整理并个性化控制器配置。</value>
+  </data>
+  <data name="UI_06242BFBF878FE7A" xml:space="preserve">
+    <value>为游戏和应用自动切换控制器配置。</value>
+  </data>
+  <data name="UI_C82F7ECB77AF2005" xml:space="preserve">
+    <value>管理虚拟控制器及其输出槽位。</value>
+  </data>
+  <data name="UI_B073C83D78CA44C5" xml:space="preserve">
+    <value>个性化 DS4Windows 并设置其行为。</value>
+  </data>
+  <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
+    <value>查看服务活动和诊断消息。</value>
+  </data>
 </root>

@@ -1,0 +1,31 @@
+<UserControl x:Class="DS4WinWPF.DS4Forms.PageHeaderControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="headerRoot" Focusable="False">
+    <Border x:Name="headerSurface" MinHeight="72" Padding="28,10"
+            Background="{DynamicResource SurfaceBackgroundColor}"
+            BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1">
+        <StackPanel x:Name="headingGroup" VerticalAlignment="Center">
+            <TextBlock x:Name="headingTitle" Text="{Binding Title, ElementName=headerRoot}"
+                       FontSize="24" FontWeight="SemiBold" TextWrapping="Wrap"
+                       Foreground="{DynamicResource ForegroundColor}" />
+            <TextBlock x:Name="headingDescription" Text="{Binding Description, ElementName=headerRoot}"
+                       FontSize="12" TextWrapping="Wrap"
+                       Foreground="{DynamicResource MutedForegroundColor}">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Margin" Value="0,3,0,0" />
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </StackPanel>
+    </Border>
+</UserControl>
