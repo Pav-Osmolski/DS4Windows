@@ -185,7 +185,7 @@ jobs:
         name: DS4Windows_Release_Test_Results
         path: TestResults/
         if-no-files-found: warn
-        retention-days: 14
+        retention-days: ${{ failure() && 14 || 7 }}
     - name: Restore application publish dependencies
       run: dotnet restore .\DS4Windows\DS4WinWPF.csproj -p:Platform=x64 -p:SelfContained=true
     - name: Set envars for versions
@@ -356,6 +356,7 @@ jobs:
           ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/*.log
           ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/previous-extracted/extraction.json
         if-no-files-found: warn
+        retention-days: ${{ failure() && 14 || 7 }}
 
     - name: Name release asset
       shell: pwsh

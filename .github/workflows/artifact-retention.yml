@@ -1,0 +1,48 @@
+name: Actions artifact retention
+
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: Delete eligible artifacts (leave disabled for an audit only)
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: actions-artifact-retention
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    if: github.repository == 'Pav-Osmolski/DS4Windows' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Test retention protections
+        run: python utils/test-actions-artifact-retention.py
+      - name: Plan and prune superseded artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APPLY: ${{ github.event_name == 'schedule' || inputs.apply }}
+        run: |
+          args=(--repo "$GITHUB_REPOSITORY" --output retention-audit --max-delete 200)
+          if [ "$APPLY" = true ]; then args+=(--apply); fi
+          python utils/actions-artifact-retention.py "${args[@]}"
+      - name: Preserve cleanup audit
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: Actions_Retention_Audit
+          path: retention-audit/
+          retention-days: 30
+          if-no-files-found: warn
