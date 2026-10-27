@@ -15,6 +15,33 @@ public class FooterAndDisclosureTests
     public TestContext TestContext { get; set; }
 
     [TestMethod]
+    public void ExpectedHapticsWarmupKeepsFooterRunningAndPersistentFailureClearsOnRecovery()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            var footer = new AppFooterControl();
+            var policy = new UsbHapticsReadinessPolicy();
+            footer.UpdateService(true);
+            var pending = new AudioEndpointPendingException("The matching VIIPER four-channel audio endpoint is not ready.");
+            var notice = policy.Observe(pending, TimeSpan.Zero).Value;
+            footer.UpdateActivity(notice.Reason, notice.Warning, DateTime.Now);
+            Assert.AreEqual(UiText.Get("Running"), ((TextBlock)footer.FindName("serviceStatus")).Text);
+            notice = policy.Observe(pending, UsbHapticsReadinessPolicy.ReadinessGrace).Value;
+            footer.UpdateActivity(notice.Reason, notice.Warning, DateTime.Now);
+            Assert.AreEqual(UiText.Get("Needs attention"), ((TextBlock)footer.FindName("serviceStatus")).Text);
+            policy.Ready();
+            footer.UpdateActivity("DualSense USB native haptics started.", false, DateTime.Now);
+            Assert.AreEqual(UiText.Get("Running"), ((TextBlock)footer.FindName("serviceStatus")).Text);
+            footer.UpdateService(false);
+            footer.UpdateService(true);
+            notice = policy.Observe(pending, TimeSpan.FromSeconds(60)).Value;
+            footer.UpdateActivity(notice.Reason, notice.Warning, DateTime.Now);
+            Assert.AreEqual(UiText.Get("Running"), ((TextBlock)footer.FindName("serviceStatus")).Text,
+                "Stop/Start must get a fresh readiness grace period.");
+        });
+    }
+
+    [TestMethod]
     public void FooterKeeps38DipHeightAndExposesFullMessagesAndWorkingActionsAcrossThemes()
     {
         string imagePath = Path.Combine(TestContext.TestResultsDirectory, "footer-themes.png");

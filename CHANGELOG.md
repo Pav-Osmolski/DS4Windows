@@ -8,6 +8,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Unify sliders across Overview, Audio Haptics, Trigger Lab, battery alerts, controller readings, profile RGB controls and appearance settings. Use a slim rounded track, circular thumb, hover halo, pressed feedback and keyboard focus indication, with live theme/accent colours and consistent disabled states.
 - Replace circular expander indicators with a shared theme-aware design, preserving full-header hover, pressed feedback, keyboard access and the fixed position of the Settings & profiles arrow.
 - Refresh the footer while keeping its collapsed height at 38 DIP. Show service state and controller count, keep warnings visible, expand complete activity details above the bar, and separate Hotkeys and About shortcuts.
+- Treat expected USB haptics endpoint enumeration as informational startup progress. Escalate waits that persist for 15 seconds, keep unexpected audio failures immediate, and clear the warning after successful audio startup so normal Stop/Start cycles do not flash a false Needs attention status.
 
 ## Released
 
