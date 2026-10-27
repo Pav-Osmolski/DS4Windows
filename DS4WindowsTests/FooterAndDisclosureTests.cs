@@ -142,6 +142,14 @@ public class FooterAndDisclosureTests
                 Assert.AreEqual(((SolidColorBrush)expander.FindResource("AccentColor")).Color,
                     ((SolidColorBrush)activeCircle.Fill).Color);
                 Assert.AreEqual(1d, activeCircle.Opacity);
+                var headerSurface = (Border)toggle.Template.FindName("HeaderSurface", toggle);
+                Assert.AreEqual((byte)0, ((SolidColorBrush)headerSurface.Background).Color.A,
+                    "Ordinary expanders must highlight only the circle, not the full header.");
+                var headerBitmap = new RenderTargetBitmap(360, 90, 96, 96, PixelFormats.Pbgra32);
+                headerBitmap.Render(expander);
+                byte[] headerPixel = new byte[4];
+                headerBitmap.CopyPixels(new Int32Rect(340, 14, 1, 1), headerPixel, 4, 0);
+                Assert.AreEqual((byte)0, headerPixel[3], "The far end of an ordinary header must remain unpainted on hover.");
                 var arrow = (System.Windows.Shapes.Path)toggle.Template.FindName("ActiveArrow", toggle);
                 Assert.AreEqual(((SolidColorBrush)expander.FindResource("DisclosureActiveGlyphColor")).Color,
                     ((SolidColorBrush)arrow.Stroke).Color);
@@ -156,6 +164,10 @@ public class FooterAndDisclosureTests
                 ThemeConsistencyValidation.Layout(expander, 360, 90);
                 Assert.IsTrue(expander.IsExpanded);
                 Assert.AreEqual(before, circle.TranslatePoint(new Point(), expander));
+                var body = (FrameworkElement)expander.Content;
+                double headerBottom = toggle.TranslatePoint(new Point(0, toggle.ActualHeight), expander).Y;
+                Assert.AreEqual(6d, body.TranslatePoint(new Point(), expander).Y - headerBottom, .01,
+                    "Expanded content needs a minimal, consistent gap below the indicator.");
                 expander.IsExpanded = false;
                 Assert.IsFalse(toggle.IsChecked.Value);
                 expander.IsEnabled = false;

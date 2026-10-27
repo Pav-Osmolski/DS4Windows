@@ -29,29 +29,21 @@
                                     <DoubleAnimation Storyboard.TargetName="ActiveCircle" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
                                     <DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
                                     <DoubleAnimation Storyboard.TargetName="PressRing" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
-                                    <DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
-                                    <DoubleAnimation Storyboard.TargetName="PressedSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
                                 </Storyboard></VisualState>
                                 <VisualState x:Name="MouseOver"><Storyboard>
                                     <DoubleAnimation Storyboard.TargetName="ActiveCircle" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
                                     <DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
                                     <DoubleAnimation Storyboard.TargetName="PressRing" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
-                                    <DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
-                                    <DoubleAnimation Storyboard.TargetName="PressedSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
                                 </Storyboard></VisualState>
                                 <VisualState x:Name="Pressed"><Storyboard>
                                     <DoubleAnimation Storyboard.TargetName="ActiveCircle" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
                                     <DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
                                     <DoubleAnimation Storyboard.TargetName="PressRing" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
-                                    <DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
-                                    <DoubleAnimation Storyboard.TargetName="PressedSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
                                 </Storyboard></VisualState>
                                 <VisualState x:Name="Disabled"><Storyboard>
                                     <DoubleAnimation Storyboard.TargetName="ActiveCircle" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
                                     <DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
                                     <DoubleAnimation Storyboard.TargetName="PressRing" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
-                                    <DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
-                                    <DoubleAnimation Storyboard.TargetName="PressedSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="0" />
                                 </Storyboard></VisualState>
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="CheckStates">
@@ -67,8 +59,6 @@
                         </VisualStateManager.VisualStateGroups>
                         <Grid>
                             <Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <Border x:Name="HoverSurface" Grid.ColumnSpan="2" CornerRadius="6" Background="{DynamicResource DisclosureHoverColor}" Opacity="0" IsHitTestVisible="False" />
-                            <Border x:Name="PressedSurface" Grid.ColumnSpan="2" CornerRadius="6" Background="{DynamicResource DisclosurePressedColor}" Opacity="0" IsHitTestVisible="False" />
                             <Grid Width="28" Height="28" VerticalAlignment="Center">
                                 <Ellipse x:Name="Circle" Fill="{DynamicResource DisclosureCircleColor}" Stroke="{DynamicResource DisclosureCircleBorderColor}" StrokeThickness="0" />
                                 <Ellipse x:Name="ActiveCircle" Fill="{DynamicResource AccentColor}" Stroke="{DynamicResource AccentColor}" StrokeThickness="1" Opacity="0" />
@@ -90,8 +80,6 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="Content" Value="{x:Null}">
                             <Setter TargetName="HeaderContent" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="HoverSurface" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="PressedSurface" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.45" /></Trigger>
                     </ControlTemplate.Triggers>
@@ -115,16 +103,19 @@
                                       ContentStringFormat="{TemplateBinding HeaderStringFormat}"
                                       IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                       Focusable="True" IsTabStop="True" />
-                        <ContentPresenter x:Name="ExpandSite" Visibility="Collapsed" ContentSource="Content"
-                                          Margin="{TemplateBinding Padding}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <Border x:Name="ExpandSite" Visibility="Collapsed" Padding="0,6,0,0">
+                            <ContentPresenter ContentSource="Content" Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
                     </DockPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsExpanded" Value="True"><Setter TargetName="ExpandSite" Property="Visibility" Value="Visible" /></Trigger>
-                        <Trigger Property="ExpandDirection" Value="Up"><Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Bottom" /></Trigger>
-                        <Trigger Property="ExpandDirection" Value="Left"><Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Right" /></Trigger>
-                        <Trigger Property="ExpandDirection" Value="Right"><Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Left" /></Trigger>
+                        <!-- Indicator-only expanders must not gain space or shift when checked. -->
+                        <Trigger Property="Content" Value="{x:Null}"><Setter TargetName="ExpandSite" Property="Visibility" Value="Collapsed" /></Trigger>
+                        <Trigger Property="ExpandDirection" Value="Up"><Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Bottom" /><Setter TargetName="ExpandSite" Property="Padding" Value="0,0,0,6" /></Trigger>
+                        <Trigger Property="ExpandDirection" Value="Left"><Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Right" /><Setter TargetName="ExpandSite" Property="Padding" Value="0,0,6,0" /></Trigger>
+                        <Trigger Property="ExpandDirection" Value="Right"><Setter TargetName="HeaderSite" Property="DockPanel.Dock" Value="Left" /><Setter TargetName="ExpandSite" Property="Padding" Value="6,0,0,0" /></Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
