@@ -92,6 +92,54 @@ public class SharedMenuLayoutTests
         });
     }
 
+    [TestMethod]
+    public void EditActionKeepsItsSplitAndMatchesSecondaryHoverWithoutCoveringTheOutline()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(null);
+            var pressedKey = (DependencyPropertyKey)typeof(ButtonBase).GetField("IsPressedPropertyKey", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(null);
+            foreach (var choice in new[] { AppThemeChoice.Light, AppThemeChoice.Dark, AppThemeChoice.Graphite, AppThemeChoice.Paper, AppThemeChoice.Midnight, AppThemeChoice.HighContrast })
+            {
+                var split = new Xceed.Wpf.Toolkit.SplitButton { Content = "Edit", Width = 110, Height = 34 };
+                split.Resources.MergedDictionaries.Add(AppThemeCatalog.Create(choice, highContrast: false));
+                Layout(split);
+                var action = (Button)split.Template.FindName("PART_ActionButton", split);
+                var arrow = (ToggleButton)split.Template.FindName("PART_ToggleButton", split);
+                var outline = (Border)split.Template.FindName("SplitSurface", split);
+                var surface = (Border)action.Template.FindName("ActionSurface", action);
+                var arrowPosition = arrow.TranslatePoint(new Point(), split);
+                Assert.AreEqual(new CornerRadius(5, 0, 0, 5), surface.CornerRadius);
+                Assert.IsFalse(outline.IsHitTestVisible);
+                Assert.AreEqual(1d, action.TranslatePoint(new Point(), split).X, .01);
+                Assert.AreEqual(32d, action.ActualHeight, .01);
+                foreach (string state in new[] { "normal", "hover", "pressed", "normal" })
+                {
+                    split.SetValue(hoverKey, state != "normal");
+                    action.SetValue(hoverKey, state != "normal"); action.SetValue(pressedKey, state == "pressed");
+                    split.UpdateLayout();
+                    string fill = state == "pressed" ? "NavigationSelectionColor" : state == "hover" ? "RaisedBackgroundColor" : "CardBackgroundColor";
+                    Assert.AreEqual(((SolidColorBrush)split.FindResource(fill)).Color, ((SolidColorBrush)surface.Background).Color, choice + " " + state);
+                    Assert.AreEqual(arrowPosition, arrow.TranslatePoint(new Point(), split), "The inset arrow must not move or be redesigned.");
+                    foreach (double scale in new[] { 1d, 1.5d, 2d })
+                    {
+                        var bitmap = new RenderTargetBitmap((int)(110 * scale), (int)(34 * scale), 96 * scale, 96 * scale, PixelFormats.Pbgra32);
+                        bitmap.Render(split);
+                        var pixel = new byte[4]; bitmap.CopyPixels(new Int32Rect(0, 0, 1, 1), pixel, 4, 0);
+                        Assert.AreEqual((byte)0, pixel[3], choice + " " + state + " must not paint outside the rounded corner.");
+                        bitmap.CopyPixels(new Int32Rect(0, (int)(17 * scale), 1, 1), pixel, 4, 0);
+                        Color border = ((SolidColorBrush)outline.BorderBrush).Color;
+                        Assert.AreEqual(border.R, pixel[2], choice + " " + state + " left outline");
+                        Assert.AreEqual(border.G, pixel[1]); Assert.AreEqual(border.B, pixel[0]);
+                        Directory.CreateDirectory("menu-renders");
+                        var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                        using var output = File.Create($"menu-renders/edit-{choice}-{state}-{scale * 100:0}.png"); encoder.Save(output);
+                    }
+                }
+            }
+        });
+    }
+
     internal static void ValidateDetachedThemeSwitch(Application application)
     {
         var original = application.Resources.MergedDictionaries.ToArray();

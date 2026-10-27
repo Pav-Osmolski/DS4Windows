@@ -5,6 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Keep the controller Edit split button and inset arrow while matching its left action to secondary-button hover/pressed colours and preventing the fill from obscuring the rounded outline.
+
 - Give Settings and Advanced category buttons their own localized tooltip descriptions, preventing unrelated parent-tab help from flashing and leaving Input or Connection without tooltips. Refresh detached tray popup colours when opening after a theme change, including nested menus, highlights and separators.
 
 - Unify tray menus, profile submenus, Lightbar controls and the controller Edit popup with themed rounded surfaces and a fixed check column, keeping checked and unchecked labels aligned. Restore consistent padding around button-mapping cards in every theme.

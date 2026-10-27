@@ -194,6 +194,31 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!-- The left action uses secondary-button colours, with only its outside corners rounded. -->
+    <Style x:Key="AppSplitActionButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+        <Setter Property="Padding" Value="6,3"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ActionSurface" Background="{TemplateBinding Background}" CornerRadius="5,0,0,5">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ActionSurface" Property="Background" Value="{DynamicResource RaisedBackgroundColor}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="ActionSurface" Property="Background" Value="{DynamicResource NavigationSelectionColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="AppMenuToggleStyle" TargetType="ToggleButton">
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}"/>
@@ -258,15 +283,17 @@
             <Setter.Value>
                 <ControlTemplate TargetType="xctk:SplitButton">
                     <Grid>
-                        <Border x:Name="SplitSurface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="6"/>
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6"/>
                         <Grid Margin="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="34"/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="PART_ActionButton" Style="{StaticResource AppPopupCommandStyle}" MinHeight="0" Padding="6,3" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                            <Button x:Name="PART_ActionButton" Style="{StaticResource AppSplitActionButtonStyle}" MinHeight="0" Padding="6,3" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
                             <ToggleButton x:Name="PART_ToggleButton" Grid.Column="1" Margin="4" Style="{StaticResource AppMenuToggleStyle}" IsChecked="{Binding IsOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Grid>
+                        <!-- Paint the outline last so neither half can obscure its antialiased inner edge. -->
+                        <Border x:Name="SplitSurface" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6" IsHitTestVisible="False"/>
                         <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" StaysOpen="False" IsOpen="{Binding IsOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Placement="{TemplateBinding DropDownPosition}" VerticalOffset="4">
                             <Border Style="{StaticResource AppPopupSurfaceStyle}" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                 <ScrollViewer Style="{StaticResource AppPopupScrollViewerStyle}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
