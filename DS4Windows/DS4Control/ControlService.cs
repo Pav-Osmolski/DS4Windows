@@ -1602,7 +1602,7 @@ namespace DS4Windows
             if (!ShouldRestartDeviceForSteamReclaim(
                     device.getConnectionType()))
             {
-                LogDebug("Automatic Steam Input reclaim skipped because restarting this active controller can cause repeated disconnects. Reconnect the controller or restart Steam after enabling HidHide if Steam already held it.", true);
+                LogDebug("Automatic Steam Input reclaim skipped because restarting this active controller can cause repeated disconnects. Reconnect the controller or restart Steam after enabling HidHide if Steam already held it.", true, requiresAttention: false);
                 return;
             }
 
@@ -6908,11 +6908,14 @@ namespace DS4Windows
         }
 
         public void LogDebug(String Data, bool warning = false)
+            => LogDebug(Data, warning, requiresAttention: warning);
+
+        internal void LogDebug(string Data, bool warning, bool requiresAttention)
         {
             //Console.WriteLine(System.DateTime.Now.ToString("G") + "> " + Data);
             if (Debug != null)
             {
-                DebugEventArgs args = new DebugEventArgs(Data, warning);
+                DebugEventArgs args = new DebugEventArgs(Data, warning, temporary: false, requiresAttention);
                 OnDebug(this, args);
             }
         }

@@ -45,11 +45,12 @@ public sealed class UiColourLayoutTests
                 var slider = (Slider)border.Child;
                 slider.Value = 127.5;
                 panel.UpdateLayout();
-                var rail = (FrameworkElement)slider.Template.FindName("RgbRail", slider);
-                var thumb = (FrameworkElement)slider.Template.FindName("RgbThumb", slider);
+                var rail = (System.Windows.Controls.Primitives.Track)slider.Template.FindName("PART_Track", slider);
+                Assert.IsNotNull(rail);
+                var thumb = rail.Thumb;
                 Assert.AreEqual(18d, border.TranslatePoint(new Point(), row).X, 0.01);
                 Assert.AreEqual(142d, border.ActualWidth, 0.01);
-                foreach (var part in new[] { rail, thumb })
+                foreach (FrameworkElement part in new FrameworkElement[] { rail, thumb })
                 {
                     var point = part.TranslatePoint(new Point(part.ActualWidth / 2, part.ActualHeight / 2), border);
                     Assert.AreEqual(border.ActualWidth / 2, point.X, 0.01);

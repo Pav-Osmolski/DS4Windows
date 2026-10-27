@@ -26,10 +26,13 @@ namespace DS4Windows
         public static event EventHandler<DebugEventArgs> GuiLog;
 
         public static void LogToGui(string data, bool warning, bool temporary = false)
+            => LogToGui(data, warning, temporary, requiresAttention: warning);
+
+        public static void LogToGui(string data, bool warning, bool temporary, bool requiresAttention)
         {
             if (GuiLog != null)
             {
-                GuiLog(null, new DebugEventArgs(data, warning, temporary));
+                GuiLog(null, new DebugEventArgs(data, warning, temporary, requiresAttention));
             }
         }
 

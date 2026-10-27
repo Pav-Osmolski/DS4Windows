@@ -14,7 +14,9 @@
   "UI_579B0A6B1024EA0B": {
     "source": "_About",
     "files": [
-      "DS4Windows/DS4Forms/About.xaml"
+      "DS4Windows/DS4Forms/About.xaml",
+      "DS4Windows/DS4Forms/AppFooterControl.xaml",
+      "DS4Windows/DS4Forms/AppFooterControl.xaml.cs"
     ]
   },
   "UI_903189090ACC10BA": {
@@ -99,7 +101,9 @@
   "UI_E934708AE2AE10C9": {
     "source": "_Hotkeys",
     "files": [
-      "DS4Windows/DS4Forms/About.xaml"
+      "DS4Windows/DS4Forms/About.xaml",
+      "DS4Windows/DS4Forms/AppFooterControl.xaml",
+      "DS4Windows/DS4Forms/AppFooterControl.xaml.cs"
     ]
   },
   "UI_ED51FAEE63257B98": {
@@ -2913,7 +2917,8 @@
   "UI_7230E6FD98806CA9": {
     "source": "Open log",
     "files": [
-      "DS4Windows/DS4Forms/MainWindow.xaml"
+      "DS4Windows/DS4Forms/MainWindow.xaml",
+      "DS4Windows/DS4Forms/AppFooterControl.xaml"
     ]
   },
   "UI_649D5C58D98A430C": {
@@ -6750,7 +6755,8 @@
   "UI_C1EBC7817870E5BE": {
     "source": "Needs attention",
     "files": [
-      "DS4Windows/DS4Control/ControllerRuntimeStatus.cs"
+      "DS4Windows/DS4Control/ControllerRuntimeStatus.cs",
+      "DS4Windows/DS4Forms/AppFooterControl.xaml.cs"
     ]
   },
   "UI_8D0FC6F13BDFA938": {
@@ -10710,6 +10716,18 @@
     "source": "Details",
     "files": [
       "DS4Windows/DS4Forms/ProfileBrowserViews.cs"
+    ]
+  },
+  "UI_F4CCAE29E1BB0C20": {
+    "source": "Running",
+    "files": [
+      "DS4Windows/DS4Forms/AppFooterControl.xaml.cs"
+    ]
+  },
+  "UI_1A4F630AC1B69FD0": {
+    "source": "Stopped",
+    "files": [
+      "DS4Windows/DS4Forms/AppFooterControl.xaml.cs"
     ]
   }
 }

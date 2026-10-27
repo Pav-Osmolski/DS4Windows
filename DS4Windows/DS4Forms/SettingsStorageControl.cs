@@ -18,10 +18,10 @@ public sealed class SettingsStorageControl : Border
     private readonly Button migrate, cancel;
     private readonly StackPanel details = new();
     private readonly TextBlock summary = new();
-    // Reuse the platform Expander indicator used elsewhere in the app. The
-    // native toggle receives pointer input so its hover/pressed feedback matches
+    // Reuse the shared circular Expander indicator used elsewhere in the app.
+    // The toggle receives pointer input so its hover/pressed feedback matches
     // the other expanders. It sits beside, not inside, the header button.
-    private readonly Expander chevron = new() { MinWidth = 24, MinHeight = 24,
+    private readonly Expander chevron = new() { MinWidth = 28, MinHeight = 28,
         Focusable = false, IsTabStop = false, HorizontalAlignment = HorizontalAlignment.Right,
         VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
     private readonly DisclosurePreferenceWriter disclosureWriter;
@@ -56,7 +56,7 @@ public sealed class SettingsStorageControl : Border
         summary.SetResourceReference(TextBlock.ForegroundProperty, "MutedForegroundColor");
         labels.Children.Add(summary);
         heading.Children.Add(labels);
-        var indicatorSpace = new Border { Width = 36 };
+        var indicatorSpace = new Border { Width = 44 };
         Grid.SetColumn(indicatorSpace, 1);
         heading.Children.Add(indicatorSpace);
         System.Windows.Input.KeyboardNavigation.SetTabNavigation(chevron, System.Windows.Input.KeyboardNavigationMode.None);

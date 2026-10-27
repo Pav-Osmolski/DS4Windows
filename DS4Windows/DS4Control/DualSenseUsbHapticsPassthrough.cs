@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -76,6 +77,8 @@ internal sealed class DualSenseUsbHapticsPassthrough
         private readonly Func<CancellationToken, Task> runOverride;
         private readonly CancellationTokenSource stop = new();
         private readonly object callbackGate = new();
+        private readonly UsbHapticsReadinessPolicy readiness = new();
+        private readonly Stopwatch elapsed = Stopwatch.StartNew();
         private bool finished;
         private bool accepting;
         private BufferedWaveProvider buffer;
@@ -106,7 +109,6 @@ internal sealed class DualSenseUsbHapticsPassthrough
 
         internal async Task Run()
         {
-            string waitingReason = null;
             try
             {
                 stop.Token.ThrowIfCancellationRequested();
@@ -121,18 +123,20 @@ internal sealed class DualSenseUsbHapticsPassthrough
                     {
                         ViiperOutDevice source = resolveSource?.Invoke();
                         if (source?.IsRuntimeConnected != true || !source.SupportsRealtimeHaptics)
-                            throw new InvalidOperationException("Waiting for this controller's virtual audio endpoint.");
+                            throw new AudioEndpointPendingException("Waiting for this controller's virtual audio endpoint.");
                         await Play(source).ConfigureAwait(false);
-                        waitingReason = null;
                     }
                     catch (OperationCanceledException) when (stop.IsCancellationRequested) { break; }
                     catch (Exception ex)
                     {
-                        if (!string.Equals(waitingReason, ex.Message, StringComparison.Ordinal))
+                        if (stop.IsCancellationRequested) break;
+                        if (readiness.Observe(ex, elapsed.Elapsed) is { } notice)
                         {
                             AppLogger.LogToGui(
-                                $"DualSense USB native haptics waiting for controller {slot + 1}: {ex.Message}", true);
-                            waitingReason = ex.Message;
+                                notice.Warning
+                                    ? $"DualSense USB native haptics unavailable for controller {slot + 1}: {notice.Reason}"
+                                    : $"DualSense USB native haptics waiting for controller {slot + 1}: {notice.Reason}",
+                                notice.Warning);
                         }
                     }
                     await Task.Delay(250, stop.Token).ConfigureAwait(false);
@@ -158,11 +162,11 @@ internal sealed class DualSenseUsbHapticsPassthrough
             if (virtualEndpoint == null ||
                 !DualSenseAudioPassthrough.TryGetEndpointUsbipPort(virtualEndpoint, out int port) ||
                 port != source.DirectSpeakerUsbipPort)
-                throw new InvalidOperationException("The matching VIIPER four-channel audio endpoint is not ready.");
+                throw new AudioEndpointPendingException("The matching VIIPER four-channel audio endpoint is not ready.");
 
             using MMDevice physicalEndpoint = FindPhysicalEndpoint(enumerator, Device, EndpointId);
             if (physicalEndpoint == null || physicalEndpoint.ID == virtualEndpoint.ID)
-                throw new InvalidOperationException(
+                throw new AudioEndpointPendingException(
                     "The matching physical USB audio endpoint is not ready. Check Advanced > Audio > USB DualSense speaker.");
             using var capture = new LoopbackCapture(virtualEndpoint);
             var pending = new BufferedWaveProvider(physicalEndpoint.AudioClient.MixFormat)
@@ -213,6 +217,7 @@ internal sealed class DualSenseUsbHapticsPassthrough
                 }
                 output.Play();
                 capture.StartRecording();
+                readiness.Ready();
                 AppLogger.LogToGui(
                     $"DualSense USB native haptics started for controller {slot + 1}: " +
                     $"{virtualEndpoint.FriendlyName} -> {physicalEndpoint.FriendlyName}; rear channels only.", false);

@@ -9,6 +9,16 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.54](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.54) - 2026-10-27
+
+- Unify sliders across Overview, Audio Haptics, Trigger Lab, battery alerts, controller readings, profile RGB controls and appearance settings. Use a slim rounded track, circular thumb, hover halo, pressed feedback and keyboard focus indication, with live theme/accent colours and consistent disabled states.
+- Replace circular expander indicators with a shared theme-aware design matching the approved preview: centred chevrons, 100 ms hover/press fades, 120 ms rotation, themed pressed/focus/disabled states and the Windows animation preference. Keep full-header highlighting specific to Settings & profiles, preserve its fixed arrow position, and add a minimal 6-DIP gap before ordinary expanded content.
+- Refresh the footer while keeping its collapsed height at 38 DIP. Show service state and controller count, keep warnings visible, expand complete activity details above the bar, and separate Hotkeys and About shortcuts.
+- Treat expected USB haptics endpoint enumeration as informational startup progress. Escalate waits that persist for 15 seconds, keep unexpected audio failures immediate, and clear the warning after successful audio startup so normal Stop/Start cycles do not flash a false Needs attention status.
+- Separate diagnostic warning severity from actionable footer status. Keep the safe Steam Input reclaim-skip advisory in the log without marking a healthy session as needing attention, and do not let advisories erase unrelated genuine failures.
+
+Implemented in [#88](https://github.com/Pav-Osmolski/DS4Windows/pull/88).
+
 ### [5.0.53](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.53) - 2026-10-26
 
 #### Profile views and icons

@@ -18,42 +18,8 @@
         <localConvert:InvertBoolToVisibilityConverter x:Key="InvertBoolToVisibilityConverter" />
         <local:ControlIndexCheck x:Key="controlIndexCheck" />
         <local:ResourcePaths x:Key="resourcesPaths" />
-        <!-- RGB controls use a centered track instead of the native slider's tick-row layout. -->
-        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider">
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Slider">
-                        <Grid Background="Transparent">
-                            <Border x:Name="RgbRail" Height="4" VerticalAlignment="Center" Background="{DynamicResource MutedForegroundColor}" CornerRadius="2"/>
-                            <Track x:Name="PART_Track" VerticalAlignment="Center" Height="20" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value}" IsDirectionReversed="{TemplateBinding IsDirectionReversed}">
-                                <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Focusable="False">
-                                        <RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Border Background="Transparent"/></ControlTemplate></RepeatButton.Template>
-                                    </RepeatButton>
-                                </Track.DecreaseRepeatButton>
-                                <Track.Thumb>
-                                    <Thumb x:Name="RgbThumb" Width="12" Height="20">
-                                        <Thumb.Template>
-                                            <ControlTemplate TargetType="Thumb"><Border Background="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="2"/></ControlTemplate>
-                                        </Thumb.Template>
-                                    </Thumb>
-                                </Track.Thumb>
-                                <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Focusable="False">
-                                        <RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Border Background="Transparent"/></ControlTemplate></RepeatButton.Template>
-                                    </RepeatButton>
-                                </Track.IncreaseRepeatButton>
-                            </Track>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter TargetName="RgbRail" Property="Background" Value="{DynamicResource AccentColor}"/></Trigger>
-                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <!-- RGB sliders share the application slider geometry and interaction states. -->
+        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}" />
         <!-- Output-mode selectors keep their indices and contents; only page chrome is replaced. -->
         <Style x:Key="ProfileModeTabControlStyle" TargetType="TabControl">
             <Setter Property="Template">

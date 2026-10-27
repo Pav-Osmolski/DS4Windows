@@ -1,0 +1,76 @@
+<UserControl x:Class="DS4WinWPF.DS4Forms.AppFooterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows"
+             lex:ResxLocalizationProvider.DefaultDictionary="Strings">
+    <UserControl.Resources>
+        <Style x:Key="FooterButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Padding" Value="8,2" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+                <Border x:Name="Chrome" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5" Padding="{TemplateBinding Padding}">
+                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" />
+                </Border>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}"/><Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource AccentColor}"/></Trigger>
+                    <Trigger Property="IsPressed" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}"/><Setter Property="Opacity" Value="0.8"/></Trigger>
+                    <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.45"/></Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate></Setter.Value></Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Background="{DynamicResource SidebarBackgroundColor}">
+        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="38"/></Grid.RowDefinitions>
+        <Border x:Name="activityPanel" Grid.Row="0" Visibility="Collapsed" Padding="18,12" Background="{DynamicResource RaisedBackgroundColor}"
+                BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0">
+            <StackPanel>
+                <DockPanel Margin="0,0,0,6">
+                    <TextBlock x:Name="activityTime" DockPanel.Dock="Right" Foreground="{DynamicResource MutedForegroundColor}" />
+                    <TextBlock Text="{lex:Loc Log}" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" />
+                </DockPanel>
+                <TextBox x:Name="activityMessage" Text="—" IsReadOnly="True" TextWrapping="Wrap" MaxHeight="100"
+                         VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0" Padding="0"
+                         Foreground="{DynamicResource ForegroundColor}" AutomationProperties.Name="{lex:Loc Log}" />
+                <Button Content="{lex:Loc Strings:UI_7230E6FD98806CA9}" Style="{StaticResource FooterButton}" Margin="0,8,0,0"
+                        HorizontalAlignment="Left" Click="OpenLog_Click" />
+            </StackPanel>
+        </Border>
+        <!-- Preserve the existing footer's exact 38 DIP collapsed footprint. -->
+        <Border x:Name="footerBar" Grid.Row="1" Height="38" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="10,0">
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                <Grid Margin="0,0,12,0">
+                    <Button x:Name="statusButton" HorizontalContentAlignment="Stretch" Style="{StaticResource FooterButton}"
+                            HorizontalAlignment="Stretch" Click="ToggleActivity_Click">
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="8"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <Ellipse x:Name="serviceDot" Width="7" Height="7" Fill="{DynamicResource MutedForegroundColor}" VerticalAlignment="Center" />
+                            <TextBlock x:Name="serviceStatus" Grid.Column="1" FontWeight="SemiBold" Margin="8,0,10,0" VerticalAlignment="Center" />
+                            <TextBlock x:Name="controllerSummary" Grid.Column="2" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource MutedForegroundColor}" />
+                        </Grid>
+                    </Button>
+                </Grid>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button x:Name="hotkeysButton" Style="{StaticResource FooterButton}" Margin="0,0,4,0" Click="Hotkeys_Click">
+                        <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE765;" FontFamily="Segoe MDL2 Assets" Margin="0,0,6,0" VerticalAlignment="Center"/><AccessText Text="{lex:Loc Strings:UI_E934708AE2AE10C9}"/></StackPanel>
+                    </Button>
+                    <Button x:Name="aboutButton" Style="{StaticResource FooterButton}" Margin="0,0,8,0" Click="About_Click">
+                        <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE946;" FontFamily="Segoe MDL2 Assets" Margin="0,0,6,0" VerticalAlignment="Center"/><AccessText Text="{lex:Loc Strings:UI_579B0A6B1024EA0B}"/></StackPanel>
+                    </Button>
+                    <Button x:Name="serviceButton" Content="{lex:Loc StartText}" Style="{StaticResource FooterButton}" MinWidth="76"
+                            Background="{DynamicResource RaisedBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" Click="ToggleService_Click" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

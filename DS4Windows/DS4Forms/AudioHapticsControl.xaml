@@ -65,35 +65,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="HapticsSlider" TargetType="Slider">
-            <Setter Property="Height" Value="34" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Slider">
-                        <Grid Height="34">
-                            <Track x:Name="PART_Track" VerticalAlignment="Center">
-                                <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" IsTabStop="False">
-                                        <RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Border Height="7" CornerRadius="4" Background="{DynamicResource AccentColor}" /></ControlTemplate></RepeatButton.Template>
-                                    </RepeatButton>
-                                </Track.DecreaseRepeatButton>
-                                <Track.Thumb>
-                                    <Thumb Width="22" Height="22">
-                                        <Thumb.Template><ControlTemplate TargetType="Thumb"><Border CornerRadius="11" Background="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource AccentColor}" BorderThickness="2" /></ControlTemplate></Thumb.Template>
-                                    </Thumb>
-                                </Track.Thumb>
-                                <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" IsTabStop="False">
-                                        <RepeatButton.Template><ControlTemplate TargetType="RepeatButton"><Border Height="7" CornerRadius="4" Background="{DynamicResource BorderColor}" /></ControlTemplate></RepeatButton.Template>
-                                    </RepeatButton>
-                                </Track.IncreaseRepeatButton>
-                            </Track>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <Style x:Key="HapticsSlider" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}" />
         <Style x:Key="StatusPill" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource RaisedBackgroundColor}" />
             <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
