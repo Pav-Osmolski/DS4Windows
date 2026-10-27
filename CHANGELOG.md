@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Apply the current theme to the About / Hotkeys window and its native background before the first content render, and keep both backgrounds synchronised when the theme changes.
 
 ## Released
 

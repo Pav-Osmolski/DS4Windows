@@ -5,6 +5,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Windows.Interop;
+using DS4Windows;
+using DS4WinWPF.DS4Forms.Themes;
 using DS4WinWPF.DS4Forms;
 
 namespace DS4WindowsTests;
@@ -13,6 +16,54 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class AboutLayoutTests
 {
+    [TestMethod]
+    public void AboutAndHotkeysUseTheThemeForTheirNativeSurfaceBeforeFirstRender()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            var application = Application.Current;
+            var shutdown = application?.ShutdownMode;
+            var mainWindow = application?.MainWindow;
+            if (application != null) application.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            try
+            {
+                foreach (var theme in new[] { AppThemeChoice.Dark, AppThemeChoice.Light, AppThemeChoice.Graphite,
+                    AppThemeChoice.Paper, AppThemeChoice.Midnight, AppThemeChoice.HighContrast })
+                foreach (bool hotkeys in new[] { false, true })
+                {
+                    var window = new About(hotkeys);
+                    try
+                    {
+                        var palette = AppThemeCatalog.Create(theme, highContrast: false);
+                        window.Resources.MergedDictionaries.Add(palette);
+                        Color expected = ((SolidColorBrush)palette["BackgroundColor"]).Color;
+                        Color? firstSurface = null;
+                        bool rendered = false;
+                        window.ContentRendered += (_, _) => rendered = true;
+                        window.SourceInitialized += (_, _) => firstSurface =
+                            HwndSource.FromHwnd(new WindowInteropHelper(window).Handle).CompositionTarget.BackgroundColor;
+                        new WindowInteropHelper(window).EnsureHandle();
+                        Assert.IsFalse(window.IsVisible, "Checking the native surface must not show a desktop window.");
+                        Assert.IsFalse(rendered, "Verify the initial clear colour before any content has rendered.");
+                        Assert.AreEqual(expected, firstSurface, $"{theme}, hotkeys={hotkeys}: first paint must use the app palette.");
+                        Assert.AreEqual(expected, ((SolidColorBrush)window.Background).Color);
+                        Assert.AreEqual(hotkeys ? 1 : 0, ((TabControl)window.FindName("aboutTabs")).SelectedIndex);
+                        window.Resources.MergedDictionaries[0] = AppThemeCatalog.Create(
+                            theme == AppThemeChoice.Dark ? AppThemeChoice.Paper : AppThemeChoice.Dark, highContrast: false);
+                        Color changed = ((SolidColorBrush)window.FindResource("BackgroundColor")).Color;
+                        Assert.AreEqual(changed, HwndSource.FromHwnd(new WindowInteropHelper(window).Handle).CompositionTarget.BackgroundColor,
+                            "The native clear colour must follow live theme changes too.");
+                    }
+                    finally { window.Close(); }
+                }
+            }
+            finally
+            {
+                if (application != null) { application.MainWindow = mainWindow; application.ShutdownMode = shutdown.Value; }
+            }
+        });
+    }
+
     [TestMethod]
     [DataRow("DarkTheme", 912d, 704d)]
     [DataRow("DefaultTheme", 912d, 704d)]

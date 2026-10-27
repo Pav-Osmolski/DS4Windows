@@ -37,7 +37,33 @@ namespace DS4WinWPF.DS4Forms
             versionText.Text = global::DS4Windows.UiText.Format("Version {0}", version);
             licenseText.Text = LoadLicenseText();
             if (showHotkeys) aboutTabs.SelectedIndex = 1;
-            SourceInitialized += (_, _) => FitToWorkArea();
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            // The HWND can be exposed before WPF renders its first content.
+            // Set its clear colour before SourceInitialized observers or ShowDialog
+            // can reveal the platform's unthemed initial surface.
+            UpdateNativeBackground();
+            base.OnSourceInitialized(e);
+            FitToWorkArea();
+        }
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            if (e.Property == BackgroundProperty) UpdateNativeBackground();
+        }
+
+        private void UpdateNativeBackground()
+        {
+            // FromVisual is still null for an unshown HWND; do not create a
+            // handle here just to update a resource during construction.
+            IntPtr handle = new WindowInteropHelper(this).Handle;
+            if (handle == IntPtr.Zero) return;
+            if (Background is SolidColorBrush brush &&
+                HwndSource.FromHwnd(handle)?.CompositionTarget is HwndTarget target)
+                target.BackgroundColor = brush.Color;
         }
 
         internal static string LoadLicenseText()
