@@ -72,76 +72,7 @@
             <Setter Property="FontSize" Value="12" />
         </Style>
 
-        <Style x:Key="OverviewQuickSliderStyle" TargetType="Slider">
-            <Setter Property="Height" Value="28" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Slider">
-                        <Grid Height="28" VerticalAlignment="Center">
-                            <Track x:Name="PART_Track" VerticalAlignment="Center">
-                                <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="Slider.DecreaseLarge" IsTabStop="False">
-                                        <RepeatButton.Template>
-                                            <ControlTemplate TargetType="RepeatButton">
-                                                <Border Height="6" Background="{DynamicResource AccentColor}"
-                                                        CornerRadius="3" />
-                                            </ControlTemplate>
-                                        </RepeatButton.Template>
-                                    </RepeatButton>
-                                </Track.DecreaseRepeatButton>
-                                <Track.Thumb>
-                                    <Thumb Width="18" Height="18">
-                                        <Thumb.Template>
-                                            <ControlTemplate TargetType="Thumb">
-                                                <Border x:Name="Knob" Background="{DynamicResource ForegroundColor}"
-                                                        BorderBrush="{DynamicResource AccentColor}"
-                                                        BorderThickness="2" CornerRadius="9" />
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="Knob" Property="BorderThickness" Value="3" />
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Thumb.Template>
-                                    </Thumb>
-                                </Track.Thumb>
-                                <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="Slider.IncreaseLarge" IsTabStop="False">
-                                        <RepeatButton.Template>
-                                            <ControlTemplate TargetType="RepeatButton">
-                                                <Border Height="6" Background="{DynamicResource BorderColor}"
-                                                        CornerRadius="3" />
-                                            </ControlTemplate>
-                                        </RepeatButton.Template>
-                                    </RepeatButton>
-                                </Track.IncreaseRepeatButton>
-                            </Track>
-                            <TickBar x:Name="SliderTicks"
-                                     Visibility="Collapsed"
-                                     IsHitTestVisible="False"
-                                     Margin="9,0,9,3"
-                                     Height="5"
-                                     VerticalAlignment="Bottom"
-                                     Placement="Bottom"
-                                     Fill="{DynamicResource MutedForegroundColor}"
-                                     Minimum="{TemplateBinding Minimum}"
-                                     Maximum="{TemplateBinding Maximum}"
-                                     TickFrequency="{TemplateBinding TickFrequency}"
-                                     Ticks="{TemplateBinding Ticks}" />
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="TickPlacement" Value="BottomRight">
-                                <Setter TargetName="SliderTicks" Property="Visibility" Value="Visible" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Opacity" Value="0.42" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <Style x:Key="OverviewQuickSliderStyle" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}" />
 
         <Style x:Key="OverviewToggleStyle" TargetType="CheckBox">
             <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />

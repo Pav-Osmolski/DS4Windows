@@ -47,7 +47,7 @@
             <Setter Property="MinHeight" Value="34" />
             <Setter Property="Padding" Value="8,4" />
         </Style>
-        <Style x:Key="LabSlider" TargetType="Slider">
+        <Style x:Key="LabSlider" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}">
             <Setter Property="Minimum" Value="0"/><Setter Property="Maximum" Value="100"/><Setter Property="TickFrequency" Value="5"/><Setter Property="IsSnapToTickEnabled" Value="True"/>
             <Setter Property="Height" Value="28"/><Setter Property="VerticalAlignment" Value="Center"/>
         </Style>

@@ -38,6 +38,8 @@ For dependency or SDK changes, follow [dependency maintenance](dependency-mainte
    installer lifecycle/upgrade checks to pass. Keep the CI run ID. Its
    **DS4Windows_Release_Candidate_...** artifact contains the final-version
    portable ZIP, installer and `CANDIDATE-BUILD.json`; retention is 30 days.
+   Temporary artifact cleanup preserves this promotion window and the latest
+   branch packages; see [Actions artifact retention](actions-artifact-retention.md).
 2. Create a draft targeting that exact `main` commit. Use a three-part numeric
    tag such as `5.0.15` and the release title `DS4Windows 5.0.15`. Clear the
    prerelease flag and link the release body to the tagged `CHANGELOG.md`.

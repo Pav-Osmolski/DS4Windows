@@ -33,18 +33,7 @@
             </tb:TaskbarIcon.ContextMenu>-->
         </tb:TaskbarIcon>
 
-        <StackPanel DockPanel.Dock="Bottom" Height="38" VerticalAlignment="Bottom" Background="{DynamicResource SidebarBackgroundColor}">
-            <DockPanel Height="38" Margin="10,0,10,0">
-                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button x:Name="aboutBtn" BorderThickness="0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF3881D8"
-                            Style="{StaticResource NoBGHoverBtn}" Click="AboutBtn_Click">
-                        <TextBlock Text="{lex:Loc HotkeysAbout}" TextDecorations="Underline" Foreground="{DynamicResource AccentColor}" Cursor="Hand" x:Uid="hotkeysText" />
-                    </Button>
-                    <Button x:Name="StartStopBtn" Content="{lex:Loc StartText}" Margin="10,0,4,0" Click="StartStopBtn_Click" MinWidth="76" Height="28" Foreground="White" Style="{StaticResource BridgePrimaryButtonStyle}" Padding="12,2" />
-                </StackPanel>
-                <Label x:Name="lastMsgLb" Content="{Binding Message}" ToolTip="{Binding Message}" Foreground="{Binding Color}" Margin="4,0,2,0" Padding="0" VerticalAlignment="Center" VerticalContentAlignment="Center" />
-            </DockPanel>
-        </StackPanel>
+        <local:AppFooterControl x:Name="footerControl" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
         <TabControl x:Name="mainTabCon" DockPanel.Dock="Top" SelectionChanged="MainTabCon_SelectionChanged" Style="{StaticResource BridgeMainTabControlStyle}">
             <TabItem x:Name="overviewTab" Header="{lex:Loc Strings:UI_D4B1EA5708DD5329}" Tag="&#xE80F;" IsEnabled="{Binding FullTabsEnabled,Mode=OneWay}">
                 <DockPanel>

@@ -72,7 +72,7 @@ internal static class UpdateStorageLayoutValidation
                 header.SetValue(hoverKey, true);
                 ThemeConsistencyValidation.Layout(host, 1000, 130);
                 var chrome = (Border)header.Template.FindName("Chrome", header);
-                Assert.AreEqual(((System.Windows.Media.SolidColorBrush)application.FindResource("RaisedBackgroundColor")).Color,
+                Assert.AreEqual(((System.Windows.Media.SolidColorBrush)application.FindResource("DisclosureHoverColor")).Color,
                     ((System.Windows.Media.SolidColorBrush)chrome.Background).Color, "Disclosure hover must use the subtle themed surface, not the selected-item fill.");
                 Assert.IsNotNull(header.FocusVisualStyle, "Keyboard navigation needs its own visible focus outline.");
                 Save("profiles-collapsed-hover", host, 1000, 130);
@@ -81,26 +81,32 @@ internal static class UpdateStorageLayoutValidation
                 // synchronization and persistence, rather than only the header.
                 var nativeToggle = ThemeConsistencyValidation.Visuals(indicator).OfType<System.Windows.Controls.Primitives.ToggleButton>().Single();
                 var idle = ThemeConsistencyValidation.Visuals(nativeToggle).OfType<System.Windows.Shapes.Ellipse>()
-                    .Select(circle => ((System.Windows.Media.SolidColorBrush)circle.Fill).Color).ToArray();
+                    .Select(circle => (((System.Windows.Media.SolidColorBrush)circle.Fill).Color, circle.Opacity)).ToArray();
                 nativeToggle.SetValue(hoverKey, true);
+                VisualStateManager.GoToState(nativeToggle, "MouseOver", false);
+                DisclosureAnimationTests.Pump(160);
                 var sharedHeader = (Grid)System.Windows.Media.VisualTreeHelper.GetParent(header);
                 sharedHeader.SetValue(hoverKey, true);
                 ThemeConsistencyValidation.Layout(host, 1000, 130);
                 Assert.IsFalse(header.IsMouseOver, "This case must exercise pointer-over-arrow rather than pointer-over-header-button.");
-                Assert.AreEqual(((System.Windows.Media.SolidColorBrush)application.FindResource("RaisedBackgroundColor")).Color,
+                Assert.AreEqual(((System.Windows.Media.SolidColorBrush)application.FindResource("DisclosureHoverColor")).Color,
                     ((System.Windows.Media.SolidColorBrush)chrome.Background).Color, "Hovering the arrow must also highlight the whole header.");
                 var hovered = ThemeConsistencyValidation.Visuals(nativeToggle).OfType<System.Windows.Shapes.Ellipse>()
-                    .Select(circle => ((System.Windows.Media.SolidColorBrush)circle.Fill).Color).ToArray();
+                    .Select(circle => (((System.Windows.Media.SolidColorBrush)circle.Fill).Color, circle.Opacity)).ToArray();
                 Assert.IsTrue(idle.Length > 0 && !idle.SequenceEqual(hovered), "The circular indicator must retain its native hover colour change.");
                 Save("profiles-circle-hover", host, 1000, 130);
                 typeof(System.Windows.Controls.Primitives.ButtonBase).GetProperty("IsPressed").SetValue(nativeToggle, true);
+                VisualStateManager.GoToState(nativeToggle, "Pressed", false);
+                DisclosureAnimationTests.Pump(160);
                 ThemeConsistencyValidation.Layout(host, 1000, 130);
                 var pressed = ThemeConsistencyValidation.Visuals(nativeToggle).OfType<System.Windows.Shapes.Ellipse>()
-                    .Select(circle => ((System.Windows.Media.SolidColorBrush)circle.Fill).Color).ToArray();
+                    .Select(circle => (((System.Windows.Media.SolidColorBrush)circle.Fill).Color, circle.Opacity)).ToArray();
                 Assert.IsFalse(idle.SequenceEqual(pressed), "The circular indicator must retain its native pressed colour change.");
                 Save("profiles-circle-pressed", host, 1000, 130);
                 typeof(System.Windows.Controls.Primitives.ButtonBase).GetProperty("IsPressed").SetValue(nativeToggle, false);
                 nativeToggle.SetValue(hoverKey, false);
+                VisualStateManager.GoToState(nativeToggle, "Normal", false);
+                DisclosureAnimationTests.Pump(160);
                 sharedHeader.SetValue(hoverKey, false);
                 ThemeConsistencyValidation.Layout(host, 1000, 130);
                 Assert.AreEqual((byte)0, ((System.Windows.Media.SolidColorBrush)chrome.Background).Color.A,

@@ -489,15 +489,23 @@ namespace DS4Windows
         protected bool warning = false;
         protected bool temporary = false;
         public DebugEventArgs(string Data, bool warn, bool temporary = false)
+            : this(Data, warn, temporary, requiresAttention: warn) { }
+
+        public DebugEventArgs(string Data, bool warn, bool temporary, bool requiresAttention)
         {
             m_Data = Data;
             warning = warn;
             this.temporary = temporary;
+            RequiresAttention = requiresAttention;
         }
 
         public DateTime Time => m_Time;
         public string Data => m_Data;
         public bool Warning => warning;
+        // Diagnostic severity is separate from whether the user must act.
+        // Existing callers retain their warning behaviour; known advisories
+        // can explicitly leave a healthy service status alone.
+        public bool RequiresAttention { get; }
         public bool Temporary => temporary;
     }
 

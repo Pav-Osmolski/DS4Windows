@@ -51,6 +51,9 @@ jobs:
 
       - name: Check every language pack
         run: python utils/validate-language-packs.py
+      - name: Test artifact retention protections
+        run: python utils/test-actions-artifact-retention.py
+
       - name: Select package build
         id: select
         shell: pwsh
@@ -166,7 +169,7 @@ jobs:
           name: DS4Windows_Test_Results
           path: TestResults/
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: ${{ job.status == 'success' && 7 || 14 }}
 
   build:
     runs-on: windows-2022
@@ -341,6 +344,7 @@ jobs:
             ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/*.log
             ${{ runner.temp }}/ds4windows-previous-msi-upgrade-*/previous-extracted/extraction.json
           if-no-files-found: warn
+          retention-days: ${{ job.status == 'success' && 7 || 14 }}
 
       - name: Compose immutable main release candidate
         if: needs.package_plan.outputs.candidate == 'true'
@@ -382,6 +386,7 @@ jobs:
           path: .\bin\${{ matrix.platform }}\Release\DS4Windows_${{ env.VERSION }}_${{ matrix.platform }}.zip
           if-no-files-found: error
           compression-level: 0
+          retention-days: 90 # latest branch package; scheduled cleanup prunes superseded copies after seven days
 
       - name: Upload standard installer EXE
         if: needs.package_plan.outputs.package == 'installer' && needs.package_plan.outputs.candidate != 'true'
@@ -392,6 +397,7 @@ jobs:
           path: .\bin\${{ matrix.platform }}\Release\installer\DS4Windows_${{ env.VERSION }}_Setup_${{ matrix.platform }}.exe
           if-no-files-found: error
           compression-level: 0
+          retention-days: 90 # protects paused WIP branches; superseded copies are pruned separately
 
       - name: Publish artifact link to run summary
         shell: pwsh

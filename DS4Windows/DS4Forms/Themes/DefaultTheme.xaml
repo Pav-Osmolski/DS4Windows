@@ -3,6 +3,8 @@
                     xmlns:local="clr-namespace:DS4WinWPF.DS4Forms.Themes" xmlns:system="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ToolTipStyles.xaml" />
+        <ResourceDictionary Source="SliderStyles.xaml" />
+        <ResourceDictionary Source="DisclosureStyles.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <!-- RGB surface Tag carries the existing channel colour for the dark theme. -->
     <Style x:Key="ProfileRedChannelStyle" TargetType="Border"><Setter Property="Background" Value="#FFFDE8E8" /></Style>
@@ -15,6 +17,13 @@
         <Setter Property="Template"><Setter.Value><ControlTemplate><Rectangle Margin="2" Stroke="{DynamicResource AccentColor}" StrokeThickness="2" StrokeDashArray="2,1" SnapsToDevicePixels="True"/></ControlTemplate></Setter.Value></Setter>
     </Style>
     <!-- Brushes -->
+    <SolidColorBrush x:Key="DisclosureActiveGlyphColor" Color="White" />
+    <SolidColorBrush x:Key="DisclosureGlyphColor" Color="#FF334963" />
+    <SolidColorBrush x:Key="DisclosureCircleBorderColor" Color="#00000000" />
+    <SolidColorBrush x:Key="DisclosureHoverColor" Color="#FFEDF4FC" />
+    <SolidColorBrush x:Key="DisclosurePressedColor" Color="#FFDCEAFA" />
+    <SolidColorBrush x:Key="DisclosureCircleColor" Color="#FFE3EAF3" />
+    <SolidColorBrush x:Key="SliderThumbColor" Color="White" />
     <SolidColorBrush x:Key="AccentForegroundColor" Color="White" />
     <SolidColorBrush x:Key="ForegroundColor" Color="{x:Static SystemColors.WindowTextColor}" />
     <SolidColorBrush x:Key="SecondaryColor" Color="{x:Static SystemColors.ControlColor}"  />

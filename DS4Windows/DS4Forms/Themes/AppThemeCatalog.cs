@@ -84,6 +84,34 @@ public static class AppThemeCatalog
             : (Color)ColorConverter.ConvertFromString(accent);
         // Accent text must be readable on the page, including custom colours.
         if (choice != AppThemeChoice.HighContrast) selected = ReadableAccent(selected, surfaces);
+        dictionary["DisclosureCircleColor"] = systemContrast ? Frozen(SystemColors.WindowColor) : Brush(choice switch
+        {
+            AppThemeChoice.Light => "#E3EAF3", AppThemeChoice.Paper => "#E4E0D6",
+            AppThemeChoice.Graphite => "#394350", AppThemeChoice.Midnight => "#253241",
+            AppThemeChoice.HighContrast => "#000000", _ => "#26394E"
+        });
+        dictionary["DisclosureGlyphColor"] = systemContrast ? Frozen(SystemColors.WindowTextColor) :
+            choice == AppThemeChoice.Light ? Brush("#334963") : choice == AppThemeChoice.Paper ? Brush("#3B4C5C") : dictionary["ForegroundColor"];
+        dictionary["DisclosureCircleBorderColor"] = choice == AppThemeChoice.HighContrast
+            ? dictionary["ForegroundColor"] : Brush("#00000000");
+        dictionary["DisclosureHoverColor"] = choice == AppThemeChoice.HighContrast ? dictionary["SurfaceBackgroundColor"] : Brush(choice switch
+        {
+            AppThemeChoice.Light => "#EDF4FC", AppThemeChoice.Paper => "#EFEEE8",
+            AppThemeChoice.Graphite => "#2B3543", AppThemeChoice.Midnight => "#111D2A", _ => "#172B44"
+        });
+        dictionary["DisclosurePressedColor"] = choice == AppThemeChoice.HighContrast ? dictionary["NavigationSelectionColor"] : Brush(choice switch
+        {
+            AppThemeChoice.Light => "#DCEAFA", AppThemeChoice.Paper => "#DCE7F2",
+            AppThemeChoice.Graphite => "#314A70", AppThemeChoice.Midnight => "#183A5A", _ => "#1D3E66"
+        });
+        dictionary["SliderThumbColor"] = Frozen(systemContrast ? SystemColors.WindowColor : Colors.White);
+        // The mock uses a light chevron on blue, but these are non-text icons:
+        // preserve that appearance whenever it meets the 3:1 icon contrast target.
+        Color preferredGlyph = choice == AppThemeChoice.Graphite ? Color.FromRgb(24, 26, 31) :
+            choice is AppThemeChoice.Midnight or AppThemeChoice.HighContrast ? Colors.Black : Colors.White;
+        dictionary["DisclosureActiveGlyphColor"] = Frozen(systemContrast ? SystemColors.WindowColor :
+            Contrast(selected, preferredGlyph) >= 3 ? preferredGlyph :
+            Contrast(selected, Colors.White) >= Contrast(selected, Colors.Black) ? Colors.White : Colors.Black);
         dictionary["AccentColor"] = Frozen(selected);
         dictionary["AccentForegroundColor"] = Frozen(systemContrast ? SystemColors.WindowColor :
             Contrast(selected, Colors.White) >= Contrast(selected, Colors.Black) ? Colors.White : Colors.Black);
