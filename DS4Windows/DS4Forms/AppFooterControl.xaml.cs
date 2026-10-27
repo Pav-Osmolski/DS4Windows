@@ -12,7 +12,11 @@ public partial class AppFooterControl : UserControl
     private int controllerCount;
     public event EventHandler HotkeysRequested, AboutRequested, ServiceToggleRequested, LogRequested;
     internal Button ServiceButton => serviceButton;
-    internal bool IsActivityExpanded { get => activityToggle.IsChecked == true; set => activityToggle.IsChecked = value; }
+    internal bool IsActivityExpanded
+    {
+        get => activityPanel.Visibility == Visibility.Visible;
+        set => activityPanel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+    }
 
     public AppFooterControl()
     {
@@ -59,10 +63,6 @@ public partial class AppFooterControl : UserControl
     }
 
     private void ToggleActivity_Click(object sender, RoutedEventArgs e) => IsActivityExpanded = !IsActivityExpanded;
-    private void ActivityChanged(object sender, RoutedEventArgs e)
-    {
-        if (activityPanel != null) activityPanel.Visibility = IsActivityExpanded ? Visibility.Visible : Visibility.Collapsed;
-    }
     private void Hotkeys_Click(object sender, RoutedEventArgs e) => HotkeysRequested?.Invoke(this, EventArgs.Empty);
     private void About_Click(object sender, RoutedEventArgs e) => AboutRequested?.Invoke(this, EventArgs.Empty);
     private void ToggleService_Click(object sender, RoutedEventArgs e) => ServiceToggleRequested?.Invoke(this, EventArgs.Empty);
