@@ -142,6 +142,7 @@
             <Style TargetType="MenuItem" BasedOn="{StaticResource AppMenuItemStyle}"/>
             <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="Separator" BasedOn="{StaticResource AppMenuSeparatorStyle}"/>
         </Style.Resources>
+        <Setter Property="local:PopupTheme.Synchronize" Value="True"/>
         <Setter Property="Padding" Value="4"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>

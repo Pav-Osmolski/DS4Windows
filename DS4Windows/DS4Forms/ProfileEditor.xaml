@@ -3181,11 +3181,11 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <WrapPanel Margin="0,0,0,12">
-                        <RadioButton Content="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="True" x:Name="profileAdvancedOutputNav"/>
-                        <RadioButton Content="{lex:Loc Strings:UI_AAC77DF347205252}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedFeedbackNav"/>
+                        <RadioButton Content="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="True" x:Name="profileAdvancedOutputNav" ToolTip="{lex:Loc Strings:UI_A515680B15783021}" />
+                        <RadioButton Content="{lex:Loc Strings:UI_AAC77DF347205252}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedFeedbackNav" ToolTip="{lex:Loc Strings:UI_3F33CB8FFADB96A1}" />
                         <RadioButton Content="{lex:Loc Strings:UI_BC1B88907D3B748A}" IsEnabled="{Binding ShowPlayStationControllerSettings}" ToolTip="{lex:Loc Strings:UI_A922B12BAC1D2FDE}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedAudioNav"/>
-                        <RadioButton Content="{lex:Loc Strings:UI_36ECB4F8669133CE}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedInputNav"/>
-                        <RadioButton Content="{lex:Loc Strings:UI_639A40E82B9A96F0}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedConnectionNav"/>
+                        <RadioButton Content="{lex:Loc Strings:UI_36ECB4F8669133CE}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedInputNav" ToolTip="{lex:Loc Strings:UI_934FBA0B1F994893}" />
+                        <RadioButton Content="{lex:Loc Strings:UI_639A40E82B9A96F0}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedConnectionNav" ToolTip="{lex:Loc Strings:UI_1BB65CE01C169723}" />
                     </WrapPanel>
                     <Grid Grid.Row="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding IsChecked, ElementName=profileAdvancedOutputNav, Converter={StaticResource BooleanToVisibilityConverter}}">

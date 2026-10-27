@@ -1,9 +1,11 @@
-# Changelog
+﻿# Changelog
 
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
 ## Unreleased
+
+- Give Settings and Advanced category buttons their own localized tooltip descriptions, preventing unrelated parent-tab help from flashing and leaving Input or Connection without tooltips. Refresh detached tray popup colours when opening after a theme change, including nested menus, highlights and separators.
 
 - Unify tray menus, profile submenus, Lightbar controls and the controller Edit popup with themed rounded surfaces and a fixed check column, keeping checked and unchecked labels aligned. Restore consistent padding around button-mapping cards in every theme.
 

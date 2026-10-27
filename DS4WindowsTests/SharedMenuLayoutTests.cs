@@ -92,6 +92,65 @@ public class SharedMenuLayoutTests
         });
     }
 
+    internal static void ValidateDetachedThemeSwitch(Application application)
+    {
+        var original = application.Resources.MergedDictionaries.ToArray();
+        try
+        {
+            void Theme(AppThemeChoice choice)
+            {
+                application.Resources.MergedDictionaries.Clear();
+                application.Resources.MergedDictionaries.Add(AppThemeCatalog.Create(choice, highContrast: false));
+                application.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative) });
+            }
+            Theme(AppThemeChoice.Dark);
+            var menu = new ContextMenu();
+            var item = new MenuItem { Header = "Controller 1" };
+            var profile = new MenuItem { Header = "Default", IsChecked = true };
+            item.Items.Add(profile); menu.Items.Add(item); menu.Items.Add(new Separator()); menu.Items.Add(new MenuItem { Header = "Stop" });
+            Layout(menu);
+            foreach (var choice in new[] { AppThemeChoice.Light, AppThemeChoice.Dark, AppThemeChoice.Paper, AppThemeChoice.Midnight, AppThemeChoice.Graphite, AppThemeChoice.HighContrast, AppThemeChoice.Light })
+            {
+                Theme(choice); menu.RaiseEvent(new RoutedEventArgs(ContextMenu.OpenedEvent)); Layout(menu);
+                var expected = ((SolidColorBrush)application.Resources["CardBackgroundColor"]).Color;
+                var surface = (Border)menu.Template.FindName("PopupSurface", menu);
+                Assert.AreEqual(expected, ((SolidColorBrush)surface.Background).Color, choice + " detached tray surface");
+                Assert.AreEqual(((SolidColorBrush)application.Resources["ForegroundColor"]).Color, ((SolidColorBrush)item.Foreground).Color, choice + " tray label");
+                System.Windows.VisualStateManager.GoToState(item, "MenuHovered", false);
+                var hover = (Border)item.Template.FindName("MenuHover", item);
+                Assert.AreEqual(((SolidColorBrush)application.Resources["DisclosureHoverColor"]).Color, ((SolidColorBrush)hover.Background).Color, choice + " hover");
+                var popup = (Popup)item.Template.FindName("PART_Popup", item);
+                Layout((FrameworkElement)popup.Child);
+                Assert.AreEqual(expected, ((SolidColorBrush)((Border)popup.Child).Background).Color, choice + " profile submenu surface");
+                profile.ApplyTemplate();
+                var selected = (Border)profile.Template.FindName("MenuSurface", profile);
+                Assert.AreEqual(((SolidColorBrush)application.Resources["NavigationSelectionColor"]).Color, ((SolidColorBrush)selected.Background).Color, choice + " selected profile");
+                if (choice == AppThemeChoice.Light)
+                {
+                    var bitmap = new RenderTargetBitmap((int)menu.ActualWidth, (int)menu.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+                    bitmap.Render(menu); var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                    Directory.CreateDirectory("menu-renders"); using var image = File.Create("menu-renders/tray-switched-to-light.png"); encoder.Save(image);
+                }
+
+                var separator = (Separator)menu.Items[1];
+                Assert.AreEqual(((SolidColorBrush)application.Resources["BorderColor"]).Color, ((SolidColorBrush)Visuals(separator).OfType<Border>().First().Background).Color, choice + " separator");
+            }
+        }
+        finally
+        {
+            application.Resources.MergedDictionaries.Clear();
+            foreach (var dictionary in original) application.Resources.MergedDictionaries.Add(dictionary);
+        }
+    }
+    private static IEnumerable<DependencyObject> Visuals(DependencyObject parent)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i); yield return child;
+            foreach (var nested in Visuals(child)) yield return nested;
+        }
+    }
+
     private static void Layout(FrameworkElement element)
     {
         element.ApplyTemplate(); element.Measure(new Size(500, 500));

@@ -211,6 +211,8 @@
     </Style>
 
     <Style x:Key="BridgeSettingsCategoryStyle" TargetType="RadioButton">
+        <!-- Each category owns its tooltip; never borrow a distant TabItem tooltip. -->
+        <Setter Property="ToolTip" Value="{Binding Content, RelativeSource={RelativeSource Self}}"/>
         <Setter Property="Foreground" Value="{DynamicResource MutedForegroundColor}" />
         <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />

@@ -97,6 +97,7 @@ namespace DS4WindowsTests
                     Switch2StickCalibrationEditorTests.ValidateStickCalibrationWindow(application);
                     BindingWindowLiveInputLayoutTests.ValidateRenderedBindingWindows(
                         application, resultsDirectory, renderedFiles);
+                    SharedMenuLayoutTests.ValidateDetachedThemeSwitch(application);
                     ThemeConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
                     AutoProfileLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     BatteryAlertsLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
