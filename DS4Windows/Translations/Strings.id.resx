@@ -6723,4 +6723,31 @@ Untuk backup: </value>
     <value>Dihentikan</value>
     <comment>Controller service state in the application footer.</comment>
   </data>
+  <data name="UI_A063C90272AC00A9" xml:space="preserve">
+    <value>Ringkasan pengontrol, profil aktif, dan keluaran Anda.</value>
+  </data>
+  <data name="UI_39D4E2C148238E2E" xml:space="preserve">
+    <value>Kelola pengontrol yang terhubung dan profilnya.</value>
+  </data>
+  <data name="UI_07CD2A0D5B736961" xml:space="preserve">
+    <value>Ubah audio game dan aplikasi menjadi umpan balik haptik.</value>
+  </data>
+  <data name="UI_B6A10B8EF33F7607" xml:space="preserve">
+    <value>Buat dan pratinjau efek pemicu adaptif.</value>
+  </data>
+  <data name="UI_AF5B046D29032A7C" xml:space="preserve">
+    <value>Buat, atur, dan sesuaikan profil pengontrol Anda.</value>
+  </data>
+  <data name="UI_06242BFBF878FE7A" xml:space="preserve">
+    <value>Ganti profil pengontrol secara otomatis untuk game dan aplikasi.</value>
+  </data>
+  <data name="UI_C82F7ECB77AF2005" xml:space="preserve">
+    <value>Kelola pengontrol virtual dan slot keluarannya.</value>
+  </data>
+  <data name="UI_B073C83D78CA44C5" xml:space="preserve">
+    <value>Sesuaikan DS4Windows dan atur perilakunya.</value>
+  </data>
+  <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
+    <value>Tinjau aktivitas layanan dan pesan diagnostik.</value>
+  </data>
 </root>
