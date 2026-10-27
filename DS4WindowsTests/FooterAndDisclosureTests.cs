@@ -136,12 +136,18 @@ public class FooterAndDisclosureTests
                 var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey",
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).GetValue(null);
                 toggle.SetValue(hoverKey, true);
+                Assert.IsTrue(VisualStateManager.GoToState(toggle, "MouseOver", false));
+                DisclosureAnimationTests.Pump(160);
+                var activeCircle = (System.Windows.Shapes.Ellipse)toggle.Template.FindName("ActiveCircle", toggle);
                 Assert.AreEqual(((SolidColorBrush)expander.FindResource("AccentColor")).Color,
-                    ((SolidColorBrush)circle.Fill).Color);
-                var arrow = (System.Windows.Shapes.Path)toggle.Template.FindName("Arrow", toggle);
-                Assert.AreEqual(((SolidColorBrush)expander.FindResource("AccentForegroundColor")).Color,
+                    ((SolidColorBrush)activeCircle.Fill).Color);
+                Assert.AreEqual(1d, activeCircle.Opacity);
+                var arrow = (System.Windows.Shapes.Path)toggle.Template.FindName("ActiveArrow", toggle);
+                Assert.AreEqual(((SolidColorBrush)expander.FindResource("DisclosureActiveGlyphColor")).Color,
                     ((SolidColorBrush)arrow.Stroke).Color);
                 typeof(ButtonBase).GetProperty("IsPressed").SetValue(toggle, true);
+                Assert.IsTrue(VisualStateManager.GoToState(toggle, "Pressed", false));
+                DisclosureAnimationTests.Pump(160);
                 Assert.AreEqual(Visibility.Visible,
                     ((System.Windows.Shapes.Ellipse)toggle.Template.FindName("PressRing", toggle)).Visibility);
                 typeof(ButtonBase).GetProperty("IsPressed").SetValue(toggle, false);

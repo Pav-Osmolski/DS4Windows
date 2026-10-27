@@ -20,6 +20,11 @@
         <Setter Property="Template"><Setter.Value><ControlTemplate><Rectangle Margin="2" Stroke="{DynamicResource AccentColor}" StrokeThickness="2" StrokeDashArray="2,1" SnapsToDevicePixels="True"/></ControlTemplate></Setter.Value></Setter>
     </Style>
     <!-- Brushes -->
+    <SolidColorBrush x:Key="DisclosureActiveGlyphColor" Color="White" />
+    <SolidColorBrush x:Key="DisclosureGlyphColor" Color="#FFF4F7FB" />
+    <SolidColorBrush x:Key="DisclosureCircleBorderColor" Color="#00000000" />
+    <SolidColorBrush x:Key="DisclosureHoverColor" Color="#FF172B44" />
+    <SolidColorBrush x:Key="DisclosurePressedColor" Color="#FF1D3E66" />
     <SolidColorBrush x:Key="DisclosureCircleColor" Color="#FF26394E" />
     <SolidColorBrush x:Key="SliderThumbColor" Color="#FFF4F7FB" />
     <SolidColorBrush x:Key="AccentForegroundColor" Color="White" />
