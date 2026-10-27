@@ -5,6 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Dismiss tooltips on clicks, scrolling, keyboard navigation, owner removal and window deactivation, and bound popup lifetime if a normal dismissal is missed. Add an enabled-by-default Show tooltips preference under Settings > Appearance, with translations in every language pack.
+- Correct Profile Editor spacing: separate the battery dropdown and number field, use the shared animated Nintendo expanders with clear header gaps, and centre Nintendo button-choice checkboxes inside their tiles.
 - Standardise dropdowns throughout the app with an inset arrow, rounded field and popup, animated hover/press/open/focus feedback, selected-item checks, editable and disabled states, and live theme colours. Preserve taller fields, use a 32-DIP minimum, add controller icons to profile selectors and keep a minimal gap before update-storage helper text.
 - Apply the current theme to the About / Hotkeys window before first render, paint the native erase surface and window frame with the current palette, and keep the backgrounds synchronised when the theme changes.
 

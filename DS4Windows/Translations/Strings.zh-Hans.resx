@@ -6896,4 +6896,7 @@
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>查看服务活动和诊断消息。</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>显示工具提示</value>
+  </data>
 </root>

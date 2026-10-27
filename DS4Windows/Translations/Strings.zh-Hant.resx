@@ -6735,4 +6735,7 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>檢視服務活動和診斷訊息。</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>顯示工具提示</value>
+  </data>
 </root>

@@ -449,6 +449,7 @@ namespace DS4WinWPF
 
             StartupDiag(logger, "DS4Windows.Global.Load begin");
             bool readAppConfig = DS4Windows.Global.Load();
+            DS4Forms.AppToolTips.Initialize();
             StartupDiag(logger, $"DS4Windows.Global.Load end readAppConfig={readAppConfig}");
             StoredLogCleanupResult logCleanup = ApplyLogRetention();
             if (logCleanup.Failed > 0) logger.Warn("Some expired log files could not be removed; check the Logs folder permissions.");

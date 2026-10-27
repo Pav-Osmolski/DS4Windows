@@ -370,11 +370,16 @@ Settings fills the available window width and groups related options into cards.
 | Section | What you can change |
 | --- | --- |
 | General | Startup, window behavior, notifications and latency warnings |
-| Appearance | App theme, sidebar icon, tray icon and language |
+| Appearance | App theme, sidebar icon, tray icon, language and tooltips |
 | Controllers | VIIPER setup, HidHide, Steam Input recovery, device options and swipe profiles; optional Nintendo pairing |
 | Updates & tools | Update checks, profile folder, diagnostic utilities, verbose logging and optional profile-editor timing logs (off by default) |
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
+
+In **Settings > Appearance**, **Show tooltips** is enabled by default. Turn it off
+to hide hover help throughout the app. The change applies immediately and is
+remembered when you restart. Tooltips dismiss when you leave their control, click,
+scroll, navigate with the keyboard or leave the window.
 
 In **Settings > Appearance > Theme and tray icon**, choose **Follow Windows**,
 **Light**, **Dark**, **Graphite**, **Paper**, **Midnight** or **High contrast**.

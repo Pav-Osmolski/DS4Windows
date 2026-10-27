@@ -819,6 +819,7 @@
                                                 </ComboBoxItem>
                                             </ComboBox>
                                         </Grid>
+                                        <CheckBox Content="{lex:Loc Strings:UI_F6B13F9FB56323B7}" IsChecked="{Binding ShowTooltips, Mode=TwoWay}" Margin="0,12,0,0" VerticalContentAlignment="Center" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" />
                                     </StackPanel>
                                 </Border>
                                 <Border Style="{DynamicResource BridgeCardStyle}">

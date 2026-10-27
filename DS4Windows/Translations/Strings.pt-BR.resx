@@ -6728,4 +6728,7 @@ O backup: </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Confira a atividade do serviço e as mensagens de diagnóstico.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Mostrar dicas de ferramentas</value>
+  </data>
 </root>

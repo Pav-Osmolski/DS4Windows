@@ -6752,4 +6752,7 @@ Sokongan : </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Semak aktiviti perkhidmatan dan mesej diagnostik.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Tunjukkan petua alat</value>
+  </data>
 </root>

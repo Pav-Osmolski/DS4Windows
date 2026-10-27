@@ -305,6 +305,18 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
         public event EventHandler IconChoiceIndexChanged;
 
+        public bool ShowTooltips
+        {
+            get => Global.ShowTooltips;
+            set
+            {
+                if (value == Global.ShowTooltips) return;
+                Global.ShowTooltips = value;
+                if (!value) AppToolTips.Dismiss();
+                Global.Save();
+            }
+        }
+
         public IReadOnlyList<SidebarIconOption> SidebarIconChoices => SidebarIconCatalog.Choices;
 
         public int SidebarIconIndex

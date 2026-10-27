@@ -2180,6 +2180,12 @@ namespace DS4Windows
             }
         }
 
+        public static bool ShowTooltips
+        {
+            get => m_Config.showTooltips;
+            set => m_Config.showTooltips = value;
+        }
+
         public static SidebarIconChoice UseSidebarIcon
         {
             get => SidebarIconPolicy.Normalize(m_Config.sidebarIcon);
@@ -5132,6 +5138,7 @@ namespace DS4Windows
         public TrayIconChoice useIconChoice;
         public SidebarIconChoice sidebarIcon = SidebarIconChoice.BlueTile;
         public double sidebarIconHue;
+        public bool showTooltips = true;
         public BatteryAlertSettings batteryAlerts = new();
         public const bool DEFAULT_FLASH_WHEN_LATE = true;
         public bool flashWhenLate = DEFAULT_FLASH_WHEN_LATE;
@@ -9743,6 +9750,8 @@ namespace DS4Windows
                         catch { missingSetting = true; }
                     }
 
+                    showTooltips = !bool.TryParse(m_Xdoc.SelectSingleNode("/Profile/ShowTooltips")?.InnerText, out bool savedTooltips) || savedTooltips;
+
                     sidebarIconHue = double.TryParse(m_Xdoc.SelectSingleNode("/Profile/SidebarIconHue")?.InnerText,
                         NumberStyles.Float, CultureInfo.InvariantCulture, out double savedHue)
                         ? SidebarIconPolicy.NormalizeHue(savedHue) : 0;
@@ -10096,6 +10105,7 @@ namespace DS4Windows
             XmlNode xmlFlashWhenLate = m_Xdoc.CreateNode(XmlNodeType.Element, "FlashWhenLate", null); xmlFlashWhenLate.InnerText = flashWhenLate.ToString(); rootElement.AppendChild(xmlFlashWhenLate);
             XmlNode xmlFlashWhenLateAt = m_Xdoc.CreateNode(XmlNodeType.Element, "FlashWhenLateAt", null); xmlFlashWhenLateAt.InnerText = flashWhenLateAt.ToString(); rootElement.AppendChild(xmlFlashWhenLateAt);
             XmlNode xmlAppIconChoice = m_Xdoc.CreateNode(XmlNodeType.Element, "AppIcon", null); xmlAppIconChoice.InnerText = useIconChoice.ToString(); rootElement.AppendChild(xmlAppIconChoice);
+            XmlNode xmlShowTooltips = m_Xdoc.CreateNode(XmlNodeType.Element, "ShowTooltips", null); xmlShowTooltips.InnerText = showTooltips.ToString(); rootElement.AppendChild(xmlShowTooltips);
             XmlNode xmlSidebarHue = m_Xdoc.CreateNode(XmlNodeType.Element, "SidebarIconHue", null); xmlSidebarHue.InnerText = SidebarIconPolicy.NormalizeHue(sidebarIconHue).ToString(CultureInfo.InvariantCulture); rootElement.AppendChild(xmlSidebarHue);
             XmlNode xmlSidebarIcon = m_Xdoc.CreateNode(XmlNodeType.Element, "SidebarIcon", null); xmlSidebarIcon.InnerText = SidebarIconPolicy.Normalize(sidebarIcon).ToString(); rootElement.AppendChild(xmlSidebarIcon);
             XmlNode xmlAppThemeChoice = m_Xdoc.CreateNode(XmlNodeType.Element, "AppTheme", null); xmlAppThemeChoice.InnerText = useCurrentTheme.ToString(); rootElement.AppendChild(xmlAppThemeChoice);

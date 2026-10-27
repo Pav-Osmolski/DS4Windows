@@ -1430,7 +1430,7 @@
                                             <TextBlock Text="{lex:Loc Strings:UI_C01932122161F43A}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                                             <TextBlock Text="{lex:Loc Strings:UI_2FE9FD087181A439}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                <ComboBox x:Name="flashTypeCombo" SelectedIndex="{Binding FlashTypeIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
+                                                <ComboBox x:Name="flashTypeCombo" Margin="0,0,8,0" SelectedIndex="{Binding FlashTypeIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
                                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_CFE6FCB880DCAC80}"/>
                                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_8652A56735CD92D4}"/>
                                                 </ComboBox>
@@ -2317,10 +2317,12 @@
                                 <Style TargetType="CheckBox" BasedOn="{StaticResource CheckBoxStyle}">
                                     <Setter Property="Margin" Value="0,6,0,6"/>
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                                     <Setter Property="ContentTemplate">
                                         <Setter.Value>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding}" TextWrapping="Wrap" VerticalAlignment="Center"/>
                                             </DataTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -2347,7 +2349,7 @@
                                 <Style TargetType="Button" BasedOn="{StaticResource BridgeSecondaryButtonStyle}">
                                     <Setter Property="MinHeight" Value="34"/>
                                 </Style>
-                                <Style TargetType="Expander">
+                                <Style TargetType="Expander" BasedOn="{StaticResource AppExpanderStyle}">
                                     <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
                                 </Style>
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource BridgeSettingsComboBoxStyle}"/>
@@ -2728,7 +2730,7 @@
                                     <Button Content="{lex:Loc Strings:UI_38964095FEA2629B}" Click="Switch2OpenAimSetup_Click" HorizontalAlignment="Left" Margin="26,0,0,12" Padding="10,5"/>
                                     <Expander x:Name="switch2PairCard" IsExpanded="false" HorizontalContentAlignment="Stretch" AutomationProperties.Name="Which Joy-Con aims?">
                                         <Expander.Header>
-                                            <StackPanel>
+                                            <StackPanel Margin="4,0,0,0">
                                                 <TextBlock Text="{lex:Loc Strings:UI_83383472D36117C2}" FontWeight="SemiBold" TextWrapping="Wrap"/>
                                                 <TextBlock Text="{lex:Loc Strings:UI_1DE023F74A3C37E5}" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}"/>
                                             </StackPanel>
