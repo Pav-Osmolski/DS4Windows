@@ -9,6 +9,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Replace circular expander indicators with a shared theme-aware design matching the approved preview: centred chevrons, 100 ms hover/press fades, 120 ms rotation, themed pressed/focus/disabled states and the Windows animation preference. Keep full-header highlighting specific to Settings & profiles, preserve its fixed arrow position, and add a minimal 6-DIP gap before ordinary expanded content.
 - Refresh the footer while keeping its collapsed height at 38 DIP. Show service state and controller count, keep warnings visible, expand complete activity details above the bar, and separate Hotkeys and About shortcuts.
 - Treat expected USB haptics endpoint enumeration as informational startup progress. Escalate waits that persist for 15 seconds, keep unexpected audio failures immediate, and clear the warning after successful audio startup so normal Stop/Start cycles do not flash a false Needs attention status.
+- Separate diagnostic warning severity from actionable footer status. Keep the safe Steam Input reclaim-skip advisory in the log without marking a healthy session as needing attention, and do not let advisories erase unrelated genuine failures.
 
 ## Released
 

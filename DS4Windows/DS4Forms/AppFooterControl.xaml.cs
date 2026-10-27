@@ -9,6 +9,7 @@ namespace DS4WinWPF.DS4Forms;
 public partial class AppFooterControl : UserControl
 {
     private bool running, warning;
+    private string attentionMessage;
     private int controllerCount;
     public event EventHandler HotkeysRequested, AboutRequested, ServiceToggleRequested, LogRequested;
     internal Button ServiceButton => serviceButton;
@@ -41,11 +42,17 @@ public partial class AppFooterControl : UserControl
         UpdateSummary();
     }
 
-    internal void UpdateActivity(string message, bool isWarning, DateTime timestamp)
+    internal void UpdateActivity(string message, bool isWarning, DateTime timestamp, bool? requiresAttention = null)
     {
-        warning = isWarning;
+        bool messageNeedsAttention = requiresAttention ?? isWarning;
+        // An advisory must neither create a failure nor erase an existing one.
+        if (!(isWarning && requiresAttention == false))
+        {
+            warning = messageNeedsAttention;
+            attentionMessage = warning ? message : null;
+        }
         activityMessage.Text = string.IsNullOrWhiteSpace(message) ? "—" : message;
-        activityMessage.SetResourceReference(ForegroundProperty, warning ? "DangerColor" : "ForegroundColor");
+        activityMessage.SetResourceReference(ForegroundProperty, messageNeedsAttention ? "DangerColor" : "ForegroundColor");
         activityTime.Text = timestamp.ToString("T");
         UpdateSummary();
     }
@@ -57,9 +64,10 @@ public partial class AppFooterControl : UserControl
         serviceDot.SetResourceReference(System.Windows.Shapes.Shape.FillProperty, warning ? "DangerColor" : running ? "SuccessColor" : "MutedForegroundColor");
         // Running describes the service only; it must not imply that a virtual
         // output is ready simply because physical controllers were discovered.
-        controllerSummary.Text = warning ? activityMessage.Text : Translations.Strings.Controllers + ": " + controllerCount;
+        controllerSummary.Text = warning ? attentionMessage : Translations.Strings.Controllers + ": " + controllerCount;
         controllerSummary.SetResourceReference(TextBlock.ForegroundProperty, warning ? "DangerColor" : "MutedForegroundColor");
         System.Windows.Automation.AutomationProperties.SetName(statusButton, serviceStatus.Text + ". " + controllerSummary.Text);
+        statusButton.ToolTip = warning ? attentionMessage : activityMessage.Text;
     }
 
     private void ToggleActivity_Click(object sender, RoutedEventArgs e) => IsActivityExpanded = !IsActivityExpanded;

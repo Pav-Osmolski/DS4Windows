@@ -50,7 +50,7 @@
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                 <Grid Margin="0,0,12,0">
                     <Button x:Name="statusButton" HorizontalContentAlignment="Stretch" Style="{StaticResource FooterButton}"
-                            HorizontalAlignment="Stretch" Click="ToggleActivity_Click" ToolTip="{Binding Text, ElementName=activityMessage}">
+                            HorizontalAlignment="Stretch" Click="ToggleActivity_Click">
                         <Grid>
                             <Grid.ColumnDefinitions><ColumnDefinition Width="8"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                             <Ellipse x:Name="serviceDot" Width="7" Height="7" Fill="{DynamicResource MutedForegroundColor}" VerticalAlignment="Center" />

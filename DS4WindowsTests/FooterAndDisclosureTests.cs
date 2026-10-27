@@ -15,6 +15,35 @@ public class FooterAndDisclosureTests
     public TestContext TestContext { get; set; }
 
     [TestMethod]
+    public void DiagnosticAdvisoriesRemainLoggedWithoutMarkingHealthyServiceAsFailed()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            var footer = new AppFooterControl();
+            footer.UpdateService(true);
+            var service = (ControlService)System.Runtime.CompilerServices.RuntimeHelpers.GetUninitializedObject(typeof(ControlService));
+            DebugEventArgs advisory = null;
+            service.Debug += (_, args) => advisory = args;
+            service.LogDebug("Automatic Steam Input reclaim skipped.", true, requiresAttention: false);
+            Assert.IsTrue(advisory.Warning, "Diagnostic warning severity must be preserved.");
+            Assert.IsFalse(advisory.RequiresAttention);
+            footer.UpdateActivity(advisory.Data, advisory.Warning, advisory.Time, advisory.RequiresAttention);
+            Assert.AreEqual(UiText.Get("Running"), ((TextBlock)footer.FindName("serviceStatus")).Text);
+            Assert.AreEqual(advisory.Data, ((TextBox)footer.FindName("activityMessage")).Text);
+            var failure = new DebugEventArgs("Virtual output failed.", true);
+            Assert.IsTrue(failure.RequiresAttention, "Existing error callers must remain actionable.");
+            footer.UpdateActivity(failure.Data, failure.Warning, failure.Time, failure.RequiresAttention);
+            Assert.AreEqual(UiText.Get("Needs attention"), ((TextBlock)footer.FindName("serviceStatus")).Text);
+            footer.UpdateActivity(advisory.Data, advisory.Warning, advisory.Time, advisory.RequiresAttention);
+            Assert.AreEqual(UiText.Get("Needs attention"), ((TextBlock)footer.FindName("serviceStatus")).Text);
+            Assert.AreEqual(failure.Data, ((TextBlock)footer.FindName("controllerSummary")).Text,
+                "An advisory must not hide an unrelated genuine failure.");
+            footer.UpdateActivity("Recovered.", false, DateTime.Now);
+            Assert.AreEqual(UiText.Get("Running"), ((TextBlock)footer.FindName("serviceStatus")).Text);
+        });
+    }
+
+    [TestMethod]
     public void ExpectedHapticsWarmupKeepsFooterRunningAndPersistentFailureClearsOnRecovery()
     {
         HeadlessWpfDispatcher.Invoke(() =>

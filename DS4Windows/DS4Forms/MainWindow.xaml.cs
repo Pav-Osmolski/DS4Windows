@@ -1176,10 +1176,11 @@ Suspend support not enabled.", true);
         {
             string message = e.Data;
             bool warning = e.Warning;
+            bool requiresAttention = e.RequiresAttention;
             DateTime timestamp = DateTime.Now;
             if (!Dispatcher.HasShutdownStarted && !Dispatcher.HasShutdownFinished)
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
-                    footerControl.UpdateActivity(message, warning, timestamp)));
+                    footerControl.UpdateActivity(message, warning, timestamp, requiresAttention)));
         }
 
         private void ChangeControllerPanel()
