@@ -61,7 +61,7 @@ namespace DS4WinWPF.DS4Forms
         private const int POWER_SUSPEND = 4;
 
         private MainWindowsViewModel mainWinVM;
-        private StatusLogMsg lastLogMsg = new StatusLogMsg();
+        private Button StartStopBtn => footerControl.ServiceButton;
         private ProfileList profileListHolder = new ProfileList();
         private ListCollectionView profilesCollectionView;
         private LogViewModel logvm;
@@ -190,7 +190,11 @@ namespace DS4WinWPF.DS4Forms
             logvm = new LogViewModel(App.rootHub);
             //logListView.ItemsSource = logvm.LogItems;
             logListView.DataContext = logvm;
-            lastMsgLb.DataContext = lastLogMsg;
+            footerControl.HotkeysRequested += (_, _) => ShowAbout(true);
+            footerControl.AboutRequested += (_, _) => ShowAbout(false);
+            footerControl.ServiceToggleRequested += (_, _) => ChangeService();
+            footerControl.LogRequested += (_, _) => mainTabCon.SelectedItem = logTab;
+            footerControl.UpdateService(App.rootHub.running);
             ProcessPriorityComboBox.ItemsSource = ProcessPriorityClasses;
 
             profileListHolder.Refresh();
@@ -200,10 +204,8 @@ namespace DS4WinWPF.DS4Forms
             };
             profilesListBox.ItemsSource = profilesCollectionView;
 
-            StartStopBtn.Content = App.rootHub.running ? Translations.Strings.StopText :
-                Translations.Strings.StartText;
-
             conLvViewModel = new ControllerListViewModel(App.rootHub, profileListHolder);
+            footerControl.UpdateControllerCount(conLvViewModel.ControllerCol.Count);
             mainWinVM.ControllerCol = conLvViewModel.ControllerCol;
             controllerLV.DataContext = conLvViewModel;
             controllerLV.ItemsSource = conLvViewModel.ControllerCol;
@@ -1172,12 +1174,17 @@ Suspend support not enabled.", true);
 
         private void UpdateLastStatusMessage(object sender, DS4Windows.DebugEventArgs e)
         {
-            lastLogMsg.Message = e.Data;
-            lastLogMsg.Warning = e.Warning;
+            string message = e.Data;
+            bool warning = e.Warning;
+            DateTime timestamp = DateTime.Now;
+            if (!Dispatcher.HasShutdownStarted && !Dispatcher.HasShutdownFinished)
+                Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                    footerControl.UpdateActivity(message, warning, timestamp)));
         }
 
         private void ChangeControllerPanel()
         {
+            footerControl.UpdateControllerCount(conLvViewModel.ControllerCol.Count);
             bool manualRowsVisible = switch2JoyConManualPanel?.Visibility ==
                 Visibility.Visible;
             if (conLvViewModel.ControllerCol.Count == 0)
@@ -1356,30 +1363,18 @@ Suspend support not enabled.", true);
 
             Dispatcher.BeginInvoke((Action)(() =>
             {
-                if (service.running)
-                {
-                    StartStopBtn.Content = Translations.Strings.StopText;
-                }
-                else
-                {
-                    StartStopBtn.Content = Translations.Strings.StartText;
-                }
+                footerControl.UpdateService(service.running);
 
                 StartStopBtn.IsEnabled = true;
                 slotManControl.IsEnabled = service.running;
             }));
         }
 
-        private void AboutBtn_Click(object sender, RoutedEventArgs e)
+        private void ShowAbout(bool hotkeys)
         {
-            About aboutWin = new About();
+            About aboutWin = new About(hotkeys);
             aboutWin.Owner = this;
             aboutWin.ShowDialog();
-        }
-
-        private void StartStopBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeService();
         }
 
         public async void ChangeService()
@@ -1415,8 +1410,7 @@ Suspend support not enabled.", true);
             {
                 // A rejected/retryable stop need not raise ServiceChanged.
                 // Always recover the button, without pretending the service stopped.
-                StartStopBtn.Content = service.running ?
-                    Translations.Strings.StopText : Translations.Strings.StartText;
+                footerControl.UpdateService(service.running);
                 StartStopBtn.IsEnabled = true;
                 slotManControl.IsEnabled = service.running;
                 mainWinVM.RefreshRuntimeState(service);
@@ -1507,13 +1501,8 @@ Suspend support not enabled.", true);
 
             if (mainTabCon.SelectedItem == settingsTab)
             {
-                lastMsgLb.Visibility = Visibility.Hidden;
                 RefreshSwitch2AssociationCandidates();
                 RefreshSwitch2JoyConPairCandidates();
-            }
-            else
-            {
-                lastMsgLb.Visibility = Visibility.Visible;
             }
             if (mainTabCon.SelectedItem == controllersTab)
             {

@@ -84,6 +84,12 @@ public static class AppThemeCatalog
             : (Color)ColorConverter.ConvertFromString(accent);
         // Accent text must be readable on the page, including custom colours.
         if (choice != AppThemeChoice.HighContrast) selected = ReadableAccent(selected, surfaces);
+        dictionary["DisclosureCircleColor"] = systemContrast ? Frozen(SystemColors.WindowColor) : Brush(choice switch
+        {
+            AppThemeChoice.Light => "#E3EAF3", AppThemeChoice.Paper => "#E4E0D6",
+            AppThemeChoice.Graphite => "#394350", AppThemeChoice.Midnight => "#253241",
+            AppThemeChoice.HighContrast => "#000000", _ => "#26394E"
+        });
         dictionary["SliderThumbColor"] = Frozen(systemContrast ? SystemColors.WindowColor : Colors.White);
         dictionary["AccentColor"] = Frozen(selected);
         dictionary["AccentForegroundColor"] = Frozen(systemContrast ? SystemColors.WindowColor :

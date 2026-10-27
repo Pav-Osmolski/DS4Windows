@@ -7,6 +7,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ToolTipStyles.xaml" />
         <ResourceDictionary Source="SliderStyles.xaml" />
+        <ResourceDictionary Source="DisclosureStyles.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <!-- RGB surface Tag carries the existing channel colour for the dark theme. -->
     <Style x:Key="ProfileRedChannelStyle" TargetType="Border"><Setter Property="Background" Value="{Binding Tag, RelativeSource={RelativeSource Self}}" /></Style>
@@ -19,6 +20,7 @@
         <Setter Property="Template"><Setter.Value><ControlTemplate><Rectangle Margin="2" Stroke="{DynamicResource AccentColor}" StrokeThickness="2" StrokeDashArray="2,1" SnapsToDevicePixels="True"/></ControlTemplate></Setter.Value></Setter>
     </Style>
     <!-- Brushes -->
+    <SolidColorBrush x:Key="DisclosureCircleColor" Color="#FF26394E" />
     <SolidColorBrush x:Key="SliderThumbColor" Color="#FFF4F7FB" />
     <SolidColorBrush x:Key="AccentForegroundColor" Color="White" />
     <SolidColorBrush x:Key="BackgroundColor" Color="#FF070D15" />

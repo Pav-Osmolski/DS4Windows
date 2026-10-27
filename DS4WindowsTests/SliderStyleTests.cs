@@ -14,6 +14,68 @@ public class SliderStyleTests
     public TestContext TestContext { get; set; }
 
     [TestMethod]
+    public void HoverHaloIsRenderedOutsideThumbAndTrackContinuesUnderIt()
+    {
+        string imagePath = Path.Combine(TestContext.TestResultsDirectory, "slider-hover-and-press.png");
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            var theme = AppThemeCatalog.Create(AppThemeChoice.Dark, highContrast: false);
+            var gallery = new StackPanel { Width = 520 };
+            gallery.Resources.MergedDictionaries.Add(theme);
+            var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).GetValue(null);
+            var dragKey = (DependencyPropertyKey)typeof(Thumb).GetField("IsDraggingPropertyKey",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).GetValue(null);
+            foreach (string state in new[] { "Rest", "Hover", "Dragging" })
+            {
+                var slider = new Slider { Minimum = 0, Maximum = 100, Value = 65 };
+                var content = new StackPanel { Margin = new Thickness(24, 12, 24, 12) };
+                var label = new TextBlock { Text = state, Margin = new Thickness(0, 0, 0, 12) };
+                label.SetResourceReference(TextBlock.ForegroundProperty, "ForegroundColor");
+                content.Children.Add(label); content.Children.Add(slider);
+                var card = new Border { Child = content };
+                card.SetResourceReference(Border.BackgroundProperty, "CardBackgroundColor");
+                gallery.Children.Add(card);
+                ThemeConsistencyValidation.Layout(gallery, 520, 300);
+                var track = (Track)slider.Template.FindName("PART_Track", slider);
+                Point original = track.Thumb.TranslatePoint(new Point(), slider);
+                if (state != "Rest") track.Thumb.SetValue(hoverKey, true);
+                if (state == "Dragging") track.Thumb.SetValue(dragKey, true);
+                ThemeConsistencyValidation.Layout(gallery, 520, 300);
+                Assert.AreEqual(original, track.Thumb.TranslatePoint(new Point(), slider));
+                var knob = (Border)track.Thumb.Template.FindName("Knob", track.Thumb);
+                Assert.AreEqual(20d, knob.ActualWidth);
+                Assert.AreEqual(20d, knob.ActualHeight);
+                var halo = (System.Windows.Shapes.Ellipse)track.Thumb.Template.FindName("HoverHalo", track.Thumb);
+                Assert.AreEqual(state == "Rest" ? 0 : state == "Hover" ? .17 : .24, halo.Opacity);
+                Assert.AreEqual(state == "Dragging" ? 5d : 3d, knob.BorderThickness.Left);
+                var fill = (Border)track.DecreaseRepeatButton.Template.FindName("Rail", track.DecreaseRepeatButton);
+                Rect fillBounds = fill.TransformToAncestor(slider).TransformBounds(new Rect(fill.RenderSize));
+                Rect thumbBounds = knob.TransformToAncestor(slider).TransformBounds(new Rect(knob.RenderSize));
+                Assert.AreEqual(thumbBounds.Left + thumbBounds.Width / 2, fillBounds.Right, .5,
+                    "The filled rail must continue to the thumb centre, hiding the inner rounded end cap.");
+                if (state == "Hover")
+                {
+                    var bitmap = new RenderTargetBitmap(520, 300, 96, 96, PixelFormats.Pbgra32);
+                    bitmap.Render(gallery);
+                    Point centre = track.Thumb.TranslatePoint(new Point(10, 10), gallery);
+                    byte[] pixel = new byte[4];
+                    bitmap.CopyPixels(new Int32Rect((int)centre.X, (int)centre.Y - 14, 1, 1), pixel, 4, 0);
+                    Color background = ((SolidColorBrush)theme["CardBackgroundColor"]).Color;
+                    Assert.IsTrue(pixel[0] != background.B || pixel[1] != background.G || pixel[2] != background.R,
+                        "The hover halo must actually paint beyond the knob, rather than being layout-clipped.");
+                }
+            }
+            ThemeConsistencyValidation.Layout(gallery, 520, 300);
+            var screenshot = new RenderTargetBitmap(520, 300, 96, 96, PixelFormats.Pbgra32);
+            screenshot.Render(gallery);
+            var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(screenshot));
+            using var stream = File.Create(imagePath); encoder.Save(stream);
+        });
+        TestContext.AddResultFile(imagePath);
+    }
+
+    [TestMethod]
     public void SharedSlidersFollowLiveThemesAndKeepRangeCommandsTicksAndGeometry()
     {
         string imagePath = Path.Combine(TestContext.TestResultsDirectory, "slider-themes.png");

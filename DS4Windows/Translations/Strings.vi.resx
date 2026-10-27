@@ -6695,4 +6695,12 @@ Backup : </value>
   <data name="UI_45989DE49FB7F66D" xml:space="preserve">
     <value>Chi tiết</value>
   </data>
+  <data name="UI_F4CCAE29E1BB0C20" xml:space="preserve">
+    <value>Đang chạy</value>
+    <comment>Controller service state in the application footer.</comment>
+  </data>
+  <data name="UI_1A4F630AC1B69FD0" xml:space="preserve">
+    <value>Đã dừng</value>
+    <comment>Controller service state in the application footer.</comment>
+  </data>
 </root>

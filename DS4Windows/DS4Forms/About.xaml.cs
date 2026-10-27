@@ -28,7 +28,7 @@ namespace DS4WinWPF.DS4Forms
 {
     public partial class About : Window
     {
-        public About()
+        public About(bool showHotkeys = false)
         {
             InitializeComponent();
             string version = string.IsNullOrWhiteSpace(Global.exeDisplayVersion)
@@ -36,6 +36,7 @@ namespace DS4WinWPF.DS4Forms
                 : Global.exeDisplayVersion;
             versionText.Text = global::DS4Windows.UiText.Format("Version {0}", version);
             licenseText.Text = LoadLicenseText();
+            if (showHotkeys) aboutTabs.SelectedIndex = 1;
             SourceInitialized += (_, _) => FitToWorkArea();
         }
 

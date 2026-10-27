@@ -9,7 +9,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
                     <Grid Background="Transparent">
-                        <Border x:Name="Rail" Height="6" CornerRadius="3"
+                        <!-- Extend the fill to the thumb centre so its end cap is
+                             hidden beneath the knob, rather than rounded off beside it. -->
+                        <Border x:Name="Rail" Height="6" CornerRadius="3" Margin="10,0,-10,0"
                                 VerticalAlignment="Center" Background="{TemplateBinding Background}" />
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -17,7 +19,22 @@
                             <Setter TargetName="Rail" Property="Height" Value="Auto" />
                             <Setter TargetName="Rail" Property="Width" Value="6" />
                             <Setter TargetName="Rail" Property="VerticalAlignment" Value="Stretch" />
+                            <Setter TargetName="Rail" Property="Margin" Value="0,-10,0,10" />
                         </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=Slider}}" Value="Horizontal" />
+                                <Condition Binding="{Binding IsDirectionReversed, RelativeSource={RelativeSource AncestorType=Slider}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Rail" Property="Margin" Value="-10,0,10,0" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=Slider}}" Value="Vertical" />
+                                <Condition Binding="{Binding IsDirectionReversed, RelativeSource={RelativeSource AncestorType=Slider}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Rail" Property="Margin" Value="0,10,0,-10" />
+                        </MultiDataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -31,11 +48,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Grid Background="Transparent">
+                    <!-- Give the halo real layout room. An oversized ellipse in
+                         a 20-DIP slot is layout-clipped by WPF even without ClipToBounds. -->
+                    <Grid Background="Transparent" Margin="-6">
                         <Ellipse x:Name="HoverHalo" Width="32" Height="32" Opacity="0"
                                  HorizontalAlignment="Center" VerticalAlignment="Center"
                                  Fill="{DynamicResource AccentColor}" IsHitTestVisible="False" />
-                        <Border x:Name="Knob" CornerRadius="10" BorderThickness="3"
+                        <Border x:Name="Knob" Margin="6" CornerRadius="10" BorderThickness="3"
                                 Background="{DynamicResource SliderThumbColor}"
                                 BorderBrush="{DynamicResource AccentColor}" />
                     </Grid>
@@ -68,6 +87,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Slider">
                     <Grid x:Name="SliderRoot" Background="{TemplateBinding Background}">
+                        <Border x:Name="BaseRail" Height="6" Margin="10,0" CornerRadius="3"
+                                VerticalAlignment="Center" Background="{DynamicResource BorderColor}" />
                         <TickBar x:Name="BeforeTicks" Visibility="Collapsed" IsHitTestVisible="False"
                                  Height="4" Margin="10,0" VerticalAlignment="Top" Placement="Top"
                                  Fill="{DynamicResource MutedForegroundColor}" />
@@ -88,7 +109,7 @@
                             <Track.IncreaseRepeatButton>
                                 <RepeatButton Style="{StaticResource AppSliderRepeatButtonStyle}"
                                               Command="{x:Static Slider.IncreaseLarge}"
-                                              Background="{DynamicResource BorderColor}" />
+                                              Background="Transparent" />
                             </Track.IncreaseRepeatButton>
                         </Track>
                     </Grid>
@@ -104,6 +125,10 @@
                             <Setter TargetName="AfterTicks" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="Orientation" Value="Vertical">
+                            <Setter TargetName="BaseRail" Property="Height" Value="Auto" />
+                            <Setter TargetName="BaseRail" Property="Width" Value="6" />
+                            <Setter TargetName="BaseRail" Property="Margin" Value="0,10" />
+                            <Setter TargetName="BaseRail" Property="VerticalAlignment" Value="Stretch" />
                             <Setter TargetName="PART_Track" Property="Height" Value="Auto" />
                             <Setter TargetName="PART_Track" Property="Width" Value="20" />
                             <Setter TargetName="PART_Track" Property="VerticalAlignment" Value="Stretch" />

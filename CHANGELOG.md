@@ -6,6 +6,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 ## Unreleased
 
 - Unify sliders across Overview, Audio Haptics, Trigger Lab, battery alerts, controller readings, profile RGB controls and appearance settings. Use a slim rounded track, circular thumb, hover halo, pressed feedback and keyboard focus indication, with live theme/accent colours and consistent disabled states.
+- Replace circular expander indicators with a shared theme-aware design, preserving full-header hover, pressed feedback, keyboard access and the fixed position of the Settings & profiles arrow.
+- Refresh the footer while keeping its collapsed height at 38 DIP. Show service state and controller count, keep warnings visible, expand complete activity details above the bar, and separate Hotkeys and About shortcuts.
 
 ## Released
 
