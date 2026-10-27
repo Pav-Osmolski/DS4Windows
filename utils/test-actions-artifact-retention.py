@@ -40,6 +40,13 @@ class Retention(unittest.TestCase):
   self.assertEqual('evidence',m.kind('DS4Windows_Installer_Lifecycle_Evidence'))
  def test_missing_latest_package_does_not_keep_old_unrelated_run(self):
   d=self.decide([artifact(1,1)],[run(1,'deleted-branch')],{'main'},immediate=True);self.assertTrue(d[1]['delete'])
+ def test_deletion_rejects_unrelated_repositories_and_invalid_ids(self):
+  for repo,identity in [('other/repo',1),('Pav-Osmolski/DS4Windows',-1),('Pav-Osmolski/DS4Windows','1/releases')]:
+   with self.assertRaises(ValueError):m.delete_artifact(repo,identity,'not-a-real-token')
+ def test_live_protected_artifact_keeps_expiry_in_audit(self):
+  a=artifact(1,1);a['expires_at']='2026-10-28T00:00:00Z'
+  d=self.decide([a],[run(1)])
+  self.assertFalse(d[1]['delete']);self.assertEqual(a['expires_at'],d[1]['expiresAt'])
  def test_release_workflow_dispatch_is_preserved(self):
   r=run(1);r.update(event='workflow_dispatch',path='.github/workflows/release.yml')
   self.assertFalse(self.decide([artifact(1,1)],[r],set(),immediate=True)[1]['delete'])

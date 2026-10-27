@@ -61,7 +61,7 @@ def plan(artifacts, runs, branches, releases, now, superseded_now=False):
             immediate = superseded_now and category == 'package' and r['conclusion'] == 'success'
             if not immediate and age < timedelta(days=days): reason = f'within {days}-day retention'
         result.append({'id': a['id'], 'name': a['name'], 'bytes': a['size_in_bytes'], 'run': a.get('workflow_run', {}).get('id'),
-                       'branch': r['head_branch'] if r else None, 'delete': reason is None, 'reason': reason or 'superseded disposable artifact'})
+                       'branch': r['head_branch'] if r else None, 'expiresAt': a.get('expires_at'), 'delete': reason is None, 'reason': reason or 'superseded disposable artifact'})
     return result
 
 def delete_artifact(repo, identity, token):
@@ -111,8 +111,9 @@ def main():
             time.sleep(max(0, .9 - (time.monotonic()-started)))
     after = pages(args.repo, 'actions/artifacts?per_page=100', 'artifacts')
     remaining = {a['id'] for a in after}
-    protected = {a['id'] for a in decisions if not a['delete'] and a['reason'] != 'already expired'}
-    # Natural expiry can race the inventory, so verify protected IDs individually only if missing.
+    protected = {a['id'] for a in decisions if not a['delete'] and a['reason'] != 'already expired'
+                 and (not a.get('expiresAt') or stamp(a['expiresAt']) > datetime.now(timezone.utc))}
+    # Natural expiry is not a deletion by this tool; only still-live protected IDs must remain.
     missing = protected - remaining
     if missing: raise RuntimeError(f'Protected artifacts missing: {sorted(missing)}')
     releases_after = pages(args.repo, 'releases?per_page=100')
