@@ -57,6 +57,8 @@ for available patterns and Reapply indicators.
 
 ## Speaker and headset routing
 
+![Profile Editor Advanced Audio speaker and microphone settings](images/site/profile-editor-advanced-audio.webp)
+
 Open **Profile Editor → Advanced → Audio**. Controls depend on physical model
 and connection.
 

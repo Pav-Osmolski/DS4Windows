@@ -11,6 +11,14 @@ selected by your profile. Available settings depend on the controller and connec
 
 Start here for a summary of your connected controller, active profile and backend status.
 
+### Footer and activity details
+
+The footer shows service state and the connected-controller count. Expand its
+activity area to read the complete message and use **Open log** for more detail.
+**Hotkeys** and **About** have separate shortcuts beside **Stop**.
+
+![Overview with expanded footer activity details](images/site/overview-log-footer-expanded.webp)
+
 ## Controllers
 
 ![Connected controllers and profile controls](images/site/controllers.webp)
@@ -24,6 +32,9 @@ For Joy-Cons, use Link/Unlink or the automatic pairing option. A pair needs a
 left and right controller of the same generation. Choose upright or sideways
 orientation for a single Joy-Con. Switch 2 Bluetooth discovery and association
 are available in **Settings → Controllers**; see [Nintendo setup and options](nintendo-options.md).
+
+Open **Controller info** on the controller card or Overview to inspect available
+physical and emulated device details. See the [Controller info guide](controller-info.md).
 
 ## Profiles
 
@@ -174,7 +185,7 @@ The [Profile Editor guide](profile-editor.md) explains each page and common setu
 tasks. Use [Nintendo Options](nintendo-options.md) and
 [Controller audio](controller-audio.md) for hardware-specific features.
 
-![Profile editor and mapping navigation](images/site/profile-editor.webp)
+![Profile editor and mapping navigation](images/site/profile-editor-button-mapping.webp)
 
 | Page | Purpose |
 | --- | --- |
@@ -196,7 +207,7 @@ that action in this profile. Select a row before choosing **Edit Action** or
 an export. Long names and triggers wrap, and narrow windows allow horizontal
 scrolling. Trigger Lab protection notices remain visible above the list.
 
-![Special Actions with an enabled controller-disconnect shortcut](images/site/special-actions.webp)
+![Special Actions list and profile action controls](images/site/profile-editor-special-actions.webp)
 
 Axis Config separates **Left stick**, **Right stick**, **Triggers** and **Motion
 axes**. Stick pages group dead zones, response shaping, outer-stick actions and
@@ -206,7 +217,7 @@ and Gyro keep their output-mode selectors, with focused cards for the selected
 mode, activation, smoothing and calibration. Changing sections preserves unsaved
 edits; use **Apply** or **Save** to write them as usual.
 
-![Axis Config with left-stick dead zones, sensitivity and live controller readings](images/site/axis-config.webp)
+![Axis Config with left-stick dead zones and sensitivity settings](images/site/profile-editor-axis-config.webp)
 
 Controller Readings groups live status, sticks, triggers, motion sensors and the
 first touchpad contact into cards that wrap to the available width. **Input** is
@@ -215,7 +226,7 @@ show physical input, gray markers show mapped output, and red areas show dead
 zones or drift. The observed physical report interval is not end-to-end latency.
 Sensor bars are read-only; configure behavior on the other editor pages.
 
-![Profile Editor button mapping and controller layout](images/site/profile-editor.webp)
+![Profile Editor button mapping and controller layout](images/site/profile-editor-button-mapping.webp)
 
 The controller diagram follows the selected controller layout.
 
@@ -510,6 +521,11 @@ Speech uses installed Windows voices locally, without a cloud service.
 
 ![Log page with startup entries, backend verification and log-management controls](images/site/log.webp)
 
+The expanded footer also provides a shortcut to the log and the complete latest
+activity message.
+
+![Expanded activity footer with Open log, Hotkeys, About and Stop](images/site/footer-expanded.webp)
+
 The Log page shows startup, controller, profile and backend events, including
 installed/portable deployment mode, USB/IP status and detected driver versions.
 **Copy Text** copies the retained latest 1,000 entries with timestamps, including
@@ -578,7 +594,10 @@ when finished.
 
 ## Hotkeys and About
 
-Open **Hotkeys/About** at the bottom of the main window. The About page shows
+![Hotkeys and About window with project information and help tabs](images/site/hotkeys-about-dialog.webp)
+
+Use the separate **Hotkeys** or **About** buttons in the footer to open the
+corresponding tab of the same window. The About page shows
 this fork's version and links to the website, setup guide, source and issue
 tracker. Hotkeys groups connection shortcuts, touchpad gestures and mapping
 terms, with notes about the settings they require.
