@@ -123,9 +123,6 @@
                             <Setter TargetName="PrimaryChrome" Property="Background" Value="{DynamicResource AccentColor}" />
                             <Setter Property="Foreground" Value="{DynamicResource AccentForegroundColor}" />
                         </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="PrimaryChrome" Property="BorderBrush" Value="{DynamicResource ForegroundColor}" />
-                        </Trigger>
                         <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5" /></Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -134,6 +131,7 @@
     </Style>
 
     <Style x:Key="BridgeSecondaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
         <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
         <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
@@ -156,9 +154,6 @@
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5" /></Trigger>
                     </ControlTemplate.Triggers>
@@ -243,6 +238,7 @@
     </Style>
 
     <Style x:Key="BridgeSettingsCategoryStyle" TargetType="RadioButton">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
         <!-- Each category owns its tooltip; never borrow a distant TabItem tooltip. -->
         <Setter Property="ToolTip" Value="{Binding Content, RelativeSource={RelativeSource Self}}"/>
         <Setter Property="Foreground" Value="{DynamicResource MutedForegroundColor}" />
@@ -267,9 +263,6 @@
                             <Setter TargetName="CategoryChrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}" />
                             <Setter TargetName="CategoryChrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
                             <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="CategoryChrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.45" />
@@ -344,12 +337,32 @@
         </Setter>
     </Style>
 
+    <Style x:Key="BridgeControllerCardsStyle" TargetType="ListView">
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListView">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer x:Name="PART_ScrollViewer" Style="{StaticResource BridgeDropDownScrollViewerStyle}"
+                                      Padding="{TemplateBinding Padding}" CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="BridgeControllerCardItemStyle" TargetType="ListViewItem">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="0,0,0,14" />
+        <Setter Property="Margin" Value="0,0,0,8" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListViewItem">

@@ -97,6 +97,7 @@ namespace DS4WindowsTests
                     Switch2StickCalibrationEditorTests.ValidateStickCalibrationWindow(application);
                     BindingWindowLiveInputLayoutTests.ValidateRenderedBindingWindows(
                         application, resultsDirectory, renderedFiles);
+                    FinalUiConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
                     SharedMenuLayoutTests.ValidateDetachedThemeSwitch(application);
                     ThemeConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
                     AutoProfileLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
@@ -118,7 +119,7 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(143, renderedFiles.Count);
+            Assert.AreEqual(155, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

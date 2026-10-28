@@ -186,7 +186,7 @@ internal static class ControllerInfoWindowValidation
                 XNamespace x="http://schemas.microsoft.com/winfx/2006/xaml";
                 var listMarkup=source.Descendants().Single(e=>(string)e.Attribute(x+"Name")=="controllerLV");
                 var padding=(Thickness)new ThicknessConverter().ConvertFromInvariantString((string)listMarkup.Attribute("Padding"));
-                var list=new ListView { Width=760,Height=180,Padding=padding,ItemContainerStyle=(Style)application.FindResource("BridgeControllerCardItemStyle"),HorizontalContentAlignment=HorizontalAlignment.Stretch };
+                var list=new ListView { Width=760,Height=180,Padding=padding,Style=(Style)application.FindResource("BridgeControllerCardsStyle"),ItemContainerStyle=(Style)application.FindResource("BridgeControllerCardItemStyle"),HorizontalContentAlignment=HorizontalAlignment.Stretch };
                 ScrollViewer.SetHorizontalScrollBarVisibility(list,ScrollBarVisibility.Disabled);
                 VirtualizingPanel.SetIsVirtualizing(list,false);
                 list.Items.Add("Selected controller");list.SelectedIndex=0;list.ApplyTemplate();
@@ -199,6 +199,7 @@ internal static class ControllerInfoWindowValidation
                 var card=(Border)item.Template.FindName("Card",item);
                 Rect bounds=card.TransformToAncestor(list).TransformBounds(new Rect(0,0,card.ActualWidth,card.ActualHeight));
                 Assert.IsTrue(bounds.Left>=8,"Selection outline must be inset from the container.");
+                Assert.AreEqual(bounds.Left,bounds.Top,1.0,"Controller card top and side insets must match in "+theme);
                 Assert.AreEqual(bounds.Left,list.ActualWidth-bounds.Right,1.0,"Controller card side margins must match in "+theme);
                 layoutHost.Close();
             }
