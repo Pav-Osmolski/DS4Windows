@@ -6,7 +6,7 @@ Create or select a saved profile on **Profiles**, or choose **Edit** for a devic
 on **Controllers**. Settings and preview availability depend on the selected
 physical controller and virtual output.
 
-![Profile Editor showing DualSense button mappings](images/site/profile-editor.webp)
+![Profile Editor showing DualSense button mappings](images/site/profile-editor-button-mapping.webp)
 
 ## Saving and previewing
 
@@ -38,7 +38,7 @@ in **Advanced → Output**. For conflicting mouse mappings, use the
 
 ## Special Actions
 
-![Special Actions with an enabled controller-disconnect shortcut](images/site/special-actions.webp)
+![Special Actions list and profile action controls](images/site/profile-editor-special-actions.webp)
 
 Special Actions trigger behaviour from a button combination: macros, program
 launches, profile shifts and Bluetooth disconnects are examples.
@@ -55,6 +55,8 @@ combining actions that also control triggers.
 
 ## Controller Readings
 
+![Controller Readings with live status and stick plots](images/site/profile-editor-controller-readings.webp)
+
 Use the live cards to check battery, observed physical report interval, sticks,
 triggers, motion sensors and the first touchpad contact.
 
@@ -70,7 +72,7 @@ Output after changing its dead zone. Choose the readout controller under
 
 ## Axis Config
 
-![Axis Config with left-stick settings and live controller readings](images/site/axis-config.webp)
+![Axis Config with left-stick response settings](images/site/profile-editor-axis-config.webp)
 
 Choose **Left stick**, **Right stick**, **Triggers** or **Motion axes**. Begin with
 the normal output mode before tuning response.
@@ -100,6 +102,8 @@ Follow [Flick stick calibration](flick-stick-calibration.md) for the in-game
 360° test instead of guessing a calibration value.
 
 ## Lightbar
+
+![Lightbar output, indicator LEDs and profile RGB colours](images/site/profile-editor-lightbar.webp)
 
 Choose **Output Mode** first. In normal mode, use **Profile colors** to adjust
 RGB and optionally **Color by Battery %**. **Battery alert** selects a threshold,
@@ -136,6 +140,8 @@ writer can send another command. Use Apply/Save to persist the selections.
 
 ## Touchpad
 
+![Touchpad mouse movement, tap and scroll controls](images/site/profile-editor-touchpad.webp)
+
 | Output mode | Purpose |
 | --- | --- |
 | Mouse | Relative pointer movement, taps, scrolling and optional trackball behaviour |
@@ -155,6 +161,8 @@ touchpad toggle before expecting a response. Absolute mouse display selection
 is in **Settings → Advanced**; profile-specific options are under Advanced → Input.
 
 ## Gyro
+
+![Gyro output, activation and calibration settings](images/site/profile-editor-gyro.webp)
 
 Choose whether motion drives controls, a mouse, stick-style aiming, steering or
 passthrough. Then configure the selected mode's activation buttons, toggle/hold
@@ -203,6 +211,8 @@ you use it.
 
 ## Advanced
 
+![Advanced Output category with virtual-controller settings](images/site/profile-editor-advanced.webp)
+
 | Category | Purpose |
 | --- | --- |
 | Output | Virtual controller type, disabling virtual output, DS4 trigger output and optional Game Bar compatibility |
@@ -220,8 +230,25 @@ Xbox impulse-trigger translation is separate from Trigger Lab. On DualSense/Edge
 the adaptive-trigger option chooses resistance/vibration output instead of body
 rumble where supported. It cannot add adaptive hardware to other controllers.
 
+![Advanced Audio category with speaker and microphone routing](images/site/profile-editor-advanced-audio.webp)
+
 See [Controller audio](controller-audio.md) and [Game Bar/integrations](integrations.md)
-for setup. Audio Haptics and Trigger Lab also have dedicated editor pages;
-their source/effect controls are explained in the
-[Audio Haptics](user-guide.md#audio-haptics) and [Trigger Lab](user-guide.md#trigger-lab)
-sections of the user guide.
+for setup.
+
+## Audio Haptics and Trigger Lab
+
+These editor pages configure the same audio-driven vibration and adaptive-trigger
+features available from the main navigation. Hardware requirements and effect
+limits are covered in the [Audio Haptics](user-guide.md#audio-haptics) and
+[Trigger Lab](user-guide.md#trigger-lab) guides.
+
+![Audio Haptics controls inside Profile Editor](images/site/profile-editor-audio-haptics.webp)
+
+![Trigger Lab controls inside Profile Editor](images/site/profile-editor-trigger-lab.webp)
+
+## Nintendo Options
+
+Use the hardware-specific cards for desk mouse control, motion aiming, feedback
+and alternate button actions. See the [Nintendo Options guide](nintendo-options.md).
+
+![Nintendo Options cards inside Profile Editor](images/site/profile-editor-nintendo-options.webp)

@@ -2,101 +2,158 @@
 
 [Documentation index](README.md) · [Getting started](getting-started.md)
 
-These screenshots show the .NET 10 interface released in 5.0.35, with refreshed
-WebP captures supplied by Pav-Osmolski on 20 October 2026. Some captures use the
-[PR #56](https://github.com/Pav-Osmolski/DS4Windows/pull/56) test build and show
-its earlier version label. Selected options illustrate the interface; they are
-not recommendations for every controller.
+These current interface captures were supplied by Pav-Osmolski on 28 October 2026,
+covering the updated app, Profile Editor and supporting windows. Selected options
+illustrate the interface; they are not recommendations for every controller.
 
 ## Overview
 
-See connected controllers, active profiles and controller status at a glance.
-[Overview guide](user-guide.md#overview).
+See the active profile, connection, battery and virtual-controller status. [Overview guide](user-guide.md#overview).
 
-![Overview dashboard with a connected controller and profile controls](images/site/overview.webp)
+![Overview dashboard with a connected DualSense and quick profile controls](images/site/overview.webp)
+
+### Expanded activity footer
+
+Expand the footer to inspect the complete activity message without leaving the current page.
+
+![Overview with the activity footer expanded](images/site/overview-log-footer-expanded.webp)
+
+![Expanded footer with activity details, Open log, Hotkeys, About and Stop controls](images/site/footer-expanded.webp)
 
 ## Controllers
 
-Select a controller, assign its profile or open the editor.
-[Controllers guide](user-guide.md#controllers).
+Assign a saved profile or open controller details. [Controllers guide](user-guide.md#controllers).
 
-![Connected controllers and profile controls](images/site/controllers.webp)
+![Connected controller card with profile, Edit and lightbar controls](images/site/controllers.webp)
+
+### Controller info
+
+Inspect available physical and emulated controller details. [Controller info guide](controller-info.md).
+
+![Controller info showing physical identity and status](images/site/controller-info-dialog.webp)
 
 ## Profiles
 
-Create, edit and manage saved profiles for different games and applications.
-[Profiles guide](user-guide.md#profiles).
+Create and organise profiles, choose a view, or manage their save location. [Profiles guide](user-guide.md#profiles).
 
-![Saved profiles and profile-management controls](images/site/profiles.webp)
+![Profiles page with custom icons, view controls and settings storage options](images/site/profiles.webp)
 
 ## Profile Editor
 
-Build a mapping around your game, then fine-tune axes, gyro, lighting and
-controller-specific behaviour. [Profile Editor guide](profile-editor.md).
+Choose a control on the diagram or mapping list, then configure its action. [Profile Editor guide](profile-editor.md).
 
-![Profile Editor with controller mapping and configuration categories](images/site/profile-editor.webp)
+![Profile Editor Button Mapping page with controller diagram and mapping cards](images/site/profile-editor-button-mapping.webp)
 
-### Button mapping
+### Button mapping dialog
 
-Choose a controller button, keyboard key, mouse action or macro for a control.
-[Button Mapping guide](profile-editor.md#button-mapping).
+Assign a controller output, keyboard key, mouse action or macro. [Button Mapping guide](profile-editor.md#button-mapping).
 
-![Button remapping dialog](images/site/remapping-dialog.webp)
+![Button mapping dialog with keyboard, controller, mouse and extra actions](images/site/remapping-dialog.webp)
 
 ### Special Actions
 
-Create shortcuts for macros, profile shifts, program launches or Bluetooth
-disconnects. Enable each action for the profiles that should use it.
-[Special Actions guide](profile-editor.md#special-actions).
+Create and enable shortcuts for macros, profile shifts and other actions. [Special Actions guide](profile-editor.md#special-actions).
 
-![Special Actions with an enabled controller-disconnect shortcut](images/site/special-actions.webp)
+![Special Actions list and profile action controls](images/site/profile-editor-special-actions.webp)
+
+### Controller Readings
+
+Compare physical input with mapped output. [Controller Readings guide](profile-editor.md#controller-readings).
+
+![Controller Readings showing controller status, sticks and sensor plots](images/site/profile-editor-controller-readings.webp)
 
 ### Axis Config
 
-Tune dead zones, sensitivity and response curves while comparing live physical
-input with mapped output. [Axis Config guide](profile-editor.md#axis-config).
+Tune dead zones, sensitivity and response curves. [Axis Config guide](profile-editor.md#axis-config).
 
-![Axis Config with left-stick settings and live controller readings](images/site/axis-config.webp)
+![Axis Config showing left-stick dead zones and response settings](images/site/profile-editor-axis-config.webp)
+
+### Lightbar
+
+Configure profile lighting and available controller indicators. [Lightbar guide](profile-editor.md#lightbar).
+
+![Lightbar output, indicator LEDs and RGB profile colours](images/site/profile-editor-lightbar.webp)
+
+### Touchpad
+
+Select a touchpad output mode and tune its behaviour. [Touchpad guide](profile-editor.md#touchpad).
+
+![Touchpad mouse movement, tapping and scrolling settings](images/site/profile-editor-touchpad.webp)
+
+### Gyro
+
+Choose motion output and activation conditions. [Gyro guide](profile-editor.md#gyro).
+
+![Gyro output, stick activation, calibration and compatibility settings](images/site/profile-editor-gyro.webp)
+
+### Audio Haptics in a profile
+
+Configure audio-driven vibration while editing a profile. [Audio Haptics guide](user-guide.md#audio-haptics).
+
+![Profile Editor Audio Haptics page](images/site/profile-editor-audio-haptics.webp)
+
+### Trigger Lab in a profile
+
+Configure adaptive-trigger effects on supported hardware. [Trigger Lab guide](user-guide.md#trigger-lab).
+
+![Profile Editor Trigger Lab page with left and right trigger controls](images/site/profile-editor-trigger-lab.webp)
+
+### Advanced
+
+Use focused Output, Feedback, Audio, Input and Connection categories. [Advanced guide](profile-editor.md#advanced).
+
+![Advanced Output category with virtual-controller settings](images/site/profile-editor-advanced.webp)
+
+### Advanced controller audio
+
+Choose supported controller speaker, headset and microphone routes. [Controller audio guide](controller-audio.md).
+
+![Advanced Audio category with DualSense speaker and microphone routing](images/site/profile-editor-advanced-audio.webp)
+
+### Nintendo Options
+
+Configure hardware-dependent Nintendo features. [Nintendo Options guide](nintendo-options.md).
+
+![Nintendo Options with mouse-on-a-desk and motion-aiming cards](images/site/profile-editor-nintendo-options.webp)
 
 ## Audio Haptics
 
-Turn system or application audio into vibration, with intensity, response and
-optional frequency filters. Audio Haptics is separate from native game-authored
-haptics. [Audio Haptics guide](user-guide.md#audio-haptics).
+Turn captured sound into vibration. This is separate from native game-authored haptics. [Audio Haptics guide](user-guide.md#audio-haptics).
 
-![Audio Haptics with response controls and expanded frequency filters](images/site/audio-haptics.webp)
+![Audio Haptics source, response and processing controls](images/site/audio-haptics.webp)
 
 ## Trigger Lab
 
-Explore adaptive-trigger effects, presets and full-pull actions on compatible
-hardware. [Trigger Lab guide](user-guide.md#trigger-lab).
+Explore adaptive-trigger effects and presets. [Trigger Lab guide](user-guide.md#trigger-lab).
 
-![Trigger Lab with linked left and right trigger controls](images/site/trigger-lab.webp)
+![Trigger Lab with left and right trigger effect controls](images/site/trigger-lab.webp)
 
 ## Auto Profiles
 
-Switch profiles automatically using application and window-title rules.
-[Auto Profiles guide](user-guide.md#auto-profiles).
+Switch profiles using application and window-title rules. [Auto Profiles guide](user-guide.md#auto-profiles).
 
-![Application and window-title profile rules](images/site/auto-profiles.webp)
+![Auto Profiles with application rules and controller-profile assignments](images/site/auto-profiles.webp)
 
 ## Output Slots
 
-Inspect virtual-controller slots and manage reservations.
-[Output Slots guide](user-guide.md#output-slots).
+Inspect virtual output slots and manage reservations. [Output Slots guide](user-guide.md#output-slots).
 
-![Output Slots with virtual-controller reservations](images/site/output-slots.webp)
+![Output Slots table and virtual-controller reservations](images/site/output-slots.webp)
 
 ## Settings
 
-Find startup, appearance, controller, integration and advanced preferences in
-focused sections. [Settings guide](user-guide.md#settings).
+Find startup, appearance, controller and integration preferences. [Settings guide](user-guide.md#settings).
 
-![Settings showing General startup, window behaviour and notification options](images/site/settings.webp)
+![Settings General page with startup and window preferences](images/site/settings.webp)
 
 ## Log and diagnostics
 
-Copy or export the current log, enable verbose details while troubleshooting,
-and manage stored logs. [Diagnostics guide](user-guide.md#log-and-diagnostics).
+Inspect activity, enable verbose details when needed and manage stored logs. [Diagnostics guide](user-guide.md#log-and-diagnostics).
 
-![Log page with startup entries, copy, export, verbose logging and retention controls](images/site/log.webp)
+![Log page with service entries and log-management controls](images/site/log.webp)
+
+## Hotkeys and About
+
+Open Hotkeys or About from the footer. [Hotkeys and About guide](user-guide.md#hotkeys-and-about).
+
+![Hotkeys and About window with version, project links and information tabs](images/site/hotkeys-about-dialog.webp)

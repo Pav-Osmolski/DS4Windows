@@ -15,7 +15,10 @@ Final prompt:
 the application's original PNG is unchanged.
 
 Screenshots in `docs/images/site/` are actual application captures, not generated
-UI illustrations. The initial captures came from the .NET 10 PR #56 test build
-on 19 October 2026. Pav-Osmolski supplied refreshed WebP captures and the
-Special Actions and Axis Config screenshots on 20 October 2026. The current
-Settings capture shows General; the Log capture includes startup entries.
+UI illustrations. Pav-Osmolski supplied the complete replacement set of 26 WebP
+captures on 28 October 2026. They are copied unchanged from the maintainer's
+`Updates/Assets/Screenshots/WEBP/` collection and cover the main pages, individual
+Profile Editor sections, Controller info, Hotkeys & About and the expanded footer.
+These replace the older 19–20 October captures, including the PR #56 test-build
+images. The [gallery](../../docs/screenshots.md) uses every supplied capture;
+relevant guides also embed the images beside their instructions.
