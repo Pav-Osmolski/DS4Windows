@@ -43,6 +43,7 @@ namespace DS4Windows
         public byte RY { get => RYAxis.LegacyValue; set => RYAxis = DS4MappedStickAxis.FromLegacy(value); }
         public byte L2, R2;
         public byte L2Raw, R2Raw;
+        public DS3ButtonPressure DS3Pressure;
         public byte FrameCounter; // 0, 1, 2...62, 63, 0....
         public byte TouchPacketCounter; // we break these out automatically
         public byte Battery; // 0 for charging, 10/20/30/40/50/60/70/80/90/100 for percentage of full
@@ -187,6 +188,7 @@ namespace DS4Windows
             elapsedTime = state.elapsedTime;
             totalMicroSec = state.totalMicroSec;
             ds4Timestamp = state.ds4Timestamp;
+            DS3Pressure = state.DS3Pressure;
             DualSenseRawInputStatus = state.DualSenseRawInputStatus;
             Switch2RawInputStatus = state.Switch2RawInputStatus;
             Switch2JoyConRawInputStatus = state.Switch2JoyConRawInputStatus;
@@ -266,6 +268,7 @@ namespace DS4Windows
             state.elapsedTime = elapsedTime;
             state.totalMicroSec = totalMicroSec;
             state.ds4Timestamp = ds4Timestamp;
+            state.DS3Pressure = DS3Pressure;
             state.DualSenseRawInputStatus = DualSenseRawInputStatus;
             state.Switch2RawInputStatus = Switch2RawInputStatus;
             state.Switch2JoyConRawInputStatus = Switch2JoyConRawInputStatus;
@@ -294,6 +297,7 @@ namespace DS4Windows
             state.ds4Timestamp = ds4Timestamp;
             state.FrameCounter = FrameCounter;
             state.TouchPacketCounter = TouchPacketCounter;
+            state.DS3Pressure = DS3Pressure;
             state.DualSenseRawInputStatus = DualSenseRawInputStatus;
             state.Switch2RawInputStatus = Switch2RawInputStatus;
             state.Switch2JoyConRawInputStatus = Switch2JoyConRawInputStatus;

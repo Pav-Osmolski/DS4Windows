@@ -6766,4 +6766,7 @@
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Просматривайте события службы и диагностические сообщения.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Показывать подсказки</value>
+  </data>
 </root>

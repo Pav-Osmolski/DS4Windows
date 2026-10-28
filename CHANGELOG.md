@@ -1,4 +1,4 @@
-# Changelog
+﻿# Changelog
 
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
@@ -8,6 +8,28 @@ archives, checksums, and build records are available on [Releases](https://githu
 There are currently no unreleased changes.
 
 ## Released
+
+### [5.0.56](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.56) - 2026-10-28
+
+- Polish the action-binding dialog: centre RGB rails within stable theme-aware channel fills shared with the Lightbar editor, fit the lightbar selector inside Extra, balance separator spacing, refresh Default/Unbound buttons with themed selection states, and align the keyboard options and macro action without increasing the window size.
+
+- Keep navigation tooltips on sidebar headers instead of empty page areas. Prevent dropdown hover from scrolling partially visible options and eliminate the trailing blank space at the bottom of long lists while retaining keyboard scrolling. Keep primary action hover/pressed colours consistent through theme changes, including Edit active profile. Align Auto Profiles controller labels and centre all rows against their dropdowns.
+
+- Preserve DualShock 3 face-button, D-pad and L1/R1 pressure when mapped to analogue triggers or stick directions, including partial presses and releases. Existing digital button, keyboard and macro assignments keep their on/off behavior. Requires the raw DsHidMini SXS input mode; its DS4-compatible mode does not expose these extra pressure channels. Thanks [@eVenent](https://github.com/eVenent) for [the request](https://github.com/Pav-Osmolski/DS4Windows/issues/92).
+
+- Keep the controller Edit split button and inset arrow while matching its left action to secondary-button hover/pressed colours and preventing the fill from obscuring the rounded outline.
+
+- Give Settings and Advanced category buttons their own localized tooltip descriptions, preventing unrelated parent-tab help from flashing and leaving Input or Connection without tooltips. Refresh detached tray popup colours when opening after a theme change, including nested menus, highlights and separators.
+
+- Unify tray menus, profile submenus, Lightbar controls and the controller Edit popup with themed rounded surfaces and a fixed check column, keeping checked and unchecked labels aligned. Restore consistent padding around button-mapping cards in every theme.
+
+- Keep the Auto Profiles rule editor at the top on initial navigation by making its scroll container the first keyboard stop, instead of focusing a lower checkbox and clipping the heading.
+- Dismiss tooltips on clicks, scrolling, keyboard navigation, owner removal and window deactivation, and respect the configured hover duration. Track the visible hover control when tab content is displayed separately from its tooltip placement target, without closing help on ordinary pointer motion or cursor queries. Add an enabled-by-default Show tooltips preference under Settings > Appearance, with translations in every language pack.
+- Correct Profile Editor spacing: separate the battery dropdown and number field, use the shared animated Nintendo expanders with clear header gaps, and centre Nintendo button-choice checkboxes inside their tiles.
+- Standardise dropdowns throughout the app with an inset arrow, rounded field and popup, animated hover/press/open/focus feedback, selected-item checks, editable and disabled states, and live theme colours. Preserve taller fields, use a 32-DIP minimum, add controller icons to profile selectors and keep a minimal gap before update-storage helper text.
+- Apply the current theme to the About / Hotkeys window before first render, paint the native erase surface and window frame with the current palette, and keep the backgrounds synchronised when the theme changes.
+
+Implemented in [#91](https://github.com/Pav-Osmolski/DS4Windows/pull/91).
 
 ### [5.0.55](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.55) - 2026-10-27
 

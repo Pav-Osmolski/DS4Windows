@@ -183,37 +183,11 @@ namespace DS4Windows.InputDevices
                     cState.PacketCounter = pState.PacketCounter + 1;
                     cState.ReportTimeStamp = utcNow;
 
-                    cState.Share = (featureReport[2 + reportOffset] & 0x01) > 0;
-                    cState.L3 = (featureReport[2 + reportOffset] & 0x02) > 0;
-                    cState.R3 = (featureReport[2 + reportOffset] & 0x04) > 0;
-                    cState.Options = (featureReport[2 + reportOffset] & 0x08) > 0;
-                    cState.DpadUp = ((featureReport[2 + reportOffset] & 0x10) > 0) && featureReport[14 + reportOffset] > 0;
-                    cState.DpadRight = ((featureReport[2 + reportOffset] & 0x20) > 0) && featureReport[15 + reportOffset] > 0;
-                    cState.DpadDown = ((featureReport[2 + reportOffset] & 0x40) > 0) && featureReport[16 + reportOffset] > 0;
-                    cState.DpadLeft = ((featureReport[2 + reportOffset] & 0x80) > 0) && featureReport[17 + reportOffset] > 0;
-
-                    cState.L2 = ((featureReport[3 + reportOffset] & 0x01) > 0) ? featureReport[18 + reportOffset] : (byte)0x00;
-                    cState.R2 = ((featureReport[3 + reportOffset] & 0x02) > 0) ? featureReport[19 + reportOffset] : (byte)0x00;
-
-                    cState.L1 = ((featureReport[3 + reportOffset] & 0x04) > 0) && featureReport[20 + reportOffset] > 0;
-                    cState.R1 = ((featureReport[3 + reportOffset] & 0x08) > 0) && featureReport[21 + reportOffset] > 0;
-                    cState.Triangle = ((featureReport[3 + reportOffset] & 0x10) > 0) && featureReport[22 + reportOffset] > 0;
-                    cState.Circle = ((featureReport[3 + reportOffset] & 0x20) > 0) && featureReport[23 + reportOffset] > 0;
-                    cState.Cross = ((featureReport[3 + reportOffset] & 0x40) > 0) && featureReport[24 + reportOffset] > 0;
-                    cState.Square = ((featureReport[3 + reportOffset] & 0x80) > 0) && featureReport[25 + reportOffset] > 0;
-                    cState.PS = (featureReport[4 + reportOffset] & 0x01) > 0;
-
-                    cState.L2Btn = cState.L2 > 0;
-                    cState.R2Btn = cState.R2 > 0;
-
-                    cState.L2Raw = cState.L2;
-                    cState.R2Raw = cState.R2;
-
-                    cState.LX = featureReport[6 + reportOffset];
-                    cState.LY = featureReport[7 + reportOffset];
-                    cState.RX = featureReport[8 + reportOffset];
-                    cState.RY = featureReport[9 + reportOffset];
-
+                    if (!DS3InputReportParser.TryReadControls(featureReport, reportOffset, cState))
+                    {
+                        HandleInputTransportLoss();
+                        continue;
+                    }
 
                     if ((this.featureSet & VidPidFeatureSet.NoBatteryReading) == 0)
                     {

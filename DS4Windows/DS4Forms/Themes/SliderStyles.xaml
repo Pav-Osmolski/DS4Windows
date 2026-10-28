@@ -15,6 +15,10 @@
                                 VerticalAlignment="Center" Background="{TemplateBinding Background}" />
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <!-- RGB fills frame the whole visible rail and thumb, with equal end insets. -->
+                        <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource AncestorType=Slider}}" Value="RgbChannel">
+                            <Setter TargetName="Rail" Property="Margin" Value="0,0,-10,0" />
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=Slider}}" Value="Vertical">
                             <Setter TargetName="Rail" Property="Height" Value="Auto" />
                             <Setter TargetName="Rail" Property="Width" Value="6" />
@@ -114,6 +118,9 @@
                         </Track>
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="Tag" Value="RgbChannel">
+                            <Setter TargetName="BaseRail" Property="Margin" Value="0" />
+                        </Trigger>
                         <Trigger Property="TickPlacement" Value="TopLeft">
                             <Setter TargetName="BeforeTicks" Property="Visibility" Value="Visible" />
                         </Trigger>

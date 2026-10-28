@@ -6730,4 +6730,7 @@ Backup : </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Xem hoạt động của dịch vụ và thông báo chẩn đoán.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Hiển thị chú giải công cụ</value>
+  </data>
 </root>

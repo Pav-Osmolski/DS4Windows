@@ -6752,4 +6752,7 @@ Le backup : </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Consultez l’activité du service et les messages de diagnostic.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Afficher les infobulles</value>
+  </data>
 </root>

@@ -79,8 +79,10 @@ public class ContextualHeaderTests
                     ProfileEditorMode = editor, ProfileEditorSectionTitle = "Button mapping",
                     ProfileEditorSectionDescription = "Assign controller buttons and shortcuts." };
                 shell.DataContext = State(false);
-                shell.Items.Add(new TabItem { Header = "Overview", ToolTip = "Your controller, profile and output.", Content = new Grid() });
-                shell.Items.Add(new TabItem { Header = "Profiles", ToolTip = "Create and organise controller profiles.", Content = new Grid() });
+                var overview = new TabItem { Header = "Overview", Content = new Grid() };
+                AppToolTips.SetHeaderHelp(overview, "Your controller, profile and output."); shell.Items.Add(overview);
+                var profiles = new TabItem { Header = "Profiles", Content = new Grid() };
+                AppToolTips.SetHeaderHelp(profiles, "Create and organise controller profiles."); shell.Items.Add(profiles);
                 shell.SelectedIndex = 0;
                 ThemeConsistencyValidation.Layout(shell, 1180, 680);
                 var ordinary = (PageHeaderControl)shell.Template.FindName("sectionHeader", shell);

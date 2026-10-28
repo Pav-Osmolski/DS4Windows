@@ -7,6 +7,7 @@
         Title="{lex:LocExtension HotkeysAbout}" Width="960" Height="780"
         MinWidth="620" MinHeight="480" WindowStartupLocation="CenterOwner"
         UseLayoutRounding="True" SnapsToDevicePixels="True"
+        Background="{DynamicResource BackgroundColor}" Foreground="{DynamicResource ForegroundColor}"
         Style="{DynamicResource WindowStyle}">
     <Window.Resources>
         <BitmapImage x:Key="AboutBanner" UriSource="/DS4Windows;component/Resources/About/about-banner.png"/>

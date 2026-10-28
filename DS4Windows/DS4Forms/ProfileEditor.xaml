@@ -19,7 +19,9 @@
         <local:ControlIndexCheck x:Key="controlIndexCheck" />
         <local:ResourcePaths x:Key="resourcesPaths" />
         <!-- RGB sliders share the application slider geometry and interaction states. -->
-        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}" />
+        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}">
+            <Setter Property="Tag" Value="RgbChannel" />
+        </Style>
         <!-- Output-mode selectors keep their indices and contents; only page chrome is replaced. -->
         <Style x:Key="ProfileModeTabControlStyle" TargetType="TabControl">
             <Setter Property="Template">
@@ -389,6 +391,9 @@
                                      VirtualizingPanel.IsVirtualizing="True"
                                      VirtualizingPanel.VirtualizationMode="Recycling"
                                      MouseDoubleClick="MappingListBox_MouseDoubleClick">
+                                <ListBox.Resources>
+                                    <Style TargetType="ScrollViewer" BasedOn="{StaticResource BridgeDropDownScrollViewerStyle}"/>
+                                </ListBox.Resources>
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -1430,7 +1435,7 @@
                                             <TextBlock Text="{lex:Loc Strings:UI_C01932122161F43A}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                                             <TextBlock Text="{lex:Loc Strings:UI_2FE9FD087181A439}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                <ComboBox x:Name="flashTypeCombo" SelectedIndex="{Binding FlashTypeIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
+                                                <ComboBox x:Name="flashTypeCombo" Margin="0,0,8,0" SelectedIndex="{Binding FlashTypeIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
                                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_CFE6FCB880DCAC80}"/>
                                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_8652A56735CD92D4}"/>
                                                 </ComboBox>
@@ -2317,10 +2322,12 @@
                                 <Style TargetType="CheckBox" BasedOn="{StaticResource CheckBoxStyle}">
                                     <Setter Property="Margin" Value="0,6,0,6"/>
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                                     <Setter Property="ContentTemplate">
                                         <Setter.Value>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding}" TextWrapping="Wrap" VerticalAlignment="Center"/>
                                             </DataTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -2347,7 +2354,7 @@
                                 <Style TargetType="Button" BasedOn="{StaticResource BridgeSecondaryButtonStyle}">
                                     <Setter Property="MinHeight" Value="34"/>
                                 </Style>
-                                <Style TargetType="Expander">
+                                <Style TargetType="Expander" BasedOn="{StaticResource AppExpanderStyle}">
                                     <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
                                 </Style>
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource BridgeSettingsComboBoxStyle}"/>
@@ -2728,7 +2735,7 @@
                                     <Button Content="{lex:Loc Strings:UI_38964095FEA2629B}" Click="Switch2OpenAimSetup_Click" HorizontalAlignment="Left" Margin="26,0,0,12" Padding="10,5"/>
                                     <Expander x:Name="switch2PairCard" IsExpanded="false" HorizontalContentAlignment="Stretch" AutomationProperties.Name="Which Joy-Con aims?">
                                         <Expander.Header>
-                                            <StackPanel>
+                                            <StackPanel Margin="4,0,0,0">
                                                 <TextBlock Text="{lex:Loc Strings:UI_83383472D36117C2}" FontWeight="SemiBold" TextWrapping="Wrap"/>
                                                 <TextBlock Text="{lex:Loc Strings:UI_1DE023F74A3C37E5}" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}"/>
                                             </StackPanel>
@@ -3176,11 +3183,11 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <WrapPanel Margin="0,0,0,12">
-                        <RadioButton Content="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="True" x:Name="profileAdvancedOutputNav"/>
-                        <RadioButton Content="{lex:Loc Strings:UI_AAC77DF347205252}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedFeedbackNav"/>
+                        <RadioButton Content="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="True" x:Name="profileAdvancedOutputNav" ToolTip="{lex:Loc Strings:UI_A515680B15783021}" />
+                        <RadioButton Content="{lex:Loc Strings:UI_AAC77DF347205252}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedFeedbackNav" ToolTip="{lex:Loc Strings:UI_3F33CB8FFADB96A1}" />
                         <RadioButton Content="{lex:Loc Strings:UI_BC1B88907D3B748A}" IsEnabled="{Binding ShowPlayStationControllerSettings}" ToolTip="{lex:Loc Strings:UI_A922B12BAC1D2FDE}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedAudioNav"/>
-                        <RadioButton Content="{lex:Loc Strings:UI_36ECB4F8669133CE}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedInputNav"/>
-                        <RadioButton Content="{lex:Loc Strings:UI_639A40E82B9A96F0}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedConnectionNav"/>
+                        <RadioButton Content="{lex:Loc Strings:UI_36ECB4F8669133CE}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedInputNav" ToolTip="{lex:Loc Strings:UI_934FBA0B1F994893}" />
+                        <RadioButton Content="{lex:Loc Strings:UI_639A40E82B9A96F0}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedConnectionNav" ToolTip="{lex:Loc Strings:UI_1BB65CE01C169723}" />
                     </WrapPanel>
                     <Grid Grid.Row="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding IsChecked, ElementName=profileAdvancedOutputNav, Converter={StaticResource BooleanToVisibilityConverter}}">

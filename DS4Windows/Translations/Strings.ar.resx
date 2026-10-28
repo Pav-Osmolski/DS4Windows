@@ -6733,4 +6733,7 @@ Backup : </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>مراجعة نشاط الخدمة ورسائل التشخيص.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>إظهار تلميحات الأدوات</value>
+  </data>
 </root>

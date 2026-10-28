@@ -36,6 +36,33 @@ after changing output type if it does not detect the new virtual controller.
 
 You can rename, duplicate, import and export profiles from the Profiles page.
 
+### DualShock 3 pressure-sensitive mappings
+
+A DualShock 3 can report how firmly its face buttons, D-pad, L1 and R1 are
+pressed. DS4Windows preserves those values when you map these buttons to
+analogue triggers or stick directions. L2/R2 continue to work as analogue
+triggers. Ordinary button, keyboard and macro assignments remain on/off actions.
+
+1. Configure the DS3 in **SXS (Sixaxis-compatible)** mode in DsHidMini, reconnect
+   it and check that DS4Windows detects it as a DualShock 3. See the official
+   [DsHidMini device-mode guide](https://docs.nefarius.at/projects/DsHidMini/v2/HID-Device-Modes-Explained/).
+2. Edit its profile and open **Button Mapping**. Double-click a button and assign
+   an analogue target. For example, map **Cross to R2 / right trigger** for
+   acceleration and **Square to L2 / left trigger** for braking. D-pad directions
+   can also map to stick directions for pressure-sensitive steering.
+3. Save the profile and test gradual presses in the game or a controller tester.
+   A light press produces a partial value; releasing the button returns it to zero.
+
+Use an emulated controller with analogue triggers, such as Xbox 360, Xbox One,
+DualShock 4 or DualSense, for acceleration/braking. Switch 2 Pro has digital
+triggers; its stick axes can still use pressure-sensitive mappings. This does
+not make virtual face buttons pressure-sensitive or add virtual DS3 output.
+
+DsHidMini's **DS4-compatible** mode exposes L2/R2 pressure in its standard report,
+but not the extra face-button, D-pad or shoulder pressure channels required here.
+Other controllers retain their existing mapping behavior. Physical DS3 testing
+is recommended before relying on a particular racing-game layout.
+
 ### Profile views and icons
 
 **Tiles** is the default profile view. Switch to **List** for compact rows or
@@ -370,11 +397,16 @@ Settings fills the available window width and groups related options into cards.
 | Section | What you can change |
 | --- | --- |
 | General | Startup, window behavior, notifications and latency warnings |
-| Appearance | App theme, sidebar icon, tray icon and language |
+| Appearance | App theme, sidebar icon, tray icon, language and tooltips |
 | Controllers | VIIPER setup, HidHide, Steam Input recovery, device options and swipe profiles; optional Nintendo pairing |
 | Updates & tools | Update checks, profile folder, diagnostic utilities, verbose logging and optional profile-editor timing logs (off by default) |
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
+
+In **Settings > Appearance**, **Show tooltips** is enabled by default. Turn it off
+to hide hover help throughout the app. The change applies immediately and is
+remembered when you restart. Tooltips dismiss when you leave their control, click,
+scroll, navigate with the keyboard or leave the window.
 
 In **Settings > Appearance > Theme and tray icon**, choose **Follow Windows**,
 **Light**, **Dark**, **Graphite**, **Paper**, **Midnight** or **High contrast**.

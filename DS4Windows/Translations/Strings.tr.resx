@@ -6752,4 +6752,7 @@ backup için: </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Hizmet etkinliğini ve tanılama iletilerini inceleyin.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Araç ipuçlarını göster</value>
+  </data>
 </root>

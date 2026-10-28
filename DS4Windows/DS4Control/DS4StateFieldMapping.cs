@@ -35,6 +35,7 @@ namespace DS4Windows
         public int[] gryodirs = new int[(int)LAST_DS4_ACTION + 1];
         public byte[] swipedirs = new byte[(int)LAST_DS4_ACTION + 1];
         public bool[] swipedirbools = new bool[(int)LAST_DS4_ACTION + 1];
+        private DS3ButtonPressure ds3Pressure;
         public bool touchButton = false;
         public bool outputTouchButton = false;
 
@@ -164,6 +165,7 @@ namespace DS4Windows
         {
             unchecked
             {
+                ds3Pressure = cState.DS3Pressure;
                 axisdirs.SetMappedAxis((int)DS4Controls.LXNeg, cState.LXAxis);
                 axisdirs.SetMappedAxis((int)DS4Controls.LXPos, cState.LXAxis);
                 axisdirs.SetMappedAxis((int)DS4Controls.LYNeg, cState.LYAxis);
@@ -273,6 +275,19 @@ namespace DS4Windows
                 outputTouchButton = cState.OutputTouchButton;
             }
         }
+
+        internal bool TryGetButtonPressure(DS4Controls control, out byte value)
+        {
+            if (!ds3Pressure.TryGetValue(control, out value)) return false;
+            // Respect suppression/removal by earlier mapping stages. Raw
+            // pressure must not resurrect a consumed digital source.
+            if (!buttons[(int)control]) value = 0;
+            return true;
+        }
+
+        internal byte GetButtonMagnitude(DS4Controls control) =>
+            TryGetButtonPressure(control, out byte value) ? value :
+                (byte)(buttons[(int)control] ? 255 : 0);
 
         public static bool IsTriggerFullPull(byte rawTriggerValue)
         {

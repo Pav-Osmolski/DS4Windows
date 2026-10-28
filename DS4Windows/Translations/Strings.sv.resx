@@ -6728,4 +6728,7 @@ och backup: </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Granska tjänstens aktivitet och diagnostikmeddelanden.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Visa verktygstips</value>
+  </data>
 </root>

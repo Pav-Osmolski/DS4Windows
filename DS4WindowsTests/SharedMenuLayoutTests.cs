@@ -1,0 +1,207 @@
+﻿using DS4Windows;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Markup;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Xml.Linq;
+using DS4WinWPF.DS4Forms.Themes;
+
+namespace DS4WindowsTests;
+
+[TestClass, DoNotParallelize]
+public class SharedMenuLayoutTests
+{
+    [TestMethod]
+    public void CheckedProfilesKeepTheirLabelColumnAcrossThemes()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            foreach (var theme in new[] { AppThemeChoice.Light, AppThemeChoice.Dark, AppThemeChoice.Graphite, AppThemeChoice.Paper, AppThemeChoice.Midnight, AppThemeChoice.HighContrast })
+            {
+                var menu = new ContextMenu();
+                menu.Resources.MergedDictionaries.Add(AppThemeCatalog.Create(theme, highContrast: false));
+                menu.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative) });
+                var first = new MenuItem { Header = "Default" };
+                var second = new MenuItem { Header = "Windows Control", IsChecked = true };
+                var parent = new MenuItem { Header = "Controller 1" };
+                parent.Items.Add(new MenuItem { Header = "MAME" });
+                menu.Items.Add(first); menu.Items.Add(second); menu.Items.Add(new Separator()); menu.Items.Add(parent);
+                Layout(menu);
+                var a = (ContentPresenter)first.Template.FindName("MenuHeader", first);
+                var b = (ContentPresenter)second.Template.FindName("MenuHeader", second);
+                Assert.IsNotNull(a, theme.ToString()); Assert.IsNotNull(b);
+                Assert.AreEqual(a.TranslatePoint(new Point(), first).X, b.TranslatePoint(new Point(), second).X, .01);
+                var tick = (System.Windows.Shapes.Path)second.Template.FindName("MenuCheck", second);
+                Assert.AreEqual(Visibility.Visible, tick.Visibility);
+                second.IsChecked = false; menu.UpdateLayout();
+                Assert.AreEqual(Visibility.Hidden, tick.Visibility);
+                Assert.AreEqual(a.TranslatePoint(new Point(), first).X, b.TranslatePoint(new Point(), second).X, .01);
+                Assert.AreEqual(Visibility.Visible, ((FrameworkElement)parent.Template.FindName("SubmenuArrow", parent)).Visibility);
+                var popup = (Popup)parent.Template.FindName("PART_Popup", parent);
+                Assert.AreEqual(PlacementMode.Right, popup.Placement);
+                Assert.AreEqual(7d, ((Border)popup.Child).CornerRadius.TopLeft);
+                var split = new Xceed.Wpf.Toolkit.SplitButton { Content = "Edit", Height = 34, Width = 100, Resources = menu.Resources, DropDownContent = new Button { Content = "New profile" } };
+                Layout(split);
+                Assert.IsNotNull(split.Template.FindName("PART_ActionButton", split));
+                Assert.IsNotNull(split.Template.FindName("PART_ToggleButton", split));
+                Assert.AreEqual(34d, split.ActualHeight);
+                second.IsChecked = true; menu.UpdateLayout();
+                var bitmap = new RenderTargetBitmap((int)menu.ActualWidth, (int)menu.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+                bitmap.Render(menu);
+                var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                Directory.CreateDirectory("menu-renders");
+                using var output = File.Create($"menu-renders/{theme}.png"); encoder.Save(output);
+            }
+        });
+    }
+
+    [TestMethod]
+    public void MappingCardsKeepTheirInsetsAcrossThemes()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            XNamespace wpf = "http://schemas.microsoft.com/winfx/2006/xaml/presentation";
+            XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
+            var path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../DS4Windows/DS4Forms/ProfileEditor.xaml"));
+            var source = LocalizedSource.Load(path);
+            foreach (string theme in new[] { "DefaultTheme", "DarkTheme" })
+            {
+                var listMarkup = new XElement(source.Descendants(wpf + "ListBox").Single(e => (string)e.Attribute(x + "Name") == "mappingListBox"));
+                listMarkup.Attribute("MouseDoubleClick")?.Remove(); listMarkup.Attribute("ItemsSource")?.Remove(); listMarkup.Attribute("SelectedIndex")?.Remove();
+                var dictionary = new XElement(wpf + "ResourceDictionary", new XAttribute(XNamespace.Xmlns + "x", x),
+                    new XElement(wpf + "ResourceDictionary.MergedDictionaries",
+                        new XElement(wpf + "ResourceDictionary", new XAttribute("Source", $"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml")),
+                        new XElement(wpf + "ResourceDictionary", new XAttribute("Source", "/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml"))),
+                    new XElement(wpf + "BooleanToVisibilityConverter", new XAttribute(x + "Key", "BooleanToVisibilityConverter")));
+                var wrapper = new XElement(wpf + "Border", new XAttribute("Width", 500), new XAttribute("Height", 200),
+                    new XElement(wpf + "Border.Resources", dictionary), listMarkup);
+                var host = (Border)XamlReader.Parse(LocalizedSource.Markup(wrapper));
+                var list = (ListBox)host.Child;
+                for (int i = 0; i < 20; i++) list.Items.Add(new { ControlName = "Cross", MappingName = "A Button", IsAvailableOnPhysicalController = true });
+                Layout(host);
+                var item = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(0);
+                Assert.IsNotNull(item);
+                Point topLeft = item.TranslatePoint(new Point(), list);
+                Assert.IsTrue(topLeft.X >= 9 && topLeft.X <= 10, theme + " left inset: " + topLeft.X);
+                Assert.IsTrue(topLeft.Y >= 9 && topLeft.Y <= 10, theme + " top inset: " + topLeft.Y);
+                Assert.IsTrue(VirtualizingPanel.GetIsVirtualizing(list));
+                Assert.AreEqual(VirtualizationMode.Recycling, VirtualizingPanel.GetVirtualizationMode(list));
+            }
+        });
+    }
+
+    [TestMethod]
+    public void EditActionKeepsItsSplitAndMatchesSecondaryHoverWithoutCoveringTheOutline()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(null);
+            var pressedKey = (DependencyPropertyKey)typeof(ButtonBase).GetField("IsPressedPropertyKey", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).GetValue(null);
+            foreach (var choice in new[] { AppThemeChoice.Light, AppThemeChoice.Dark, AppThemeChoice.Graphite, AppThemeChoice.Paper, AppThemeChoice.Midnight, AppThemeChoice.HighContrast })
+            {
+                var split = new Xceed.Wpf.Toolkit.SplitButton { Content = "Edit", Width = 110, Height = 34 };
+                split.Resources.MergedDictionaries.Add(AppThemeCatalog.Create(choice, highContrast: false));
+                Layout(split);
+                var action = (Button)split.Template.FindName("PART_ActionButton", split);
+                var arrow = (ToggleButton)split.Template.FindName("PART_ToggleButton", split);
+                var outline = (Border)split.Template.FindName("SplitSurface", split);
+                var surface = (Border)action.Template.FindName("ActionSurface", action);
+                var arrowPosition = arrow.TranslatePoint(new Point(), split);
+                Assert.AreEqual(new CornerRadius(5, 0, 0, 5), surface.CornerRadius);
+                Assert.IsFalse(outline.IsHitTestVisible);
+                Assert.AreEqual(1d, action.TranslatePoint(new Point(), split).X, .01);
+                Assert.AreEqual(32d, action.ActualHeight, .01);
+                foreach (string state in new[] { "normal", "hover", "pressed", "normal" })
+                {
+                    split.SetValue(hoverKey, state != "normal");
+                    action.SetValue(hoverKey, state != "normal"); action.SetValue(pressedKey, state == "pressed");
+                    split.UpdateLayout();
+                    string fill = state == "pressed" ? "NavigationSelectionColor" : state == "hover" ? "RaisedBackgroundColor" : "CardBackgroundColor";
+                    Assert.AreEqual(((SolidColorBrush)split.FindResource(fill)).Color, ((SolidColorBrush)surface.Background).Color, choice + " " + state);
+                    Assert.AreEqual(arrowPosition, arrow.TranslatePoint(new Point(), split), "The inset arrow must not move or be redesigned.");
+                    foreach (double scale in new[] { 1d, 1.5d, 2d })
+                    {
+                        var bitmap = new RenderTargetBitmap((int)(110 * scale), (int)(34 * scale), 96 * scale, 96 * scale, PixelFormats.Pbgra32);
+                        bitmap.Render(split);
+                        var pixel = new byte[4]; bitmap.CopyPixels(new Int32Rect(0, 0, 1, 1), pixel, 4, 0);
+                        Assert.AreEqual((byte)0, pixel[3], choice + " " + state + " must not paint outside the rounded corner.");
+                        bitmap.CopyPixels(new Int32Rect(0, (int)(17 * scale), 1, 1), pixel, 4, 0);
+                        Color border = ((SolidColorBrush)outline.BorderBrush).Color;
+                        Assert.AreEqual(border.R, pixel[2], choice + " " + state + " left outline");
+                        Assert.AreEqual(border.G, pixel[1]); Assert.AreEqual(border.B, pixel[0]);
+                        Directory.CreateDirectory("menu-renders");
+                        var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                        using var output = File.Create($"menu-renders/edit-{choice}-{state}-{scale * 100:0}.png"); encoder.Save(output);
+                    }
+                }
+            }
+        });
+    }
+
+    internal static void ValidateDetachedThemeSwitch(Application application)
+    {
+        var original = application.Resources.MergedDictionaries.ToArray();
+        try
+        {
+            void Theme(AppThemeChoice choice)
+            {
+                application.Resources.MergedDictionaries.Clear();
+                application.Resources.MergedDictionaries.Add(AppThemeCatalog.Create(choice, highContrast: false));
+                application.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative) });
+            }
+            Theme(AppThemeChoice.Dark);
+            var menu = new ContextMenu();
+            var item = new MenuItem { Header = "Controller 1" };
+            var profile = new MenuItem { Header = "Default", IsChecked = true };
+            item.Items.Add(profile); menu.Items.Add(item); menu.Items.Add(new Separator()); menu.Items.Add(new MenuItem { Header = "Stop" });
+            Layout(menu);
+            foreach (var choice in new[] { AppThemeChoice.Light, AppThemeChoice.Dark, AppThemeChoice.Paper, AppThemeChoice.Midnight, AppThemeChoice.Graphite, AppThemeChoice.HighContrast, AppThemeChoice.Light })
+            {
+                Theme(choice); menu.RaiseEvent(new RoutedEventArgs(ContextMenu.OpenedEvent)); Layout(menu);
+                var expected = ((SolidColorBrush)application.Resources["CardBackgroundColor"]).Color;
+                var surface = (Border)menu.Template.FindName("PopupSurface", menu);
+                Assert.AreEqual(expected, ((SolidColorBrush)surface.Background).Color, choice + " detached tray surface");
+                Assert.AreEqual(((SolidColorBrush)application.Resources["ForegroundColor"]).Color, ((SolidColorBrush)item.Foreground).Color, choice + " tray label");
+                System.Windows.VisualStateManager.GoToState(item, "MenuHovered", false);
+                var hover = (Border)item.Template.FindName("MenuHover", item);
+                Assert.AreEqual(((SolidColorBrush)application.Resources["DisclosureHoverColor"]).Color, ((SolidColorBrush)hover.Background).Color, choice + " hover");
+                var popup = (Popup)item.Template.FindName("PART_Popup", item);
+                Layout((FrameworkElement)popup.Child);
+                Assert.AreEqual(expected, ((SolidColorBrush)((Border)popup.Child).Background).Color, choice + " profile submenu surface");
+                profile.ApplyTemplate();
+                var selected = (Border)profile.Template.FindName("MenuSurface", profile);
+                Assert.AreEqual(((SolidColorBrush)application.Resources["NavigationSelectionColor"]).Color, ((SolidColorBrush)selected.Background).Color, choice + " selected profile");
+                if (choice == AppThemeChoice.Light)
+                {
+                    var bitmap = new RenderTargetBitmap((int)menu.ActualWidth, (int)menu.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+                    bitmap.Render(menu); var encoder = new PngBitmapEncoder(); encoder.Frames.Add(BitmapFrame.Create(bitmap));
+                    Directory.CreateDirectory("menu-renders"); using var image = File.Create("menu-renders/tray-switched-to-light.png"); encoder.Save(image);
+                }
+
+                var separator = (Separator)menu.Items[1];
+                Assert.AreEqual(((SolidColorBrush)application.Resources["BorderColor"]).Color, ((SolidColorBrush)Visuals(separator).OfType<Border>().First().Background).Color, choice + " separator");
+            }
+        }
+        finally
+        {
+            application.Resources.MergedDictionaries.Clear();
+            foreach (var dictionary in original) application.Resources.MergedDictionaries.Add(dictionary);
+        }
+    }
+    private static IEnumerable<DependencyObject> Visuals(DependencyObject parent)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i); yield return child;
+            foreach (var nested in Visuals(child)) yield return nested;
+        }
+    }
+
+    private static void Layout(FrameworkElement element)
+    {
+        element.ApplyTemplate(); element.Measure(new Size(500, 500));
+        element.Arrange(new Rect(new Point(), element.DesiredSize)); element.UpdateLayout();
+    }
+}
