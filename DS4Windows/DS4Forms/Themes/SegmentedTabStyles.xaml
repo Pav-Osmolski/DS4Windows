@@ -43,7 +43,7 @@
                 <ControlTemplate TargetType="TabControl">
                     <Grid KeyboardNavigation.TabNavigation="Local">
                         <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
-                        <TabPanel IsItemsHost="True" HorizontalAlignment="Left" Margin="0,0,0,4" />
+                        <StackPanel IsItemsHost="True" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,4" />
                         <ContentPresenter Grid.Row="1" x:Name="PART_SelectedContentHost" ContentSource="SelectedContent"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />

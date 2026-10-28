@@ -31,7 +31,7 @@ There are currently no unreleased changes.
 - Standardise dropdowns throughout the app with an inset arrow, rounded field and popup, animated hover/press/open/focus feedback, selected-item checks, editable and disabled states, and live theme colours. Preserve taller fields, use a 32-DIP minimum, add controller icons to profile selectors and keep a minimal gap before update-storage helper text.
 - Apply the current theme to the About / Hotkeys window before first render, paint the native erase surface and window frame with the current palette, and keep the backgrounds synchronised when the theme changes.
 
-Implemented in [#91](https://github.com/Pav-Osmolski/DS4Windows/pull/91).
+Implemented in [#91](https://github.com/Pav-Osmolski/DS4Windows/pull/91) and [#93](https://github.com/Pav-Osmolski/DS4Windows/pull/93).
 
 ### [5.0.55](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.55) - 2026-10-27
 

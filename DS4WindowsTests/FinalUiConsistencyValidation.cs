@@ -93,12 +93,13 @@ internal static class FinalUiConsistencyValidation
                     link.TranslatePoint(new Point(0, link.ActualHeight / 2), card).Y, .01, "Link profile checkbox must be centred too.");
                 Save(gallery, directory, "final-controls-" + theme + ".png", 940, 560, images);
                 var touch = ProfileAdvancedLayoutTests.Load(theme is AppThemeChoice.Light or AppThemeChoice.Paper ? "DefaultTheme" : "DarkTheme", "Touchpad");
+                ((TabControl)touch.FindName("touchOutputTabControl")).SelectedIndex = 0;
                 ThemeConsistencyValidation.Layout(touch, 1000, 900);
                 touch.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.ContextIdle, new Action(() => { })); touch.UpdateLayout();
                 foreach (string[] group in new[] { new[] { "touchSlideUD", "touchTapUD", "touchScrollUD" }, new[] { "touchMouseRotationUD", "touchMouseThresholdUD", "frictionUD" } })
                 {
                     var controls = group.Select(name => (FrameworkElement)touch.FindName(name)).ToArray();
-                    Assert.IsTrue(controls.All(c => c != null));
+                    Assert.IsTrue(controls.All(c => c != null && c.ActualWidth > 0), "Validate visible, arranged touchpad fields.");
                     double x = controls[0].TranslatePoint(new Point(), touch).X;
                     foreach (var control in controls) Assert.AreEqual(x, control.TranslatePoint(new Point(), touch).X, .01, "Touchpad field alignment: " + control.Name);
                 }
