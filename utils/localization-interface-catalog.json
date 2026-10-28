@@ -10783,5 +10783,11 @@
     "files": [
       "DS4Windows/DS4Forms/MainWindow.xaml"
     ]
+  },
+  "UI_F6B13F9FB56323B7": {
+    "source": "Show tooltips",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
   }
 }

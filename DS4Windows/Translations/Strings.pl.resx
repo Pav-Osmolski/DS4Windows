@@ -6729,4 +6729,7 @@ i backup: </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Przeglądaj aktywność usługi i komunikaty diagnostyczne.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Pokaż podpowiedzi</value>
+  </data>
 </root>

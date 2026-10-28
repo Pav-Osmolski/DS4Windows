@@ -551,6 +551,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
         [XmlIgnore]
         public SidebarIconChoice SidebarIcon { get; private set; } = SidebarIconChoice.BlueTile;
 
+        public bool ShowTooltips { get; set; } = true;
         public double SidebarIconHue { get; set; }
         private string appAccent = "Theme";
         public string AppAccent
@@ -1003,6 +1004,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             AppIcon = source.useIconChoice;
             SidebarIcon = SidebarIconPolicy.Normalize(source.sidebarIcon);
             SidebarIconHue = SidebarIconPolicy.NormalizeHue(source.sidebarIconHue);
+            ShowTooltips = source.showTooltips;
             BatteryAlerts = source.batteryAlerts?.Clone() ?? new();
             AppTheme = source.useCurrentTheme;
             AppAccent = source.appAccent;
@@ -1125,6 +1127,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.useIconChoice = AppIcon;
             destination.sidebarIcon = SidebarIconPolicy.Normalize(SidebarIcon);
             destination.sidebarIconHue = SidebarIconPolicy.NormalizeHue(SidebarIconHue);
+            destination.showTooltips = ShowTooltips;
             destination.batteryAlerts = BatteryAlerts?.Clone() ?? new();
             destination.useCurrentTheme = AppTheme;
             destination.appAccent = AppAccent;

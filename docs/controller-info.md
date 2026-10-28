@@ -4,6 +4,8 @@ Open **Controller info** below the battery indicator in **Overview**, or on the
 relevant card in **Controllers**. Both buttons open the same window for that
 physical controller. You can keep separate windows open for different devices.
 
+![Controller info window with Physical controller and Emulated controller tabs](images/site/controller-info-dialog.webp)
+
 **Physical controller** shows information DS4Windows has already read from the
 connected device: connection, available identifiers, battery, report interval,
 and supported cached Sony firmware information. Opening the window does not
@@ -33,6 +35,6 @@ Review identifiers such as serial numbers before sharing copied information.
 
 ## Backend requirement
 
-Controller info requires the matching VIIPER 0.1.16 backend bundled with
-DS4Windows 5.0.49. Use the complete installer or portable package when upgrading.
-Earlier backends do not provide this information endpoint.
+Controller info was introduced with DS4Windows 5.0.49 and VIIPER 0.1.16. Use the
+matching backend bundled with your current complete installer or portable package.
+Backends older than 0.1.16 do not provide this information endpoint.

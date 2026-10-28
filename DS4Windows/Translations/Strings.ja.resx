@@ -6729,4 +6729,7 @@ Backup : </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>サービスの動作と診断メッセージを確認します。</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>ツールヒントを表示</value>
+  </data>
 </root>

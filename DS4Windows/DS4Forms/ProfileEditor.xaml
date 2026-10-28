@@ -19,7 +19,9 @@
         <local:ControlIndexCheck x:Key="controlIndexCheck" />
         <local:ResourcePaths x:Key="resourcesPaths" />
         <!-- RGB sliders share the application slider geometry and interaction states. -->
-        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}" />
+        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}">
+            <Setter Property="Tag" Value="RgbChannel" />
+        </Style>
         <!-- Output-mode selectors keep their indices and contents; only page chrome is replaced. -->
         <Style x:Key="ProfileModeTabControlStyle" TargetType="TabControl">
             <Setter Property="Template">
@@ -389,6 +391,9 @@
                                      VirtualizingPanel.IsVirtualizing="True"
                                      VirtualizingPanel.VirtualizationMode="Recycling"
                                      MouseDoubleClick="MappingListBox_MouseDoubleClick">
+                                <ListBox.Resources>
+                                    <Style TargetType="ScrollViewer" BasedOn="{StaticResource BridgeDropDownScrollViewerStyle}"/>
+                                </ListBox.Resources>
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -1430,7 +1435,7 @@
                                             <TextBlock Text="{lex:Loc Strings:UI_C01932122161F43A}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                                             <TextBlock Text="{lex:Loc Strings:UI_2FE9FD087181A439}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                <ComboBox x:Name="flashTypeCombo" SelectedIndex="{Binding FlashTypeIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
+                                                <ComboBox x:Name="flashTypeCombo" Margin="0,0,8,0" SelectedIndex="{Binding FlashTypeIndex,FallbackValue=0}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
                                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_CFE6FCB880DCAC80}"/>
                                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_8652A56735CD92D4}"/>
                                                 </ComboBox>
@@ -1523,7 +1528,7 @@
                             <TabItem Header="{lex:Loc Mouse}" Visibility="Collapsed">
                                 <StackPanel>
                                     <Border Style="{DynamicResource BridgeCardStyle}">
-                                        <StackPanel>
+                                        <StackPanel Grid.IsSharedSizeScope="True">
                                             <TextBlock Text="{lex:Loc Strings:UI_0C03AF01D149F688}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
 
                                             <Grid>
@@ -1537,38 +1542,41 @@
                                                     <ColumnDefinition Width="Auto"/>
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                    <CheckBox Content="{lex:Loc TouchSlide}" IsChecked="{Binding TouchSenExists}" VerticalAlignment="Center" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0,0,0,0" VerticalContentAlignment="Center"/>
-                                                    <xctk:IntegerUpDown d:IsHidden="True" MinWidth="80" Maximum="500" Value="{Binding TouchSens}" IsEnabled="{Binding TouchSenExists}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center"/>
-                                                </StackPanel>
+                                                <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" SharedSizeGroup="TouchpadButtonLabels"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                                    <CheckBox Grid.Column="0" Content="{lex:Loc TouchSlide}" IsChecked="{Binding TouchSenExists}" VerticalAlignment="Center" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0,0,12,0" VerticalContentAlignment="Center"/>
+                                                    <xctk:IntegerUpDown x:Name="touchSlideUD" Grid.Column="1" d:IsHidden="True" MinWidth="80" Maximum="500" Value="{Binding TouchSens}" IsEnabled="{Binding TouchSenExists}" Margin="0" MinHeight="34" VerticalAlignment="Center"/>
+                                                </Grid>
                                                 <CheckBox Content="{lex:Loc Strings:UI_BFCE4760DED5D5CD}" Grid.Row="0" Grid.Column="1" Margin="24,0,0,12" IsChecked="{Binding TouchJitter}" VerticalAlignment="Center" ToolTip="{lex:Loc TouchpadJitterCompTooltip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                    <CheckBox Content="{lex:Loc TouchTap}" IsChecked="{Binding TouchTapExists}" VerticalAlignment="Center" ToolTip="{lex:Loc TouchpadTapTooltip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0,0,0,0" VerticalContentAlignment="Center"/>
-                                                    <xctk:IntegerUpDown Value="{Binding TouchTap}" d:IsHidden="True" MinWidth="80" IsEnabled="{Binding TouchTapExists}" ToolTip="{lex:Loc TouchpadTapTooltip}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center"/>
-                                                </StackPanel>
+                                                <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" SharedSizeGroup="TouchpadButtonLabels"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                                    <CheckBox Grid.Column="0" Content="{lex:Loc TouchTap}" IsChecked="{Binding TouchTapExists}" VerticalAlignment="Center" ToolTip="{lex:Loc TouchpadTapTooltip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0,0,12,0" VerticalContentAlignment="Center"/>
+                                                    <xctk:IntegerUpDown x:Name="touchTapUD" Grid.Column="1" Value="{Binding TouchTap}" d:IsHidden="True" MinWidth="80" IsEnabled="{Binding TouchTapExists}" ToolTip="{lex:Loc TouchpadTapTooltip}" Margin="0" MinHeight="34" VerticalAlignment="Center"/>
+                                                </Grid>
                                                 <CheckBox Content="{lex:Loc Strings:UI_E772F78B46EF6D26}" Grid.Row="1" Grid.Column="1" Margin="24,0,0,12" IsChecked="{Binding TouchDoubleTap}" VerticalAlignment="Center" ToolTip="{lex:Loc Resources:TapAndHold}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="0,0,0,12" VerticalAlignment="Center">
-                                                    <CheckBox Content="{lex:Loc TouchScroll}" IsChecked="{Binding TouchScrollExists}" VerticalAlignment="Center" ToolTip="{lex:Loc TouchpadSlideTooltip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0,0,0,0" VerticalContentAlignment="Center"/>
-                                                    <xctk:IntegerUpDown Value="{Binding TouchScroll}" d:IsHidden="True" MinWidth="80" IsEnabled="{Binding TouchScrollExists}" ToolTip="{lex:Loc TouchpadSlideTooltip}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center"/>
-                                                </StackPanel>
+                                                <Grid Grid.Row="2" Grid.Column="0" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" SharedSizeGroup="TouchpadButtonLabels"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                                    <CheckBox Grid.Column="0" Content="{lex:Loc TouchScroll}" IsChecked="{Binding TouchScrollExists}" VerticalAlignment="Center" ToolTip="{lex:Loc TouchpadSlideTooltip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0,0,12,0" VerticalContentAlignment="Center"/>
+                                                    <xctk:IntegerUpDown x:Name="touchScrollUD" Grid.Column="1" Value="{Binding TouchScroll}" d:IsHidden="True" MinWidth="80" IsEnabled="{Binding TouchScrollExists}" ToolTip="{lex:Loc TouchpadSlideTooltip}" Margin="0" MinHeight="34" VerticalAlignment="Center"/>
+                                                </Grid>
                                                 <CheckBox Content="{lex:Loc Strings:UI_B5C9F0BA7137615F}" Grid.Row="2" Grid.Column="1" Margin="24,0,0,12" IsChecked="{Binding LowerRightTouchRMB}" VerticalAlignment="Center" ToolTip="{lex:Loc Resources:BestUsedRightSide}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                                                 <CheckBox Content="{lex:Loc Strings:UI_993AE34F833F524A}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" IsChecked="{Binding TouchpadClickPassthru}" VerticalAlignment="Center" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                                             </Grid>
                                             <CheckBox Content="{lex:Loc Strings:UI_921B671F423B14A9}" IsChecked="{Binding StartTouchpadOff}" VerticalAlignment="Center" ToolTip="{lex:Loc Resources:TouchpadOffTip}" Margin="0,10,0,14" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                            <Grid Margin="0,0,0,12" VerticalAlignment="Center"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" SharedSizeGroup="TouchpadAdvancedLabels"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_57B5E2FC1BBA18BB}" ContentStringFormat="{}{0}:" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                                <xctk:DoubleUpDown d:IsHidden="True" MinWidth="80" Minimum="-180" Maximum="180" Increment="1" FormatString="F0" Value="{Binding TouchRelMouseRotation,FallbackValue='0'}" ToolTip="{lex:Loc TouchpadRotationTooltip}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center"/>
-                                                <TextBlock Text="°" FontSize="18" Margin="3,0,0,0" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                </StackPanel><xctk:DoubleUpDown x:Name="touchMouseRotationUD" Grid.Column="1" d:IsHidden="True" MinWidth="80" Minimum="-180" Maximum="180" Increment="1" FormatString="F0" Value="{Binding TouchRelMouseRotation,FallbackValue='0'}" ToolTip="{lex:Loc TouchpadRotationTooltip}" Margin="0" MinHeight="34" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2" Text="°" FontSize="18" Margin="3,0,0,0" VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Margin="0,0,0,12" VerticalAlignment="Center"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" SharedSizeGroup="TouchpadAdvancedLabels"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_9787E7155CD818BF}" ContentStringFormat="{}{0}:" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                                                <xctk:DoubleUpDown d:IsHidden="True" MinWidth="80" Minimum="1.0" Maximum="40.0" Increment="1.0" FormatString="F1" Value="{Binding TouchRelMouseMinThreshold,FallbackValue='1.0'}" ToolTip="{lex:Loc TouchpadMinThresholdTooltip}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                </StackPanel><xctk:DoubleUpDown x:Name="touchMouseThresholdUD" Grid.Column="1" d:IsHidden="True" MinWidth="80" Minimum="1.0" Maximum="40.0" Increment="1.0" FormatString="F1" Value="{Binding TouchRelMouseMinThreshold,FallbackValue='1.0'}" ToolTip="{lex:Loc TouchpadMinThresholdTooltip}" Margin="0" MinHeight="34" VerticalAlignment="Center"/>
+                                            </Grid>
+                                            <Grid Margin="0,0,0,12" VerticalAlignment="Center"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto" SharedSizeGroup="TouchpadAdvancedLabels"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                                                 <CheckBox Content="{lex:Loc Strings:UI_29F4224BE1B6F5BF}" IsChecked="{Binding TouchTrackball}" VerticalAlignment="Center" ToolTip="{lex:Loc TouchpadTrackballEnableTooltip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0,0,0,0" VerticalContentAlignment="Center"/>
                                                 <Label Content="{lex:Loc Strings:UI_463DA62CA1E6A8CE}" Padding="0" Margin="12,0,12,0" VerticalAlignment="Center"/>
-                                                <xctk:DoubleUpDown x:Name="frictionUD" d:IsHidden="True" MinWidth="80" IsEnabled="{Binding TouchTrackball}" Minimum="0.1" Maximum="20.0" Value="{Binding TouchTrackballFriction,FallbackValue='10'}" ValueChanged="FrictionUD_ValueChanged" ToolTip="{lex:Loc TouchpadTrackballFrictionTooltip}" Margin="8,0,0,0" MinHeight="34" VerticalAlignment="Center"/>
-                                            </StackPanel>
+                                                </StackPanel><xctk:DoubleUpDown Grid.Column="1" x:Name="frictionUD" d:IsHidden="True" MinWidth="80" IsEnabled="{Binding TouchTrackball}" Minimum="0.1" Maximum="20.0" Value="{Binding TouchTrackballFriction,FallbackValue='10'}" ValueChanged="FrictionUD_ValueChanged" ToolTip="{lex:Loc TouchpadTrackballFrictionTooltip}" Margin="0" MinHeight="34" VerticalAlignment="Center"/>
+                                            </Grid>
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Label Content="{lex:Loc Strings:UI_7E04F2FFB9334E3D}" Padding="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                 <ComboBox MinWidth="160" SelectedIndex="{Binding TouchInvertIndex}" Margin="20,0,0,0" MinHeight="34" VerticalAlignment="Center">
@@ -2317,10 +2325,12 @@
                                 <Style TargetType="CheckBox" BasedOn="{StaticResource CheckBoxStyle}">
                                     <Setter Property="Margin" Value="0,6,0,6"/>
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                                     <Setter Property="ContentTemplate">
                                         <Setter.Value>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding}" TextWrapping="Wrap" VerticalAlignment="Center"/>
                                             </DataTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -2347,7 +2357,7 @@
                                 <Style TargetType="Button" BasedOn="{StaticResource BridgeSecondaryButtonStyle}">
                                     <Setter Property="MinHeight" Value="34"/>
                                 </Style>
-                                <Style TargetType="Expander">
+                                <Style TargetType="Expander" BasedOn="{StaticResource AppExpanderStyle}">
                                     <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
                                 </Style>
                                 <Style TargetType="ComboBox" BasedOn="{StaticResource BridgeSettingsComboBoxStyle}"/>
@@ -2728,7 +2738,7 @@
                                     <Button Content="{lex:Loc Strings:UI_38964095FEA2629B}" Click="Switch2OpenAimSetup_Click" HorizontalAlignment="Left" Margin="26,0,0,12" Padding="10,5"/>
                                     <Expander x:Name="switch2PairCard" IsExpanded="false" HorizontalContentAlignment="Stretch" AutomationProperties.Name="Which Joy-Con aims?">
                                         <Expander.Header>
-                                            <StackPanel>
+                                            <StackPanel Margin="4,0,0,0">
                                                 <TextBlock Text="{lex:Loc Strings:UI_83383472D36117C2}" FontWeight="SemiBold" TextWrapping="Wrap"/>
                                                 <TextBlock Text="{lex:Loc Strings:UI_1DE023F74A3C37E5}" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}"/>
                                             </StackPanel>
@@ -3176,11 +3186,11 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <WrapPanel Margin="0,0,0,12">
-                        <RadioButton Content="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="True" x:Name="profileAdvancedOutputNav"/>
-                        <RadioButton Content="{lex:Loc Strings:UI_AAC77DF347205252}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedFeedbackNav"/>
+                        <RadioButton Content="{lex:Loc Strings:UI_B2439BCB8DEE14B6}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="True" x:Name="profileAdvancedOutputNav" ToolTip="{lex:Loc Strings:UI_A515680B15783021}" />
+                        <RadioButton Content="{lex:Loc Strings:UI_AAC77DF347205252}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedFeedbackNav" ToolTip="{lex:Loc Strings:UI_3F33CB8FFADB96A1}" />
                         <RadioButton Content="{lex:Loc Strings:UI_BC1B88907D3B748A}" IsEnabled="{Binding ShowPlayStationControllerSettings}" ToolTip="{lex:Loc Strings:UI_A922B12BAC1D2FDE}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedAudioNav"/>
-                        <RadioButton Content="{lex:Loc Strings:UI_36ECB4F8669133CE}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedInputNav"/>
-                        <RadioButton Content="{lex:Loc Strings:UI_639A40E82B9A96F0}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedConnectionNav"/>
+                        <RadioButton Content="{lex:Loc Strings:UI_36ECB4F8669133CE}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedInputNav" ToolTip="{lex:Loc Strings:UI_934FBA0B1F994893}" />
+                        <RadioButton Content="{lex:Loc Strings:UI_639A40E82B9A96F0}" GroupName="ProfileAdvancedCategory" Style="{DynamicResource BridgeSettingsCategoryStyle}" IsChecked="False" x:Name="profileAdvancedConnectionNav" ToolTip="{lex:Loc Strings:UI_1BB65CE01C169723}" />
                     </WrapPanel>
                     <Grid Grid.Row="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Visibility="{Binding IsChecked, ElementName=profileAdvancedOutputNav, Converter={StaticResource BooleanToVisibilityConverter}}">

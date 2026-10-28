@@ -118,9 +118,9 @@ public sealed class UiColourLayoutTests
             Assert.AreEqual(separator.ActualWidth, paintedLine.ActualWidth, 0.01);
             var left = separator.TranslatePoint(new Point(), menu);
             var right = separator.TranslatePoint(new Point(separator.ActualWidth, 0), menu);
-            Assert.AreEqual(menu.BorderThickness.Left, left.X, 0.01, "The separator must start at the menu's inside edge.");
-            Assert.AreEqual(menu.ActualWidth - menu.BorderThickness.Right, right.X, 0.01, "The separator must reach the opposite inside edge.");
-            Assert.AreEqual(new Thickness(0), menu.Padding);
+            Assert.AreEqual(menu.BorderThickness.Left + menu.Padding.Left, left.X, 0.01, "The separator must start at the menu's inside edge.");
+            Assert.AreEqual(menu.ActualWidth - menu.BorderThickness.Right - menu.Padding.Right, right.X, 0.01, "The separator must reach the opposite inside edge.");
+            Assert.AreEqual(new Thickness(4), menu.Padding);
             Assert.AreEqual(new Thickness(1), menu.BorderThickness);
             var initialColour = ((SolidColorBrush)menu.Background).Color;
             string nextTheme = theme == "DarkTheme" ? "DefaultTheme" : "DarkTheme";

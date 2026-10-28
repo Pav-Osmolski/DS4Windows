@@ -1,12 +1,23 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:DS4WinWPF.DS4Forms.Themes" xmlns:system="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ToolTipStyles.xaml" />
         <ResourceDictionary Source="SliderStyles.xaml" />
+        <ResourceDictionary Source="NumericInputStyles.xaml" />
+        <ResourceDictionary Source="SegmentedTabStyles.xaml" />
         <ResourceDictionary Source="DisclosureStyles.xaml" />
+        <ResourceDictionary Source="ComboBoxStyles.xaml" />
+        <ResourceDictionary Source="MenuStyles.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <!-- RGB surface Tag carries the existing channel colour for the dark theme. -->
+    <Style x:Key="ContextMenuStyle" TargetType="ContextMenu" BasedOn="{StaticResource AppContextMenuStyle}"/>
+    <Style TargetType="ContextMenu" BasedOn="{StaticResource ContextMenuStyle}"/>
+    <Style x:Key="MenuItemStyle" TargetType="MenuItem" BasedOn="{StaticResource AppMenuItemStyle}"/>
+    <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemStyle}"/>
+    <Style x:Key="SplitButtonStyle" TargetType="xctk:SplitButton" BasedOn="{StaticResource AppSplitButtonStyle}"/>
+    <Style TargetType="xctk:SplitButton" BasedOn="{StaticResource SplitButtonStyle}"/>
+    <!-- Stable RGB surfaces shared by the profile editor and binding dialog. -->
     <Style x:Key="ProfileRedChannelStyle" TargetType="Border"><Setter Property="Background" Value="#FFFDE8E8" /></Style>
     <Style x:Key="ProfileGreenChannelStyle" TargetType="Border"><Setter Property="Background" Value="#FFE7F5EB" /></Style>
     <Style x:Key="ProfileBlueChannelStyle" TargetType="Border"><Setter Property="Background" Value="#FFE5EEFF" /></Style>
@@ -235,17 +246,12 @@
     need to use it here because I had to modify it to accomodate for dark theme too -->
     <!--
         BridgeShellStyles is loaded after either application theme and builds
-        its component styles on these stable keys. DarkTheme supplies fully
-        templated versions; the light/default theme intentionally inherits the
-        native Windows control chrome, with shared input spacing.
+        its component styles on these stable keys. Dropdowns share the inset template in both base themes; other controls
+        retain the light/default Windows chrome with shared input spacing.
     -->
     <Style x:Key="ButtonStyle" TargetType="{x:Type Button}" />
     <Style x:Key="CheckBoxStyle" TargetType="{x:Type CheckBox}" />
-    <Style x:Key="ComboBoxStyle" TargetType="{x:Type ComboBox}">
-        <Setter Property="MinHeight" Value="26" />
-        <Setter Property="Padding" Value="5,4" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-    </Style>
+    <Style x:Key="ComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource AppInsetComboBoxStyle}" />
     <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColor}" />
         <Setter Property="MinHeight" Value="26" />
@@ -256,6 +262,6 @@
         <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColor}" />
     </Style>
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxStyle}" />
-    <Style x:Key="ComboBoxItemStyle" TargetType="{x:Type ComboBoxItem}" />
+    <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem" BasedOn="{StaticResource AppInsetComboBoxItemStyle}" />
     <Style x:Key="WindowStyle" TargetType="{x:Type Window}" />
 </ResourceDictionary>

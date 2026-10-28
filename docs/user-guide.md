@@ -11,6 +11,14 @@ selected by your profile. Available settings depend on the controller and connec
 
 Start here for a summary of your connected controller, active profile and backend status.
 
+### Footer and activity details
+
+The footer shows service state and the connected-controller count. Expand its
+activity area to read the complete message and use **Open log** for more detail.
+**Hotkeys** and **About** have separate shortcuts beside **Stop**.
+
+![Overview with expanded footer activity details](images/site/overview-log-footer-expanded.webp)
+
 ## Controllers
 
 ![Connected controllers and profile controls](images/site/controllers.webp)
@@ -25,6 +33,9 @@ left and right controller of the same generation. Choose upright or sideways
 orientation for a single Joy-Con. Switch 2 Bluetooth discovery and association
 are available in **Settings → Controllers**; see [Nintendo setup and options](nintendo-options.md).
 
+Open **Controller info** on the controller card or Overview to inspect available
+physical and emulated device details. See the [Controller info guide](controller-info.md).
+
 ## Profiles
 
 ![Saved profiles](images/site/profiles.webp)
@@ -35,6 +46,33 @@ DualSense when the game supports that controller's features. Restart the game
 after changing output type if it does not detect the new virtual controller.
 
 You can rename, duplicate, import and export profiles from the Profiles page.
+
+### DualShock 3 pressure-sensitive mappings
+
+A DualShock 3 can report how firmly its face buttons, D-pad, L1 and R1 are
+pressed. DS4Windows preserves those values when you map these buttons to
+analogue triggers or stick directions. L2/R2 continue to work as analogue
+triggers. Ordinary button, keyboard and macro assignments remain on/off actions.
+
+1. Configure the DS3 in **SXS (Sixaxis-compatible)** mode in DsHidMini, reconnect
+   it and check that DS4Windows detects it as a DualShock 3. See the official
+   [DsHidMini device-mode guide](https://docs.nefarius.at/projects/DsHidMini/v2/HID-Device-Modes-Explained/).
+2. Edit its profile and open **Button Mapping**. Double-click a button and assign
+   an analogue target. For example, map **Cross to R2 / right trigger** for
+   acceleration and **Square to L2 / left trigger** for braking. D-pad directions
+   can also map to stick directions for pressure-sensitive steering.
+3. Save the profile and test gradual presses in the game or a controller tester.
+   A light press produces a partial value; releasing the button returns it to zero.
+
+Use an emulated controller with analogue triggers, such as Xbox 360, Xbox One,
+DualShock 4 or DualSense, for acceleration/braking. Switch 2 Pro has digital
+triggers; its stick axes can still use pressure-sensitive mappings. This does
+not make virtual face buttons pressure-sensitive or add virtual DS3 output.
+
+DsHidMini's **DS4-compatible** mode exposes L2/R2 pressure in its standard report,
+but not the extra face-button, D-pad or shoulder pressure channels required here.
+Other controllers retain their existing mapping behavior. Physical DS3 testing
+is recommended before relying on a particular racing-game layout.
 
 ### Profile views and icons
 
@@ -147,7 +185,7 @@ The [Profile Editor guide](profile-editor.md) explains each page and common setu
 tasks. Use [Nintendo Options](nintendo-options.md) and
 [Controller audio](controller-audio.md) for hardware-specific features.
 
-![Profile editor and mapping navigation](images/site/profile-editor.webp)
+![Profile editor and mapping navigation](images/site/profile-editor-button-mapping.webp)
 
 | Page | Purpose |
 | --- | --- |
@@ -169,7 +207,7 @@ that action in this profile. Select a row before choosing **Edit Action** or
 an export. Long names and triggers wrap, and narrow windows allow horizontal
 scrolling. Trigger Lab protection notices remain visible above the list.
 
-![Special Actions with an enabled controller-disconnect shortcut](images/site/special-actions.webp)
+![Special Actions list and profile action controls](images/site/profile-editor-special-actions.webp)
 
 Axis Config separates **Left stick**, **Right stick**, **Triggers** and **Motion
 axes**. Stick pages group dead zones, response shaping, outer-stick actions and
@@ -179,7 +217,7 @@ and Gyro keep their output-mode selectors, with focused cards for the selected
 mode, activation, smoothing and calibration. Changing sections preserves unsaved
 edits; use **Apply** or **Save** to write them as usual.
 
-![Axis Config with left-stick dead zones, sensitivity and live controller readings](images/site/axis-config.webp)
+![Axis Config with left-stick dead zones and sensitivity settings](images/site/profile-editor-axis-config.webp)
 
 Controller Readings groups live status, sticks, triggers, motion sensors and the
 first touchpad contact into cards that wrap to the available width. **Input** is
@@ -188,7 +226,7 @@ show physical input, gray markers show mapped output, and red areas show dead
 zones or drift. The observed physical report interval is not end-to-end latency.
 Sensor bars are read-only; configure behavior on the other editor pages.
 
-![Profile Editor button mapping and controller layout](images/site/profile-editor.webp)
+![Profile Editor button mapping and controller layout](images/site/profile-editor-button-mapping.webp)
 
 The controller diagram follows the selected controller layout.
 
@@ -370,11 +408,16 @@ Settings fills the available window width and groups related options into cards.
 | Section | What you can change |
 | --- | --- |
 | General | Startup, window behavior, notifications and latency warnings |
-| Appearance | App theme, sidebar icon, tray icon and language |
+| Appearance | App theme, sidebar icon, tray icon, language and tooltips |
 | Controllers | VIIPER setup, HidHide, Steam Input recovery, device options and swipe profiles; optional Nintendo pairing |
 | Updates & tools | Update checks, profile folder, diagnostic utilities, verbose logging and optional profile-editor timing logs (off by default) |
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
+
+In **Settings > Appearance**, **Show tooltips** is enabled by default. Turn it off
+to hide hover help throughout the app. The change applies immediately and is
+remembered when you restart. Tooltips dismiss when you leave their control, click,
+scroll, navigate with the keyboard or leave the window.
 
 In **Settings > Appearance > Theme and tray icon**, choose **Follow Windows**,
 **Light**, **Dark**, **Graphite**, **Paper**, **Midnight** or **High contrast**.
@@ -478,6 +521,11 @@ Speech uses installed Windows voices locally, without a cloud service.
 
 ![Log page with startup entries, backend verification and log-management controls](images/site/log.webp)
 
+The expanded footer also provides a shortcut to the log and the complete latest
+activity message.
+
+![Expanded activity footer with Open log, Hotkeys, About and Stop](images/site/footer-expanded.webp)
+
 The Log page shows startup, controller, profile and backend events, including
 installed/portable deployment mode, USB/IP status and detected driver versions.
 **Copy Text** copies the retained latest 1,000 entries with timestamps, including
@@ -546,7 +594,10 @@ when finished.
 
 ## Hotkeys and About
 
-Open **Hotkeys/About** at the bottom of the main window. The About page shows
+![Hotkeys and About window with project information and help tabs](images/site/hotkeys-about-dialog.webp)
+
+Use the separate **Hotkeys** or **About** buttons in the footer to open the
+corresponding tab of the same window. The About page shows
 this fork's version and links to the website, setup guide, source and issue
 tracker. Hotkeys groups connection shortcuts, touchpad gestures and mapping
 terms, with notes about the settings they require.

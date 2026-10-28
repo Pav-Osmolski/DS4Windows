@@ -97,6 +97,8 @@ namespace DS4WindowsTests
                     Switch2StickCalibrationEditorTests.ValidateStickCalibrationWindow(application);
                     BindingWindowLiveInputLayoutTests.ValidateRenderedBindingWindows(
                         application, resultsDirectory, renderedFiles);
+                    FinalUiConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
+                    SharedMenuLayoutTests.ValidateDetachedThemeSwitch(application);
                     ThemeConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
                     AutoProfileLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     BatteryAlertsLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
@@ -117,8 +119,8 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            // Main's theme coverage plus this branch's two DirectInput views.
-            Assert.AreEqual(121, renderedFiles.Count);
+            // Main theme coverage plus one DirectInput view for each of six themes.
+            Assert.AreEqual(161, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

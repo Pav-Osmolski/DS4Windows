@@ -6,6 +6,8 @@ Nintendo Options groups hardware-dependent features into cards. The controller
 must expose the relevant hardware; selecting a Nintendo virtual output does not
 add an optical sensor, motion sensor or headset port to a different physical pad.
 
+![Nintendo Options with desk mouse and motion-aiming cards](images/site/profile-editor-nintendo-options.webp)
+
 ## Connect and pair
 
 For Switch 2 Pro, use USB or **Settings → Controllers** Bluetooth discovery and

@@ -34,6 +34,29 @@ internal static class AutoProfileLayoutValidation
                 var list = (ListView)page.FindName("programListLV");
                 list.SelectedItem = draft;
                 Layout(page);
+                var grid = (Grid)page.FindName("autoProfilesGrid");
+                var firstRow = (StackPanel)page.FindName("controller1LabelRow");
+                var firstLabel = firstRow.Children.OfType<Label>().Single();
+                double left = firstLabel.TranslatePoint(new Point(), grid).X;
+                foreach (var label in grid.Children.OfType<Label>().Prepend(firstLabel))
+                {
+                    Assert.AreEqual(VerticalAlignment.Center, label.VerticalAlignment);
+                    Assert.AreEqual(VerticalAlignment.Center, label.VerticalContentAlignment);
+                    Assert.AreEqual(new Thickness(5, 0, 5, 0), label.Padding);
+                    if (label.Visibility != Visibility.Visible) continue;
+                    Assert.AreEqual(left, label.TranslatePoint(new Point(), grid).X, .01, "Controller labels must have the same left inset.");
+                    int index = ReferenceEquals(label, firstLabel) ? 1 : Grid.GetRow(label) + 1;
+                    var dropdown = (ComboBox)page.FindName("cont" + index + "AutoProf");
+                    double middle = label.TranslatePoint(new Point(0, label.ActualHeight / 2), grid).Y;
+                    Assert.AreEqual(dropdown.TranslatePoint(new Point(0, dropdown.ActualHeight / 2), grid).Y, middle, .01,
+                        "Every controller label must be vertically centred against its dropdown.");
+                    var text = Visuals(label).OfType<ContentPresenter>().First();
+                    Assert.AreEqual(middle, text.TranslatePoint(new Point(0, text.ActualHeight / 2), grid).Y, .01,
+                        "The actual label text must also be vertically centred, not just its outer control.");
+                }
+                var all = firstRow.Children.OfType<CheckBox>().Single();
+                Assert.AreEqual(firstLabel.ActualHeight / 2,
+                    all.TranslatePoint(new Point(0, all.ActualHeight / 2), firstRow).Y, .01);
                 var toolbar = new[] { "addProgramsBtn", "hideUncheckedBtn", "moveRuleUpBtn", "moveRuleDownBtn" }
                     .Select(name => (Button)page.FindName(name)).ToArray();
                 foreach (var button in toolbar)
@@ -48,6 +71,9 @@ internal static class AutoProfileLayoutValidation
                 page.Measure(new Size(1180, 540)); page.Arrange(new Rect(0, 0, 1180, 540)); page.UpdateLayout();
                 var editorScroll = (ScrollViewer)page.FindName("sidebarScrollViewer");
                 var editorContent = (StackPanel)page.FindName("outerEditControlsPanel");
+                Assert.AreSame(editorScroll, Visuals(page).OfType<Control>().First(control => control.Focusable && control.IsTabStop && control.Visibility == Visibility.Visible && control.IsEnabled),
+                    "The rule editor scroll container must receive initial tab focus before its lower checkboxes can scroll the heading out of view.");
+                Assert.AreEqual(0d, editorScroll.VerticalOffset, .01, "The initial rule editor view must show its heading from the top.");
                 var scrollbar = (System.Windows.Controls.Primitives.ScrollBar)editorScroll.Template.FindName("PART_VerticalScrollBar", editorScroll);
                 Assert.AreEqual(Visibility.Visible, scrollbar.Visibility);
                 double contentRight = editorContent.TranslatePoint(new Point(editorContent.ActualWidth, 0), page).X;

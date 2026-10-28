@@ -1,10 +1,14 @@
 using System.Runtime.CompilerServices;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Windows.Interop;
+using DS4Windows;
+using DS4WinWPF.DS4Forms.Themes;
 using DS4WinWPF.DS4Forms;
 
 namespace DS4WindowsTests;
@@ -13,6 +17,85 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class AboutLayoutTests
 {
+    [TestMethod]
+    public void AboutAndHotkeysUseTheThemeForTheirNativeSurfaceBeforeFirstRender()
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            var application = Application.Current;
+            var shutdown = application?.ShutdownMode;
+            var mainWindow = application?.MainWindow;
+            if (application != null) application.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            try
+            {
+                foreach (var theme in new[] { AppThemeChoice.Dark, AppThemeChoice.Light, AppThemeChoice.Graphite,
+                    AppThemeChoice.Paper, AppThemeChoice.Midnight, AppThemeChoice.HighContrast })
+                foreach (bool hotkeys in new[] { false, true })
+                {
+                    var window = new About(hotkeys);
+                    try
+                    {
+                        var palette = AppThemeCatalog.Create(theme, highContrast: false);
+                        window.Resources.MergedDictionaries.Add(palette);
+                        Color expected = ((SolidColorBrush)palette["BackgroundColor"]).Color;
+                        Color? firstSurface = null;
+                        bool rendered = false;
+                        window.ContentRendered += (_, _) => rendered = true;
+                        window.SourceInitialized += (_, _) => firstSurface =
+                            HwndSource.FromHwnd(new WindowInteropHelper(window).Handle).CompositionTarget.BackgroundColor;
+                        new WindowInteropHelper(window).EnsureHandle();
+                        Assert.IsFalse(window.IsVisible, "Checking the native surface must not show a desktop window.");
+                        Assert.IsFalse(rendered, "Verify the initial clear colour before any content has rendered.");
+                        AssertNativeEraseUsesTheme(window, expected);
+                        Assert.AreEqual(expected, firstSurface, $"{theme}, hotkeys={hotkeys}: first paint must use the app palette.");
+                        Assert.AreEqual(expected, ((SolidColorBrush)window.Background).Color);
+                        Assert.AreEqual(hotkeys ? 1 : 0, ((TabControl)window.FindName("aboutTabs")).SelectedIndex);
+                        window.Resources.MergedDictionaries[0] = AppThemeCatalog.Create(
+                            theme == AppThemeChoice.Dark ? AppThemeChoice.Paper : AppThemeChoice.Dark, highContrast: false);
+                        Color changed = ((SolidColorBrush)window.FindResource("BackgroundColor")).Color;
+                        AssertNativeEraseUsesTheme(window, changed);
+                        Assert.AreEqual(changed, HwndSource.FromHwnd(new WindowInteropHelper(window).Handle).CompositionTarget.BackgroundColor,
+                            "The native clear colour must follow live theme changes too.");
+                    }
+                    finally { window.Close(); }
+                }
+            }
+            finally
+            {
+                if (application != null) { application.MainWindow = mainWindow; application.ShutdownMode = shutdown.Value; }
+            }
+        });
+    }
+
+    private static void AssertNativeEraseUsesTheme(About window, Color expected)
+    {
+        IntPtr screen = GetDC(IntPtr.Zero);
+        IntPtr dc = CreateCompatibleDC(screen);
+        IntPtr bitmap = CreateCompatibleBitmap(screen, 1, 1);
+        IntPtr previous = SelectObject(dc, bitmap);
+        try
+        {
+            IntPtr result = SendMessage(new WindowInteropHelper(window).Handle, 0x0014, dc, IntPtr.Zero);
+            Assert.AreEqual(new IntPtr(1), result, "The native erase must be handled before WPF renders.");
+            uint pixel = GetPixel(dc, 0, 0);
+            Assert.AreEqual((uint)(expected.R | expected.G << 8 | expected.B << 16), pixel,
+                "Windows must erase the actual native DC with the theme colour, not its default white brush.");
+        }
+        finally
+        {
+            SelectObject(dc, previous); DeleteObject(bitmap); DeleteDC(dc); ReleaseDC(IntPtr.Zero, screen);
+        }
+    }
+    [DllImport("user32.dll")] private static extern IntPtr GetDC(IntPtr hwnd);
+    [DllImport("user32.dll")] private static extern int ReleaseDC(IntPtr hwnd, IntPtr dc);
+    [DllImport("user32.dll")] private static extern IntPtr SendMessage(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam);
+    [DllImport("gdi32.dll")] private static extern IntPtr CreateCompatibleDC(IntPtr dc);
+    [DllImport("gdi32.dll")] private static extern IntPtr CreateCompatibleBitmap(IntPtr dc, int width, int height);
+    [DllImport("gdi32.dll")] private static extern IntPtr SelectObject(IntPtr dc, IntPtr value);
+    [DllImport("gdi32.dll")] private static extern uint GetPixel(IntPtr dc, int x, int y);
+    [DllImport("gdi32.dll")] private static extern bool DeleteObject(IntPtr value);
+    [DllImport("gdi32.dll")] private static extern bool DeleteDC(IntPtr dc);
+
     [TestMethod]
     [DataRow("DarkTheme", 912d, 704d)]
     [DataRow("DefaultTheme", 912d, 704d)]

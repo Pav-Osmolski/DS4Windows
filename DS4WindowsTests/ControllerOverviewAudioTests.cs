@@ -223,9 +223,7 @@ public sealed class ControllerOverviewAudioTests
             Assert.IsNotNull(selected, "The joystick profile must not leave the Overview selector blank.");
             Assert.AreEqual(OutContType.ViiperGenericJoystick, selected.Type);
             Assert.AreEqual(selected.Name, joystickModel.SelectedOutputControllerName);
-            var profileStyle = (Style)overview.FindResource("BridgeProfileComboBoxStyle");
-            var originalItemStyle = (Style)profileStyle.Setters.OfType<Setter>()
-                .Single(s => s.Property == ItemsControl.ItemContainerStyleProperty).Value;
+            var originalItemStyle = (Style)overview.FindResource("BridgeDropDownItemStyle");
             var expectedItem = new ComboBoxItem { Style = originalItemStyle };
             var actualItem = new ComboBoxItem { DataContext = selected, Style = selector.ItemContainerStyle };
             Assert.AreEqual(expectedItem.Padding, actualItem.Padding, "Keep the current Overview item spacing.");

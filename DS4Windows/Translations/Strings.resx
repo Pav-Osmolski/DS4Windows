@@ -8450,4 +8450,7 @@ X axis: {0}, Y axis: {1}</value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Review service activity and diagnostic messages.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Show tooltips</value>
+  </data>
 </root>

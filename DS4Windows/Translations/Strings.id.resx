@@ -6750,4 +6750,7 @@ Untuk backup: </value>
   <data name="UI_49A49EABA8ABEE24" xml:space="preserve">
     <value>Tinjau aktivitas layanan dan pesan diagnostik.</value>
   </data>
+  <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
+    <value>Tampilkan tooltip</value>
+  </data>
 </root>

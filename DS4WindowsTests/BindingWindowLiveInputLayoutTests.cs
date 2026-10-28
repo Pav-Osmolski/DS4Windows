@@ -4,8 +4,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using DS4WinWPF.DS4Forms.ViewModels;
 using DS4Windows;
 using DS4WinWPF.DS4Forms;
+using DS4WinWPF.DS4Forms.Themes;
 
 namespace DS4WindowsTests;
 
@@ -214,12 +218,12 @@ public sealed class BindingWindowLiveInputLayoutTests
         ResourceDictionary[] original = application.Resources.MergedDictionaries.ToArray();
         try
         {
-            foreach (string theme in new[] { "DefaultTheme", "DarkTheme" })
+            foreach (string theme in new[] { "Light", "Dark", "Graphite", "Paper", "Midnight", "HighContrast" })
             {
                 application.Resources.MergedDictionaries.Clear();
-                var colors = new ResourceDictionary();
+                var colors = AppThemeCatalog.Create(Enum.Parse<AppThemeChoice>(theme), highContrast: false);
                 application.Resources.MergedDictionaries.Add(colors);
-                colors.Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml", UriKind.Relative);
+                application.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative) });
                 foreach (bool narrow in new[] { false, true })
                 {
                     foreach (bool show in new[] { false, true })
@@ -314,6 +318,7 @@ public sealed class BindingWindowLiveInputLayoutTests
                     Assert.AreEqual(surface.ActualWidth / 2, center.X, 0.6, "RGB rail is not horizontally centred.");
                     Assert.AreEqual(surface.ActualHeight / 2, center.Y, 0.6, "RGB rail is not vertically centred.");
                 }
+                ValidateBindingPolish(window, content, theme);
             }
             else Assert.AreEqual(Visibility.Collapsed, toggle.Visibility);
             Assert.AreEqual(show ? Visibility.Visible : Visibility.Collapsed, viewport.Visibility);
@@ -352,6 +357,81 @@ public sealed class BindingWindowLiveInputLayoutTests
             Global.outDevTypeTemp[Global.TEST_PROFILE_INDEX] = previousType;
         }
         Assert.IsFalse(preview.IsPolling);
+    }
+
+    private static void ValidateBindingPolish(BindingWindow window, FrameworkElement content, string theme)
+    {
+        var extras = (GroupBox)window.FindName("extrasGB");
+        var combo = (ComboBox)window.FindName("LightbarModeCombo");
+        Rect field = combo.TransformToAncestor(extras).TransformBounds(new Rect(combo.RenderSize));
+        Assert.IsTrue(field.Left >= 0 && field.Right <= extras.ActualWidth - 4,
+            theme + ": Lightbar dropdown must fit inside its group, including its inset arrow.");
+        var sliders = ThemeConsistencyValidation.Visuals(extras).OfType<Slider>().ToArray();
+        Assert.AreEqual(3, sliders.Length);
+        string[] keys = ["ProfileRedChannelStyle", "ProfileGreenChannelStyle", "ProfileBlueChannelStyle"];
+        for (int i = 0; i < sliders.Length; i++)
+        {
+            var slider = sliders[i]; var fill = (Border)slider.Parent;
+            Rect bounds = slider.TransformToAncestor(fill).TransformBounds(new Rect(slider.RenderSize));
+            Assert.AreEqual(bounds.Left, fill.ActualWidth - bounds.Right, 1.01, theme + ": symmetric RGB inset");
+            Assert.AreEqual(fill.ActualHeight / 2, bounds.Top + bounds.Height / 2, 1.01, theme + ": vertically centred RGB slider");
+            var rail = (Border)slider.Template.FindName("BaseRail", slider);
+            Rect railBounds = rail.TransformToAncestor(fill).TransformBounds(new Rect(rail.RenderSize));
+            Assert.AreEqual(railBounds.Left, fill.ActualWidth - railBounds.Right, 1.01,
+                "The visible rail must have equal space at both ends, not just a centred control box.");
+            Assert.AreEqual(fill.Padding.Left, railBounds.Left, 1.01);
+            var reference = new Border { Style = (Style)window.FindResource(keys[i]) };
+            foreach (string tag in new[] { "#00000000", "#60FF0000", "#FFFFFFFF" })
+            {
+                reference.Tag = tag;
+                Assert.AreEqual(((SolidColorBrush)reference.Background).Color, ((SolidColorBrush)fill.Background).Color,
+                    theme + ": binding and profile RGB fills must use the same palette, independent of channel value.");
+            }
+        }
+        foreach (string name in new[] { "extrasModeSeparator", "extrasFlashSeparator" })
+        {
+            var separator = (Border)window.FindName(name);
+            Assert.AreEqual(separator.Margin.Top, separator.Margin.Bottom);
+            Assert.AreEqual(8d, separator.Margin.Top);
+            Assert.AreEqual(((SolidColorBrush)window.FindResource("BorderColor")).Color, ((SolidColorBrush)separator.Background).Color);
+        }
+        var section = (StackPanel)window.FindName("extrasLightbarSection");
+        var modeSeparator = (Border)window.FindName("extrasModeSeparator");
+        var colorTabs = (TabControl)window.FindName("extrasLightbarTabs");
+        double modeY = modeSeparator.TranslatePoint(new Point(), extras).Y;
+        Assert.AreEqual(8d, modeY - combo.TranslatePoint(new Point(0, combo.ActualHeight), extras).Y, 1.01);
+        var changeLight = ThemeConsistencyValidation.Visuals(colorTabs).OfType<CheckBox>().First();
+        Assert.AreEqual(8d, changeLight.TranslatePoint(new Point(), extras).Y - modeSeparator.TranslatePoint(new Point(0, modeSeparator.ActualHeight), extras).Y, 1.01);
+        var flashSeparator = (Border)window.FindName("extrasFlashSeparator");
+        var flashRow = (StackPanel)window.FindName("extrasFlashRow");
+        Assert.AreEqual(8d, flashSeparator.TranslatePoint(new Point(), extras).Y - section.TranslatePoint(new Point(0, section.ActualHeight), extras).Y, 1.01);
+        Assert.AreEqual(8d, flashRow.TranslatePoint(new Point(), extras).Y - flashSeparator.TranslatePoint(new Point(0, flashSeparator.ActualHeight), extras).Y, 1.01);
+        var top = (Grid)window.FindName("topGrid");
+        var title = (TextBlock)window.FindName("keyMouseTopTxt");
+        double middle = title.TranslatePoint(new Point(0, title.ActualHeight / 2), top).Y;
+        foreach (var check in ThemeConsistencyValidation.Visuals(top).OfType<CheckBox>())
+            Assert.AreEqual(middle, check.TranslatePoint(new Point(0, check.ActualHeight / 2), top).Y, 1.01, theme + ": keyboard heading and checkboxes must line up");
+        var record = (Button)window.FindName("recordMacroBtn");
+        Assert.AreEqual(middle, record.TranslatePoint(new Point(0, record.ActualHeight / 2), top).Y, 1.01);
+        Assert.AreEqual(8d, top.Margin.Right, "Macro button needs a right gutter.");
+        var defaults = (Button)window.FindName("defaultBtn");
+        var unbound = (Button)window.FindName("unboundBtn");
+        foreach (bool selected in new[] { false, true })
+        foreach (var button in new[] { defaults, unbound })
+        {
+            button.DataContext = new OutBinding { outputType = selected ?
+                (ReferenceEquals(button, defaults) ? OutBinding.OutType.Default : OutBinding.OutType.Button) : OutBinding.OutType.Key,
+                control = X360Controls.Unbound };
+            button.UpdateLayout();
+            Assert.AreEqual(selected, button.Tag);
+            Assert.IsTrue(button.ActualHeight >= 34);
+            var chrome = (Border)button.Template.FindName("Chrome", button);
+            Assert.AreEqual(((SolidColorBrush)window.FindResource(selected ? "NavigationSelectionColor" : "CardBackgroundColor")).Color,
+                ((SolidColorBrush)chrome.Background).Color, theme + ": themed selection without a hard-coded green fill");
+            button.ClearValue(FrameworkElement.DataContextProperty);
+        }
+        content.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.DataBind, new Action(() => { }));
+        content.UpdateLayout();
     }
 
     private static void AssertInside(FrameworkElement content, FrameworkElement child)
