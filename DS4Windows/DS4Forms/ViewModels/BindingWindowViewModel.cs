@@ -499,6 +499,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private int shiftTriggerIndex;
         public int ShiftTriggerIndex { get => shiftTriggerIndex; set => shiftTriggerIndex = value; }
 
+        public bool IsDefault => outputType == OutType.Default;
+        public bool IsUnbound => outputType == OutType.Button && control == X360Controls.Unbound;
+
         public string DefaultColor
         {
             get

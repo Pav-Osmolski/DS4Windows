@@ -19,6 +19,7 @@ public class SliderStyleTests
         string imagePath = Path.Combine(TestContext.TestResultsDirectory, "slider-hover-and-press.png");
         HeadlessWpfDispatcher.Invoke(() =>
         {
+            _ = new Slider(); // initialize WPF pack-resource support in a focused, cold test process
             var theme = AppThemeCatalog.Create(AppThemeChoice.Dark, highContrast: false);
             var gallery = new StackPanel { Width = 520 };
             gallery.Resources.MergedDictionaries.Add(theme);

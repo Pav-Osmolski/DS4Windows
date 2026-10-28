@@ -19,7 +19,9 @@
         <local:ControlIndexCheck x:Key="controlIndexCheck" />
         <local:ResourcePaths x:Key="resourcesPaths" />
         <!-- RGB sliders share the application slider geometry and interaction states. -->
-        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}" />
+        <Style x:Key="ProfileRgbSliderStyle" TargetType="Slider" BasedOn="{StaticResource AppSliderStyle}">
+            <Setter Property="Tag" Value="RgbChannel" />
+        </Style>
         <!-- Output-mode selectors keep their indices and contents; only page chrome is replaced. -->
         <Style x:Key="ProfileModeTabControlStyle" TargetType="TabControl">
             <Setter Property="Template">

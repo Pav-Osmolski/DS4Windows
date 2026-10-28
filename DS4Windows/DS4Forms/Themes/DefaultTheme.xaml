@@ -15,7 +15,7 @@
     <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemStyle}"/>
     <Style x:Key="SplitButtonStyle" TargetType="xctk:SplitButton" BasedOn="{StaticResource AppSplitButtonStyle}"/>
     <Style TargetType="xctk:SplitButton" BasedOn="{StaticResource SplitButtonStyle}"/>
-    <!-- RGB surface Tag carries the existing channel colour for the dark theme. -->
+    <!-- Stable RGB surfaces shared by the profile editor and binding dialog. -->
     <Style x:Key="ProfileRedChannelStyle" TargetType="Border"><Setter Property="Background" Value="#FFFDE8E8" /></Style>
     <Style x:Key="ProfileGreenChannelStyle" TargetType="Border"><Setter Property="Background" Value="#FFE7F5EB" /></Style>
     <Style x:Key="ProfileBlueChannelStyle" TargetType="Border"><Setter Property="Background" Value="#FFE5EEFF" /></Style>

@@ -109,15 +109,16 @@ internal static class ThemeConsistencyValidation
         var surfaces = Visuals(root).OfType<Border>().Where(b => b.Height == 40 && b.Child is Slider).ToArray();
         Assert.AreEqual(6, surfaces.Length);
         string[] light = ["#FFFDE8E8", "#FFE7F5EB", "#FFE5EEFF"];
+        string[] dark = ["#FF341C24", "#FF153329", "#FF18294B"];
         for (int i = 0; i < surfaces.Length; i++)
         {
             foreach (int alpha in new[] { 0, 96, 255 })
             {
                 string colour = $"#{alpha:X2}" + (i % 3 == 0 ? "FF0000" : i % 3 == 1 ? "00FF00" : "0000FF");
                 surfaces[i].Tag = colour;
-                Color expected = (Color)ColorConverter.ConvertFromString(theme == "DarkTheme" ? colour : light[i % 3]);
+                Color expected = (Color)ColorConverter.ConvertFromString(theme == "DarkTheme" ? dark[i % 3] : light[i % 3]);
                 Assert.AreEqual(expected, ((SolidColorBrush)surfaces[i].Background).Color,
-                    "Both normal and low-battery channels must retain their dark behaviour and readable light tints.");
+                    "Both normal and low-battery channels must keep stable themed fills even at zero or full intensity.");
             }
             surfaces[i].Tag = "#60" + (i % 3 == 0 ? "FF0000" : i % 3 == 1 ? "00FF00" : "0000FF");
         }

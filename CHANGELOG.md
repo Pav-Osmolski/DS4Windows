@@ -5,6 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Polish the action-binding dialog: centre RGB rails within stable theme-aware channel fills shared with the Lightbar editor, fit the lightbar selector inside Extra, balance separator spacing, refresh Default/Unbound buttons with themed selection states, and align the keyboard options and macro action without increasing the window size.
+
 - Keep navigation tooltips on sidebar headers instead of empty page areas. Prevent dropdown hover from scrolling partially visible options and eliminate the trailing blank space at the bottom of long lists while retaining keyboard scrolling. Keep primary action hover/pressed colours consistent through theme changes, including Edit active profile. Align Auto Profiles controller labels and centre all rows against their dropdowns.
 
 - Preserve DualShock 3 face-button, D-pad and L1/R1 pressure when mapped to analogue triggers or stick directions, including partial presses and releases. Existing digital button, keyboard and macro assignments keep their on/off behavior. Requires the raw DsHidMini SXS input mode; its DS4-compatible mode does not expose these extra pressure channels. Thanks [@eVenent](https://github.com/eVenent) for [the request](https://github.com/Pav-Osmolski/DS4Windows/issues/92).
