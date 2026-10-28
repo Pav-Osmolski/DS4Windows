@@ -100,8 +100,8 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
-                                <Label Content="{lex:Loc Controller1Text}" Padding="0" VerticalAlignment="Center" />
+                            <StackPanel x:Name="controller1LabelRow" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource spaceMargin}">
+                                <Label Content="{lex:Loc Controller1Text}" VerticalAlignment="Center" Padding="5,0" VerticalContentAlignment="Center" />
                                 <CheckBox Content="{lex:Loc Strings:UI_A52ACE420F2175D0}" Margin="10,0,0,0" VerticalAlignment="Center"
                                           IsChecked="{Binding ApplyToAllControllers}" />
                             </StackPanel>
@@ -125,7 +125,7 @@
                             </ComboBox>
 
                             <Label Content="{lex:Loc Controller2Text}" Grid.Row="1" Margin="{StaticResource spaceMargin}"
-                                   Visibility="{Binding ControllerSpecificProfilesVisible}" />
+                                   Visibility="{Binding ControllerSpecificProfilesVisible}" VerticalAlignment="Center" Padding="5,0" VerticalContentAlignment="Center" />
                             <ComboBox x:Name="cont2AutoProf" theme:InsetComboBox.ShowControllerIcon="True" Grid.Row="1" Grid.Column="1" Margin="{StaticResource spaceMargin}"
                               Visibility="{Binding ControllerSpecificProfilesVisible}"
                               SelectedIndex="{Binding SelectedIndexCon2}">
@@ -147,7 +147,7 @@
                             </ComboBox>
 
                             <Label Content="{lex:Loc Controller3Text}" Grid.Row="2" Margin="{StaticResource spaceMargin}"
-                                   Visibility="{Binding ControllerSpecificProfilesVisible}" />
+                                   Visibility="{Binding ControllerSpecificProfilesVisible}" VerticalAlignment="Center" Padding="5,0" VerticalContentAlignment="Center" />
                             <ComboBox x:Name="cont3AutoProf" theme:InsetComboBox.ShowControllerIcon="True" Grid.Row="2" Grid.Column="1" Margin="{StaticResource spaceMargin}"
                               Visibility="{Binding ControllerSpecificProfilesVisible}"
                               SelectedIndex="{Binding SelectedIndexCon3}">
@@ -169,7 +169,7 @@
                             </ComboBox>
 
                             <Label Content="{lex:Loc Controller4Text}" Grid.Row="3" Margin="{StaticResource spaceMargin}"
-                                   Visibility="{Binding ControllerSpecificProfilesVisible}" />
+                                   Visibility="{Binding ControllerSpecificProfilesVisible}" VerticalAlignment="Center" Padding="5,0" VerticalContentAlignment="Center" />
                             <ComboBox x:Name="cont4AutoProf" theme:InsetComboBox.ShowControllerIcon="True" Grid.Row="3" Grid.Column="1" Margin="{StaticResource spaceMargin}"
                               Visibility="{Binding ControllerSpecificProfilesVisible}"
                               SelectedIndex="{Binding SelectedIndexCon4}">
@@ -190,7 +190,7 @@
                                 </ComboBox.ItemsSource>
                             </ComboBox>
 
-                        <Label Content="{lex:Loc Controller5Text}" Grid.Row="4" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}" />
+                        <Label Content="{lex:Loc Controller5Text}" Grid.Row="4" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" Padding="5,0" VerticalContentAlignment="Center" />
                         <ComboBox x:Name="cont5AutoProf" theme:InsetComboBox.ShowControllerIcon="True" Grid.Row="4" Grid.Column="1" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}"
                               SelectedIndex="{Binding SelectedIndexCon5}">
                                 <ComboBox.Resources>
@@ -210,7 +210,7 @@
                                 </ComboBox.ItemsSource>
                             </ComboBox>
 
-                        <Label Content="{lex:Loc Controller6Text}" Grid.Row="5" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}" />
+                        <Label Content="{lex:Loc Controller6Text}" Grid.Row="5" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" Padding="5,0" VerticalContentAlignment="Center" />
                         <ComboBox x:Name="cont6AutoProf" theme:InsetComboBox.ShowControllerIcon="True" Grid.Row="5" Grid.Column="1" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}"
                               SelectedIndex="{Binding SelectedIndexCon6}">
                                 <ComboBox.Resources>
@@ -231,7 +231,7 @@
                             </ComboBox>
 
 
-                        <Label Content="{lex:Loc Controller7Text}" Grid.Row="6" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}" />
+                        <Label Content="{lex:Loc Controller7Text}" Grid.Row="6" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" Padding="5,0" VerticalContentAlignment="Center" />
                         <ComboBox x:Name="cont7AutoProf" theme:InsetComboBox.ShowControllerIcon="True" Grid.Row="6" Grid.Column="1" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}"
                               SelectedIndex="{Binding SelectedIndexCon7}">
                                 <ComboBox.Resources>
@@ -251,7 +251,7 @@
                                 </ComboBox.ItemsSource>
                             </ComboBox>
 
-                        <Label Content="{lex:Loc Controller8Text}" Grid.Row="7" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}" />
+                        <Label Content="{lex:Loc Controller8Text}" Grid.Row="7" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}" VerticalAlignment="Center" Padding="5,0" VerticalContentAlignment="Center" />
                         <ComboBox x:Name="cont8AutoProf" theme:InsetComboBox.ShowControllerIcon="True" Grid.Row="7" Grid.Column="1" Visibility="{Binding ExpandedControllerSpecificProfilesVisible}" Margin="{StaticResource spaceMargin}"
                               SelectedIndex="{Binding SelectedIndexCon8}">
                                 <ComboBox.Resources>

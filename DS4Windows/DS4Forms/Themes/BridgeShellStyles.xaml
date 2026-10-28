@@ -92,13 +92,45 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="BridgePrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+    <Style x:Key="BridgePrimaryButtonStyle" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
         <Setter Property="Background" Value="{DynamicResource AccentColor}" />
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
         <Setter Property="Foreground" Value="{DynamicResource AccentForegroundColor}" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Padding" Value="16,8" />
         <Setter Property="MinHeight" Value="36" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <!-- Stable across theme switches, including views retaining this style instance. -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="PrimaryChrome" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PrimaryChrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}" />
+                            <Setter TargetName="PrimaryChrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+                            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="PrimaryChrome" Property="Background" Value="{DynamicResource AccentColor}" />
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForegroundColor}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="PrimaryChrome" Property="BorderBrush" Value="{DynamicResource ForegroundColor}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5" /></Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="BridgeSecondaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
@@ -385,6 +417,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
                     <Border x:Name="NavItem"
+                            ToolTip="{Binding Path=(local:AppToolTips.HeaderHelp), RelativeSource={RelativeSource TemplatedParent}}"
                             Background="{TemplateBinding Background}"
                             BorderBrush="Transparent"
                             BorderThickness="3,0,0,0"
@@ -789,7 +822,7 @@
                             <Grid>
                                 <local:PageHeaderControl x:Name="sectionHeader"
                                     Title="{Binding SelectedItem.Header, RelativeSource={RelativeSource TemplatedParent}}"
-                                    Description="{Binding SelectedItem.ToolTip, RelativeSource={RelativeSource TemplatedParent}}">
+                                    Description="{Binding Path=SelectedItem.(local:AppToolTips.HeaderHelp), RelativeSource={RelativeSource TemplatedParent}}">
                                     <local:PageHeaderControl.Style>
                                         <Style TargetType="local:PageHeaderControl">
                                             <Style.Triggers>

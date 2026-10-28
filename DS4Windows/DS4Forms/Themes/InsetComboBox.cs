@@ -22,6 +22,17 @@ public static class InsetComboBox
     public static readonly DependencyProperty IsItemPressedProperty = DependencyProperty.RegisterAttached(
         "IsItemPressed", typeof(bool), typeof(InsetComboBox), new PropertyMetadata(false));
     public static bool GetIsItemPressed(DependencyObject value) => (bool)value.GetValue(IsItemPressedProperty);
+    private static readonly DependencyProperty KeyboardNavigationProperty = DependencyProperty.RegisterAttached(
+        "KeyboardNavigation", typeof(bool), typeof(InsetComboBox), new PropertyMetadata(false));
+    private static void NavigationKey(object sender, KeyEventArgs e) =>
+        ((ComboBox)sender).SetValue(KeyboardNavigationProperty, true);
+    private static void HoverBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+    {
+        var item = (ComboBoxItem)sender;
+        if (item.IsMouseOver && ItemsControl.ItemsControlFromItemContainer(item) is ComboBox combo &&
+            !(bool)combo.GetValue(KeyboardNavigationProperty))
+            e.Handled = true; // Hover focuses items; it must not scroll a clipped edge item into view.
+    }
     private static readonly DependencyPropertyDescriptor HighlightDescriptor =
         DependencyPropertyDescriptor.FromProperty(ComboBoxItem.IsHighlightedProperty, typeof(ComboBoxItem));
     private static void ItemLoaded(object sender, RoutedEventArgs e)
@@ -49,12 +60,14 @@ public static class InsetComboBox
         {
             if ((bool)args.NewValue)
             {
+                item.RequestBringIntoView += HoverBringIntoView;
                 item.PreviewMouseLeftButtonDown += ItemDown; item.PreviewMouseLeftButtonUp += ItemUp;
                 item.MouseLeave += ItemUp; item.Unloaded += ItemUnloaded; item.Loaded += ItemLoaded;
                 item.MouseEnter += ItemHoverChanged; item.MouseLeave += ItemHoverChanged;
             }
             else
             {
+                item.RequestBringIntoView -= HoverBringIntoView;
                 item.PreviewMouseLeftButtonDown -= ItemDown; item.PreviewMouseLeftButtonUp -= ItemUp;
                 item.MouseLeave -= ItemUp; item.Unloaded -= ItemUnloaded; item.Loaded -= ItemLoaded;
                 item.MouseEnter -= ItemHoverChanged; item.MouseLeave -= ItemHoverChanged;
@@ -65,7 +78,7 @@ public static class InsetComboBox
         if (value is not ComboBox combo) return;
         if ((bool)args.NewValue)
         {
-            combo.Loaded += Loaded;
+            combo.Loaded += Loaded; combo.PreviewKeyDown += NavigationKey;
             combo.MouseEnter += Changed; combo.MouseLeave += Changed; combo.MouseMove += Changed;
             combo.GotKeyboardFocus += FocusChanged; combo.LostKeyboardFocus += FocusChanged;
             combo.PreviewMouseLeftButtonDown += MouseChanged; combo.PreviewMouseLeftButtonUp += MouseChanged;
@@ -74,7 +87,7 @@ public static class InsetComboBox
         }
         else
         {
-            combo.Loaded -= Loaded;
+            combo.Loaded -= Loaded; combo.PreviewKeyDown -= NavigationKey;
             combo.MouseEnter -= Changed; combo.MouseLeave -= Changed; combo.MouseMove -= Changed;
             combo.GotKeyboardFocus -= FocusChanged; combo.LostKeyboardFocus -= FocusChanged;
             combo.PreviewMouseLeftButtonDown -= MouseChanged; combo.PreviewMouseLeftButtonUp -= MouseChanged;
@@ -86,10 +99,20 @@ public static class InsetComboBox
     {
         Update((ComboBox)sender, false);
     }
-    private static void Changed(object sender, MouseEventArgs e) => Update((ComboBox)sender);
+    private static void Changed(object sender, MouseEventArgs e)
+    {
+        var combo = (ComboBox)sender;
+        combo.SetValue(KeyboardNavigationProperty, false);
+        Update(combo);
+    }
     private static void FocusChanged(object sender, KeyboardFocusChangedEventArgs e) => Update((ComboBox)sender);
     private static void MouseChanged(object sender, MouseButtonEventArgs e) => Update((ComboBox)sender);
-    private static void OpenChanged(object sender, System.EventArgs e) => Update((ComboBox)sender);
+    private static void OpenChanged(object sender, System.EventArgs e)
+    {
+        var combo = (ComboBox)sender;
+        combo.SetValue(KeyboardNavigationProperty, false);
+        Update(combo);
+    }
     private static void EnabledChanged(object sender, DependencyPropertyChangedEventArgs e) => Update((ComboBox)sender);
     internal static void Update(ComboBox combo, bool animate = true)
     {

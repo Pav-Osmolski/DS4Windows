@@ -11,7 +11,7 @@ adaptive triggers to your physical controller.
 
 | Physical input | Connection and setup | Features to explore |
 | --- | --- | --- |
-| DualShock 3 | Requires compatible controller drivers; see Device Options | Button/stick mapping and rumble; do not assume DS4/DualSense feature parity |
+| DualShock 3 | Requires compatible controller drivers; see Device Options | Button/stick mapping and rumble. DsHidMini SXS mode supports [pressure-sensitive mappings](user-guide.md#dualshock-3-pressure-sensitive-mappings); DS4-compatible mode carries only L2/R2 pressure. Do not assume DS4/DualSense feature parity |
 | DualShock 4 | USB or Bluetooth | Touchpad, gyro, lightbar, rumble and supported controller-audio routes |
 | DualSense / DualSense Edge | USB or Bluetooth | Touchpad, gyro, lighting, audio, advanced haptics and adaptive triggers |
 | Switch Pro | USB or Bluetooth | Mapping, motion and Nintendo feedback/settings |

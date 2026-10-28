@@ -167,7 +167,7 @@
                         </Border>
                         <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" Placement="Bottom" VerticalOffset="4" IsOpen="{TemplateBinding IsDropDownOpen}" PopupAnimation="Fade">
                             <Border MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}" CornerRadius="7" Padding="4" Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource AccentColor}" BorderThickness="1">
-                                <ScrollViewer Style="{DynamicResource BridgeDropDownScrollViewerStyle}" CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <ScrollViewer Style="{DynamicResource BridgeDropDownScrollViewerStyle}" CanContentScroll="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                                     <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
                                 </ScrollViewer>
                             </Border>

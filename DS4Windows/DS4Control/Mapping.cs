@@ -6799,7 +6799,7 @@ namespace DS4Windows
         /// <param name="tp">Mouse object</param>
         /// <param name="fieldMap">DS4StateFieldMapping instance for current MapCustom run</param>
         /// <returns></returns>
-        private static byte GetByteMapping(int device, DS4Controls control, DS4State cState, DS4StateExposed eState, Mouse tp,
+        internal static byte GetByteMapping(int device, DS4Controls control, DS4State cState, DS4StateExposed eState, Mouse tp,
             DS4StateFieldMapping fieldMap)
         {
             byte result = 0;
@@ -6808,7 +6808,7 @@ namespace DS4Windows
             DS4StateFieldMapping.ControlType controlType = DS4StateFieldMapping.mappedType[controlNum];
             if (controlType == DS4StateFieldMapping.ControlType.Button)
             {
-                result = (byte)(fieldMap.buttons[controlNum] ? 255 : 0);
+                result = fieldMap.GetButtonMagnitude(control);
             }
             else if (controlType == DS4StateFieldMapping.ControlType.AxisDir)
             {
@@ -7272,6 +7272,13 @@ namespace DS4Windows
 
             if (controlType == DS4StateFieldMapping.ControlType.Button)
             {
+                if (fieldMap.TryGetButtonPressure(control, out byte pressure))
+                {
+                    double coordinate = alt ? 128.0 + pressure * (127.0 / 255.0) :
+                        128.0 - pressure * (128.0 / 255.0);
+                    DS4MappedStickAxis.TryFromProfileCoordinate(coordinate, out var pressureAxis);
+                    return pressureAxis;
+                }
                 result = fieldMap.buttons[controlNum] ? trueVal : falseVal;
             }
             else if (controlType == DS4StateFieldMapping.ControlType.AxisDir)

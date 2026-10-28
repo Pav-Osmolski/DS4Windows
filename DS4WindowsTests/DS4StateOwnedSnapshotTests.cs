@@ -302,6 +302,7 @@ public sealed class DS4StateOwnedSnapshotTests
         if (type == typeof(ulong)) return (ulong)seed + 10_000;
         if (type == typeof(float)) return seed + 0.375f;
         if (type == typeof(double)) return -seed - 0.625;
+        if (type == typeof(DS3ButtonPressure)) return new DS3ButtonPressure(true, 1, 17, 33, 65, 97, 129, 161, 193, 225, 255);
         if (type == typeof(DateTime)) return DateTime.UnixEpoch.AddTicks(seed + 1);
         if (type == typeof(Switch2Vector3Raw)) return new Switch2Vector3Raw(
             (short)(seed + 1), (short)(-seed - 2), (short)(seed + 3));

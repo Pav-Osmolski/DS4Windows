@@ -10,8 +10,14 @@ namespace DS4WinWPF.DS4Forms;
 
 // WPF still owns hover detection and opening delays. Keep popup lifetime tied
 // to the current owner so scrolling, navigation and lost focus cannot strand it.
-internal static class AppToolTips
+public static class AppToolTips
 {
+    // A TabItem is also the logical parent of its page. Keep navigation help
+    // as data and expose it only on the visual header, never on the TabItem.
+    public static readonly DependencyProperty HeaderHelpProperty = DependencyProperty.RegisterAttached(
+        "HeaderHelp", typeof(string), typeof(AppToolTips), new PropertyMetadata(null));
+    public static string GetHeaderHelp(DependencyObject target) => (string)target.GetValue(HeaderHelpProperty);
+    public static void SetHeaderHelp(DependencyObject target, string text) => target.SetValue(HeaderHelpProperty, text);
     private static bool initialized;
     private static WeakReference<ToolTip> current;
     private static WeakReference<FrameworkElement> owner;
