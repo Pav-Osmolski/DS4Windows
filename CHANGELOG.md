@@ -11,6 +11,8 @@ There are currently no unreleased changes.
 
 ### [5.0.56](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.56) - 2026-10-28
 
+- Remove automatic focus outlines from page actions while retaining keyboard focus cues. Replace the mapping dialog's old tab strip with readable themed tabs, match controller Edit/lightbar heights to the profile selector, equalise controller-card insets across themes, align touchpad number fields, and apply theme-aware outlines to every numeric-input type.
+
 - Polish the action-binding dialog: centre RGB rails within stable theme-aware channel fills shared with the Lightbar editor, fit the lightbar selector inside Extra, balance separator spacing, refresh Default/Unbound buttons with themed selection states, and align the keyboard options and macro action without increasing the window size.
 
 - Keep navigation tooltips on sidebar headers instead of empty page areas. Prevent dropdown hover from scrolling partially visible options and eliminate the trailing blank space at the bottom of long lists while retaining keyboard scrolling. Keep primary action hover/pressed colours consistent through theme changes, including Edit active profile. Align Auto Profiles controller labels and centre all rows against their dropdowns.

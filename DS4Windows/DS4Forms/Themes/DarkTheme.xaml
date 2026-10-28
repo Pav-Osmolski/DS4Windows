@@ -7,6 +7,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ToolTipStyles.xaml" />
         <ResourceDictionary Source="SliderStyles.xaml" />
+        <ResourceDictionary Source="NumericInputStyles.xaml" />
+        <ResourceDictionary Source="SegmentedTabStyles.xaml" />
         <ResourceDictionary Source="DisclosureStyles.xaml" />
         <ResourceDictionary Source="ComboBoxStyles.xaml" />
         <ResourceDictionary Source="MenuStyles.xaml" />
@@ -774,22 +776,22 @@
     <!-- ComboBoxItem Style -->
     <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem" BasedOn="{StaticResource AppInsetComboBoxItemStyle}" />
 
-    <Style x:Key="DoubleUpDownStyle" TargetType="{x:Type xctk:DoubleUpDown}">
+    <Style x:Key="DoubleUpDownStyle" TargetType="{x:Type xctk:DoubleUpDown}" BasedOn="{StaticResource AppNumericInputStyle}">
         <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
         <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
     </Style>
 
-    <Style x:Key="DecimalUpDownStyle" TargetType="{x:Type xctk:DecimalUpDown}">
+    <Style x:Key="DecimalUpDownStyle" TargetType="{x:Type xctk:DecimalUpDown}" BasedOn="{StaticResource AppNumericInputStyle}">
         <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
         <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
     </Style>
 
-    <Style x:Key="SByteUpDownStyle" TargetType="{x:Type xctk:SByteUpDown}">
+    <Style x:Key="SByteUpDownStyle" TargetType="{x:Type xctk:SByteUpDown}" BasedOn="{StaticResource AppNumericInputStyle}">
         <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
         <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
     </Style>
 
-    <Style x:Key="UIntegerUpDownStyle" TargetType="{x:Type xctk:UIntegerUpDown}">
+    <Style x:Key="UIntegerUpDownStyle" TargetType="{x:Type xctk:UIntegerUpDown}" BasedOn="{StaticResource AppNumericInputStyle}">
         <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
         <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
     </Style>
@@ -797,7 +799,7 @@
     <DataTemplate x:Key="DefaultWatermarkTemplate">
         <ContentControl Content="{Binding}" Focusable="False" Foreground="{DynamicResource ForegroundColor}" Margin="0,0,3,0"/>
     </DataTemplate>
-    <Style x:Key="IntegerDownStyle" TargetType="{x:Type xctk:IntegerUpDown}">
+    <Style x:Key="IntegerDownStyle" TargetType="{x:Type xctk:IntegerUpDown}" BasedOn="{StaticResource AppNumericInputStyle}">
         <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>

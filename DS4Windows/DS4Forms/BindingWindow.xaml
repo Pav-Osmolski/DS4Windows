@@ -267,7 +267,7 @@
 
             </DockPanel>
 
-            <TabControl x:Name="mapOptionsPanel" DockPanel.Dock="Top" Foreground="{x:Null}" BorderBrush="{x:Null}" Margin="0">
+            <TabControl x:Name="mapOptionsPanel" DockPanel.Dock="Top" Style="{DynamicResource AppSegmentedTabsStyle}" Margin="0">
                 <TabItem Header="{lex:Loc BindingWin.KeyAndRelMouse}">
                     <DockPanel>
                         <Grid x:Name="topGrid" DockPanel.Dock="Top" Margin="0,2,8,4">

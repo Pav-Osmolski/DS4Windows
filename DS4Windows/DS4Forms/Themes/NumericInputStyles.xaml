@@ -1,0 +1,16 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+    <Style x:Key="AppNumericInputStyle" TargetType="Control">
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style TargetType="xctk:DoubleUpDown" BasedOn="{StaticResource AppNumericInputStyle}" />
+    <Style TargetType="xctk:DecimalUpDown" BasedOn="{StaticResource AppNumericInputStyle}" />
+    <Style TargetType="xctk:SByteUpDown" BasedOn="{StaticResource AppNumericInputStyle}" />
+    <Style TargetType="xctk:UIntegerUpDown" BasedOn="{StaticResource AppNumericInputStyle}" />
+    <Style TargetType="xctk:IntegerUpDown" BasedOn="{StaticResource AppNumericInputStyle}" />
+</ResourceDictionary>

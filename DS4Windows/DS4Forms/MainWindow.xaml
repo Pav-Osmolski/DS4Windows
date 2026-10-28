@@ -62,7 +62,7 @@
                     </Grid.RowDefinitions>
                     <Label x:Name="noContLb" Grid.Row="0" Visibility="Hidden" Content="{lex:Loc NoControllersConnected}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                     <ListView x:Name="controllerLV" Grid.Row="0" ItemsSource="{Binding ControllerCol}" SelectionMode="Single"
-                              SelectedIndex="{Binding CurrentIndex, Mode=OneWayToSource}" Margin="0" Padding="8,0,8,0"
+                              SelectedIndex="{Binding CurrentIndex, Mode=OneWayToSource}" Margin="0" Padding="8,8,8,0" Style="{StaticResource BridgeControllerCardsStyle}"
                               SelectedItem="{Binding DataContext.SelectedController, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Mode=TwoWay}"
                               ItemContainerStyle="{StaticResource BridgeControllerCardItemStyle}"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -194,10 +194,10 @@
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
                                         <CheckBox Grid.Row="1" Grid.Column="1" Content="{lex:Loc LinkProfileId}" IsChecked="{Binding LinkedProfile}"
-                                                  IsEnabled="{Binding CanLinkProfile}" Margin="12,0,12,0" VerticalAlignment="Center"
+                                                  IsEnabled="{Binding CanLinkProfile}" Margin="12,0,12,0" VerticalAlignment="Center" VerticalContentAlignment="Center"
                                                   ToolTip="{lex:Loc Strings:UI_CF060D18277AD290}" />
                                         <xctk:SplitButton Grid.Row="1" Grid.Column="2" x:Name="ProfEditSBtn" Content="{lex:Loc Edit}"
-                                                          MinWidth="84" Height="34" Margin="0,0,10,0"
+                                                          MinWidth="84" Height="{Binding ActualHeight, ElementName=selectProfCombo}" Margin="0,0,10,0"
                                                           Visibility="{Binding PrimaryDevice, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                           Tag="{Binding DevIndex, Mode=OneTime}" Click="ProfEditSBtn_Click" VerticalAlignment="Center">
                                             <xctk:SplitButton.DropDownContent>
@@ -221,7 +221,7 @@
                                                     ToolTip="{lex:Loc Strings:UI_9B5A5F90BCE01E23}" />
                                         <TextBlock Grid.Column="5" Text="{lex:Loc Strings:UI_19F3DDCFE1D67DA8}" FontSize="10" FontWeight="Bold"
                                                        Foreground="{DynamicResource MutedForegroundColor}" Margin="0,0,0,5" />
-                                        <Button Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" x:Name="LightColorBtn" Width="116" Height="34"
+                                        <Button Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" x:Name="LightColorBtn" Width="116" Height="{Binding ActualHeight, ElementName=selectProfCombo}"
                                                     Background="{Binding LightColor, Mode=OneWay}" BorderBrush="{DynamicResource BorderColor}"
                                                     Tag="{Binding DevIndex, Mode=OneTime}" Click="LightColorBtn_Click"
                                                     ToolTip="{lex:Loc Strings:UI_0F181154D34FDBC2}" />

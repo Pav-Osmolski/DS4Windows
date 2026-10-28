@@ -5,6 +5,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ToolTipStyles.xaml" />
         <ResourceDictionary Source="SliderStyles.xaml" />
+        <ResourceDictionary Source="NumericInputStyles.xaml" />
+        <ResourceDictionary Source="SegmentedTabStyles.xaml" />
         <ResourceDictionary Source="DisclosureStyles.xaml" />
         <ResourceDictionary Source="ComboBoxStyles.xaml" />
         <ResourceDictionary Source="MenuStyles.xaml" />
