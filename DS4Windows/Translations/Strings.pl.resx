@@ -6738,4 +6738,10 @@ i backup: </value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>Fizyczne kontrolery pozostają ukryte do zatrzymania lub zamknięcia aplikacji. Wymaga HidHide. Zmiany obowiązują po zatrzymaniu i ponownym uruchomieniu.</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Pomoc w zapewnieniu zgodności ze Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Włącza ukrywanie kontrolera i wyświetla wskazówki ponownego połączenia, gdy Steam jest uruchomiony. Aktywne kontrolery USB/Bluetooth nie są restartowane.</value>
+  </data>
 </root>

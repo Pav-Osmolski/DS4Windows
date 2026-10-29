@@ -6761,4 +6761,10 @@ backup için: </value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>Fiziksel kontrolcüler durdurulana veya çıkış yapılana kadar gizli kalır. HidHide gerektirir. Değişiklikler durdurup başlattıktan sonra uygulanır.</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Steam Input uyumluluk yardımı</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Kontrolcü gizlemeyi etkinleştirir ve Steam çalışırken yeniden bağlantı önerileri gösterir. Etkin USB/Bluetooth kontrolcüleri yeniden başlatılmaz.</value>
+  </data>
 </root>

@@ -6744,4 +6744,10 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>實體控制器將保持隱藏，直到停止或結束。需要 HidHide。變更會在停止後重新啟動時生效。</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Steam Input 相容性協助</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>啟用控制器隱藏，並在 Steam 執行時顯示重新連線指引。不會重新啟動使用中的 USB/Bluetooth 控制器。</value>
+  </data>
 </root>

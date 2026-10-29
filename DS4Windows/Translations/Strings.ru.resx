@@ -6775,4 +6775,10 @@
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>Физические контроллеры остаются скрытыми до остановки или выхода. Требуется HidHide. Изменения применяются после остановки и запуска.</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Помощь с совместимостью Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Включает скрытие контроллера и показывает рекомендации по переподключению при запущенном Steam. Активные контроллеры USB/Bluetooth не перезапускаются.</value>
+  </data>
 </root>

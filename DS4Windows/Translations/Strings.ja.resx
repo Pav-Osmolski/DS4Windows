@@ -6738,4 +6738,10 @@ Backup : </value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>物理コントローラーは停止または終了まで非表示のままになります。HidHide が必要です。変更は停止してから開始すると適用されます。</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Steam Input の互換性サポート</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>コントローラーの非表示を有効にし、Steam の実行中に再接続の案内を表示します。使用中の USB/Bluetooth コントローラーは再起動しません。</value>
+  </data>
 </root>

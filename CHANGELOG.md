@@ -11,6 +11,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Add **Keep controllers hidden between reconnects** under Settings > Controllers > Prevent double input, enabled by default. Retain only DS4Windows-owned HidHide entries between disconnects while the service runs, reducing physical-device exposure before a replacement virtual controller is ready. Stop/exit releases retained entries; changes apply after Stop/Start. Existing user-managed hiding entries are preserved.
 
+- Remove duplicate reconnect-help text and redundant stick-calibration subheadings without leaving empty rows. Rename the Steam option to **Steam Input compatibility assistance** and explain its active USB/Bluetooth restart limitation.
+
 ## Released
 
 ### [5.0.56](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.56) - 2026-10-28

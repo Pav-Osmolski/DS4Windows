@@ -8459,4 +8459,10 @@ X axis: {0}, Y axis: {1}</value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>Keeps physical controllers hidden until Stop or exit. Requires HidHide. Changes apply after Stop/Start.</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Steam Input compatibility assistance</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Enables controller hiding and shows reconnect guidance when Steam is running. Active USB/Bluetooth controllers are not restarted.</value>
+  </data>
 </root>

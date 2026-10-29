@@ -6734,4 +6734,10 @@ Zálohování : </value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>Fyzické ovladače zůstanou skryté do zastavení nebo ukončení. Vyžaduje HidHide. Změny se projeví po zastavení a spuštění.</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Pomoc s kompatibilitou Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Zapne skrývání ovladače a při spuštěném Steamu zobrazí pokyny k opětovnému připojení. Aktivní ovladače USB/Bluetooth se nerestartují.</value>
+  </data>
 </root>

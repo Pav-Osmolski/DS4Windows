@@ -6737,4 +6737,10 @@ El backup: </value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>Los mandos físicos permanecen ocultos hasta detener o salir. Requiere HidHide. Los cambios se aplican tras detener e iniciar.</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Ayuda de compatibilidad con Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Activa la ocultación del mando y muestra indicaciones de reconexión cuando Steam está abierto. No reinicia los mandos USB/Bluetooth activos.</value>
+  </data>
 </root>

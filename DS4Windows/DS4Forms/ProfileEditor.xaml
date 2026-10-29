@@ -796,18 +796,16 @@
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
-                                                            <RowDefinition Height="Auto"/>
                                                         </Grid.RowDefinitions>
-                                                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="{lex:Loc StickCalibration}" HorizontalContentAlignment="Center" Margin="0,4,12,10" Padding="0" VerticalAlignment="Center"/>
-                                                        <Label Content="{lex:Loc XAxisOffset}" Grid.Row="1" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                        <DockPanel Grid.Row="1" Grid.Column="1">
+                                                        <Label Content="{lex:Loc XAxisOffset}" Grid.Row="0" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
+                                                        <DockPanel Grid.Row="0" Grid.Column="1">
                                                             <xctk:SByteUpDown d:IsHidden="True" Value="{Binding LeftStickDriftXAxis,UpdateSourceTrigger=LostFocus}" MinWidth="50" Maximum="127" Minimum="-127" Increment="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                                         </DockPanel>
-                                                        <Label Content="{lex:Loc YAxisOffset}" Grid.Row="2" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                        <DockPanel Grid.Row="2" Grid.Column="1">
+                                                        <Label Content="{lex:Loc YAxisOffset}" Grid.Row="1" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
+                                                        <DockPanel Grid.Row="1" Grid.Column="1">
                                                             <xctk:SByteUpDown d:IsHidden="True" Value="{Binding LeftStickDriftYAxis,UpdateSourceTrigger=LostFocus}" MinWidth="50" Maximum="127" Minimum="-127" Increment="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                                         </DockPanel>
-                                                        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="{lex:Loc AutomaticallyRecalibrateStick}" Click="CalibrateStick_OnClick" Tag="0" MinHeight="34" Padding="12,7" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left"/>
+                                                        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{lex:Loc AutomaticallyRecalibrateStick}" Click="CalibrateStick_OnClick" Tag="0" MinHeight="34" Padding="12,7" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left"/>
                                                     </Grid>
                                                 </StackPanel>
                                             </Border>
@@ -1092,18 +1090,16 @@
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
-                                                            <RowDefinition Height="Auto"/>
                                                         </Grid.RowDefinitions>
-                                                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="{lex:Loc StickCalibration}" HorizontalContentAlignment="Center" Margin="0,4,12,10" Padding="0" VerticalAlignment="Center"/>
-                                                        <Label Content="{lex:Loc XAxisOffset}" Grid.Row="1" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                        <DockPanel Grid.Row="1" Grid.Column="1">
+                                                        <Label Content="{lex:Loc XAxisOffset}" Grid.Row="0" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
+                                                        <DockPanel Grid.Row="0" Grid.Column="1">
                                                             <xctk:SByteUpDown d:IsHidden="True" Value="{Binding RightStickDriftXAxis,UpdateSourceTrigger=LostFocus}" MinWidth="50" Maximum="127" Minimum="-127" Increment="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                                         </DockPanel>
-                                                        <Label Content="{lex:Loc YAxisOffset}" Grid.Row="2" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
-                                                        <DockPanel Grid.Row="2" Grid.Column="1">
+                                                        <Label Content="{lex:Loc YAxisOffset}" Grid.Row="1" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,4,12,10"/>
+                                                        <DockPanel Grid.Row="1" Grid.Column="1">
                                                             <xctk:SByteUpDown d:IsHidden="True" Value="{Binding RightStickDriftYAxis,UpdateSourceTrigger=LostFocus}" MinWidth="50" Maximum="127" Minimum="-127" Increment="1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                                         </DockPanel>
-                                                        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="{lex:Loc AutomaticallyRecalibrateStick}" Click="CalibrateStick_OnClick" Tag="1" MinHeight="34" Padding="12,7" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left"/>
+                                                        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{lex:Loc AutomaticallyRecalibrateStick}" Click="CalibrateStick_OnClick" Tag="1" MinHeight="34" Padding="12,7" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left"/>
                                                     </Grid>
                                                 </StackPanel>
                                             </Border>

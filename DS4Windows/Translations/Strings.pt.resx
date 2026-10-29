@@ -6738,4 +6738,10 @@ O backup: </value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>Os comandos físicos permanecem ocultos até parar ou sair. Requer HidHide. As alterações aplicam-se após parar e iniciar.</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Assistência de compatibilidade com Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Ativa a ocultação do comando e apresenta orientações de reconexão quando o Steam está em execução. Os comandos USB/Bluetooth ativos não são reiniciados.</value>
+  </data>
 </root>

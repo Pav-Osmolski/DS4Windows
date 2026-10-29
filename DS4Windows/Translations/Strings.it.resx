@@ -6735,4 +6735,10 @@ Il backup: </value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>I controller fisici restano nascosti fino all’arresto o all’uscita. Richiede HidHide. Le modifiche si applicano dopo l’arresto e il riavvio.</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Assistenza per la compatibilità con Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Attiva l’occultamento del controller e mostra indicazioni per la riconnessione quando Steam è in esecuzione. I controller USB/Bluetooth attivi non vengono riavviati.</value>
+  </data>
 </root>

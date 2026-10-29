@@ -6767,4 +6767,10 @@ De backup: </value>
   <data name="UI_F6E208B90A8761C5" xml:space="preserve">
     <value>Fysieke controllers blijven verborgen tot stoppen of afsluiten. Vereist HidHide. Wijzigingen gelden na stoppen en starten.</value>
   </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Compatibiliteitshulp voor Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Schakelt controllerverberging in en toont herverbindingsadvies wanneer Steam actief is. Actieve USB-/Bluetooth-controllers worden niet opnieuw gestart.</value>
+  </data>
 </root>
