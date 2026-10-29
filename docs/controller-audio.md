@@ -87,6 +87,23 @@ restrain loud effects; **Bass/body boost** changes body/bass emphasis. These
 speaker-processing controls do not alter native advanced-haptics channels.
 NVIDIA processing choices require the availability indicated by the UI.
 
+## Identifying virtual audio devices
+
+DS4Windows names its virtual playback and recording endpoints **DS4Windows
+Controller 1 Audio** and **DS4Windows Controller 1 Microphone**, using the
+connected controller's number. Windows may append the emulated device model
+in parentheses. Physical controller endpoints keep their Windows names.
+
+These labels apply to DualShock 4, DualSense and DualSense Edge emulation,
+including PlayStation audio companions used with Xbox and Switch output.
+They are independent of the physical input controller model. Outputs without
+an audio interface do not gain one from this change. Existing endpoint IDs,
+profile selections, Windows defaults and microphone routing stay unchanged.
+Select the DS4Windows microphone in recording software when testing the virtual
+microphone route; a USB controller's physical microphone remains available for
+direct recording. A virtual endpoint being listed does not mean microphone
+forwarding is enabled. Reopen an application's device list if it caches names.
+
 ## Microphone
 
 Enable controller microphone input where available, then select the appropriate

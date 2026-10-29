@@ -934,7 +934,8 @@ namespace DS4Windows
 
         private static bool LooksLikeControllerAudioIdentity(string identity)
         {
-            return ClassifyEndpointIdentity(identity) != ControllerAudioEndpointKind.Any ||
+            return identity.IndexOf("DS4Windows Controller ", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                ClassifyEndpointIdentity(identity) != ControllerAudioEndpointKind.Any ||
                 identity.IndexOf("Wireless Controller", StringComparison.OrdinalIgnoreCase) >= 0 ||
                 identity.IndexOf("VIIPER", StringComparison.OrdinalIgnoreCase) >= 0;
         }

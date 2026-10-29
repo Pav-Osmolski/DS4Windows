@@ -1049,6 +1049,7 @@ namespace DS4Windows
             if (connected)
             {
                 RebindSwitch2RuntimeStatusBridge();
+                RefreshAudioEndpointNames();
                 ResetState();
             }
         }
@@ -1100,6 +1101,29 @@ namespace DS4Windows
 
             return Program.rootHub.DS4Controllers[deviceIndex] as
                 DualSenseDevice;
+        }
+
+        private readonly object audioEndpointNamesGate = new object();
+        private ViiperAudioEndpointNames audioEndpointNames;
+        private bool audioEndpointNamesEnabled;
+
+        private void RefreshAudioEndpointNames()
+        {
+            lock (audioEndpointNamesGate)
+            {
+                audioEndpointNames?.Dispose();
+                audioEndpointNames = null;
+                ViiperDeviceStream stream = Volatile.Read(ref deviceStream);
+                int index = Volatile.Read(ref lastInputDeviceIndex);
+                if (!audioEndpointNamesEnabled || !connected || gamepadOnly || stream == null ||
+                    stream.UsbipPort <= 0 || index < 0 ||
+                    index >= ControlService.MAX_DS4_CONTROLLER_COUNT ||
+                    viiperType is not (ViiperVirtualDeviceType.DualShock4 or
+                        ViiperVirtualDeviceType.DualSense or ViiperVirtualDeviceType.DualSenseEdge)) return;
+                audioEndpointNames = new ViiperAudioEndpointNames(stream.UsbipPort, index,
+                    () => connected && ReferenceEquals(stream, Volatile.Read(ref deviceStream)) &&
+                        index == Volatile.Read(ref lastInputDeviceIndex));
+            }
         }
 
         public override void Connect()
@@ -1326,6 +1350,8 @@ namespace DS4Windows
                 ResetState();
                 StartFeedbackReader();
             }
+            lock (audioEndpointNamesGate) audioEndpointNamesEnabled = true;
+            RefreshAudioEndpointNames();
             StartSwitch2RuntimeStatusBridge();
             if (!audioOnlySidecar && viiperType is ViiperVirtualDeviceType.DualShock4 or
                     ViiperVirtualDeviceType.DualSense or ViiperVirtualDeviceType.DualSenseEdge or
@@ -1995,6 +2021,13 @@ namespace DS4Windows
 
         public override void Disconnect()
         {
+            lock (audioEndpointNamesGate)
+            {
+                audioEndpointNamesEnabled = false;
+                audioEndpointNames?.Dispose();
+                audioEndpointNames = null;
+            }
+
             // Invalidate producer admission before any worker generation or
             // stream teardown work. A callback which was paused after capture
             // can then neither stage into nor adopt a successor lifecycle.
@@ -5276,6 +5309,8 @@ namespace DS4Windows
                             failedStreamGeneration &&
                         Volatile.Read(ref deviceStream) != null;
                 }
+
+                RefreshAudioEndpointNames();
 
                 // The new generation is visible, so no old reader or queued
                 // dispatch can gain a callback claim. Wait outside the short

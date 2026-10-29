@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Clearly label virtual playback and microphone endpoints with DS4Windows and the controller number, including PlayStation audio companions for other output modes. Keep physical device labels and saved endpoint IDs unchanged.
 
 ## Released
 
