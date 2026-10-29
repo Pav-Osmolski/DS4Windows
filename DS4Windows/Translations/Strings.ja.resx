@@ -6732,4 +6732,10 @@ Backup : </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>ツールヒントを表示</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>再接続の間もコントローラーを非表示にする</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>物理コントローラーは停止または終了まで非表示のままになります。HidHide が必要です。変更は停止してから開始すると適用されます。</value>
+  </data>
 </root>

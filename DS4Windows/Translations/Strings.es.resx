@@ -6731,4 +6731,10 @@ El backup: </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Mostrar información sobre herramientas</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Mantener ocultos los mandos entre reconexiones</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Los mandos físicos permanecen ocultos hasta detener o salir. Requiere HidHide. Los cambios se aplican tras detener e iniciar.</value>
+  </data>
 </root>

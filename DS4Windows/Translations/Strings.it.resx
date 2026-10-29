@@ -6729,4 +6729,10 @@ Il backup: </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Mostra suggerimenti</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Mantieni nascosti i controller tra le riconnessioni</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>I controller fisici restano nascosti fino all’arresto o all’uscita. Richiede HidHide. Le modifiche si applicano dopo l’arresto e il riavvio.</value>
+  </data>
 </root>

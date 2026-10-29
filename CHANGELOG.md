@@ -9,6 +9,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Forward supported Sony USB controller microphones directly to the named VIIPER microphone, with profile level, noise suppression and mute handling. Match the exact physical USB device, capture only when the virtual recording interface is in use, and reject stale audio after disconnects or route changes. Preserve native headset access and existing Bluetooth routes; no virtual cable is required.
 
+- Add **Keep controllers hidden between reconnects** under Settings > Controllers > Prevent double input, enabled by default. Retain only DS4Windows-owned HidHide entries between disconnects while the service runs, reducing physical-device exposure before a replacement virtual controller is ready. Stop/exit releases retained entries; changes apply after Stop/Start. Existing user-managed hiding entries are preserved.
+
 ## Released
 
 ### [5.0.56](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.56) - 2026-10-28

@@ -6733,4 +6733,10 @@ Backup : </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Hiển thị chú giải công cụ</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Giữ tay cầm ẩn giữa các lần kết nối lại</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Tay cầm vật lý vẫn ẩn cho đến khi dừng hoặc thoát. Cần HidHide. Thay đổi có hiệu lực sau khi dừng rồi khởi chạy lại.</value>
+  </data>
 </root>

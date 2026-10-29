@@ -6755,4 +6755,10 @@ Varmuuskopiointi : </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Näytä työkaluvihjeet</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Pidä ohjaimet piilotettuina uudelleenyhdistämisten välillä</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Fyysiset ohjaimet pysyvät piilotettuina pysäyttämiseen tai sulkemiseen asti. Edellyttää HidHidea. Muutokset tulevat voimaan pysäytyksen ja käynnistyksen jälkeen.</value>
+  </data>
 </root>

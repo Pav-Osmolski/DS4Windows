@@ -8453,4 +8453,10 @@ X axis: {0}, Y axis: {1}</value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Show tooltips</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Keep controllers hidden between reconnects</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Keeps physical controllers hidden until Stop or exit. Requires HidHide. Changes apply after Stop/Start.</value>
+  </data>
 </root>

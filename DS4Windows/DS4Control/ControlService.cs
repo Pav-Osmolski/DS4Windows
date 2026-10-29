@@ -2853,7 +2853,7 @@ namespace DS4Windows
 
         private bool StartCore(bool showlog)
         {
-            hidHideManagedDevices.OpenLifecycle();
+            hidHideManagedDevices.OpenLifecycle(Global.KeepControllersHiddenOnReconnect);
             reportDiagnosticsWorker.Resume();
             StartupDiag($"ControlService.Start enter showlog={showlog} running={running} inServiceTask={inServiceTask} admin={Global.IsAdministrator()}");
             inServiceTask = true;

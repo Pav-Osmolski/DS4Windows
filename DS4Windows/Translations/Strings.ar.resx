@@ -6736,4 +6736,10 @@ Backup : </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>إظهار تلميحات الأدوات</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>إبقاء وحدات التحكم مخفية بين عمليات إعادة الاتصال</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>تبقى وحدات التحكم الفعلية مخفية حتى الإيقاف أو الخروج. يتطلب HidHide. تُطبّق التغييرات بعد الإيقاف ثم التشغيل.</value>
+  </data>
 </root>

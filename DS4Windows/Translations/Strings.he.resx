@@ -6731,4 +6731,10 @@
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>הצגת תיאורי כלים</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>השארת הבקרים מוסתרים בין חיבורים מחדש</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>הבקרים הפיזיים נשארים מוסתרים עד לעצירה או ליציאה. נדרש HidHide. השינויים חלים לאחר עצירה והפעלה.</value>
+  </data>
 </root>

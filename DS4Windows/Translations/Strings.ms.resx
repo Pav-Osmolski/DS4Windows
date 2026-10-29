@@ -6755,4 +6755,10 @@ Sokongan : </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Tunjukkan petua alat</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Kekalkan pengawal tersembunyi antara sambungan semula</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Pengawal fizikal kekal tersembunyi sehingga dihentikan atau aplikasi ditutup. Memerlukan HidHide. Perubahan berkuat kuasa selepas berhenti dan mula semula.</value>
+  </data>
 </root>

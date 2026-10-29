@@ -6730,4 +6730,10 @@ Das Backup: </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>QuickInfos anzeigen</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Controller zwischen erneuten Verbindungen verborgen halten</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Physische Controller bleiben bis zum Stoppen oder Beenden verborgen. Erfordert HidHide. Änderungen gelten nach Stoppen und Starten.</value>
+  </data>
 </root>

@@ -6761,4 +6761,10 @@ De backup: </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Knopinfo weergeven</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Controllers verborgen houden tussen herverbindingen</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Fysieke controllers blijven verborgen tot stoppen of afsluiten. Vereist HidHide. Wijzigingen gelden na stoppen en starten.</value>
+  </data>
 </root>

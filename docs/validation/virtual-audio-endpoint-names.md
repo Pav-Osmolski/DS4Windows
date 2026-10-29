@@ -119,3 +119,35 @@ physical USB controller microphone was available, so that hardware check was
 skipped. No microphone recording or speaker playback was performed by the probe.
 The r3 preview therefore requires the physical acceptance checks above before
 release. It does not claim the issue #90 echo is resolved.
+
+## Reconnect retention (preview r4)
+
+GTA V Enhanced hot-plug testing exposed a separate visibility window. Steam's
+logs saw the physical Bluetooth controller before its VIIPER replacement, even
+with the game-specific Steam Input mapping disabled. The browser tester appeared
+normal while the game exhibited doubled actions. This supports investigating
+consumer hot-plug/visibility handling, not declaring a confirmed game or app cause.
+
+The r4 preview adds the default-on reconnect-protection setting described in
+[HidHide lifecycle](../hidhide-device-lifecycle.md#reconnect-protection). The
+policy is captured at service start. It retains only proven owned persistent
+entries after a successful connection disconnects, revalidates late removals,
+and includes disconnected controllers in normal service-stop cleanup. Cancelled
+connections still roll back additions and preexisting user rules remain untouched.
+No input, haptics or microphone packet paths are changed by this follow-up.
+
+The full application suite passed 7,942 tests with 16 opt-in checks skipped;
+156 focused HidHide/settings/language checks passed. Tests cover enabled and
+disabled policy, reconnect reuse, user-rule exclusion, late-write reassertion,
+cancelled connection rollback, failed-Stop resumption, full-stop release, and
+missing/invalid/true/false preference serialization. New UI text is present in
+all 24 language packs. No live HidHide rules or installed settings were changed.
+
+Maintainer acceptance: restart into r4 with the option enabled, launch GTA only
+after the virtual controller is ready, then disconnect/reconnect Bluetooth while
+the game remains running. Compare Steam's physical/virtual discovery and input
+behavior with r3. Verify Stop releases process-owned rules, native access returns,
+and unrelated user-created hiding entries remain. Do not claim a GTA fix until
+that hardware/game comparison completes. R3 microphone USB/BT listening passed;
+the session exercised rumble/trigger commands, while audio-waveform haptics were
+not observed in the supplied counters.

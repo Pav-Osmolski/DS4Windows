@@ -6732,4 +6732,10 @@ i backup: </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Pokaż podpowiedzi</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Ukrywaj kontrolery pomiędzy ponownymi połączeniami</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Fizyczne kontrolery pozostają ukryte do zatrzymania lub zamknięcia aplikacji. Wymaga HidHide. Zmiany obowiązują po zatrzymaniu i ponownym uruchomieniu.</value>
+  </data>
 </root>
