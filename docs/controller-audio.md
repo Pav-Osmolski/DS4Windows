@@ -110,16 +110,42 @@ Enable controller microphone input where available, then select the appropriate
 input in the game, voice app or Windows sound settings. Adjust microphone level
 and noise suppression after verifying that an unmuted signal is reaching the app.
 
-Bluetooth PlayStation microphone routing uses the matching VIIPER virtual capture
-endpoint. The virtual format follows the profile's output, so a physical model
-and its virtual audio endpoint need not have the same name.
+Recognized Sony DualShock 4, DualSense and DualSense Edge controllers can forward
+microphone input to the matching **DS4Windows Controller N Microphone** endpoint
+over USB or Bluetooth. For USB, the controller must expose an active Windows
+recording endpoint. A headset jack alone does not guarantee that capability;
+unsupported models and third-party clones are not assumed compatible.
 
-For USB/legacy microphone routes, expand **Advanced audio** and choose the
-physical Windows capture source and the intended virtual-output render endpoint
-as described there. For example, a separately installed virtual cable uses its
-render side to receive microphone PCM; the voice app uses the cable's capture
-side. These endpoint selectors are not required for the supported VIIPER
-Bluetooth microphone route. DS4Windows does not install a virtual cable itself.
+For USB, DS4Windows automatically selects the physical recording endpoint belonging
+to that exact controller. It captures microphone audio only, converts it to the
+virtual format and applies the profile's microphone level, noise suppression and
+supported mute controls. It never captures system/game playback for this route.
+No virtual cable or manual capture/output selection is required.
+
+The virtual format follows the profile's output, so a physical model and its
+virtual endpoint need not have the same model name. Supported Xbox/Switch output
+profiles can use a separate PlayStation audio companion for microphone forwarding.
+That companion does not change the controller presented to games or start a
+separate USB haptics playback route.
+
+**Enable controller microphone input** controls forwarding. Turn it off to use
+the physical USB microphone directly instead. The physical endpoint remains
+selectable, and the virtual endpoint remains listed while its virtual audio device
+exists, even when forwarding is off. This keeps saved application selections
+stable; a listed endpoint is not proof that audio is flowing. DS4Windows opens USB
+microphone capture only while forwarding is enabled and a Windows consumer has
+opened the virtual recording interface. Windows microphone permissions still apply.
+
+To test, enable microphone input, apply the profile, then select the named
+DS4Windows microphone in Windows Sound or your recording app. Speak and check its
+level meter or make a short recording. Repeat over Bluetooth and verify haptics
+separately on both connections. If USB capture cannot start, the log identifies
+the missing physical endpoint or capture error. Do not select the controller's
+game-audio playback endpoint as a microphone destination.
+
+Legacy custom virtual-cable selections are retained for offline configuration;
+they are not required by the supported direct USB/Bluetooth routes. Switch 2 Pro's
+native USB headset path remains separate, as described below.
 
 ## DualSense mute button
 

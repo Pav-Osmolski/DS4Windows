@@ -379,7 +379,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        public void UsbSpeakerAndLegacyMicSelectorsOnlyAppearForUsbDualSense()
+        public void UsbSpeakerSelectorRemainsLiveAndLegacyMicSelectorsRemainOfflineOnly()
         {
             ControllerUiCapabilities offlineProfile =
                 ControllerUiCapabilities.For(null);
@@ -397,7 +397,7 @@ namespace DS4WindowsTests
             Assert.IsTrue(offlineProfile.ShowLegacyMicrophoneRouting,
                 "Offline editing keeps the legacy endpoint settings available under Advanced audio.");
             Assert.IsTrue(usbDualSense.ShowUsbDualSenseSpeakerSelector);
-            Assert.IsTrue(usbDualSense.ShowLegacyMicrophoneRouting);
+            Assert.IsFalse(usbDualSense.ShowLegacyMicrophoneRouting);
             Assert.IsFalse(bluetoothDualSense.ShowUsbDualSenseSpeakerSelector);
             Assert.IsFalse(bluetoothDualSense.ShowLegacyMicrophoneRouting);
             Assert.IsFalse(bluetoothDualShock4.ShowUsbDualSenseSpeakerSelector);
@@ -405,6 +405,9 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [DataRow((int)InputDeviceType.DS4, (int)ConnectionType.SONYWA,
+            0x054C, 0x09CC, (int)OutContType.ViiperDS4, true,
+            (int)ControllerMicrophoneUiStatus.RequiresBluetooth, false)]
         [DataRow((int)InputDeviceType.DS4, (int)ConnectionType.BT,
             0x054C, 0x09CC, (int)OutContType.ViiperDS4, true,
             (int)ControllerMicrophoneUiStatus.Ready, true)]
@@ -431,10 +434,10 @@ namespace DS4WindowsTests
             (int)ControllerMicrophoneUiStatus.OutputStarting, false)]
         [DataRow((int)InputDeviceType.DualSense, (int)ConnectionType.USB,
             0x054C, 0x0CE6, (int)OutContType.X360, false,
-            (int)ControllerMicrophoneUiStatus.UsbLegacyRoute, true)]
+            (int)ControllerMicrophoneUiStatus.Ready, true)]
         [DataRow((int)InputDeviceType.DS4, (int)ConnectionType.USB,
             0x054C, 0x09CC, (int)OutContType.ViiperDS4, true,
-            (int)ControllerMicrophoneUiStatus.RequiresBluetooth, false)]
+            (int)ControllerMicrophoneUiStatus.Ready, true)]
         [DataRow((int)InputDeviceType.DualSense, (int)ConnectionType.BT,
             0x1234, 0x0CE6, (int)OutContType.ViiperDualSense, true,
             (int)ControllerMicrophoneUiStatus.RequiresCompatibleController,

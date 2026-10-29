@@ -7,6 +7,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Clearly label virtual playback and microphone endpoints with DS4Windows and the controller number, including PlayStation audio companions for other output modes. Keep physical device labels and saved endpoint IDs unchanged.
 
+- Forward supported Sony USB controller microphones directly to the named VIIPER microphone, with profile level, noise suppression and mute handling. Match the exact physical USB device, capture only when the virtual recording interface is in use, and reject stale audio after disconnects or route changes. Preserve native headset access and existing Bluetooth routes; no virtual cable is required.
+
 ## Released
 
 ### [5.0.56](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.56) - 2026-10-28

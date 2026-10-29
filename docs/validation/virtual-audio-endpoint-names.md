@@ -67,8 +67,55 @@ or playback; actual USB and Bluetooth haptics require maintainer listening tests
 A physical-plus-virtual USB enumeration smoke check was attempted but skipped
 because the required active endpoint pair was unavailable at that time.
 
-The microphone naming change does not add USB microphone forwarding into the
-VIIPER capture endpoint. USB still uses the legacy capture-to-virtual-render
-route; direct controller-to-VIIPER microphone forwarding currently requires an
-eligible Bluetooth source. Do not route microphone PCM into the controller's
-game-audio playback endpoint as a substitute.
+## USB microphone forwarding (preview r3)
+
+The naming-only r2 preview did not forward USB microphone audio into VIIPER.
+The r3 preview adds that route for recognized Sony DS4, DualSense and Edge sources
+with a Windows recording endpoint. It matches the physical controller's USB
+container, excludes USB/IP endpoints, and never falls back to the default mic,
+loopback capture, game playback or a virtual-cable render endpoint.
+
+Capture runs on a separate worker only while the profile enables forwarding and
+a Windows consumer opens the virtual recording interface. A bounded 100 ms
+capture buffer discards stale input on overflow. Mono/stereo capture is converted
+to 48 kHz mono in 10 ms blocks, then passed through the existing microphone
+processor and output-specific VIIPER packer. Transport writes remain on the
+existing writer. Source, stream and route generations reject retired audio;
+mute transitions clear buffered/prepared input and the final transport mute
+check remains active. Capture failures retry with an initial endpoint grace period
+and report an unavailable microphone lane rather than pretending it is armed.
+
+Tests exercise fragmented blocks, clipping, non-finite input, mono/stereo and
+16/44.1/48 kHz conversion, incremental resampling, production DS4/DualSense/Edge
+packing, software mute, profile disable, virtual recording close, source
+replacement and stale-generation rejection. Policy checks cover eligible USB and
+Bluetooth controllers, optional audio companions and exclusion of unrelated
+headset paths. Adding a USB microphone companion must not activate the native
+USB haptics playback bridge for an Xbox/Switch primary output.
+
+The automated checks do not verify physical headset sound quality or prove the
+original issue #90 echo is fixed. Maintainer acceptance must check:
+
+1. USB: enable microphone input, apply, open the named DS4Windows microphone in
+   Windows Sound/recording software and confirm speech reaches its meter/recording.
+2. Toggle microphone forwarding and mute, close/reopen the recording consumer,
+   and reconnect the controller; confirm no old audio is replayed.
+3. Repeat with Bluetooth, and test native game haptics over both USB and Bluetooth.
+4. For NVIDIA issue #90 testing, keep game and microphone recordings separate and
+   compare with the physical USB microphone. Do not infer echo from device names.
+5. Confirm physical endpoint names/defaults remain unchanged. The virtual mic stays
+   visible with forwarding disabled; it is not hidden or removed by that checkbox.
+
+## Final r3 validation record
+
+The application suite passed 7,932 tests with 16 opt-in checks skipped. After
+preserving the unsupported-adapter UI guard, 168 focused microphone, capability,
+USB haptics and allocation checks passed. The native-feedback allocation check
+now uses the suite's existing strict measurement scope to exclude GC allocation-
+context repair; its requirement remains exactly zero allocated bytes.
+
+A read-only probe called the production USB capture lookup, but no connected
+physical USB controller microphone was available, so that hardware check was
+skipped. No microphone recording or speaker playback was performed by the probe.
+The r3 preview therefore requires the physical acceptance checks above before
+release. It does not claim the issue #90 echo is resolved.
