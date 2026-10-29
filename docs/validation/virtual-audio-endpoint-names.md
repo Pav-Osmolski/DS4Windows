@@ -49,3 +49,26 @@ This verifies endpoint presentation, not physical headset recording quality,
 DS4 Bluetooth microphone decoding, NVIDIA capture, or the echo in issue #90.
 Windows 10 was not available for the live endpoint check. Applications caching
 their audio-device list may need to reopen it to display updated names.
+
+## Preview regression correction
+
+The first preview exposed a legacy model-classification bug: matching the token
+DS4 anywhere also matched DS4Windows in the new labels, incorrectly classifying
+DualSense audio as DS4 and preventing USB haptics source selection. Classification
+now prioritizes Sony USB VID/PID information, then uses model-name hints with the
+application name removed. Regression cases cover both renamed model families,
+labels without model hints, and contradictory display-name/USB identities.
+
+The Windows endpoint probe was extended to require the correct DS4/DualSense
+classification and invoke the production USB haptics source finder. DualSense,
+Edge and the DualSense audio companion each selected their renamed render
+endpoint and exposed four mix channels. This is a routing check without capture
+or playback; actual USB and Bluetooth haptics require maintainer listening tests.
+A physical-plus-virtual USB enumeration smoke check was attempted but skipped
+because the required active endpoint pair was unavailable at that time.
+
+The microphone naming change does not add USB microphone forwarding into the
+VIIPER capture endpoint. USB still uses the legacy capture-to-virtual-render
+route; direct controller-to-VIIPER microphone forwarding currently requires an
+eligible Bluetooth source. Do not route microphone PCM into the controller's
+game-audio playback endpoint as a substitute.
