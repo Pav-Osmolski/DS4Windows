@@ -1586,7 +1586,7 @@ namespace DS4Windows
                 profileSwipeTracking = false;
             }
             else if (Global.SwipeProfiles &&
-                !Global.useTempProfile[deviceNum] &&
+                ProfileSwipePolicy.CanSwipe(deviceNum) &&
                 profileSwipeTracking &&
                 !(dragging || dragging2) &&
                 TryGetProfileSwipeDirection(profileSwipeOriginX,

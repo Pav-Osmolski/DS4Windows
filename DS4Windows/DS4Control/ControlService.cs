@@ -5903,9 +5903,11 @@ namespace DS4Windows
                             LogDebug($"DualSense mute profile action failed to load " +
                                 $"'{profileName}'.", true);
                         }
+                        ProfileSwitchFeedback.ReportApplied(loaded, deviceIndex,
+                            profileName, DS4Controllers[deviceIndex]?.Battery ?? 0);
                     }, loadGuard: () =>
                         IsCurrentDualSenseMuteProfileRequest(
-                            deviceIndex, modeEpoch));
+                            deviceIndex, modeEpoch), allowProfileSwipes: true);
             }
         }
 

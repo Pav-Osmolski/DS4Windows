@@ -944,9 +944,9 @@ Suspend support not enabled.", true);
                 conLvViewModel.ControllerCol)
             {
                 string slide = App.rootHub.TouchpadSlide(item.DevIndex);
-                if (Global.useTempProfile[item.DevIndex])
+                if (!ProfileSwipePolicy.CanSwipe(item.DevIndex))
                 {
-                    // Auto Profiles own the runtime profile while active.
+                    // Auto Profiles and held actions own their temporary profile.
                     // Consume rather than defer a gesture so it cannot switch
                     // unexpectedly when the temporary profile is released.
                     continue;

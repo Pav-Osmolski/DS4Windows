@@ -3599,6 +3599,7 @@ namespace DS4Windows
             if (result)
             {
                 tempprofilename[device] = name;
+                ProfileSwipePolicy.PublishTemporarySelection(device, false);
                 useTempProfile[device] = true;
                 tempprofileDistance[device] = name.ToLower().Contains("distance");
             }
@@ -3651,6 +3652,7 @@ namespace DS4Windows
                     if (loaded)
                     {
                         tempprofilename[device] = temporaryName ?? string.Empty;
+                        ProfileSwipePolicy.PublishTemporarySelection(device, false);
                         useTempProfile[device] = temporaryName != null;
                         tempprofileDistance[device] = temporaryName?.Contains("distance",
                             StringComparison.OrdinalIgnoreCase) == true;

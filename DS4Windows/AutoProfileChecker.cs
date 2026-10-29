@@ -139,6 +139,8 @@ namespace DS4WinWPF
                         string tempname = controllerProfileEntity.GetProfileNameForController(j);
                         if (tempname != string.Empty && tempname != "(none)")
                         {
+                            // An active rule owns even an already-loaded mute target.
+                            ProfileSwipePolicy.PublishTemporarySelection(j, false);
                             if ((Global.useTempProfile[j] && tempname != Global.tempprofilename[j]) ||
                                 (!Global.useTempProfile[j] && tempname != Global.ProfilePath[j]) ||
                                 forceLoadProfile)

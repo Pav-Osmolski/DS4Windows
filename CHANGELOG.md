@@ -5,6 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Restore two-finger profile swipes after a DualSense mute-button profile switch while retaining Auto Profiles and held-action ownership. Request enabled profile-change notifications only after successful mute-button and manual profile switches. Thanks to [pinn73](https://www.reddit.com/user/pinn73/) for reporting the switching problems.
+
 - Clearly label virtual playback and microphone endpoints with DS4Windows and the controller number, including PlayStation audio companions for other output modes. Keep physical device labels and saved endpoint IDs unchanged.
 
 - Forward supported Sony USB controller microphones directly to the named VIIPER microphone, with profile level, noise suppression and mute handling. Match the exact physical USB device, capture only when the virtual recording interface is in use, and reject stale audio after disconnects or route changes. Preserve native headset access and existing Bluetooth routes; no virtual cable is required.
