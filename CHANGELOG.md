@@ -5,11 +5,17 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+There are currently no unreleased changes.
+
+## Released
+
+### [5.0.57](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.57) - 2026-10-29
+
 - Refresh the profile Duplicate prompt with a labelled name field, source-profile context, aligned themed actions, keyboard shortcuts and inline validation. Prevent duplicates from replacing an existing profile.
 
 - Restore two-finger profile swipes after a DualSense mute-button profile switch while retaining Auto Profiles and held-action ownership. Request enabled profile-change notifications only after successful mute-button and manual profile switches. Thanks to [pinn73](https://www.reddit.com/user/pinn73/) for reporting the switching problems.
 
-- Clearly label virtual playback and microphone endpoints with DS4Windows and the controller number, including PlayStation audio companions for other output modes. Keep physical device labels and saved endpoint IDs unchanged.
+- Clearly label virtual playback and microphone endpoints with DS4Windows and the controller number, including PlayStation audio companions for other output modes. Keep physical device labels and saved endpoint IDs unchanged. Thanks [@1hezio](https://github.com/1hezio) for the audio report that prompted this investigation ([#90](https://github.com/Pav-Osmolski/DS4Windows/issues/90)); this release does not claim to resolve the reported echo.
 
 - Forward supported Sony USB controller microphones directly to the named VIIPER microphone, with profile level, noise suppression and mute handling. Match the exact physical USB device, capture only when the virtual recording interface is in use, and reject stale audio after disconnects or route changes. Preserve native headset access and existing Bluetooth routes; no virtual cable is required.
 
@@ -17,7 +23,9 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Remove duplicate reconnect-help text and redundant stick-calibration subheadings without leaving empty rows. Rename the Steam option to **Steam Input compatibility assistance** and explain its active USB/Bluetooth restart limitation.
 
-## Released
+- Add hardware-free two-controller startup, reconnect and audio-slot isolation tests. Thanks [@jusseppe88](https://github.com/jusseppe88) for the detailed second-controller report ([#95](https://github.com/Pav-Osmolski/DS4Windows/issues/95)); physical Bluetooth pairing on the affected setup remains under investigation.
+
+Changes: [PR #96](https://github.com/Pav-Osmolski/DS4Windows/pull/96).
 
 ### [5.0.56](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.56) - 2026-10-28
 
