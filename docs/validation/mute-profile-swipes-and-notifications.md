@@ -53,7 +53,7 @@ Synthetic tests do not substitute for the physical acceptance sequence above.
 
 The focused set passed 134 tests. The full x64 Release application suite passed
 7,953 tests with 16 opt-in hardware checks skipped. The maintainer reproduced both
-original failures on r5; physical acceptance of the correction is pending in r6.
+original failures on r5; physical acceptance passed in r6: the maintainer confirmed continued swiping after mute switching and visible notifications with the main window minimised.
 The portable r6 ZIP passed CRC checks, preserves all 24 app language satellites,
 contains the expected version and new policy/feedback types, and contains no
 profiles or logs. SHA-256:

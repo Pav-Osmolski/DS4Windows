@@ -5,6 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Refresh the profile Duplicate prompt with a labelled name field, source-profile context, aligned themed actions, keyboard shortcuts and inline validation. Prevent duplicates from replacing an existing profile.
+
 - Restore two-finger profile swipes after a DualSense mute-button profile switch while retaining Auto Profiles and held-action ownership. Request enabled profile-change notifications only after successful mute-button and manual profile switches. Thanks to [pinn73](https://www.reddit.com/user/pinn73/) for reporting the switching problems.
 
 - Clearly label virtual playback and microphone endpoints with DS4Windows and the controller number, including PlayStation audio companions for other output modes. Keep physical device labels and saved endpoint IDs unchanged.

@@ -395,8 +395,8 @@
                         <local:SettingsStorageControl x:Name="settingsStorageControl" Grid.Row="1" />
 
                         <Border x:Name="dupBoxBar" Grid.Row="2" Style="{StaticResource BridgeCardStyle}"
-                                Padding="14,10" Margin="0,0,0,14" Visibility="Collapsed">
-                            <local:DupBox x:Name="dupBox" HorizontalAlignment="Center" />
+                                Padding="18" Margin="0,0,0,14" Visibility="Collapsed">
+                            <local:DupBox x:Name="dupBox" HorizontalAlignment="Stretch" />
                         </Border>
 
                         <Border Grid.Row="3" Background="{DynamicResource CardBackgroundColor}"

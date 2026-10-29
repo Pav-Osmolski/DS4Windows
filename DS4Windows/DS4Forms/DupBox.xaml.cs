@@ -39,7 +39,17 @@ namespace DS4WinWPF.DS4Forms
     public partial class DupBox : UserControl
     {
         private string oldfilename;
-        public string OldFilename { get => oldfilename; set => oldfilename = value; }
+        public string OldFilename
+        {
+            get => oldfilename;
+            set
+            {
+                oldfilename = value;
+                sourceProfileName.Text = value;
+                profileTxt.Clear();
+                validationMessage.Visibility = Visibility.Collapsed;
+            }
+        }
 
         public event EventHandler Cancel;
         public delegate void SaveHandler(DupBox sender, string profilename);
@@ -52,18 +62,73 @@ namespace DS4WinWPF.DS4Forms
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            string profile = profileTxt.Text;
-            if (!string.IsNullOrWhiteSpace(profile) &&
-                profile.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1)
+            string profile;
+            try { profile = DS4Windows.ProfileName.Normalize(profileTxt.Text); }
+            catch (ArgumentException)
             {
-                System.IO.File.Copy(DS4Windows.Global.appdatapath + "\\Profiles\\" + oldfilename + ".xml",
-                DS4Windows.Global.appdatapath + "\\Profiles\\" + profile + ".xml", true);
-                Save?.Invoke(this, profile);
+                ShowValidation(Properties.Resources.ResourceManager.GetString("ProfileNameInvalid"));
+                return;
             }
-            else
+
+            string directory = System.IO.Path.Combine(DS4Windows.Global.appdatapath, "Profiles");
+            string destination = System.IO.Path.Combine(directory, profile + ".xml");
+            if (System.IO.File.Exists(destination))
             {
-                MessageBox.Show(Properties.Resources.ValidName, Properties.Resources.NotValid,
-                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                ShowValidation(Properties.Resources.ResourceManager.GetString("ProfileRenameCollision"));
+                return;
+            }
+            try
+            {
+                // A duplicate must never replace the source or another existing profile.
+                // The persistence helper also protects a collision after preflight.
+                DS4Windows.ProfilePersistence.Save(destination,
+                    System.IO.File.ReadAllText(System.IO.Path.Combine(directory, oldfilename + ".xml")),
+                    overwrite: false);
+            }
+            catch (Exception exception) when (exception is System.IO.IOException ||
+                exception is UnauthorizedAccessException)
+            {
+                ShowValidation(exception.Message);
+                return;
+            }
+            Save?.Invoke(this, profile);
+        }
+
+        private void ShowValidation(string message)
+        {
+            validationMessage.Text = message;
+            validationMessage.Visibility = Visibility.Visible;
+            profileTxt.Focus();
+            profileTxt.SelectAll();
+        }
+
+        private void ProfileTxt_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (validationMessage != null)
+                validationMessage.Visibility = Visibility.Collapsed;
+        }
+
+        private void DuplicatePrompt_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+                Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    if (IsVisible) { profileTxt.Focus(); profileTxt.SelectAll(); }
+                }), System.Windows.Threading.DispatcherPriority.Input);
+        }
+
+        private void DuplicatePrompt_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                Cancel?.Invoke(this, EventArgs.Empty);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Enter)
+            {
+                if (cancelBtn.IsKeyboardFocusWithin) Cancel?.Invoke(this, EventArgs.Empty);
+                else SaveBtn_Click(sender, new RoutedEventArgs());
+                e.Handled = true;
             }
         }
 
