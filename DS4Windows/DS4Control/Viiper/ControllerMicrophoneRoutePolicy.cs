@@ -42,12 +42,17 @@ namespace DS4Windows
             };
         }
 
+        internal static bool IsEligibleUsbSource(DS4Device source) =>
+            source != null && source.ConnectionType == ConnectionType.USB &&
+            ControllerAudioCapabilityPolicy.IsSupportedSonyController(source.DeviceType,
+                source.HidDevice?.Attributes?.VendorId, source.HidDevice?.Attributes?.ProductId);
+
         internal static bool CanRouteDirectViiperMicrophone(
             bool profileEnabled, DS4Device source, OutContType outputType,
             ViiperOutDevice outputDevice)
         {
             return CanRouteDirectViiperMicrophone(profileEnabled,
-                IsEligibleBluetoothSource(source), outputType,
+                IsEligibleBluetoothSource(source) || IsEligibleUsbSource(source), outputType,
                 outputDevice?.SupportsActiveVirtualMicrophone == true);
         }
 
@@ -64,8 +69,9 @@ namespace DS4Windows
             bool profileEnabled, DS4Device source, OutContType outputType,
             ViiperOutDevice outputDevice)
         {
-            return CanRouteDirectViiperMicrophone(profileEnabled, source,
-                outputType, outputDevice) &&
+            return CanRouteDirectViiperMicrophone(profileEnabled,
+                IsEligibleBluetoothSource(source), outputType,
+                outputDevice?.SupportsActiveVirtualMicrophone == true) &&
                 outputDevice.IsVirtualMicrophoneInterfaceActive;
         }
 

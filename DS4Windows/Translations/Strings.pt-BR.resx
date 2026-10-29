@@ -6731,4 +6731,16 @@ O backup: </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Mostrar dicas de ferramentas</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Manter os controles ocultos entre reconexões</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Os controles físicos permanecem ocultos até parar ou sair. Requer HidHide. As alterações são aplicadas após parar e iniciar.</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Assistência de compatibilidade com Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Ativa a ocultação do controle e mostra orientações de reconexão quando o Steam está em execução. Os controles USB/Bluetooth ativos não são reiniciados.</value>
+  </data>
 </root>

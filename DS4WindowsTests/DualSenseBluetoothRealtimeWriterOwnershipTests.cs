@@ -97,7 +97,12 @@ namespace DS4Windows.Tests
         }
 
         [TestMethod]
-        public void SynchronousLoadedWriterPathAllocatesZeroAfterWarmup()
+        [DataRow(false)]
+        [DataRow(true)]
+        [System.Runtime.CompilerServices.MethodImpl(
+            System.Runtime.CompilerServices.MethodImplOptions.NoInlining |
+            System.Runtime.CompilerServices.MethodImplOptions.AggressiveOptimization)]
+        public void SynchronousLoadedWriterPathAllocatesZeroAfterWarmup(bool positiveControl)
         {
             using var native = new ImmediateNativeIo(ReportLength);
             using var writer = new DualSenseBluetoothRealtimeWriter(
@@ -113,18 +118,28 @@ namespace DS4Windows.Tests
             }
             Assert.IsTrue(succeeded);
 
-            long before = GC.GetAllocatedBytesForCurrentThread();
-            for (int index = 0; index < 10_000; index++)
+            long allocated;
+            // Isolate the exact zero-byte counter window from GC allocation-
+            // context repair, as in the suite's other strict realtime tests.
+            using (global::DS4WindowsTests.StrictAllocationMeasurementScope.Begin())
             {
-                report[1] = (byte)index;
-                succeeded &= writer.TryWrite(report, out bool fault) &&
-                    !fault;
+                long before = GC.GetAllocatedBytesForCurrentThread();
+                for (int index = 0; index < 10_000; index++)
+                {
+                    report[1] = (byte)index;
+                    succeeded &= writer.TryWrite(report, out bool fault) &&
+                        !fault;
+                }
+                if (positiveControl) GC.KeepAlive(new byte[128]);
+                allocated = GC.GetAllocatedBytesForCurrentThread() - before;
             }
-            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
 
             Assert.IsTrue(succeeded);
-            Assert.AreEqual(0L, allocated,
-                $"Realtime HID writer allocated {allocated} bytes.");
+            if (positiveControl)
+                Assert.IsTrue(allocated >= 128, "The measurement must detect real allocations.");
+            else
+                Assert.AreEqual(0L, allocated,
+                    $"Realtime HID writer allocated {allocated} bytes.");
             Assert.IsFalse(native.ObservedStateLock);
         }
 

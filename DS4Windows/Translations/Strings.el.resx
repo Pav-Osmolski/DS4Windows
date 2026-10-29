@@ -6757,4 +6757,16 @@ Example: whyme_DS4Windows</value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Εμφάνιση συμβουλών εργαλείων</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Διατήρηση των χειριστηρίων κρυφών μεταξύ επανασυνδέσεων</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Τα φυσικά χειριστήρια παραμένουν κρυφά μέχρι τη διακοπή ή την έξοδο. Απαιτείται HidHide. Οι αλλαγές εφαρμόζονται μετά από διακοπή και εκκίνηση.</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Βοήθεια συμβατότητας Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Ενεργοποιεί την απόκρυψη χειριστηρίου και εμφανίζει οδηγίες επανασύνδεσης όταν εκτελείται το Steam. Τα ενεργά χειριστήρια USB/Bluetooth δεν επανεκκινούνται.</value>
+  </data>
 </root>

@@ -417,6 +417,7 @@ namespace DS4Windows
         private bool switch2PendingResynchronization;
         private int preparedMicrophoneHead;
         private int preparedMicrophoneCount;
+        private readonly long[] preparedMicrophoneUsbRouteGenerations = new long[MaxPreparedMicrophoneFrames];
         private int pendingMicrophoneHead;
         private int pendingMicrophoneCount;
         private IOpusDecoder microphoneDecoder;
@@ -1036,6 +1037,9 @@ namespace DS4Windows
 
         internal void BindPhysicalController(int deviceIndex)
         {
+            UsbControllerMicrophoneBridge usbBridge = Volatile.Read(ref usbMicrophoneBridge);
+            if (usbBridge != null && !usbBridge.Matches(ResolveMicrophoneSource(deviceIndex), deviceIndex))
+                StopUsbMicrophoneBridge();
             DualSenseDevice converterTarget = ResolvePhysicalControllerTarget(deviceIndex);
             if (connected && !CanReuseHapticsConverterForTarget(converterTarget))
                 throw new InvalidOperationException("The VIIPER haptics converter requires a new virtual device for this physical controller.");
@@ -1049,6 +1053,7 @@ namespace DS4Windows
             if (connected)
             {
                 RebindSwitch2RuntimeStatusBridge();
+                RefreshAudioEndpointNames();
                 ResetState();
             }
         }
@@ -1100,6 +1105,29 @@ namespace DS4Windows
 
             return Program.rootHub.DS4Controllers[deviceIndex] as
                 DualSenseDevice;
+        }
+
+        private readonly object audioEndpointNamesGate = new object();
+        private ViiperAudioEndpointNames audioEndpointNames;
+        private bool audioEndpointNamesEnabled;
+
+        private void RefreshAudioEndpointNames()
+        {
+            lock (audioEndpointNamesGate)
+            {
+                audioEndpointNames?.Dispose();
+                audioEndpointNames = null;
+                ViiperDeviceStream stream = Volatile.Read(ref deviceStream);
+                int index = Volatile.Read(ref lastInputDeviceIndex);
+                if (!audioEndpointNamesEnabled || !connected || gamepadOnly || stream == null ||
+                    stream.UsbipPort <= 0 || index < 0 ||
+                    index >= ControlService.MAX_DS4_CONTROLLER_COUNT ||
+                    viiperType is not (ViiperVirtualDeviceType.DualShock4 or
+                        ViiperVirtualDeviceType.DualSense or ViiperVirtualDeviceType.DualSenseEdge)) return;
+                audioEndpointNames = new ViiperAudioEndpointNames(stream.UsbipPort, index,
+                    () => connected && ReferenceEquals(stream, Volatile.Read(ref deviceStream)) &&
+                        index == Volatile.Read(ref lastInputDeviceIndex));
+            }
         }
 
         public override void Connect()
@@ -1326,6 +1354,8 @@ namespace DS4Windows
                 ResetState();
                 StartFeedbackReader();
             }
+            lock (audioEndpointNamesGate) audioEndpointNamesEnabled = true;
+            RefreshAudioEndpointNames();
             StartSwitch2RuntimeStatusBridge();
             if (!audioOnlySidecar && viiperType is ViiperVirtualDeviceType.DualShock4 or
                     ViiperVirtualDeviceType.DualSense or ViiperVirtualDeviceType.DualSenseEdge or
@@ -1995,6 +2025,13 @@ namespace DS4Windows
 
         public override void Disconnect()
         {
+            lock (audioEndpointNamesGate)
+            {
+                audioEndpointNamesEnabled = false;
+                audioEndpointNames?.Dispose();
+                audioEndpointNames = null;
+            }
+
             // Invalidate producer admission before any worker generation or
             // stream teardown work. A callback which was paused after capture
             // can then neither stage into nor adopt a successor lifecycle.
@@ -2467,6 +2504,7 @@ namespace DS4Windows
             }
 
             microphoneInterfaceThread = null;
+            StopUsbMicrophoneBridge();
             Volatile.Write(ref virtualMicrophoneInterfaceActive, 0);
             Volatile.Write(ref virtualMicrophoneInterfaceStateKnown, 0);
             Volatile.Write(ref virtualMicrophoneInterfaceRemoteGenerationKnown,
@@ -4884,6 +4922,7 @@ namespace DS4Windows
         {
             int payloadLength;
             long queuedAt;
+            long usbRouteGeneration;
             lock (preparedMicrophoneQueueLock)
             {
                 if (preparedMicrophoneCount == 0)
@@ -4894,6 +4933,7 @@ namespace DS4Windows
                 int slot = preparedMicrophoneHead;
                 payloadLength = preparedMicrophoneLengths[slot];
                 queuedAt = preparedMicrophoneTimestamps[slot];
+                usbRouteGeneration = preparedMicrophoneUsbRouteGenerations[slot];
                 Buffer.BlockCopy(preparedMicrophoneFrames[slot], 0,
                     microphoneTransportPayload, 0, payloadLength);
                 preparedMicrophoneLengths[slot] = 0;
@@ -4905,6 +4945,11 @@ namespace DS4Windows
 
             while (IsStateWriterCurrent(writerGeneration))
             {
+                // Recheck after dequeue and after transport recovery: an old
+                // USB capture lease cannot reach a successor or a disabled mic.
+                if (usbRouteGeneration >= 0 &&
+                    (usbRouteGeneration != UsbMicrophoneRouteGeneration ||
+                     Volatile.Read(ref usbMicrophoneBridge)?.CanSubmit != true)) return true;
                 long failedStreamGeneration = Volatile.Read(
                     ref streamGeneration);
                 ViiperDeviceStream stream = deviceStream;
@@ -5276,6 +5321,8 @@ namespace DS4Windows
                             failedStreamGeneration &&
                         Volatile.Read(ref deviceStream) != null;
                 }
+
+                RefreshAudioEndpointNames();
 
                 // The new generation is visible, so no old reader or queued
                 // dispatch can gain a callback claim. Wait outside the short
@@ -5699,7 +5746,7 @@ namespace DS4Windows
             dualShock4ResamplePreviousSampleKnown = true;
         }
 
-        private void SubmitMicrophonePcm(int frames, bool muted)
+        private void SubmitMicrophonePcm(int frames, bool muted, long usbRouteGeneration = -1)
         {
             microphoneTelemetry.ObservePreProcessorFrame(microphoneMonoPcm,
                 frames);
@@ -5755,10 +5802,10 @@ namespace DS4Windows
             Interlocked.Exchange(ref lastMicrophoneProcessedTimestamp,
                 Stopwatch.GetTimestamp());
 
-            QueuePreparedMicrophonePayload(payload);
+            QueuePreparedMicrophonePayload(payload, usbRouteGeneration);
         }
 
-        private void QueuePreparedMicrophonePayload(byte[] payload)
+        private void QueuePreparedMicrophonePayload(byte[] payload, long usbRouteGeneration = -1)
         {
             if (payload == null || payload.Length == 0 || payload.Length >
                     MaximumPreparedMicrophonePayloadLength ||
@@ -5770,6 +5817,7 @@ namespace DS4Windows
             long queuedAt = Stopwatch.GetTimestamp();
             lock (preparedMicrophoneQueueLock)
             {
+                if (writerStopRequested || !connected) return;
                 if (preparedMicrophoneCount == MaxPreparedMicrophoneFrames)
                 {
                     // Audio is a time-indexed stream. At complete frame
@@ -5789,6 +5837,7 @@ namespace DS4Windows
                     0, payload.Length);
                 preparedMicrophoneLengths[tail] = payload.Length;
                 preparedMicrophoneTimestamps[tail] = queuedAt;
+                preparedMicrophoneUsbRouteGenerations[tail] = usbRouteGeneration;
                 preparedMicrophoneCount++;
             }
 
@@ -7945,6 +7994,88 @@ namespace DS4Windows
                 type == ViiperVirtualDeviceType.DualSenseEdge;
         }
 
+        private static DS4Device ResolveMicrophoneSource(int index)
+        {
+            DS4Device[] devices = Program.rootHub?.DS4Controllers;
+            return devices != null && index >= 0 && index < devices.Length ? devices[index] : null;
+        }
+
+        private UsbControllerMicrophoneBridge usbMicrophoneBridge;
+        private long usbMicrophoneRouteGeneration;
+        internal long UsbMicrophoneRouteGeneration => Interlocked.Read(ref usbMicrophoneRouteGeneration);
+        internal ControllerRuntimeLaneState UsbMicrophoneStatus =>
+            Volatile.Read(ref usbMicrophoneBridge)?.Status ?? ControllerRuntimeLaneState.Starting;
+
+        internal bool IsUsbMicrophoneSourceCurrent(DS4Device source, int index, long generation, long routeGeneration) =>
+            connected && !writerStopRequested && SupportsActiveVirtualMicrophone &&
+            routeGeneration == UsbMicrophoneRouteGeneration && generation == RuntimeFeedbackGeneration && index == Volatile.Read(ref lastInputDeviceIndex) &&
+            index >= 0 && index < ControlService.MAX_DS4_CONTROLLER_COUNT &&
+            Global.DualSenseEnableMicrophonePassthrough[index] &&
+            source != null && !source.IsRemoved && !source.IsDisconnecting &&
+            ControllerMicrophoneRoutePolicy.IsEligibleUsbSource(source) &&
+            ReferenceEquals(ResolveMicrophoneSource(index), source);
+
+        internal bool TryQueueUsbMicrophonePcm(DS4Device source, int index, long generation, long routeGeneration, short[] pcm)
+        {
+            if (pcm == null || pcm.Length != DualSenseMicrophoneFramesPerPacket) return false;
+            lock (microphoneProcessingLock)
+            {
+                if (!IsUsbMicrophoneSourceCurrent(source, index, generation, routeGeneration) || !IsVirtualMicrophoneInterfaceActive) return false;
+                Array.Copy(pcm, microphoneMonoPcm, pcm.Length);
+                Volatile.Write(ref microphoneVolume, Global.DualSenseMicrophoneVolume[index]);
+                Volatile.Write(ref microphoneNoiseSuppression, Global.DualSenseMicrophoneNoiseSuppression[index]);
+                bool muted = (source as DualSenseDevice)?.IsProfileMicrophoneMuted == true;
+                Volatile.Write(ref microphoneMuted, muted ? 1 : 0);
+                SubmitMicrophonePcm(pcm.Length, muted, routeGeneration);
+                return true;
+            }
+        }
+
+        internal void UpdateUsbMicrophoneMute(DS4Device source, int index, long generation, long routeGeneration)
+        {
+            if (IsUsbMicrophoneSourceCurrent(source, index, generation, routeGeneration))
+            {
+                int muted = (source as DualSenseDevice)?.IsProfileMicrophoneMuted == true ? 1 : 0;
+                if (Interlocked.Exchange(ref microphoneMuted, muted) != muted)
+                    ClearUsbMicrophonePending(source, index, generation, routeGeneration);
+            }
+        }
+
+        internal void ClearUsbMicrophonePending(DS4Device source, int index, long generation, long routeGeneration)
+        {
+            lock (microphoneProcessingLock)
+            {
+                if (routeGeneration != UsbMicrophoneRouteGeneration || generation != RuntimeFeedbackGeneration ||
+                    index != Volatile.Read(ref lastInputDeviceIndex) ||
+                    !ReferenceEquals(ResolveMicrophoneSource(index), source)) return;
+                lock (preparedMicrophoneQueueLock)
+                {
+                    preparedMicrophoneHead = preparedMicrophoneCount = 0;
+                    Array.Clear(preparedMicrophoneLengths);
+                    Array.Clear(preparedMicrophoneTimestamps);
+                }
+                microphoneProcessor.Reset();
+            }
+        }
+
+        private void StopUsbMicrophoneBridge()
+        {
+            UsbControllerMicrophoneBridge bridge = Interlocked.Exchange(ref usbMicrophoneBridge, null);
+            if (bridge == null) return;
+            Interlocked.Increment(ref usbMicrophoneRouteGeneration);
+            bridge.Dispose();
+            lock (microphoneProcessingLock)
+            {
+                lock (preparedMicrophoneQueueLock)
+                {
+                    preparedMicrophoneHead = preparedMicrophoneCount = 0;
+                    Array.Clear(preparedMicrophoneLengths);
+                    Array.Clear(preparedMicrophoneTimestamps);
+                }
+                microphoneProcessor.Reset();
+            }
+        }
+
         private void UpdateBluetoothMicrophoneSource(int deviceIndex,
             long workerGeneration)
         {
@@ -7962,11 +8093,24 @@ namespace DS4Windows
             if (!profileEnabled || Program.rootHub == null ||
                 deviceIndex >= Program.rootHub.DS4Controllers.Length)
             {
+                StopUsbMicrophoneBridge();
                 DetachBluetoothMicrophoneSource();
                 return;
             }
 
             DS4Device source = Program.rootHub.DS4Controllers[deviceIndex];
+            if (activeStreamSupportsMicrophone && ControllerMicrophoneRoutePolicy.IsEligibleUsbSource(source))
+            {
+                if (microphoneSourceDevice != null) DetachBluetoothMicrophoneSource();
+                UsbControllerMicrophoneBridge bridge = Volatile.Read(ref usbMicrophoneBridge);
+                if (bridge == null || !bridge.Matches(source, deviceIndex))
+                {
+                    StopUsbMicrophoneBridge();
+                    Volatile.Write(ref usbMicrophoneBridge, new UsbControllerMicrophoneBridge(source, deviceIndex, this));
+                }
+                return;
+            }
+            StopUsbMicrophoneBridge();
             DualSenseDevice dualSenseSource = source as DualSenseDevice;
             bool validDualSense = dualSenseSource != null &&
                 IsCurrentPhysicalSonyDualSense(dualSenseSource);

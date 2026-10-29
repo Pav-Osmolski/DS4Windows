@@ -108,9 +108,17 @@ public sealed class DualSenseNativeFeedbackDiagnosticsTests
         byte[] envelope = new byte[76];
         report.CopyTo(envelope, 28);
         for (int i = 0; i < 100; i++) Record();
-        long before = GC.GetAllocatedBytesForCurrentThread();
-        for (int i = 0; i < 10000; i++) Record();
-        Assert.AreEqual(before, GC.GetAllocatedBytesForCurrentThread());
+        long allocated;
+        // Use the suite's strict measurement scope: full-suite background GCs
+        // can repair allocation contexts while the counter window is open.
+        // Keep the zero-allocation requirement and framework assertions outside.
+        using (StrictAllocationMeasurementScope.Begin())
+        {
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 10000; i++) Record();
+            allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+        }
+        Assert.AreEqual(0L, allocated);
         void Record()
         {
             diagnostics.Admit(report, 1, 1);

@@ -6731,4 +6731,16 @@
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>הצגת תיאורי כלים</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>השארת הבקרים מוסתרים בין חיבורים מחדש</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>הבקרים הפיזיים נשארים מוסתרים עד לעצירה או ליציאה. נדרש HidHide. השינויים חלים לאחר עצירה והפעלה.</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>סיוע בתאימות ל-Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>מפעיל הסתרת בקר ומציג הנחיות לחיבור מחדש כאשר Steam פועל. בקרים פעילים בחיבור USB/Bluetooth אינם מופעלים מחדש.</value>
+  </data>
 </root>

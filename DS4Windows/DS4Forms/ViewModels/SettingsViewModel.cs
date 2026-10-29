@@ -44,6 +44,12 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             set => DS4Windows.Global.UseExclusiveMode = value;
         }
 
+        public bool KeepControllersHiddenOnReconnect
+        {
+            get => DS4Windows.Global.KeepControllersHiddenOnReconnect;
+            set => DS4Windows.Global.KeepControllersHiddenOnReconnect = value;
+        }
+
         public bool ReclaimSteamInput
         {
             get => DS4Windows.Global.ReclaimSteamInput;

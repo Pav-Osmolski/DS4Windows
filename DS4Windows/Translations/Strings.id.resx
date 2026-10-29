@@ -6753,4 +6753,16 @@ Untuk backup: </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Tampilkan tooltip</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Tetap sembunyikan pengontrol di antara penyambungan ulang</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Pengontrol fisik tetap tersembunyi hingga dihentikan atau aplikasi ditutup. Memerlukan HidHide. Perubahan berlaku setelah dihentikan lalu dimulai kembali.</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Bantuan kompatibilitas Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Mengaktifkan penyembunyian pengontrol dan menampilkan panduan penyambungan ulang saat Steam berjalan. Pengontrol USB/Bluetooth yang aktif tidak dimulai ulang.</value>
+  </data>
 </root>

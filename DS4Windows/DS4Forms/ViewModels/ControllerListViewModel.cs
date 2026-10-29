@@ -877,11 +877,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 if (logSelection)
                 {
-                    string prolog = string.Format(
-                        Properties.Resources.UsingProfile,
-                        (devIndex + 1).ToString(), profileName,
-                        $"{device?.Battery ?? 0}");
-                    AppLogger.LogToGui(prolog, false);
+                    ProfileSwitchFeedback.ReportApplied(true, devIndex,
+                        profileName, device?.Battery ?? 0);
                 }
 
                 LightColorChanged?.Invoke(this, EventArgs.Empty);

@@ -1791,6 +1791,12 @@ namespace DS4Windows
             return UseExclusiveMode;
         }
 
+        public static bool KeepControllersHiddenOnReconnect
+        {
+            get => m_Config.keepControllersHiddenOnReconnect;
+            set => m_Config.keepControllersHiddenOnReconnect = value;
+        }
+
         public static bool ReclaimSteamInput
         {
             set { m_Config.reclaimSteamInput = value; }
@@ -3593,6 +3599,7 @@ namespace DS4Windows
             if (result)
             {
                 tempprofilename[device] = name;
+                ProfileSwipePolicy.PublishTemporarySelection(device, false);
                 useTempProfile[device] = true;
                 tempprofileDistance[device] = name.ToLower().Contains("distance");
             }
@@ -3645,6 +3652,7 @@ namespace DS4Windows
                     if (loaded)
                     {
                         tempprofilename[device] = temporaryName ?? string.Empty;
+                        ProfileSwipePolicy.PublishTemporarySelection(device, false);
                         useTempProfile[device] = temporaryName != null;
                         tempprofileDistance[device] = temporaryName?.Contains("distance",
                             StringComparison.OrdinalIgnoreCase) == true;
@@ -5074,6 +5082,7 @@ namespace DS4Windows
           new int[1] { DEFAULT_TOUCH_DIS_INVERT_TRIGGER }, new int[1] { DEFAULT_TOUCH_DIS_INVERT_TRIGGER}, new int[1] { DEFAULT_TOUCH_DIS_INVERT_TRIGGER } };
         public Boolean useExclusiveMode = false; // Re-enable Ex Mode
         public bool reclaimSteamInput = false;
+        public bool keepControllersHiddenOnReconnect = true;
 
         public const int DEFAULT_FORM_WIDTH = 782;
         public int formWidth = DEFAULT_FORM_WIDTH;
@@ -9656,6 +9665,7 @@ namespace DS4Windows
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/startMinimized"); Boolean.TryParse(Item.InnerText, out startMinimized); }
                     catch { missingSetting = true; }
                     viiperDebugLogging = Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/ViiperDebugLogging")?.InnerText, out bool viiperDebug) && viiperDebug;
+                    keepControllersHiddenOnReconnect = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/KeepControllersHiddenOnReconnect")?.InnerText, out bool keepHidden) || keepHidden;
                     showViiperTrayIcon = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/ShowViiperTrayIcon")?.InnerText, out bool visibleTray) || visibleTray;
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/minimizeToTaskbar"); Boolean.TryParse(Item.InnerText, out minToTaskbar); }
                     catch { missingSetting = true; }
@@ -10067,6 +10077,7 @@ namespace DS4Windows
 
             // Ex Mode (+1 line)
             XmlNode xmlUseExclNode = m_Xdoc.CreateNode(XmlNodeType.Element, "useExclusiveMode", null); xmlUseExclNode.InnerText = useExclusiveMode.ToString(); rootElement.AppendChild(xmlUseExclNode);
+            XmlNode xmlKeepHidden = m_Xdoc.CreateNode(XmlNodeType.Element, "KeepControllersHiddenOnReconnect", null); xmlKeepHidden.InnerText = keepControllersHiddenOnReconnect.ToString(); rootElement.AppendChild(xmlKeepHidden);
             XmlNode xmlReclaimSteamInput = m_Xdoc.CreateNode(XmlNodeType.Element, "ReclaimSteamInput", null); xmlReclaimSteamInput.InnerText = reclaimSteamInput.ToString(); rootElement.AppendChild(xmlReclaimSteamInput);
             XmlNode xmlStartMinimized = m_Xdoc.CreateNode(XmlNodeType.Element, "startMinimized", null); xmlStartMinimized.InnerText = startMinimized.ToString(); rootElement.AppendChild(xmlStartMinimized);
             XmlNode xmlViiperDebug = m_Xdoc.CreateNode(XmlNodeType.Element, "ViiperDebugLogging", null); xmlViiperDebug.InnerText = viiperDebugLogging.ToString(); rootElement.AppendChild(xmlViiperDebug);

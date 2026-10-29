@@ -51,6 +51,15 @@ namespace DS4WindowsTests
         [DataRow("DualSense Wireless Controller", (int)ControllerAudioEndpointKind.DualSense)]
         [DataRow("DualShock 4 Controller", (int)ControllerAudioEndpointKind.DualShock4)]
         [DataRow("Wireless Controller", (int)ControllerAudioEndpointKind.Any)]
+        [DataRow("DS4Windows Controller 1 Audio (2- DualSense Wireless Controller)", (int)ControllerAudioEndpointKind.DualSense)]
+        [DataRow("DS4Windows Controller 1 Microphone (DualSense Edge Wireless Controller)", (int)ControllerAudioEndpointKind.DualSense)]
+        [DataRow("DS4Windows Controller 2 Audio (2- Wireless Controller)", (int)ControllerAudioEndpointKind.Any)]
+        [DataRow("DS4Windows Controller 1 Audio", (int)ControllerAudioEndpointKind.Any)]
+        [DataRow("DS4Windows Controller 1 Audio USB VID_054C PID_0CE6", (int)ControllerAudioEndpointKind.DualSense)]
+        [DataRow("DS4Windows Controller 1 Audio USB VID_054C PID_09CC", (int)ControllerAudioEndpointKind.DualShock4)]
+        [DataRow("DualShock display name USB VID_054C PID_0CE6", (int)ControllerAudioEndpointKind.DualSense)]
+        [DataRow("DualSense display name USB VID_054C PID_09CC", (int)ControllerAudioEndpointKind.DualShock4)]
+        [DataRow("DS4 Controller", (int)ControllerAudioEndpointKind.DualShock4)]
         public void ClassifiesControllerAudioEndpointIdentity(string identity, int expected)
         {
             Assert.AreEqual((ControllerAudioEndpointKind)expected,

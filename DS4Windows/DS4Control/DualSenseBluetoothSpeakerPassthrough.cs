@@ -974,14 +974,15 @@ namespace DS4Windows
                     LowLatencyCaptureBufferMs), "DualSense Bluetooth speaker");
         }
 
-        private static bool IsLikelyGameAudioEndpoint(string sourceName)
+        internal static bool IsLikelyGameAudioEndpoint(string sourceName)
         {
             if (string.IsNullOrEmpty(sourceName))
             {
                 return false;
             }
 
-            return sourceName.IndexOf("Wireless Controller", StringComparison.OrdinalIgnoreCase) >= 0 ||
+            return sourceName.StartsWith("DS4Windows Controller ", StringComparison.OrdinalIgnoreCase) ||
+                sourceName.IndexOf("Wireless Controller", StringComparison.OrdinalIgnoreCase) >= 0 ||
                 sourceName.IndexOf("DualSense", StringComparison.OrdinalIgnoreCase) >= 0 ||
                 sourceName.IndexOf("VIIPER", StringComparison.OrdinalIgnoreCase) >= 0;
         }

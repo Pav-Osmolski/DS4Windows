@@ -15,7 +15,7 @@ internal static class GuardedProfileReload
     internal static bool Execute(int slot, string name, bool temporary,
         bool launchProgram, ControlService service, DS4Device source,
         long revision, Func<bool> loadGuard, out bool accepted,
-        ControllerProfileActionTarget? submittedTarget = null)
+        ControllerProfileActionTarget? submittedTarget = null, bool allowProfileSwipes = false)
     {
         accepted = false;
         if ((uint)slot >= Global.MAX_DS4_CONTROLLER_COUNT || service == null ||
@@ -119,6 +119,10 @@ internal static class GuardedProfileReload
 
         void Apply()
         {
+            // A manual mute selection must not take swipe ownership away from
+            // an existing automatic/held temporary profile.
+            bool permitSwipes = temporary && allowProfileSwipes &&
+                ProfileSwipePolicy.CanSwipe(slot);
             applied = Global.store.ApplyPreparedProfileNew(prepared, launchProgram,
                 service, out _, transitionRevision: revision,
                 completeColdSideEffects: false, actionTarget: source == null ? null : target);
@@ -129,6 +133,7 @@ internal static class GuardedProfileReload
             Global.tempprofilename[slot] = temporary ? name : string.Empty;
             Global.tempprofileDistance[slot] = temporary &&
                 name.Contains("distance", StringComparison.OrdinalIgnoreCase);
+            ProfileSwipePolicy.PublishTemporarySelection(slot, permitSwipes);
             Global.useTempProfile[slot] = temporary;
         }
     }
