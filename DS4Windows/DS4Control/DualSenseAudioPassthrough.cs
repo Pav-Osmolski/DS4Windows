@@ -934,7 +934,8 @@ namespace DS4Windows
 
         private static bool LooksLikeControllerAudioIdentity(string identity)
         {
-            return ClassifyEndpointIdentity(identity) != ControllerAudioEndpointKind.Any ||
+            return identity.IndexOf("DS4Windows Controller ", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                ClassifyEndpointIdentity(identity) != ControllerAudioEndpointKind.Any ||
                 identity.IndexOf("Wireless Controller", StringComparison.OrdinalIgnoreCase) >= 0 ||
                 identity.IndexOf("VIIPER", StringComparison.OrdinalIgnoreCase) >= 0;
         }
@@ -1337,21 +1338,23 @@ namespace DS4Windows
                 .Replace("_", string.Empty)
                 .Replace("-", string.Empty);
 
+            // USB identity outranks display-name hints. The application's name
+            // contains "DS4" but is shared by every emulated controller model.
             if (ContainsSonyUsbIdentity(normalized, "05C4") ||
-                ContainsSonyUsbIdentity(normalized, "09CC") ||
-                identity.IndexOf("DualShock", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                identity.IndexOf("DS4", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
+                ContainsSonyUsbIdentity(normalized, "09CC"))
                 return ControllerAudioEndpointKind.DualShock4;
-            }
-
             if (ContainsSonyUsbIdentity(normalized, "0CE6") ||
-                ContainsSonyUsbIdentity(normalized, "0DF2") ||
-                identity.IndexOf("DualSense", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                identity.IndexOf("PS5", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
+                ContainsSonyUsbIdentity(normalized, "0DF2"))
                 return ControllerAudioEndpointKind.DualSense;
-            }
+
+            string modelName = identity.Replace("DS4Windows", string.Empty,
+                StringComparison.OrdinalIgnoreCase);
+            if (modelName.IndexOf("DualShock", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                modelName.IndexOf("DS4", StringComparison.OrdinalIgnoreCase) >= 0)
+                return ControllerAudioEndpointKind.DualShock4;
+            if (modelName.IndexOf("DualSense", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                modelName.IndexOf("PS5", StringComparison.OrdinalIgnoreCase) >= 0)
+                return ControllerAudioEndpointKind.DualSense;
 
             return ControllerAudioEndpointKind.Any;
         }

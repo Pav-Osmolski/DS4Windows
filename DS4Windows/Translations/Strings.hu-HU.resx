@@ -6729,4 +6729,16 @@ A háttérben: </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Eszköztippek megjelenítése</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Vezérlők rejtve tartása az újracsatlakozások között</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>A fizikai vezérlők leállításig vagy kilépésig rejtve maradnak. HidHide szükséges. A módosítások leállítás és indítás után lépnek érvénybe.</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Steam Input kompatibilitási segítség</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Bekapcsolja a vezérlő elrejtését, és futó Steam mellett újracsatlakozási útmutatást jelenít meg. Az aktív USB-/Bluetooth-vezérlőket nem indítja újra.</value>
+  </data>
 </root>

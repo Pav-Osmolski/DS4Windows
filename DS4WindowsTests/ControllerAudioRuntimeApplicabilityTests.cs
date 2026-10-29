@@ -52,7 +52,6 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
     [DataRow(InputDeviceType.Switch2JoyConJoined, ConnectionType.BT)]
     [DataRow(InputDeviceType.SwitchPro, ConnectionType.USB)]
     [DataRow(InputDeviceType.DS3, ConnectionType.USB)]
-    [DataRow(InputDeviceType.DS4, ConnectionType.USB)]
     public void InheritedSonySettingsDoNotMakeUnsupportedControllersNeedAttention(
         InputDeviceType deviceType, ConnectionType connection)
     {

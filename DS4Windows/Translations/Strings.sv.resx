@@ -6731,4 +6731,16 @@ och backup: </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Visa verktygstips</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Behåll handkontroller dolda mellan återanslutningar</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Fysiska handkontroller förblir dolda tills du stoppar eller avslutar. Kräver HidHide. Ändringar gäller efter stopp och start.</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Kompatibilitetshjälp för Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Aktiverar döljning av handkontrollen och visar återanslutningsråd när Steam körs. Aktiva USB-/Bluetooth-handkontroller startas inte om.</value>
+  </data>
 </root>

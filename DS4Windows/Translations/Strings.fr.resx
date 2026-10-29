@@ -6755,4 +6755,16 @@ Le backup : </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Afficher les infobulles</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Garder les manettes masquées entre les reconnexions</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Les manettes physiques restent masquées jusqu’à l’arrêt ou la fermeture. Nécessite HidHide. Les changements s’appliquent après un arrêt puis un démarrage.</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Aide à la compatibilité Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Active le masquage de la manette et affiche des conseils de reconnexion lorsque Steam est lancé. Les manettes USB/Bluetooth actives ne sont pas redémarrées.</value>
+  </data>
 </root>

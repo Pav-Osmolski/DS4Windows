@@ -6899,4 +6899,16 @@
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>显示工具提示</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>在重新连接之间保持控制器隐藏</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>物理控制器将保持隐藏，直到停止或退出。需要 HidHide。更改在停止后重新启动时生效。</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Steam Input 兼容性辅助</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>启用控制器隐藏，并在 Steam 运行时显示重新连接指引。不会重启正在使用的 USB/Bluetooth 控制器。</value>
+  </data>
 </root>

@@ -10789,5 +10789,29 @@
     "files": [
       "DS4Windows/DS4Forms/MainWindow.xaml"
     ]
+  },
+  "UI_90826CB73E23005F": {
+    "source": "Keep controllers hidden between reconnects",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_F6E208B90A8761C5": {
+    "source": "Keeps physical controllers hidden until Stop or exit. Requires HidHide. Changes apply after Stop/Start.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_C8530A9FFDD57548": {
+    "source": "Steam Input compatibility assistance",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_3123788FB6F3C64F": {
+    "source": "Enables controller hiding and shows reconnect guidance when Steam is running. Active USB/Bluetooth controllers are not restarted.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
   }
 }

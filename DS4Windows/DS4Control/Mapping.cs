@@ -294,6 +294,7 @@ namespace DS4Windows
             public bool Pending;
             public bool Running;
             public bool TempProfile;
+            public bool AllowProfileSwipes;
             public bool LaunchProgram;
             public string ProfileName = string.Empty;
             public Action<bool> AfterLoad;
@@ -1271,7 +1272,7 @@ namespace DS4Windows
 
         private static long RequestProfileSwitch(int device, string profileName, bool tempProfile,
             bool launchProgram, ControlService ctrl, Action<bool> afterLoad = null,
-            Func<bool> loadGuard = null)
+            Func<bool> loadGuard = null, bool allowProfileSwipes = false)
         {
             if (device < 0 || device >= Global.MAX_DS4_CONTROLLER_COUNT)
             {
@@ -1295,6 +1296,7 @@ namespace DS4Windows
                 request.Revision = revision = Global.BeginProfileSwitchRevision(device);
                 request.Pending = true;
                 request.TempProfile = tempProfile;
+                request.AllowProfileSwipes = tempProfile && allowProfileSwipes;
                 request.LaunchProgram = launchProgram;
                 // Freeze the requested regular name at enqueue. UI selection
                 // may supply its local name because another in-flight loader
@@ -1466,10 +1468,11 @@ namespace DS4Windows
         /// </summary>
         public static void RequestTemporaryProfileLoad(int device,
             string profileName, bool launchProgram, ControlService ctrl,
-            Action<bool> afterLoad = null, Func<bool> loadGuard = null)
+            Action<bool> afterLoad = null, Func<bool> loadGuard = null,
+            bool allowProfileSwipes = false)
         {
             RequestProfileSwitch(device, profileName, true, launchProgram,
-                ctrl, afterLoad, loadGuard);
+                ctrl, afterLoad, loadGuard, allowProfileSwipes);
         }
 
         public static void ExecuteSerializedProfileMutation(int device,
@@ -1492,6 +1495,7 @@ namespace DS4Windows
             while (true)
             {
                 bool tempProfile;
+                bool allowProfileSwipes;
                 bool launchProgram;
                 string profileName;
                 Action<bool> afterLoad;
@@ -1519,6 +1523,7 @@ namespace DS4Windows
                     request.Control = null;
                     request.Guarded = null;
                     tempProfile = request.TempProfile;
+                    allowProfileSwipes = request.AllowProfileSwipes;
                     launchProgram = request.LaunchProgram;
                     profileName = request.ProfileName;
                     afterLoad = request.AfterLoad;
@@ -1560,7 +1565,7 @@ namespace DS4Windows
                 {
                     loaded = GuardedProfileReload.Execute(device, profileName,
                         tempProfile, launchProgram, ctrl, source, revision,
-                        loadGuard, out requestAccepted, target);
+                        loadGuard, out requestAccepted, target, allowProfileSwipes);
                 }
                 catch (Exception ex)
                 {

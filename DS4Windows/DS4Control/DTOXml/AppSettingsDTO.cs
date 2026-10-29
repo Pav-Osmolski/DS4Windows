@@ -99,6 +99,16 @@ namespace DS4WinWPF.DS4Control.DTOXml
         [XmlIgnore]
         public bool UseExclusiveMode { get; private set; }
 
+        [XmlElement("KeepControllersHiddenOnReconnect")]
+        public string KeepControllersHiddenOnReconnectString
+        {
+            get => KeepControllersHiddenOnReconnect.ToString();
+            set => KeepControllersHiddenOnReconnect = !bool.TryParse(value, out bool enabled) || enabled;
+        }
+
+        [XmlIgnore]
+        public bool KeepControllersHiddenOnReconnect { get; private set; } = true;
+
         [XmlElement("ReclaimSteamInput")]
         public string ReclaimSteamInputString
         {
@@ -958,6 +968,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
         {
             UseExclusiveMode = source.useExclusiveMode;
             ReclaimSteamInput = source.reclaimSteamInput;
+            KeepControllersHiddenOnReconnect = source.keepControllersHiddenOnReconnect;
             StartMinimized = source.startMinimized;
             MinimizeToTaskbar = source.minToTaskbar;
             ProcessPriority = source.processPriority;
@@ -1079,6 +1090,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
         {
             destination.useExclusiveMode = UseExclusiveMode;
             destination.reclaimSteamInput = ReclaimSteamInput;
+            destination.keepControllersHiddenOnReconnect = KeepControllersHiddenOnReconnect;
             destination.startMinimized = StartMinimized;
             destination.minToTaskbar = MinimizeToTaskbar;
             destination.processPriority = ProcessPriority;

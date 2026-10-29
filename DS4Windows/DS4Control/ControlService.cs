@@ -2853,7 +2853,7 @@ namespace DS4Windows
 
         private bool StartCore(bool showlog)
         {
-            hidHideManagedDevices.OpenLifecycle();
+            hidHideManagedDevices.OpenLifecycle(Global.KeepControllersHiddenOnReconnect);
             reportDiagnosticsWorker.Resume();
             StartupDiag($"ControlService.Start enter showlog={showlog} running={running} inServiceTask={inServiceTask} admin={Global.IsAdministrator()}");
             inServiceTask = true;
@@ -4062,7 +4062,8 @@ namespace DS4Windows
 
             OutContType desiredSidecar = primary?.IsRuntimeConnected == true
                 ? PlayStationFeatureOutputPolicy.GetAudioOnlySidecarType(
-                    source, primaryType, getDInputOnly(index))
+                    source, primaryType, getDInputOnly(index),
+                    allowUsbMicrophone: Global.DualSenseEnableMicrophonePassthrough[index])
                 : OutContType.None;
             if (desiredSidecar == OutContType.None)
             {
@@ -4396,6 +4397,7 @@ namespace DS4Windows
                 // audible speaker streaming and the Audio Haptics feature.
                 dualSenseUsbHaptics.Update(ind, dualsense,
                     getEnableOutputDataToDS4(ind) &&
+                    playStationFeatureOutput?.IsAudioOnlySidecar != true &&
                     (playStationFeatureOutputType.Normalize() == OutContType.ViiperDualSense ||
                      playStationFeatureOutputType.Normalize() == OutContType.ViiperDualSenseEdge),
                     DualSenseAudioSpeakerEndpointId[ind],
@@ -4437,7 +4439,10 @@ namespace DS4Windows
                     dualSenseAudioPassthrough.Stop(ind);
                 }
 
+                // A supported USB source waits for its VIIPER capture route;
+                // never fall back to a render/cable route during startup.
                 if (DualSenseEnableMicrophonePassthrough[ind] &&
+                    !ControllerMicrophoneRoutePolicy.IsEligibleUsbSource(dualsense) &&
                     !useViiperControllerMicrophone)
                 {
                     dualSenseMicrophonePassthrough.Start(DualSenseMicrophoneVolume[ind],
@@ -5312,7 +5317,8 @@ namespace DS4Windows
                     : dualShock4AudioPassthrough.GetStatus(index);
             }
 
-            bool microphoneRequired = controllerAudioApplicable &&
+            bool microphoneRequired = (controllerAudioApplicable ||
+                ControllerMicrophoneRoutePolicy.IsEligibleUsbSource(device)) &&
                 Global.DualSenseEnableMicrophonePassthrough[index];
             ControllerRuntimeLaneState microphone =
                 ControllerRuntimeLaneState.NotRequired;
@@ -5326,7 +5332,9 @@ namespace DS4Windows
                 {
                     microphone = playStationFeatureOutput?
                         .SupportsActiveVirtualMicrophone == true
-                        ? ControllerRuntimeLaneState.Ready
+                        ? ControllerMicrophoneRoutePolicy.IsEligibleUsbSource(device)
+                            ? playStationFeatureOutput.UsbMicrophoneStatus
+                            : ControllerRuntimeLaneState.Ready
                         : playStationFeatureOutput?.IsRuntimeConnected == true
                             ? ControllerRuntimeLaneState.Unavailable
                             : ControllerRuntimeLaneState.Starting;
@@ -5895,9 +5903,11 @@ namespace DS4Windows
                             LogDebug($"DualSense mute profile action failed to load " +
                                 $"'{profileName}'.", true);
                         }
+                        ProfileSwitchFeedback.ReportApplied(loaded, deviceIndex,
+                            profileName, DS4Controllers[deviceIndex]?.Battery ?? 0);
                     }, loadGuard: () =>
                         IsCurrentDualSenseMuteProfileRequest(
-                            deviceIndex, modeEpoch));
+                            deviceIndex, modeEpoch), allowProfileSwipes: true);
             }
         }
 

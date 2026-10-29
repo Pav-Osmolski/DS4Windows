@@ -43,6 +43,9 @@ namespace DS4Windows
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         private readonly HashSet<string> persistentOwnedIds =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private readonly HashSet<string> reconnectRetainedIds =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        private bool retainDisconnectedDevices;
         private long nextGeneration;
         private long lifecycleGeneration;
         private bool acceptingConnections;
@@ -57,10 +60,12 @@ namespace DS4Windows
         /// Opens a new service generation. Claims from an earlier generation
         /// can never become current again after Stop followed by Start.
         /// </summary>
-        public void OpenLifecycle()
+        public void OpenLifecycle(bool? keepHiddenOnReconnect = null)
         {
             lock (syncRoot)
             {
+                if (keepHiddenOnReconnect.HasValue)
+                    retainDisconnectedDevices = keepHiddenOnReconnect.Value;
                 lifecycleGeneration++;
                 acceptingConnections = true;
             }
@@ -234,6 +239,14 @@ namespace DS4Windows
                 string[] releases = binding.InstanceIds.Where(id =>
                     persistentOwnedIds.Contains(id) &&
                     !IsReferencedNoLock(id)).ToArray();
+                if (acceptingConnections && retainDisconnectedDevices)
+                {
+                    // Keep only proven process-owned additions. Their existing
+                    // PnP identities are cloaked before the next arrival, rather
+                    // than racing consumers that open the physical device first.
+                    reconnectRetainedIds.UnionWith(releases);
+                    releases = Array.Empty<string>();
+                }
                 return new HidHideDisconnectPlan(binding.InstanceIds.ToArray(),
                     releases);
             }
@@ -246,7 +259,7 @@ namespace DS4Windows
             lock (syncRoot)
             {
                 return ids.Where(id => persistentOwnedIds.Contains(id) &&
-                    !IsReferencedNoLock(id)).ToArray();
+                    !IsReferencedNoLock(id) && !IsRetainedNoLock(id)).ToArray();
             }
         }
 
@@ -265,13 +278,14 @@ namespace DS4Windows
                 foreach (string id in ids)
                 {
                     if (!persistentOwnedIds.Contains(id)) continue;
-                    if (IsReferencedNoLock(id))
+                    if (IsReferencedNoLock(id) || IsRetainedNoLock(id))
                     {
                         reassert.Add(id);
                     }
                     else
                     {
                         persistentOwnedIds.Remove(id);
+                        reconnectRetainedIds.Remove(id);
                     }
                 }
                 return reassert;
@@ -286,6 +300,7 @@ namespace DS4Windows
             lock (syncRoot)
             {
                 persistentOwnedIds.ExceptWith(ids);
+                reconnectRetainedIds.ExceptWith(ids);
             }
         }
 
@@ -306,6 +321,7 @@ namespace DS4Windows
             lock (syncRoot)
             {
                 persistentOwnedIds.ExceptWith(ids);
+                reconnectRetainedIds.ExceptWith(ids);
             }
         }
 
@@ -323,6 +339,7 @@ namespace DS4Windows
                 HidHideServiceReleasePlan plan = new(
                     sessionOwnedIds.ToArray(), persistentOwnedIds.ToArray());
                 bindings.Clear();
+                reconnectRetainedIds.Clear();
                 return plan;
             }
         }
@@ -354,6 +371,9 @@ namespace DS4Windows
             acceptingConnections = false;
             lifecycleGeneration++;
         }
+
+        private bool IsRetainedNoLock(string instanceId) =>
+            acceptingConnections && reconnectRetainedIds.Contains(instanceId);
 
         private bool IsReferencedNoLock(string instanceId)
         {

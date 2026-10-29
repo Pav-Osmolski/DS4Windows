@@ -298,7 +298,7 @@ internal sealed class DualSenseUsbHapticsPassthrough
         return null;
     }
 
-    private static bool EndpointMatchesContainer(MMDevice endpoint, Guid container)
+    internal static bool EndpointMatchesContainer(MMDevice endpoint, Guid container)
     {
         foreach (var key in new[] { PropertyKeys.PKEY_Device_ControllerDeviceId,
             PropertyKeys.PKEY_Device_InstanceId, PropertyKeys.PKEY_Device_InterfaceKey })

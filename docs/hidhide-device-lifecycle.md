@@ -24,10 +24,11 @@ so DS4Windows may have to add a persistent fallback rule. Only instance IDs
 that this process actually inserted are removable ownership. A matching rule
 that was already present protects the controller but remains user-owned.
 
-The live identity set is captured before PnP removal. On disconnect,
-DS4Windows removes only its persistent additions after the virtual output has
-retired. Session entries are process-scoped and are cleared only for a full
-service stop, never for one controller. Overlapping old/new generations are
+The live identity set is captured before PnP removal. With reconnect protection
+enabled (the default), DS4Windows retains its persistent additions until Stop or
+exit. With protection disabled, it removes its additions after the disconnected
+controller's virtual output has retired. Session entries are process-scoped and
+are cleared only for a full service stop, never for one controller. Overlapping old/new generations are
 reference-counted; if a reconnect arrives during a persistent removal write,
 the rule is reasserted before the driver mutation boundary is released.
 
@@ -37,10 +38,9 @@ then run under the same driver-mutation boundary. A HotPlug operation that
 entered before Stop cannot add a rule afterward, and a later Start opens a new
 generation only after cleanup completes.
 
-This cleanup allows a wired controller whose instance ID changes from A to B
-to enumerate unblocked, after which B is hidden as the new generation. It also
-prevents a user-created HidHide entry from being adopted and deleted by
-DS4Windows.
+A wired controller whose instance ID changes from A to B is resolved and hidden
+as a new generation; retention of A cannot cloak an unknown B before discovery.
+User-created HidHide entries are never adopted and deleted by DS4Windows.
 
 Application-list inverse mode, active state, and blacklist reads are treated as
 fallible driver queries. DS4Windows does not mutate whitelist policy, cache a
@@ -91,4 +91,32 @@ already active wired controller. Restarting the HID collection after the input
 reader owns it can tear down the current generation, race the path/serial
 registries, and return as a generic HID collection. A physical reconnect or
 Steam restart is required when Steam held a wired controller before HidHide was
-enabled. The existing Bluetooth reclaim path is unchanged.
+enabled. Bluetooth reclaim likewise avoids restarting an active device.
+
+## Reconnect protection
+
+**Settings > Controllers > Prevent double input > Keep controllers hidden between
+reconnects** is enabled by default. It retains HidHide entries that DS4Windows
+proved it added for a connected physical controller, even after that controller
+disconnects. An already-known physical PnP identity can therefore reconnect with
+its hiding rule still present, reducing the window in which Steam or a game can
+open it before the virtual output is ready.
+
+The policy is captured when the service starts. After changing the toggle, use
+**Stop**, then **Start**. The setting itself performs no driver operations or
+controller restarts from the UI thread. When disabled, the previous immediate
+physical-disconnect release behavior remains available.
+
+Normal **Stop** or application exit releases all retained DS4Windows-owned
+entries, including controllers that are no longer connected. Preexisting
+user-managed entries are never adopted as process-owned or removed. Cancelled
+connections still roll back new additions; late release attempts revalidate
+ownership and reassert a retained identity when necessary. An unsuccessful Stop
+that resumes the service preserves the active retention policy.
+
+This does not hide virtual controllers, change their identities, or alter input,
+audio or haptics packets. Native controller use without DS4Windows requires Stop
+or exit (or disabling the option and performing Stop/Start). It does not repair
+input state already retained by a running game. It cannot guarantee hiding of a
+previously unseen device identity before its first discovery, and it is not a
+confirmed fix for GTA V Enhanced's duplicate-input behavior.

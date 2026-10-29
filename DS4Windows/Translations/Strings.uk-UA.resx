@@ -6728,4 +6728,16 @@
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>Показувати підказки</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>Приховувати контролери між повторними підключеннями</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>Фізичні контролери залишаються прихованими до зупинки або виходу. Потрібен HidHide. Зміни застосовуються після зупинки та запуску.</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>Допомога із сумісністю Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>Вмикає приховування контролера та показує поради щодо повторного підключення, коли Steam запущено. Активні контролери USB/Bluetooth не перезапускаються.</value>
+  </data>
 </root>

@@ -30,7 +30,7 @@ namespace DS4Windows
 
         internal static OutContType GetAudioOnlySidecarType(
             DS4Device source, OutContType primaryOutputType,
-            bool dInputOnly)
+            bool dInputOnly, bool allowUsbMicrophone = false)
         {
             if (source?.HidDevice?.Attributes == null)
             {
@@ -41,15 +41,16 @@ namespace DS4Windows
                 source.ConnectionType,
                 source.HidDevice.Attributes.VendorId,
                 source.HidDevice.Attributes.ProductId,
-                primaryOutputType, dInputOnly);
+                primaryOutputType, dInputOnly, allowUsbMicrophone);
         }
 
         internal static OutContType GetAudioOnlySidecarType(
             InputDeviceType deviceType, ConnectionType connectionType,
             int vendorId, int productId, OutContType primaryOutputType,
-            bool dInputOnly)
+            bool dInputOnly, bool allowUsbMicrophone = false)
         {
-            if (dInputOnly || connectionType != ConnectionType.BT ||
+            if (dInputOnly || (connectionType != ConnectionType.BT &&
+                    !(allowUsbMicrophone && connectionType == ConnectionType.USB)) ||
                 vendorId != DS4Devices.SONY_VID ||
                 !NeedsAudioOnlySidecar(primaryOutputType))
             {

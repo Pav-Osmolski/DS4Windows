@@ -6736,4 +6736,16 @@ Backup : </value>
   <data name="UI_F6B13F9FB56323B7" xml:space="preserve">
     <value>إظهار تلميحات الأدوات</value>
   </data>
+  <data name="UI_90826CB73E23005F" xml:space="preserve">
+    <value>إبقاء وحدات التحكم مخفية بين عمليات إعادة الاتصال</value>
+  </data>
+  <data name="UI_F6E208B90A8761C5" xml:space="preserve">
+    <value>تبقى وحدات التحكم الفعلية مخفية حتى الإيقاف أو الخروج. يتطلب HidHide. تُطبّق التغييرات بعد الإيقاف ثم التشغيل.</value>
+  </data>
+  <data name="UI_C8530A9FFDD57548" xml:space="preserve">
+    <value>المساعدة في التوافق مع Steam Input</value>
+  </data>
+  <data name="UI_3123788FB6F3C64F" xml:space="preserve">
+    <value>يفعّل إخفاء وحدة التحكم ويعرض إرشادات إعادة الاتصال عند تشغيل Steam. لا تُعاد تهيئة اتصال وحدات USB/Bluetooth النشطة.</value>
+  </data>
 </root>

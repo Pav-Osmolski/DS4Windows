@@ -165,9 +165,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             PhysicalIdentityKnown && IsGenuineSonyController &&
             ConnectionType == DS4Windows.ConnectionType.USB;
 
-        internal bool ShowLegacyMicrophoneRouting => DeviceType == null ||
-            IsDualSense && PhysicalIdentityKnown && IsGenuineSonyController &&
-            ConnectionType == DS4Windows.ConnectionType.USB;
+        internal bool ShowLegacyMicrophoneRouting => DeviceType == null;
 
         internal ControllerMicrophoneUiState GetMicrophoneUiState(
             OutContType outputType, bool activeStreamSupportsMicrophone,
@@ -190,16 +188,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     global::DS4Windows.UiText.Get("Controller microphone routing requires a genuine Sony DualShock 4 or DualSense."));
             }
 
-            if (IsDualSense &&
-                ConnectionType == DS4Windows.ConnectionType.USB)
-            {
-                return new ControllerMicrophoneUiState(
-                    ControllerMicrophoneUiStatus.UsbLegacyRoute,
-                    canEnable: true,
-                    global::DS4Windows.UiText.Get("USB DualSense microphone routing uses the capture and virtual-output endpoints in Advanced audio."));
-            }
-
-            if (ConnectionType != DS4Windows.ConnectionType.BT)
+            // Preserve the unsupported-adapter guard; the new capture bridge
+            // adds USB, not every connection type accepted by a Sony device.
+            if (ConnectionType != DS4Windows.ConnectionType.USB &&
+                ConnectionType != DS4Windows.ConnectionType.BT)
             {
                 return new ControllerMicrophoneUiState(
                     ControllerMicrophoneUiStatus.RequiresBluetooth,
@@ -216,7 +208,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     global::DS4Windows.UiText.Get("A VIIPER PlayStation audio interface is required to expose the controller microphone."));
             }
 
-            if (requireActiveStream && !activeStreamSupportsMicrophone)
+            if (requireActiveStream && !activeStreamSupportsMicrophone &&
+                !(ConnectionType == DS4Windows.ConnectionType.USB &&
+                    PlayStationFeatureOutputPolicy.NeedsAudioOnlySidecar(outputType)))
             {
                 return new ControllerMicrophoneUiState(
                     ControllerMicrophoneUiStatus.OutputStarting,

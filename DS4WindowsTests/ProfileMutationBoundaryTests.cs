@@ -49,6 +49,70 @@ public class ProfileMutationBoundaryTests
         finally { WaitForOrdinaryWorker(); }
     }
 
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void TemporarySwipePermissionIsPublishedOnlyBySuccessfulManualLoad(bool allowSwipes)
+    {
+        using var fixture = new Fixture();
+        fixture.MakeValid();
+        var source = fixture.AttachLegacy();
+        source.ReadWaitEv.Set();
+        bool loaded = false;
+        Global.useTempProfile[Slot] = false;
+        try
+        {
+            Mapping.RequestTemporaryProfileLoad(Slot, "Candidate", false,
+                fixture.Service, result => loaded = result, allowProfileSwipes: allowSwipes);
+            WaitForOrdinaryWorker();
+            Assert.IsTrue(loaded);
+            Assert.IsTrue(Global.useTempProfile[Slot]);
+            Assert.AreEqual(allowSwipes, ProfileSwipePolicy.CanSwipe(Slot));
+
+            // A failed destination cannot revoke the already-working selection.
+            Mapping.RequestTemporaryProfileLoad(Slot, "Missing", false,
+                fixture.Service, result => loaded = result);
+            WaitForOrdinaryWorker();
+            Assert.IsFalse(loaded);
+            Assert.AreEqual("Candidate", Global.tempprofilename[Slot]);
+            Assert.AreEqual(allowSwipes, ProfileSwipePolicy.CanSwipe(Slot));
+
+            // Auto Profiles may load the same name, but still acquire ownership.
+            Assert.IsTrue(Global.TryLoadAutoProfile(Slot, source, "Candidate", false, fixture.Service));
+            Assert.IsFalse(ProfileSwipePolicy.CanSwipe(Slot));
+            Mapping.RequestTemporaryProfileLoad(Slot, "Candidate", false,
+                fixture.Service, allowProfileSwipes: true);
+            WaitForOrdinaryWorker();
+            Assert.IsFalse(ProfileSwipePolicy.CanSwipe(Slot),
+                "Mute switching must not steal swipe authority from Auto Profiles.");
+        }
+        finally { WaitForOrdinaryWorker(); }
+    }
+
+    [TestMethod]
+    public void SwipeToRegularProfileAfterMuteSelectionClearsTemporaryState()
+    {
+        using var fixture = new Fixture();
+        fixture.MakeValid();
+        fixture.WriteOtherProfile();
+        var source = fixture.AttachLegacy();
+        source.ReadWaitEv.Set();
+        Global.useTempProfile[Slot] = false;
+        try
+        {
+            Mapping.RequestTemporaryProfileLoad(Slot, "Candidate", false,
+                fixture.Service, allowProfileSwipes: true);
+            WaitForOrdinaryWorker();
+            Assert.IsTrue(ProfileSwipePolicy.CanSwipe(Slot));
+            Mapping.RequestRegularProfileReload(Slot, false, fixture.Service, profileName: "Other");
+            WaitForOrdinaryWorker();
+            Assert.IsFalse(Global.useTempProfile[Slot]);
+            Assert.AreEqual("Other", Global.ProfilePath[Slot]);
+            Assert.IsTrue(ProfileSwipePolicy.CanSwipe(Slot));
+        }
+        finally { WaitForOrdinaryWorker(); }
+    }
+
     private static void WaitForOrdinaryWorker()
     {
         var gates = (object[])typeof(Mapping).GetField("profileSwitchRequestLocks",
@@ -892,6 +956,7 @@ public class ProfileMutationBoundaryTests
         private readonly long oldRevision = Global.ReadProfileSwitchRevision(Slot);
         private readonly string oldTemp = Global.tempprofilename[Slot];
         private readonly bool oldUseTemp = Global.useTempProfile[Slot];
+        private readonly bool oldTemporarySwipe = ProfileSwipePolicy.AllowsTemporarySwipe(Slot);
         private readonly bool oldDistance = Global.tempprofileDistance[Slot];
         private readonly bool oldTouch = Global.TouchActive[Slot];
         private readonly bool oldForceLight = DS4LightBar.forcelight[Slot];
@@ -1047,6 +1112,7 @@ public class ProfileMutationBoundaryTests
             Global.appdatapath = oldRoot;
             Global.tempprofilename[Slot] = oldTemp;
             Global.useTempProfile[Slot] = oldUseTemp;
+            ProfileSwipePolicy.PublishTemporarySelection(Slot, oldTemporarySwipe);
             Global.tempprofileDistance[Slot] = oldDistance;
             Global.TouchActive[Slot] = oldTouch;
             DS4LightBar.forcelight[Slot] = oldForceLight;

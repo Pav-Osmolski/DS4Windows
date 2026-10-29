@@ -8,32 +8,47 @@
              lex:LocalizeDictionary.DesignCulture=""
              lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows"
              lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-             mc:Ignorable="d" Height="30" Width="436">
-    <DockPanel Margin="4">
-        <Canvas DockPanel.Dock="Left" Margin="20,0,0,0">
-            <TextBox x:Name="profileTxt" TextWrapping="Wrap" Text="" Width="160" HorizontalAlignment="Left"
-                 VerticalAlignment="Center" MaxLines="1"/>
-
-            <TextBlock Margin="5,2" MinWidth="50" Text="{Binding Source={lex:Loc Resources:TypeNewName}, StringFormat='&lt;{0}&gt;'}" Foreground="{DynamicResource ForegroundColor}" Opacity="0.7" IsHitTestVisible="False">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=profileTxt, Path=Text.IsEmpty, Mode=OneWay}" Value="False">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding ElementName=profileTxt, Path=Text.IsEmpty, Mode=OneWay}" Value="True">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-        </Canvas>
-
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,30,0">
-            <Button x:Name="saveBtn" Content="{lex:Loc Save}" Width="80" Click="SaveBtn_Click" />
-            <Button x:Name="cancelBtn" Content="{lex:Loc Cancel}" Width="80" Click="CancelBtn_Click" Margin="20,0,0,0" />
-        </StackPanel>
-    </DockPanel>
+             mc:Ignorable="d" PreviewKeyDown="DuplicatePrompt_PreviewKeyDown"
+             IsVisibleChanged="DuplicatePrompt_IsVisibleChanged">
+    <Grid MaxWidth="720" HorizontalAlignment="Left"
+          Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.ColumnSpan="3" Margin="0,0,0,14">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+            <Border Background="{DynamicResource RaisedBackgroundColor}" CornerRadius="6"
+                    Width="38" Height="38" Margin="0,0,12,0" VerticalAlignment="Center">
+                <TextBlock Text="&#xE8C8;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+                           Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock Text="{lex:Loc Duplicate}" Style="{DynamicResource BridgeSectionTitleStyle}" Margin="0"/>
+                <TextBlock x:Name="sourceProfileName" Foreground="{DynamicResource MutedForegroundColor}"
+                           TextWrapping="Wrap" Margin="0,3,0,0"/>
+            </StackPanel>
+        </Grid>
+        <Label Grid.Row="1" Content="{lex:Loc Name}" Target="{Binding ElementName=profileTxt}"
+               Padding="0" Margin="0,0,0,6" Foreground="{DynamicResource MutedForegroundColor}"/>
+        <TextBox Grid.Row="2" x:Name="profileTxt" MinWidth="180" MinHeight="36" Padding="10,7"
+                 VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,0,12,0"
+                 TextChanged="ProfileTxt_TextChanged"/>
+        <Button Grid.Row="2" Grid.Column="1" x:Name="saveBtn" Content="{lex:Loc Duplicate}"
+                Style="{DynamicResource BridgePrimaryButtonStyle}" MinWidth="100" MinHeight="36"
+                Margin="0,0,8,0" VerticalAlignment="Center" Click="SaveBtn_Click"/>
+        <Button Grid.Row="2" Grid.Column="2" x:Name="cancelBtn" Content="{lex:Loc Cancel}"
+                Style="{DynamicResource BridgeSecondaryButtonStyle}" MinWidth="100" MinHeight="36"
+                Margin="0" VerticalAlignment="Center" Click="CancelBtn_Click"/>
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="3" x:Name="validationMessage"
+                   Foreground="{DynamicResource DangerColor}" TextWrapping="Wrap"
+                   Visibility="Collapsed" Margin="0,9,0,0"/>
+    </Grid>
 </UserControl>
