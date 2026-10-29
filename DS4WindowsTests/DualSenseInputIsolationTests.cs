@@ -350,6 +350,57 @@ namespace DS4WindowsTests
             Invoke(device, "RequestPhysicalLifecycleShutdown", true, false);
         }
 
+        [TestMethod]
+        public void SecondSimulatedBluetoothControllerStartsWhileFirstOutputOwnerIsBlocked()
+        {
+            var first = CreateBluetoothDevice();
+            var second = CreateBluetoothDevice();
+            using var firstEntered = new ManualResetEvent(false);
+            using var releaseFirst = new ManualResetEvent(false);
+            using var secondWritten = new AutoResetEvent(false);
+            Task secondAdmission = null;
+            first.PhysicalOutputWriteTestHook = () =>
+            {
+                firstEntered.Set();
+                releaseFirst.WaitOne();
+            };
+            second.PhysicalOutputWriteTestHook = () => secondWritten.Set();
+            first.PhysicalOutputFinalizeTestHook = () => { };
+            second.PhysicalOutputFinalizeTestHook = () => { };
+            try
+            {
+                Invoke(first, "StartPhysicalWorkers");
+                Invoke(first, "QueuePhysicalOutputUpdate");
+                Assert.IsTrue(firstEntered.WaitOne(2000));
+                // Exercise a second real production worker generation, not
+                // a second Windows/USB device or a live Bluetooth radio.
+                secondAdmission = Task.Run(() => Invoke(second, "StartPhysicalWorkers"));
+                Assert.IsTrue(secondAdmission.Wait(2000), "Second controller startup waited for the first writer.");
+                Invoke(second, "QueuePhysicalOutputUpdate");
+                Assert.IsTrue(secondWritten.WaitOne(2000), "The first controller blocked the second controller's output owner.");
+                Invoke(second, "RequestPhysicalLifecycleShutdown", true, false);
+                Assert.IsFalse(((Thread)GetField(second, "physicalOutputThread"))?.IsAlive == true);
+                Assert.IsTrue(((Thread)GetField(first, "physicalOutputThread"))?.IsAlive == true);
+                // Reconnect only the simulated second controller while the
+                // first still owns its blocked write.
+                secondWritten.Reset();
+                long previousGeneration = (long)GetField(second, "physicalOutputGeneration");
+                secondAdmission = Task.Run(() => Invoke(second, "StartPhysicalWorkers"));
+                Assert.IsTrue(secondAdmission.Wait(2000), "Second controller startup waited for the first writer.");
+                Assert.AreNotEqual(previousGeneration, (long)GetField(second, "physicalOutputGeneration"));
+                Invoke(second, "QueuePhysicalOutputUpdate");
+                Assert.IsTrue(secondWritten.WaitOne(2000));
+                Assert.IsTrue(((Thread)GetField(second, "physicalOutputThread"))?.IsAlive == true);
+            }
+            finally
+            {
+                releaseFirst.Set();
+                if (secondAdmission != null) Assert.IsTrue(secondAdmission.Wait(3000));
+                Invoke(second, "RequestPhysicalLifecycleShutdown", true, false);
+                Invoke(first, "RequestPhysicalLifecycleShutdown", true, false);
+            }
+        }
+
         private static DualSenseDevice CreateBluetoothDevice()
         {
             HidDevice hidDevice = (HidDevice)RuntimeHelpers.
