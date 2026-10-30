@@ -308,6 +308,48 @@ namespace DS4Windows
         }
 
         int temInt = 0;
+        // DS4-specific policy. DualSense and Nintendo retain their existing calibration paths.
+        // A calibration span describes sensitivity, not sensor orientation. Some compatible
+        // devices reverse the endpoint order; using its sign reverses otherwise correct input.
+        internal bool TrySetDs4CalibrationData(byte[] report, bool usbLayout, out string diagnostic)
+        {
+            if (report == null || report.Length < 35)
+            {
+                diagnostic = "rejected: calibration report is shorter than 35 bytes; previous calibration retained";
+                return false;
+            }
+
+            int Read(int offset) => (short)(report[offset] | report[offset + 1] << 8);
+            int speed = Read(19) + Read(21);
+            var candidate = new CalibData[6];
+            var details = new System.Text.StringBuilder();
+            bool valid = speed > 0;
+            for (int axis = 0; axis < 6; axis++)
+            {
+                int plusOffset = axis < 3 ? (usbLayout ? 7 + 4 * axis : 7 + 2 * axis) : 23 + 4 * (axis - 3);
+                int minusOffset = axis < 3 ? (usbLayout ? plusOffset + 2 : plusOffset + 6) : plusOffset + 2;
+                int plus = Read(plusOffset), minus = Read(minusOffset);
+                int bias = axis < 3 ? Read(1 + 2 * axis) : plus - (plus - minus) / 2;
+                int numerator = axis < 3 ? speed * SixAxis.GYRO_RES_IN_DEG_SEC : 2 * SixAxis.ACC_RES_PER_G;
+                int denominator = axis < 3 ? Math.Abs(plus - bias) + Math.Abs(minus - bias) : plus - minus;
+                double gain = denominator == 0 ? double.NaN : (double)numerator / denominator;
+                bool usable = plus != minus && Math.Abs(bias) <= 1024 &&
+                    !double.IsNaN(gain) && gain >= 0.5 && gain <= 1.5;
+                valid &= usable;
+                candidate[axis] = new CalibData { bias = bias, sensNumer = numerator, sensDenom = denominator };
+                details.Append(FormattableString.Invariant(
+                    $" axis{axis}=(bias:{bias},plus:{plus},minus:{minus},gain:{gain:F6},valid:{usable})"));
+            }
+
+            diagnostic = $"{(valid ? "accepted" : "rejected; previous calibration retained")}; " +
+                $"layout={(usbLayout ? "USB" : "Bluetooth")}; speed={speed};" + details +
+                $" report={Convert.ToHexString(report)}";
+            if (!valid) return false;
+            calibrationData = candidate;
+            calibrationDone = true;
+            return true;
+        }
+
         public void setCalibrationData(ref byte[] calibData, bool useAltGyroCalib)
         {
             int pitchPlus, pitchMinus, yawPlus, yawMinus, rollPlus, rollMinus,
