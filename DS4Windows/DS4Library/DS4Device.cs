@@ -1997,6 +1997,7 @@ namespace DS4Windows
                                 Environment.TickCount64);
                             if (BluetoothMicrophoneStreaming)
                             {
+                                Issue90AudioDiagnostics.InputReport(this, btInputReport, bluetoothReportLength);
                                 DualShock4BluetoothAudioProtocol.ExtractMicrophoneSbcFrames(
                                     btInputReport, bluetoothReportLength,
                                     HandleBluetoothMicrophoneSbcFrame);

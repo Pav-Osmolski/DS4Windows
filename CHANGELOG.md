@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Add an explicit-consent, 30-second audio-route diagnostic preview for [#90](https://github.com/Pav-Osmolski/DS4Windows/issues/90), reported by [@1hezio](https://github.com/1hezio). Capture bounded samples before/after microphone processing, successful virtual submissions, raw DS4 Bluetooth reports and Windows virtual-mic audio, with profile/settings and endpoint/session snapshots. This is diagnostic instrumentation, not a confirmed echo fix.
 
 ## Released
 

@@ -4156,6 +4156,9 @@ namespace DS4Windows
                                     continue;
                                 }
 
+                                Issue90AudioDiagnostics.Pcm(targetDeviceIndex, 0,
+                                    payload.AsSpan(speakerPcmOffset, speakerPcmLength),
+                                    GetVirtualSpeakerPcmSampleRate(viiperType), 2);
                                 if (atomicSubscriber != null)
                                 {
                                     atomicSubscriber(this, payload,
@@ -4217,6 +4220,8 @@ namespace DS4Windows
                                         ref feedbackSpeakerStale);
                                     continue;
                                 }
+                                Issue90AudioDiagnostics.Pcm(targetDeviceIndex, 0, payload.AsSpan(0, length),
+                                    GetVirtualSpeakerPcmSampleRate(viiperType), 2);
                                 subscriber(this, payload, length);
                             }
                             Interlocked.Increment(ref feedbackSpeakerDelivered);
@@ -4962,6 +4967,10 @@ namespace DS4Windows
                         activeStreamFrameVersion,
                         ViiperStreamFrameMicrophonePcm,
                         microphoneTransportPayload, payloadLength);
+                    Issue90AudioDiagnostics.Pcm(Volatile.Read(ref lastInputDeviceIndex), 4,
+                        microphoneTransportPayload.AsSpan(0, payloadLength),
+                        viiperType == ViiperVirtualDeviceType.DualShock4 ? 16000 : 48000,
+                        viiperType == ViiperVirtualDeviceType.DualShock4 ? 1 : 2);
                     long submittedAt = Stopwatch.GetTimestamp();
                     if (queuedAt > 0)
                     {
@@ -5748,6 +5757,7 @@ namespace DS4Windows
 
         private void SubmitMicrophonePcm(int frames, bool muted, long usbRouteGeneration = -1)
         {
+            Issue90AudioDiagnostics.Mono(Volatile.Read(ref lastInputDeviceIndex), 2, microphoneMonoPcm, frames);
             microphoneTelemetry.ObservePreProcessorFrame(microphoneMonoPcm,
                 frames);
             DualSenseMicrophoneNoiseSuppression suppression =
@@ -5758,6 +5768,7 @@ namespace DS4Windows
             microphoneProcessor.Process(microphoneMonoPcm, frames,
                 (byte)Math.Clamp(Volatile.Read(ref microphoneVolume), 0,
                     byte.MaxValue), suppression, muteOutput: muted);
+            Issue90AudioDiagnostics.Mono(Volatile.Read(ref lastInputDeviceIndex), 3, microphoneMonoPcm, frames);
             microphoneTelemetry.ObservePostProcessorFrame(microphoneMonoPcm,
                 frames, muted);
             if (suppression != DualSenseMicrophoneNoiseSuppression.Off &&
@@ -8907,6 +8918,7 @@ namespace DS4Windows
             Interlocked.Increment(ref microphoneSbcFramesReceived);
             Interlocked.Exchange(ref lastMicrophoneCompressedRxTimestamp,
                 Stopwatch.GetTimestamp());
+            Issue90AudioDiagnostics.Compressed(Volatile.Read(ref lastInputDeviceIndex), sbcFrame, sequence);
             TryEnqueuePendingMicrophoneFrame(MicrophoneCodec.Sbc,
                 sbcFrame, sbcFrame.Length, sequence,
                 hasSequence: true, sourceGeneration: sourceGeneration);

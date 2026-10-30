@@ -549,6 +549,7 @@ namespace DS4WinWPF
             window.Show();
             StartupDiag(logger, "MainWindow.Show end");
             window.IsInitialShow = false;
+            DS4Windows.Issue90AudioDiagnostics.Initialize();
 
             // Set up hooks for IPC command calls
             HwndSource source = PresentationSource.FromVisual(window) as HwndSource;

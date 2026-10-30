@@ -71,6 +71,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+        <Content Include="..\extras\Issue90-Diagnostic-README.txt" Link="Issue90-Diagnostic-README.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+        <Content Include="..\extras\Issue90-Audio-Diagnostic.ps1" Link="Issue90-Audio-Diagnostic.ps1" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+        <Content Include="..\extras\Start-Issue90-Diagnostic.cmd" Link="Start-Issue90-Diagnostic.cmd" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Include="..\installer\StartupSetupState.cs" Link="StartupSetupState.cs" />
 		<None Remove="libs\x64\**" Condition="'$(Platform)' != 'x64'" />
 		<None Remove="libs\x86\**" Condition="'$(Platform)' != 'x86'" />
