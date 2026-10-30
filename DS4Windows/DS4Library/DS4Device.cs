@@ -1080,45 +1080,41 @@ namespace DS4Windows
         protected const int DS4_FEATURE_REPORT_5_CRC32_POS = DS4_FEATURE_REPORT_5_LEN - 4;
         public virtual void RefreshCalibration()
         {
-            byte[] calibration = new byte[41];
-            calibration[0] = conType == ConnectionType.BT ? (byte)0x05 : (byte)0x02;
+            bool bluetooth = conType == ConnectionType.BT;
+            bool read = TryReadDs4Calibration(bluetooth, hDevice.readFeatureData,
+                out byte[] report, out string transport);
+            string calibration = "not applied; previous calibration retained";
+            if (read) sixAxis.TrySetDs4CalibrationData(report, !bluetooth, out calibration);
+            // One connection-time record, including the coefficients needed to diagnose
+            // compatible controllers which identify themselves using Sony's IDs.
+            AppLogger.LogToGui($"DS4 motion calibration ({DisplayName}, {conType}): {transport}; {calibration}", false);
+        }
 
-            if (conType == ConnectionType.BT)
+        internal static bool TryReadDs4Calibration(bool bluetooth, Func<byte[], bool> readFeature,
+            out byte[] report, out string diagnostic)
+        {
+            report = new byte[41];
+            int attempts = bluetooth ? 5 : 1;
+            for (int attempt = 0; attempt < attempts; attempt++)
             {
-                bool found = false;
-                for (int tries = 0; !found && tries < 5; tries++)
+                Array.Clear(report);
+                report[0] = bluetooth ? (byte)0x05 : (byte)0x02;
+                if (!readFeature(report) || report[0] != (bluetooth ? (byte)0x05 : (byte)0x02)) continue;
+                if (!bluetooth)
                 {
-                    hDevice.readFeatureData(calibration);
-                    uint recvCrc32 = calibration[DS4_FEATURE_REPORT_5_CRC32_POS] |
-                                (uint)(calibration[DS4_FEATURE_REPORT_5_CRC32_POS + 1] << 8) |
-                                (uint)(calibration[DS4_FEATURE_REPORT_5_CRC32_POS + 2] << 16) |
-                                (uint)(calibration[DS4_FEATURE_REPORT_5_CRC32_POS + 3] << 24);
-
-                    uint calcCrc32 = ~Crc32Algorithm.Compute(new byte[] { 0xA3 });
-                    calcCrc32 = ~Crc32Algorithm.CalculateBasicHash(ref calcCrc32, ref calibration, 0, DS4_FEATURE_REPORT_5_LEN - 4);
-                    bool validCrc = recvCrc32 == calcCrc32;
-                    if (!validCrc && tries >= 5)
-                    {
-                        AppLogger.LogToGui("Gyro Calibration Failed", true);
-                        continue;
-                    }
-                    else if (validCrc)
-                    {
-                        found = true;
-                    }
+                    diagnostic = "USB feature read succeeded";
+                    return true;
                 }
 
-                sixAxis.setCalibrationData(ref calibration, conType == ConnectionType.USB);
+                uint received = (uint)(report[37] | report[38] << 8 | report[39] << 16 | report[40] << 24);
+                uint calculated = DualShock4BluetoothAudioProtocol.ComputeBluetoothCrc(0xA3, report, 37);
+                if (received != calculated) continue;
+                diagnostic = $"Bluetooth feature read and CRC passed on attempt {attempt + 1}";
+                return true;
+            }
 
-                if (hDevice.Attributes.ProductId == 0x5C4 && hDevice.Attributes.VendorId == 0x054C &&
-                    sixAxis.fixupInvertedGyroAxis())
-                    AppLogger.LogToGui($"Automatically fixed inverted YAW gyro axis in DS4 v.1 BT gamepad ({Mac.ToString()})", false);
-            }
-            else
-            {
-                hDevice.readFeatureData(calibration);
-                sixAxis.setCalibrationData(ref calibration, conType == ConnectionType.USB);
-            }
+            diagnostic = $"feature read/CRC failed after {attempts} attempt(s); report={Convert.ToHexString(report)}";
+            return false;
         }
 
         public virtual void StartUpdate()
