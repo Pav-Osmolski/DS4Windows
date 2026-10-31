@@ -61,6 +61,7 @@
                 </Grid>
 
                 <WrapPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Content="{lex:Loc Settings}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,3,8,3" Click="MainSettings_Click" />
                     <Button x:Name="presetBtn" Style="{DynamicResource BridgeSecondaryButtonStyle}" Content="{lex:Loc Strings:UI_1DE8CA36A20F0CF0}" Margin="0,3,0,3" Click="PresetBtn_Click" />
                     <Button x:Name="applyBtn" Content="{lex:Loc Apply}" Margin="8,3,0,3" Click="ApplyBtn_Click" IsEnabled="False" Style="{StaticResource BridgeSecondaryButtonStyle}" />
                     <Button x:Name="cancelBtn" Content="{lex:Loc Cancel}" Margin="8,3,0,3" Click="CancelBtn_Click" Style="{StaticResource BridgeSecondaryButtonStyle}" />
@@ -480,6 +481,7 @@
                                     <Button x:Name="newActionBtn" Content="{lex:Loc NewAction}" Style="{DynamicResource BridgePrimaryButtonStyle}" Margin="0,0,8,8" Click="NewActionBtn_Click" />
                                     <Button x:Name="editActionBtn" Content="{lex:Loc EditAction}" Style="{DynamicResource BridgeSecondaryButtonStyle}" IsEnabled="{Binding ItemSelected}" Margin="0,0,8,8" Click="EditActionBtn_Click" />
                                     <Button x:Name="removeActionBtn" Content="{lex:Loc RemoveAction}" Style="{DynamicResource BridgeSecondaryButtonStyle}" IsEnabled="{Binding ItemSelected}" Margin="0,0,8,8" Click="RemoveActionBtn_Click" />
+                                    <Button Content="{lex:Loc ImportSpecialActions}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,8" Click="ImportSpecialActions_OnClick" />
                                     <Button Content="{lex:Loc ExportSpecialActions}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,8" Click="ExportSpecialActions_OnClick" />
                                 </WrapPanel>
                             </StackPanel>

@@ -517,6 +517,19 @@ namespace DS4WinWPF.DS4Forms
             recordWin.ShowDialog();
         }
 
+        private void MultiTripleTapTrigBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var settings = multiActButtonVM.PrepareTripleTapSettings();
+            var window = new RecordBoxWindow(specialActVM.DeviceNum, settings, false) { Owner = Window.GetWindow(this) };
+            window.Saved += (_, _) =>
+            {
+                multiActButtonVM.TripleTapMacro.Clear();
+                multiActButtonVM.TripleTapMacro.AddRange((int[])settings.action.actionMacro);
+                multiActButtonVM.UpdateTripleTapDisplayText();
+            };
+            window.ShowDialog();
+        }
+
         private void MultiDoubleTapTrigBtn_Click(object sender, RoutedEventArgs e)
         {
             DS4Windows.DS4ControlSettings settings = multiActButtonVM.PrepareDoubleTapSettings();

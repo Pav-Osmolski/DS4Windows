@@ -9,6 +9,16 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.58](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.58) - 2026-10-31
+
+- Preserve complete enabled special-action names, including slashes, with structured profile entries and unambiguous recovery of legacy names. Thanks [@lpv11](https://github.com/lpv11) for the report and video, and [@Masterload1975](https://github.com/Masterload1975) for the follow-up ([#99](https://github.com/Pav-Osmolski/DS4Windows/issues/99)).
+
+- Add optional triple-tap macros, configurable hold and tap timing, non-overwriting action import with backups, and a Settings shortcut that offers to save or discard profile edits. Existing multi-actions retain their default timings. Thanks [@Masterload1975](https://github.com/Masterload1975) for the requests ([#100](https://github.com/Pav-Osmolski/DS4Windows/issues/100)).
+
+- Add verbose-only feedback-path observations separating game control, speaker media, rear-channel haptics and microphone-interface events. Retain physical feedback health counters without treating idle games as failures. Thanks [@Darkii-0](https://github.com/Darkii-0) for the missing-haptics report ([#98](https://github.com/Pav-Osmolski/DS4Windows/issues/98)); these diagnostics do not claim to fix that report.
+
+Changes: [PR #101](https://github.com/Pav-Osmolski/DS4Windows/pull/101).
+
 ### [5.0.57](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.57) - 2026-10-29
 
 - Refresh the profile Duplicate prompt with a labelled name field, source-profile context, aligned themed actions, keyboard shortcuts and inline validation. Prevent duplicates from replacing an existing profile.
