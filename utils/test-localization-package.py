@@ -42,6 +42,31 @@ VALIDATOR_SPEC.loader.exec_module(VALIDATOR)
 
 
 class LocalizationPackageTests(unittest.TestCase):
+    def test_directinput_preview_uses_release_lang_layout_and_preserves_matched_backend(self):
+        with tempfile.TemporaryDirectory(prefix="ds4w-preview-localization-") as temporary:
+            root = Path(temporary)
+            files = SATELLITES + ("viiper.exe", "README.txt")
+            for relative in files:
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(("fixture:" + relative).encode())
+            (root / "DS4Windows.runtimeconfig.json").write_text(json.dumps({"runtimeOptions": {}}))
+            (root / "DS4Windows.deps.json").write_text(json.dumps({"targets": {"test": {
+                "DS4Windows/1": {"resources": {name: {"locale": name.split("/")[0]}
+                    for name in SATELLITES if name.endswith("/DS4Windows.resources.dll")}},
+                "TaskScheduler/1": {"resources": {"de/Microsoft.Win32.TaskScheduler.resources.dll": {"locale": "de"}}}
+            }}}))
+            command = [sys.executable, str(REPOSITORY / "utils/GenericJoystickPreview/Prepare-Localization.py"), str(root)]
+            subprocess.run(command, check=True, capture_output=True)
+            VALIDATOR.validate_localization_package(root)
+            for relative in SATELLITES:
+                self.assertEqual(("fixture:" + relative).encode(), (root / "Lang" / relative).read_bytes())
+                self.assertFalse((root / relative).exists())
+            self.assertEqual(b"fixture:viiper.exe", (root / "viiper.exe").read_bytes())
+            self.assertFalse((root / "DS4Windows.portable").exists())
+            (root / "Lang" / SATELLITES[0]).unlink()
+            self.assertNotEqual(0, subprocess.run(command, capture_output=True).returncode)
+
     def test_missing_cipher_or_required_notice_is_rejected_before_composition(self):
         for missing in ("BouncyCastle.Cryptography.dll", "Resources/BouncyCastle.NOTICE.txt",
                         "Resources/DsxTriggerEffects.NOTICE.txt", "extras/VIIPER-WDL-NOTICE.txt"):

@@ -119,7 +119,8 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
-            Assert.AreEqual(155, renderedFiles.Count);
+            // Main theme coverage plus one DirectInput view for each of six themes.
+            Assert.AreEqual(161, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

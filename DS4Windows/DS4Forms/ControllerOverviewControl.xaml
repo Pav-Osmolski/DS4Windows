@@ -337,6 +337,11 @@
                                                   DropDownClosed="OutputControllerCombo_DropDownClosed"
                                                   PreviewKeyDown="OutputControllerCombo_PreviewKeyDown"
                                                   Style="{StaticResource OverviewSettingsComboBoxStyle}">
+                                            <ComboBox.ItemContainerStyle>
+                                                <Style TargetType="ComboBoxItem" BasedOn="{StaticResource BridgeDropDownItemStyle}">
+                                                    <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                                                </Style>
+                                            </ComboBox.ItemContainerStyle>
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />

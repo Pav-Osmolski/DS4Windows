@@ -16,6 +16,32 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class ControllerOverviewAudioTests
 {
+    internal static MainWindowsViewModel JoystickOverviewModel() =>
+        Model(new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB));
+
+    [TestMethod]
+    public void JoystickOverviewNamesSavedOutputButRefusesActivationOutsidePreview()
+    {
+        var previous = Global.OutContType[0];
+        var previousTemp = Global.outDevTypeTemp[0];
+        try
+        {
+            Assert.IsFalse(PortableLabContext.IsActive);
+            var model = JoystickOverviewModel();
+            var choice = model.OutputControllerChoices.Single(c => c.Type == OutContType.ViiperGenericJoystick);
+            Assert.IsFalse(choice.IsEnabled);
+            Global.OutContType[0] = OutContType.ViiperGenericJoystick;
+            Assert.AreEqual(choice.Name, model.SelectedOutputControllerName);
+            Global.OutContType[0] = OutContType.ViiperX360;
+            int changes = 0;
+            model.QuickProfileSettingChanged += (_, _) => changes++;
+            model.SelectedOutputController = OutContType.ViiperGenericJoystick;
+            Assert.AreEqual(OutContType.ViiperX360, model.SelectedOutputController);
+            Assert.AreEqual(0, changes);
+        }
+        finally { Global.OutContType[0] = previous; Global.outDevTypeTemp[0] = previousTemp; }
+    }
+
     [TestMethod]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.USB, true)]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.BT, true)]
@@ -185,6 +211,27 @@ public sealed class ControllerOverviewAudioTests
         Assert.AreEqual(Visibility.Collapsed, native.Visibility);
         Assert.AreEqual(Visibility.Collapsed, managed.Visibility);
         Assert.AreEqual(Visibility.Collapsed, speaker.Visibility);
+        var previousOutput = Global.OutContType[0];
+        try
+        {
+            Global.OutContType[0] = OutContType.ViiperGenericJoystick;
+            var joystickModel = JoystickOverviewModel();
+            overview.DataContext = joystickModel;
+            overview.UpdateLayout();
+            var selector = (ComboBox)overview.FindName("outputControllerCombo");
+            var selected = selector.SelectedItem as OverviewOutputControllerChoice;
+            Assert.IsNotNull(selected, "The joystick profile must not leave the Overview selector blank.");
+            Assert.AreEqual(OutContType.ViiperGenericJoystick, selected.Type);
+            Assert.AreEqual(selected.Name, joystickModel.SelectedOutputControllerName);
+            var originalItemStyle = (Style)overview.FindResource("BridgeDropDownItemStyle");
+            var expectedItem = new ComboBoxItem { Style = originalItemStyle };
+            var actualItem = new ComboBoxItem { DataContext = selected, Style = selector.ItemContainerStyle };
+            Assert.AreEqual(expectedItem.Padding, actualItem.Padding, "Keep the current Overview item spacing.");
+            Assert.AreEqual(expectedItem.Margin, actualItem.Margin);
+            Assert.AreSame(expectedItem.Template, actualItem.Template, "Keep the current Overview highlight and disabled visuals.");
+            Assert.AreEqual(selected.IsEnabled, actualItem.IsEnabled);
+        }
+        finally { Global.OutContType[0] = previousOutput; }
         overview.DataContext = null;
     }
 
