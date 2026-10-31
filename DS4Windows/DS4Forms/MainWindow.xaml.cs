@@ -1484,6 +1484,8 @@ Suspend support not enabled.", true);
             executableRestartHint.Text = global::DS4Windows.UiText.Format("Re-launch required: close DS4Windows, then open {0}.", SettingsRestartRequirements.RequestedExecutable(Global.FakeExeName));
         }
 
+        internal void OpenMainSettings() => mainTabCon.SelectedItem = settingsTab;
+
         private void OpenSettingsLog_Click(object sender, RoutedEventArgs e)
         {
             mainTabCon.SelectedItem = logTab;

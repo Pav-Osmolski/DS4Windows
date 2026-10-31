@@ -1674,6 +1674,9 @@ namespace DS4Windows
                             Node.AppendChild(el);
                         }
 
+                        XmlNode names = xDoc.SelectSingleNode("DS4Windows/ProfileActionNames");
+                        if (names != null && !names.ChildNodes.Cast<XmlNode>().Any(n => n.InnerText == "Disconnect Controller"))
+                            names.AppendChild(xDoc.CreateElement("Action")).InnerText = "Disconnect Controller";
                         xDoc.Save(s);
                         LoadActions();
                     }
@@ -3433,6 +3436,7 @@ namespace DS4Windows
 
         public static void CacheExtraProfileInfo(int device)
         {
+            Mapping.ResetMultiActionGestures(device);
             m_Config.CacheExtraProfileInfo(device);
         }
 
@@ -6039,6 +6043,10 @@ namespace DS4Windows
                 rootElement.AppendChild(xmlGyroSwipeSettingsElement);
 
                 XmlNode xmlProfileActions = m_Xdoc.CreateNode(XmlNodeType.Element, "ProfileActions", null); xmlProfileActions.InnerText = string.Join("/", profileActions[device]); rootElement.AppendChild(xmlProfileActions);
+                XmlElement actionNames = m_Xdoc.CreateElement("ProfileActionNames");
+                foreach (string actionName in profileActions[device])
+                    actionNames.AppendChild(m_Xdoc.CreateElement("Action")).InnerText = actionName;
+                rootElement.AppendChild(actionNames);
                 XmlNode xmlBTPollRate = m_Xdoc.CreateNode(XmlNodeType.Element, "BTPollRate", null); xmlBTPollRate.InnerText = btPollRate[device].ToString(); rootElement.AppendChild(xmlBTPollRate);
                 XmlNode xmlAutomaticBTPollRate = m_Xdoc.CreateNode(XmlNodeType.Element, "AutomaticBTPollRate", null); xmlAutomaticBTPollRate.InnerText = automaticBTPollRate[device].ToString(); rootElement.AppendChild(xmlAutomaticBTPollRate);
 
@@ -9288,18 +9296,10 @@ namespace DS4Windows
                 {
                     Item = m_Xdoc.SelectSingleNode("/" + rootname + "/ProfileActions");
                     profileActions[device].Clear();
-                    if (!string.IsNullOrEmpty(Item.InnerText))
-                    {
-                        string[] actionNames = Item.InnerText.Split('/');
-                        for (int actIndex = 0, actLen = actionNames.Length; actIndex < actLen; actIndex++)
-                        {
-                            string tempActionName = actionNames[actIndex];
-                            if (!profileActions[device].Contains(tempActionName))
-                            {
-                                profileActions[device].Add(tempActionName);
-                            }
-                        }
-                    }
+                    XmlNode names = m_Xdoc.SelectSingleNode("/" + rootname + "/ProfileActionNames");
+                    profileActions[device].AddRange(ProfileActionNames.Read(Item?.InnerText,
+                        names?.SelectNodes("Action").Cast<XmlNode>().Select(n => n.InnerText),
+                        actions.Select(a => a.name)));
                 }
                 catch { profileActions[device].Clear(); missingSetting = true; }
 
@@ -12262,6 +12262,7 @@ namespace DS4Windows
         public string controls;
         public List<int> macro = new List<int>();
         public string details;
+        internal MultiActionConfiguration MultiActionOptions;
         public List<DS4Controls> uTrigger = new List<DS4Controls>();
         public string ucontrols;
         public double delayTime = 0;
@@ -12382,6 +12383,7 @@ namespace DS4Windows
             {
                 typeID = ActionTypeId.MultiAction;
                 this.details = details;
+                MultiActionOptions = new MultiActionConfiguration(details);
             }
             else if (type == "XboxGameDVR")
             {

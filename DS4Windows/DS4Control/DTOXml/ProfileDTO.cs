@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -2275,6 +2276,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
             get; set;
         }
 
+        [XmlArray("ProfileActionNames"), XmlArrayItem("Action")]
+        public string[] ProfileActionNames { get; set; }
+
         [XmlElement("Control")]
         public DS4ControlAssignementSerializer Control
         {
@@ -2810,6 +2814,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             OutputDS4TriggerMode = source.outputDS4TriggerMode[deviceIndex];
 
             ProfileActions = string.Join("/", source.profileActions[deviceIndex]);
+            ProfileActionNames = source.profileActions[deviceIndex].ToArray();
             Control = new DS4ControlAssignementSerializer();
             ShiftControl = new DS4ControlAssignementSerializer();
 
@@ -3726,18 +3731,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.triggerLabSettings[deviceIndex] = (TriggerLabSettings ?? new TriggerLabProfileSettings()).Clone();
             destination.outputDS4TriggerMode[deviceIndex] = OutputDS4TriggerMode;
 
-            if (!string.IsNullOrEmpty(ProfileActions))
-            {
-                string[] actionNames = ProfileActions.Split('/');
-                for (int actIndex = 0, actLen = actionNames.Length; actIndex < actLen; actIndex++)
-                {
-                    string tempActionName = actionNames[actIndex];
-                    if (!destination.profileActions[deviceIndex].Contains(tempActionName))
-                    {
-                        destination.profileActions[deviceIndex].Add(tempActionName);
-                    }
-                }
-            }
+            destination.profileActions[deviceIndex].Clear();
+            destination.profileActions[deviceIndex].AddRange(DS4Windows.ProfileActionNames.Read(
+                ProfileActions, ProfileActionNames, destination.actions.Select(a => a.name)));
 
             if (Control != null)
             {

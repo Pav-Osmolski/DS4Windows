@@ -5,7 +5,11 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Preserve complete enabled special-action names, including slashes, with structured profile entries and unambiguous recovery of legacy names. Thanks [@lpv11](https://github.com/lpv11) for the report and video ([#99](https://github.com/Pav-Osmolski/DS4Windows/issues/99)).
+
+- Add optional triple-tap macros, configurable hold and tap timing, non-overwriting action import with backups, and a Settings shortcut that offers to save or discard profile edits. Existing multi-actions retain their default timings. Thanks [@Masterload1975](https://github.com/Masterload1975) for the requests ([#100](https://github.com/Pav-Osmolski/DS4Windows/issues/100)).
+
+- Add verbose-only feedback-path observations separating game control, speaker media, rear-channel haptics and microphone-interface events. Retain physical feedback health counters without treating idle games as failures. Thanks [@Darkii-0](https://github.com/Darkii-0) for the missing-haptics report ([#98](https://github.com/Pav-Osmolski/DS4Windows/issues/98)); these diagnostics do not claim to fix that report.
 
 ## Released
 

@@ -14,6 +14,23 @@ used to write out a profile. Some older profiles did not contain the
 **config_version** attribute so tags used in the profile might have to be examined
 to determine an approximate version number corresponding to the schema version.
 
+## Enabled special-action names (next release)
+
+`ProfileActionNames` contains individual `Action` string elements. Its presence,
+including an empty array, is authoritative. `ProfileActions` retains its legacy
+slash-separated form for older readers. When only that legacy field exists,
+loading uses known action names to recover a unique partition; ambiguous or
+unknown lists retain their legacy interpretation. This avoids splitting a name
+such as `Play/Pause` in profiles saved by the new app.
+
+Multi-action `Details` retains its first three comma-separated macro fields
+(single, hold, double). Optional fields append the triple macro, hold milliseconds
+and tap-window milliseconds. Missing or invalid timing values default to 500 ms
+and 150 ms. The UI requires a tap interval no longer than the hold duration.
+Older apps can still read the first three macro fields but do not implement the
+new triple/timing fields. Editing and saving in older versions can drop newer
+fields; keep backups when switching versions.
+
 ## Current additive settings (5.0.29)
 
 These optional fields do not require a profile schema-version bump:

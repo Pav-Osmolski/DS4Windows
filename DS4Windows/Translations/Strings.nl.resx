@@ -6773,4 +6773,8 @@ De backup: </value>
   <data name="UI_3123788FB6F3C64F" xml:space="preserve">
     <value>Schakelt controllerverberging in en toont herverbindingsadvies wanneer Steam actief is. Actieve USB-/Bluetooth-controllers worden niet opnieuw gestart.</value>
   </data>
+  <data name="SpecialActionEdit.TripleTapTrigger" xml:space="preserve"><value>Triple-tap trigger (optional)</value></data>
+  <data name="SpecialActionEdit.TapInterval" xml:space="preserve"><value>Tap interval (seconds)</value></data>
+  <data name="SpecialActionEdit.GestureTimingHelp" xml:space="preserve"><value>Tap interval controls the maximum tap length and the wait between taps. Triple tap delays double-tap playback until that interval ends. Existing defaults: hold 0.50 seconds; tap interval 0.15 seconds.</value></data>
+  <data name="ImportSpecialActions" xml:space="preserve"><value>Import actions</value></data>
 </root>

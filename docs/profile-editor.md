@@ -48,6 +48,27 @@ and configure the action. Then check its **Enabled** box for this profile.
 Select a row to **Edit Action** or **Remove Action**; use **Export actions** to
 share or back up an export. Save the profile after changing its enabled actions.
 
+**Import actions** reads an exported `Actions.xml` file without replacing your
+existing actions. Duplicate names receive an imported suffix; a copy of the
+previous action file is kept beside `Actions.xml` as a `.before-import-….bak`
+file. Imported actions are disabled until you enable them for a profile. Review
+program-launch and macro actions before enabling them.
+
+For a **Multi-action button**, record any combination of single-tap, hold,
+double-tap and optional triple-tap macros. **Hold for** sets the hold duration
+in seconds (default 0.50). **Tap interval** sets both the maximum tap length
+and the wait between taps (default 0.15 seconds). If a triple-tap macro is set,
+a double-tap waits for the next tap interval to expire before playing, so both
+macros cannot fire for the same triple-tap. Without triple tap, double tap keeps
+its immediate second-press behaviour. All selected trigger buttons must be held
+together, and each controller tracks its own gestures.
+
+The **Settings** button at the top opens the main application settings. Choose
+whether to save or discard profile edits first; Cancel keeps the editor open.
+Action names such as `Play/Pause` are stored as complete names when the profile
+is saved. Old slash-separated selections are recovered only when the installed
+action definitions identify one unambiguous interpretation.
+
 For example, a Bluetooth disconnect action can use PS + Options so an ordinary
 game button does not disconnect the controller accidentally. Test combinations
 for conflicts with your game. Read any Trigger Lab protection notice before

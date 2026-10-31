@@ -3434,6 +3434,44 @@ namespace DS4WinWPF.DS4Forms
             window.ShowDialog();
         }
 
+        private void MainSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var choice = MessageBox.Show(global::DS4Windows.UiText.Get("Save profile changes before opening Settings? Choose No to discard profile edits."),
+                "DS4Windows", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            if (choice == MessageBoxResult.Cancel) return;
+            if (choice == MessageBoxResult.Yes)
+            {
+                if (!ApplyProfileStep(false)) return;
+                profileTriggerLabControl.RestorePhysicalProfileEffects();
+                Closed?.Invoke(this, EventArgs.Empty);
+            }
+            else CancelEdit();
+            (Application.Current.MainWindow as MainWindow)?.OpenMainSettings();
+        }
+
+        private void ImportSpecialActions_OnClick(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog { Filter = global::DS4Windows.UiText.FileFilter("DS4Windows Special Actions (*.xml)|*.xml"), Multiselect = false };
+            if (dialog.ShowDialog() != true) return;
+            try
+            {
+                using var input = File.OpenRead(dialog.FileName);
+                var imported = SpecialActionImport.Read(input, Global.GetActions().Select(a => a.name));
+                if (MessageBox.Show(global::DS4Windows.UiText.Format("Import {0} actions? Existing actions are kept. Duplicate names receive an imported suffix. Imported actions remain disabled until you enable them for a profile.", imported.Count),
+                    "DS4Windows", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
+                specialActionsVM.ExportEnabledActions();
+                SpecialActionImport.SaveMerged(System.IO.Path.Combine(Global.appdatapath, "Actions.xml"), Global.GetActions(), imported);
+                Global.LoadActions();
+                for (int i = 0; i < Global.TEST_PROFILE_ITEM_COUNT; i++) Global.CacheExtraProfileInfo(i);
+                specialActionsVM.LoadActions(false);
+            }
+            catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException || ex is InvalidOperationException || ex is System.Xml.XmlException || ex is ArgumentException || ex is FormatException || ex is IndexOutOfRangeException)
+            {
+                MessageBox.Show(global::DS4Windows.UiText.Get("Actions could not be imported. Existing actions were kept.") + "\n" + ex.Message,
+                    "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
         private void ExportSpecialActions_OnClick(object sender, RoutedEventArgs e)
         {
             var dialog = new SaveFileDialog();

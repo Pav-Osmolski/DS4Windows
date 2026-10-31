@@ -255,6 +255,9 @@ namespace DS4Windows
         public class ActionState
         {
             public bool[] dev = new bool[Global.MAX_DS4_CONTROLLER_COUNT];
+            internal readonly MultiActionGesture[] MultiGestures = Enumerable.Range(0, Global.MAX_DS4_CONTROLLER_COUNT)
+                .Select(_ => new MultiActionGesture()).ToArray();
+            internal readonly long[] MultiEpochs = new long[Global.MAX_DS4_CONTROLLER_COUNT];
         }
 
         internal struct ControlToXInput
@@ -678,6 +681,23 @@ namespace DS4Windows
         }
 
         internal static void ResetStickFilters(int device) => stickFilters[device].RequestReset();
+        private static readonly int[] multiActionResetGenerations = new int[Global.MAX_DS4_CONTROLLER_COUNT];
+        internal static void ResetMultiActionGestures(int device)
+        {
+            if ((uint)device < multiActionResetGenerations.Length)
+                Interlocked.Increment(ref multiActionResetGenerations[device]);
+        }
+        internal static MultiActionGesture GetMultiActionGesture(ActionState state, int device)
+        {
+            long epoch = ((long)(uint)CaptureMacroMouseEpoch(device) << 32) |
+                (uint)Volatile.Read(ref multiActionResetGenerations[device]);
+            if (state.MultiEpochs[device] != epoch)
+            {
+                state.MultiGestures[device].Reset();
+                state.MultiEpochs[device] = epoch;
+            }
+            return state.MultiGestures[device];
+        }
 
         private static DS4SquareStick[] outSqrStk = new DS4SquareStick[Global.TEST_PROFILE_ITEM_COUNT]
         {
@@ -4952,6 +4972,24 @@ namespace DS4Windows
 
                     if (action == null)
                     {
+                        continue;
+                    }
+
+                    if (action.typeID == SpecialAction.ActionTypeId.MultiAction && index >= 0)
+                    {
+                        var state = actionDone[index];
+                        var gestureState = GetMultiActionGesture(state, device);
+                        bool active = action.trigger.Count > 0;
+                        foreach (DS4Controls trigger in action.trigger)
+                            active &= getBoolSpecialActionMapping(device, trigger, cState, eState, tp, fieldMapping);
+                        if (active)
+                            foreach (DS4Controls trigger in action.trigger)
+                                ResetToDefaultValue(trigger, MappedState, outputfieldMapping);
+                        var options = action.MultiActionOptions ??= new MultiActionConfiguration(action.details);
+                        int gesture = gestureState.Update(active,
+                            (long)(Stopwatch.GetTimestamp() * (1000.0 / Stopwatch.Frequency)), options, Global.DebouncingMs[device]);
+                        if (gesture >= 0 && options.Macros[gesture].Length != 0)
+                            PlayMacro(device, macroControl, options.Macros[gesture], null, null, DS4Controls.None, DS4KeyType.None);
                         continue;
                     }
 

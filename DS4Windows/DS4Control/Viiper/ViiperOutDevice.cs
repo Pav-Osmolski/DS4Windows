@@ -241,6 +241,7 @@ namespace DS4Windows
         // stream that receives native media without adding periodic logging
         // or allocations to the realtime path.
         private long feedbackFramesRead;
+        private ViiperFeedbackPathDiagnostics feedbackPathDiagnostics;
         private long feedbackAtomicFramesRead;
         private long feedbackAtomicFramesQueued;
         private int feedbackFirstFrameLogged;
@@ -1259,6 +1260,7 @@ namespace DS4Windows
             Interlocked.Exchange(ref lastFeedbackSpeakerDispatchTimestamp, 0);
             Interlocked.Exchange(ref maximumFeedbackSpeakerDispatchGapTicks, 0);
             Interlocked.Exchange(ref maximumFeedbackSpeakerCallbackTicks, 0);
+            feedbackPathDiagnostics = null;
             Interlocked.Exchange(ref feedbackSpeakerDelivered, 0);
             Interlocked.Exchange(ref feedbackSpeakerStale, 0);
             Interlocked.Exchange(ref feedbackSpeakerNoSubscriberDeferrals, 0);
@@ -5880,6 +5882,7 @@ namespace DS4Windows
         private void LogWriterHealthIfNeeded()
         {
             QueueNativeFeedbackHealthIfNeeded();
+            ObserveFeedbackPath();
             // Formatting the full transport snapshot allocates heavily and
             // publishes through the WPF logger. A live speaker stream has a
             // 10.667 ms deadline, so defer diagnostics instead of allowing a
@@ -6045,6 +6048,39 @@ namespace DS4Windows
         // Keep the small physical-native snapshot available even while speaker
         // streaming defers the much larger virtual-writer snapshot. Formatting
         // and GUI publication run away from the input/audio/transport threads.
+        private void ObserveFeedbackPath(byte? frameType = null, ReadOnlySpan<byte> payload = default)
+        {
+            // No counters, clocks, formatting, queueing or endpoint probing when verbose is off.
+            if (!Global.VerboseStartupLogging) return;
+            var diagnostics = Volatile.Read(ref feedbackPathDiagnostics);
+            if (diagnostics == null)
+            {
+                var created = new ViiperFeedbackPathDiagnostics();
+                diagnostics = Interlocked.CompareExchange(ref feedbackPathDiagnostics, created, null) ?? created;
+            }
+            long now = Stopwatch.GetTimestamp();
+            if (!(frameType.HasValue ? diagnostics.Observe(true, frameType.Value, now, payload, IsDualSenseType()) : diagnostics.TrySchedule(now))) return;
+            var snapshot = (Owner: this, Diagnostics: diagnostics, Generation: Volatile.Read(ref streamGeneration));
+            ThreadPool.QueueUserWorkItem(static data =>
+            {
+                if (!Global.VerboseStartupLogging || data.Generation != Volatile.Read(ref data.Owner.streamGeneration) ||
+                    !ReferenceEquals(data.Diagnostics, Volatile.Read(ref data.Owner.feedbackPathDiagnostics))) return;
+                var owner = data.Owner;
+                try
+                {
+                int index = Volatile.Read(ref owner.lastInputDeviceIndex);
+                string outputEnabled = index >= 0 && index < Global.EnableOutputDataToDS4.Length
+                    ? Global.EnableOutputDataToDS4[index].ToString() : "unbound";
+                AppLogger.LogToGui($"VIIPER feedback path ({owner.viiperType}, controller {Volatile.Read(ref owner.lastInputDeviceIndex) + 1}, stream {data.Generation}): " +
+                    data.Diagnostics.Format(Stopwatch.GetTimestamp()) +
+                    $" outputDataEnabled={outputEnabled}" +
+                    $" controlCallbacksDelivered={Interlocked.Read(ref owner.feedbackControlDelivered)} speakerCallbacksDelivered={Interlocked.Read(ref owner.feedbackSpeakerDelivered)} controlStale={Interlocked.Read(ref owner.feedbackControlStale)} controlCallbackFailures={Interlocked.Read(ref owner.feedbackControlCallbackFailures)} speakerCallbackFailures={Interlocked.Read(ref owner.feedbackSpeakerCallbackFailures)}. " +
+                    "0x85 is microphone-interface status, not game haptics. Callback delivery is not physical actuator acknowledgement; ages of -1 mean not observed while verbose was enabled.", false);
+                }
+                catch (Exception exception) { Trace.WriteLine("Feedback-path diagnostics could not be logged: " + exception.Message); }
+            }, snapshot, preferLocal: false);
+        }
+
         private void QueueNativeFeedbackHealthIfNeeded()
         {
             if (!Global.VerboseStartupLogging) return;
@@ -6271,6 +6307,7 @@ namespace DS4Windows
                             break;
                         }
 
+                        ObserveFeedbackPath(frameType, framedPayload.AsSpan(0, payloadLength));
                         if (frameType == ViiperStreamFrameOutputState)
                             {
                                 int targetDeviceIndex = Volatile.Read(
@@ -6405,6 +6442,7 @@ namespace DS4Windows
                                 $"VIIPER feedback stream active: bus={stream.BusId} device={stream.DevId} port={stream.UsbipPort} sidecar={audioOnlySidecar} gamepadOnly={gamepadOnly} rawPayload={feedbackLength} sequenceCount={frameNumber}",
                                 false);
                         }
+                        ObserveFeedbackPath(ViiperStreamFrameOutputState, buffer.AsSpan(0, feedbackLength));
                         int targetDeviceIndex = Volatile.Read(ref lastInputDeviceIndex);
                         if (TryCaptureNativeCommandContext(buffer, feedbackLength,
                             targetDeviceIndex, out ViiperNativeCommandContext nativeContext))

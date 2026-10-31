@@ -6750,4 +6750,8 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_3123788FB6F3C64F" xml:space="preserve">
     <value>啟用控制器隱藏，並在 Steam 執行時顯示重新連線指引。不會重新啟動使用中的 USB/Bluetooth 控制器。</value>
   </data>
+  <data name="SpecialActionEdit.TripleTapTrigger" xml:space="preserve"><value>Triple-tap trigger (optional)</value></data>
+  <data name="SpecialActionEdit.TapInterval" xml:space="preserve"><value>Tap interval (seconds)</value></data>
+  <data name="SpecialActionEdit.GestureTimingHelp" xml:space="preserve"><value>Tap interval controls the maximum tap length and the wait between taps. Triple tap delays double-tap playback until that interval ends. Existing defaults: hold 0.50 seconds; tap interval 0.15 seconds.</value></data>
+  <data name="ImportSpecialActions" xml:space="preserve"><value>Import actions</value></data>
 </root>
