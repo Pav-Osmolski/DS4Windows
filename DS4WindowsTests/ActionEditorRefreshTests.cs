@@ -47,7 +47,17 @@ public class ActionEditorRefreshTests
                 Assert.AreEqual("Cross", editor.TriggerCheckBoxes[0].Tag);
                 Assert.IsTrue(viewer.ScrollableHeight > 0);
                 foreach (var numeric in Visuals(tabs).OfType<Xceed.Wpf.Toolkit.DecimalUpDown>())
+                {
                     Assert.AreEqual(36d, numeric.ActualHeight, "Numeric fields must not stretch to fill the options panel.");
+                    if (numeric.Parent is StackPanel row && row.Orientation == Orientation.Horizontal)
+                        foreach (Label label in row.Children.OfType<Label>())
+                        {
+                            double fieldCentre = numeric.TranslatePoint(new Point(0, numeric.ActualHeight / 2), row).Y;
+                            double labelCentre = label.TranslatePoint(new Point(0, label.ActualHeight / 2), row).Y;
+                            Assert.AreEqual(fieldCentre, labelCentre, 0.5, "Labels and units must centre beside their number field.");
+                            Assert.AreEqual(VerticalAlignment.Center, label.VerticalContentAlignment);
+                        }
+                }
                 if (type == "MultiAction")
                 {
                     var triple = (Button)editor.FindName("multiTripleTapTrigBtn");

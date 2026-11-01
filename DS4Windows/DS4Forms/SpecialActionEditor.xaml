@@ -23,7 +23,7 @@
         <Border Style="{DynamicResource BridgeCardStyle}" Padding="16" Margin="0,0,0,14">
           <Grid>
             <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-            <Label Content="{lex:Loc Strings:UI_2683CAD48A14DC3F}" VerticalAlignment="Center" Padding="0" />
+            <Label VerticalContentAlignment="Center" Content="{lex:Loc Strings:UI_2683CAD48A14DC3F}" VerticalAlignment="Center" Padding="0" />
             <TextBox x:Name="actionNameTxt" Text="{Binding ActionName,FallbackValue=Name,ValidatesOnNotifyDataErrors=True}"
                      Grid.Column="1" MinHeight="36" Margin="12,0,0,0" VerticalContentAlignment="Center" />
           </Grid>
@@ -104,9 +104,9 @@
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
                             <StackPanel Margin="{StaticResource spaceMargin}">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="{StaticResource spaceMargin}">
-                                    <Label Content="{lex:Loc SpecialActionEdit.HoldFor}" ContentStringFormat="{}{0} "></Label>
+                                    <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc SpecialActionEdit.HoldFor}" ContentStringFormat="{}{0} "></Label>
                                     <xctk:DecimalUpDown Height="36" VerticalAlignment="Center" Value="{Binding Delay}" Width="100" Margin="6,0" Minimum="0" Maximum="60" FormatString= "F2" Increment="0.5" />
-                                    <Label Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
+                                    <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
                                 </StackPanel>
                                 <Grid Margin="{StaticResource spaceMargin}">
                                     <Grid.ColumnDefinitions>
@@ -121,7 +121,7 @@
                                             Click="LaunchProgBrowseBtn_Click" />
                                 </Grid>
                                 <StackPanel Margin="{StaticResource spaceMargin}">
-                                    <Label Content="{lex:Loc Strings:UI_7F816072C1C6A23B}"/>
+                                    <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc Strings:UI_7F816072C1C6A23B}"/>
                                     <TextBox Text="{Binding Arguments}" />
                                 </StackPanel>
                             </StackPanel>
@@ -167,7 +167,7 @@
                                         Margin="{StaticResource spaceMargin}" Click="PressKeyToggleTriggerBtn_Click" />
 
                                 <StackPanel Margin="{StaticResource spaceMargin}" Visibility="{Binding ShowToggleControls}">
-                                    <Label Content="{lex:Loc SpecialActionEdit.UntoggleKeyBy}" />
+                                    <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc SpecialActionEdit.UntoggleKeyBy}" />
                                     <ComboBox x:Name="pressReleaseKeyCombo" SelectedIndex="{Binding PressReleaseIndex}">
                                         <ComboBoxItem Content="{lex:Loc SpecialActionEdit.PressingUnloadTrigger}" />
                                         <ComboBoxItem Content="{lex:Loc SpecialActionEdit.ReleasingUnloadTrigger}" />
@@ -179,9 +179,9 @@
                         <TabItem x:Name="disconnectBTTab" Header="{lex:Loc Strings:UI_BEF6971CA5310AC8}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="{StaticResource spaceMargin}">
-                                <Label Content="{lex:Loc SpecialActionEdit.HoldFor}" ContentStringFormat="{}{0} "></Label>
+                                <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc SpecialActionEdit.HoldFor}" ContentStringFormat="{}{0} "></Label>
                                 <xctk:DecimalUpDown Height="36" VerticalAlignment="Center" Value="{Binding HoldInterval}" Width="100" Margin="6,0" Minimum="0" Maximum="60" FormatString= "F2" Increment="0.5" />
-                                <Label Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
+                                <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
                             </StackPanel>
                                                     </ScrollViewer>
                         </TabItem>
@@ -189,9 +189,9 @@
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
                             <StackPanel Margin="{StaticResource spaceMargin}">
                                 <StackPanel Orientation="Horizontal" Margin="0,8,0,8">
-                                    <Label Content="{lex:Loc SpecialActionEdit.HoldFor}" ContentStringFormat="{}{0} "></Label>
+                                    <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc SpecialActionEdit.HoldFor}" ContentStringFormat="{}{0} "></Label>
                                     <xctk:DecimalUpDown Height="36" VerticalAlignment="Center" Value="{Binding HoldInterval}" Width="100" Margin="6,0" Minimum="0" Maximum="60" FormatString= "F2" Increment="0.5"/>
-                                    <Label Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
+                                    <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
                                 </StackPanel>
                                 <CheckBox Content="{lex:Loc SpecialActionEdit.ViaNotification}" IsChecked="{Binding Notification}" Margin="{StaticResource spaceMargin}" />
                                 <CheckBox Content="{lex:Loc SpecialActionEdit.ViaLightbar}" IsChecked="{Binding Lightbar}" Margin="{StaticResource spaceMargin}" />
@@ -204,7 +204,7 @@
                                                 <SolidColorBrush Color="{Binding EmptyColor,FallbackValue=#FFFF0000}"/>
                                             </Button.Background>
                                         </Button>
-                                        <Label Content="0%" />
+                                        <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="0%" />
                                     </StackPanel>
                                     <Button Width="130" Height="20" VerticalAlignment="Top" Focusable="False" Margin="10,0,0,0">
                                         <Button.Background>
@@ -221,7 +221,7 @@
                                                 <SolidColorBrush Color="{Binding FullColor,FallbackValue=#FF00FF00}"/>
                                             </Button.Background>
                                         </Button>
-                                        <Label Content="100%" Padding="0,5" HorizontalAlignment="Center" />
+                                        <Label VerticalContentAlignment="Center" VerticalAlignment="Center" Content="100%" Padding="0,5" HorizontalAlignment="Center" />
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -265,11 +265,11 @@
                                 </Border>
                                 <WrapPanel Margin="0,6,0,0">
                                     <StackPanel Orientation="Horizontal" Margin="0,0,16,8">
-                                    <Label Content="{lex:Loc SpecialActionEdit.HoldFor}" VerticalAlignment="Center" />
+                                    <Label Padding="0" VerticalContentAlignment="Center" Content="{lex:Loc SpecialActionEdit.HoldFor}" VerticalAlignment="Center" />
                                     <xctk:DecimalUpDown Height="36" VerticalAlignment="Center" Value="{Binding HoldSeconds, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="100" Minimum="0.15" Maximum="60" Increment="0.05" FormatString="F2" Margin="6,0,0,0" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <Label Content="{lex:Loc SpecialActionEdit.TapInterval}" VerticalAlignment="Center" />
+                                    <Label Padding="0" VerticalContentAlignment="Center" Content="{lex:Loc SpecialActionEdit.TapInterval}" VerticalAlignment="Center" />
                                     <xctk:DecimalUpDown Height="36" VerticalAlignment="Center" Value="{Binding TapSeconds, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Width="100" Minimum="0.05" Maximum="2" Increment="0.05" FormatString="F2" Margin="6,0,0,0" />
                                     </StackPanel>
                                 </WrapPanel>
@@ -280,18 +280,18 @@
                         <TabItem x:Name="sixaxisWheelCalibrateTab" Header="{lex:Loc Strings:UI_F7A711BC464F45BE}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="{StaticResource spaceMargin}">
-                                <Label Content="{lex:Loc HoldFor}" ContentStringFormat="{}{0} "></Label>
+                                <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc HoldFor}" ContentStringFormat="{}{0} "></Label>
                                 <xctk:DecimalUpDown Height="36" VerticalAlignment="Center" Value="{Binding HoldInterval}" Width="100" Margin="6,0" Minimum="0" Maximum="60" FormatString= "F2" Increment="0.5" />
-                                <Label Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
+                                <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
                             </StackPanel>
                                                     </ScrollViewer>
                         </TabItem>
                         <TabItem x:Name="gyroCalibrateTab" Header="{lex:Loc SpecialActionEdit.CalibrateGyro}">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="{StaticResource spaceMargin}">
-                                <Label Content="{lex:Loc HoldFor}" ContentStringFormat="{}{0} "></Label>
+                                <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc HoldFor}" ContentStringFormat="{}{0} "></Label>
                                 <xctk:DecimalUpDown Height="36" VerticalAlignment="Center" Value="{Binding HoldInterval}" Width="100" Margin="6,0" Minimum="0" Maximum="60" FormatString= "F2" Increment="0.5" />
-                                <Label Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
+                                <Label Padding="0" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{lex:Loc Strings:UI_E6C5669EE730A0D1}" />
                             </StackPanel>
                                                     </ScrollViewer>
                         </TabItem>
