@@ -3834,7 +3834,8 @@ Suspend support not enabled.", true);
                 }
                 LogOpenPhase("profile loaded");
 
-                editor = new ProfileEditor(device, controllerContextDevice);
+                editor = new ProfileEditor(device, controllerContextDevice,
+                    Global.ProfileEditorTimingLogging ? LogOpenPhase : null);
                 LogOpenPhase("editor shell constructed");
                 editor.CreatedProfile += Editor_CreatedProfile;
                 editor.Closed += ProfileEditor_Closed;
@@ -3844,15 +3845,25 @@ Suspend support not enabled.", true);
 
                 profileEditorLoadingPanel.Visibility = Visibility.Collapsed;
                 profDockPanel.Children.Add(editor);
+                LogOpenPhase("editor attached to workspace");
                 mainWinVM.EditingProfileName = editor.ProfileName;
                 NavigateProfileEditor(1);
-                await Dispatcher.Yield(DispatcherPriority.Render);
-                LogOpenPhase("first frame rendered");
+                await Dispatcher.Yield(DispatcherPriority.Loaded);
+                LogOpenPhase("initial layout and Loaded callbacks completed");
+                await Dispatcher.Yield(DispatcherPriority.Background);
+                // Dispatcher progress is measurable; this is not a claim that
+                // the compositor has presented a frame on the user's monitor.
+                LogOpenPhase("render queue drained; editor responsive");
             }
             catch (Exception ex)
             {
                 AppLogger.LogToGui($"Failed to open profile editor after " +
                     $"{openTimer.ElapsedMilliseconds}ms: {ex.Message}", true);
+                if (editor != null)
+                {
+                    editor.RetireEditorSession();
+                    profDockPanel.Children.Remove(editor);
+                }
                 profileEditorLoadingPanel.Visibility = Visibility.Collapsed;
                 profilesBrowserPanel.Visibility = Visibility.Visible;
                 profOptsToolbar.Visibility = Visibility.Visible;

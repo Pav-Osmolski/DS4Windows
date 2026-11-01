@@ -14,7 +14,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using NonFormTimer = System.Timers.Timer;
+using System.Windows.Threading;
 using DS4WinWPF.DS4Forms.ViewModels;
 using DS4Windows;
 using System.ComponentModel;
@@ -96,6 +96,7 @@ namespace DS4WinWPF.DS4Forms
         private bool mappingReadingsActive;
         private bool showingMappingDialog;
         private bool liveInputPreviewVisible;
+        private volatile bool editorRetired;
 
         public bool Keepsize
         {
@@ -109,19 +110,22 @@ namespace DS4WinWPF.DS4Forms
 
         public string ProfileName => profileNameTxt.Text;
 
-        private NonFormTimer inputTimer;
+        private DispatcherTimer inputTimer;
 
         private TouchButtonUserControl touchButtonUC;
         private ContentControl activeTouchButtonDisplayControl;
 
         public ProfileEditor(int device, int controllerContextDevice = -1)
+            : this(device, controllerContextDevice, null) { }
+
+        internal ProfileEditor(int device, int controllerContextDevice, Action<string> timingPhase)
         {
             InitializeComponent();
+            timingPhase?.Invoke("editor XAML and deferred templates loaded");
 
             deviceNum = device;
             triggerPreviewDeviceIndex = ResolveControllerContextIndex(
                 device, controllerContextDevice);
-            emptyColorGB.Visibility = Visibility.Collapsed;
             DS4Device physicalController = ResolveControllerContext(
                 device, controllerContextDevice);
             diagramPhysicalController = physicalController;
@@ -131,6 +135,7 @@ namespace DS4WinWPF.DS4Forms
                 physicalController?.HidDevice?.Attributes?.VendorId,
                 physicalController?.HidDevice?.Attributes?.ProductId,
                 physicalController?.HidDevice?.DevicePath);
+            timingPhase?.Invoke("profile view model constructed");
             picBoxHover.Visibility = Visibility.Hidden;
             picBoxHover2.Visibility = Visibility.Hidden;
 
@@ -153,19 +158,15 @@ namespace DS4WinWPF.DS4Forms
                     _ => ControllerDiagramKind.DualShock4,
                 };
             ConfigureControllerDiagram(defaultDiagram, true);
+            timingPhase?.Invoke("controller diagram prepared");
 
             mappingListVM = new MappingListViewModel(deviceNum,
                 profileSettingsVM.ContType, physicalController?.DeviceType,
                 physicalControllerIsDualSenseEdge);
-            Switch2SecondActionControlCombo.ItemsSource = mappingListVM.Mappings
-                .Where(control => control.IsAvailableOnPhysicalController).ToArray();
-            Switch2SecondActionControlCombo.SelectedIndex = 0;
             profileSettingsVM.Switch2ModeShiftEditor.MappingScopeChanged +=
                 (_, _) => mappingListVM.UpdateMappings();
             specialActionsVM = new SpecialActionsListViewModel(device);
 
-            touchButtonUC = new TouchButtonUserControl(device);
-            TouchpadButtonControlDisplaySetup();
 
             RemoveHoverBtnText();
             PopulateHoverImages();
@@ -173,20 +174,15 @@ namespace DS4WinWPF.DS4Forms
             PopulateHoverIndexes();
             PopulateReverseHoverIndexes();
             RefreshJoyConDiagram();
-            PopulateGyroActionsTriggersMenu();
 
-            AssignTiltAssociation();
-            AssignSwipeAssociation();
-            AssignStickOuterBindAssociation();
             UpdateOutputControllerHint(profileSettingsVM.TempConType);
-            AssignGyroSwipeAssociation();
 
-            inputTimer = new NonFormTimer(100);
-            inputTimer.Elapsed += InputDS4;
-            profileAudioHapticsControl.SetDevice(deviceNum);
-            profileTriggerLabControl.SetDevice(deviceNum, triggerPreviewDeviceIndex);
+            inputTimer = new DispatcherTimer(DispatcherPriority.Background)
+                { Interval = TimeSpan.FromMilliseconds(100) };
+            inputTimer.Tick += InputDS4;
             UpdateTriggerLabSpecialActionBadge();
             SetupEvents();
+            timingPhase?.Invoke("mapping model and editor events prepared");
         }
 
         private void ConfigureControllerDiagram(ControllerDiagramKind diagramKind,
@@ -1196,8 +1192,6 @@ namespace DS4WinWPF.DS4Forms
 
         private void SetupEvents()
         {
-            gyroOutModeCombo.SelectionChanged += GyroOutModeCombo_SelectionChanged;
-            outConTypeCombo.SelectionChanged += OutConTypeCombo_SelectionChanged;
             mappingListBox.SelectionChanged += MappingListBox_SelectionChanged;
             Closed += ProfileEditor_Closed;
             profileSettingsVM.JoyConPresentationChanged += JoyConPresentationChanged;
@@ -1218,8 +1212,8 @@ namespace DS4WinWPF.DS4Forms
 
         private void UnregisterEvents()
         {
-            gyroOutModeCombo.SelectionChanged -= GyroOutModeCombo_SelectionChanged;
-            outConTypeCombo.SelectionChanged -= OutConTypeCombo_SelectionChanged;
+            if (gyroOutModeCombo != null) gyroOutModeCombo.SelectionChanged -= GyroOutModeCombo_SelectionChanged;
+            if (outConTypeCombo != null) outConTypeCombo.SelectionChanged -= OutConTypeCombo_SelectionChanged;
             mappingListBox.SelectionChanged -= MappingListBox_SelectionChanged;
             Closed -= ProfileEditor_Closed;
             profileSettingsVM.JoyConPresentationChanged -= JoyConPresentationChanged;
@@ -1232,10 +1226,10 @@ namespace DS4WinWPF.DS4Forms
             profileSettingsVM.SZDeadZoneChanged -= UpdateReadingsSZDeadZone;
             profileSettingsVM.TouchpadOutputIndexChanged -= TouchpadOutputDisplayChange;
 
-            axialLSStickControl.AxialVM.DeadZoneXChanged -= UpdateReadingsLsDeadZoneX;
-            axialLSStickControl.AxialVM.DeadZoneYChanged -= UpdateReadingsLsDeadZoneY;
-            axialRSStickControl.AxialVM.DeadZoneXChanged -= UpdateReadingsRsDeadZoneX;
-            axialRSStickControl.AxialVM.DeadZoneYChanged -= UpdateReadingsRsDeadZoneY;
+            if (axialLSStickControl != null) axialLSStickControl.AxialVM.DeadZoneXChanged -= UpdateReadingsLsDeadZoneX;
+            if (axialLSStickControl != null) axialLSStickControl.AxialVM.DeadZoneYChanged -= UpdateReadingsLsDeadZoneY;
+            if (axialRSStickControl != null) axialRSStickControl.AxialVM.DeadZoneXChanged -= UpdateReadingsRsDeadZoneX;
+            if (axialRSStickControl != null) axialRSStickControl.AxialVM.DeadZoneYChanged -= UpdateReadingsRsDeadZoneY;
 
             profileSettingsVM.LeftStickDriftXAxisChanged -= UpdateReadingsLSDrift;
             profileSettingsVM.LeftStickDriftYAxisChanged -= UpdateReadingsLSDrift;
@@ -1243,8 +1237,7 @@ namespace DS4WinWPF.DS4Forms
             profileSettingsVM.RightStickDriftYAxisChanged -= UpdateReadingsRSDrift;
 
             inputTimer.Stop();
-            inputTimer.Elapsed -= InputDS4;
-            inputTimer = null;
+            inputTimer.Tick -= InputDS4;
 
             StopEditorBindings();
         }
@@ -1293,7 +1286,7 @@ namespace DS4WinWPF.DS4Forms
 
         private void TouchpadOutputDisplayChange(object sender, EventArgs e)
         {
-            TouchpadButtonControlDisplaySetup();
+            if (touchButtonUC != null) TouchpadButtonControlDisplaySetup();
         }
 
         private void UpdateReadingsSZDeadZone(object sender, EventArgs e)
@@ -1464,15 +1457,15 @@ namespace DS4WinWPF.DS4Forms
             hoverIndexes[rslConBtn] = 31;
             hoverIndexes[rsrConBtn] = 32;
 
-            hoverIndexes[gyroZNBtn] = 33;
-            hoverIndexes[gyroZPBtn] = 34;
-            hoverIndexes[gyroXNBtn] = 35;
-            hoverIndexes[gyroXPBtn] = 36;
+            if (gyroZNBtn != null) hoverIndexes[gyroZNBtn] = 33;
+            if (gyroZPBtn != null) hoverIndexes[gyroZPBtn] = 34;
+            if (gyroXNBtn != null) hoverIndexes[gyroXNBtn] = 35;
+            if (gyroXPBtn != null) hoverIndexes[gyroXPBtn] = 36;
 
-            hoverIndexes[swipeUpBtn] = 37;
-            hoverIndexes[swipeDownBtn] = 38;
-            hoverIndexes[swipeLeftBtn] = 39;
-            hoverIndexes[swipeRightBtn] = 40;
+            if (swipeUpBtn != null) hoverIndexes[swipeUpBtn] = 37;
+            if (swipeDownBtn != null) hoverIndexes[swipeDownBtn] = 38;
+            if (swipeLeftBtn != null) hoverIndexes[swipeLeftBtn] = 39;
+            if (swipeRightBtn != null) hoverIndexes[swipeRightBtn] = 40;
 
             hoverIndexes[fnlConBtn] = 41;
             hoverIndexes[fnrConBtn] = 42;
@@ -1887,8 +1880,10 @@ namespace DS4WinWPF.DS4Forms
                 }
 
                 sidebarTabControl.Visibility = Visibility.Collapsed;
-                profileSettingsTabCon.Visibility = Visibility.Visible;
                 profileSettingsTabCon.SelectedIndex = nextSection - 3;
+                var page = (profileSettingsTabCon.SelectedItem as TabItem)?.Content as DeferredProfilePage;
+                page?.EnsureContent();
+                profileSettingsTabCon.Visibility = Visibility.Visible;
                 AnimateWorkspacePanel(profileSettingsTabCon);
             }
 
@@ -1964,8 +1959,6 @@ namespace DS4WinWPF.DS4Forms
                 }
             }
 
-            profileAudioHapticsControl.SetDevice(deviceNum);
-            profileTriggerLabControl.SetDevice(deviceNum, triggerPreviewDeviceIndex);
             UpdateTriggerLabSpecialActionBadge();
 
             ColorByBatteryPerCheck();
@@ -1980,72 +1973,30 @@ namespace DS4WinWPF.DS4Forms
             RefreshMappingLiveInput();
             if (readingsDevice >= 0)
             {
-                useControllerUD.Value = readingsDevice + 1;
+                if (useControllerUD != null) useControllerUD.Value = readingsDevice + 1;
                 conReadingsUserCon.UseDevice(readingsDevice, device);
                 contReadingsTab.IsEnabled = true;
             }
             else
             {
-                useControllerUD.Value = 1;
+                if (useControllerUD != null) useControllerUD.Value = 1;
                 contReadingsTab.IsEnabled = false;
             }
 
             conReadingsUserCon.EnableControl(false);
-            axialLSStickControl.UseDevice(Global.LSModInfo[device]);
-            axialRSStickControl.UseDevice(Global.RSModInfo[device]);
 
             specialActionsVM.LoadActions(currentProfile == null);
             mappingListVM.UpdateMappings();
             profileSettingsVM.UpdateLateProperties();
             RefreshJoyConDiagram();
-            profileSettingsVM.PopulateTouchDisInver(touchDisInvertBtn.ContextMenu);
-            profileSettingsVM.PopulateGyroMouseTrig(gyroMouseTrigBtn.ContextMenu);
-            profileSettingsVM.PopulateGyroMouseStickTrig(gyroMouseStickTrigBtn.ContextMenu);
-            profileSettingsVM.PopulateGyroSwipeTrig(gyroSwipeTrigBtn.ContextMenu);
-            profileSettingsVM.PopulateGyroControlsTrig(gyroControlsTrigBtn.ContextMenu);
             profileSettingsTabCon.DataContext = profileSettingsVM;
             mappingListBox.DataContext = mappingListVM;
             specialActionsTab.DataContext = specialActionsVM;
             lightbarRect.DataContext = profileSettingsVM;
 
-            StickDeadZoneInfo lsMod = Global.LSModInfo[device];
-            if (lsMod.deadzoneType == StickDeadZoneInfo.DeadZoneType.Radial)
-            {
-                conReadingsUserCon.LsDeadX = profileSettingsVM.LSDeadZone;
-                conReadingsUserCon.LsDeadY = profileSettingsVM.LSDeadZone;
-            }
-            else if (lsMod.deadzoneType == StickDeadZoneInfo.DeadZoneType.Axial)
-            {
-                conReadingsUserCon.LsDeadX = axialLSStickControl.AxialVM.DeadZoneX;
-                conReadingsUserCon.LsDeadY = axialLSStickControl.AxialVM.DeadZoneY;
-            }
-
-            StickDeadZoneInfo rsMod = Global.RSModInfo[device];
-            if (rsMod.deadzoneType == StickDeadZoneInfo.DeadZoneType.Radial)
-            {
-                conReadingsUserCon.RsDeadX = profileSettingsVM.RSDeadZone;
-                conReadingsUserCon.RsDeadY = profileSettingsVM.RSDeadZone;
-            }
-            else if (rsMod.deadzoneType == StickDeadZoneInfo.DeadZoneType.Axial)
-            {
-                conReadingsUserCon.RsDeadX = axialRSStickControl.AxialVM.DeadZoneX;
-                conReadingsUserCon.RsDeadY = axialRSStickControl.AxialVM.DeadZoneY;
-            }
-
-            conReadingsUserCon.L2Dead = profileSettingsVM.L2DeadZone;
-            conReadingsUserCon.R2Dead = profileSettingsVM.R2DeadZone;
-            conReadingsUserCon.SixAxisXDead = profileSettingsVM.SXDeadZone;
-            conReadingsUserCon.SixAxisZDead = profileSettingsVM.SZDeadZone;
-
-            conReadingsUserCon.LsDriftX = profileSettingsVM.LeftStickDriftXAxis;
-            conReadingsUserCon.LsDriftY = profileSettingsVM.LeftStickDriftYAxis;
-            conReadingsUserCon.RsDriftX = profileSettingsVM.RightStickDriftXAxis;
-            conReadingsUserCon.RsDriftY = profileSettingsVM.RightStickDriftYAxis;
-
-            axialLSStickControl.AxialVM.DeadZoneXChanged += UpdateReadingsLsDeadZoneX;
-            axialLSStickControl.AxialVM.DeadZoneYChanged += UpdateReadingsLsDeadZoneY;
-            axialRSStickControl.AxialVM.DeadZoneXChanged += UpdateReadingsRsDeadZoneX;
-            axialRSStickControl.AxialVM.DeadZoneYChanged += UpdateReadingsRsDeadZoneY;
+            RefreshReadingsValues();
+            RefreshMaterializedPages();
+            foreach (var page in DeferredPages) page.Ready = true;
 
             // Sort special action list by action name
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(specialActionsVM.ActionCol);
@@ -2066,9 +2017,9 @@ namespace DS4WinWPF.DS4Forms
             specialActionsTab.DataContext = null;
             lightbarRect.DataContext = null;
 
-            touchButtonUC.UnregisterDataContext();
-            axialLSStickControl.UnregisterDataContext();
-            axialRSStickControl.UnregisterDataContext();
+            touchButtonUC?.UnregisterDataContext();
+            axialLSStickControl?.UnregisterDataContext();
+            axialRSStickControl?.UnregisterDataContext();
         }
 
         private void RefreshEditorBindings()
@@ -2076,26 +2027,13 @@ namespace DS4WinWPF.DS4Forms
             specialActionsVM.LoadActions(currentProfile == null);
             mappingListVM.UpdateMappings();
             profileSettingsVM.UpdateLateProperties();
-            profileSettingsVM.PopulateTouchDisInver(touchDisInvertBtn.ContextMenu);
-            profileSettingsVM.PopulateGyroMouseTrig(gyroMouseTrigBtn.ContextMenu);
-            profileSettingsVM.PopulateGyroMouseStickTrig(gyroMouseStickTrigBtn.ContextMenu);
-            profileSettingsVM.PopulateGyroSwipeTrig(gyroSwipeTrigBtn.ContextMenu);
-            profileSettingsVM.PopulateGyroControlsTrig(gyroControlsTrigBtn.ContextMenu);
             profileSettingsTabCon.DataContext = profileSettingsVM;
             mappingListBox.DataContext = mappingListVM;
             specialActionsTab.DataContext = specialActionsVM;
             lightbarRect.DataContext = profileSettingsVM;
 
-            conReadingsUserCon.LsDeadX = profileSettingsVM.LSDeadZone;
-            conReadingsUserCon.RsDeadX = profileSettingsVM.RSDeadZone;
-            conReadingsUserCon.L2Dead = profileSettingsVM.L2DeadZone;
-            conReadingsUserCon.R2Dead = profileSettingsVM.R2DeadZone;
-            conReadingsUserCon.SixAxisXDead = profileSettingsVM.SXDeadZone;
-            conReadingsUserCon.SixAxisZDead = profileSettingsVM.SZDeadZone;
-            conReadingsUserCon.LsDriftX = profileSettingsVM.LeftStickDriftXAxis;
-            conReadingsUserCon.LsDriftY = profileSettingsVM.LeftStickDriftYAxis;
-            conReadingsUserCon.RsDriftX = profileSettingsVM.RightStickDriftXAxis;
-            conReadingsUserCon.RsDriftY = profileSettingsVM.RightStickDriftYAxis;
+            RefreshReadingsValues();
+            RefreshMaterializedPages();
         }
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
@@ -2103,7 +2041,7 @@ namespace DS4WinWPF.DS4Forms
             ClearRumblePreview();
 
             Global.outDevTypeTemp[deviceNum] = OutContType.ViiperX360;
-            profileTriggerLabControl.RestorePhysicalProfileEffects();
+            profileTriggerLabControl?.RestorePhysicalProfileEffects();
             Mapping.RequestRegularProfileReload(deviceNum, false, App.rootHub);
 
             Closed?.Invoke(this, EventArgs.Empty);
@@ -2287,7 +2225,7 @@ namespace DS4WinWPF.DS4Forms
             bool saved = ApplyProfileStep(false);
             if (saved)
             {
-                profileTriggerLabControl.RestorePhysicalProfileEffects();
+                profileTriggerLabControl?.RestorePhysicalProfileEffects();
                 Closed?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -2357,7 +2295,7 @@ namespace DS4WinWPF.DS4Forms
         {
             ClearRumblePreview();
 
-            profileTriggerLabControl.RestorePhysicalProfileEffects();
+            profileTriggerLabControl?.RestorePhysicalProfileEffects();
             Closed?.Invoke(this, EventArgs.Empty);
         }
 
@@ -2368,6 +2306,7 @@ namespace DS4WinWPF.DS4Forms
 
         private void ColorByBatteryPerCheck()
         {
+            if (colorGB == null || emptyColorGB == null) return;
             bool state = profileSettingsVM.ColorBatteryPercent;
             if (state)
             {
@@ -2588,6 +2527,9 @@ namespace DS4WinWPF.DS4Forms
 
         private void FrictionUD_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            // Initial values can arrive while the deferred template is still
+            // assigning its named fields. They are not a user edit.
+            if (editorRetired || touchpadPage?.IsMaterialized != true) return;
             if (deviceNum < ControlService.CURRENT_DS4_CONTROLLER_LIMIT)
             {
                 App.rootHub.touchPad[deviceNum]?.ResetTrackAccel(frictionUD.Value.GetValueOrDefault());
@@ -2703,8 +2645,6 @@ namespace DS4WinWPF.DS4Forms
         private void Switch2OpenGyroSettings_Click(object sender, RoutedEventArgs e)
         {
             // Reuse the canonical editor, including its trigger combinations.
-            profileSettingsVM.PopulateGyroMouseTrig(gyroMouseTrigBtn.ContextMenu);
-            profileSettingsVM.PopulateGyroMouseStickTrig(gyroMouseStickTrigBtn.ContextMenu);
             if (Window.GetWindow(this)?.DataContext is MainWindowsViewModel shell)
                 shell.ProfileEditorNavigationIndex = 7;
             else
@@ -2757,7 +2697,8 @@ namespace DS4WinWPF.DS4Forms
             int index = outConTypeCombo.SelectedIndex;
             if (index >= 0)
             {
-                if (ViiperSetupManager.IsViiperOutputType(profileSettingsVM.TempConType))
+                if ((outConTypeCombo.IsDropDownOpen || outConTypeCombo.IsKeyboardFocusWithin) &&
+                    ViiperSetupManager.IsViiperOutputType(profileSettingsVM.TempConType))
                 {
                     ViiperSetupManager.EnsureReadyWithPrompt(Application.Current.MainWindow);
                 }
@@ -2909,17 +2850,13 @@ namespace DS4WinWPF.DS4Forms
             DS4Controls control) => mappings.ControlIndexMap.TryGetValue(control, out int index)
                 ? index : -1;
 
-        private void InputDS4(object sender, System.Timers.ElapsedEventArgs e)
+        private void InputDS4(object sender, EventArgs e)
         {
+            if (editorRetired || Dispatcher.HasShutdownStarted) return;
             inputTimer.Stop();
 
-            bool activeWin = false;
-            int tempDeviceNum = 0;
-            Dispatcher.Invoke(() =>
-            {
-                activeWin = Application.Current.MainWindow.IsActive;
-                tempDeviceNum = profileSettingsVM.FuncDevNum;
-            });
+            bool activeWin = Application.Current?.MainWindow?.IsActive == true;
+            int tempDeviceNum = profileSettingsVM.FuncDevNum;
 
             if (activeWin && profileSettingsVM.UseControllerReadout)
             {
@@ -2928,6 +2865,7 @@ namespace DS4WinWPF.DS4Forms
                 {
                     Dispatcher.BeginInvoke((Action)(() =>
                     {
+                        if (editorRetired || !mappingReadingsActive) return;
                         int index = GetInputControlMappingIndex(mappingListVM, activeControl);
                         if (index < 0) return;
                         mappingListVM.SelectedIndex = index;
@@ -2936,19 +2874,28 @@ namespace DS4WinWPF.DS4Forms
                 }
             }
 
-            if (profileSettingsVM.UseControllerReadout)
+            if (!editorRetired && profileSettingsVM.UseControllerReadout)
             {
                 inputTimer.Start();
             }
         }
         private void ProfileEditor_Closed(object sender, EventArgs e)
         {
+            RetireEditorSession();
+            Global.CacheExtraProfileInfo(profileSettingsVM.Device);
+        }
+
+        internal void RetireEditorSession()
+        {
+            if (editorRetired) return;
+            editorRetired = true;
+            foreach (var page in DeferredPages) page.Retired = true;
+            profileSettingsVM.RetireEditor();
             mappingReadingsActive = false;
             mappingLiveInput.EnableControl(false);
             profileSettingsVM.UseControllerReadout = false;
             inputTimer.Stop();
             conReadingsUserCon.EnableControl(false);
-            Global.CacheExtraProfileInfo(profileSettingsVM.Device);
             UnregisterEvents();
         }
 
@@ -3060,15 +3007,17 @@ namespace DS4WinWPF.DS4Forms
         private void RefreshControllerReadingsPresentation()
         {
             // Selection events can arrive while InitializeComponent builds the tabs.
-            if (conReadingsUserCon == null || axisReadingsHost == null ||
-                axisContentArea == null || contReadingsTab == null) return;
+            if (conReadingsUserCon == null || contReadingsTab == null) return;
 
-            bool docked = profileSettingsTabCon.Visibility == Visibility.Visible &&
+            bool docked = axisReadingsHost != null &&
+                profileSettingsTabCon.Visibility == Visibility.Visible &&
                 profileSettingsTabCon.SelectedItem == axisConfigTab &&
-                axisReadingsToggle.IsChecked == true;
-            MoveControllerReadings(contReadingsTab, axisReadingsHost, conReadingsUserCon, docked);
-            ArrangeAxisReadingsDock(axisReadingsHost, docked,
-                axisContentArea.ActualWidth);
+                axisReadingsToggle?.IsChecked == true;
+            if (axisReadingsHost != null)
+            {
+                MoveControllerReadings(contReadingsTab, axisReadingsHost, conReadingsUserCon, docked);
+                ArrangeAxisReadingsDock(axisReadingsHost, docked, axisContentArea.ActualWidth);
+            }
             controllerReadingsTabActive = docked ||
                 (sidebarTabControl.Visibility == Visibility.Visible &&
                  sidebarTabControl.SelectedItem == contReadingsTab);
@@ -3442,7 +3391,7 @@ namespace DS4WinWPF.DS4Forms
             if (choice == MessageBoxResult.Yes)
             {
                 if (!ApplyProfileStep(false)) return;
-                profileTriggerLabControl.RestorePhysicalProfileEffects();
+                profileTriggerLabControl?.RestorePhysicalProfileEffects();
                 Closed?.Invoke(this, EventArgs.Empty);
             }
             else CancelEdit();

@@ -53,5 +53,7 @@ namespace DS4WinWPF.DS4Forms
         {
             DataContext = null;
         }
+
+        internal void RefreshDataContext() => DataContext = touchButtonVM;
     }
 }

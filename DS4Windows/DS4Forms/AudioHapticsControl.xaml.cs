@@ -31,6 +31,7 @@ namespace DS4WinWPF.DS4Forms
 
         private int deviceIndex = -1;
         private bool loading;
+        private bool preparedForLoad;
         private readonly DispatcherTimer statusRefreshTimer;
 
         public AudioHapticsControl()
@@ -43,7 +44,8 @@ namespace DS4WinWPF.DS4Forms
             statusRefreshTimer.Tick += (_, _) => UpdateStatus(CurrentSettings);
             Loaded += (_, _) =>
             {
-                RefreshSourcesAndSettings();
+                if (!preparedForLoad) RefreshSourcesAndSettings();
+                preparedForLoad = false;
                 statusRefreshTimer.Start();
             };
             Unloaded += (_, _) => statusRefreshTimer.Stop();
@@ -58,6 +60,7 @@ namespace DS4WinWPF.DS4Forms
         {
             deviceIndex = index >= 0 && index < Global.TEST_PROFILE_ITEM_COUNT ? index : -1;
             RefreshSourcesAndSettings();
+            preparedForLoad = !IsLoaded;
         }
 
         public void RefreshSourcesAndSettings()
