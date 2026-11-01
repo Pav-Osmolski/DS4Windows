@@ -165,3 +165,13 @@ Retest the r3 local package with the same physical profile and audio settings.
 Repeated Edit/Cancel timings should now remain close to layout/transition costs
 rather than waiting for audio configuration. Retain the timing log if another
 unrelated delay remains; do not present synthetic tests as hardware acceptance.
+
+## Maintainer acceptance — 2026-11-01
+
+The maintainer tested r3 with the same DualSense USB profile and accepted it
+for release. The supplied log records first opening at 308 ms, repeated opens
+at 167 and 137 ms, and return-page queue drain at 52, 69 and 58 ms. No previous
+~900 ms stall appears in this capture. All eight settings pages were visited.
+These are application timing phases from one setup, not compositor presentation
+measurements or a claim of physical testing with every controller/transport.
+The final local application suite passed 7,998 tests with 16 opt-in skips.
