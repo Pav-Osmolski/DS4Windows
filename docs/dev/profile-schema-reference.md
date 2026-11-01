@@ -31,6 +31,15 @@ Older apps can still read the first three macro fields but do not implement the
 new triple/timing fields. Editing and saving in older versions can drop newer
 fields; keep backups when switching versions.
 
+The next additive Multi Action extension uses 15 comma-separated fields. The
+first six retain the above playback/timing layout; disabled gestures have empty
+legacy playback fields. Field 6 is `v2:<enabled-mask>` (bits single, hold, double,
+triple). Fields 7–10 hold Base64 UTF-8 display names, and 11–14 retain the four
+recorded macros, including disabled ones. New readers restore those recordings
+only for a recognized, complete extension. Invalid names fall back to empty
+labels. Legacy actions default all gesture switches to enabled. Older versions
+can execute the enabled legacy fields but may lose the extension when editing.
+
 ## Current additive settings (5.0.29)
 
 These optional fields do not require a profile schema-version bump:

@@ -63,6 +63,18 @@ macros cannot fire for the same triple-tap. Without triple tap, double tap keeps
 its immediate second-press behaviour. All selected trigger buttons must be held
 together, and each controller tracks its own gestures.
 
+Each gesture has an optional **macro name** and its own checkbox. Uncheck it to
+disable playback while keeping its recording and name; recheck it to restore it.
+Keeping related gestures in one Multi Action makes these controls easiest to
+manage. Separate enabled Multi Actions also share triple-tap recognition when
+their trigger-button combinations and both timing values match exactly. This
+prevents the double and single actions also firing for that triple tap. Actions
+with different button combinations or timing remain independent.
+
+The action editor shows standard trigger buttons first, followed by extra
+controller-specific controls. Trigger and action-settings panels scroll
+independently; Save and Cancel remain available below them.
+
 The **Settings** button at the top opens the main application settings. Choose
 whether to save or discard profile edits first; Cancel keeps the editor open.
 Action names such as `Play/Pause` are stored as complete names when the profile

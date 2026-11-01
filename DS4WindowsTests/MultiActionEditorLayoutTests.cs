@@ -49,7 +49,7 @@ public class MultiActionEditorLayoutTests
             root.Measure(new Size(width, 480)); root.Arrange(new Rect(0, 0, width, 480)); root.UpdateLayout();
             var viewer = root.Children.OfType<ScrollViewer>().Single();
             var content = (StackPanel)viewer.Content;
-            var buttons = content.Children.OfType<Button>().ToArray();
+            var buttons = Visuals(content).OfType<Button>().Where(b => b.Name.StartsWith("multi")).ToArray();
             Assert.AreEqual(4, buttons.Length);
             foreach (var button in buttons) Assert.IsTrue(button.ActualWidth <= width && button.ActualWidth > 0);
             var inputs = content.Children.OfType<WrapPanel>().Single().Children.OfType<StackPanel>().SelectMany(p => p.Children.OfType<Xceed.Wpf.Toolkit.DecimalUpDown>()).ToArray();
@@ -70,4 +70,12 @@ public class MultiActionEditorLayoutTests
         });
     }
     private static string Root([CallerFilePath] string file = "") => Path.GetFullPath(Path.Combine(Path.GetDirectoryName(file)!, ".."));
+    private static IEnumerable<DependencyObject> Visuals(DependencyObject parent)
+    {
+        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i); yield return child;
+            foreach (var descendant in Visuals(child)) yield return descendant;
+        }
+    }
 }

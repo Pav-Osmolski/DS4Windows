@@ -5,7 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Prevent matching separate Multi Actions from also firing double/single macros for a triple tap; add per-gesture names and enable switches that preserve recorded macros. Refresh the action editor with themed panels, bounded scrolling and consistent controls. Thanks [@Masterload1975](https://github.com/Masterload1975) for the follow-up and suggestions ([#100](https://github.com/Pav-Osmolski/DS4Windows/issues/100)).
+- Use the same inline Profiles panel for Rename and Duplicate, replacing one mode with the other and closing stale prompts when selection changes.
 
 ## Released
 
