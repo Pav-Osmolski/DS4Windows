@@ -12383,7 +12383,7 @@ namespace DS4Windows
             {
                 typeID = ActionTypeId.MultiAction;
                 this.details = details;
-                MultiActionOptions = new MultiActionConfiguration(details);
+                MultiActionOptions = new MultiActionConfiguration(details, controls);
             }
             else if (type == "XboxGameDVR")
             {

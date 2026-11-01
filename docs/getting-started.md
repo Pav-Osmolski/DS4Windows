@@ -24,6 +24,17 @@ Starting with **5.0.14**, new releases use numeric versions and are marked
 **Latest**. Check the release notes for limitations and signing status;
 this fork currently publishes unsigned builds.
 
+For a standard installation, download the **Setup_x64.exe** asset and run it.
+Setup shows the application/backend versions and checks the shared drivers.
+Review the optional HidHide and FakerInput selections, then choose **Install**.
+Healthy existing driver installations are kept; follow any repair or restart
+instructions shown before testing your controller.
+
+![DS4Windows Setup showing component versions, installation status and optional drivers](images/site/installer.webp)
+
+*Installer example. Displayed versions, detected drivers and available actions
+depend on the release and what is already installed on your PC.*
+
 ### Uninstalling the standard installation
 
 Run **DS4Windows Setup** from Windows Installed apps and choose Uninstall.

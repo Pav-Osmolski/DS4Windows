@@ -21,6 +21,7 @@ using DS4WinWPF.DS4Forms.ViewModels.SpecialActions;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -102,6 +103,7 @@ namespace DS4WinWPF.DS4Forms
             gyroCalibrateTab.DataContext = calibrateGyroVM;
 
             SetupLateEvents();
+            saveBtn.IsEnabled = specialActVM.ActionTypeIndex > 0;
         }
 
         private void SetupLateEvents()
@@ -113,7 +115,8 @@ namespace DS4WinWPF.DS4Forms
         {
             var boxes = new List<CheckBox>();
             string previousGroup = null;
-            foreach (SpecialActionTriggerCatalog.Entry entry in SpecialActionTriggerCatalog.Entries)
+            foreach (SpecialActionTriggerCatalog.Entry entry in SpecialActionTriggerCatalog.Entries
+                .OrderBy(entry => entry.Group == "Standard buttons" ? 0 : 1))
             {
                 if (entry.Group != previousGroup)
                 {
@@ -154,15 +157,15 @@ namespace DS4WinWPF.DS4Forms
                     Text = detail, TextWrapping = TextWrapping.Wrap, FontSize = 11,
                     Margin = new Thickness(0, 2, 0, 0),
                 };
-                subtitle.SetResourceReference(TextBlock.ForegroundProperty, "ForegroundColor");
+                subtitle.SetResourceReference(TextBlock.ForegroundProperty, "MutedForegroundColor");
                 content.Children.Add(subtitle);
             }
 
             var box = new CheckBox
             {
-                Tag = tag, Content = content, Margin = new Thickness(0, 3, 0, 5),
+                Tag = tag, Content = content, Margin = new Thickness(0, 4, 0, 6),
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
-                VerticalContentAlignment = VerticalAlignment.Top,
+                VerticalContentAlignment = VerticalAlignment.Center,
             };
             box.SetResourceReference(Control.ForegroundProperty, "ForegroundColor");
             System.Windows.Automation.AutomationProperties.SetName(box,

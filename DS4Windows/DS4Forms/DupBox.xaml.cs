@@ -39,12 +39,16 @@ namespace DS4WinWPF.DS4Forms
     public partial class DupBox : UserControl
     {
         private string oldfilename;
+        private ProfileEntity renameProfile;
+        public bool IsRenameMode => renameProfile != null;
         public string OldFilename
         {
             get => oldfilename;
             set
             {
                 oldfilename = value;
+                renameProfile = null;
+                SetOperation(false);
                 sourceProfileName.Text = value;
                 profileTxt.Clear();
                 validationMessage.Visibility = Visibility.Collapsed;
@@ -54,6 +58,24 @@ namespace DS4WinWPF.DS4Forms
         public event EventHandler Cancel;
         public delegate void SaveHandler(DupBox sender, string profilename);
         public event SaveHandler Save;
+        public event SaveHandler Renamed;
+
+        public void BeginRename(ProfileEntity profile)
+        {
+            OldFilename = profile.Name;
+            renameProfile = profile;
+            SetOperation(true);
+            profileTxt.Text = profile.Name;
+            Dispatcher.BeginInvoke((Action)(() => { if (IsVisible) { profileTxt.Focus(); profileTxt.SelectAll(); } }));
+        }
+
+        private void SetOperation(bool rename)
+        {
+            string label = Translations.Strings.ResourceManager.GetString(rename ? "RenameProfile" : "Duplicate") ?? (rename ? "Rename" : "Duplicate");
+            operationTitle.Text = label;
+            saveBtn.Content = label;
+            operationIcon.Text = rename ? "\uE8AC" : "\uE8C8";
+        }
 
         public DupBox()
         {
@@ -72,6 +94,12 @@ namespace DS4WinWPF.DS4Forms
 
             string directory = System.IO.Path.Combine(DS4Windows.Global.appdatapath, "Profiles");
             string destination = System.IO.Path.Combine(directory, profile + ".xml");
+            if (renameProfile != null)
+            {
+                if (!renameProfile.RenameProfile(profile, out string error)) { ShowValidation(error); return; }
+                Renamed?.Invoke(this, profile);
+                return;
+            }
             if (System.IO.File.Exists(destination))
             {
                 ShowValidation(Properties.Resources.ResourceManager.GetString("ProfileRenameCollision"));

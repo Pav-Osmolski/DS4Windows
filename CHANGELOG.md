@@ -9,6 +9,14 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.59](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.59) - 2026-11-01
+
+- Prevent matching separate Multi Actions from also firing double/single macros for a triple tap; add per-gesture names and enable switches that preserve recorded macros. Refresh the action editor with themed panels, bounded scrolling and consistent controls. Thanks [@Masterload1975](https://github.com/Masterload1975) for the follow-up and suggestions ([#100](https://github.com/Pav-Osmolski/DS4Windows/issues/100)).
+- Use the same inline Profiles panel for Rename and Duplicate, replacing one mode with the other and closing stale prompts when selection changes.
+- Centre action-editor labels and units beside their number fields, document the actual special-action schema release versions, and illustrate the installation guide with the current installer layout.
+
+Changes: [PR #102](https://github.com/Pav-Osmolski/DS4Windows/pull/102).
+
 ### [5.0.58](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.58) - 2026-10-31
 
 - Preserve complete enabled special-action names, including slashes, with structured profile entries and unambiguous recovery of legacy names. Thanks [@lpv11](https://github.com/lpv11) for the report and video, and [@Masterload1975](https://github.com/Masterload1975) for the follow-up ([#99](https://github.com/Pav-Osmolski/DS4Windows/issues/99)).

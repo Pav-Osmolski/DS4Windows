@@ -46,6 +46,9 @@ DualSense when the game supports that controller's features. Restart the game
 after changing output type if it does not detect the new virtual controller.
 
 You can rename, duplicate, import and export profiles from the Profiles page.
+**Rename** and **Duplicate** use the same inline panel below the toolbar. Opening
+one replaces the other; selecting a different profile closes the pending panel.
+Rename prefills the existing name, while Duplicate starts with an empty name.
 
 ### DualShock 3 pressure-sensitive mappings
 
@@ -163,7 +166,7 @@ provide an automatic downgrade or guarantee that an older driver can be restored
 
 If saving fails, the editor stays open and the last valid profile file is kept.
 Check Log for the file error, resolve permissions or free space, and retry.
-A rename collision leaves both existing profiles unchanged; the Rename dialog
+A rename collision leaves both existing profiles unchanged; the inline Rename panel
 stays open so you can choose another name. If a save-based rename cannot remove
 the original file, both complete copies are kept; check Log before removing any
 copy yourself.
