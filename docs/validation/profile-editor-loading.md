@@ -122,3 +122,46 @@ close handlers, then destination selection and return-page queue drain. Retest
 repeated Controllers → Edit → Cancel with the actual controller and profile;
 these measures can distinguish synchronous cleanup from destination layout if
 any pause remains. User acceptance of r2 is still required.
+
+## Follow-up: live lock contention (r3)
+
+The r2 video/log still showed intermittent pauses: synchronous Cancel completed
+in 11–19 ms on repeated opens, but the UI queue continuation could take around
+900 ms. A local EventPipe sample trace of the running r2 app reproduced both
+opening and Cancel delays. During the affected periods the UI thread waited in:
+
+```
+DispatcherTimer.FireTick
+MainWindowsViewModel.RefreshRuntimeState
+MainWindowsViewModel.CreateRuntimeSnapshot
+ControlService.GetControllerRuntimeSignals
+Monitor.Enter_Slowpath
+```
+
+The samples captured approximately 719 ms of this wait on opening and 890 ms
+on return. Concurrent samples show the profile cold-options worker inside
+DualSenseAudioPassthrough.Start / FindControllerEndpoint while its capture
+callback also waits for the same runtime gate. Thus the delayed Background
+continuation was evidence of UI blocking, not proof of a rendering bottleneck.
+Hidden-picker discovery was unnecessary work, but did not explain this wait.
+
+DualSense and DualShock 4 speaker status readers, plus the shared Audio Haptics
+status reader, now take their runtime gate only if immediately available. When
+busy they return the last complete status snapshot; a never-observed slot starts
+as Starting. The next successful poll refreshes the snapshot, including failures
+and stopped states. Invalid-slot behaviour is unchanged. This is display-only
+observation, never authorization to use an audio runtime, and does not alter
+capture, routing, teardown, packet cadence or haptic transport.
+
+NonBlockingRuntimeStatusTests holds real service gates on another thread while
+calling their actual status readers. Integration tests call the same
+GetControllerRuntimeSignals path as the Overview timer for DualSense USB/BT and
+DualShock 4 BT. Tests cover retained ready status during contention, cold starting
+status, independent slots, exception-safe gate release, and fresh stopped/failed
+observations after release. These tests use fake devices and no audio endpoints.
+The initial contention/runtime-status selection passed 52 cases.
+
+Retest the r3 local package with the same physical profile and audio settings.
+Repeated Edit/Cancel timings should now remain close to layout/transition costs
+rather than waiting for audio configuration. Retain the timing log if another
+unrelated delay remains; do not present synthetic tests as hardware acceptance.

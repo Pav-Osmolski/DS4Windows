@@ -5,6 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Keep controller/audio status polling responsive while audio configuration is busy, using the last coherent status instead of blocking the UI behind runtime locks.
 - Avoid scanning audio sessions for hidden Audio Haptics controls, populate the source picker asynchronously, and tighten editor loading/return transitions with Cancel timing reports.
 - Open Profile Editor without constructing its eight settings pages up front. Create each page on first use and retain its controls for that editing session, preserving unsaved edits and settings on unvisited pages.
 - Separate editor construction, attachment, layout and dispatcher timing reports; defer device discovery until Advanced is opened and ignore discovery results after the editor closes.

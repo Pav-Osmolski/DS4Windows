@@ -25,6 +25,10 @@ namespace DS4Windows
         private readonly DualShock4AudioSlotWorkQueue[] slotWorkQueues =
             CreateSlotWorkQueues();
 
+        private readonly NonBlockingRuntimeStatus<ControllerRuntimeLaneState>[] statusSnapshots =
+            NonBlockingRuntimeStatus<ControllerRuntimeLaneState>.CreateSlots(ControllerCount,
+                ControllerRuntimeLaneState.Starting);
+
         public ControllerRuntimeLaneState GetStatus(int slot)
         {
             if (slot < 0 || slot >= slots.Length)
@@ -32,7 +36,7 @@ namespace DS4Windows
                 return ControllerRuntimeLaneState.Unavailable;
             }
 
-            lock (syncRoot)
+            return statusSnapshots[slot].Read(syncRoot, () =>
             {
                 if (slots[slot]?.IsOperational == true)
                 {
@@ -52,7 +56,7 @@ namespace DS4Windows
                 return pendingStarts[slot] != null
                     ? ControllerRuntimeLaneState.Starting
                     : ControllerRuntimeLaneState.Unavailable;
-            }
+            });
         }
 
         public void Start(int slot, DS4Device device, byte speakerVolume,
