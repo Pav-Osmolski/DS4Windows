@@ -36,6 +36,10 @@ namespace DS4Windows
         private readonly object[] slotLocks = Enumerable.Range(0,
             ControllerCount).Select(_ => new object()).ToArray();
         private readonly SlotRuntime[] slots = new SlotRuntime[ControllerCount];
+        private readonly NonBlockingRuntimeStatus<AudioHapticsRuntimeStatus>[] statusSnapshots =
+            NonBlockingRuntimeStatus<AudioHapticsRuntimeStatus>.CreateSlots(ControllerCount,
+                AudioHapticsRuntimeStatus.Starting);
+
         private bool disposed;
 
         public void Start(int slot, DS4Device device,
@@ -156,11 +160,11 @@ namespace DS4Windows
             {
                 return AudioHapticsRuntimeStatus.Inactive;
             }
-            lock (slotLocks[slot])
+            return statusSnapshots[slot].Read(slotLocks[slot], () =>
             {
                 return slots[slot]?.Status ??
                     AudioHapticsRuntimeStatus.Inactive;
-            }
+            });
         }
 
         public void Dispose()

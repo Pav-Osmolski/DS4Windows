@@ -48,6 +48,8 @@ and configure the action. Then check its **Enabled** box for this profile.
 Select a row to **Edit Action** or **Remove Action**; use **Export actions** to
 share or back up an export. Save the profile after changing its enabled actions.
 
+![Edit Action with trigger buttons, action settings and Save and Cancel controls](images/site/profile-editor-special-actions-edit-action.webp)
+
 **Import actions** reads an exported `Actions.xml` file without replacing your
 existing actions. Duplicate names receive an imported suffix; a copy of the
 previous action file is kept beside `Actions.xml` as a `.before-import-….bak`

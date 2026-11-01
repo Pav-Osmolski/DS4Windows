@@ -146,6 +146,24 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
         Assert.IsFalse(service.GetControllerRuntimeSignals(0).ProfileSelected);
     }
 
+    [TestMethod]
+    [DoNotParallelize]
+    [DataRow(InputDeviceType.DualSense, ConnectionType.USB)]
+    [DataRow(InputDeviceType.DualSense, ConnectionType.BT)]
+    [DataRow(InputDeviceType.DS4, ConnectionType.BT)]
+    public void OverviewStatusDoesNotWaitBehindSpeakerRuntimeWork(InputDeviceType type, ConnectionType connection)
+    {
+        using var profile = new ProfileScope();
+        DS4Device device = type == InputDeviceType.DualSense ? new TestDualSense(connection) :
+            new TestPhysicalDevice(type, connection, 0x054C, 0x09CC);
+        var service = Service(device, installAudioServices: true);
+        string field = type == InputDeviceType.DualSense ? "dualSenseAudioPassthrough" : "dualShock4AudioPassthrough";
+        var audio = typeof(ControlService).GetField(field, PrivateInstance).GetValue(service);
+        var gate = audio.GetType().GetField("syncRoot", PrivateInstance).GetValue(audio);
+        NonBlockingRuntimeStatusTests.WhileHeld(gate, () => service.GetControllerRuntimeSignals(0),
+            signals => Assert.AreEqual(ControllerRuntimeLaneState.Starting, signals.Speaker));
+    }
+
     private static ControlService Service(DS4Device device,
         bool installAudioServices)
     {

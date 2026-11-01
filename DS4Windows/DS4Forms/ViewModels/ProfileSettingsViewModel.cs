@@ -41,6 +41,13 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 {
     public class ProfileSettingsViewModel
     {
+        private volatile bool editorRetired;
+        private bool discoveryStarted;
+        private readonly string discoveryControllerPath;
+        private readonly int? discoveryVendorId, discoveryProductId;
+        // Background discovery may finish after Cancel, Save or controller
+        // replacement. It must never publish into a retired editing session.
+        internal void RetireEditor() => editorRetired = true;
         private static readonly IReadOnlyList<FlickCalibrationTriggerChoice> flickCalibrationTriggerChoices =
             Array.AsReadOnly(new[]
             {
@@ -149,7 +156,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private async System.Threading.Tasks.Task RefreshUsbPollingAsync(
             string path, int? vendorId, int? productId)
         {
-            if (!ShowUsbPollingDetails || string.IsNullOrEmpty(path) ||
+            if (editorRetired || !ShowUsbPollingDetails || string.IsNullOrEmpty(path) ||
                 vendorId == null || productId == null) return;
             usbPollingDescription = global::DS4Windows.UiText.Get("Reading advertised USB endpoint intervals...");
             var timings = await System.Threading.Tasks.Task.Run(() =>
@@ -164,6 +171,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             if (dispatcher == null || dispatcher.HasShutdownStarted) return;
             await dispatcher.InvokeAsync(() =>
             {
+                if (editorRetired) return;
                 usbPollingDescription = details;
                 UsbPollingDescriptionChanged?.Invoke(this, EventArgs.Empty);
             });
@@ -4442,13 +4450,33 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             gyroMouseStickSmoothMethodIndex = FindGyroMouseStickSmoothMethodIndex();
 
             SetupEvents();
-            _ = RefreshAudioEndpointChoicesAsync();
-            _ = RefreshUsbPollingAsync(physicalControllerPath,
-                physicalControllerVendorId, physicalControllerProductId);
+            discoveryControllerPath = physicalControllerPath;
+            discoveryVendorId = physicalControllerVendorId;
+            discoveryProductId = physicalControllerProductId;
+        }
+
+        internal void StartEditorDiscovery()
+        {
+            if (editorRetired || discoveryStarted) return;
+            discoveryStarted = true;
+            _ = ObserveDiscoveryAsync(RefreshAudioEndpointChoicesAsync);
+            _ = ObserveDiscoveryAsync(() => RefreshUsbPollingAsync(discoveryControllerPath,
+                discoveryVendorId, discoveryProductId));
+        }
+
+        private async System.Threading.Tasks.Task ObserveDiscoveryAsync(Func<System.Threading.Tasks.Task> discover)
+        {
+            try { await discover(); }
+            catch (Exception ex)
+            {
+                if (!editorRetired && (Global.ProfileEditorTimingLogging || Global.VerboseStartupLogging))
+                    AppLogger.LogToGui("Profile editor device discovery: " + ex.Message, false);
+            }
         }
 
         private async System.Threading.Tasks.Task RefreshAudioEndpointChoicesAsync()
         {
+            if (editorRetired) return;
             await AudioEndpointChoiceCache.RefreshAsync().ConfigureAwait(false);
 
             System.Windows.Threading.Dispatcher dispatcher =
@@ -4460,12 +4488,14 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
             await dispatcher.InvokeAsync(() =>
             {
+                if (editorRetired) return;
                 NotifyAudioEndpointChoicesChanged();
             });
         }
 
         internal void NotifyAudioEndpointChoicesChanged()
         {
+            if (editorRetired) return;
             // Keep each selected item and the collection itself alive while devices refresh.
             // Replacing ItemsSource clears WPF's selection, especially the empty-ID auto choice.
             RefreshChoices(AudioCaptureEndpointChoices, BuildAudioCaptureEndpointChoices());

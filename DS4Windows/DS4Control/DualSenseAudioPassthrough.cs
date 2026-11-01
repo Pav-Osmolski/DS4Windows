@@ -57,6 +57,10 @@ namespace DS4Windows
         private int captureUsbipPort = -1;
         private bool disposed;
 
+        private readonly NonBlockingRuntimeStatus<ControllerRuntimeLaneState>[] statusSnapshots =
+            NonBlockingRuntimeStatus<ControllerRuntimeLaneState>.CreateSlots(ControllerCount,
+                ControllerRuntimeLaneState.Starting);
+
         public ControllerRuntimeLaneState GetStatus(int slot)
         {
             if (slot < 0 || slot >= slots.Length)
@@ -64,7 +68,7 @@ namespace DS4Windows
                 return ControllerRuntimeLaneState.Unavailable;
             }
 
-            lock (syncRoot)
+            return statusSnapshots[slot].Read(syncRoot, () =>
             {
                 if (slots[slot] != null || bluetoothSlots[slot] != null)
                 {
@@ -79,7 +83,7 @@ namespace DS4Windows
                 return bluetoothStartPending[slot]
                     ? ControllerRuntimeLaneState.Starting
                     : ControllerRuntimeLaneState.Unavailable;
-            }
+            });
         }
 
         public void Start(int slot, DualSenseDevice dualSenseDevice, byte speakerVolume,

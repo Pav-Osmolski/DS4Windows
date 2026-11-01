@@ -196,5 +196,9 @@ running at logon must be closed first. Development lab launches continue to
 manage their own logging.
 For slow profile-editor opening, enable **Settings > Updates & tools > Profile
 editor timing logs**. This separate option records `[ProfileEditorTiming]` phases
-and is off by default. Turn it off after collecting the log.
+and is off by default. It separates XAML/template construction, the profile view
+model, controller artwork, workspace attachment, initial layout/Loaded callbacks
+and the render queue. Opening a settings page for the first time adds a page
+construction measurement. Dispatcher timing does not measure when the monitor
+actually presents a frame. Turn the option off after collecting the log.
 Hardware-specific support is not established by a passing unit test alone.

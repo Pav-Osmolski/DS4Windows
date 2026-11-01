@@ -9,6 +9,14 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.60](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.60) - 2026-11-01
+
+- Make Profile Editor faster to open by creating its eight settings pages only when first visited, retaining unsaved edits within the editing session and preserving settings on unvisited pages ([#104](https://github.com/Pav-Osmolski/DS4Windows/pull/104)).
+- Fix brief UI freezes when opening or cancelling Profile Editor: controller/audio status polling now keeps its last coherent observation while audio configuration is busy instead of waiting behind runtime locks. In the maintainer's DualSense USB test, return transitions took 52–69 ms and repeated opens took 137–167 ms; the previous intermittent pauses were around 900 ms.
+- Skip audio-session discovery for hidden controls, populate the Audio Haptics source picker asynchronously, and defer Advanced device discovery until needed. Retire editor timers and ignore late discovery results after close.
+- Restore touchpad and axial-stick bindings after preset changes, avoid setup checks caused by initial output-selector binding, and improve loading/return sequencing. Timing logs now distinguish construction, layout, queued work and Cancel cleanup.
+- Add the updated Edit Action screenshot to the Special Actions guide and document the editor performance checks. VIIPER remains at 0.1.17 and USB/IP at 0.9.8.1; audio/haptic transport is unchanged.
+
 ### [5.0.59](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.59) - 2026-11-01
 
 - Prevent matching separate Multi Actions from also firing double/single macros for a triple tap; add per-gesture names and enable switches that preserve recorded macros. Refresh the action editor with themed panels, bounded scrolling and consistent controls. Thanks [@Masterload1975](https://github.com/Masterload1975) for the follow-up and suggestions ([#100](https://github.com/Pav-Osmolski/DS4Windows/issues/100)).

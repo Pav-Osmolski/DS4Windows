@@ -31,10 +31,17 @@ namespace DS4WinWPF.DS4Forms
 
         private int deviceIndex = -1;
         private bool loading;
+        private bool refreshPending = true;
+        private bool audioDiscoveryRunning;
+        private readonly Func<IReadOnlyList<AppAudioSnapshot>> discoverAudioSessions;
+        private IReadOnlyList<AppAudioSnapshot> audioSessions = Array.Empty<AppAudioSnapshot>();
         private readonly DispatcherTimer statusRefreshTimer;
 
-        public AudioHapticsControl()
+        public AudioHapticsControl() : this(AppAudioSessionDiscovery.Read) { }
+
+        internal AudioHapticsControl(Func<IReadOnlyList<AppAudioSnapshot>> discovery)
         {
+            discoverAudioSessions = discovery ?? throw new ArgumentNullException(nameof(discovery));
             InitializeComponent();
             statusRefreshTimer = new DispatcherTimer
             {
@@ -43,10 +50,10 @@ namespace DS4WinWPF.DS4Forms
             statusRefreshTimer.Tick += (_, _) => UpdateStatus(CurrentSettings);
             Loaded += (_, _) =>
             {
-                RefreshSourcesAndSettings();
-                statusRefreshTimer.Start();
+                RefreshWhenVisible();
             };
-            Unloaded += (_, _) => statusRefreshTimer.Stop();
+            IsVisibleChanged += (_, _) => RefreshWhenVisible();
+            Unloaded += (_, _) => { refreshPending = true; statusRefreshTimer.Stop(); };
             SetEditorEnabled(false);
         }
 
@@ -57,11 +64,25 @@ namespace DS4WinWPF.DS4Forms
         public void SetDevice(int index)
         {
             deviceIndex = index >= 0 && index < Global.TEST_PROFILE_ITEM_COUNT ? index : -1;
-            RefreshSourcesAndSettings();
+            refreshPending = true;
+            RefreshWhenVisible();
+        }
+
+        private void RefreshWhenVisible()
+        {
+            if (!IsLoaded || !IsVisible)
+            {
+                refreshPending = true;
+                statusRefreshTimer.Stop();
+                return;
+            }
+            if (refreshPending) RefreshSourcesAndSettings();
+            statusRefreshTimer.Start();
         }
 
         public void RefreshSourcesAndSettings()
         {
+            refreshPending = false;
             loading = true;
             try
             {
@@ -110,17 +131,35 @@ namespace DS4WinWPF.DS4Forms
 
         private void PopulateAudioSources(AudioHapticsProfileSettings settings)
         {
-            IReadOnlyList<AppAudioSnapshot> sessions = Array.Empty<AppAudioSnapshot>();
+            sourceCombo.ItemsSource = BuildAudioSourceChoices(settings, audioSessions);
+            if (IsLoaded && IsVisible && !audioDiscoveryRunning)
+                _ = DiscoverAudioSessionsAsync();
+        }
+
+        private async System.Threading.Tasks.Task DiscoverAudioSessionsAsync()
+        {
+            audioDiscoveryRunning = true;
             try
             {
-                sessions = AppAudioSessionDiscovery.Read();
+                // Core Audio/COM and process discovery can take hundreds of
+                // milliseconds. Only publish plain snapshots on the UI thread.
+                audioSessions = await System.Threading.Tasks.Task.Run(discoverAudioSessions);
+                if (!IsLoaded || !IsVisible || Dispatcher.HasShutdownStarted) return;
+                bool wasLoading = loading;
+                loading = true;
+                try
+                {
+                    sourceCombo.ItemsSource = BuildAudioSourceChoices(CurrentSettings, audioSessions);
+                    if (CurrentSettings != null) SelectStoredSource(CurrentSettings);
+                }
+                finally { loading = wasLoading; }
             }
             catch
             {
-                // Core Audio can reject discovery while rebuilding the graph.
-                // Retain the stored selection and let the refresh button retry.
+                // Keep the stored choice if Windows is rebuilding its graph.
+                // The refresh button can retry; this never changes audio routing.
             }
-            sourceCombo.ItemsSource = BuildAudioSourceChoices(settings, sessions);
+            finally { audioDiscoveryRunning = false; }
         }
 
         internal static List<AudioSourceChoice> BuildAudioSourceChoices(

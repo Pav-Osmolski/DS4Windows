@@ -587,7 +587,10 @@
                         <Setter Property="Height" Value="30"/>
                     </Style>
                 </TabItem.Resources>
-                <Grid>
+                <local:DeferredProfilePage x:Name="axisPage" Tag="axis" Materializing="AxisPage_Materializing">
+                    <local:DeferredProfilePage.PageTemplate>
+                        <DataTemplate>
+<Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
@@ -1342,11 +1345,17 @@
                         </Grid>
                     </Grid>
                 </Grid>
+                        </DataTemplate>
+                    </local:DeferredProfilePage.PageTemplate>
+                </local:DeferredProfilePage>
             </TabItem>
 
             <TabItem Header="{lex:Loc Lightbar}" Tag="Color, battery indicators, flash, and passthrough">
                 <TabItem.Resources/>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <local:DeferredProfilePage x:Name="lightbarPage" Tag="lightbar" Materializing="LightbarPage_Materializing">
+                    <local:DeferredProfilePage.PageTemplate>
+                        <DataTemplate>
+<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="0,0,12,8">
                         <Border Style="{DynamicResource BridgeCardStyle}">
                             <StackPanel>
@@ -1498,13 +1507,19 @@
                         </TabControl>
                     </StackPanel>
                 </ScrollViewer>
+                        </DataTemplate>
+                    </local:DeferredProfilePage.PageTemplate>
+                </local:DeferredProfilePage>
             </TabItem>
 
             <TabItem Header="{lex:Loc Touchpad}" Tag="Mouse, controls, gestures, and absolute positioning">
                 <TabItem.Resources>
                     <Thickness x:Key="spaceMargin" Bottom="10"/>
                 </TabItem.Resources>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <local:DeferredProfilePage x:Name="touchpadPage" Tag="touchpad" Materializing="TouchpadPage_Materializing">
+                    <local:DeferredProfilePage.PageTemplate>
+                        <DataTemplate>
+<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="0,0,12,8">
                         <Border Style="{DynamicResource BridgeCardStyle}">
                             <StackPanel>
@@ -1802,11 +1817,17 @@
                         </TabControl>
                     </StackPanel>
                 </ScrollViewer>
+                        </DataTemplate>
+                    </local:DeferredProfilePage.PageTemplate>
+                </local:DeferredProfilePage>
             </TabItem>
 
             <TabItem x:Name="gyroSettingsTab" Header="{lex:Loc Gyro}" Tag="Motion controls, mouse, steering, and directional swipes">
                 <TabItem.Resources/>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <local:DeferredProfilePage x:Name="gyroPage" Tag="gyro" Materializing="GyroPage_Materializing">
+                    <local:DeferredProfilePage.PageTemplate>
+                        <DataTemplate>
+<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Margin="0,0,12,8">
                         <Border Style="{DynamicResource BridgeCardStyle}">
                             <StackPanel>
@@ -2279,20 +2300,38 @@
                         </Border>
                     </StackPanel>
                 </ScrollViewer>
+                        </DataTemplate>
+                    </local:DeferredProfilePage.PageTemplate>
+                </local:DeferredProfilePage>
             </TabItem>
 
             <TabItem Header="{lex:Loc Strings:UI_7100F6A2F74F84AE}" Tag="Turn system or app audio into advanced controller haptics">
-                <local:AudioHapticsControl x:Name="profileAudioHapticsControl"
+                <local:DeferredProfilePage x:Name="audioHapticsPage" Tag="audioHaptics" Materializing="AudioHapticsPage_Materializing">
+                    <local:DeferredProfilePage.PageTemplate>
+                        <DataTemplate>
+<local:AudioHapticsControl x:Name="profileAudioHapticsControl"
                                            SettingsChanged="ProfileAudioHapticsControl_SettingsChanged" />
+                        </DataTemplate>
+                    </local:DeferredProfilePage.PageTemplate>
+                </local:DeferredProfilePage>
             </TabItem>
 
             <TabItem Header="{lex:Loc Strings:UI_4F7722D7B7B04935}" Tag="Build persistent adaptive-trigger effects for this profile">
-                <local:TriggerLabControl x:Name="profileTriggerLabControl"
+                <local:DeferredProfilePage x:Name="triggerLabPage" Tag="triggerLab" Materializing="TriggerLabPage_Materializing">
+                    <local:DeferredProfilePage.PageTemplate>
+                        <DataTemplate>
+<local:TriggerLabControl x:Name="profileTriggerLabControl"
                                          SettingsChanged="ProfileTriggerLabControl_SettingsChanged" />
+                        </DataTemplate>
+                    </local:DeferredProfilePage.PageTemplate>
+                </local:DeferredProfilePage>
             </TabItem>
 
             <TabItem x:Name="switch2ControlsTab" Header="{lex:Loc Strings:UI_5B984E3F3041FF0F}" Tag="HD rumble, motion, Joy-Con mouse modes, calibration, and controller behavior">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <local:DeferredProfilePage x:Name="nintendoPage" Tag="nintendo" Materializing="NintendoPage_Materializing">
+                    <local:DeferredProfilePage.PageTemplate>
+                        <DataTemplate>
+<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
                         <Border Margin="4" Padding="16" Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="6">
                             <Border.Style>
@@ -3170,10 +3209,16 @@
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
+                        </DataTemplate>
+                    </local:DeferredProfilePage.PageTemplate>
+                </local:DeferredProfilePage>
             </TabItem>
 
             <TabItem Header="{lex:Loc Strings:UI_9F088DBEBD6C3C70}" Tag="Output device, rumble, audio, latency, compatibility, and custom hooks">
-                <Grid>
+                <local:DeferredProfilePage x:Name="advancedPage" Tag="advanced" Materializing="AdvancedPage_Materializing">
+                    <local:DeferredProfilePage.PageTemplate>
+                        <DataTemplate>
+<Grid>
                     <Grid.Resources>
                         <DataTemplate x:Key="ProfileAdvancedCheckContentTemplate">
                             <TextBlock Text="{Binding}" TextWrapping="Wrap" />
@@ -3652,6 +3697,9 @@
                         </ScrollViewer>
                     </Grid>
                 </Grid>
+                        </DataTemplate>
+                    </local:DeferredProfilePage.PageTemplate>
+                </local:DeferredProfilePage>
             </TabItem>
         </TabControl>
     </Grid>
