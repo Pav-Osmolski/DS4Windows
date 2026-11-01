@@ -255,6 +255,9 @@ namespace DS4Windows
         public class ActionState
         {
             public bool[] dev = new bool[Global.MAX_DS4_CONTROLLER_COUNT];
+            internal readonly MultiActionGesture[] MultiGestures = Enumerable.Range(0, Global.MAX_DS4_CONTROLLER_COUNT)
+                .Select(_ => new MultiActionGesture()).ToArray();
+            internal readonly long[] MultiEpochs = new long[Global.MAX_DS4_CONTROLLER_COUNT];
         }
 
         internal struct ControlToXInput
@@ -678,6 +681,25 @@ namespace DS4Windows
         }
 
         internal static void ResetStickFilters(int device) => stickFilters[device].RequestReset();
+        private static readonly int[] multiActionResetGenerations = new int[Global.MAX_DS4_CONTROLLER_COUNT];
+        private static readonly HashSet<string>[] multiActionTripleGroups = Enumerable.Range(0, Global.MAX_DS4_CONTROLLER_COUNT)
+            .Select(_ => new HashSet<string>(StringComparer.Ordinal)).ToArray();
+        internal static void ResetMultiActionGestures(int device)
+        {
+            if ((uint)device < multiActionResetGenerations.Length)
+                Interlocked.Increment(ref multiActionResetGenerations[device]);
+        }
+        internal static MultiActionGesture GetMultiActionGesture(ActionState state, int device)
+        {
+            long epoch = ((long)(uint)CaptureMacroMouseEpoch(device) << 32) |
+                (uint)Volatile.Read(ref multiActionResetGenerations[device]);
+            if (state.MultiEpochs[device] != epoch)
+            {
+                state.MultiGestures[device].Reset();
+                state.MultiEpochs[device] = epoch;
+            }
+            return state.MultiGestures[device];
+        }
 
         private static DS4SquareStick[] outSqrStk = new DS4SquareStick[Global.TEST_PROFILE_ITEM_COUNT]
         {
@@ -4928,7 +4950,22 @@ namespace DS4Windows
                 int totalActionCount = GetActions().Count;
                 DS4StateFieldMapping previousFieldMapping = null;
                 List<string> profileActions = getProfileActions(device);
-                //foreach (string actionname in profileActions)
+                // Match only enabled Multi Actions with the exact same chord and
+                // timing. Reuse storage; do not allocate or scan peers per action.
+                var tripleGroups = multiActionTripleGroups[device];
+                tripleGroups.Clear();
+                foreach (string name in profileActions)
+                {
+                    var candidate = GetProfileAction(device, name);
+                    if (candidate?.typeID != SpecialAction.ActionTypeId.MultiAction) continue;
+                    var configuration = candidate.MultiActionOptions ??= new MultiActionConfiguration(candidate.details, candidate.controls);
+                    if (configuration.HasTriple) tripleGroups.Add(configuration.GroupKey);
+                }
+                long gestureTime = (long)(Stopwatch.GetTimestamp() * (1000.0 / Stopwatch.Frequency));
+                // Finish gesture recognition on the input owner before any legacy
+                // key action can await. A delayed continuation must never update
+                // gesture state with an older frame or read reused group storage.
+                for (int actionPhase = 0; actionPhase < 2; actionPhase++)
                 for (int actionIndex = 0, profileListLen = profileActions.Count;
                      actionIndex < profileListLen; actionIndex++)
                 {
@@ -4938,6 +4975,8 @@ namespace DS4Windows
                     string actionname = profileActions[actionIndex];
                     SpecialAction action = GetProfileAction(device, actionname);
                     int index = GetProfileActionIndexOf(device, actionname);
+                    if (action == null || (action.typeID == SpecialAction.ActionTypeId.MultiAction) != (actionPhase == 0))
+                        continue;
 
                     if (actionDoneCount < index + 1)
                     {
@@ -4952,6 +4991,25 @@ namespace DS4Windows
 
                     if (action == null)
                     {
+                        continue;
+                    }
+
+                    if (action.typeID == SpecialAction.ActionTypeId.MultiAction && index >= 0)
+                    {
+                        var state = actionDone[index];
+                        var gestureState = GetMultiActionGesture(state, device);
+                        var options = action.MultiActionOptions ??= new MultiActionConfiguration(action.details, action.controls);
+                        if (!options.HasEnabledMacro) { gestureState.Reset(); continue; }
+                        bool active = action.trigger.Count > 0;
+                        foreach (DS4Controls trigger in action.trigger)
+                            active &= getBoolSpecialActionMapping(device, trigger, cState, eState, tp, fieldMapping);
+                        if (active)
+                            foreach (DS4Controls trigger in action.trigger)
+                                ResetToDefaultValue(trigger, MappedState, outputfieldMapping);
+                        int gesture = gestureState.Update(active,
+                            gestureTime, options, Global.DebouncingMs[device], tripleGroups.Contains(options.GroupKey));
+                        if (gesture >= 0 && options.IsEnabled(gesture))
+                            PlayMacro(device, macroControl, options.Macros[gesture], null, null, DS4Controls.None, DS4KeyType.None);
                         continue;
                     }
 

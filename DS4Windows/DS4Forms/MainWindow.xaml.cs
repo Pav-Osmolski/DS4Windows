@@ -1484,6 +1484,8 @@ Suspend support not enabled.", true);
             executableRestartHint.Text = global::DS4Windows.UiText.Format("Re-launch required: close DS4Windows, then open {0}.", SettingsRestartRequirements.RequestedExecutable(Global.FakeExeName));
         }
 
+        internal void OpenMainSettings() => mainTabCon.SelectedItem = settingsTab;
+
         private void OpenSettingsLog_Click(object sender, RoutedEventArgs e)
         {
             mainTabCon.SelectedItem = logTab;
@@ -1923,12 +1925,13 @@ Suspend support not enabled.", true);
 
         private void ProfilesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (dupBoxBar != null) dupBoxBar.Visibility = Visibility.Collapsed;
             if (profileIconBtn != null) profileIconBtn.IsEnabled = profilesListBox.SelectedItem is ProfileEntity;
             bool hasSelection = profilesListBox.SelectedIndex >= 0;
             newProfListBtn.IsEnabled = true;
             editProfBtn.IsEnabled = hasSelection;
             deleteProfBtn.IsEnabled = hasSelection;
-            renameProfBtn.IsEnabled = hasSelection;
+            renameProfBtn.IsEnabled = hasSelection && (profilesListBox.SelectedItem as ProfileEntity)?.Name != "Default";
             dupProfBtn.IsEnabled = hasSelection;
             importProfBtn.IsEnabled = true;
             exportProfBtn.IsEnabled = hasSelection;
@@ -3607,6 +3610,18 @@ Suspend support not enabled.", true);
         private void DupBox_Cancel(object sender, EventArgs e)
         {
             dupBoxBar.Visibility = Visibility.Collapsed;
+            if (dupBox.IsRenameMode) renameProfBtn.Focus(); else dupProfBtn.Focus();
+        }
+
+        private void DupBox_Renamed(DupBox sender, string profilename)
+        {
+            string previousName = sender.OldFilename;
+            dupBoxBar.Visibility = Visibility.Collapsed;
+            foreach (CompositeDeviceModel controller in conLvViewModel.ControllerCol.Where(item => item.SelectedProfile == previousName))
+                ApplyProfileSelection(controller, () => controller.ChangeSelectedProfile(profilename));
+            profilesCollectionView?.Refresh();
+            trayIconVM.PopulateContextMenu();
+            renameProfBtn.Focus();
         }
 
         private void DupBox_Save(DupBox sender, string profilename)
@@ -4016,16 +4031,12 @@ Suspend support not enabled.", true);
                 if (entity.Name != "Default" &&
                     File.Exists(filename))
                 {
-                    RenameProfileWindow renameWin = new RenameProfileWindow();
-                    renameWin.ChangeProfileName(entity);
-                    bool? result = renameWin.ShowDialog();
-                    if (result.HasValue && result.Value)
-                    {
-                        foreach (CompositeDeviceModel controller in conLvViewModel.ControllerCol.Where(item => item.SelectedProfile == Path.GetFileNameWithoutExtension(filename)))
-                            ApplyProfileSelection(controller, () => controller.ChangeSelectedProfile(entity.Name));
-                        profilesCollectionView?.Refresh();
-                        trayIconVM.PopulateContextMenu();
-                    }
+                    dupBox.BeginRename(entity);
+                    dupBox.Renamed -= DupBox_Renamed;
+                    dupBox.Renamed += DupBox_Renamed;
+                    dupBox.Cancel -= DupBox_Cancel;
+                    dupBox.Cancel += DupBox_Cancel;
+                    dupBoxBar.Visibility = Visibility.Visible;
                 }
             }
         }

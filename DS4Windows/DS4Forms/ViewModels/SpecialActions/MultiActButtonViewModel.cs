@@ -21,17 +21,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using DS4Windows;
 using DS4WinWPF.DS4Forms.ViewModels.Util;
 
 namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
 {
-    public class MultiActButtonViewModel : NotifyDataErrorBase
+    public class MultiActButtonViewModel : NotifyDataErrorBase, INotifyPropertyChanged
     {
         private List<int> tapMacro = new List<int>();
         private List<int> holdMacro = new List<int>();
         private List<int> doubleTapMacro = new List<int>();
         private List<int>[] loadAccessArray;
+        public List<int> TripleTapMacro { get; } = new();
+        public double HoldSeconds { get; set; } = 0.5;
+        public double TapSeconds { get; set; } = 0.15;
+        private readonly bool[] enabled = { true, true, true, true };
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void SetEnabled(int index, bool value, [CallerMemberName] string property = null)
+        {
+            if (enabled[index] == value) return;
+            enabled[index] = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+        public bool TapEnabled { get => enabled[0]; set => SetEnabled(0, value); }
+        public bool HoldEnabled { get => enabled[1]; set => SetEnabled(1, value); }
+        public bool DoubleTapEnabled { get => enabled[2]; set => SetEnabled(2, value); }
+        public bool TripleTapEnabled { get => enabled[3]; set => SetEnabled(3, value); }
+        public string TapName { get; set; } = "";
+        public string HoldName { get; set; } = "";
+        public string DoubleTapName { get; set; } = "";
+        public string TripleTapName { get; set; } = "";
+        public string TripleTapMacroText => TripleTapMacro.Count == 0 ? Properties.Resources.SelectMacro : Properties.Resources.MacroRecorded;
+        public event EventHandler TripleTapMacroTextChanged;
+        public void UpdateTripleTapDisplayText() => TripleTapMacroTextChanged?.Invoke(this, EventArgs.Empty);
+        public DS4ControlSettings PrepareTripleTapSettings()
+        {
+            var settings = new DS4ControlSettings(DS4Controls.None);
+            settings.action.actionMacro = TripleTapMacro.ToArray();
+            settings.actionType = DS4ControlSettings.ActionType.Macro;
+            settings.keyType = DS4KeyType.Macro;
+            return settings;
+        }
 
         public List<int> TapMacro { get => tapMacro; }
         public List<int> HoldMacro { get => holdMacro; }
@@ -84,13 +116,21 @@ namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
 
         public MultiActButtonViewModel()
         {
-            loadAccessArray = new List<int>[3] { tapMacro, holdMacro, doubleTapMacro };
+            loadAccessArray = new List<int>[] { tapMacro, holdMacro, doubleTapMacro, TripleTapMacro };
         }
 
         public void LoadAction(SpecialAction action)
         {
-            string[] dets = action.details.Split(',');
-            for (int i = 0; i < 3; i++)
+            var options = new MultiActionConfiguration(action.details);
+            HoldSeconds = options.HoldMilliseconds / 1000.0;
+            TapSeconds = options.TapMilliseconds / 1000.0;
+            TapEnabled = options.Enabled[0]; HoldEnabled = options.Enabled[1];
+            DoubleTapEnabled = options.Enabled[2]; TripleTapEnabled = options.Enabled[3];
+            TapName = options.Names[0] ?? ""; HoldName = options.Names[1] ?? "";
+            DoubleTapName = options.Names[2] ?? ""; TripleTapName = options.Names[3] ?? "";
+            string[] dets = options.Macros;
+            foreach (var macro in loadAccessArray) macro.Clear();
+            for (int i = 0; i < 4; i++)
             {
                 string[] macs = dets[i].Split('/');
                 foreach (string s in macs)
@@ -145,40 +185,26 @@ namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
 
         public void SaveAction(SpecialAction action, bool edit = false)
         {
-            string details = string.Join("/", tapMacro) + "," +
-                string.Join("/", holdMacro) + "," +
-                string.Join("/", doubleTapMacro);
-            Global.SaveAction(action.name, action.controls, 7, details, edit);
+            Global.SaveAction(action.name, action.controls, 7, SerializeDetails(), edit);
         }
+
+        internal string SerializeDetails() => MultiActionConfiguration.Serialize(
+            loadAccessArray.Select(macro => string.Join("/", macro)).ToArray(), enabled,
+            new[] { TapName, HoldName, DoubleTapName, TripleTapName },
+            (int)Math.Round(HoldSeconds * 1000), (int)Math.Round(TapSeconds * 1000));
 
         public override bool IsValid(SpecialAction action)
         {
             ClearOldErrors();
 
-            bool valid = true;
-            List<string> tapMacroErrors = new List<string>();
-            List<string> holdMacroErrors = new List<string>();
-            List<string> doubleTapMacroErrors = new List<string>();
-
-            if (tapMacro.Count == 0)
-            {
-                tapMacroErrors.Add("No tap macro defined");
-                errors["TapMacro"] = tapMacroErrors;
-                RaiseErrorsChanged("TapMacro");
-            }
-            if (holdMacro.Count == 0)
-            {
-                holdMacroErrors.Add("No hold macro defined");
-                errors["HoldMacro"] = holdMacroErrors;
-                RaiseErrorsChanged("HoldMacro");
-            }
-            if (doubleTapMacro.Count == 0)
-            {
-                doubleTapMacroErrors.Add("No double tap macro defined");
-                errors["DoubleTapMacro"] = doubleTapMacroErrors;
-                RaiseErrorsChanged("DoubleTapMacro");
-            }
-
+            bool valid = TapMacro.Count + HoldMacro.Count + DoubleTapMacro.Count + TripleTapMacro.Count > 0;
+            if (new[] { TapName, HoldName, DoubleTapName, TripleTapName }.Any(name => name?.Length > 128))
+            { valid = false; errors["TapMacro"] = new List<string> { "Macro names must be at most 128 characters." }; RaiseErrorsChanged("TapMacro"); }
+            if (!valid) { errors["TapMacro"] = new List<string> { "Record at least one macro." }; RaiseErrorsChanged("TapMacro"); }
+            if (!double.IsFinite(HoldSeconds) || HoldSeconds < 0.15 || HoldSeconds > 60)
+            { valid = false; errors["HoldSeconds"] = new List<string> { "Use 0.15 to 60 seconds." }; RaiseErrorsChanged("HoldSeconds"); }
+            if (!double.IsFinite(TapSeconds) || TapSeconds < 0.05 || TapSeconds > 2 || TapSeconds > HoldSeconds)
+            { valid = false; errors["TapSeconds"] = new List<string> { "Use 0.05 to 2 seconds, no longer than the hold duration." }; RaiseErrorsChanged("TapSeconds"); }
             return valid;
         }
 
@@ -190,6 +216,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels.SpecialActions
                 RaiseErrorsChanged("TapMacro");
                 RaiseErrorsChanged("HoldMacro");
                 RaiseErrorsChanged("DoubleTapMacro");
+                RaiseErrorsChanged("HoldSeconds");
+                RaiseErrorsChanged("TapSeconds");
             }
         }
     }

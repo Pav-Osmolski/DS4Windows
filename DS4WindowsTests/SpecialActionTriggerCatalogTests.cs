@@ -234,10 +234,8 @@ public sealed class SpecialActionTriggerCatalogTests
         {
             var editor = new SpecialActionEditor(Global.TEST_PROFILE_INDEX, new ProfileList(),
                 new SpecialAction("Extra buttons", "Switch 2 C", "Key", "65", extras: "Press\nCapture"));
-            editor.Resources.MergedDictionaries.Add(new ResourceDictionary
-            {
-                Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{theme}.xaml", UriKind.Relative),
-            });
+            editor.Resources.MergedDictionaries.Add(ActionEditorRefreshTests.ThemeResources(
+                theme == "DarkTheme" ? AppThemeChoice.Dark : AppThemeChoice.Light));
             editor.Background = (Brush)editor.FindResource("BackgroundColor");
             editor.Measure(new Size(width, 700));
             editor.Arrange(new Rect(0, 0, width, 700));
@@ -261,14 +259,15 @@ public sealed class SpecialActionTriggerCatalogTests
                 Assert.IsTrue(box.ActualWidth > 0 && box.ActualHeight > 0, (string)box.Tag);
                 foreach (TextBlock text in ((StackPanel)box.Content).Children)
                 {
-                    Assert.AreEqual(foreground.Color, ((SolidColorBrush)text.Foreground).Color, text.Text);
+                    var expected = (SolidColorBrush)editor.FindResource(text.FontSize == 11 ? "MutedForegroundColor" : "ForegroundColor");
+                    Assert.AreEqual(expected.Color, ((SolidColorBrush)text.Foreground).Color, text.Text);
                     Assert.AreEqual(TextWrapping.Wrap, text.TextWrapping);
                     Rect bounds = text.TransformToAncestor(viewer).TransformBounds(new Rect(text.RenderSize));
                     Assert.IsTrue(bounds.Left >= -0.5 && bounds.Right <= viewer.ActualWidth + 0.5, $"Clipped {text.Text}: {bounds}");
                 }
             }
-            // The initially visible region includes the controls requested in the report.
-            foreach (string tag in new[] { "Switch 2 C", "Bottom Left Paddle", "Bottom Right Paddle", "Function Left", "Function Right", "Mute", "Capture" })
+            // Everyday controls lead; extra controls remain checkable below by scrolling.
+            foreach (string tag in new[] { "Cross", "Circle", "Square", "Triangle", "Options", "Share", "Up" })
             {
                 var box = boxes.Single(candidate => (string)candidate.Tag == tag);
                 Rect bounds = box.TransformToAncestor(viewer).TransformBounds(new Rect(box.RenderSize));
