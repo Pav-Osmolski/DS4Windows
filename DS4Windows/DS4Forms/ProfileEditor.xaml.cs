@@ -2038,13 +2038,22 @@ namespace DS4WinWPF.DS4Forms
 
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
+            var cancelTimer = System.Diagnostics.Stopwatch.StartNew();
+            void Mark(string phase)
+            {
+                if (Global.ProfileEditorTimingLogging)
+                    AppLogger.LogToGui($"[ProfileEditorTiming] cancel {phase}: total={cancelTimer.ElapsedMilliseconds}ms", false);
+            }
             ClearRumblePreview();
+            Mark("rumble preview cleared");
 
             Global.outDevTypeTemp[deviceNum] = OutContType.ViiperX360;
             profileTriggerLabControl?.RestorePhysicalProfileEffects();
             Mapping.RequestRegularProfileReload(deviceNum, false, App.rootHub);
+            Mark("effects restored; profile reload queued");
 
             Closed?.Invoke(this, EventArgs.Empty);
+            Mark("close handlers completed");
         }
 
         private void HoverConBtn_Click(object sender, RoutedEventArgs e)

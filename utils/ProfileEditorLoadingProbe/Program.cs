@@ -64,6 +64,7 @@ internal static class Program
             var entity = Activator.CreateInstance(assembly.GetType("DS4WinWPF.ProfileEntity")!);
             entity.GetType().GetProperty("Name")!.SetValue(entity, "Offline probe");
             bool visitPages = args.Contains("--visit-pages");
+            if (args.Contains("--check-audio-discovery")) CheckAudioDiscovery(assembly, slot);
             var rows = new List<object>();
             var type = assembly.GetType("DS4WinWPF.DS4Forms.ProfileEditor")!;
             for (int attempt = 0; attempt < (visitPages ? 2 : 6); attempt++)
@@ -176,6 +177,64 @@ internal static class Program
         }
         catch (Exception exception) { Console.Error.WriteLine(exception); return 1; }
         finally { Directory.Delete(scratch, recursive: true); }
+    }
+
+    private static readonly System.Threading.ManualResetEventSlim discoveryRelease = new(false);
+    private static int discoveryCalls;
+    private static int discoveryThread;
+    private static Func<IReadOnlyList<T>> BlockedDiscovery<T>() => () =>
+    {
+        System.Threading.Interlocked.Increment(ref discoveryCalls);
+        discoveryThread = Environment.CurrentManagedThreadId;
+        if (!discoveryRelease.Wait(TimeSpan.FromSeconds(10))) throw new TimeoutException("Discovery test was not released.");
+        return Array.Empty<T>();
+    };
+
+    private static void CheckAudioDiscovery(Assembly assembly, int slot)
+    {
+        var snapshot = assembly.GetType("DS4WinWPF.DS4Forms.ViewModels.AppAudioSnapshot")!;
+        var discovery = typeof(Program).GetMethod(nameof(BlockedDiscovery), BindingFlags.Static | BindingFlags.NonPublic)!
+            .MakeGenericMethod(snapshot).Invoke(null, null)!;
+        var control = (FrameworkElement)Activator.CreateInstance(assembly.GetType("DS4WinWPF.DS4Forms.AudioHapticsControl")!,
+            BindingFlags.Instance | BindingFlags.NonPublic, null, new[] { discovery }, null)!;
+        var store = assembly.GetType("DS4Windows.Global")!.GetProperty("store")!.GetValue(null)!;
+        var settings = ((Array)store.GetType().GetField("audioHapticsSettings")!.GetValue(store)!).GetValue(slot)!;
+        string settingsBefore = JsonSerializer.Serialize(settings, settings.GetType());
+        var setDevice = control.GetType().GetMethod("SetDevice")!;
+        setDevice.Invoke(control, new object[] { slot });
+        setDevice.Invoke(control, new object[] { slot });
+        DrainDispatcher();
+        if (discoveryCalls != 0) throw new InvalidOperationException("Hidden feature control scanned audio sessions.");
+        var host = new Window { Content = control, Width = 900, Height = 700, Left = -30000,
+            Top = -30000, Opacity = 0, ShowActivated = false, ShowInTaskbar = false };
+        try
+        {
+            host.Show();
+            var deadline = Stopwatch.StartNew();
+            while (discoveryCalls == 0 && deadline.ElapsedMilliseconds < 3000) { DrainDispatcher(); System.Threading.Thread.Sleep(5); }
+            if (discoveryCalls != 1) throw new InvalidOperationException("Visible feature did not start exactly one discovery.");
+            bool uiResponded = false;
+            control.Dispatcher.BeginInvoke(DispatcherPriority.Background, () => uiResponded = true);
+            DrainDispatcher();
+            if (!uiResponded || discoveryThread == Environment.CurrentManagedThreadId)
+                throw new InvalidOperationException("Audio discovery blocked the UI dispatcher.");
+            setDevice.Invoke(control, new object[] { -1 });
+            if (discoveryCalls != 1) throw new InvalidOperationException("Overlapping discovery was not coalesced.");
+            host.Hide();
+            discoveryRelease.Set();
+            var running = control.GetType().GetField("audioDiscoveryRunning", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            deadline.Restart();
+            while ((bool)running.GetValue(control)! && deadline.ElapsedMilliseconds < 3000) { DrainDispatcher(); System.Threading.Thread.Sleep(5); }
+            if ((bool)running.GetValue(control)!) throw new InvalidOperationException("Discovery did not finish after hiding.");
+            host.Show(); DrainDispatcher();
+            deadline.Restart();
+            while ((bool)running.GetValue(control)! && deadline.ElapsedMilliseconds < 3000) { DrainDispatcher(); System.Threading.Thread.Sleep(5); }
+            if (discoveryCalls != 2) throw new InvalidOperationException("Revisited feature did not refresh its source list.");
+            if (settingsBefore != JsonSerializer.Serialize(settings, settings.GetType()))
+                throw new InvalidOperationException("Source discovery modified the stored profile settings.");
+            Console.WriteLine("Audio discovery passed: hidden work skipped, slow discovery off dispatcher, overlapping calls coalesced, hide/revisit safe.");
+        }
+        finally { discoveryRelease.Set(); host.Close(); DrainDispatcher(); }
     }
 
     private static IEnumerable<DependencyObject> Visuals(DependencyObject parent)

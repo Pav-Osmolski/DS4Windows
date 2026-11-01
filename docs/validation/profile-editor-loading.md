@@ -87,3 +87,38 @@ changes; those require the interactive checks below.
 6. While playing over USB and Bluetooth, open/close the editor and verify input,
    audio and haptics continue normally. Do not treat an offline probe as proof
    of this hardware behaviour.
+
+## Follow-up: real shell transitions (r2)
+
+The user's r1 capture showed warm construction/attachment in 65–67 ms and
+layout/Loaded in 93–105 ms, followed by 725–910 ms before the Background-priority
+continuation. The isolated probe above does not reproduce that shell backlog;
+its numbers are not end-to-end timings from the user's desktop.
+
+The shell's selected-controller refresh also refreshed its hidden Audio Haptics
+control. That synchronously enumerated Windows Core Audio endpoints, sessions
+and process metadata. The control now defers hidden refreshes and runs session
+discovery on a worker, publishing only plain snapshots on the dispatcher. A
+pending scan is shared by overlapping refreshes. The result uses the current
+profile selection and is not published into a hidden/unloaded page. This changes
+the source picker, not capture, rendering, microphone forwarding or haptic
+transport. No editable WPF control is constructed on a worker.
+
+Opening now yields below both Loaded and Render priority before constructing the
+editor, so the loading view can complete its layout first. Closing chooses the
+return tab before restoring the profile browser, avoiding an intermediate
+Profiles layout when returning to Controllers. Browser metadata/storage refresh
+is skipped when Profiles is only being used as the editor workspace. Cancel
+still clears previews and queues the regular-profile reload to discard edits.
+
+Use `--check-audio-discovery` with the offline probe to inject a deliberately
+blocked discovery operation. It checks that a hidden page does no scan, that a
+visible scan leaves the dispatcher responsive, overlapping requests coalesce,
+and late completion after hiding plus revisiting is safe. It opens only an
+invisible offscreen test window and never reads real audio sessions in this check.
+
+The timing option also records Cancel's preview cleanup, rollback queueing and
+close handlers, then destination selection and return-page queue drain. Retest
+repeated Controllers → Edit → Cancel with the actual controller and profile;
+these measures can distinguish synchronous cleanup from destination layout if
+any pause remains. User acceptance of r2 is still required.
