@@ -382,13 +382,23 @@ input reports, not a measurement of end-to-end game latency
 
 ## Report a reproducible issue
 
-[Open an issue](https://github.com/Pav-Osmolski/DS4Windows/issues) with:
+Before reporting, read the relevant sections above and
+[search open and closed issues](https://github.com/Pav-Osmolski/DS4Windows/issues?q=is%3Aissue).
+Add useful findings to an existing matching report rather than opening a duplicate.
+If a closed issue's fix does not work for your setup, explain what is different.
+
+[Open a bug report](https://github.com/Pav-Osmolski/DS4Windows/issues/new?template=bug_report.yml) with:
 
 - App version and full Windows build.
 - Controller model, USB/Bluetooth connection and virtual output type.
 - Installed or portable setup, and any overlapping mapping software.
 - Steps, expected behaviour and observed behaviour.
 - Relevant exported log or installer diagnostics, reviewed for personal data.
+
+Use the [feature request form](https://github.com/Pav-Osmolski/DS4Windows/issues/new?template=feature_request.yml)
+for proposed improvements, or [Discussions](https://github.com/Pav-Osmolski/DS4Windows/discussions)
+for setup questions. If a required detail or log is unavailable, explain why;
+there is no need to delete profiles or reinstall drivers just to file a report.
 
 Enable verbose logging only when needed to reproduce a problem, then turn it off.
 
