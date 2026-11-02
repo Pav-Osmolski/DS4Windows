@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Read troubleshooting first
+    url: https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/troubleshooting.md
+    about: Common fixes, known behaviours and instructions for collecting useful logs.
+  - name: Ask a question or discuss your setup
+    url: https://github.com/Pav-Osmolski/DS4Windows/discussions
+    about: Get help using existing features or discuss an idea before opening an issue.

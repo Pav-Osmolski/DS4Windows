@@ -2,6 +2,14 @@ $ErrorActionPreference='Stop'
 $repo='Pav-Osmolski/DS4Windows'
 $request=[pscustomobject]@{state='open';head=@{ref='feature/example';repo=@{full_name=$repo}};base=@{repo=@{full_name=$repo}}}
 $cases=@(
+ @{Event='push';Branch='main';Files=@('.github/ISSUE_TEMPLATE/bug_report.yml');Test='false';Package='none'},
+ @{Event='pull_request';Branch='123/merge';Files=@('.github/ISSUE_TEMPLATE/feature_request.yml','.github/ISSUE_TEMPLATE/config.yml');Test='false';Package='none'},
+ @{Event='push';Branch='feature/example';Files=@('.github/ISSUE_TEMPLATE/legacy.md','docs/troubleshooting.md');Test='false';Package='none'},
+ @{Event='pull_request';Branch='123/merge';Files=@('.github/ISSUE_TEMPLATE/bug_report.yml','DS4Windows/View.xaml');Test='true';Package='none'},
+ @{Event='pull_request';Branch='123/merge';Files=@('.github/ISSUE_TEMPLATE/config.yml','.github/workflows/ci-build.yml');Test='true';Package='installer'},
+ @{Event='pull_request';Branch='123/merge';Files=@('.github/ISSUE_TEMPLATE-other/bug_report.yml');Test='true';Package='none'},
+ @{Event='pull_request';Branch='123/merge';Files=@('.github/ISSUE_TEMPLATE/script.ps1');Test='true';Package='none'},
+ @{Event='workflow_dispatch';Branch='main';Files=@('.github/ISSUE_TEMPLATE/config.yml');Manual='installer';Test='true';Package='installer';Candidate='true'},
  @{Event='push';Branch='feature/example';Requests=@($request);Test='false';Package='none'},
  @{Event='push';Branch='feature/example';Requests=@();Test='true';Package='none'},
  @{Event='push';Branch='feature/other';Requests=@($request);Test='true';Package='none'},
