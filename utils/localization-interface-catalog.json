@@ -10819,5 +10819,23 @@
     "files": [
       "DS4Windows/DS4Control/ControllerRuntimeStatus.cs"
     ]
+  },
+  "UI_BC72FF3C85FBD0E8": {
+    "source": "Choose colour",
+    "files": [
+      "DS4Windows/DS4Forms/ColorPickerWindow.xaml.cs"
+    ]
+  },
+  "UI_F417EC0D05827EEA": {
+    "source": "Changes are previewed immediately.",
+    "files": [
+      "DS4Windows/DS4Forms/ColorPickerWindow.xaml.cs"
+    ]
+  },
+  "UI_E4DB9A5AD7E50B2E": {
+    "source": "Live X/Y input and output.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerReadingsControl.xaml"
+    ]
   }
 }

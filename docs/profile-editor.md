@@ -48,6 +48,13 @@ and configure the action. Then check its **Enabled** box for this profile.
 Select a row to **Edit Action** or **Remove Action**; use **Export actions** to
 share or back up an export. Save the profile after changing its enabled actions.
 
+Double-click an action row to edit it. Use **Move Up / Move Down** to arrange
+selected rows, or click **Name**, **Trigger** or **Action** headings to sort;
+click again to reverse the direction. The app remembers this display order for
+the installation. Enabled actions and their execution order remain separate
+from list organisation. Checkboxes still enable/disable actions rather than
+opening the editor ([request #105](https://github.com/Pav-Osmolski/DS4Windows/issues/105)).
+
 ![Edit Action with trigger buttons, action settings and Save and Cancel controls](images/site/profile-editor-special-actions-edit-action.webp)
 
 **Import actions** reads an exported `Actions.xml` file without replacing your

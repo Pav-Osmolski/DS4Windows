@@ -17,6 +17,21 @@ output reproduce the problem.
 4. If Device Manager shows the controller disabled, verify its identity before
    enabling that device. Avoid disabling unrelated HID devices.
 
+### A second Bluetooth controller will not connect
+
+Check **Windows > Bluetooth & devices** during the failed attempt. If Windows
+never shows it connected, record that separately from a controller Windows
+connects but DS4Windows cannot open. With Steam and DS4Windows fully exited,
+compare both connection orders, then repeat with DS4Windows running. Note
+whether VIIPER remains running and capture a verbose log of the app-running test.
+
+In [issue #95](https://github.com/Pav-Osmolski/DS4Windows/issues/95#issuecomment-6525380415),
+the later tests also failed with DS4Windows exited. A different adapter worked
+in the reported comparison, but that test also included a reboot and fresh
+pairing. It was a workaround, not proof of faulty hardware, a particular
+power-saving setting or a confirmed app fix. Do not assume the same cause for
+every second-controller failure.
+
 ## Switch 2 controller is reached but its slot cannot activate
 
 Starting in 5.0.31, an unassigned Switch 2 input slot loads the existing
@@ -67,11 +82,44 @@ the legacy Big Picture checkbox instructions.
 
 For button conflicts, see [Mouse-click troubleshooting](troubleshooting-mouse-clicks.md).
 
+If a game loses its controller when you Alt+Tab, check **Auto Profiles** as well
+as the active profile's **Emulated Controller**. Switching between Xbox and
+DualSense output when the game loses focus recreates the virtual controller.
+Keep output types consistent when the game needs the same device throughout
+the session; [issue #95's follow-up](https://github.com/Pav-Osmolski/DS4Windows/issues/95#issuecomment-6525380415)
+resolved this separately from the Bluetooth connection problem.
+
 ## VIIPER cannot start or no virtual output appears
 
 Read the startup error and follow the requested Install / Repair VIIPER action.
 Restart Windows if setup requests it. Keep the app and bundled backend together;
 do not substitute a newer USB/IP or unrelated VIIPER binary.
+
+### Connected, Select a profile, or Needs attention
+
+If **Select a profile** is shown, open **Controllers > Active Profile** and
+choose the intended profile. Create one under **Profiles** first if the list is
+empty. Physical input can be present while no virtual controller is created
+because no profile is selected. This was one of the separate findings in
+[issue #66](https://github.com/Pav-Osmolski/DS4Windows/issues/66#issuecomment-6347132764).
+
+With a profile selected, read the **Controller status** explanation and compare
+the virtual device in `joy.cpl`. Update the complete app/backend package before
+repeatedly reinstalling drivers. Intermittent VIIPER confirmation/connection-check
+failures in [#66](https://github.com/Pav-Osmolski/DS4Windows/issues/66#issuecomment-6381990559)
+were addressed in **5.0.47** with its matching backend; that report did not prove
+a laptop hardware, Windows-version or antivirus fault. For a recurrence, capture
+the failed attempt with both application and VIIPER debug logs before restarting.
+
+### Stop or reconnect gets stuck
+
+Update the complete package first. The DS3 Stop/Start and reconnect defects in
+[#25](https://github.com/Pav-Osmolski/DS4Windows/issues/25#issuecomment-6166743185)
+were confirmed resolved in **5.0.23**; no controller-driver reinstall was needed.
+For a new failure, distinguish **Stop while connected** from **disconnect, then
+reconnect**, note whether the window still responds, and capture the full verbose
+log through shutdown. The last visible cleanup message alone does not establish
+which cleanup step stalled.
 
 Quit a conflicting VIIPER instance through its tray icon before retrying.
 Portable users must extract the complete package, including backend files and
@@ -109,6 +157,65 @@ Disable profile Trigger Lab effects while testing game-authored triggers.
 Test native game haptics separately from Audio Haptics capture. Use the
 [controller audio guide](controller-audio.md) for endpoint/mute setup and
 [compatibility guide](controller-compatibility.md) for hardware limits.
+
+### Triggers work, but native DualSense speaker/haptics are silent
+
+A game can send trigger/lightbar commands without sending its separate audio
+haptics. For a game with native DualSense support, fully exit the game, select
+**Disable Steam Input** in its Steam controller override, start DS4Windows and
+wait for **Ready**, then relaunch the game. Keep the virtual controller playback
+device enabled and your usual speakers/headphones as the default main output.
+This resolved [Ratchet & Clank in issue #103](https://github.com/Pav-Osmolski/DS4Windows/issues/103#issuecomment-6560777205).
+
+If input stops working with Steam Input disabled, report that detection problem
+rather than assuming every game requires the same setting. In a new report,
+include the game, active profile, USB/Bluetooth connection and full logs; check
+whether the virtual controller playback meter moves. A successful Windows
+speaker test or adaptive trigger effect alone does not verify game haptics.
+
+### Microphone is listed but silent, or a recording contains game echo
+
+Check the recording app's **exact selected input**, Windows microphone privacy
+permissions, and the profile's microphone-enable/mute settings. The physical
+controller microphone and **DS4Windows Controller N Microphone** are distinct
+devices. Forwarding starts when a recording client opens the virtual input;
+an idle input is not a failed listening test. A Windows microphone test result
+of **0%** means no level was recorded, not necessarily that input volume is 0.
+See the [microphone routing guide](controller-audio.md).
+
+For echo, record system sound and microphone on **separate tracks**. Keep game
+audio playing, stay quiet briefly, then speak. Inspect the microphone track on
+its own. Check **Listen to this device**, monitoring/loopback settings and the
+selected input before changing controller drivers. If game audio is on the
+microphone track, compare a second compatible headset directly connected to the
+same controller, if one is available. In
+[#90](https://github.com/Pav-Osmolski/DS4Windows/issues/90#issuecomment-6551225577),
+changing headsets removed the unwanted audio; that result does not establish
+that every echo report is a hardware fault.
+
+For a silent DS4 Bluetooth microphone on older builds, update first:
+[#80](https://github.com/Pav-Osmolski/DS4Windows/issues/80) identified a separate
+virtual-microphone status request defect, subsequently fixed and confirmed by
+the reporter. Share both logs during an actual recording attempt if it persists.
+
+### Headphone routing or battery-alert previews are silent
+
+For managed controller audio, enable **Stream audio to controller**, select the
+intended source, and use **Audio output > Follow headphone jack** to switch
+between speaker and connected headphones automatically. This covers managed
+DualSense/Edge USB/Bluetooth and genuine DS4 Bluetooth routes; DS4 USB audio is
+handled by Windows. An Audio Haptics route override can retain a different
+choice ([#74](https://github.com/Pav-Osmolski/DS4Windows/issues/74)).
+
+**Battery alerts** are off by default under **Settings > Controllers**. For a
+silent preview, check its selected output, speech/sound selection and volume;
+a specifically selected missing device is reported rather than replaced
+silently. Controller-speaker previews also require an enabled, unmuted speaker
+route in **Profile Editor > Advanced > Audio**. Controllers without a supported
+speaker can use PC/headphone audio. See [battery alerts](user-guide.md#battery-alerts)
+for Windows voices, supported sound files and repeat settings added through
+[#45](https://github.com/Pav-Osmolski/DS4Windows/issues/45). Preview/on-demand
+checks do not count toward automatic reminder totals.
 
 ### DualSense haptics stop after disabling a Windows audio device
 
@@ -192,6 +299,86 @@ Use [this fork's releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 Installed users run the matching Setup EXE; portable users replace the complete
 packaged app files in their existing folder. Keep profiles, settings and
 portable-data. Check both `%APPDATA%\DS4Windows` and the app folder for settings.
+
+### Access denied when saving a profile
+
+Open **Profiles > Settings & profiles** to see the current folder and whether
+it is writable. Installed copies using `Program Files` can fail to save when
+running normally, even though controller input works. Use **Change location**
+to copy settings to AppData, review any destination conflicts, then restart as
+requested. Use **Back up all** first; original files are retained. Do not solve
+a settings-location problem by disabling Windows folder protection. The saving
+and microphone problems in [#80](https://github.com/Pav-Osmolski/DS4Windows/issues/80)
+had separate causes.
+
+### Special Actions will not stay enabled, or multiple tap macros fire
+
+Save the action itself, enable its checkbox for **each intended profile**, then
+save that profile. Creating or importing an action does not enable it in every
+profile. After updating an affected older build, re-enable selections that were
+not previously saved; the app cannot reconstruct every lost choice.
+
+The earlier selection-saving problem in
+[#33](https://github.com/Pav-Osmolski/DS4Windows/issues/33) and the separate slash
+in action names problem in
+[#99](https://github.com/Pav-Osmolski/DS4Windows/issues/99#issuecomment-6547849251)
+were fixed; use **5.0.58 or later** for names such as **Play/Pause**. There is no
+need to recreate actions or edit XML manually just to avoid that delimiter bug.
+If a multimedia key still fails after the selection survives reopening, capture
+that separately with the affected profile and `Actions.xml`.
+
+For single/double/triple/hold shortcuts, prefer one **Multi-action button** with
+the gestures named and enabled individually. Separate actions sharing the same
+buttons must also use identical hold/tap timing to share recognition. Enabling
+triple tap means double tap waits for the tap interval; that wait is expected.
+The separate-action triple-tap overlap in
+[#100](https://github.com/Pav-Osmolski/DS4Windows/issues/100#issuecomment-6557362696)
+was fixed in **5.0.59**. See [Special Actions](profile-editor.md#special-actions).
+
+### Old update downloads take up space
+
+Use **Settings > Updates & tools > Updates > Update storage**. It shows recognised
+stored files and reclaimable space; **Clean up now** previews removal. The
+default keeps one previous version per component, with cleanup after a successful
+updated start. Current files, profiles/settings and backups are preserved;
+unknown or busy files are left alone. Avoid manually deleting active backend
+files to reduce storage ([#83](https://github.com/Pav-Osmolski/DS4Windows/issues/83)).
+
+## Game prompts, controller metadata or pressure readings look wrong
+
+- **Xbox One output still shows Xbox 360 icons:** verify the selected output in
+  Controller info or a compatible tester, then check the game's own prompt
+  options and Steam Input. Artwork alone does not identify the emulated device.
+  [#71](https://github.com/Pav-Osmolski/DS4Windows/issues/71) confirmed Xbox One
+  detection while the game retained its older artwork.
+- **Factory dates differ from the app version:** choose the correct Physical or
+  Emulated tab in [Controller info](controller-info.md). Emulated firmware dates
+  describe the virtual device. The specific DS4 `20211` timestamp encoding error
+  was corrected in **5.0.48**, rather than being a tester limitation
+  ([#75](https://github.com/Pav-Osmolski/DS4Windows/issues/75#issuecomment-6384927640)).
+  Battery percentages can also be quantised into protocol bands; Xbox USB outputs
+  may report wired/no battery instead of the physical percentage.
+- **DS3 buttons act digital when mapped to an axis:** use **SXS mode in DsHidMini**,
+  reconnect, and map pressure-sensitive buttons to analogue triggers or stick
+  directions. Keyboard/button assignments remain on/off, and Switch 2 Pro
+  triggers are digital. Pressure support was added in **5.0.56** and confirmed on
+  real hardware in [#92](https://github.com/Pav-Osmolski/DS4Windows/issues/92).
+
+For lights left on by an application, use **Lightbar > Indicator LEDs > Off** and
+**Apply** or **Reapply indicators**; close any app still changing them. Normal
+lightbar mode keeps the profile colour, while **Passthru + Device settings**
+allows application control. The colour-ownership fix in
+[#28](https://github.com/Pav-Osmolski/DS4Windows/issues/28) and indicator controls
+in [#40](https://github.com/Pav-Osmolski/DS4Windows/issues/40) are separate changes.
+
+For clipped readings or inaccessible editor controls, include Windows display
+scaling and the approximate window size with a screenshot. **Axis Config > Show
+controller readings** provides live readings while tuning; narrow layouts stack
+the panels. The scrolling/card-width issues in
+[#19](https://github.com/Pav-Osmolski/DS4Windows/issues/19) were addressed in
+5.0.21–5.0.22. The displayed report interval is a smoothed observation of physical
+input reports, not a measurement of end-to-end game latency
+([#59](https://github.com/Pav-Osmolski/DS4Windows/issues/59)).
 
 ## Report a reproducible issue
 

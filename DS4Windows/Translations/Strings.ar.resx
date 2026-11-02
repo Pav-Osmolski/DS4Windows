@@ -6756,4 +6756,7 @@ Backup : </value>
   <data name="SpecialActionEdit.GestureName" xml:space="preserve"><value>Macro name (optional)</value></data>
   <data name="SpecialActionEdit.GestureManagementHelp" xml:space="preserve"><value>Keep gestures together in one action. Uncheck a gesture to disable it without deleting its macro or name. Matching separate actions share tap recognition when their buttons and timing are identical.</value></data>
   <data name="UI_0600A878D7015ABB" xml:space="preserve"><value>فعّل جهاز تشغيل DS4Windows Audio الخاص بوحدة التحكم هذه في إعدادات الصوت في Windows لاستعادة الاستجابة اللمسية للألعاب. يمكن أن تبقى سماعات الرأس جهاز الإخراج الافتراضي.</value></data>
+  <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>اختيار اللون</value></data>
+  <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>تُعايَن التغييرات فورًا.</value></data>
+  <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>إدخال وإخراج X/Y مباشرة.</value></data>
 </root>

@@ -2777,6 +2777,51 @@ namespace DS4WinWPF.DS4Forms
             };
         }
 
+        private void MoveActionUp_Click(object sender, RoutedEventArgs e) => MoveAction(-1);
+        private void MoveActionDown_Click(object sender, RoutedEventArgs e) => MoveAction(1);
+        private void MoveAction(int direction)
+        {
+            var selected = specialActionsVM.CurrentSpecialActionItem;
+            specialActionsVM.MoveSelectedAction(direction);
+            foreach (var column in specialActionsLV.Columns) column.SortDirection = null;
+            specialActionsLV.SelectedItem = selected;
+            if (selected != null) specialActionsLV.ScrollIntoView(selected);
+        }
+
+        private void SpecialActions_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+            e.Handled = true;
+            var selected = specialActionsVM.CurrentSpecialActionItem;
+            bool descending = e.Column.SortDirection == ListSortDirection.Ascending;
+            foreach (var column in specialActionsLV.Columns) column.SortDirection = null;
+            specialActionsVM.SortActions(e.Column.SortMemberPath, descending);
+            e.Column.SortDirection = descending ? ListSortDirection.Descending : ListSortDirection.Ascending;
+            specialActionsLV.SelectedItem = selected;
+        }
+
+        private void SpecialActions_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // Checkboxes, scrollbars and headers keep their normal behaviour.
+            for (var node = e.OriginalSource as DependencyObject; node != null;
+                node = node is Visual ? VisualTreeHelper.GetParent(node) : LogicalTreeHelper.GetParent(node))
+            {
+                if (node is System.Windows.Controls.Primitives.ButtonBase or System.Windows.Controls.Primitives.ScrollBar or System.Windows.Controls.Primitives.Thumb) return;
+                if (node is DataGridRow row)
+                {
+                    if (row.Item is SpecialActionItem item)
+                    {
+                        specialActionsLV.SelectedItem = item;
+                        specialActionsVM.CurrentSpecialActionItem = item;
+                        specialActionsVM.SpecialActionIndex = specialActionsVM.ActionCol.IndexOf(item);
+                        EditActionBtn_Click(sender, e);
+                        e.Handled = true;
+                    }
+                    return;
+                }
+                if (ReferenceEquals(node, specialActionsLV)) return;
+            }
+        }
+
         private void EditActionBtn_Click(object sender, RoutedEventArgs e)
         {
             if (specialActionsVM.SpecialActionIndex >= 0)
@@ -2804,6 +2849,7 @@ namespace DS4WinWPF.DS4Forms
                     newitem.Index = currentIndex;
                     specialActionsVM.ActionCol.RemoveAt(currentIndex);
                     specialActionsVM.ActionCol.Insert(currentIndex, newitem);
+                    specialActionsVM.RememberOrder();
                     specialActionDockPanel.Children.Remove(actEditor);
                     baseSpeActPanel.Visibility = Visibility.Visible;
                     specialActionsVM.ExportEnabledActions();
