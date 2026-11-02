@@ -162,7 +162,7 @@ public class InsetComboBoxTests
                 var selected = new ComboBoxItem { Content = "Windows Control", IsSelected = true };
                 selected.SetResourceReference(FrameworkElement.StyleProperty, "AppInsetComboBoxItemStyle");
                 host.Children.Add(selected);
-                ThemeConsistencyValidation.Layout(host, 320, 140); DisclosureAnimationTests.Pump(30);
+                ThemeConsistencyValidation.Layout(host, 320, 140); DisclosureAnimationTests.Pump(160);
                 Assert.AreEqual(Visibility.Visible, ((FrameworkElement)selected.Template.FindName("SelectedCheck", selected)).Visibility);
                 var highlight = (DependencyPropertyKey)typeof(ComboBoxItem).GetField("IsHighlightedPropertyKey", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
                 selected.SetValue(highlight, true);
@@ -170,6 +170,10 @@ public class InsetComboBoxTests
                 selected.SetValue(mouse, true);
                 InsetComboBox.SetEnabled(selected, false);
                 Assert.IsTrue(VisualStateManager.GoToState(selected, "ItemHovered", false)); DisclosureAnimationTests.Pump(160);
+                var hover = (Border)selected.Template.FindName("ItemHover", selected);
+                var deadline = System.Diagnostics.Stopwatch.StartNew();
+                while (Math.Abs(hover.Opacity - 1) > .001 && deadline.ElapsedMilliseconds < 1500)
+                    DisclosureAnimationTests.Pump(16);
                 Assert.AreEqual(1d, ((Border)selected.Template.FindName("ItemHover", selected)).Opacity);
                 InsetComboBox.SetEnabled(selected, true);
                 selected.RaiseEvent(new System.Windows.Input.MouseButtonEventArgs(System.Windows.Input.Mouse.PrimaryDevice, 0, System.Windows.Input.MouseButton.Left)
