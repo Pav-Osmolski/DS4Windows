@@ -68,6 +68,7 @@ namespace DS4Windows.InputDevices
             public bool Pending;
             public bool NativeCommand;
             public long SubmittedTimestamp;
+            public bool SubmittedDuringStreaming;
 
             public WriteSlot(int reportLength)
             {
@@ -157,6 +158,11 @@ namespace DS4Windows.InputDevices
         private long slowCompletionCount;
         private long severeCompletionCount;
         private long maximumCompletionTicks;
+        private int mediaStreamingStarted;
+        private long startupCompletedWrites;
+        private long startupMaximumCompletionTicks;
+        private long streamingCompletedWrites;
+        private long streamingMaximumCompletionTicks;
         private long lateSubmissionCount;
         private long maximumSubmissionGapTicks;
         private long slowNativeSubmissionCount;
@@ -181,6 +187,19 @@ namespace DS4Windows.InputDevices
         public long LateSubmissionCount => Interlocked.Read(ref lateSubmissionCount);
         public long MaximumCompletionTicks =>
             Interlocked.Read(ref maximumCompletionTicks);
+        // Phase is captured at submission, so a startup write observed after
+        // streaming begins cannot inflate the streaming maximum. These are
+        // submission-to-observation times, not physical actuator latency.
+        public long StartupCompletedWrites => Interlocked.Read(ref startupCompletedWrites);
+        public long StartupMaximumCompletionTicks => Interlocked.Read(ref startupMaximumCompletionTicks);
+        public long StreamingCompletedWrites => Interlocked.Read(ref streamingCompletedWrites);
+        public long StreamingMaximumCompletionTicks => Interlocked.Read(ref streamingMaximumCompletionTicks);
+
+        internal void MarkMediaStreamingStarted()
+        {
+            if (Volatile.Read(ref mediaStreamingStarted) == 0)
+                Volatile.Write(ref mediaStreamingStarted, 1);
+        }
         public long MaximumSubmissionGapTicks =>
             Interlocked.Read(ref maximumSubmissionGapTicks);
         public long SlowNativeSubmissionCount =>
@@ -673,6 +692,7 @@ namespace DS4Windows.InputDevices
                 ResetEvent(slot.EventHandle);
                 PrepareNativeOverlapped(slot);
 
+                slot.SubmittedDuringStreaming = Volatile.Read(ref mediaStreamingStarted) != 0;
                 long nativeSubmissionStarted = Stopwatch.GetTimestamp();
                 bool submitted = TrySubmit(
                     slot.BufferHandle.AddrOfPinnedObject(), slot.Overlapped,
@@ -716,6 +736,8 @@ namespace DS4Windows.InputDevices
                         slot.SubmittedTimestamp = 0;
                     }
                     Interlocked.Increment(ref completedWrites);
+                    RecordPhaseCompletion(Stopwatch.GetTimestamp() - nativeSubmissionStarted,
+                        slot.SubmittedDuringStreaming);
                 }
 
                 RecordSubmissionGap(now);
@@ -991,6 +1013,7 @@ namespace DS4Windows.InputDevices
                 PrepareNativeOverlapped(slot);
 
                 long submitted = Stopwatch.GetTimestamp();
+                slot.SubmittedDuringStreaming = Volatile.Read(ref mediaStreamingStarted) != 0;
                 long nativeSubmissionStarted = Stopwatch.GetTimestamp();
                 bool submittedToHid = TrySubmit(
                     slot.BufferHandle.AddrOfPinnedObject(), slot.Overlapped,
@@ -1059,6 +1082,8 @@ namespace DS4Windows.InputDevices
 
                     SetEvent(slot.EventHandle);
                     Interlocked.Increment(ref completedWrites);
+                    RecordPhaseCompletion(Stopwatch.GetTimestamp() - nativeSubmissionStarted,
+                        slot.SubmittedDuringStreaming);
                 }
 
                 RecordSubmissionGap(submitted);
@@ -1194,6 +1219,8 @@ namespace DS4Windows.InputDevices
             }
 
             RecordCompletion(completedTimestamp - submittedTimestamp);
+            RecordPhaseCompletion(completedTimestamp - submittedTimestamp,
+                slot.SubmittedDuringStreaming);
             return true;
         }
 
@@ -1279,6 +1306,21 @@ namespace DS4Windows.InputDevices
             if (elapsedTicks > Stopwatch.Frequency * SevereCompletionMilliseconds / 1000)
             {
                 Interlocked.Increment(ref severeCompletionCount);
+            }
+        }
+
+        private void RecordPhaseCompletion(long elapsedTicks, bool streaming)
+        {
+            elapsedTicks = Math.Max(0, elapsedTicks);
+            if (streaming)
+            {
+                Interlocked.Increment(ref streamingCompletedWrites);
+                UpdateMaximum(ref streamingMaximumCompletionTicks, elapsedTicks);
+            }
+            else
+            {
+                Interlocked.Increment(ref startupCompletedWrites);
+                UpdateMaximum(ref startupMaximumCompletionTicks, elapsedTicks);
             }
         }
 

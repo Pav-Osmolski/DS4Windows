@@ -5,7 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Separate pre-streaming and streaming Bluetooth write-completion observations in verbose DualSense diagnostics, so an early startup outlier is not mistaken for ongoing haptics latency. Preserve lifetime maxima and document that completion observation is not physical actuator acknowledgement. Thanks [@Darkii-0](https://github.com/Darkii-0) for the reports and captures supporting the investigation ([#98](https://github.com/Pav-Osmolski/DS4Windows/issues/98)); this diagnostic improvement is not a claimed fix for the reported missing haptics.
+- Add an opt-in #98 preview companion with a finite rear-channel virtual-endpoint test, endpoint/session observations, read-only Bluetooth adapter inventory and local ZIP collection. The diagnostic launcher is packaged only when `Issue98DiagnosticsPreview=true`; ordinary launches do not activate the companion, and it does not record microphone/game audio or change drivers, sound defaults or power settings.
 
 ## Released
 

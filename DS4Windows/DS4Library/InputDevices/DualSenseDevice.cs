@@ -1233,6 +1233,39 @@ namespace DS4Windows.InputDevices
                 }
             }
         }
+        public long BluetoothAudioPacerStartupCompletedWrites
+        {
+            get
+            {
+                lock (bluetoothAudioPacerLock)
+                    return bluetoothAudioPacer?.HelperStartupCompletedWrites ?? 0;
+            }
+        }
+        public double BluetoothAudioPacerStartupMaximumCompletionMilliseconds
+        {
+            get
+            {
+                lock (bluetoothAudioPacerLock)
+                    return bluetoothAudioPacer?.HelperStartupMaximumCompletionMilliseconds ?? 0;
+            }
+        }
+        public long BluetoothAudioPacerStreamingCompletedWrites
+        {
+            get
+            {
+                lock (bluetoothAudioPacerLock)
+                    return bluetoothAudioPacer?.HelperStreamingCompletedWrites ?? 0;
+            }
+        }
+        public double BluetoothAudioPacerStreamingMaximumCompletionMilliseconds
+        {
+            get
+            {
+                lock (bluetoothAudioPacerLock)
+                    return bluetoothAudioPacer?.HelperStreamingMaximumCompletionMilliseconds ?? 0;
+            }
+        }
+
         public long BluetoothAudioPacerLateSubmissions
         {
             get

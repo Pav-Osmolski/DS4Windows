@@ -16,6 +16,55 @@ namespace DS4Windows.Tests
             DualSenseBluetoothAudioPacer.ReportLength;
 
         [TestMethod]
+        public void LateStartupObservationDoesNotInflateStreamingTiming()
+        {
+            using var native = new PendingNativeIo(ReportLength);
+            using var writer = new DualSenseBluetoothRealtimeWriter(
+                ReportLength, slotCount: 1, audioInFlightLimit: 1, native);
+            Assert.IsTrue(writer.TryWrite(new byte[ReportLength], out _));
+            Array slots = (Array)typeof(DualSenseBluetoothRealtimeWriter)
+                .GetField("slots", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(writer);
+            object slot = slots.GetValue(0);
+            FieldInfo timestamp = slot.GetType().GetField("SubmittedTimestamp");
+            timestamp.SetValue(slot, Stopwatch.GetTimestamp() - Stopwatch.Frequency * 2);
+
+            // The OS completion is already signalled; observation is delayed.
+            native.Complete();
+            writer.MarkMediaStreamingStarted();
+            Assert.IsTrue(writer.WaitForNextWriteSlot(0, out bool fault));
+            Assert.IsFalse(fault);
+            Assert.AreEqual(1L, writer.StartupCompletedWrites);
+            Assert.AreEqual(0L, writer.StreamingCompletedWrites);
+            Assert.IsTrue(writer.StartupMaximumCompletionTicks >= Stopwatch.Frequency * 2);
+            Assert.AreEqual(0L, writer.StreamingMaximumCompletionTicks);
+
+            Assert.IsTrue(writer.TryWrite(new byte[ReportLength], out _));
+            native.Complete();
+            Assert.IsTrue(writer.WaitForNextWriteSlot(0, out fault));
+            Assert.IsFalse(fault);
+            Assert.AreEqual(1L, writer.StartupCompletedWrites);
+            Assert.AreEqual(1L, writer.StreamingCompletedWrites);
+            Assert.AreEqual(writer.CompletedWrites,
+                writer.StartupCompletedWrites + writer.StreamingCompletedWrites);
+            Assert.AreEqual(writer.StartupMaximumCompletionTicks, writer.MaximumCompletionTicks,
+                "The legacy lifetime maximum must remain available.");
+        }
+
+        [TestMethod]
+        public void SynchronousWritesAreCountedInTheirSubmissionPhase()
+        {
+            using var native = new ImmediateNativeIo(ReportLength);
+            using var writer = new DualSenseBluetoothRealtimeWriter(
+                ReportLength, slotCount: 1, audioInFlightLimit: 1, native);
+            Assert.IsTrue(writer.TryWrite(new byte[ReportLength], out _));
+            writer.MarkMediaStreamingStarted();
+            Assert.IsTrue(writer.TryWrite(new byte[ReportLength], out _));
+            Assert.AreEqual(1L, writer.StartupCompletedWrites);
+            Assert.AreEqual(1L, writer.StreamingCompletedWrites);
+            Assert.AreEqual(2L, writer.CompletedWrites);
+        }
+
+        [TestMethod]
         public void OverduePendingWritePoisonsFifoAndRetainsBuffersUntilCancellationCompletes()
         {
             using var native = new PendingNativeIo(ReportLength);
@@ -226,14 +275,19 @@ namespace DS4Windows.Tests
         private sealed class PendingNativeIo : ImmediateNativeIo
         {
             internal bool Cancelled;
+            private IntPtr lastOverlapped;
             internal PendingNativeIo(int completionLength) : base(completionLength) { }
             public override bool TrySubmit(IntPtr deviceHandle, IntPtr buffer,
                 uint bytesToWrite, IntPtr overlapped, out bool pending, out int error)
             {
+                lastOverlapped = overlapped;
                 pending = true;
                 error = 997;
                 return true;
             }
+
+            internal void Complete() =>
+                SetEvent(Marshal.PtrToStructure<NativeOverlapped>(lastOverlapped).EventHandle);
 
             // Dispose waits for completion before freeing its pinned slot.
             public override void Cancel(IntPtr deviceHandle, IntPtr overlapped)

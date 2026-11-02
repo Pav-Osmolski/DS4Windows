@@ -135,7 +135,7 @@ public sealed class DualSenseSettingsRefreshAdmissionTests
             Assert.AreEqual(DualSenseBluetoothAudioPacer.GameStateAndTemplatePayloadLength, command.Payload.Length);
             CollectionAssert.AreEqual(exact.Skip(13).Take(47).ToArray(), command.Payload.Take(47).ToArray());
         }
-        Assert.AreEqual(17, typeof(DualSenseBluetoothAudioPacer).GetField("ProtocolVersion",
+        Assert.AreEqual(18, typeof(DualSenseBluetoothAudioPacer).GetField("ProtocolVersion",
             BindingFlags.Static | BindingFlags.NonPublic)!.GetRawConstantValue());
     }
 

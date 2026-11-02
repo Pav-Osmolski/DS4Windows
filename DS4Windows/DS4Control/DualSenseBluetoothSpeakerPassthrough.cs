@@ -2949,6 +2949,12 @@ namespace DS4Windows
                          $"helperWriteCompletions={device.BluetoothAudioPacerCompletedWrites} " +
                          $"helperSlowCompletions={device.BluetoothAudioPacerSlowCompletions} " +
                          $"helperCompletionMaxMs={device.BluetoothAudioPacerMaximumCompletionMilliseconds:F2} " +
+                         $"completionTimingScope=submission-to-observation " +
+                         $"startupWriteCompletions={device.BluetoothAudioPacerStartupCompletedWrites} " +
+                         $"startupObservedCompletionMaxMs={device.BluetoothAudioPacerStartupMaximumCompletionMilliseconds:F2} " +
+                         $"streamingWriteCompletions={device.BluetoothAudioPacerStreamingCompletedWrites} " +
+                         $"streamingObservedCompletionMaxMs={device.BluetoothAudioPacerStreamingMaximumCompletionMilliseconds:F2} " +
+                         $"streamingScope=since-first-media-including-silence " +
                          $"helperLateSubmissions={device.BluetoothAudioPacerLateSubmissions} " +
                          $"helperSubmissionGapMaxMs={device.BluetoothAudioPacerMaximumSubmissionGapMilliseconds:F2} " +
                           $"helperSlowNativeSubmissions={device.BluetoothAudioPacerSlowNativeSubmissions} " +

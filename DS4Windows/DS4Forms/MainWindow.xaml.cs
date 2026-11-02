@@ -129,9 +129,19 @@ namespace DS4WinWPF.DS4Forms
             ProcessPriorityClass.High, ProcessPriorityClass.RealTime
         ];
 
+        private void ShowIssue98Diagnostics(object sender, EventArgs e)
+        {
+            ContentRendered -= ShowIssue98Diagnostics;
+            new global::DS4Windows.Issue98Diagnostics(this).Show();
+        }
+
         public MainWindow(ArgumentParser parser)
         {
             InitializeComponent();
+            if (Environment.GetEnvironmentVariable("DS4WINDOWS_ISSUE98_DIAGNOSTICS") == "1")
+            {
+                ContentRendered += ShowIssue98Diagnostics;
+            }
             if (PortableLabContext.IsActive) Title = global::DS4Windows.UiText.Get("DS4Windows — Portable controller lab");
             profileEditorReturnTabIndex = mainTabCon.Items.IndexOf(profilesTab);
 

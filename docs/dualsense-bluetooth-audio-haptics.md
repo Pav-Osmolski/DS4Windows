@@ -109,6 +109,35 @@ one DS4Windows transport so their ordering remains deterministic.
 
 ## Diagnostics
 
+With **Verbose logging** enabled, the `DualSense Bluetooth combined stream stats`
+summary separates HID write timing into two phases:
+
+- `startupWriteCompletions` and `startupObservedCompletionMaxMs`: writes submitted
+  before the helper first attempts to stream a media report.
+- `streamingWriteCompletions` and `streamingObservedCompletionMaxMs`: writes
+  submitted from that point onward, including silent keep-alive media and control
+  reports. This is not a measurement limited to audible sound or active vibration.
+
+The phase is captured when a write is submitted. A startup write whose completion
+is only checked after streaming begins remains in the startup measurements.
+The maxima last for that writer's lifetime; they are not reset every log interval
+or by a profile/media reset. Recreating the writer starts a new set of counters.
+A phase with zero completed writes has a zero maximum because it has no samples.
+
+`completionTimingScope=submission-to-observation` makes the measurement boundary
+explicit. These times include any delay before DS4Windows checks a completed
+Windows write. They do not establish Bluetooth radio delivery time or when the
+controller physically vibrated. The existing `writerMaximumCompletionMs` and
+`helperCompletionMaxMs` remain lifetime maxima for asynchronous writes, so an
+early startup outlier may continue to appear throughout a successful game session.
+The phase counters additionally include successful synchronous writes.
+
+Compare these measurements with the incoming `VIIPER feedback path` counters and
+`hapticsPresented`. No incoming non-zero feedback is a different observation from
+incoming effects that fail to reach the physical output path. A large write-time
+maximum by itself does not demonstrate USB power saving or explain missing game
+feedback.
+
 When the virtual audio interface is active, a VIIPER traffic capture should contain:
 
 - `audio-haptics-out` for host audio written to the virtual UAC OUT endpoint.

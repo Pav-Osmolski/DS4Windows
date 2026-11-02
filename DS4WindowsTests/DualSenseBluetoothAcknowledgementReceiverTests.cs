@@ -16,7 +16,7 @@ namespace DS4Windows.Tests;
 [DoNotParallelize]
 public sealed class DualSenseBluetoothAcknowledgementReceiverTests
 {
-    private const int MediaLength = sizeof(long) + sizeof(byte) + sizeof(long) + 17 * sizeof(long);
+    private const int MediaLength = sizeof(long) + sizeof(byte) + sizeof(long) + 21 * sizeof(long);
     private const int NativeLength = sizeof(long) + sizeof(int) + sizeof(byte);
     private const BindingFlags InstancePrivate = BindingFlags.Instance | BindingFlags.NonPublic;
 

@@ -9,7 +9,7 @@ namespace DS4WindowsTests
     {
         private const string HelperArgument =
             "--dualsense-bt-audio-pacer-helper";
-        private const int ProtocolVersion = 17;
+        private const int ProtocolVersion = 18;
 
         private static readonly MethodInfo TryParseHelperArgumentsMethod =
             typeof(DualSenseBluetoothAudioPacer).GetMethod(
@@ -83,7 +83,16 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        public void Protocol17HelloContainsOnlyVersionAndAuthenticationToken()
+        public void Protocol18RejectsVersion17WithoutPhaseTimingMetrics()
+        {
+            Guid token = Guid.NewGuid();
+            Assert.IsFalse(TryParseHello(BuildCurrentHello(17, token), token,
+                out string error));
+            StringAssert.Contains(error, "Unsupported pacer protocol version 17");
+        }
+
+        [TestMethod]
+        public void Protocol18HelloContainsOnlyVersionAndAuthenticationToken()
         {
             Guid token = new Guid("8c264fb4-ebc7-4e9d-b79b-0911497418d2");
             byte[] payload = BuildCurrentHello(ProtocolVersion, token);
@@ -94,7 +103,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        public void Protocol17RejectsVersion11AndHandleBearingHelloForms()
+        public void Protocol18RejectsVersion11AndHandleBearingHelloForms()
         {
             Guid token = new Guid("ba637939-7cca-47b8-b410-56f743c6ab00");
 
@@ -146,7 +155,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        public void Protocol17RejectsPreCreditProtocol15Hello()
+        public void Protocol18RejectsPreCreditProtocol15Hello()
         {
             Guid token = new Guid("e6e855d5-35ab-4ea3-a777-81cce1fa94b4");
             Assert.IsFalse(TryParseHello(BuildCurrentHello(15, token), token,
@@ -155,7 +164,7 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        public void Protocol17RejectsVersion16WithoutNativeRumblePolicy()
+        public void Protocol18RejectsVersion16WithoutNativeRumblePolicy()
         {
             Guid token = new Guid("af1e69b8-c157-4fc1-a29a-d07db14ce5e8");
             Assert.IsFalse(TryParseHello(BuildCurrentHello(16, token), token,

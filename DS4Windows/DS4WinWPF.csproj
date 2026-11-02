@@ -40,6 +40,11 @@
 		<RepositoryUrl>https://github.com/Pav-Osmolski/DS4Windows</RepositoryUrl>
 	</PropertyGroup>
 
+	<ItemGroup Condition="'$(Issue98DiagnosticsPreview)' == 'true'">
+		<Content Include="..\utils\issue98\*" Link="%(Filename)%(Extension)"
+			CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+	</ItemGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<DefineConstants>$(DefineConstants);WIN64</DefineConstants>

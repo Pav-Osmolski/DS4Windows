@@ -316,7 +316,9 @@ public class DualSenseBluetoothNativeOrderingTests
             {
                 Assert.AreEqual((byte)0x81, kind);
                 mediaCount++;
-                Assert.AreEqual(153, length);
+                Assert.AreEqual(185, length);
+                // Verify the real helper publishes streaming counts, not padding.
+                Assert.IsTrue(BinaryPrimitives.ReadInt64LittleEndian(payload.Slice(169)) > 0);
                 Assert.AreEqual((long)mediaCount, BinaryPrimitives.ReadInt64LittleEndian(payload));
                 Assert.AreEqual((byte)DualSenseBluetoothAudioPacer.AcknowledgementDisposition.Presented, payload[8]);
             }

@@ -172,7 +172,7 @@ namespace DS4Windows.InputDevices
         }
 
         private const string HelperArgument = "--dualsense-bt-audio-pacer-helper";
-        private const int ProtocolVersion = 17;
+        private const int ProtocolVersion = 18;
         private const int PipeConnectTimeoutMilliseconds = 5000;
         private const int HelperReadyTimeoutMilliseconds = 5000;
         private const int HelperStopTimeoutMilliseconds = 3000;
@@ -593,6 +593,11 @@ namespace DS4Windows.InputDevices
         private long helperCompletedWriteCount;
         private long helperSlowCompletionCount;
         private long helperMaximumCompletionTicks;
+        private long helperStartupCompletedWrites;
+        private long helperStartupMaximumCompletionTicks;
+        private long helperStreamingCompletedWrites;
+        private long helperStreamingMaximumCompletionTicks;
+
         private long helperLateSubmissionCount;
         private long helperMaximumSubmissionGapTicks;
         private long helperSlowNativeSubmissionCount;
@@ -683,6 +688,15 @@ namespace DS4Windows.InputDevices
             Interlocked.Read(ref helperCompletedWriteCount);
         public long HelperSlowCompletionCount =>
             Interlocked.Read(ref helperSlowCompletionCount);
+        public long HelperStartupCompletedWrites =>
+            Interlocked.Read(ref helperStartupCompletedWrites);
+        public double HelperStartupMaximumCompletionMilliseconds =>
+            Interlocked.Read(ref helperStartupMaximumCompletionTicks) * 1000.0 / Stopwatch.Frequency;
+        public long HelperStreamingCompletedWrites =>
+            Interlocked.Read(ref helperStreamingCompletedWrites);
+        public double HelperStreamingMaximumCompletionMilliseconds =>
+            Interlocked.Read(ref helperStreamingMaximumCompletionTicks) * 1000.0 / Stopwatch.Frequency;
+
         public double HelperMaximumCompletionMilliseconds =>
             Interlocked.Read(ref helperMaximumCompletionTicks) * 1000.0 /
             Stopwatch.Frequency;
@@ -2270,7 +2284,7 @@ namespace DS4Windows.InputDevices
         private void ProcessAcknowledgementCore(byte[] payload,
             int payloadLength)
         {
-            const int writerMetricCount = 17;
+            const int writerMetricCount = 21;
             int metricOffset = sizeof(long) + sizeof(byte) + sizeof(long);
             if (payloadLength != metricOffset +
                 writerMetricCount * sizeof(long) || payload == null ||
@@ -2351,6 +2365,23 @@ namespace DS4Windows.InputDevices
                     metricOffset, sizeof(long))));
             metricOffset += sizeof(long);
             Interlocked.Exchange(ref helperRealtimeHapticsPresentedCount,
+                BinaryPrimitives.ReadInt64LittleEndian(payload.AsSpan(
+                    metricOffset, sizeof(long))));
+
+            metricOffset += sizeof(long);
+            Interlocked.Exchange(ref helperStartupCompletedWrites,
+                BinaryPrimitives.ReadInt64LittleEndian(payload.AsSpan(
+                    metricOffset, sizeof(long))));
+            metricOffset += sizeof(long);
+            Interlocked.Exchange(ref helperStartupMaximumCompletionTicks,
+                BinaryPrimitives.ReadInt64LittleEndian(payload.AsSpan(
+                    metricOffset, sizeof(long))));
+            metricOffset += sizeof(long);
+            Interlocked.Exchange(ref helperStreamingCompletedWrites,
+                BinaryPrimitives.ReadInt64LittleEndian(payload.AsSpan(
+                    metricOffset, sizeof(long))));
+            metricOffset += sizeof(long);
+            Interlocked.Exchange(ref helperStreamingMaximumCompletionTicks,
                 BinaryPrimitives.ReadInt64LittleEndian(payload.AsSpan(
                     metricOffset, sizeof(long))));
 
@@ -4810,6 +4841,11 @@ namespace DS4Windows.InputDevices
                                 DualSenseBluetoothPhysicalOutputSequence.
                                     ControllerStateSourceOffset);
 
+                            // Diagnostic phase only: streaming includes synthesized
+                            // silence. Never reset totals or affect transport decisions.
+                            if (!controlOnly)
+                                writer.MarkMediaStreamingStarted();
+
                             bool transportFault;
                             bool accepted;
                             if (pairedItem == null)
@@ -5530,7 +5566,7 @@ namespace DS4Windows.InputDevices
             {
                 using global::DS4Windows.MultimediaThreadRegistration mmcss =
                     global::DS4Windows.MultimediaThreadRegistration.EnterProAudio();
-                const int writerMetricCount = 17;
+                const int writerMetricCount = 21;
                 byte[] payload = new byte[
                     sizeof(long) + sizeof(byte) + sizeof(long) +
                     writerMetricCount * sizeof(long)];
@@ -5635,6 +5671,22 @@ namespace DS4Windows.InputDevices
                         BinaryPrimitives.WriteInt64LittleEndian(
                             payload.AsSpan(metricOffset, sizeof(long)),
                             realtimeHaptics.PresentedCount);
+                        metricOffset += sizeof(long);
+                        BinaryPrimitives.WriteInt64LittleEndian(
+                            payload.AsSpan(metricOffset, sizeof(long)),
+                            writer.StartupCompletedWrites);
+                        metricOffset += sizeof(long);
+                        BinaryPrimitives.WriteInt64LittleEndian(
+                            payload.AsSpan(metricOffset, sizeof(long)),
+                            writer.StartupMaximumCompletionTicks);
+                        metricOffset += sizeof(long);
+                        BinaryPrimitives.WriteInt64LittleEndian(
+                            payload.AsSpan(metricOffset, sizeof(long)),
+                            writer.StreamingCompletedWrites);
+                        metricOffset += sizeof(long);
+                        BinaryPrimitives.WriteInt64LittleEndian(
+                            payload.AsSpan(metricOffset, sizeof(long)),
+                            writer.StreamingMaximumCompletionTicks);
                         lock (pipeWriteLock)
                         {
                             WriteFrame(responsePipe,
