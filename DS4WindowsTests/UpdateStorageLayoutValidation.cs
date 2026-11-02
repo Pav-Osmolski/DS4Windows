@@ -113,8 +113,9 @@ internal static class UpdateStorageLayoutValidation
                 VisualStateManager.GoToState(nativeToggle, "Normal", false);
                 DisclosureAnimationTests.Pump(160);
                 sharedHeader.SetValue(hoverKey, false);
+                DisclosureAnimationTests.Pump(190);
                 ThemeConsistencyValidation.Layout(host, 1000, 130);
-                Assert.AreEqual((byte)0, ((System.Windows.Media.SolidColorBrush)chrome.Background).Color.A,
+                Assert.AreEqual(0d, chrome.Opacity, .01,
                     "The header highlight must clear after leaving both header and arrow.");
                 var toggleMethod = typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle",
                     System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
