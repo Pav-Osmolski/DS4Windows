@@ -8,6 +8,23 @@ namespace DS4WindowsTests;
 public class VirtualHapticsEndpointMonitorTests
 {
     [TestMethod]
+    public void StalePropertyStoresDoNotHideTheCurrentEndpointsDisabledStateOrRecovery()
+    {
+        DeviceState current = DeviceState.Disabled;
+        Func<DeviceState?>[] readers = [
+            () => throw new System.Runtime.InteropServices.COMException("Stale endpoint", unchecked((int)0xE000020B)),
+            () => null, // An unrelated readable endpoint is excluded by the port match.
+            () => current,
+            () => throw new System.Runtime.InteropServices.COMException("Another stale endpoint")
+        ];
+        Assert.AreEqual(true, VirtualHapticsEndpointMonitor.EvaluateEndpointReaders(readers));
+        current = DeviceState.Active;
+        Assert.AreEqual(false, VirtualHapticsEndpointMonitor.EvaluateEndpointReaders(readers));
+        Assert.IsNull(VirtualHapticsEndpointMonitor.EvaluateEndpointReaders(readers.Take(2)), "Unreadable entries alone are not evidence of a disabled controller.");
+        Assert.IsNull(VirtualHapticsEndpointMonitor.EvaluateEndpointReaders(readers.Append(() => DeviceState.Disabled)), "Ambiguous exact-port matches must remain unknown.");
+    }
+
+    [TestMethod]
     public void OnlyOneConfirmedDisabledPlaybackEndpointProducesWarning()
     {
         Assert.AreEqual(true, VirtualHapticsEndpointMonitor.EvaluateStates([DeviceState.Disabled]));

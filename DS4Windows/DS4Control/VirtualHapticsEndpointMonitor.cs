@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NAudio.CoreAudioApi;
@@ -73,16 +74,28 @@ internal sealed class VirtualHapticsEndpointMonitor
     private static bool? ReadDisabled(int port)
     {
         using var enumerator = new MMDeviceEnumerator();
-        var states = new List<DeviceState>();
-        foreach (var endpoint in enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.All))
-        {
-            using (endpoint)
+        return EvaluateEndpointReaders(enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.All)
+            .Select(endpoint => (Func<DeviceState?>)(() =>
             {
-                if (DualSenseAudioPassthrough.IsDualSenseEndpoint(endpoint) &&
-                    DualSenseAudioPassthrough.TryGetEndpointUsbipPort(endpoint, out int endpointPort) &&
-                    endpointPort == port)
-                    states.Add(endpoint.State);
+                using (endpoint)
+                {
+                    return DualSenseAudioPassthrough.IsDualSenseEndpoint(endpoint) &&
+                        DualSenseAudioPassthrough.TryGetEndpointUsbipPort(endpoint, out int endpointPort) &&
+                        endpointPort == port ? endpoint.State : null;
+                }
+            })));
+    }
+
+    internal static bool? EvaluateEndpointReaders(IEnumerable<Func<DeviceState?>> readers)
+    {
+        var states = new List<DeviceState>();
+        foreach (var read in readers)
+        {
+            try
+            {
+                if (read() is DeviceState state) states.Add(state);
             }
+            catch { /* A stale endpoint's property store must not hide another endpoint's confirmed state. */ }
         }
         return EvaluateStates(states);
     }
