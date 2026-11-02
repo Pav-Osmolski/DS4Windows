@@ -26,7 +26,7 @@ if (-not $PSBoundParameters.ContainsKey('ChangedFiles') -and $BaseCommit -match 
     }
 }
 $docsOnly = @($ChangedFiles).Count -gt 0 -and @($ChangedFiles | Where-Object {
-    $_ -cnotmatch '^(docs/|website/|README\.md$|CHANGELOG\.md$|contributors\.md$|contributing\.md$|zensical\.toml$)'
+    $_ -cnotmatch '^(docs/|website/|README\.md$|CHANGELOG\.md$|contributors\.md$|contributing\.md$|zensical\.toml$|\.github/ISSUE_TEMPLATE/[^/]+\.(yml|yaml|md)$)'
 }).Count -eq 0
 $infrastructure = @($ChangedFiles | Where-Object {
     $_ -cmatch '^(installer/|extras/|utils/|\.github/workflows/|global\.json$|NuGet\.config$|Directory\.)' -or
@@ -37,7 +37,7 @@ if ($EventName -eq 'workflow_dispatch') {
     $reason = 'Explicit preview/rebuild request; run the full test gate.'
 } elseif ($docsOnly) {
     $test = $false
-    $reason = 'Documentation-only changes: text/site checks cover this source.'
+    $reason = 'Documentation/issue-template changes: text, form and site checks cover this source.'
 } elseif ($EventName -eq 'push' -and $RefName -ceq $DefaultBranch) {
     $package = 'installer'
     $reason = 'Validate and compose the exact main release candidate once.'
