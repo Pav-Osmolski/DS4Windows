@@ -110,6 +110,34 @@ Test native game haptics separately from Audio Haptics capture. Use the
 [controller audio guide](controller-audio.md) for endpoint/mute setup and
 [compatibility guide](controller-compatibility.md) for hardware limits.
 
+### DualSense haptics stop after disabling a Windows audio device
+
+Keep **DS4Windows Controller N Audio** enabled in Windows Sound when using
+virtual DualSense or DualSense Edge output, over USB or Bluetooth. Native game
+haptics use the actuator channels of this virtual playback device; disabling it
+also prevents those haptics from reaching DS4Windows. Ordinary buttons and sticks,
+and manual rumble tests, can still work.
+
+1. Open **Windows Sound settings > More sound settings > Playback** (or run
+   `mmsys.cpl`). Right-click the device list and enable **Show Disabled Devices**.
+2. Enable the **DS4Windows Controller N Audio** device for the affected controller.
+3. Keep your usual headphones or speakers selected as both **Default Device** and
+   **Default Communications Device**. The controller playback device does not need
+   to be either default for game-authored haptics. If the game has a separate
+   controller-audio selector, keep it assigned to the matching controller device.
+4. Restart the game if it does not rediscover the enabled playback device.
+
+The **DS4Windows Controller N Microphone** recording device is separate. It can
+remain disabled when you do not use controller microphone forwarding; it is not
+required for game haptics. Do not disable the playback device to silence or avoid
+using the microphone.
+
+The missing haptics in [issue #98](https://github.com/Pav-Osmolski/DS4Windows/issues/98#issuecomment-6578485972)
+were resolved by re-enabling playback. The before/after capture used the same
+profile and showed rear-channel haptics returning with playback enabled. No
+Bluetooth adapter replacement, driver reinstall or power-setting change was
+needed for that case.
+
 ### Delayed or weak DualSense vibration
 
 Update to **5.0.34 or later**, including its matching bundled VIIPER backend.

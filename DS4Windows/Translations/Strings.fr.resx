@@ -6774,4 +6774,5 @@ Le backup : </value>
   <data name="SpecialActionEdit.Behaviour" xml:space="preserve"><value>Action settings</value></data>
   <data name="SpecialActionEdit.GestureName" xml:space="preserve"><value>Macro name (optional)</value></data>
   <data name="SpecialActionEdit.GestureManagementHelp" xml:space="preserve"><value>Keep gestures together in one action. Uncheck a gesture to disable it without deleting its macro or name. Matching separate actions share tap recognition when their buttons and timing are identical.</value></data>
+  <data name="UI_0600A878D7015ABB" xml:space="preserve"><value>Activez le périphérique de lecture DS4Windows Audio de cette manette dans les paramètres audio de Windows pour rétablir le retour haptique des jeux. Votre casque peut rester la sortie par défaut.</value></data>
 </root>

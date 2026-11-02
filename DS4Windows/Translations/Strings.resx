@@ -8472,4 +8472,5 @@ X axis: {0}, Y axis: {1}</value>
   <data name="SpecialActionEdit.Behaviour" xml:space="preserve"><value>Action settings</value></data>
   <data name="SpecialActionEdit.GestureName" xml:space="preserve"><value>Macro name (optional)</value></data>
   <data name="SpecialActionEdit.GestureManagementHelp" xml:space="preserve"><value>Keep gestures together in one action. Uncheck a gesture to disable it without deleting its macro or name. Matching separate actions share tap recognition when their buttons and timing are identical.</value></data>
+  <data name="UI_0600A878D7015ABB" xml:space="preserve"><value>Enable this controller's DS4Windows Audio playback device in Windows Sound to restore game haptics. Your headphones can remain the default output.</value></data>
 </root>

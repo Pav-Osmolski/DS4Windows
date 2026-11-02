@@ -35,6 +35,12 @@ rumble test. See [compatibility](controller-compatibility.md).
 
 ### USB native haptics
 
+**Keep the virtual playback device enabled on both USB and Bluetooth.**
+`DS4Windows Controller N Audio` carries game-authored haptics as well as controller
+audio. Your normal headphones/speakers can remain the Windows default output;
+the controller microphone recording device is not required for haptics.
+See [disabled-playback troubleshooting](troubleshooting.md#dualsense-haptics-stop-after-disabling-a-windows-audio-device).
+
 From 5.0.30, DS4Windows uses a separate USB route for the
 native waveform channels of the matching virtual DualSense/Edge Windows audio
 endpoint. It renders only the two actuator channels to the matching physical

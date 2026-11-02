@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Explain when the current virtual DualSense/Edge playback device is disabled in Windows Sound, preventing native game haptics despite working controller input. Check the exact output asynchronously after startup and clear the warning on recovery; leave Windows defaults and device settings unchanged. Document keeping playback enabled with headphones as the default output and the separate, optional microphone endpoint. Thanks [@Darkii-0](https://github.com/Darkii-0) for isolating the cause and providing before/after diagnostics ([#98](https://github.com/Pav-Osmolski/DS4Windows/issues/98)).
 
 ## Released
 
