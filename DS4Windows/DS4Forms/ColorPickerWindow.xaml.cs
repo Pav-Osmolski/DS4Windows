@@ -43,7 +43,12 @@ namespace DS4WinWPF.DS4Forms
         public ColorPickerWindow()
         {
             InitializeComponent();
+            Title = global::DS4Windows.UiText.Get("Choose colour");
+            hint.Text = global::DS4Windows.UiText.Get("Changes are previewed immediately.");
+            closeButton.Content = global::DS4Windows.UiText.Get("Close");
         }
+
+        private void Close_Click(object sender, RoutedEventArgs e) => Close();
 
         private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {

@@ -34,6 +34,18 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private ObservableCollection<SpecialActionItem> actionCol =
             new ObservableCollection<SpecialActionItem>();
         private int specialActionIndex = -1;
+        private readonly LatestPreferenceWriter<string[]> orderWriter;
+        internal Func<SettingsStorage> Storage = () => SettingsStorage.Current;
+        internal Task OrderSaved => orderWriter.Saved;
+        public bool CanMoveUp => currentSAItem != null && actionCol.IndexOf(currentSAItem) > 0;
+        public bool CanMoveDown => currentSAItem != null && actionCol.IndexOf(currentSAItem) is int index && index >= 0 && index < actionCol.Count - 1;
+        public event EventHandler CanMoveUpChanged;
+        public event EventHandler CanMoveDownChanged;
+        private void RefreshMoveState()
+        {
+            CanMoveUpChanged?.Invoke(this, EventArgs.Empty);
+            CanMoveDownChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         public ObservableCollection<SpecialActionItem> ActionCol { get => actionCol; }
         public int DeviceNum { get => deviceNum; }
@@ -56,6 +68,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             set
             {
                 currentSAItem = value;
+                RefreshMoveState();
             }
         }
 
@@ -65,6 +78,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public SpecialActionsListViewModel(int deviceNum)
         {
             this.deviceNum = deviceNum;
+            orderWriter = new(order => Storage().SetSpecialActionOrder(order),
+                error => NLog.LogManager.GetLogger("SpecialActions").Warn(error, "Could not remember action display order."));
 
             SpecialActionIndexChanged += SpecialActionsListViewModel_SpecialActionIndexChanged;
             actionCol.CollectionChanged += ActionCol_CollectionChanged;
@@ -73,28 +88,36 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private void ActionCol_CollectionChanged(object sender,
             System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            if (e.Action is System.Collections.Specialized.NotifyCollectionChangedAction.Remove or
+                System.Collections.Specialized.NotifyCollectionChangedAction.Move or
+                System.Collections.Specialized.NotifyCollectionChangedAction.Add or
+                System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
             {
-                for (int i = e.OldStartingIndex; i < actionCol.Count; i++)
+                for (int i = 0; i < actionCol.Count; i++)
                 {
                     // Replace old index with updated index
                     actionCol[i].Index = i;
                 }
             }
+            RefreshMoveState();
         }
 
         private void SpecialActionsListViewModel_SpecialActionIndexChanged(object sender, EventArgs e)
         {
             ItemSelectedChanged?.Invoke(this, EventArgs.Empty);
+            RefreshMoveState();
         }
 
         public void LoadActions(bool newProfile = false)
+            => LoadActions(Global.GetActions(), newProfile);
+
+        internal void LoadActions(IEnumerable<SpecialAction> actions, bool newProfile = false)
         {
             actionCol.Clear();
 
             List<string> pactions = Global.ProfileActions[deviceNum];
             int idx = 0;
-            foreach (SpecialAction action in Global.GetActions())
+            foreach (SpecialAction action in actions)
             {
                 string displayName = GetActionDisplayName(action);
                 SpecialActionItem item = new SpecialActionItem(action, displayName, idx);
@@ -111,7 +134,56 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 actionCol.Add(item);
                 idx++;
             }
+            try
+            {
+                var order = Storage().SpecialActionOrder;
+                var ranks = order.Select((name, rank) => (name, rank)).ToDictionary(x => x.name, x => x.rank, StringComparer.Ordinal);
+                Arrange(actionCol.OrderBy(item => ranks.TryGetValue(item.ActionName, out int rank) ? rank : int.MaxValue).ToArray());
+            }
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+            { NLog.LogManager.GetLogger("SpecialActions").Warn(error, "Could not read action display order."); }
         }
+
+        private void Arrange(SpecialActionItem[] desired)
+        {
+            var selected = currentSAItem;
+            for (int i = 0; i < desired.Length; i++)
+            {
+                int current = actionCol.IndexOf(desired[i]);
+                if (current != i) actionCol.Move(current, i);
+            }
+            CurrentSpecialActionItem = actionCol.Contains(selected) ? selected : null;
+            SpecialActionIndex = actionCol.IndexOf(CurrentSpecialActionItem);
+        }
+
+        public void MoveSelectedAction(int direction)
+        {
+            int index = actionCol.IndexOf(currentSAItem);
+            int target = index + Math.Sign(direction);
+            if (direction == 0 || index < 0 || target < 0 || target >= actionCol.Count) return;
+            var selected = currentSAItem;
+            actionCol.Move(index, target);
+            CurrentSpecialActionItem = selected;
+            SpecialActionIndex = target;
+            RememberOrder();
+        }
+
+        public void SortActions(string property, bool descending)
+        {
+            Func<SpecialActionItem, string> key = property switch
+            {
+                nameof(SpecialActionItem.ActionName) => item => item.ActionName,
+                nameof(SpecialActionItem.Controls) => item => item.Controls,
+                nameof(SpecialActionItem.TypeName) => item => item.TypeName,
+                _ => null,
+            };
+            if (key == null) return;
+            Arrange((descending ? actionCol.OrderByDescending(key, StringComparer.CurrentCultureIgnoreCase) :
+                actionCol.OrderBy(key, StringComparer.CurrentCultureIgnoreCase)).ToArray());
+            RememberOrder();
+        }
+
+        internal void RememberOrder() => orderWriter.Queue(actionCol.Select(item => item.ActionName).ToArray());
 
         public SpecialActionItem CreateActionItem(SpecialAction action)
         {
@@ -172,15 +244,22 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 }
             }
 
-            Global.ProfileActions[deviceNum] = pactions;
+            // Display sorting must not change action execution priority. Keep
+            // existing enabled order and append only newly enabled actions in
+            // the stable global action order.
+            var enabled = pactions.ToHashSet(StringComparer.Ordinal);
+            Global.ProfileActions[deviceNum] = Global.ProfileActions[deviceNum]
+                .Concat(Global.GetActions().Select(action => action.name))
+                .Concat(pactions)
+                .Where(enabled.Contains).Distinct(StringComparer.Ordinal).ToList();
             Global.CacheExtraProfileInfo(deviceNum);
         }
 
         public void RemoveAction(SpecialActionItem item)
         {
             Global.RemoveAction(item.SpecialAction.name);
-            int itemIndex = item.Index;
-            actionCol.RemoveAt(itemIndex);
+            actionCol.Remove(item);
+            RememberOrder();
             Global.ProfileActions[deviceNum].Remove(item.SpecialAction.name);
             Global.CacheExtraProfileInfo(deviceNum);
         }

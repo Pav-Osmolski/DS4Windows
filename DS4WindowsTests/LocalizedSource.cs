@@ -12,7 +12,11 @@ internal static class LocalizedSource
     {
         var document = XDocument.Load(path);
         foreach (var attribute in document.Descendants().Attributes())
+        {
+            if (attribute.IsNamespaceDeclaration && attribute.Value == "clr-namespace:DS4WinWPF.DS4Forms.Themes")
+                attribute.Value += ";assembly=DS4Windows";
             if (attribute.Value.StartsWith("{lex:Loc Strings:UI_")) attribute.Value = Resolve(attribute.Value);
+        }
         return document;
     }
 
@@ -23,6 +27,8 @@ internal static class LocalizedSource
     {
         foreach (var attribute in element.DescendantsAndSelf().Attributes().ToArray())
         {
+            if (attribute.IsNamespaceDeclaration && attribute.Value == "clr-namespace:DS4WinWPF.DS4Forms.Themes")
+                attribute.Value += ";assembly=DS4Windows";
             if (attribute.Name.NamespaceName == "http://wpflocalizeextension.codeplex.com") attribute.Remove();
             else if (attribute.Value.StartsWith("{lex:Loc ")) attribute.Value = Resolve(attribute.Value);
         }

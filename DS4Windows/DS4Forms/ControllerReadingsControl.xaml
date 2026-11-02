@@ -43,6 +43,7 @@
                 <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
                         <TextBlock Text="{lex:Loc Strings:UI_674E595229EA2709}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_E4DB9A5AD7E50B2E}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Height="18" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
                         <Viewbox Width="170" Height="170" Stretch="Uniform" Margin="0,8,0,16" HorizontalAlignment="Center">
                             <Canvas x:Name="lsCanvas" Width="130" Height="130" ClipToBounds="True">
                                 <Rectangle Width="130" Height="130" Stroke="{DynamicResource BorderColor}"/>
@@ -79,6 +80,7 @@
                 <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
                         <TextBlock Text="{lex:Loc Strings:UI_20FCDBFB7BC65BDC}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_E4DB9A5AD7E50B2E}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Height="18" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
                         <Viewbox Width="170" Height="170" Stretch="Uniform" Margin="0,8,0,16" HorizontalAlignment="Center">
                             <Canvas x:Name="rsCanvas" Width="130" Height="130" ClipToBounds="True">
                                 <Rectangle Width="{Binding Path=Width, ElementName=rsCanvas}" Height="{Binding Path=Height, ElementName=rsCanvas}" Stroke="{DynamicResource BorderColor}"/>
@@ -115,7 +117,7 @@
                 <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
                         <TextBlock Text="{lex:Loc Strings:UI_EDF61AF9E1947310}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-                        <TextBlock Text="{lex:Loc Strings:UI_CCBE6D28696ECE54}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
+                        <TextBlock Text="{lex:Loc Strings:UI_CCBE6D28696ECE54}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Height="18" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
                         <Viewbox Width="170" Height="170" Stretch="Uniform" Margin="0,8,0,16" HorizontalAlignment="Center">
                             <Canvas x:Name="sixaxisCanvas" Width="130" Height="130" ClipToBounds="True">
                                 <Rectangle Width="{Binding Path=Width, ElementName=sixaxisCanvas}" Height="{Binding Path=Height, ElementName=sixaxisCanvas}" Stroke="{DynamicResource BorderColor}"/>

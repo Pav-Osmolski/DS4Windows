@@ -483,7 +483,10 @@
                                     <Button x:Name="removeActionBtn" Content="{lex:Loc RemoveAction}" Style="{DynamicResource BridgeSecondaryButtonStyle}" IsEnabled="{Binding ItemSelected}" Margin="0,0,8,8" Click="RemoveActionBtn_Click" />
                                     <Button Content="{lex:Loc ImportSpecialActions}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,8" Click="ImportSpecialActions_OnClick" />
                                     <Button Content="{lex:Loc ExportSpecialActions}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,8" Click="ExportSpecialActions_OnClick" />
+                                    <Button Content="{lex:Loc MoveUp}" Style="{DynamicResource BridgeSecondaryButtonStyle}" IsEnabled="{Binding CanMoveUp}" Margin="0,0,8,8" Click="MoveActionUp_Click"/>
+                                    <Button Content="{lex:Loc MoveDown}" Style="{DynamicResource BridgeSecondaryButtonStyle}" IsEnabled="{Binding CanMoveDown}" Margin="0,0,8,8" Click="MoveActionDown_Click"/>
                                 </WrapPanel>
+                                <TextBlock Text="{lex:Loc Strings:UI_E681FDD85EBE9480}" Foreground="{DynamicResource MutedForegroundColor}" Margin="0,4,0,0" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Border>
 
@@ -514,7 +517,8 @@
                                   SelectedIndex="{Binding SpecialActionIndex}"
                                   SelectedItem="{Binding CurrentSpecialActionItem,Mode=OneWayToSource}"
                                   Margin="0,12,0,0" AutoGenerateColumns="False" IsReadOnly="True"
-                                  CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False"
+                                  CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="True"
+                                  Sorting="SpecialActions_Sorting" MouseDoubleClick="SpecialActions_DoubleClick"
                                   CanUserReorderColumns="False" SelectionMode="Single" SelectionUnit="FullRow"
                                   HeadersVisibility="Column" GridLinesVisibility="Horizontal"
                                   HorizontalGridLinesBrush="{DynamicResource BorderColor}"
@@ -551,7 +555,7 @@
                                 </Style>
                             </DataGrid.Resources>
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="{lex:Loc Strings:UI_92C1CDFDF4CB9CF6}" Width="Auto" MinWidth="80">
+                                <DataGridTemplateColumn Header="{lex:Loc Strings:UI_92C1CDFDF4CB9CF6}" Width="Auto" MinWidth="80" CanUserSort="False">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <!-- Update before Click exports the list, rather than waiting for a DataGrid row commit. -->
@@ -561,9 +565,9 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="{lex:Loc Name}" Binding="{Binding ActionName}" Width="2*" MinWidth="160" ElementStyle="{StaticResource ActionTextStyle}" />
-                                <DataGridTextColumn Header="{lex:Loc Trigger}" Binding="{Binding Controls}" Width="2*" MinWidth="160" ElementStyle="{StaticResource ActionTextStyle}" />
-                                <DataGridTextColumn Header="{lex:Loc Action}" Binding="{Binding TypeName}" Width="*" MinWidth="120" ElementStyle="{StaticResource ActionTextStyle}" />
+                                <DataGridTextColumn Header="{lex:Loc Name}" Binding="{Binding ActionName}" SortMemberPath="ActionName" Width="2*" MinWidth="160" ElementStyle="{StaticResource ActionTextStyle}" />
+                                <DataGridTextColumn Header="{lex:Loc Trigger}" Binding="{Binding Controls}" SortMemberPath="Controls" Width="2*" MinWidth="160" ElementStyle="{StaticResource ActionTextStyle}" />
+                                <DataGridTextColumn Header="{lex:Loc Action}" Binding="{Binding TypeName}" SortMemberPath="TypeName" Width="*" MinWidth="120" ElementStyle="{StaticResource ActionTextStyle}" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </DockPanel>

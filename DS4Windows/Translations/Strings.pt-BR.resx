@@ -6750,4 +6750,8 @@ O backup: </value>
   <data name="SpecialActionEdit.Behaviour" xml:space="preserve"><value>Action settings</value></data>
   <data name="SpecialActionEdit.GestureName" xml:space="preserve"><value>Macro name (optional)</value></data>
   <data name="SpecialActionEdit.GestureManagementHelp" xml:space="preserve"><value>Keep gestures together in one action. Uncheck a gesture to disable it without deleting its macro or name. Matching separate actions share tap recognition when their buttons and timing are identical.</value></data>
+  <data name="UI_0600A878D7015ABB" xml:space="preserve"><value>Ative o dispositivo de reprodução DS4Windows Audio deste controle nas configurações de som do Windows para restaurar a resposta háptica dos jogos. Seus fones de ouvido podem continuar como saída padrão.</value></data>
+  <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Escolher cor</value></data>
+  <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>As alterações são visualizadas imediatamente.</value></data>
+  <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Entrada e saída X/Y em tempo real.</value></data>
 </root>

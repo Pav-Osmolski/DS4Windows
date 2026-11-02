@@ -16,11 +16,30 @@ namespace DS4WindowsTests
             ControllerRuntimeLaneState speaker = ControllerRuntimeLaneState.NotRequired,
             ControllerRuntimeLaneState microphone = ControllerRuntimeLaneState.NotRequired,
             ControllerRuntimeLaneState audioHaptics = ControllerRuntimeLaneState.NotRequired,
-            bool virtualFailed = false, bool physicalCleanupQuarantined = false, bool profileSelected = true) =>
+            bool virtualFailed = false, bool physicalCleanupQuarantined = false, bool profileSelected = true,
+            bool virtualHapticsPlaybackDisabled = false) =>
             new ControllerRuntimeSignals(present, synced, alive,
                 virtualRequired, virtualConnected, virtualTypeMatches,
                 haptics, speaker, microphone, audioHaptics, "DualSense", virtualFailed,
-                physicalCleanupQuarantined, profileSelected);
+                physicalCleanupQuarantined, profileSelected, virtualHapticsPlaybackDisabled);
+
+        [TestMethod]
+        public void DisabledVirtualPlaybackExplainsHapticsFailureAndClearsOnRecovery()
+        {
+            var status = ControllerRuntimeStatusPolicy.Evaluate(Signals(virtualHapticsPlaybackDisabled: true));
+            Assert.IsTrue(status.NeedsAttention);
+            StringAssert.Contains(status.Detail, "Windows Sound");
+            StringAssert.Contains(status.Detail, "headphones can remain the default");
+            Assert.IsTrue(ControllerRuntimeStatusPolicy.Evaluate(Signals()).IsReady);
+            Assert.IsTrue(ControllerRuntimeStatusPolicy.Evaluate(Signals(
+                virtualRequired: false, virtualHapticsPlaybackDisabled: true)).IsReady);
+            Assert.AreEqual(ControllerStartupStage.CreatingVirtualController,
+                ControllerRuntimeStatusPolicy.Evaluate(Signals(
+                    virtualConnected: false, virtualHapticsPlaybackDisabled: true)).Stage);
+            Assert.AreEqual(ControllerStartupStage.ProfileRequired,
+                ControllerRuntimeStatusPolicy.Evaluate(Signals(
+                    profileSelected: false, virtualHapticsPlaybackDisabled: true)).Stage);
+        }
 
         [TestMethod]
         [DataRow(false)]

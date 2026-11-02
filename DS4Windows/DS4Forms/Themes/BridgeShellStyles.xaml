@@ -60,36 +60,40 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Chrome" CornerRadius="6" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                    <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <Border x:Name="HoverSurface" CornerRadius="6" Background="{DynamicResource DisclosureHoverColor}" Opacity="0" IsHitTestVisible="False"/>
+                        <Border x:Name="PressedSurface" CornerRadius="6" Background="{DynamicResource DisclosurePressedColor}" Opacity="0" IsHitTestVisible="False"/>
                         <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="Center" RecognizesAccessKey="True" />
-                    </Border>
+                    </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource DisclosureHoverColor}" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource DisclosurePressedColor}" />
-                        </Trigger>
+                        <!-- Include the sibling circular arrow in the same hover
+                             surface. Animate opacity, never shared theme brushes. -->
+                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" Value="True">
+                            <DataTrigger.EnterActions><BeginStoryboard><Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="{x:Static theme:DisclosureVisualStateManager.HoverDuration}"/>
+                            </Storyboard></BeginStoryboard></DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions><BeginStoryboard><Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="{x:Static theme:DisclosureVisualStateManager.HoverDuration}"/>
+                            </Storyboard></BeginStoryboard></DataTrigger.ExitActions>
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" Value="True"/>
+                                <Condition Binding="{Binding IsMouseCaptureWithin, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.EnterActions><BeginStoryboard><Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="PressedSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="{x:Static theme:DisclosureVisualStateManager.PressDuration}"/>
+                            </Storyboard></BeginStoryboard></MultiDataTrigger.EnterActions>
+                            <MultiDataTrigger.ExitActions><BeginStoryboard><Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="PressedSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="{x:Static theme:DisclosureVisualStateManager.ReleaseDuration}"/>
+                            </Storyboard></BeginStoryboard></MultiDataTrigger.ExitActions>
+                        </MultiDataTrigger>
                         <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5" /></Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <!-- The native arrow is a sibling, so use their shared header's
-                 hover state to keep the full rounded surface highlighted. -->
-            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" Value="True">
-                <Setter Property="Background" Value="{DynamicResource DisclosureHoverColor}" />
-            </DataTrigger>
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" Value="True" />
-                    <Condition Binding="{Binding IsMouseCaptureWithin, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}" Value="True" />
-                </MultiDataTrigger.Conditions>
-                <Setter Property="Background" Value="{DynamicResource DisclosurePressedColor}" />
-            </MultiDataTrigger>
-        </Style.Triggers>
     </Style>
 
     <Style x:Key="BridgePrimaryButtonStyle" TargetType="Button">
