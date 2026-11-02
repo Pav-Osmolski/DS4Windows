@@ -5,12 +5,19 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+There are no unreleased changes.
+
+## Released
+
+### [5.0.61](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.61) - 2026-11-02
+
 - Add remembered Special Actions display ordering with Move Up/Down, sortable Name/Trigger/Action headings and double-click editing. Preserve enabled selections and execution order independently of presentation. Thanks [@Masterload1975](https://github.com/Masterload1975) for the request ([#105](https://github.com/Pav-Osmolski/DS4Windows/issues/105)).
 - Smooth Settings & profiles hover/press surfaces, refresh the shared colour picker with a proper title, themed palette/RGB/hex layout and a clear Close action, and align stick/motion plots with concise one-line descriptions.
 - Audit all 24 closed issue discussions and expand troubleshooting with confirmed fixes, current configuration checks and source links. Preserve uncertainty for reports closed without a confirmed cause, including the later Bluetooth-adapter workaround in [#95](https://github.com/Pav-Osmolski/DS4Windows/issues/95).
 - Explain when the current virtual DualSense/Edge playback device is disabled in Windows Sound, preventing native game haptics despite working controller input. Check the exact output asynchronously after startup and clear the warning on recovery; leave Windows defaults and device settings unchanged. Document keeping playback enabled with headphones as the default output and the separate, optional microphone endpoint. Thanks [@Darkii-0](https://github.com/Darkii-0) for isolating the cause and providing before/after diagnostics ([#98](https://github.com/Pav-Osmolski/DS4Windows/issues/98)).
+- Build with the pinned .NET SDK 10.0.403 and refresh SDK-dependent package locks, including the installer helper's ILLink tasks ([#106](https://github.com/Pav-Osmolski/DS4Windows/pull/106)). VIIPER remains at 0.1.17 and USB/IP at 0.9.8.1.
 
-## Released
+The profile controls, status guidance and documentation audit are included in [#108](https://github.com/Pav-Osmolski/DS4Windows/pull/108).
 
 ### [5.0.60](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.60) - 2026-11-01
 
