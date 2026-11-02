@@ -229,9 +229,11 @@ public sealed class Switch2ProfileSectionLayoutTests
         {
             Assert.AreEqual(1, names.Count(name => name == reference), reference);
         }
-        // Moving controls into cards must not introduce another namescope/template.
-        Assert.IsFalse(calibration.Ancestors().Any(node =>
-            node.Name == Wpf + "DataTemplate" || node.Name == Wpf + "ControlTemplate"));
+        // The page itself may be deferred. Cards within it must still share
+        // that one namescope so their ElementName bindings can resolve.
+        var pageTemplate = tab.Descendants(Wpf + "DataTemplate").First();
+        Assert.AreSame(pageTemplate, calibration.Ancestors(Wpf + "DataTemplate").Single());
+        Assert.IsFalse(calibration.Ancestors(Wpf + "ControlTemplate").Any());
     }
 
     [TestMethod]

@@ -140,6 +140,34 @@ internal sealed class SettingsStorage
         RejectLink(file);
         Save(file, new ProfileViewPreference { View = value });
     }
+    private sealed class SpecialActionOrderPreference
+    {
+        public int Version { get; set; } = 1;
+        public string[] Names { get; set; } = Array.Empty<string>();
+    }
+    internal string[] SpecialActionOrder
+    {
+        get
+        {
+            string file = Path.Combine(stateDirectory, "special-actions-order.json");
+            if (!File.Exists(file)) return Array.Empty<string>();
+            RejectLink(file);
+            if (new FileInfo(file).Length > 1024 * 1024) throw new InvalidDataException("Action order preference is too large.");
+            var preference = JsonSerializer.Deserialize<SpecialActionOrderPreference>(File.ReadAllText(file));
+            return preference?.Version == 1 ? NormalizeActionOrder(preference.Names) : Array.Empty<string>();
+        }
+    }
+    internal void SetSpecialActionOrder(string[] names)
+    {
+        RejectLink(stateDirectory);
+        string file = Path.Combine(stateDirectory, "special-actions-order.json");
+        RejectLink(file);
+        Save(file, new SpecialActionOrderPreference { Names = NormalizeActionOrder(names) });
+    }
+    private static string[] NormalizeActionOrder(string[] names) =>
+        (names ?? Array.Empty<string>()).Where(name => !string.IsNullOrWhiteSpace(name))
+            .Distinct(StringComparer.Ordinal).Take(10000).ToArray();
+
     internal (int Keep, bool Automatic) UpdateRetention
     {
         get

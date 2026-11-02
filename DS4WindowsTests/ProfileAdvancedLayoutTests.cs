@@ -83,6 +83,9 @@ public sealed class ProfileAdvancedLayoutTests
             : source.Descendants(wpf + "TabItem")
                 .Single(e => LocalizedSource.Resolve((string)e.Attribute("Header")) == (page == "AxisConfig" ? "Axis Config" : page));
         XElement content = selected.Elements().First(e => !e.Name.LocalName.EndsWith(".Resources"));
+        // The production host defers construction, not the page's geometry.
+        if (content.Name.LocalName == "DeferredProfilePage")
+            content = content.Descendants(wpf + "DataTemplate").First().Elements().Single();
         var markup = content.Name == wpf + "Grid" ? new XElement(content) : new XElement(wpf + "Grid", new XElement(content));
         // Render the actual shared axial layout without its controller wiring.
         foreach (XElement axial in markup.Descendants().Where(e => e.Name.LocalName == "AxialStickUserControl").ToArray())
@@ -100,7 +103,7 @@ public sealed class ProfileAdvancedLayoutTests
         foreach (XElement element in markup.DescendantsAndSelf())
         foreach (XAttribute attribute in element.Attributes().ToArray())
         {
-            if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged" or "Loaded" or "Unloaded" or "SizeChanged" or "Checked" or "Unchecked" || attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
+            if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged" or "Loaded" or "Unloaded" or "SizeChanged" or "Checked" or "Unchecked" or "Sorting" or "MouseDoubleClick" || attribute.Name.NamespaceName == "http://schemas.microsoft.com/expression/blend/2008") attribute.Remove();
             else if (attribute.Value.StartsWith("{lex:Loc "))
             {
                 attribute.Value = LocalizedSource.Resolve(attribute.Value);

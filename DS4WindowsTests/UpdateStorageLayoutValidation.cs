@@ -70,13 +70,18 @@ internal static class UpdateStorageLayoutValidation
                 var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey",
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).GetValue(null);
                 header.SetValue(hoverKey, true);
+                var sharedHeader = (Grid)System.Windows.Media.VisualTreeHelper.GetParent(header);
+                sharedHeader.SetValue(hoverKey, true);
+                DisclosureAnimationTests.Pump(190);
                 ThemeConsistencyValidation.Layout(host, 1000, 130);
-                var chrome = (Border)header.Template.FindName("Chrome", header);
+                var chrome = (Border)header.Template.FindName("HoverSurface", header);
+                Assert.AreEqual(1d, chrome.Opacity, .01, "Header hover should finish its transition.");
                 Assert.AreEqual(((System.Windows.Media.SolidColorBrush)application.FindResource("DisclosureHoverColor")).Color,
                     ((System.Windows.Media.SolidColorBrush)chrome.Background).Color, "Disclosure hover must use the subtle themed surface, not the selected-item fill.");
                 Assert.IsNotNull(header.FocusVisualStyle, "Keyboard navigation needs its own visible focus outline.");
                 Save("profiles-collapsed-hover", host, 1000, 130);
                 header.SetValue(hoverKey, false);
+                sharedHeader.SetValue(hoverKey, false);
                 // Exercise the native toggle's command, including both state
                 // synchronization and persistence, rather than only the header.
                 var nativeToggle = ThemeConsistencyValidation.Visuals(indicator).OfType<System.Windows.Controls.Primitives.ToggleButton>().Single();
@@ -85,8 +90,8 @@ internal static class UpdateStorageLayoutValidation
                 nativeToggle.SetValue(hoverKey, true);
                 VisualStateManager.GoToState(nativeToggle, "MouseOver", false);
                 DisclosureAnimationTests.Pump(160);
-                var sharedHeader = (Grid)System.Windows.Media.VisualTreeHelper.GetParent(header);
                 sharedHeader.SetValue(hoverKey, true);
+                DisclosureAnimationTests.Pump(190);
                 ThemeConsistencyValidation.Layout(host, 1000, 130);
                 Assert.IsFalse(header.IsMouseOver, "This case must exercise pointer-over-arrow rather than pointer-over-header-button.");
                 Assert.AreEqual(((System.Windows.Media.SolidColorBrush)application.FindResource("DisclosureHoverColor")).Color,
@@ -108,8 +113,9 @@ internal static class UpdateStorageLayoutValidation
                 VisualStateManager.GoToState(nativeToggle, "Normal", false);
                 DisclosureAnimationTests.Pump(160);
                 sharedHeader.SetValue(hoverKey, false);
+                DisclosureAnimationTests.Pump(190);
                 ThemeConsistencyValidation.Layout(host, 1000, 130);
-                Assert.AreEqual((byte)0, ((System.Windows.Media.SolidColorBrush)chrome.Background).Color.A,
+                Assert.AreEqual(0d, chrome.Opacity, .01,
                     "The header highlight must clear after leaving both header and arrow.");
                 var toggleMethod = typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle",
                     System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);

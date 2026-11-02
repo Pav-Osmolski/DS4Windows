@@ -58,7 +58,8 @@ namespace DS4Windows
             ControllerRuntimeLaneState microphone,
             ControllerRuntimeLaneState audioHaptics,
             string virtualControllerName, bool virtualFailed = false,
-            bool physicalCleanupQuarantined = false, bool profileSelected = true)
+            bool physicalCleanupQuarantined = false, bool profileSelected = true,
+            bool virtualHapticsPlaybackDisabled = false)
         {
             PhysicalPresent = physicalPresent;
             PhysicalSynced = physicalSynced;
@@ -74,6 +75,7 @@ namespace DS4Windows
             VirtualFailed = virtualFailed;
             PhysicalCleanupQuarantined = physicalCleanupQuarantined;
             ProfileSelected = profileSelected;
+            VirtualHapticsPlaybackDisabled = virtualHapticsPlaybackDisabled;
         }
 
         public bool PhysicalPresent { get; }
@@ -90,6 +92,7 @@ namespace DS4Windows
         public bool VirtualFailed { get; }
         public bool PhysicalCleanupQuarantined { get; }
         public bool ProfileSelected { get; }
+        public bool VirtualHapticsPlaybackDisabled { get; }
     }
 
     public readonly struct ControllerStartupStatus : IEquatable<ControllerStartupStatus>
@@ -194,6 +197,13 @@ namespace DS4Windows
                     ControllerStartupStage.CreatingVirtualController,
                     global::DS4Windows.UiText.Get("Connected"),
                     global::DS4Windows.UiText.Format("Switching to the virtual {0} pad.", signals.VirtualControllerName));
+            }
+
+            if (signals.VirtualRequired && signals.VirtualHapticsPlaybackDisabled)
+            {
+                return new ControllerStartupStatus(ControllerStartupStage.Attention,
+                    global::DS4Windows.UiText.Get("Needs attention"),
+                    global::DS4Windows.UiText.Get("Enable this controller's DS4Windows Audio playback device in Windows Sound to restore game haptics. Your headphones can remain the default output."));
             }
 
             ControllerStartupStatus laneStatus = EvaluateLane(

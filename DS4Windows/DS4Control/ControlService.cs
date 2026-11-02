@@ -5377,7 +5377,9 @@ namespace DS4Windows
                 speaker, microphone, audioHaptics,
                 desiredType.ToDisplayName(), virtualFailed, physicalCleanupQuarantined,
                 profileSelected: !string.IsNullOrWhiteSpace(Global.useTempProfile[index]
-                    ? Global.tempprofilename[index] : Global.ProfilePath[index]));
+                    ? Global.tempprofilename[index] : Global.ProfilePath[index]),
+                virtualHapticsPlaybackDisabled: advancedHapticsRequired &&
+                    advancedHapticsOutput?.IsVirtualHapticsPlaybackDisabled == true);
         }
 
         internal static bool ShouldUseGameBarControllerCompatibility(bool enabled,

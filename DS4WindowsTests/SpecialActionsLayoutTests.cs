@@ -29,7 +29,8 @@ public class SpecialActionsLayoutTests
             root.UpdateLayout();
             Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ContextIdle);
             root.UpdateLayout();
-            Assert.IsFalse(table.CanUserSortColumns, "Selection indices must match the original action collection.");
+            Assert.IsTrue(table.CanUserSortColumns, "Explicit sorting reorders the presentation collection while retaining action identity.");
+            CollectionAssert.AreEqual(new[] { "ActionName", "Controls", "TypeName" }, table.Columns.OfType<DataGridTextColumn>().Select(c => c.SortMemberPath).ToArray());
             Assert.IsFalse(table.CanUserAddRows);
             Assert.AreSame(item, table.SelectedItem);
             var enabled = Visuals(table).OfType<CheckBox>().Single();

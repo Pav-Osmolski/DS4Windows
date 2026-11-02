@@ -105,6 +105,7 @@ namespace DS4WinWPF.DS4Forms
         private int physicalDeviceIndex = -1;
         private bool liveApplyPersistent;
         private bool loading;
+        private bool preparedForLoad;
         private readonly SideUi leftUi;
         private readonly SideUi rightUi;
         private readonly DispatcherTimer previewResetTimer;
@@ -132,7 +133,11 @@ namespace DS4WinWPF.DS4Forms
                     RestorePhysicalProfileEffects();
                 }
             };
-            Loaded += (_, _) => RefreshSettings();
+            Loaded += (_, _) =>
+            {
+                if (!preparedForLoad) RefreshSettings();
+                preparedForLoad = false;
+            };
             Unloaded += (_, _) => previewResetTimer.Stop();
             RefreshSettings();
         }
@@ -155,6 +160,7 @@ namespace DS4WinWPF.DS4Forms
                 deviceIndex == physicalDeviceIndex;
             InitializeFullPullMappings();
             RefreshSettings();
+            preparedForLoad = !IsLoaded;
         }
 
         private void InitializeFullPullMappings()

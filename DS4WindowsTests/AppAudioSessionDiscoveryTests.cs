@@ -146,8 +146,8 @@ public sealed class AppAudioSessionDiscoveryTests
         string discovery = File.ReadAllText(Path.Combine(root, "DS4Windows",
             "DS4Forms", "ViewModels", "AppAudioSessionDiscovery.cs"));
 
-        StringAssert.Contains(control, "sessions = AppAudioSessionDiscovery.Read();");
-        StringAssert.Contains(control, "sourceCombo.ItemsSource = BuildAudioSourceChoices(settings, sessions);");
+        StringAssert.Contains(control, "public AudioHapticsControl() : this(AppAudioSessionDiscovery.Read)");
+        StringAssert.Contains(control, "sourceCombo.ItemsSource = BuildAudioSourceChoices(settings, audioSessions);");
         StringAssert.Contains(cache, "AppAudioSessionDiscovery.Read(enumerator)");
         StringAssert.Contains(discovery, "EnumerateAudioEndPoints(DataFlow.Render,");
         StringAssert.Contains(discovery, "DeviceState.Active).Cast<MMDevice>(), CopySessions)");

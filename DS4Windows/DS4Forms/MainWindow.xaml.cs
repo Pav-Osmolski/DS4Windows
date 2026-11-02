@@ -1511,7 +1511,8 @@ Suspend support not enabled.", true);
             {
                 RefreshSwitch2JoyConManualRows(force: true);
             }
-            if (mainTabCon.SelectedItem == profilesTab && settingsStorageControl != null)
+            if (mainTabCon.SelectedItem == profilesTab && !profileEditorLoading &&
+                mainWinVM?.ProfileEditorMode != true && settingsStorageControl != null)
             {
                 settingsStorageControl.BeforeChange = BeforeSettingsLocationChange;
                 settingsStorageControl.CloseRequested = RequestApplicationShutdown;
@@ -3722,13 +3723,11 @@ Suspend support not enabled.", true);
             }
         }
 
-        private void ProfileEditor_Closed(object sender, EventArgs e)
+        private async void ProfileEditor_Closed(object sender, EventArgs e)
         {
+            Stopwatch closeTimer = Stopwatch.StartNew();
             ProfileEditor closingEditor = sender as ProfileEditor ?? editor;
             profDockPanel.Children.Remove(closingEditor);
-            profilesBrowserPanel.Visibility = Visibility.Visible;
-            profOptsToolbar.Visibility = Visibility.Visible;
-            profilesListBox.Visibility = Visibility.Visible;
             preserveSize = true;
             if (closingEditor != null && !closingEditor.Keepsize)
             {
@@ -3746,7 +3745,16 @@ Suspend support not enabled.", true);
             mainWinVM.SetEditingControllerContext(null);
             mainWinVM.FullTabsEnabled = true;
             mainTabCon.SelectedIndex = profileEditorReturnTabIndex;
-            //Task.Run(() => GC.Collect(0, GCCollectionMode.Forced, false));
+            // Restore the browser only after choosing the destination. Returning
+            // to Controllers must not load/layout Profiles in between.
+            profilesBrowserPanel.Visibility = Visibility.Visible;
+            profOptsToolbar.Visibility = Visibility.Visible;
+            profilesListBox.Visibility = Visibility.Visible;
+            if (Global.ProfileEditorTimingLogging)
+                AppLogger.LogToGui($"[ProfileEditorTiming] editor closed; destination selected: total={closeTimer.ElapsedMilliseconds}ms", false);
+            await Dispatcher.Yield(DispatcherPriority.Background);
+            if (Global.ProfileEditorTimingLogging)
+                AppLogger.LogToGui($"[ProfileEditorTiming] return page layout and render queue drained: total={closeTimer.ElapsedMilliseconds}ms", false);
         }
 
         private void NewProfListBtn_Click(object sender, RoutedEventArgs e)
@@ -3818,8 +3826,11 @@ Suspend support not enabled.", true);
                 // Let the editor workspace and loading state render before profile
                 // parsing begins. Profile loading is file and XML heavy, and does
                 // not need to block WPF's dispatcher.
-                await Dispatcher.Yield(DispatcherPriority.Render);
-                LogOpenPhase("loading view rendered");
+                // Render priority alone can resume before WPF has run Loaded
+                // and layout for the new workspace. Drain both before building
+                // the editor, so the loading state gets its own frame.
+                await Dispatcher.Yield(DispatcherPriority.Background);
+                LogOpenPhase("loading view layout and render queue drained");
 
                 bool profileAlreadyLoaded = false;
                 if (entity != null)
@@ -3834,7 +3845,8 @@ Suspend support not enabled.", true);
                 }
                 LogOpenPhase("profile loaded");
 
-                editor = new ProfileEditor(device, controllerContextDevice);
+                editor = new ProfileEditor(device, controllerContextDevice,
+                    Global.ProfileEditorTimingLogging ? LogOpenPhase : null);
                 LogOpenPhase("editor shell constructed");
                 editor.CreatedProfile += Editor_CreatedProfile;
                 editor.Closed += ProfileEditor_Closed;
@@ -3844,15 +3856,25 @@ Suspend support not enabled.", true);
 
                 profileEditorLoadingPanel.Visibility = Visibility.Collapsed;
                 profDockPanel.Children.Add(editor);
+                LogOpenPhase("editor attached to workspace");
                 mainWinVM.EditingProfileName = editor.ProfileName;
                 NavigateProfileEditor(1);
-                await Dispatcher.Yield(DispatcherPriority.Render);
-                LogOpenPhase("first frame rendered");
+                await Dispatcher.Yield(DispatcherPriority.Loaded);
+                LogOpenPhase("initial layout and Loaded callbacks completed");
+                await Dispatcher.Yield(DispatcherPriority.Background);
+                // Dispatcher progress is measurable; this is not a claim that
+                // the compositor has presented a frame on the user's monitor.
+                LogOpenPhase("render queue drained; editor responsive");
             }
             catch (Exception ex)
             {
                 AppLogger.LogToGui($"Failed to open profile editor after " +
                     $"{openTimer.ElapsedMilliseconds}ms: {ex.Message}", true);
+                if (editor != null)
+                {
+                    editor.RetireEditorSession();
+                    profDockPanel.Children.Remove(editor);
+                }
                 profileEditorLoadingPanel.Visibility = Visibility.Collapsed;
                 profilesBrowserPanel.Visibility = Visibility.Visible;
                 profOptsToolbar.Visibility = Visibility.Visible;

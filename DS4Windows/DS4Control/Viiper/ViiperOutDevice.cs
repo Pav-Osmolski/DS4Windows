@@ -1013,6 +1013,14 @@ namespace DS4Windows
         internal int DirectSpeakerUsbipPort =>
             Volatile.Read(ref deviceStream)?.UsbipPort ?? -1;
 
+        private readonly VirtualHapticsEndpointMonitor hapticsEndpointMonitor = new();
+
+        internal bool IsVirtualHapticsPlaybackDisabled => hapticsEndpointMonitor?.IsDisabled(
+            IsRuntimeConnected && !IsGamepadOnly &&
+                (OutputType == OutContType.ViiperDualSense || OutputType == OutContType.ViiperDualSenseEdge)
+                ? DirectSpeakerUsbipPort : -1,
+            RuntimeFeedbackGeneration) == true;
+
         internal bool SupportsActiveVirtualMicrophone =>
             connected && activeStreamSupportsMicrophone;
 
