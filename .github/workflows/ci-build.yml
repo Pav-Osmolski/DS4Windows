@@ -222,7 +222,7 @@ jobs:
           if ($package -cnotmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$' -or $product -cne "$package.0") {
             throw 'Project release and Windows versions must agree.'
           }
-          $version = if ($env:MAIN_CANDIDATE -ceq 'true') { $package } else { "$(Get-Date -Format yyyy.MM.dd)-ci-$($env:GITHUB_SHA.Substring(0,7))" }
+          $version = if ($env:GITHUB_REF_NAME -ceq 'fix/bluetooth-write-timing-diagnostics') { '5.0.60-issue98-feedback-preview20261102' } elseif ($env:MAIN_CANDIDATE -ceq 'true') { $package } else { "$(Get-Date -Format yyyy.MM.dd)-ci-$($env:GITHUB_SHA.Substring(0,7))" }
           $bundle = if ($env:MAIN_CANDIDATE -ceq 'true') { $product } else { "$package-ci.$env:GITHUB_RUN_NUMBER" }
           "VERSION=$version" >> $env:GITHUB_ENV
           "PRODUCT_VERSION=$product" >> $env:GITHUB_ENV
@@ -230,7 +230,7 @@ jobs:
           "BUNDLE_VERSION=$bundle" >> $env:GITHUB_ENV
 
       - name: Build ${{ matrix.platform }}
-        run: dotnet publish .\DS4Windows\DS4WinWPF.csproj -c Release /p:platform=${{ matrix.platform }} -r win-${{ matrix.platform }} --self-contained true --no-restore -p:Version=${{ env.PACKAGE_VERSION }} -p:InformationalVersion=${{ env.VERSION }} -p:IncludeSourceRevisionInInformationalVersion=false -o .\bin\${{ matrix.platform }}\Release\output
+        run: dotnet publish .\DS4Windows\DS4WinWPF.csproj -c Release /p:platform=${{ matrix.platform }} -r win-${{ matrix.platform }} --self-contained true --no-restore -p:Version=${{ env.PACKAGE_VERSION }} -p:InformationalVersion=${{ env.VERSION }} -p:IncludeSourceRevisionInInformationalVersion=false -p:Issue98DiagnosticsPreview=${{ github.ref_name == 'fix/bluetooth-write-timing-diagnostics' }} -o .\bin\${{ matrix.platform }}\Release\output
 
       - name: Package ${{ matrix.platform }}
         run: python .\utils\post-build.py .\bin\${{ matrix.platform }}\Release\output . ${{ env.VERSION }}
