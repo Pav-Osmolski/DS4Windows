@@ -7,6 +7,7 @@ Controller remapping, advanced feedback, and per-game profiles for Windows.
 [**Website**](https://pav-osmolski.github.io/DS4Windows/) · [**Download**](https://github.com/Pav-Osmolski/DS4Windows/releases) · [Documentation](docs/README.md) · [Changelog](CHANGELOG.md) · [Community](https://www.reddit.com/r/DS4Windows/) · [Support on Ko-fi](https://ko-fi.com/devilhood42)
 
 [![Releases](https://img.shields.io/github/v/release/Pav-Osmolski/DS4Windows?logo=github&label=release)](https://github.com/Pav-Osmolski/DS4Windows/releases)
+[![.NET 10.0](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 [![Main build](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml/badge.svg?branch=main)](https://github.com/Pav-Osmolski/DS4Windows/actions/workflows/ci-build.yml?query=branch%3Amain)
 [![Required USB/IP: usbip-win2 0.9.8.1](https://img.shields.io/badge/USB%2FIP_required-0.9.8.1-blue)](https://github.com/vadimgrn/usbip-win2/releases/tag/v.0.9.8.1)
 
