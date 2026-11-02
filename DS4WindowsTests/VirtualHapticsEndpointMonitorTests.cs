@@ -15,6 +15,8 @@ public class VirtualHapticsEndpointMonitorTests
             () => throw new System.Runtime.InteropServices.COMException("Stale endpoint", unchecked((int)0xE000020B)),
             () => null, // An unrelated readable endpoint is excluded by the port match.
             () => current,
+            () => DeviceState.NotPresent, // A retired persona can retain the same USB/IP port.
+            () => DeviceState.Unplugged,
             () => throw new System.Runtime.InteropServices.COMException("Another stale endpoint")
         ];
         Assert.AreEqual(true, VirtualHapticsEndpointMonitor.EvaluateEndpointReaders(readers));

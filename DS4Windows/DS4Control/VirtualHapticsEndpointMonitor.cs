@@ -79,9 +79,11 @@ internal sealed class VirtualHapticsEndpointMonitor
             {
                 using (endpoint)
                 {
+                    var state = endpoint.State;
+                    if (state is not (DeviceState.Active or DeviceState.Disabled)) return null;
                     return DualSenseAudioPassthrough.IsDualSenseEndpoint(endpoint) &&
                         DualSenseAudioPassthrough.TryGetEndpointUsbipPort(endpoint, out int endpointPort) &&
-                        endpointPort == port ? endpoint.State : null;
+                        endpointPort == port ? state : null;
                 }
             })));
     }
@@ -93,7 +95,10 @@ internal sealed class VirtualHapticsEndpointMonitor
         {
             try
             {
-                if (read() is DeviceState state) states.Add(state);
+                // Old personas can retain the same USB/IP port in their PnP
+                // ancestry. Non-present/unplugged records are not competing
+                // live endpoint matches and must not hide the current one.
+                if (read() is DeviceState state && state is (DeviceState.Active or DeviceState.Disabled)) states.Add(state);
             }
             catch { /* A stale endpoint's property store must not hide another endpoint's confirmed state. */ }
         }
