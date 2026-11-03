@@ -9,6 +9,11 @@ There are no unreleased changes.
 
 ## Released
 
+### [5.0.62](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.62) - 2026-11-03
+
+- Fix Special Actions moves and column sorting appearing unchanged while the underlying list moved, which could make selection refer to a different action. Remove the conflicting alphabetical view sort and track selection by action identity. Cover the displayed grid in light and dark themes with regression tests for moves, sorting, enabled selections and remembered order. Thanks [@Masterload1975](https://github.com/Masterload1975) for the follow-up report ([#105](https://github.com/Pav-Osmolski/DS4Windows/issues/105), [#110](https://github.com/Pav-Osmolski/DS4Windows/pull/110)).
+- Replace the bug report template with a guided form that emphasises troubleshooting and existing-issue searches, add a feature-request form, and use lightweight form/documentation checks for template-only changes ([#109](https://github.com/Pav-Osmolski/DS4Windows/pull/109)).
+
 ### [5.0.61](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.61) - 2026-11-02
 
 - Add remembered Special Actions display ordering with Move Up/Down, sortable Name/Trigger/Action headings and double-click editing. Preserve enabled selections and execution order independently of presentation. Thanks [@Masterload1975](https://github.com/Masterload1975) for the request ([#105](https://github.com/Pav-Osmolski/DS4Windows/issues/105)).
