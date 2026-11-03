@@ -1998,11 +1998,7 @@ namespace DS4WinWPF.DS4Forms
             RefreshMaterializedPages();
             foreach (var page in DeferredPages) page.Ready = true;
 
-            // Sort special action list by action name
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(specialActionsVM.ActionCol);
-            view.SortDescriptions.Clear();
-            view.SortDescriptions.Add(new SortDescription("ActionName", ListSortDirection.Ascending));
-            view.Refresh();
+            RefreshSpecialActionView();
 
             if (profileSettingsVM.UseControllerReadout)
             {
@@ -2775,6 +2771,13 @@ namespace DS4WinWPF.DS4Forms
                 specialActionsVM.ExportEnabledActions();
                 Global.CacheExtraProfileInfo(profileSettingsVM.Device);
             };
+        }
+
+        internal void RefreshSpecialActionView()
+        {
+            // The collection owns the persisted display order. A second sort
+            // hides moves and makes displayed and collection indexes disagree.
+            CollectionViewSource.GetDefaultView(specialActionsVM.ActionCol).SortDescriptions.Clear();
         }
 
         private void MoveActionUp_Click(object sender, RoutedEventArgs e) => MoveAction(-1);

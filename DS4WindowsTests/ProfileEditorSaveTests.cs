@@ -242,6 +242,79 @@ public sealed class ProfileEditorSaveTests
     }
 
     [TestMethod]
+    [DataRow("DarkTheme")]
+    [DataRow("DefaultTheme")]
+    public void ActionGridMovesSortsAndEditsKeepTheDisplayedActionIdentity(string theme)
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            var storage = new SettingsStorage(directory + "/program", directory + "/appdata", directory + "/preferences");
+            var vm = new SpecialActionsListViewModel(0) { Storage = () => storage };
+            var actions = new[] {
+                new SpecialAction("Zulu", "Circle", "Macro", "65/65"),
+                new SpecialAction("Alpha", "Triangle", "DisconnectBT", "0"),
+                new SpecialAction("Bravo", "Cross", "Macro", "66/66") };
+            Global.ProfileActions[0] = new List<string> { "Zulu", "Bravo" };
+            vm.LoadActions(actions);
+            var editor = CreateEditor(null);
+            typeof(ProfileEditor).GetField("specialActionsVM", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(editor, vm);
+            var root = ProfileAdvancedLayoutTests.Load(theme, "Special Actions");
+            root.DataContext = vm;
+            var table = (DataGrid)root.FindName("specialActionsLV");
+            typeof(ProfileEditor).GetField("specialActionsLV", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(editor, table);
+            // Reproduce the old Reload path's extra view sort. Production
+            // initialization must remove it, not hide collection reordering.
+            var view = System.Windows.Data.CollectionViewSource.GetDefaultView(vm.ActionCol);
+            view.SortDescriptions.Add(new System.ComponentModel.SortDescription("ActionName", System.ComponentModel.ListSortDirection.Ascending));
+            editor.RefreshSpecialActionView();
+            root.Measure(new Size(1000, 700));
+            root.Arrange(new Rect(0, 0, 1000, 700));
+            root.UpdateLayout();
+            var selected = vm.ActionCol[2];
+            table.SelectedItem = selected;
+            try
+            {
+                foreach (int direction in new[] { -1, -1, 1 })
+                {
+                    typeof(ProfileEditor).GetMethod("MoveAction", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(editor, new object[] { direction });
+                    AssertAligned();
+                }
+                foreach (var column in table.Columns.Where(c => !string.IsNullOrEmpty(c.SortMemberPath)))
+                {
+                    for (int pass = 0; pass < 2; pass++)
+                    {
+                        typeof(ProfileEditor).GetMethod("SpecialActions_Sorting", BindingFlags.Instance | BindingFlags.NonPublic)!
+                            .Invoke(editor, new object[] { table, new DataGridSortingEventArgs(column) });
+                        AssertAligned();
+                        var values = table.Items.Cast<SpecialActionItem>().Select(item => column.SortMemberPath switch {
+                            "ActionName" => item.ActionName, "Controls" => item.Controls, _ => item.TypeName }).ToArray();
+                        var expected = pass == 0 ? values.OrderBy(x => x, StringComparer.CurrentCultureIgnoreCase).ToArray()
+                            : values.OrderByDescending(x => x, StringComparer.CurrentCultureIgnoreCase).ToArray();
+                        CollectionAssert.AreEqual(expected, values);
+                    }
+                }
+                vm.ExportEnabledActions();
+                CollectionAssert.AreEqual(new[] { "Zulu", "Bravo" }, Global.ProfileActions[0]);
+                vm.OrderSaved.GetAwaiter().GetResult();
+                var reopened = new SpecialActionsListViewModel(0) { Storage = () => storage };
+                reopened.LoadActions(actions);
+                table.ItemsSource = reopened.ActionCol;
+                CollectionAssert.AreEqual(vm.ActionCol.Select(x => x.ActionName).ToArray(), table.Items.Cast<SpecialActionItem>().Select(x => x.ActionName).ToArray());
+            }
+            finally { vm.OrderSaved.GetAwaiter().GetResult(); }
+
+            void AssertAligned()
+            {
+                CollectionAssert.AreEqual(vm.ActionCol.ToArray(), table.Items.Cast<SpecialActionItem>().ToArray(), "Visible grid order must match the collection after each operation.");
+                Assert.AreSame(selected, table.SelectedItem);
+                Assert.AreSame(selected, vm.CurrentSpecialActionItem);
+                Assert.AreEqual(vm.ActionCol.IndexOf(selected), vm.SpecialActionIndex);
+                Assert.AreSame(selected.SpecialAction, vm.CurrentSpecialActionItem.SpecialAction, "Edit must receive the action shown in the selected row.");
+            }
+        });
+    }
+
+    [TestMethod]
     [DataRow("DarkTheme", false)]
     [DataRow("DarkTheme", true)]
     [DataRow("DefaultTheme", false)]
