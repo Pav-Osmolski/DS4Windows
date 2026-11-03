@@ -68,6 +68,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             set
             {
                 currentSAItem = value;
+                // Selection follows the action itself, never a possibly sorted
+                // view index. Reordering must not select a different action.
+                SpecialActionIndex = actionCol.IndexOf(value);
                 RefreshMoveState();
             }
         }
