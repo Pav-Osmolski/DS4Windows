@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Reduce idle CPU spikes from controller-audio endpoint checks by reading requested Windows audio properties in one bounded pass and reusing the identity within each check. Preserve fresh endpoint state, disabled-device detection and existing haptics timing.
 
 ## Released
 
