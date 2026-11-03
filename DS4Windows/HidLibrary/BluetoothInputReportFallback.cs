@@ -6,7 +6,10 @@ namespace DS4Windows;
 // its current full HID report while a Windows gaming overlay is open. This is a current-state fallback, not an event-history replacement.
 internal sealed class BluetoothInputReportFallback
 {
-    internal const uint StreamingWaitMilliseconds = 16;
+    // Wait normally until starvation is proven. Once querying current state,
+    // do not add another display-frame-sized stall before every sample. Keep
+    // a positive wait so an immediate/cached query cannot turn into a busy loop.
+    internal uint StreamingWaitMilliseconds => recovering ? 1u : 16u;
     internal const uint QueryWaitMilliseconds = 32;
     private readonly Func<byte[], uint, HidDevice.ReadStatus> query;
     private readonly byte[] buffer;

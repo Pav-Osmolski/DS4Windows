@@ -27,6 +27,25 @@ public class BluetoothInputReportFallbackTests
     [TestMethod]
     [DataRow(0x05C4, 0x11)]
     [DataRow(0x0CE6, 0x31)]
+    public void OnlyActiveRecoveryUsesShortWaitAndFreshStreamingRestoresNormalWait(int product, int id)
+    {
+        var fallback = Create(product, (byte)id, Report((byte)id, 100));
+        Assert.AreEqual(16u, fallback.StreamingWaitMilliseconds);
+        Assert.IsTrue(fallback.AcceptStreamingReport(Report((byte)id, 90)));
+        Assert.AreEqual(16u, fallback.StreamingWaitMilliseconds);
+        Assert.IsTrue(fallback.TryRecover(out _));
+        Assert.AreEqual(1u, fallback.StreamingWaitMilliseconds);
+        Assert.IsFalse(fallback.TryRecover(out _), "Repeated cached state must not reset recovery pacing.");
+        Assert.AreEqual(1u, fallback.StreamingWaitMilliseconds);
+        Assert.IsFalse(fallback.AcceptStreamingReport(Report((byte)id, 99)));
+        Assert.AreEqual(1u, fallback.StreamingWaitMilliseconds);
+        Assert.IsTrue(fallback.AcceptStreamingReport(Report((byte)id, 101)));
+        Assert.AreEqual(16u, fallback.StreamingWaitMilliseconds);
+    }
+
+    [TestMethod]
+    [DataRow(0x05C4, 0x11)]
+    [DataRow(0x0CE6, 0x31)]
     public void RecoveryHandlesControllerClockWrap(int product, int id)
     {
         uint end = id == 0x31 ? uint.MaxValue - 2 : ushort.MaxValue - 2u;

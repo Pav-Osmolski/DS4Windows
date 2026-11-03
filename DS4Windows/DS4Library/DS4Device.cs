@@ -1956,7 +1956,7 @@ namespace DS4Windows
                         // firmware entered its Bluetooth audio report mode.
                         HidDevice.ReadStatus res = hDevice.ReadFile(
                             btInputReport, inputFallback.Enabled ?
-                                BluetoothInputReportFallback.StreamingWaitMilliseconds : READ_STREAM_TIMEOUT);
+                                inputFallback.StreamingWaitMilliseconds : READ_STREAM_TIMEOUT);
                         bool recoveredCurrentState = false;
                         if (inputFallback.Enabled && res == HidDevice.ReadStatus.WaitTimedOut)
                         {

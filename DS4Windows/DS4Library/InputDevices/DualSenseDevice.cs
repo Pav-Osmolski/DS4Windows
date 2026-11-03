@@ -5091,7 +5091,7 @@ namespace DS4Windows.InputDevices
                         out byte[] completedReport, out int readWinError,
                         out long physicalReadObservedAt,
                         out long readRearmDuration,
-                        inputFallback.Enabled ? BluetoothInputReportFallback.StreamingWaitMilliseconds : uint.MaxValue);
+                        inputFallback.Enabled ? inputFallback.StreamingWaitMilliseconds : uint.MaxValue);
                     bool recoveredCurrentState = false;
                     if (inputFallback.Enabled && res == HidDevice.ReadStatus.WaitTimedOut)
                     {
