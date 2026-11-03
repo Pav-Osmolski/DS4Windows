@@ -1,11 +1,11 @@
-﻿# Changelog
+# Changelog
 
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
 ## Unreleased
 
-There are no unreleased changes.
+- Keep touchpad mouse and mapped controller input available when Windows gaming overlays withhold a supported Sony Bluetooth controller's streaming reports. Use bounded current-state queries during the interruption, validate the reports, and discard older queued input when streaming resumes. Thanks [@nachocheese-boop](https://github.com/nachocheese-boop) for the report ([#107](https://github.com/Pav-Osmolski/DS4Windows/issues/107)).
 
 ## Released
 

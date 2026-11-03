@@ -1895,6 +1895,8 @@ namespace DS4Windows
                 // while the independent audio handle continues submitting.
                 NativeMethods.HidD_SetNumInputBuffers(
                     hDevice.SafeReadHandle.DangerousGetHandle(), 64);
+                var inputFallback = new BluetoothInputReportFallback(hDevice,
+                    conType, BT_INPUT_REPORT_LENGTH, 0x11);
                 Queue<double> latencyQueue = new Queue<double>(21); // Set capacity at max + 1 to avoid any resizing
                 int tempLatencyCount = 0;
                 long oldtime = 0;
@@ -1953,7 +1955,18 @@ namespace DS4Windows
                         // former two-deep IOCP pump stopped receiving when DS4
                         // firmware entered its Bluetooth audio report mode.
                         HidDevice.ReadStatus res = hDevice.ReadFile(
-                            btInputReport, READ_STREAM_TIMEOUT);
+                            btInputReport, inputFallback.Enabled ?
+                                BluetoothInputReportFallback.StreamingWaitMilliseconds : READ_STREAM_TIMEOUT);
+                        bool recoveredCurrentState = false;
+                        if (inputFallback.Enabled && res == HidDevice.ReadStatus.WaitTimedOut)
+                        {
+                            if (exitInputThread) break;
+                            if (!inputFallback.TryRecover(out byte[] currentReport))
+                                continue;
+                            Array.Copy(currentReport, btInputReport, btInputReport.Length);
+                            recoveredCurrentState = true;
+                            res = HidDevice.ReadStatus.Success;
+                        }
                         int readWinError = res == HidDevice.ReadStatus.ReadError ?
                             Marshal.GetLastWin32Error() : 0;
                         if (IsExpectedAdministrativeInputReadCancellation(res,
@@ -2007,6 +2020,9 @@ namespace DS4Windows
                                 readWaitEv.Reset();
                                 continue;
                             }
+
+                            if (!recoveredCurrentState && !inputFallback.AcceptStreamingReport(btInputReport))
+                                continue;
 
                             //Array.Copy(btInputReport, 2, inputReport, 0, inputReport.Length);
                             fixed (byte* byteP = &btInputReport[2], imp = inputReport)

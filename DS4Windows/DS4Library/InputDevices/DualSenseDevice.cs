@@ -5034,6 +5034,8 @@ namespace DS4Windows.InputDevices
                     conType == ConnectionType.BT ? 64 : 3);
                 using PipelinedInputReportReader inputReader =
                     hDevice.CreatePipelinedInputReportReader(inputReport);
+                var inputFallback = new BluetoothInputReportFallback(hDevice,
+                    conType, inputReport.Length, 0x31);
                 double[] latencySamples = new double[20];
                 int latencySampleIndex = 0;
                 int tempLatencyCount = 0;
@@ -5088,7 +5090,18 @@ namespace DS4Windows.InputDevices
                     HidDevice.ReadStatus res = inputReader.ReadNext(
                         out byte[] completedReport, out int readWinError,
                         out long physicalReadObservedAt,
-                        out long readRearmDuration);
+                        out long readRearmDuration,
+                        inputFallback.Enabled ? BluetoothInputReportFallback.StreamingWaitMilliseconds : uint.MaxValue);
+                    bool recoveredCurrentState = false;
+                    if (inputFallback.Enabled && res == HidDevice.ReadStatus.WaitTimedOut)
+                    {
+                        if (exitInputThread) break;
+                        if (!inputFallback.TryRecover(out completedReport))
+                            continue;
+                        recoveredCurrentState = true;
+                        res = HidDevice.ReadStatus.Success;
+                        physicalReadObservedAt = Stopwatch.GetTimestamp();
+                    }
                     if (IsExpectedAdministrativeInputReadCancellation(res,
                             readWinError))
                     {
@@ -5260,6 +5273,9 @@ namespace DS4Windows.InputDevices
                         // Received incorrect report, skip it
                         continue;
                     }
+
+                    if (!recoveredCurrentState && !inputFallback.AcceptStreamingReport(inputReport))
+                        continue;
 
                     utcNow = DateTime.UtcNow; // timestamp with UTC in case system time zone changes
 
