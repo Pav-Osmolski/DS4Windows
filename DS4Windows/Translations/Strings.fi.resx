@@ -6778,4 +6778,10 @@ Varmuuskopiointi : </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Valitse väri</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>Muutokset näkyvät heti esikatselussa.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Reaaliaikainen X/Y-tulo ja -lähtö.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>Pidä Bluetooth-ohjaimen syöte toiminnassa Game Barissa</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Käytä vaihtoehtoista lukutapaa, jos Game Bar tai peliohjainnäppäimistö keskeyttää normaalin syötteen. Koskee tuettuja Sonyn Bluetooth-ohjaimia. Muutokset tulevat voimaan pysäytyksen ja käynnistyksen jälkeen.</value>
+  </data>
 </root>

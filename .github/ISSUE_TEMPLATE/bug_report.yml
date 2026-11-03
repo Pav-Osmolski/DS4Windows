@@ -1,0 +1,151 @@
+name: Bug report
+description: Report something that is not working as expected.
+labels: [bug]
+assignees: [Pav-Osmolski]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve DS4Windows!
+
+        **Please read the [troubleshooting guide](https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/troubleshooting.md) before opening a report.** It covers common controller, Steam Input, audio/haptics, profile-saving and installation problems, along with instructions for collecting useful logs.
+
+        Also [search open and closed issues](https://github.com/Pav-Osmolski/DS4Windows/issues?q=is%3Aissue). If the same problem is already reported, add your findings there instead of opening a duplicate. If a closed issue's fix does not work for you, include its link and explain what is different.
+
+        If practical, try the [latest stable release](https://github.com/Pav-Osmolski/DS4Windows/releases/latest) first. Please report the exact version you tested, including any preview suffix. Do not delete settings or reinstall drivers just to complete this form.
+  - type: checkboxes
+    id: before-reporting
+    attributes:
+      label: Before reporting
+      options:
+        - label: I have read the relevant sections of the [troubleshooting guide](https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/troubleshooting.md).
+          required: true
+        - label: I have searched [open and closed issues](https://github.com/Pav-Osmolski/DS4Windows/issues?q=is%3Aissue) for this problem.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened, and what did you expect?
+      description: Describe the visible problem. Include the exact error or Controller status message, if there is one.
+      placeholder: Explain what you were trying to do, what happened instead, and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How can we reproduce it?
+      description: Start from launching the app or connecting the controller. If the problem is intermittent, say how often it happens and what triggers it.
+      placeholder: |
+        1. Start DS4Windows with...
+        2. Connect the controller using...
+        3. Open/change/press...
+        4. Observe...
+        Frequency: every time / sometimes / once so far
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: Exact DS4Windows version
+      description: Copy it from About or the first line of the Log. If the app cannot start, use the downloaded package name. "Latest" alone does not identify a version.
+      placeholder: Full version number or preview/package name
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows edition, version and full OS build
+      description: Press Win + R, enter winver, and copy the edition/version/build text.
+      placeholder: Windows 11 Pro, version ..., OS build ...
+    validations:
+      required: true
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: How do you run DS4Windows?
+      options:
+        - Installed with the Setup EXE
+        - Portable ZIP
+        - Built from source
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: controller
+    attributes:
+      label: Controller make and model
+      description: Include the manufacturer and model/revision, especially for third-party controllers. List each controller if more than one is involved. For an installer-only issue, enter "Not applicable".
+      placeholder: Make/model, genuine or third-party, and number of controllers
+    validations:
+      required: true
+  - type: dropdown
+    id: connection
+    attributes:
+      label: Physical controller connection
+      description: Select every connection on which you reproduced the problem.
+      multiple: true
+      options:
+        - USB
+        - Bluetooth
+        - Other adapter or connection
+        - Not applicable / not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: output
+    attributes:
+      label: Emulated controller
+      description: Check Emulated controller in Overview or Profile Editor. Select all affected outputs.
+      multiple: true
+      options:
+        - Xbox 360
+        - Xbox One / Series
+        - DualShock 4
+        - DualSense
+        - DualSense Edge
+        - Switch 2 Pro
+        - Physical input only / no virtual output
+        - Other / preview output
+        - Not applicable / not sure
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Game, other software and relevant settings
+      description: Name the game/app and launcher if relevant. Include Steam Input's per-game override, other controller/mapping software, and whether DS4Windows runs as administrator. For Bluetooth-specific problems, include the adapter model and driver version if known. For audio problems, describe the headset/microphone and selected input/output devices.
+      placeholder: Game/app, launcher, Steam Input setting, other software and relevant setup. If none, say so.
+    validations:
+      required: true
+  - type: textarea
+    id: comparisons
+    attributes:
+      label: What have you tried?
+      description: Include relevant troubleshooting steps, results and workarounds. If safe and practical, compare a separate default/test profile, USB versus Bluetooth, or a previous working version. Keep your existing profiles; an untested comparison is fine to mark "Not tested".
+      placeholder: |
+        Troubleshooting steps and results:
+        Separate default/test profile:
+        USB/Bluetooth comparison:
+        Last working version, if known:
+        Related issue links:
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        ### Collect useful diagnostics
+
+        - In **Log**, enable **Verbose logging**, reproduce the problem once, then use **Open log folder** and attach the full `ds4windows_log.txt`, including startup. Turn verbose logging off afterwards. If you cannot collect a log, explain why below.
+        - For VIIPER/virtual-output problems, also follow [Capture VIIPER's own debug log](https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/troubleshooting.md#capture-viipers-own-debug-log) and attach `viiper-debug.log`. Use the app's logging option; do not launch VIIPER manually.
+        - For setup failures, use the installer's **Copy diagnostics** or **Open log** buttons. If the app will not start, these diagnostics are still useful.
+        - For mapping, profile or Special Action problems, attach the affected profile XML and, where relevant, `Actions.xml` in a ZIP. Add screenshots or a short recording if they clarify the behaviour; include display scaling for layout problems.
+
+        **Attachments are public.** Review logs, profiles and screenshots for personal details or credentials before uploading. Never include passwords or tokens.
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Logs, profiles and screenshots
+      description: Drag files into this box or paste the full log. Include the approximate time of the failure so it can be matched to the log. If files are unavailable, explain why. Do not attach only the final error line.
+      placeholder: Attach diagnostics here, or explain what you could not collect and why.
+    validations:
+      required: true

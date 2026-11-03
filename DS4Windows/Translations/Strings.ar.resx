@@ -6759,4 +6759,10 @@ Backup : </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>اختيار اللون</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>تُعايَن التغييرات فورًا.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>إدخال وإخراج X/Y مباشرة.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>الحفاظ على عمل إدخال وحدة تحكم Bluetooth في Game Bar</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>استخدم طريقة بديلة لقراءة الإدخال إذا قاطع Game Bar أو لوحة مفاتيح Gamepad الإدخال العادي. ينطبق على وحدات تحكم Sony المدعومة عبر Bluetooth. تُطبّق التغييرات بعد الإيقاف ثم التشغيل.</value>
+  </data>
 </root>

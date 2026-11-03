@@ -1,0 +1,55 @@
+name: Feature request
+description: Suggest an improvement or a new capability.
+labels: [enhancement]
+assignees: [Pav-Osmolski]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for DS4Windows? Please explain the problem it would solve and how you would use it. A simple example is often more helpful than a detailed technical design.
+
+        Check the [user guide](https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/user-guide.md) and [existing requests](https://github.com/Pav-Osmolski/DS4Windows/issues?q=is%3Aissue%20label%3Aenhancement) first; the feature may already exist or be planned. For help with an existing feature, use [Discussions](https://github.com/Pav-Osmolski/DS4Windows/discussions). If something is broken, use the bug report form instead.
+  - type: checkboxes
+    id: existing-requests
+    attributes:
+      label: Before suggesting
+      options:
+        - label: I have checked the documentation and searched open and closed issues for this feature.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe what you are trying to achieve and what is difficult or missing today.
+      placeholder: When I use ..., I would like to ..., but currently ...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like DS4Windows to do?
+      description: Describe the desired behaviour and give an example of how you would use it. You do not need to know how it should be implemented.
+      placeholder: Ideally, I could ... and the result would be ...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Current workaround or alternatives
+      description: If you have tried another approach or seen a useful example elsewhere, describe it and include a link if available.
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant controller, game or setup
+      description: If the request depends on hardware or a game, include the controller model, USB/Bluetooth connection, intended emulated controller and game/app. Otherwise, leave this blank.
+    validations:
+      required: false
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples, screenshots or mock-ups
+      description: Optional supporting material. Review attachments for personal details before uploading; issue attachments are public.
+    validations:
+      required: false

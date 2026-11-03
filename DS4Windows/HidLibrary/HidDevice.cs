@@ -366,15 +366,38 @@ namespace DS4Windows
             return ReadFileCore(inputBuffer, timeout, true, out bytesRead);
         }
 
+        // Current-state query used only when supported Sony Bluetooth input
+        // streaming is temporarily withheld. Reuse the same bounded, exact-IRP
+        // cancellation/drain lifetime as ReadFile; never call synchronous HidD
+        // from the input owner or retain a pinned buffer after returning.
+        internal ReadStatus ReadCurrentInputReport(byte[] report, uint timeout) =>
+            ReadFileCore(report, timeout, false, out _, currentState: true);
+
         private unsafe ReadStatus ReadFileCore(Span<byte> inputBuffer, uint timeout,
-            bool captureByteCount, out int bytesRead)
+            bool captureByteCount, out int bytesRead, bool currentState = false)
         {
             bytesRead = 0;
             lock (readTransferLock)
             {
-                SafeFileHandle transferHandle = AcquireTransferHandle(
-                    exclusive: true, out IntPtr nativeHandle,
-                    out long capturedTransferEpoch);
+                SafeFileHandle transferHandle;
+                IntPtr nativeHandle;
+                long capturedTransferEpoch;
+                if (currentState)
+                {
+                    lock (handleLock)
+                    {
+                        // A fallback must never reopen a handle after Stop or
+                        // race a new physical connection into the retired owner.
+                        if (disposed || !IsOpen || safeReadHandle == null ||
+                            safeReadHandle.IsClosed || safeReadHandle.IsInvalid)
+                            return ReadStatus.ReadError;
+                        transferHandle = AcquireTransferHandle(true,
+                            out nativeHandle, out capturedTransferEpoch);
+                    }
+                }
+                else
+                    transferHandle = AcquireTransferHandle(true,
+                        out nativeHandle, out capturedTransferEpoch);
                 EventWaitHandle wait = GetOrCreateReadCompletionEvent();
                 try
                 {
@@ -392,8 +415,13 @@ namespace DS4Windows
                         {
                             return ReadStatus.ReadError;
                         }
-                        if (NativeMethods.ReadFilePinned(nativeHandle, buffer,
-                            (uint)inputBuffer.Length, null, &ov))
+                        int ioctlBytes = 0;
+                        bool immediate = currentState ? NativeMethods.DeviceIoControl(
+                            nativeHandle, 0x000B01A2, IntPtr.Zero, 0, // IOCTL_HID_GET_INPUT_REPORT (hidclass.h)
+                            (IntPtr)buffer, inputBuffer.Length, ref ioctlBytes,
+                            (IntPtr)(&ov)) : NativeMethods.ReadFilePinned(nativeHandle,
+                            buffer, (uint)inputBuffer.Length, null, &ov);
+                        if (immediate)
                         {
                             // The existing hot-path overload does not need an
                             // extra native call. Protocol transactions need the
@@ -461,7 +489,8 @@ namespace DS4Windows
                             bytesRead = (int)completedBytes;
                         }
 
-                        return ReadStatus.Success;
+                        return currentState && (!IsTransferEpochCurrent(capturedTransferEpoch) ||
+                            transferHandle.IsClosed) ? ReadStatus.ReadError : ReadStatus.Success;
                     }
                 }
                 finally

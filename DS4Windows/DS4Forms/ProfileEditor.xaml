@@ -514,7 +514,6 @@
                         </Border>
 
                         <DataGrid x:Name="specialActionsLV" ItemsSource="{Binding ActionCol}"
-                                  SelectedIndex="{Binding SpecialActionIndex}"
                                   SelectedItem="{Binding CurrentSpecialActionItem,Mode=OneWayToSource}"
                                   Margin="0,12,0,0" AutoGenerateColumns="False" IsReadOnly="True"
                                   CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="True"

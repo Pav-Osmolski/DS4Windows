@@ -104,7 +104,11 @@ ID. The receipt's `runId` identifies the successful release-preparation run;
 - To get a preview, run **CI Build** on the desired branch with **package:
   portable** (default) or **installer**. This runs the full test gate first.
   WIP branches remain independent; syncing main into one requires fresh tests.
-- Known documentation-only changes run text/site validation. The always-present
+- Known documentation-only and issue-template-only changes run lightweight
+  text, issue-form/chooser YAML and site validation, without Windows tests or
+  installer builds. Only Markdown/YAML files directly in `.github/ISSUE_TEMPLATE/`
+  qualify; mixed application, dependency or workflow changes retain their full
+  gates. Manual runs still perform the requested full validation. The always-present
   **checks** job fails if any selected CI gate fails or is cancelled, and can
   be required by main's branch protection without waiting for skipped jobs.
 - Main application/infrastructure changes build once with final numeric

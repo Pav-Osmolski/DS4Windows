@@ -99,6 +99,16 @@ namespace DS4WinWPF.DS4Control.DTOXml
         [XmlIgnore]
         public bool UseExclusiveMode { get; private set; }
 
+        [XmlElement("GameBarBluetoothInputRecovery")]
+        public string GameBarBluetoothInputRecoveryString
+        {
+            get => GameBarBluetoothInputRecovery.ToString();
+            set => GameBarBluetoothInputRecovery = !bool.TryParse(value, out bool enabled) || enabled;
+        }
+
+        [XmlIgnore]
+        public bool GameBarBluetoothInputRecovery { get; private set; } = true;
+
         [XmlElement("KeepControllersHiddenOnReconnect")]
         public string KeepControllersHiddenOnReconnectString
         {
@@ -967,6 +977,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
         public void MapFrom(BackingStore source)
         {
             UseExclusiveMode = source.useExclusiveMode;
+            GameBarBluetoothInputRecovery = source.gameBarBluetoothInputRecovery;
             ReclaimSteamInput = source.reclaimSteamInput;
             KeepControllersHiddenOnReconnect = source.keepControllersHiddenOnReconnect;
             StartMinimized = source.startMinimized;
@@ -1089,6 +1100,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
         public void MapTo(BackingStore destination)
         {
             destination.useExclusiveMode = UseExclusiveMode;
+            destination.gameBarBluetoothInputRecovery = GameBarBluetoothInputRecovery;
             destination.reclaimSteamInput = ReclaimSteamInput;
             destination.keepControllersHiddenOnReconnect = KeepControllersHiddenOnReconnect;
             destination.startMinimized = StartMinimized;

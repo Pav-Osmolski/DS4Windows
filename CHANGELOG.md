@@ -1,13 +1,22 @@
-﻿# Changelog
+# Changelog
 
 Release history for the Pav-Osmolski DS4Windows fork. Downloads, source
 archives, checksums, and build records are available on [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 
 ## Unreleased
 
-There are no unreleased changes.
+There are currently no unreleased changes.
 
 ## Released
+
+### [5.0.63](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.63) - 2026-11-03
+
+- Keep touchpad mouse and mapped controller input available when Windows gaming overlays withhold a supported Sony Bluetooth controller's streaming reports. Provide a default-on, session-scoped recovery setting under Connection and device options. Use bounded current-state queries during the interruption, validate the reports, and discard older queued input when streaming resumes. Thanks [@nachocheese-boop](https://github.com/nachocheese-boop) for the report ([#107](https://github.com/Pav-Osmolski/DS4Windows/issues/107), [#111](https://github.com/Pav-Osmolski/DS4Windows/pull/111)).
+
+### [5.0.62](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.62) - 2026-11-03
+
+- Fix Special Actions moves and column sorting appearing unchanged while the underlying list moved, which could make selection refer to a different action. Remove the conflicting alphabetical view sort and track selection by action identity. Cover the displayed grid in light and dark themes with regression tests for moves, sorting, enabled selections and remembered order. Thanks [@Masterload1975](https://github.com/Masterload1975) for the follow-up report ([#105](https://github.com/Pav-Osmolski/DS4Windows/issues/105), [#110](https://github.com/Pav-Osmolski/DS4Windows/pull/110)).
+- Replace the bug report template with a guided form that emphasises troubleshooting and existing-issue searches, add a feature-request form, and use lightweight form/documentation checks for template-only changes ([#109](https://github.com/Pav-Osmolski/DS4Windows/pull/109)).
 
 ### [5.0.61](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.61) - 2026-11-02
 

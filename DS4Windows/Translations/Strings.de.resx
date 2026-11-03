@@ -6753,4 +6753,10 @@ Das Backup: </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Farbe auswählen</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>Änderungen werden sofort angezeigt.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Live-Eingabe und -Ausgabe für X/Y.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>Bluetooth-Controllereingaben in Game Bar aufrechterhalten</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Eine alternative Lesemethode verwenden, wenn Game Bar oder die Gamepad-Tastatur die normale Eingabe unterbricht. Gilt für unterstützte Sony-Bluetooth-Controller. Änderungen gelten nach Stopp/Start.</value>
+  </data>
 </root>

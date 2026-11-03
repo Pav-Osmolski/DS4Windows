@@ -3,9 +3,9 @@ name: Documentation site
 on:
   push:
     branches: [main]
-    paths: ["docs/**", "website/**", "zensical.toml", "README.md", "CHANGELOG.md", "contributors.md", "contributing.md", "DS4Windows/DS4WinWPF.csproj", ".github/workflows/pages.yml"]
+    paths: [".github/ISSUE_TEMPLATE/**", "docs/**", "website/**", "zensical.toml", "README.md", "CHANGELOG.md", "contributors.md", "contributing.md", "DS4Windows/DS4WinWPF.csproj", ".github/workflows/pages.yml"]
   pull_request:
-    paths: ["docs/**", "website/**", "zensical.toml", "README.md", "CHANGELOG.md", "contributors.md", "contributing.md", "DS4Windows/DS4WinWPF.csproj", ".github/workflows/pages.yml"]
+    paths: [".github/ISSUE_TEMPLATE/**", "docs/**", "website/**", "zensical.toml", "README.md", "CHANGELOG.md", "contributors.md", "contributing.md", "DS4Windows/DS4WinWPF.csproj", ".github/workflows/pages.yml"]
   release:
     types: [published]
   workflow_dispatch:

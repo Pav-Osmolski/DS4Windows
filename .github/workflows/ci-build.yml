@@ -54,6 +54,15 @@ jobs:
       - name: Test artifact retention protections
         run: python utils/test-actions-artifact-retention.py
 
+      - name: Validate issue forms and chooser
+        run: |
+          python -m pip install PyYAML==6.0.3
+          python utils/validate-issue-forms.py
+
+      - name: Test branch and PR package selection
+        shell: pwsh
+        run: ./utils/test-ci-plan.ps1
+
       - name: Select package build
         id: select
         shell: pwsh
@@ -112,10 +121,9 @@ jobs:
       - name: Run standalone hardware-verification unit tests
         run: dotnet test .\utils\Switch2UsbHardwareVerify.Tests\Switch2UsbHardwareVerify.Tests.csproj -c Release --no-restore --verbosity minimal --logger "trx" --results-directory TestResults/standalone --blame-hang-timeout 5m
 
-      - name: Test branch and PR package selection
+      - name: Test release candidate protections
         shell: pwsh
         run: |
-          .\utils\test-ci-plan.ps1
           python .\utils\test-release-candidate.py
 
       - name: Test numeric release identity and legacy publication policy

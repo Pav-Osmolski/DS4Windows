@@ -6776,4 +6776,10 @@ Untuk backup: </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Pilih warna</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>Perubahan langsung dipratinjau.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Masukan dan keluaran X/Y langsung.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>Pertahankan input pengontrol Bluetooth di Game Bar</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Gunakan metode pembacaan alternatif jika Game Bar atau keyboard Gamepad mengganggu input normal. Berlaku untuk pengontrol Sony Bluetooth yang didukung. Perubahan berlaku setelah Hentikan/Mulai.</value>
+  </data>
 </root>
