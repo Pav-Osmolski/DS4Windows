@@ -5035,7 +5035,7 @@ namespace DS4Windows.InputDevices
                 using PipelinedInputReportReader inputReader =
                     hDevice.CreatePipelinedInputReportReader(inputReport);
                 var inputFallback = new BluetoothInputReportFallback(hDevice,
-                    conType, inputReport.Length, 0x31);
+                    conType, inputReport.Length, 0x31, GameBarBluetoothInputRecoveryEnabled);
                 double[] latencySamples = new double[20];
                 int latencySampleIndex = 0;
                 int tempLatencyCount = 0;

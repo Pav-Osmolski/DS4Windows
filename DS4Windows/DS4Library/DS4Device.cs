@@ -823,6 +823,8 @@ namespace DS4Windows
         public virtual GyroMouseSens GyroMouseSensSettings { get => gyroMouseSensSettings; }
 
         protected int deviceSlotNumber = DEFAULT_JOINT_SLOT_NUMBER;
+        internal bool GameBarBluetoothInputRecoveryEnabled { get; set; } = true;
+
         public int DeviceSlotNumber
         {
             get => deviceSlotNumber;
@@ -1896,7 +1898,7 @@ namespace DS4Windows
                 NativeMethods.HidD_SetNumInputBuffers(
                     hDevice.SafeReadHandle.DangerousGetHandle(), 64);
                 var inputFallback = new BluetoothInputReportFallback(hDevice,
-                    conType, BT_INPUT_REPORT_LENGTH, 0x11);
+                    conType, BT_INPUT_REPORT_LENGTH, 0x11, GameBarBluetoothInputRecoveryEnabled);
                 Queue<double> latencyQueue = new Queue<double>(21); // Set capacity at max + 1 to avoid any resizing
                 int tempLatencyCount = 0;
                 long oldtime = 0;

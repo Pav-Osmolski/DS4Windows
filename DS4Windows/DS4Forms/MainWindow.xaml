@@ -911,6 +911,7 @@
                                     <StackPanel>
                                         <TextBlock Text="{lex:Loc Strings:UI_F649A744971CBD4D}" Style="{DynamicResource BridgeSectionTitleStyle}" />
                                         <TextBlock Text="{lex:Loc Strings:UI_F27CEC7341696391}" Style="{DynamicResource BridgeSectionDescriptionStyle}" />
+                                        <CheckBox x:Name="gameBarBluetoothRecoveryCk" Content="{lex:Loc Strings:GameBarBluetoothInputRecoveryLabel}" IsChecked="{Binding GameBarBluetoothInputRecovery}" ToolTip="{lex:Loc Strings:GameBarBluetoothInputRecoveryDescription}" Margin="{StaticResource spaceMargin}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}" />
                                         <CheckBox Content="{lex:Loc DisconnectFromBtWhenStopping}" Margin="{StaticResource spaceMargin}" IsChecked="{Binding DisconnectBTStop}" ToolTip="{lex:Loc Strings:UI_27C4E6B16BC97DCA}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}" />
                                         <CheckBox Content="{lex:Loc QuickCharge}" Margin="{StaticResource spaceMargin}" IsChecked="{Binding QuickCharge}" ToolTip="{lex:Loc Resources:QuickCharge}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}" />
                                         <Button x:Name="deviceOptionSettingsBtn" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left" Margin="0" MinWidth="140" Content="{lex:Loc DeviceOptions}" Click="DeviceOptionSettingsBtn_Click" VerticalAlignment="Center" />

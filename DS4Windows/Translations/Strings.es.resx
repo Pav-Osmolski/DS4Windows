@@ -6754,4 +6754,10 @@ El backup: </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Elegir color</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>Los cambios se previsualizan al instante.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Entrada y salida X/Y en tiempo real.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>Mantener la entrada del mando Bluetooth en Game Bar</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Usar un método de lectura alternativo si Game Bar o el teclado de mando interrumpen la entrada normal. Se aplica a mandos Sony Bluetooth compatibles. Los cambios se aplican después de detener e iniciar.</value>
+  </data>
 </root>

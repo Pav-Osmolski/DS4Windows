@@ -6922,4 +6922,10 @@
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>选择颜色</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>更改会立即预览。</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>实时 X/Y 输入和输出。</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>保持蓝牙控制器在 Game Bar 中的输入</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>当 Game Bar 或游戏手柄键盘中断正常输入时，使用备用输入读取方式。适用于受支持的索尼蓝牙控制器。更改在停止并启动后生效。</value>
+  </data>
 </root>

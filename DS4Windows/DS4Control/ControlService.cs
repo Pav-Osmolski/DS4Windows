@@ -41,6 +41,7 @@ namespace DS4Windows
 {
     public partial class ControlService
     {
+        private bool gameBarBluetoothInputRecoveryForSession = true;
         private BatteryAlertService batteryAlerts;
         internal BatteryAlertService BatteryAlerts => System.Threading.LazyInitializer.EnsureInitialized(ref batteryAlerts, () => new(this));
         private readonly DualSenseAudioPassthrough dualSenseAudioPassthrough = new DualSenseAudioPassthrough();
@@ -2853,6 +2854,8 @@ namespace DS4Windows
 
         private bool StartCore(bool showlog)
         {
+            // Latch once per service session, including controllers reconnected later.
+            gameBarBluetoothInputRecoveryForSession = Global.GameBarBluetoothInputRecovery;
             hidHideManagedDevices.OpenLifecycle(Global.KeepControllersHiddenOnReconnect);
             reportDiagnosticsWorker.Resume();
             StartupDiag($"ControlService.Start enter showlog={showlog} running={running} inServiceTask={inServiceTask} admin={Global.IsAdministrator()}");
@@ -3739,6 +3742,7 @@ namespace DS4Windows
             }
 
             StartupDiag($"device.StartUpdate begin index={index}");
+            device.GameBarBluetoothInputRecoveryEnabled = gameBarBluetoothInputRecoveryForSession;
             device.StartUpdate();
             if (device is InputDevices.JoyConDevice startedJoyCon)
                 startedJoyCon.TryStartConnectionHaptic();

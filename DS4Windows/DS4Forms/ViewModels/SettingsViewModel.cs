@@ -44,6 +44,12 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             set => DS4Windows.Global.UseExclusiveMode = value;
         }
 
+        public bool GameBarBluetoothInputRecovery
+        {
+            get => Global.GameBarBluetoothInputRecovery;
+            set => Global.GameBarBluetoothInputRecovery = value;
+        }
+
         public bool KeepControllersHiddenOnReconnect
         {
             get => DS4Windows.Global.KeepControllersHiddenOnReconnect;

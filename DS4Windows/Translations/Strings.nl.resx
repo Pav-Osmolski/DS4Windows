@@ -6784,4 +6784,10 @@ De backup: </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Kleur kiezen</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>Wijzigingen worden direct weergegeven.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Live X/Y-invoer en -uitvoer.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>Bluetooth-controllerinvoer behouden in Game Bar</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Gebruik een alternatieve leesmethode als Game Bar of het gamepadtoetsenbord de normale invoer onderbreekt. Geldt voor ondersteunde Sony-Bluetooth-controllers. Wijzigingen gelden na Stoppen/Starten.</value>
+  </data>
 </root>

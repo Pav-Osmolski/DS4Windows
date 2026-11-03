@@ -20,14 +20,15 @@ internal sealed class BluetoothInputReportFallback
     internal long RecoveredReports { get; private set; }
 
     internal BluetoothInputReportFallback(HidDevice device, ConnectionType connection,
-        int reportLength, byte reportId) : this(device.Attributes.VendorId,
+        int reportLength, byte reportId, bool enabled = true) : this(device.Attributes.VendorId,
             device.Attributes.ProductId, connection, reportLength, reportId,
-            device.ReadCurrentInputReport) { }
+            device.ReadCurrentInputReport, enabled) { }
 
     internal BluetoothInputReportFallback(int vendor, int product, ConnectionType connection,
-        int reportLength, byte reportId, Func<byte[], uint, HidDevice.ReadStatus> query)
+        int reportLength, byte reportId, Func<byte[], uint, HidDevice.ReadStatus> query,
+        bool enabled = true)
     {
-        Enabled = connection == ConnectionType.BT && vendor == 0x054C &&
+        Enabled = enabled && connection == ConnectionType.BT && vendor == 0x054C &&
             ((reportId == 0x31 && (product == 0x0CE6 || product == 0x0DF2)) ||
              (reportId == 0x11 && (product == 0x05C4 || product == 0x09CC)));
         this.reportId = reportId;

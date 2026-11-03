@@ -55,6 +55,14 @@ retain their usual input path. Current-state sampling cannot recover a history
 of very short presses that occurred between samples. The local physical test
 used DualSense; DS4/Edge paths also have synthetic regression coverage.
 
+The default-on **Keep Bluetooth controller input working in Game Bar** checkbox
+in **Settings > Controllers > Connection and device options** controls this
+recovery. Changes apply after **Stop/Start**; reconnects within the same running
+session keep the previous choice. Turning it off restores the original input
+reader without current-state queries. This is separate from **Profile Editor >
+Advanced > Output > Game Bar**, whose optional controller compatibility routes
+mapped input through an Xbox-compatible companion for overlay navigation.
+
 If the problem persists, attach the affected **profile XML** (for example
 `Pc.xml`, rather than application settings `Profiles.xml`) and a **Verbose** log
 including startup, the failure time and the keyboard/mouse output handler.

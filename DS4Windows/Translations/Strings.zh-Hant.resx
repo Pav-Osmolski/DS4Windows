@@ -6761,4 +6761,10 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>選擇顏色</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>變更會立即預覽。</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>即時 X/Y 輸入與輸出。</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>維持藍牙控制器在 Game Bar 中的輸入</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>當 Game Bar 或遊戲控制器鍵盤中斷正常輸入時，使用替代輸入讀取方式。適用於支援的 Sony 藍牙控制器。變更於停止並啟動後生效。</value>
+  </data>
 </root>

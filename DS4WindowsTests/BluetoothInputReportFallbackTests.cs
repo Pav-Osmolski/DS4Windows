@@ -10,6 +10,23 @@ public class BluetoothInputReportFallbackTests
     [DataRow(0x09CC, 0x11)]
     [DataRow(0x0CE6, 0x31)]
     [DataRow(0x0DF2, 0x31)]
+    public void DisabledPreferenceNeverQueriesSupportedController(int product, int id)
+    {
+        var fallback = new BluetoothInputReportFallback(0x054C, product,
+            ConnectionType.BT, 78, (byte)id,
+            (_, _) => throw new AssertFailedException("Disabled recovery queried the controller."),
+            enabled: false);
+        Assert.IsFalse(fallback.Enabled);
+        Assert.IsFalse(fallback.TryRecover(out _));
+        Assert.IsTrue(fallback.AcceptStreamingReport(Report((byte)id, 1)));
+        Assert.AreEqual(0L, fallback.RecoveredReports);
+    }
+
+    [TestMethod]
+    [DataRow(0x05C4, 0x11)]
+    [DataRow(0x09CC, 0x11)]
+    [DataRow(0x0CE6, 0x31)]
+    [DataRow(0x0DF2, 0x31)]
     public void RecoversCurrentStateThenRejectsQueuedOlderReports(int product, int id)
     {
         var current = Report((byte)id, 500);
