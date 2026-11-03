@@ -6792,4 +6792,10 @@
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Выбор цвета</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>Изменения сразу видны в предпросмотре.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Вход и выход X/Y в реальном времени.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>Сохранять ввод Bluetooth-контроллера в Game Bar</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Использовать альтернативный способ чтения, если Game Bar или экранная клавиатура в режиме геймпада прерывает обычный ввод. Для поддерживаемых Bluetooth-контроллеров Sony. Изменения применяются после остановки и запуска.</value>
+  </data>
 </root>

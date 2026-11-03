@@ -6751,4 +6751,10 @@ Zálohování : </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Vybrat barvu</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>Změny se ihned zobrazí v náhledu.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Živý vstup a výstup X/Y.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>Zachovat vstup ovladače Bluetooth v Game Baru</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Použít alternativní způsob čtení vstupu, pokud Game Bar nebo klávesnice pro gamepad přeruší běžný vstup. Platí pro podporované ovladače Sony přes Bluetooth. Změny se projeví po zastavení a spuštění.</value>
+  </data>
 </root>

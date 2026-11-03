@@ -6754,4 +6754,10 @@
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>בחירת צבע</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>השינויים מוצגים בתצוגה מקדימה מיד.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>קלט ופלט X/Y בזמן אמת.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>שמירה על קלט בקר Bluetooth ב-Game Bar</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>שימוש בשיטת קריאה חלופית אם Game Bar או מקלדת Gamepad מפסיקים את הקלט הרגיל. חל על בקרי Sony Bluetooth נתמכים. השינויים חלים לאחר עצירה והפעלה.</value>
+  </data>
 </root>

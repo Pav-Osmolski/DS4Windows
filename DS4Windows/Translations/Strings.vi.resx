@@ -6756,4 +6756,10 @@ Backup : </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Chọn màu</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>Các thay đổi được xem trước ngay.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Đầu vào và đầu ra X/Y trực tiếp.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>Duy trì đầu vào tay cầm Bluetooth trong Game Bar</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Dùng phương thức đọc thay thế nếu Game Bar hoặc bàn phím Gamepad làm gián đoạn đầu vào bình thường. Áp dụng cho tay cầm Sony Bluetooth được hỗ trợ. Thay đổi có hiệu lực sau khi Dừng/Khởi động.</value>
+  </data>
 </root>

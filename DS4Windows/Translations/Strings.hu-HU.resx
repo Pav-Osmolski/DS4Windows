@@ -6752,4 +6752,10 @@ A háttérben: </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Szín kiválasztása</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>A változások azonnal láthatók.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Élő X/Y bemenet és kimenet.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>A Bluetooth-vezérlő bemenetének fenntartása a Game Barban</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Alternatív beolvasás használata, ha a Game Bar vagy a játékvezérlős billentyűzet megszakítja a normál bemenetet. A támogatott Sony Bluetooth-vezérlőkre vonatkozik. A módosítások leállítás és indítás után lépnek életbe.</value>
+  </data>
 </root>

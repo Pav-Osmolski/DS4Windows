@@ -6752,4 +6752,10 @@ Il backup: </value>
   <data name="UI_BC72FF3C85FBD0E8" xml:space="preserve"><value>Scegli colore</value></data>
   <data name="UI_F417EC0D05827EEA" xml:space="preserve"><value>Le modifiche vengono mostrate subito.</value></data>
   <data name="UI_E4DB9A5AD7E50B2E" xml:space="preserve"><value>Ingresso e uscita X/Y in tempo reale.</value></data>
+  <data name="GameBarBluetoothInputRecoveryLabel" xml:space="preserve">
+    <value>Mantenere attivo l’input del controller Bluetooth in Game Bar</value>
+  </data>
+  <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
+    <value>Usa un metodo di lettura alternativo se Game Bar o la tastiera per gamepad interrompono l’input normale. Si applica ai controller Sony Bluetooth supportati. Le modifiche hanno effetto dopo Arresta/Avvia.</value>
+  </data>
 </root>

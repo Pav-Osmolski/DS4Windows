@@ -32,6 +32,44 @@ pairing. It was a workaround, not proof of faulty hardware, a particular
 power-saving setting or a confirmed app fix. Do not assume the same cause for
 every second-controller failure.
 
+## Touchpad mouse stops with Game Bar or the Gamepad touch keyboard
+
+First compare touchpad mouse movement on the desktop, with Game Bar or the
+Windows touch keyboard's **Gamepad** layout open, and again after closing it.
+Record whether controller buttons also stop reaching DS4Windows. Repeat over
+USB using the same profile; a working USB test does not rule out a Bluetooth
+interaction.
+
+In [issue #107](https://github.com/Pav-Osmolski/DS4Windows/issues/107), a local
+DualSense test showed Windows temporarily withholding streaming Bluetooth input
+while a gaming overlay was open. Touchpad mapping remained enabled. Direct
+current-state requests still returned changing, valid controller reports. This
+explains that captured freeze; it does not establish a cause for every Game Bar
+or Bluetooth problem, including the reporter's separate USB observation.
+
+Builds containing the #107 fix keep the usual streaming reader and use a bounded
+current-state fallback during interruptions on supported Sony DualShock 4,
+DualSense and DualSense Edge Bluetooth identities. They validate checksums and
+reject older queued state when streaming resumes. Unsupported devices and USB
+retain their usual input path. Current-state sampling cannot recover a history
+of very short presses that occurred between samples. The local physical test
+used DualSense; DS4/Edge paths also have synthetic regression coverage.
+
+The default-on **Keep Bluetooth controller input working in Game Bar** checkbox
+in **Settings > Controllers > Connection and device options** controls this
+recovery. Changes apply after **Stop/Start**; reconnects within the same running
+session keep the previous choice. Turning it off restores the original input
+reader without current-state queries. This is separate from **Profile Editor >
+Advanced > Output > Game Bar**, whose optional controller compatibility routes
+mapped input through an Xbox-compatible companion for overlay navigation.
+
+If the problem persists, attach the affected **profile XML** (for example
+`Pc.xml`, rather than application settings `Profiles.xml`) and a **Verbose** log
+including startup, the failure time and the keyboard/mouse output handler.
+State the physical controller, connection, virtual output, Windows build and
+whether a physical mouse still works. An old Bluetooth-pause warning alone does
+not prove that it coincides with the touchpad problem.
+
 ## Switch 2 controller is reached but its slot cannot activate
 
 Starting in 5.0.31, an unassigned Switch 2 input slot loads the existing
