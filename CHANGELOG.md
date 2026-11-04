@@ -9,6 +9,11 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.64](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.64) - 2026-11-03
+
+- Reduce idle CPU spikes from controller-audio endpoint checks by reading requested Windows audio properties in one bounded pass and reusing the identity within each check. Preserve fresh endpoint state, disabled-device detection and existing haptics timing ([#112](https://github.com/Pav-Osmolski/DS4Windows/pull/112)).
+- Document repeatable CPU measurements and the extra load UI inspectors can add through accessibility queries; correct the development guide's pinned SDK version.
+
 ### [5.0.63](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.63) - 2026-11-03
 
 - Keep touchpad mouse and mapped controller input available when Windows gaming overlays withhold a supported Sony Bluetooth controller's streaming reports. Provide a default-on, session-scoped recovery setting under Connection and device options. Use bounded current-state queries during the interruption, validate the reports, and discard older queued input when streaming resumes. Thanks [@nachocheese-boop](https://github.com/nachocheese-boop) for the report ([#107](https://github.com/Pav-Osmolski/DS4Windows/issues/107), [#111](https://github.com/Pav-Osmolski/DS4Windows/pull/111)).

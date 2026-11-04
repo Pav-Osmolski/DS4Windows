@@ -884,7 +884,8 @@ namespace DS4Windows
 
         public static bool IsDualSenseEndpoint(MMDevice device)
         {
-            ControllerAudioEndpointKind kind = ClassifyEndpoint(device);
+            string identity = GetEndpointIdentity(device);
+            ControllerAudioEndpointKind kind = ClassifyEndpointIdentity(identity);
             if (kind == ControllerAudioEndpointKind.DualSense)
             {
                 return true;
@@ -894,7 +895,7 @@ namespace DS4Windows
             // Keep the historic generic fallback, but never mistake a positively
             // identified DS4 endpoint for a physical DualSense speaker.
             return kind == ControllerAudioEndpointKind.Any &&
-                GetEndpointIdentity(device).IndexOf("Wireless Controller",
+                identity.IndexOf("Wireless Controller",
                     StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
@@ -1383,17 +1384,18 @@ namespace DS4Windows
                 return string.Empty;
             }
 
-            var values = new List<string>
-            {
-                endpoint.ID ?? string.Empty,
-                endpoint.FriendlyName ?? string.Empty,
-                endpoint.DeviceFriendlyName ?? string.Empty,
-            };
-
-            AddEndpointProperty(values, endpoint, PropertyKeys.PKEY_Device_InstanceId);
-            AddEndpointProperty(values, endpoint, PropertyKeys.PKEY_Device_ControllerDeviceId);
-            AddEndpointProperty(values, endpoint, PropertyKeys.PKEY_Device_InterfaceKey);
-            return string.Join(" ", values);
+            var properties = AudioEndpointPropertyReader.Read(endpoint,
+                PropertyKeys.PKEY_Device_FriendlyName,
+                PropertyKeys.PKEY_DeviceInterface_FriendlyName,
+                PropertyKeys.PKEY_Device_InstanceId,
+                PropertyKeys.PKEY_Device_ControllerDeviceId,
+                PropertyKeys.PKEY_Device_InterfaceKey);
+            return string.Join(" ", endpoint.ID ?? string.Empty,
+                properties.GetValueOrDefault(PropertyKeys.PKEY_Device_FriendlyName, "Unknown"),
+                properties.GetValueOrDefault(PropertyKeys.PKEY_DeviceInterface_FriendlyName, "Unknown"),
+                properties.GetValueOrDefault(PropertyKeys.PKEY_Device_InstanceId, string.Empty),
+                properties.GetValueOrDefault(PropertyKeys.PKEY_Device_ControllerDeviceId, string.Empty),
+                properties.GetValueOrDefault(PropertyKeys.PKEY_Device_InterfaceKey, string.Empty));
         }
 
         private static string GetEndpointProperty(MMDevice endpoint,
@@ -1401,29 +1403,13 @@ namespace DS4Windows
         {
             try
             {
-                return endpoint?.Properties[propertyKey]?.Value?.ToString() ??
-                    string.Empty;
+                return endpoint == null ? string.Empty :
+                    AudioEndpointPropertyReader.Read(endpoint, propertyKey)
+                        .GetValueOrDefault(propertyKey, string.Empty);
             }
             catch
             {
                 return string.Empty;
-            }
-        }
-
-        private static void AddEndpointProperty(List<string> values, MMDevice endpoint,
-            PropertyKey propertyKey)
-        {
-            try
-            {
-                object value = endpoint.Properties[propertyKey]?.Value;
-                if (value != null)
-                {
-                    values.Add(value.ToString());
-                }
-            }
-            catch
-            {
-                // Endpoint property availability differs by Windows audio driver.
             }
         }
 

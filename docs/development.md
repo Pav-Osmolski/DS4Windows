@@ -5,7 +5,7 @@
 ## Build on Windows
 
 Use Windows x64, Git and the **exact SDK declared in `global.json`** (currently
-10.0.402). Automatic roll-forward and prerelease selection are disabled. Install
+10.0.403). Automatic roll-forward and prerelease selection are disabled. Install
 that SDK before running the commands below; a different .NET 10 SDK is not an
 interchangeable build input. Python 3.10 or newer is used by packaging scripts.
 The current VIIPER distribution targets Windows x64 even though legacy x86
@@ -112,6 +112,28 @@ release pipeline runs both suites against the exact source before packaging and
 keeps translation and installer checks. Installer-stage timing diagnostics help
 locate slow phases without removing validation. Do not use an obsolete run's
 success as evidence for a newer revision.
+
+## Measuring idle CPU
+
+Compare the same controller, connection, profile, virtual output and enabled
+audio routes. Allow startup to settle, then measure visible and minimised states
+separately for at least 30–60 seconds. Record average CPU and the highest sample,
+the sampling interval and logical processor count. With process CPU-time deltas,
+divide by elapsed wall time and processor count to obtain whole-machine CPU
+percentage rather than the percentage of one core.
+
+UI inspectors and accessibility clients can add substantial work inside the
+application by repeatedly querying its controls. Take an uninstrumented baseline
+and repeat after disconnecting the inspection client. Do not disable the app's
+accessibility providers or remove visual effects just to improve a benchmark.
+Identify the busy threads before calling a cost rendering-related: a native
+UI Automation worker can otherwise be mistaken for the WPF render thread.
+
+Use per-thread CPU deltas to distinguish busy work from waits. A sampled
+thread-time trace also includes blocked threads; its inclusive time is not, by
+itself, proof of CPU consumption. Measure expensive status probes independently,
+then verify the improvement in the running app and check that endpoint changes,
+controller reconnects, audio and haptics still follow the same contracts.
 
 ## Code and evidence
 
