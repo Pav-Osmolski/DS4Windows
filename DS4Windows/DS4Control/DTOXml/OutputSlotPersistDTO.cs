@@ -151,6 +151,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
                 OutContType.ViiperDualSenseEdge => "ViiperDualSenseEdge",
                 OutContType.ViiperSwitch2Pro => "ViiperSwitch2Pro",
                 OutContType.ViiperXboxOne => "ViiperXboxOne",
+                OutContType.ViiperGenericJoystick => "ViiperGenericJoystick",
                 _ => "ViiperX360",
             };
         }

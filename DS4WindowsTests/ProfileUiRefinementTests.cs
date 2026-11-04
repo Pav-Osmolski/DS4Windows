@@ -94,23 +94,37 @@ public class ProfileUiRefinementTests
             header.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative) });
             button.SetResourceReference(FrameworkElement.StyleProperty, "BridgeDisclosureHeaderButtonStyle");
             ThemeConsistencyValidation.Layout(header, 400, 80);
+            DisclosureAnimationTests.Pump(160); // Let the hidden HWND's initial composition settle before synthetic input.
             var hover = (Border)button.Template.FindName("HoverSurface", button);
             var press = (Border)button.Template.FindName("PressedSurface", button);
             void Set(string field, bool value) => header.SetValue((DependencyPropertyKey)typeof(UIElement).GetField(field, BindingFlags.Static | BindingFlags.NonPublic).GetValue(null), value);
             Set("IsMouseOverPropertyKey", true);
             DisclosureAnimationTests.Pump(190);
+            WaitFor(() => Math.Abs(hover.Opacity - 1) < .01);
             Assert.AreEqual(1d, hover.Opacity, .01);
             Set("IsMouseCaptureWithinPropertyKey", true);
             DisclosureAnimationTests.Pump(110);
+            WaitFor(() => Math.Abs(press.Opacity - 1) < .01);
             Assert.AreEqual(1d, press.Opacity, .01);
             Set("IsMouseCaptureWithinPropertyKey", false);
             DisclosureAnimationTests.Pump(160);
+            WaitFor(() => press.Opacity < .01);
             Assert.AreEqual(0d, press.Opacity, .01);
             Assert.AreEqual(1d, hover.Opacity, .01, "Arrow release must keep the parent hover.");
             Set("IsMouseOverPropertyKey", false);
             DisclosureAnimationTests.Pump(190);
+            WaitFor(() => hover.Opacity < .01);
             Assert.AreEqual(0d, hover.Opacity, .01);
         });
+    }
+
+    // Hidden HWND composition can begin after a dispatcher timer has started.
+    // Keep the final-state assertions strict without assuming frame delivery.
+    private static void WaitFor(Func<bool> complete)
+    {
+        var deadline = System.Diagnostics.Stopwatch.StartNew();
+        while (!complete() && deadline.ElapsedMilliseconds < 1500)
+            DisclosureAnimationTests.Pump(16);
     }
 
     private static IEnumerable<DependencyObject> Visuals(DependencyObject root)
