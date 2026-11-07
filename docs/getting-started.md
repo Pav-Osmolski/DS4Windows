@@ -168,6 +168,18 @@ VIIPER stays beside DS4Windows. Install / Repair restores the matching version
 in that folder, downloading it only if needed, without moving your files or
 closing DS4Windows. Controller output pauses briefly during an active repair.
 
+## Verify a download
+
+To verify packages published through the attested release workflow, install
+[GitHub CLI](https://cli.github.com/) and run this command for the installer or
+portable ZIP. Use the actual downloaded filename.
+
+```powershell
+gh attestation verify '<downloaded package>' --repo Pav-Osmolski/DS4Windows --signer-workflow Pav-Osmolski/DS4Windows/.github/workflows/ci-build.yml --source-ref refs/heads/main
+```
+
+Older releases use the checksums and build records supplied with their downloads.
+
 ## Connect and choose a profile
 
 Connect a supported controller and select it in DS4Windows. Controller-family
