@@ -22,10 +22,10 @@
 		     a SustainedLowLatency lease in the process. -->
 		<ServerGarbageCollection>false</ServerGarbageCollection>
 		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
-		<AssemblyVersion>5.0.64.0</AssemblyVersion>
-		<FileVersion>5.0.64.0</FileVersion>
-		<Version>5.0.64</Version>
-		<InformationalVersion>5.0.64</InformationalVersion>
+		<AssemblyVersion>5.0.65.0</AssemblyVersion>
+		<FileVersion>5.0.65.0</FileVersion>
+		<Version>5.0.65</Version>
+		<InformationalVersion>5.0.65</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>

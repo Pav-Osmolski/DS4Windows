@@ -5,9 +5,15 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- Fix inverted gyro passthrough on DS4-compatible controllers that report reversed calibration endpoints. Validate calibration reads and preserve motion direction when applying their sensitivity. Thanks [@Raine-07](https://github.com/Raine-07) for reporting and comparing controllers, and [@nben](https://github.com/nben) for confirming the preview fix and sharing the calibration capture ([upstream #154](https://github.com/hbashton/DS4Windows/issues/154)).
+There are currently no unreleased changes.
 
 ## Released
+
+### [5.0.65](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.65) - 2026-11-07
+
+- Fix inverted gyro passthrough on DS4-compatible controllers that report reversed calibration endpoints. Validate calibration reads and preserve motion direction when applying their sensitivity. Thanks [@Raine-07](https://github.com/Raine-07) for reporting and comparing controllers, and [@nben](https://github.com/nben) for confirming the preview fix and sharing the calibration capture ([upstream #154](https://github.com/hbashton/DS4Windows/issues/154)).
+- Identify Pav-Osmolski as the publisher in About, the README and the download guide. Include links to the exact source revision and contributor credits in the release information archive ([#113](https://github.com/Pav-Osmolski/DS4Windows/pull/113)).
+- Attest the tested installer and portable ZIP and verify their build provenance during release promotion ([#114](https://github.com/Pav-Osmolski/DS4Windows/pull/114)).
 
 ### [5.0.64](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.64) - 2026-11-03
 
