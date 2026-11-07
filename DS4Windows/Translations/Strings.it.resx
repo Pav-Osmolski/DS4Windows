@@ -6758,4 +6758,8 @@ Il backup: </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Usa un metodo di lettura alternativo se Game Bar o la tastiera per gamepad interrompono l’input normale. Si applica ai controller Sony Bluetooth supportati. Le modifiche hanno effetto dopo Arresta/Avvia.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Pubblicato da Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>
