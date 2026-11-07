@@ -527,6 +527,10 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.mode == 'promote' && needs.identity.outputs.unsigned_release == 'true'
     runs-on: windows-2022
     timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+      attestations: read
     env:
       RELEASE_TAG: ${{ needs.identity.outputs.tag }}
       RELEASE_ID: ${{ needs.identity.outputs.release_id }}
@@ -547,6 +551,15 @@ jobs:
         python .\utils\release-candidate.py fetch --run-id $env:INPUT_CANDIDATE_RUN_ID `
           --tag $env:RELEASE_TAG --output (Join-Path $env:RUNNER_TEMP 'main-release-candidate')
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    - name: Verify main build attestations before promotion
+      shell: pwsh
+      run: |
+        foreach ($package in @($env:RELEASE_ASSET, $env:INSTALLER_ASSET)) {
+          gh attestation verify $package --repo $env:GITHUB_REPOSITORY `
+            --signer-workflow "$env:GITHUB_REPOSITORY/.github/workflows/ci-build.yml" `
+            --source-ref refs/heads/main --source-digest $env:GITHUB_SHA --deny-self-hosted-runners
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        }
     - name: Prepare verified release records
       shell: pwsh
       env:
