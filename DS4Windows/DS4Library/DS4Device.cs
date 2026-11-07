@@ -1086,10 +1086,10 @@ namespace DS4Windows
             bool read = TryReadDs4Calibration(bluetooth, hDevice.readFeatureData,
                 out byte[] report, out string transport);
             string calibration = "not applied; previous calibration retained";
-            if (read) sixAxis.TrySetDs4CalibrationData(report, !bluetooth, out calibration);
-            // One connection-time record, including the coefficients needed to diagnose
-            // compatible controllers which identify themselves using Sony's IDs.
-            AppLogger.LogToGui($"DS4 motion calibration ({DisplayName}, {conType}): {transport}; {calibration}", false);
+            // The Sony wireless adapter uses report 0x02 with Bluetooth endpoint ordering.
+            if (read) sixAxis.TrySetDs4CalibrationData(report, conType == ConnectionType.USB, out calibration);
+            if (Global.VerboseStartupLogging)
+                AppLogger.LogToGui($"DS4 motion calibration ({DisplayName}, {conType}): {transport}; {calibration}", false);
         }
 
         internal static bool TryReadDs4Calibration(bool bluetooth, Func<byte[], bool> readFeature,

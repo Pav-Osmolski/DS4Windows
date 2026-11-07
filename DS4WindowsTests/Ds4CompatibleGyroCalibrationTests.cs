@@ -24,6 +24,35 @@ public class Ds4CompatibleGyroCalibrationTests
     }
 
     [TestMethod]
+    [DataRow(-1600)]
+    [DataRow(1600)]
+    public void CapturedCloneCalibrationPreservesDirectionInVirtualDs4Packet(int sample)
+    {
+        // Bluetooth calibration report from nben's successful preview test in upstream issue #154.
+        byte[] capture = Convert.FromHexString(
+            "050000000000001322F9DD8D2281DD5A23A6DC1C021C02AE1F52E08C2075DF882079DF0400893FEEAE");
+        Assert.IsTrue(DS4Device.TryReadDs4Calibration(true, buffer =>
+        {
+            capture.CopyTo(buffer, 0);
+            return true;
+        }, out byte[] report, out string readResult), readResult);
+
+        var motion = new DS4SixAxis();
+        Assert.IsTrue(motion.TrySetDs4CalibrationData(report, false, out string calibration), calibration);
+        int[] values = Apply(motion, sample, sample, sample);
+        var state = new DS4State
+        {
+            Motion = new SixAxis(values[0], values[1], values[2], values[3], values[4], values[5], 0.004)
+        };
+        byte[] packet = ViiperStatePacketBuilder.Build(ViiperVirtualDeviceType.DualShock4, state, -1);
+        for (int axis = 0; axis < 3; axis++)
+        {
+            short output = BinaryPrimitives.ReadInt16LittleEndian(packet.AsSpan(19 + 2 * axis));
+            Assert.AreEqual(Math.Sign(sample), Math.Sign(output), $"Virtual DS4 gyro axis {axis}");
+        }
+    }
+
+    [TestMethod]
     [DataRow(false)] [DataRow(true)]
     public void ValidBiasedCalibrationMatchesLegacyScaling(bool usb)
     {
