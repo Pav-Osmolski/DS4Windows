@@ -6761,4 +6761,8 @@ i backup: </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Używaj alternatywnej metody odczytu, jeśli Game Bar lub klawiatura w trybie gamepada przerwie normalne wejście. Dotyczy obsługiwanych kontrolerów Sony Bluetooth. Zmiany obowiązują po zatrzymaniu i uruchomieniu.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Wydawca: Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

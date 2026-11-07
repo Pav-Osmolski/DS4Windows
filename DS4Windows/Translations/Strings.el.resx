@@ -6786,4 +6786,8 @@ Example: whyme_DS4Windows</value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Χρήση εναλλακτικής μεθόδου ανάγνωσης αν το Game Bar ή το πληκτρολόγιο Gamepad διακόψει την κανονική είσοδο. Ισχύει για υποστηριζόμενα χειριστήρια Sony Bluetooth. Οι αλλαγές εφαρμόζονται μετά από Διακοπή/Έναρξη.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Εκδότης: Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

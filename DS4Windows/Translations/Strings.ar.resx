@@ -6765,4 +6765,8 @@ Backup : </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>استخدم طريقة بديلة لقراءة الإدخال إذا قاطع Game Bar أو لوحة مفاتيح Gamepad الإدخال العادي. ينطبق على وحدات تحكم Sony المدعومة عبر Bluetooth. تُطبّق التغييرات بعد الإيقاف ثم التشغيل.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>الناشر: Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Fix inverted gyro passthrough on DS4-compatible controllers that report reversed calibration endpoints. Validate calibration reads and preserve motion direction when applying their sensitivity. Thanks [@Raine-07](https://github.com/Raine-07) for reporting and comparing controllers, and [@nben](https://github.com/nben) for confirming the preview fix and sharing the calibration capture ([upstream #154](https://github.com/hbashton/DS4Windows/issues/154)).
 
 ## Released
 

@@ -10837,5 +10837,11 @@
     "files": [
       "DS4Windows/DS4Forms/ControllerReadingsControl.xaml"
     ]
+  },
+  "UI_EA8813DBAAEE8209": {
+    "source": "Published by Pav-Osmolski",
+    "files": [
+      "DS4Windows/DS4Forms/About.xaml"
+    ]
   }
 }

@@ -6757,4 +6757,8 @@
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Використовувати альтернативний спосіб читання, якщо Game Bar або клавіатура в режимі геймпада перериває звичайне введення. Для підтримуваних Bluetooth-контролерів Sony. Зміни застосовуються після зупинки та запуску.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Видавець: Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

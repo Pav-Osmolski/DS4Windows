@@ -6761,4 +6761,8 @@ Backup : </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Game Barまたはゲームパッドキーボードが通常の入力を中断した場合、別の読み取り方法を使用します。対応するSony製Bluetoothコントローラーが対象です。変更は停止・開始後に適用されます。</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>公開元: Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

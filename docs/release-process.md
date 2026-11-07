@@ -60,7 +60,9 @@ For dependency or SDK changes, follow [dependency maintenance](dependency-mainte
    The workflow creates a missing tag only when the draft target matches the
    selected commit. It verifies the successful same-repository main run, every
    required test/installer gate, the exact run attempt, artifact digest and
-   package hashes. It uploads the original portable and installer bytes,
+   package hashes. It also verifies the installer and portable ZIP attestations
+   against the main CI workflow and the selected source commit before uploading
+   the original tested bytes,
    matching source archives, release-information ZIP, checksums and
    `RELEASE-BUILD.json` into the draft. Branch and PR artifacts are never eligible.
 4. Test those downloads. Existing release assets are never overwritten.
@@ -74,6 +76,11 @@ maintainer has approved unsigned numeric releases for this fork while trusted
 signing is investigated separately. Include the signing status in release
 notes. Source, digest, dependency and installer validation remain mandatory.
 Other release types retain the certificate, signer and timestamp checks.
+
+To exercise attestations on a branch before enabling changes on main, dispatch
+**CI Build** with **package: installer** and **test_attestations** enabled.
+The job verifies both preview files and rejects altered copies. The release
+workflow only accepts attestations tied to the selected main commit.
 
 ### Explicit rebuild fallback
 

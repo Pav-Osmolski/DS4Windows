@@ -6757,4 +6757,8 @@ Zálohování : </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Použít alternativní způsob čtení vstupu, pokud Game Bar nebo klávesnice pro gamepad přeruší běžný vstup. Platí pro podporované ovladače Sony přes Bluetooth. Změny se projeví po zastavení a spuštění.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Vydává Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>
