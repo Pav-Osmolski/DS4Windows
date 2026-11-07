@@ -145,7 +145,7 @@
                                 <Image Source="{StaticResource AboutBanner}" Stretch="Uniform" Visibility="Hidden" IsHitTestVisible="False"/>
                                 <StackPanel Margin="26,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" MaxWidth="330">
                                     <TextBlock Text="DS4Windows" Foreground="#F4F7FF" FontSize="36" FontWeight="Bold"/>
-                                    <TextBlock Text="{lex:Loc Strings:UI_903189090ACC10BA}" Foreground="#79C7FF" FontSize="18" TextWrapping="Wrap" Margin="0,8,0,0"/>
+                                    <TextBlock Text="{lex:Loc Strings:UI_EA8813DBAAEE8209}" Foreground="#79C7FF" FontSize="18" TextWrapping="Wrap" Margin="0,8,0,0"/>
                                     <TextBlock Text="{lex:Loc Strings:UI_D6CC6AD6734453BF}" Foreground="#D0DDF0" FontSize="13" TextWrapping="Wrap" Margin="0,14,0,0"/>
                                 </StackPanel>
                             </Grid>

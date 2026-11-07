@@ -6784,4 +6784,8 @@ Le backup : </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Utiliser une autre méthode de lecture si Game Bar ou le clavier pour manette interrompt les entrées normales. Concerne les manettes Sony Bluetooth prises en charge. Les modifications prennent effet après un arrêt et un démarrage.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Publié par Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

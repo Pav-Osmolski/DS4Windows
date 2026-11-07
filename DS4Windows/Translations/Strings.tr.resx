@@ -6784,4 +6784,8 @@ backup için: </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Game Bar veya oyun kumandası klavyesi normal girişi keserse alternatif bir okuma yöntemi kullan. Desteklenen Sony Bluetooth kontrolcüler için geçerlidir. Değişiklikler Durdur/Başlat sonrasında uygulanır.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Yayınlayan: Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

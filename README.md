@@ -4,6 +4,8 @@
 
 Controller remapping, advanced feedback, and per-game profiles for Windows.
 
+**Published by [Pav-Osmolski](https://github.com/Pav-Osmolski).**
+
 [**Website**](https://pav-osmolski.github.io/DS4Windows/) · [**Download**](https://github.com/Pav-Osmolski/DS4Windows/releases) · [Documentation](docs/README.md) · [Changelog](CHANGELOG.md) · [Community](https://www.reddit.com/r/DS4Windows/) · [Support on Ko-fi](https://ko-fi.com/devilhood42)
 
 [![Releases](https://img.shields.io/github/v/release/Pav-Osmolski/DS4Windows?logo=github&label=release)](https://github.com/Pav-Osmolski/DS4Windows/releases)

@@ -8482,4 +8482,8 @@ X axis: {0}, Y axis: {1}</value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Use an alternative input-reading method if Game Bar or the Gamepad keyboard interrupts normal input. Applies to supported Sony Bluetooth controllers. Changes apply after Stop/Start.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Published by Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>
