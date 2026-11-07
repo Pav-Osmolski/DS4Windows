@@ -6784,4 +6784,8 @@ Varmuuskopiointi : </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Käytä vaihtoehtoista lukutapaa, jos Game Bar tai peliohjainnäppäimistö keskeyttää normaalin syötteen. Koskee tuettuja Sonyn Bluetooth-ohjaimia. Muutokset tulevat voimaan pysäytyksen ja käynnistyksen jälkeen.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Julkaisija: Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

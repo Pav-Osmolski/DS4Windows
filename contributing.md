@@ -27,6 +27,19 @@ Use [Development](docs/development.md) for build/test commands and
 hardware was tested and which checks remain unverified. Documentation-only
 changes need link and content checks; they do not require installing software.
 
+## Redistributing this fork
+
+See [GPLv3](LICENSE.txt) for the licence terms. Preserve the applicable
+copyright and licence notices, identify and date your modifications, and
+provide the corresponding source when distributing covered binaries. That
+includes the modified code and applicable build and installation scripts.
+Follow the notices for bundled components as well.
+
+We welcome downstream forks linking to the source revision they used and
+publishing browsable source history. These are requests for transparency.
+Clearly identify who publishes your build so users know where to find its
+downloads, source and support.
+
 ## Documentation and releases
 
 - Keep README short and point readers to the documentation index.

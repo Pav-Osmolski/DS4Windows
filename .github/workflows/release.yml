@@ -436,7 +436,11 @@ jobs:
         New-Item -ItemType Directory -Path $infoDirectory | Out-Null
         foreach ($name in $noticeNames) { Copy-Item -LiteralPath (Join-Path $publish "extras\$name") -Destination $infoDirectory }
         $signing = if ($env:UNSIGNED_RELEASE -ceq 'true') { 'Unsigned release (no Authenticode signature)' } else { 'Required Authenticode signing verified' }
-        @("DS4Windows release: $env:RELEASE_TAG", "DS4Windows source commit: $sourceCommit",
+        $sourceUrl = "$env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
+        @("DS4Windows release: $env:RELEASE_TAG", "Publisher repository: $env:GITHUB_REPOSITORY",
+          "DS4Windows source commit: $sourceCommit", "DS4Windows source: $sourceUrl/tree/$sourceCommit",
+          "Upstream lineage: hbashton/DS4Windows and the wider DS4Windows community",
+          "Credits: $sourceUrl/blob/$sourceCommit/contributors.md",
           "VIIPER source commit: $brokerCommit", "VIIPER binary SHA-256: $brokerHash",
           "Signing: $signing", "GitHub Actions run: $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID") |
           Set-Content -LiteralPath (Join-Path $infoDirectory 'SOURCE-REVISIONS.txt') -Encoding utf8
@@ -606,7 +610,11 @@ jobs:
         New-Item -ItemType Directory -Path $infoDirectory | Out-Null
         foreach ($name in $noticeNames) { Copy-Item -LiteralPath (Join-Path $publish "extras\$name") -Destination $infoDirectory }
         $signing = if ($env:UNSIGNED_RELEASE -ceq 'true') { 'Unsigned release (no Authenticode signature)' } else { 'Required Authenticode signing verified' }
-        @("DS4Windows release: $env:RELEASE_TAG", "DS4Windows source commit: $sourceCommit",
+        $sourceUrl = "$env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
+        @("DS4Windows release: $env:RELEASE_TAG", "Publisher repository: $env:GITHUB_REPOSITORY",
+          "DS4Windows source commit: $sourceCommit", "DS4Windows source: $sourceUrl/tree/$sourceCommit",
+          "Upstream lineage: hbashton/DS4Windows and the wider DS4Windows community",
+          "Credits: $sourceUrl/blob/$sourceCommit/contributors.md",
           "VIIPER source commit: $brokerCommit", "VIIPER binary SHA-256: $brokerHash",
           "Signing: $signing", "GitHub Actions run: $env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID") |
           Set-Content -LiteralPath (Join-Path $infoDirectory 'SOURCE-REVISIONS.txt') -Encoding utf8

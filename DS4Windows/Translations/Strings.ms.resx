@@ -6784,4 +6784,8 @@ Sokongan : </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Gunakan kaedah bacaan alternatif jika Game Bar atau papan kekunci Gamepad mengganggu input biasa. Terpakai kepada pengawal Sony Bluetooth yang disokong. Perubahan berkuat kuasa selepas Henti/Mula.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Diterbitkan oleh Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

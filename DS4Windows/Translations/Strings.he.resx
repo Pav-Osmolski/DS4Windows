@@ -6760,4 +6760,8 @@
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>שימוש בשיטת קריאה חלופית אם Game Bar או מקלדת Gamepad מפסיקים את הקלט הרגיל. חל על בקרי Sony Bluetooth נתמכים. השינויים חלים לאחר עצירה והפעלה.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>פורסם על ידי Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

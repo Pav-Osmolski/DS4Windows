@@ -6760,4 +6760,8 @@ och backup: </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Använd en alternativ läsmetod om Game Bar eller handkontrollstangentbordet avbryter normal inmatning. Gäller kompatibla Sony-Bluetooth-handkontroller. Ändringar gäller efter Stopp/Start.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Utgiven av Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

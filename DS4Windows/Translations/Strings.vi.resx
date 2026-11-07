@@ -6762,4 +6762,8 @@ Backup : </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Dùng phương thức đọc thay thế nếu Game Bar hoặc bàn phím Gamepad làm gián đoạn đầu vào bình thường. Áp dụng cho tay cầm Sony Bluetooth được hỗ trợ. Thay đổi có hiệu lực sau khi Dừng/Khởi động.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Phát hành bởi Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>
