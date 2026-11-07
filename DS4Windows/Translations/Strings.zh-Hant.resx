@@ -6767,4 +6767,8 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>當 Game Bar 或遊戲控制器鍵盤中斷正常輸入時，使用替代輸入讀取方式。適用於支援的 Sony 藍牙控制器。變更於停止並啟動後生效。</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>發行者：Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

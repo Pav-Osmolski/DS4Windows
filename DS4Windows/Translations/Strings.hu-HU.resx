@@ -6758,4 +6758,8 @@ A háttérben: </value>
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>Alternatív beolvasás használata, ha a Game Bar vagy a játékvezérlős billentyűzet megszakítja a normál bemenetet. A támogatott Sony Bluetooth-vezérlőkre vonatkozik. A módosítások leállítás és indítás után lépnek életbe.</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>Kiadó: Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>
