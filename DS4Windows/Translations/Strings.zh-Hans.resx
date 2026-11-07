@@ -6928,4 +6928,8 @@
   <data name="GameBarBluetoothInputRecoveryDescription" xml:space="preserve">
     <value>当 Game Bar 或游戏手柄键盘中断正常输入时，使用备用输入读取方式。适用于受支持的索尼蓝牙控制器。更改在停止并启动后生效。</value>
   </data>
+  <data name="UI_EA8813DBAAEE8209" xml:space="preserve">
+    <value>发布者：Pav-Osmolski</value>
+    <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
+  </data>
 </root>

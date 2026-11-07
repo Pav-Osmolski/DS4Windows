@@ -2,6 +2,9 @@
 
 [Back to the overview](../README.md)
 
+Pav-Osmolski publishes this fork through its [GitHub releases](https://github.com/Pav-Osmolski/DS4Windows/releases/latest).
+Each stable release includes the installer, portable ZIP, corresponding source, checksums and build records.
+
 ## What you need
 
 - Windows **x64**, with a Windows edition supported by the bundled .NET 10
