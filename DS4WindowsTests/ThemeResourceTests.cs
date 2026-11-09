@@ -12,6 +12,33 @@ namespace DS4WindowsTests
     public class ThemeResourceTests
     {
         public TestContext TestContext { get; set; }
+
+        private static void ValidateProfileEditorLightbarLifecycle(Application application)
+        {
+            // App.xaml supplies this diagram-button style in the running app.
+            application.Resources.Add("NoBGHoverBtn", new Style(typeof(Button)));
+            try
+            {
+                foreach (bool visitLightbar in new[] { false, true })
+                {
+                    var editor = new ProfileEditor(DS4Windows.Global.TEST_PROFILE_INDEX);
+                    try
+                    {
+                        var lightbar = (DeferredProfilePage)editor.FindName("lightbarPage");
+                        Assert.IsFalse(lightbar.IsMaterialized);
+                        if (visitLightbar)
+                        {
+                            lightbar.Ready = true;
+                            lightbar.EnsureContent();
+                            Assert.IsNotNull(((FrameworkElement)lightbar.Content).FindName("colorGB"));
+                        }
+                    }
+                    finally { editor.RetireEditorSession(); }
+                }
+            }
+            finally { application.Resources.Remove("NoBGHoverBtn"); }
+        }
+
         [TestMethod]
         public void DefaultThemeLoadsBridgeShellStylesOnFreshConfiguration()
         {
@@ -94,6 +121,7 @@ namespace DS4WindowsTests
                     Assert.AreEqual("Preparing verified package...",
                         ((TextBlock)setupProgress.FindName(
                             "phaseText")).Text);
+                    ValidateProfileEditorLightbarLifecycle(application);
                     Switch2StickCalibrationEditorTests.ValidateStickCalibrationWindow(application);
                     BindingWindowLiveInputLayoutTests.ValidateRenderedBindingWindows(
                         application, resultsDirectory, renderedFiles);

@@ -186,6 +186,7 @@ namespace DS4WinWPF.DS4Forms
         private void LightbarPage_Materializing(object sender, ProfilePageMaterializingEventArgs e)
         {
             colorGB = e.Find<GroupBox>("colorGB");
+            colorGB.IsVisibleChanged += MainLightbarColorGroup_IsVisibleChanged;
             emptyColorGB = e.Find<GroupBox>("emptyColorGB");
             colorByBatteryPerCk = e.Find<CheckBox>("colorByBatteryPerCk");
             InitialiseLightbarPage();
