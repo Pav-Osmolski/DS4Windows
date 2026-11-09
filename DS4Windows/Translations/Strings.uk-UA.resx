@@ -6770,4 +6770,20 @@
   <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
     <value>Збільште відстань, щоб випадкові свайпи не спричиняли натискання кнопок.</value>
   </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Компоненти</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Підтримка віртуальних контролерів і додаткові драйвери</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Керувати компонентами…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Вивід віртуального контролера</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Перевірка стану компонентів…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Керуйте програмами та драйверами для своїх контролерів.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Перевірка…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Відкрити журнал VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Видалити USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Додаткові драйвери</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Ці драйвери також можуть використовувати інші програми на цьому ПК.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Налаштування приховування</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Відкрити HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Використовувати введення Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Керувати спільними драйверами…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Копіювати діагностику компонентів</value></data>
 </root>

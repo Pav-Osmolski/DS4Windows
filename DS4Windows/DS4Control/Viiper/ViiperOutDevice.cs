@@ -1156,9 +1156,11 @@ namespace DS4Windows
             if (!status.Ready)
             {
                 throw new IOException(
-                    status.ServerProbeMessage != null
-                        ? $"{status.DisplayText}. Check the running broker connection in Settings > VIIPER Virtual Controller Support."
-                        : $"{status.DisplayText}. Use Settings > VIIPER Virtual Controller Support to install or repair VIIPER and usbip-win2.");
+                    status.UsbipPaused
+                        ? $"{status.DisplayText}. Manage USB/IP in Settings > Components."
+                        : status.ServerProbeMessage != null
+                        ? $"{status.DisplayText}. Check the running broker connection in Settings > Components."
+                        : $"{status.DisplayText}. Use Settings > Components to install or repair VIIPER and usbip-win2.");
             }
 
             deviceStream = CreateDeviceStreamWithServerFallback();

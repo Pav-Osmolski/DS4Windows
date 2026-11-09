@@ -802,6 +802,7 @@ namespace DS4Windows.Bootstrapper
             if (!restartRequired &&
                 (plannedAction == LaunchAction.Install ||
                  plannedAction == LaunchAction.Repair) &&
+                !Installation.UsbipComponentState.IsPaused(Installation.UsbipComponentState.Read()) &&
                 !InfrastructureProbe.IsHealthy())
             {
                 if (infrastructureRecoveryPass)

@@ -68,8 +68,8 @@ def main():
     # Retain historical resource identities used by the existing generated API,
     # while replacing obsolete installation/recovery instructions with current ones.
     corrections = {
-        "ViGEmPluginFailure": "The virtual controller could not start (error {0}). Open Settings > Controllers and select Install / Repair VIIPER. Check Log for details.",
-        "ViGEm117MinNeeded": "Requires the supported VIIPER and USB/IP versions. Open Settings > Controllers and select Install / Repair VIIPER.",
+        "ViGEmPluginFailure": "The virtual controller could not start (error {0}). Open Settings > Components and select Install / Repair VIIPER. Check Log for details.",
+        "ViGEm117MinNeeded": "Requires the supported VIIPER and USB/IP versions. Open Settings > Components and select Install / Repair VIIPER.",
         "Welcome.Step1Text": "Step 1: Install VIIPER and USB/IP",
         "FirstLaunch.DS3EnableText": "Support for DualShock 3 (PS3) controllers. Requires the DsHidMini driver from Nefarius.",
         "Welcome.Step2Text": "Step 2: Check virtual controller support",
@@ -83,7 +83,7 @@ def main():
     tree = ET.parse(properties)
     other = {node.get("name"): node for node in tree.findall("data")}
     property_corrections = {
-        "OpenScpDriver": "Open Settings > Controllers and select Install / Repair VIIPER.",
+        "OpenScpDriver": "Open Settings > Components and select Install / Repair VIIPER.",
         "Step1": "Step 1: Install VIIPER and USB/IP",
         "DinputOnly": "Disable virtual controller output",
         "OutContNotice": "Choose the virtual controller games should detect. Save the profile to apply the change.",

@@ -6775,4 +6775,20 @@ Backup : </value>
   <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
     <value>Tăng khoảng cách để tránh vô tình kích hoạt nút khi vuốt.</value>
   </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Thành phần</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Hỗ trợ tay cầm ảo và trình điều khiển tùy chọn</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Quản lý thành phần…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Đầu ra tay cầm ảo</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Đang kiểm tra trạng thái thành phần…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Quản lý phần mềm và trình điều khiển hỗ trợ tay cầm của bạn.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Đang kiểm tra…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Mở nhật ký VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Gỡ cài đặt USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Trình điều khiển tùy chọn</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Các ứng dụng khác trên PC này cũng có thể dùng các trình điều khiển này.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Cài đặt ẩn thiết bị</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Mở HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Dùng phương thức nhập liệu của Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Quản lý trình điều khiển dùng chung…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Sao chép thông tin chẩn đoán thành phần</value></data>
 </root>

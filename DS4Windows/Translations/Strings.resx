@@ -390,7 +390,7 @@ Example: whyme_DS4Windows</value>
     <value>Real World Calibration</value>
   </data>
   <data name="ViGEmPluginFailure" xml:space="preserve">
-    <value>The virtual controller could not start (error {0}). Open Settings &gt; Controllers and select Install / Repair VIIPER. Check Log for details.</value>
+    <value>The virtual controller could not start (error {0}). Open Settings &gt; Components and select Install / Repair VIIPER. Check Log for details.</value>
   </data>
   <data name="CRC32Fail" xml:space="preserve">
     <value>Data integrity checks failed for wireless device. Closing device.</value>
@@ -849,7 +849,7 @@ Disabled:
     <value>Touchpad</value>
   </data>
   <data name="ViGEm117MinNeeded" xml:space="preserve">
-    <value>Requires the supported VIIPER and USB/IP versions. Open Settings &gt; Controllers and select Install / Repair VIIPER.</value>
+    <value>Requires the supported VIIPER and USB/IP versions. Open Settings &gt; Components and select Install / Repair VIIPER.</value>
   </data>
   <data name="AbsoluteMouse" xml:space="preserve">
     <value>Absolute Mouse</value>
@@ -8495,4 +8495,20 @@ X axis: {0}, Y axis: {1}</value>
   <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
     <value>Increase the distance to prevent accidental swipe button presses.</value>
   </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Components</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Virtual controller support and optional drivers</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Manage components…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Virtual controller output</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Checking component status…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Manage the software and drivers that support your controller setup.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Checking…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Open VIIPER log</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Remove USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Optional drivers</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>These drivers can also be used by other apps on this PC.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Hiding settings</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Open HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Use Windows input</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Manage shared drivers…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Copy component diagnostics</value></data>
 </root>

@@ -333,7 +333,7 @@
     <value>Opening Installer</value>
   </data>
   <data name="OpenScpDriver" xml:space="preserve">
-    <value>Open Settings &gt; Controllers and select Install / Repair VIIPER.</value>
+    <value>Open Settings &gt; Components and select Install / Repair VIIPER.</value>
   </data>
   <data name="OtherFileLocation" xml:space="preserve">
     <value>, other location files will be deleted</value>

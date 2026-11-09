@@ -6771,4 +6771,20 @@ A háttérben: </value>
   <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
     <value>Növelje a távolságot a csúsztatás miatti véletlen gombnyomások elkerüléséhez.</value>
   </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Összetevők</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Virtuális vezérlők támogatása és választható illesztőprogramok</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Összetevők kezelése…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Virtuális vezérlőkimenet</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Összetevők állapotának ellenőrzése…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>A vezérlőkhöz használt szoftverek és illesztőprogramok kezelése.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Ellenőrzés…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>VIIPER-napló megnyitása</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>USB/IP eltávolítása…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Választható illesztőprogramok</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>A számítógép más alkalmazásai is használhatják ezeket az illesztőprogramokat.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Elrejtési beállítások</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>HidHide megnyitása…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows-bemenet használata</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Megosztott illesztőprogramok kezelése…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Összetevők diagnosztikájának másolása</value></data>
 </root>

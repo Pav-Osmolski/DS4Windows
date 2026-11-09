@@ -1917,6 +1917,12 @@ namespace DS4Windows
             set => m_Config.profileEditorTimingLogging = value;
         }
 
+        public static bool PreferWindowsKeyboardMouse
+        {
+            get => m_Config.preferWindowsKeyboardMouse;
+            set => m_Config.preferWindowsKeyboardMouse = value;
+        }
+
         public static bool SuppressViiperSetupPrompt
         {
             get => m_Config.suppressViiperSetupPrompt;
@@ -5144,6 +5150,7 @@ namespace DS4Windows
         public bool profileEditorTimingLogging = false;
         public bool outputSlotsAutoFit = true;
         public double[] outputSlotsColumnWidths = Array.Empty<double>();
+        public bool preferWindowsKeyboardMouse;
         public bool suppressViiperSetupPrompt = false;
         public bool showViiperTrayIcon = true;
         public bool viiperDebugLogging = false;
@@ -9684,6 +9691,7 @@ namespace DS4Windows
                     catch { missingSetting = true; }
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/startMinimized"); Boolean.TryParse(Item.InnerText, out startMinimized); }
                     catch { missingSetting = true; }
+                    preferWindowsKeyboardMouse = Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/PreferWindowsKeyboardMouse")?.InnerText, out bool windowsInput) && windowsInput;
                     viiperDebugLogging = Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/ViiperDebugLogging")?.InnerText, out bool viiperDebug) && viiperDebug;
                     gameBarBluetoothInputRecovery = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/GameBarBluetoothInputRecovery")?.InnerText, out bool recoverGameBarInput) || recoverGameBarInput;
                     keepControllersHiddenOnReconnect = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/KeepControllersHiddenOnReconnect")?.InnerText, out bool keepHidden) || keepHidden;
@@ -10102,6 +10110,9 @@ namespace DS4Windows
             XmlNode xmlKeepHidden = m_Xdoc.CreateNode(XmlNodeType.Element, "KeepControllersHiddenOnReconnect", null); xmlKeepHidden.InnerText = keepControllersHiddenOnReconnect.ToString(); rootElement.AppendChild(xmlKeepHidden);
             XmlNode xmlReclaimSteamInput = m_Xdoc.CreateNode(XmlNodeType.Element, "ReclaimSteamInput", null); xmlReclaimSteamInput.InnerText = reclaimSteamInput.ToString(); rootElement.AppendChild(xmlReclaimSteamInput);
             XmlNode xmlStartMinimized = m_Xdoc.CreateNode(XmlNodeType.Element, "startMinimized", null); xmlStartMinimized.InnerText = startMinimized.ToString(); rootElement.AppendChild(xmlStartMinimized);
+            XmlNode xmlWindowsInput = m_Xdoc.CreateElement("PreferWindowsKeyboardMouse");
+            xmlWindowsInput.InnerText = preferWindowsKeyboardMouse.ToString();
+            rootElement.AppendChild(xmlWindowsInput);
             XmlNode xmlViiperDebug = m_Xdoc.CreateNode(XmlNodeType.Element, "ViiperDebugLogging", null); xmlViiperDebug.InnerText = viiperDebugLogging.ToString(); rootElement.AppendChild(xmlViiperDebug);
             XmlNode xmlViiperTray = m_Xdoc.CreateNode(XmlNodeType.Element, "ShowViiperTrayIcon", null); xmlViiperTray.InnerText = showViiperTrayIcon.ToString(); rootElement.AppendChild(xmlViiperTray);
             XmlNode xmlminToTaskbar = m_Xdoc.CreateNode(XmlNodeType.Element, "minimizeToTaskbar", null); xmlminToTaskbar.InnerText = minToTaskbar.ToString(); rootElement.AppendChild(xmlminToTaskbar);
