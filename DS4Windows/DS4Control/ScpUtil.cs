@@ -699,6 +699,8 @@ namespace DS4Windows
         public static string exeFileName = Path.GetFileName(exelocation);
         public static FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(exelocation);
         public static string exeversion = fileVersion.FileVersion;
+        internal const string ForkLogSuffix = " (Pav-Osmolski fork)";
+
         public static string exeDisplayVersion = string.IsNullOrWhiteSpace(fileVersion.ProductVersion) ?
             exeversion : fileVersion.ProductVersion;
         public static ulong exeversionLong = (ulong)fileVersion.ProductMajorPart << 48 |
@@ -2545,6 +2547,8 @@ namespace DS4Windows
             return m_Config.enableOutputDataToDS4[index];
         }
 
+        internal static int[] TouchpadSwipeDistance => m_Config.touchpadSwipeDistance;
+
         public static byte[] TouchSensitivity => m_Config.touchSensitivity;
         public static byte[] getTouchSensitivity()
         {
@@ -4355,6 +4359,12 @@ namespace DS4Windows
         public const bool DEFAULT_TOUCH_TOGGLE = true;
         public const bool DEFAULT_TOUCHPAD_JITTER_COMP = true;
         public const int DEFAULT_TOUCHPAD_SENS = 100;
+        internal const int DefaultTouchpadSwipeDistance = 300;
+        internal const int MinimumTouchpadSwipeDistance = 50;
+        internal const int MaximumTouchpadSwipeDistance = 600;
+
+        internal static int NormalizeTouchpadSwipeDistance(int value) =>
+            Math.Clamp(value, MinimumTouchpadSwipeDistance, MaximumTouchpadSwipeDistance);
         public const int DEFAULT_DS4_BT_POLL_RATE = 4;
         public const int DEFAULT_RUMBLE = 100;
         public const double DEFAULT_ANALOG_SENS = 1.0;
@@ -4424,6 +4434,9 @@ namespace DS4Windows
           DEFAULT_RUMBLE, DEFAULT_RUMBLE, DEFAULT_RUMBLE,
           DEFAULT_RUMBLE, DEFAULT_RUMBLE, DEFAULT_RUMBLE };
         public int[] rumbleAutostopTime = new int[Global.TEST_PROFILE_ITEM_COUNT] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // Value in milliseconds (0=autustop timer disabled)
+        internal readonly int[] touchpadSwipeDistance =
+            Enumerable.Repeat(DefaultTouchpadSwipeDistance, Global.TEST_PROFILE_ITEM_COUNT).ToArray();
+
         public Byte[] touchSensitivity = new Byte[Global.TEST_PROFILE_ITEM_COUNT]
         { DEFAULT_TOUCHPAD_SENS, DEFAULT_TOUCHPAD_SENS, DEFAULT_TOUCHPAD_SENS,
           DEFAULT_TOUCHPAD_SENS, DEFAULT_TOUCHPAD_SENS, DEFAULT_TOUCHPAD_SENS,
@@ -11378,6 +11391,7 @@ namespace DS4Windows
             Mapping.ResetStickFilters(device);
             Mapping.RequestPostMapStickReset(device);
             touchSensitivity[device] = DEFAULT_TOUCHPAD_SENS;
+            touchpadSwipeDistance[device] = DefaultTouchpadSwipeDistance;
 
             lsModInfo[device].Reset();
             rsModInfo[device].Reset();

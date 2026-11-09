@@ -6932,4 +6932,13 @@
     <value>发布者：Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>颜色预览</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>最小滑动距离</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>增大距离可避免意外滑动触发按键。</value>
+  </data>
 </root>

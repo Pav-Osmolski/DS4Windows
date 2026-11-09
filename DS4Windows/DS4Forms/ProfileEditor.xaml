@@ -1417,6 +1417,9 @@
                                                             <Label Content="B" Padding="0" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                                             <Border Tag="{Binding MainColorBString, FallbackValue=Blue}" Style="{DynamicResource ProfileBlueChannelStyle}" Padding="6" Height="40" CornerRadius="3" VerticalAlignment="Center"><Slider Value="{Binding MainColorB}" MinWidth="100" Minimum="0" Maximum="255" ToolTip="{Binding MainColorB}" Style="{StaticResource ProfileRgbSliderStyle}" Background="Transparent" Height="28" VerticalAlignment="Center"/></Border>
                                                         </StackPanel>
+                                                        <Border Height="30" CornerRadius="4" BorderThickness="1"
+                                                                BorderBrush="{DynamicResource BorderColor}"
+                                                                Background="{Binding MainColorString}" AutomationProperties.Name="{lex:Loc LightbarColorPreview}"/>
                                                     </StackPanel>
                                                 </GroupBox>
                                                 <GroupBox x:Name="emptyColorGB" Header="{lex:Loc Strings:UI_C6C094BC0054F9CB}" Padding="4" Margin="0,0,20,12">
@@ -1656,6 +1659,15 @@
                                     <Border Style="{DynamicResource BridgeCardStyle}">
                                         <StackPanel>
                                             <TextBlock Text="{lex:Loc Strings:UI_98C12125DE2CCBDB}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+
+                                            <TextBlock Text="{lex:Loc TouchpadSwipeDistanceHelp}" Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                                <Label Target="{Binding ElementName=touchpadSwipeDistanceInput}" Content="{lex:Loc TouchpadSwipeDistance}"
+                                                       Padding="0" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                                <xctk:IntegerUpDown x:Name="touchpadSwipeDistanceInput" MinWidth="80" MinHeight="34"
+                                                                    Minimum="50" Maximum="600" Increment="10"
+                                                                    Value="{Binding TouchpadSwipeDistance}"/>
+                                            </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Button x:Name="swipeUpBtn" Content="{lex:Loc Strings:UI_7BAAA24E318F98A9}" MinWidth="100" Tag="{Binding SwipeUp, Source={StaticResource controlIndexCheck}}" Click="SwipeControlsButton_Click" MinHeight="34" Padding="12,7" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>

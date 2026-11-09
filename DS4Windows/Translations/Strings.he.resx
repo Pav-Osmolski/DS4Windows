@@ -6764,4 +6764,13 @@
     <value>פורסם על ידי Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>תצוגה מקדימה של הצבע</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>מרחק החלקה מזערי</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>הגדילו את המרחק כדי למנוע לחיצות לא מכוונות על כפתורים בעקבות החלקה.</value>
+  </data>
 </root>

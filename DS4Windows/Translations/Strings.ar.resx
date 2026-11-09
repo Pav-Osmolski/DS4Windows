@@ -6769,4 +6769,13 @@ Backup : </value>
     <value>الناشر: Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>معاينة اللون</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>الحد الأدنى لمسافة السحب</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>زِد المسافة لتجنب تفعيل الأزرار عن طريق السحب غير المقصود.</value>
+  </data>
 </root>

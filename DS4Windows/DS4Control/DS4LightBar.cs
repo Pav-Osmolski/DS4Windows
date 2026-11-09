@@ -77,7 +77,21 @@ namespace DS4Windows
                 // profile ownership even when this routine skips its colour.
                 dualSense.SetProfileLightbarOwnership(useLightRoutine);
             }
-            //bool useLightRoutine = false;
+            int previewArgb = device.ProfileLightbarPreviewArgb;
+            if (previewArgb != 0 && useLightRoutine && !defaultLight && !shuttingdown && !useForceLight)
+            {
+                DS4LightbarState preview = new()
+                {
+                    LightBarColor = new DS4Color(Color.FromArgb(previewArgb)),
+                    LightBarExplicitlyOff = true,
+                };
+                byte flashDuration = device.getLightBarOnDuration();
+                if (flashDuration > 1)
+                    preview.LightBarFlashDurationOn = preview.LightBarFlashDurationOff = 1;
+                device.SetLightbarState(ref preview);
+                return;
+            }
+
             if (!defaultLight && !useForceLight && useLightRoutine)
             {
                 if (lightModeInfo.useCustomLed)

@@ -330,6 +330,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
         }
         public event EventHandler MainColorChanged;
+        internal event EventHandler MainColorEdited;
 
         public string MainColorString
         {
@@ -354,8 +355,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             get => Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.red;
             set
             {
-                Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.red = (byte)value;
-                MainColorRChanged?.Invoke(this, EventArgs.Empty);
+                SetMainColorChannel(ref Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.red,
+                    (byte)value, MainColorRChanged);
             }
         }
         public event EventHandler MainColorRChanged;
@@ -371,8 +372,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             get => Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.green;
             set
             {
-                Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.green = (byte)value;
-                MainColorGChanged?.Invoke(this, EventArgs.Empty);
+                SetMainColorChannel(ref Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.green,
+                    (byte)value, MainColorGChanged);
             }
         }
         public event EventHandler MainColorGChanged;
@@ -388,8 +389,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             get => Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.blue;
             set
             {
-                Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.blue = (byte)value;
-                MainColorBChanged?.Invoke(this, EventArgs.Empty);
+                SetMainColorChannel(ref Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.blue,
+                    (byte)value, MainColorBChanged);
             }
         }
         public event EventHandler MainColorBChanged;
@@ -399,6 +400,14 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             get => $"#{ Global.LightbarSettingsInfo[device].ds4winSettings.m_Led.blue.ToString("X2")}0000FF";
         }
         public event EventHandler MainColorBStringChanged;
+
+        private void SetMainColorChannel(ref byte channel, byte value, EventHandler changed)
+        {
+            if (channel == value) return;
+            channel = value;
+            changed?.Invoke(this, EventArgs.Empty);
+            MainColorEdited?.Invoke(this, EventArgs.Empty);
+        }
 
         public string LowColor
         {
@@ -2361,6 +2370,12 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             get => Global.szOutBezierCurveObj[device].CustomDefinition;
             set => Global.szOutBezierCurveObj[device].InitBezierCurve(value, BezierCurve.AxisType.SA, true);
+        }
+
+        public int TouchpadSwipeDistance
+        {
+            get => Global.TouchpadSwipeDistance[device];
+            set => Global.TouchpadSwipeDistance[device] = BackingStore.NormalizeTouchpadSwipeDistance(value);
         }
 
         public int TouchpadOutputIndex

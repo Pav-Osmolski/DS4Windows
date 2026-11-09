@@ -148,8 +148,11 @@ Follow [Flick stick calibration](flick-stick-calibration.md) for the in-game
 ![Lightbar output, indicator LEDs and profile RGB colours](images/site/profile-editor-lightbar.webp)
 
 Choose **Output Mode** first. In normal mode, use **Profile colors** to adjust
-RGB and optionally **Color by Battery %**. **Battery alert** selects a threshold,
-flash/pulse pattern and alert color. **Charging** controls behaviour while charging.
+RGB and optionally **Color by Battery %**. Editing the normal RGB sliders
+updates the color swatch and previews a solid color on the connected controller
+when its active lightbar mode is Normal. Leaving the page, applying, saving or
+canceling ends the preview. **Battery alert** selects a threshold, flash/pulse
+pattern and alert color. **Charging** controls behaviour while charging.
 **Rainbow and brightness** controls the cycle and maximum light level, including
 the always-rainbow option.
 
@@ -191,6 +194,10 @@ writer can send another command. Use Apply/Save to persist the selections.
 | Mouse joystick | Translate touch motion into stick-style output |
 | Absolute mouse | Position the pointer using the touch surface |
 | Passthrough | Let a compatible game use virtual-controller touch data |
+
+In **Controls** mode, raise **Minimum swipe distance** to make accidental
+one-finger swipe button presses less likely. It defaults to 300 and is saved
+per profile. Two-finger profile switching has its own gesture settings.
 
 For a desktop mouse, start with Slide and moderate sensitivity. Add Tap, Scroll,
 Double Tap or Lower Right as RMB only if needed. Rotation changes movement

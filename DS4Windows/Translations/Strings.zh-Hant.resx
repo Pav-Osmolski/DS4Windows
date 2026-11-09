@@ -6771,4 +6771,13 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
     <value>發行者：Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>色彩預覽</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>最小滑動距離</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>增加距離可避免意外滑動觸發按鍵。</value>
+  </data>
 </root>

@@ -6786,4 +6786,13 @@ Untuk backup: </value>
     <value>Diterbitkan oleh Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Pratinjau warna</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Jarak usap minimum</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Perbesar jarak agar usapan yang tidak disengaja tidak memicu tombol.</value>
+  </data>
 </root>

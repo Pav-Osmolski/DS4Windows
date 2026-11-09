@@ -6788,4 +6788,13 @@ Sokongan : </value>
     <value>Diterbitkan oleh Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Pratonton warna</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Jarak leret minimum</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Tingkatkan jarak untuk mengelakkan leretan yang tidak disengajakan daripada mencetuskan butang.</value>
+  </data>
 </root>

@@ -9,6 +9,12 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.66](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.66) - 2026-11-09
+
+- Preview Normal lightbar RGB edits on screen and on the selected controller when its active lightbar mode is Normal. Thanks [@nben](https://github.com/nben) for the request ([#116](https://github.com/Pav-Osmolski/DS4Windows/issues/116)).
+- Add a per-profile minimum distance for one-finger touchpad swipe button mappings. Increase it to reduce accidental swipes. Existing profiles retain the default of 300. Thanks [u/AEKarim](https://www.reddit.com/user/AEKarim/) for the [suggestion](https://www.reddit.com/r/DS4Windows/comments/1xqe2sp/ds4_touch_pad_swipesensitivity/).
+- Identify the Pav-Osmolski fork beside the version in the Log tab and the saved startup log.
+
 ### [5.0.65](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.65) - 2026-11-07
 
 - Fix inverted gyro passthrough on DS4-compatible controllers that report reversed calibration endpoints. Validate calibration reads and preserve motion direction when applying their sensitivity. Thanks [@Raine-07](https://github.com/Raine-07) for reporting and comparing controllers, and [@nben](https://github.com/nben) for confirming the preview fix and sharing the calibration capture ([upstream #154](https://github.com/hbashton/DS4Windows/issues/154)).
