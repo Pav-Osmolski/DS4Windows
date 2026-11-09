@@ -22,10 +22,10 @@
 		     a SustainedLowLatency lease in the process. -->
 		<ServerGarbageCollection>false</ServerGarbageCollection>
 		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
-		<AssemblyVersion>5.0.66.0</AssemblyVersion>
-		<FileVersion>5.0.66.0</FileVersion>
-		<Version>5.0.66</Version>
-		<InformationalVersion>5.0.66</InformationalVersion>
+		<AssemblyVersion>5.0.67.0</AssemblyVersion>
+		<FileVersion>5.0.67.0</FileVersion>
+		<Version>5.0.67</Version>
+		<InformationalVersion>5.0.67</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
@@ -72,6 +72,7 @@
 
 	<ItemGroup>
 		<Compile Include="..\installer\StartupSetupState.cs" Link="StartupSetupState.cs" />
+		<Compile Include="..\installer\UsbipComponentState.cs" Link="UsbipComponentState.cs" />
 		<None Remove="libs\x64\**" Condition="'$(Platform)' != 'x64'" />
 		<None Remove="libs\x86\**" Condition="'$(Platform)' != 'x86'" />
 	</ItemGroup>

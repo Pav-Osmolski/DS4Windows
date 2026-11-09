@@ -432,3 +432,98 @@ finally {
     }
     Write-Host "USB-IP post-reboot inspection passed $($cases.Count) presence, driver and DriverStore cases plus boundary retention/recovery."
 }
+
+& {
+    Invoke-Expression (Get-BackendFunctionDefinition "Invoke-UsbipComponentAction")
+    $script:RequiredUsbipVersion = [Version]"0.9.8.1"
+    $script:CanonicalUsbipPath = "MockUsbip:\usbip.exe"
+    $script:UsbipReplacementStatePath = "MockUsbip:\boundary.json"
+    $script:BundledUsbipInstallerPath = "MockUsbip:\setup.exe"
+    $script:UsbipInstallerSha256 = "mock-digest"
+    $script:InstallDir = "MockUsbip:\viiper"
+    $script:ComponentState = ""
+    $script:ComponentBoot = "boot-a"
+    $script:ComponentInstalled = $true
+    $script:ComponentReady = $true
+    $script:ComponentImports = @()
+    $script:ComponentPostRebootSafe = $true
+    $script:ComponentInstalls = 0
+    $script:ComponentUninstalls = 0
+    $script:ComponentInstallerExit = 0
+
+    function Get-UsbipComponentState { $script:ComponentState }
+    function Set-UsbipComponentState([string]$state) { $script:ComponentState = $state }
+    function Get-WindowsBootSessionId { $script:ComponentBoot }
+    function Get-CitrixUsbMonitorState { $null }
+    function Get-UsbipInstalledVersion { $script:RequiredUsbipVersion }
+    function Test-PinnedUsbipComponent { $script:ComponentReady }
+    function Get-UsbipUninstallEntry { "mock-uninstall" }
+    function Assert-SafeManagedDirectory([string]$path) { $path }
+    function New-Item { }
+    function Protect-ElevatedTaskTargetDirectory { }
+    function Get-UsbipImportedPortBlocks { $script:ComponentImports }
+    function Test-Path([string]$LiteralPath) {
+        if ($LiteralPath -eq $script:CanonicalUsbipPath) { return $script:ComponentInstalled }
+        if ($LiteralPath -eq $script:UsbipReplacementStatePath) { return $false }
+        throw "Unexpected path: $LiteralPath"
+    }
+    function Remove-MismatchedUsbipPackage($entry, $installed, $required, [switch]$IntentionalRemoval) {
+        if (-not $IntentionalRemoval -or $entry -ne "mock-uninstall") { throw "Wrong uninstaller invocation" }
+        $script:ComponentUninstalls++
+        $script:ComponentState = "Removing:" + $script:ComponentBoot
+        $script:ComponentInstalled = $script:ComponentReady = $false
+        return $true
+    }
+    function Assert-UsbipPostRebootState {
+        if (-not $script:ComponentPostRebootSafe) { throw "Old USB/IP package remains" }
+    }
+    function Assert-FileSha256([string]$path, [string]$digest) {
+        if ($path -ne $script:BundledUsbipInstallerPath -or $digest -ne $script:UsbipInstallerSha256) {
+            throw "Wrong restore package"
+        }
+    }
+    function Start-Process($FilePath, $ArgumentList, [switch]$PassThru, [switch]$Wait, $WindowStyle) {
+        if ($FilePath -ne $script:BundledUsbipInstallerPath -or -not $Wait) { throw "Unexpected process" }
+        $script:ComponentInstalls++
+        $script:ComponentInstalled = $true
+        $script:ComponentReady = $script:ComponentInstallerExit -eq 0
+        [pscustomobject]@{ ExitCode = $script:ComponentInstallerExit }
+    }
+
+    $script:ComponentImports = @("foreign import")
+    $blocked = $false
+    try { Invoke-UsbipComponentAction Remove } catch { $blocked = $true }
+    if (-not $blocked -or $script:ComponentState -or $script:ComponentUninstalls) {
+        throw "An active USB/IP import must block all removal mutations."
+    }
+    $script:ComponentImports = @()
+    if ((Invoke-UsbipComponentAction Remove) -ne 3010 -or $script:ComponentState -ne "Removing:boot-a") {
+        throw "Removal did not record the boot boundary."
+    }
+    if ((Invoke-UsbipComponentAction Verify) -ne 3010) { throw "Same-boot removal verification was allowed." }
+    if ((Invoke-UsbipComponentAction Restore) -ne 3010 -or $script:ComponentInstalls) {
+        throw "Restore crossed the pending removal boundary."
+    }
+    $script:ComponentBoot = "boot-b"
+    $script:ComponentPostRebootSafe = $false
+    $blocked = $false
+    try { Invoke-UsbipComponentAction Verify } catch { $blocked = $true }
+    if (-not $blocked -or $script:ComponentState -ne "Removing:boot-a") {
+        throw "An incomplete removal was marked verified."
+    }
+    $script:ComponentPostRebootSafe = $true
+    if ((Invoke-UsbipComponentAction Verify) -ne 0 -or $script:ComponentState -ne "Removed") {
+        throw "Verified removal did not retain the intentional pause."
+    }
+    $script:ComponentInstallerExit = 3010
+    if ((Invoke-UsbipComponentAction Restore) -ne 3010 -or $script:ComponentState -ne "Restoring:boot-b") {
+        throw "Restore did not retain the restart requirement."
+    }
+    $script:ComponentBoot = "boot-c"
+    $script:ComponentReady = $true
+    if ((Invoke-UsbipComponentAction Restore) -ne 0 -or $script:ComponentState -or
+            $script:ComponentInstalls -ne 1 -or $script:ComponentUninstalls -ne 1) {
+        throw "A verified restore should clear the pause without running the installer twice."
+    }
+    Write-Host "USB-IP component management passed active-import, reboot, removal verification and restoration checks."
+}

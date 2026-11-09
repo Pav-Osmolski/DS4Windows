@@ -412,7 +412,8 @@ Settings fills the available window width and groups related options into cards.
 | --- | --- |
 | General | Startup, window behavior, notifications and latency warnings |
 | Appearance | App theme, sidebar icon, tray icon, language and tooltips |
-| Controllers | VIIPER setup, HidHide, Steam Input recovery, device options and swipe profiles; optional Nintendo pairing |
+| Controllers | Virtual output status, device hiding, Steam Input recovery, connection options, swipe profiles and Nintendo pairing |
+| Components | VIIPER setup and logs, USB/IP removal and restoration, and optional HidHide and FakerInput drivers |
 | Updates & tools | Update checks, profile folder, diagnostic utilities, verbose logging and optional profile-editor timing logs (off by default) |
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
@@ -461,6 +462,30 @@ immediately.
 Use [Swipe profiles](swipe-profiles.md) to limit profile cycling. For double
 input, configure HidHide and check overlapping Steam Input mappings.
 Run at Startup and Start Minimized are separate choices.
+
+### Manage controller components
+
+Open **Settings > Components** or use **Manage components…** from the
+virtual output status in **Settings > Controllers**.
+
+- **VIIPER** shows the selected backend and its running status. Use
+  **Install / Repair VIIPER** to fix a backend that needs attention.
+- **USB/IP** can be removed from Windows with administrator approval.
+  Close games and other applications using USB/IP first. If an import is
+  still attached, removal stops. Restart Windows, reopen Components and
+  choose **Verify removal…** to finish. Virtual output stays paused across
+  app restarts and updates. Choose **Restore USB/IP…** to reinstall and
+  verify the supported driver, then reopen DS4Windows to start the backend.
+- **HidHide** shows both the DS4Windows hiding preference and the system-wide
+  hiding state. Use **Hiding settings** for DS4Windows or **Open HidHide…**
+  to manage the driver's settings in its configuration client.
+- **FakerInput** shows the installed driver and the keyboard and mouse
+  handler in use. Choose **Use Windows input** to use the Windows handler
+  after the next Stop/Start. Return to automatic selection to let DS4Windows
+  choose the handler again.
+
+Install missing optional drivers here. To remove an optional shared driver,
+use **Manage shared drivers…** to open Windows Installed apps.
 
 ### Battery alerts
 

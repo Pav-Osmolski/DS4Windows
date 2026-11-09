@@ -6772,4 +6772,20 @@ Das Backup: </value>
   <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
     <value>Erhöhe den Abstand, um versehentliche Tastendrücke durch Wischen zu vermeiden.</value>
   </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Komponenten</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Unterstützung für virtuelle Controller und optionale Treiber</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Komponenten verwalten…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Virtuelle Controller-Ausgabe</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Komponentenstatus wird geprüft…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Software und Treiber für die Controller-Einrichtung verwalten.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Wird geprüft…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>VIIPER-Protokoll öffnen</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>USB/IP entfernen…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Optionale Treiber</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Andere Anwendungen auf diesem PC können diese Treiber ebenfalls verwenden.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Ausblendeinstellungen</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>HidHide öffnen…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows-Eingabe verwenden</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Gemeinsam genutzte Treiber verwalten…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Komponentendiagnose kopieren</value></data>
 </root>

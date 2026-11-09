@@ -69,115 +69,77 @@ namespace DS4WinWPF.DS4Forms
                 : "VIIPER setup needs attention";
         }
 
-        private async void HidHideInstall_Click(object sender, RoutedEventArgs e)
-        {
-            await RunBundledInstallerAsync(hidHideInstallBtn, "HidHide",
-                HidHideInstallerFileName,
-                HidHideInstallerSha256);
-        }
+        private async void HidHideInstall_Click(object sender, RoutedEventArgs e) =>
+            await RunBundledInstallerAsync(hidHideInstallBtn, hidHide: true);
 
-        private async void FakerInputInstallBtn_Click(object sender, RoutedEventArgs e)
-        {
-            bool useX64 = Environment.Is64BitOperatingSystem;
-            string fileName = useX64 ? FakerInputX64FileName :
-                FakerInputX86FileName;
-            string sha256 = useX64 ? FakerInputX64Sha256 :
-                FakerInputX86Sha256;
-            await RunBundledInstallerAsync(fakerInputInstallBtn,
-                "FakerInput", fileName, sha256);
-        }
+        private async void FakerInputInstallBtn_Click(object sender, RoutedEventArgs e) =>
+            await RunBundledInstallerAsync(fakerInputInstallBtn, hidHide: false);
 
-        private async Task RunBundledInstallerAsync(
-            System.Windows.Controls.Button button, string componentName,
-            string bundledFileName, string expectedSha256)
+        private async Task RunBundledInstallerAsync(System.Windows.Controls.Button button, bool hidHide)
         {
             if (DS4Windows.PortableLabContext.IsActive) return;
-            string target = Path.Combine(AppContext.BaseDirectory, "extras",
-                bundledFileName);
+            string component = hidHide ? "HidHide" : "FakerInput";
             try
             {
                 SetInstallerControlsEnabled(false);
-
-                if (!File.Exists(target))
-                {
-                    throw new FileNotFoundException(
-                        global::DS4Windows.UiText.Format("The offline DS4Windows package is incomplete: ") +
-                        global::DS4Windows.UiText.Format("{0} is missing.", bundledFileName), target);
-                }
-
-                button.Content = $"Verifying bundled {componentName}…";
-                if (!await InstallerMatchesSha256Async(target,
-                    expectedSha256))
-                {
-                    throw new InvalidDataException(
-                        global::DS4Windows.UiText.Format("The bundled {0} installer failed its ", componentName) +
-                        global::DS4Windows.UiText.Get("SHA-256 integrity check."));
-                }
-
-                button.Content = $"Installing {componentName}…";
-                using Process process = Process.Start(new ProcessStartInfo
-                {
-                    FileName = target,
-                    UseShellExecute = true,
-                    Verb = "runas",
-                }) ?? throw new InvalidOperationException(
-                    global::DS4Windows.UiText.Format("Windows did not start the {0} installer.", componentName));
-                await process.WaitForExitAsync();
-
-                const int RestartRequiredExitCode = 3010;
-                bool restartRequired = process.ExitCode ==
-                    RestartRequiredExitCode;
-                if (process.ExitCode != 0 && !restartRequired)
-                {
-                    throw new InvalidOperationException(
-                        global::DS4Windows.UiText.Format("The {0} installer exited with code {1}.", componentName, process.ExitCode));
-                }
-
-                if (componentName == "HidHide")
-                {
-                    DS4Windows.Global.RefreshHidHideInfo();
-                }
-                else if (componentName == "FakerInput")
-                {
-                    DS4Windows.Global.RefreshFakerInputInfo();
-                }
-                button.Content = restartRequired ?
-                    $"{componentName} setup complete — restart required" :
-                    $"{componentName} setup complete";
-                if (restartRequired)
-                {
+                bool restart = await InstallOptionalDriverAsync(hidHide, text => button.Content = text);
+                button.Content = restart ? $"{component} setup complete — restart required" : $"{component} setup complete";
+                if (restart)
                     MessageBox.Show(this,
-                        global::DS4Windows.UiText.Format("{0} was installed successfully. Restart Windows to finish setup.", componentName),
-                        global::DS4Windows.UiText.Format("{0} setup", componentName), MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-                }
+                        global::DS4Windows.UiText.Format("{0} was installed successfully. Restart Windows to finish setup.", component),
+                        global::DS4Windows.UiText.Format("{0} setup", component), MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch (Exception ex)
+            catch (Exception error)
             {
-                button.Content = $"{componentName} setup failed";
-                MessageBox.Show(this,
-                    global::DS4Windows.UiText.Format("Could not install {0}: {1}", componentName, ex.Message),
-                    global::DS4Windows.UiText.Format("{0} setup", componentName), MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                button.Content = $"{component} setup failed";
+                MessageBox.Show(this, global::DS4Windows.UiText.Format("Could not install {0}: {1}", component, error.Message),
+                    global::DS4Windows.UiText.Format("{0} setup", component), MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            finally
-            {
-                SetInstallerControlsEnabled(true);
-            }
+            finally { SetInstallerControlsEnabled(true); }
         }
 
-        private static async Task<bool> InstallerMatchesSha256Async(
-            string path, string expectedSha256)
+        internal static async Task<bool> InstallOptionalDriverAsync(bool hidHide, Action<string> progress = null)
         {
-            if (string.IsNullOrWhiteSpace(expectedSha256)) return true;
+            bool x64 = Environment.Is64BitOperatingSystem;
+            string component = hidHide ? "HidHide" : "FakerInput";
+            string name = hidHide ? HidHideInstallerFileName : x64 ? FakerInputX64FileName : FakerInputX86FileName;
+            string digest = hidHide ? HidHideInstallerSha256 : x64 ? FakerInputX64Sha256 : FakerInputX86Sha256;
+            string target = Path.Combine(AppContext.BaseDirectory, "extras", name);
+            if (DS4Windows.PortableLabContext.IsActive)
+                throw new InvalidOperationException("Optional driver setup is unavailable in the portable lab.");
+            if (hidHide ? DS4Windows.Global.IsHidHideInstalled() : DS4Windows.Global.IsFakerInputInstalled())
+                return false;
 
-            using FileStream stream = new FileStream(path, FileMode.Open,
-                FileAccess.Read, FileShare.Read, bufferSize: 81920,
-                useAsync: true);
-            using SHA256 sha256 = SHA256.Create();
-            byte[] hash = await sha256.ComputeHashAsync(stream);
-            return string.Equals(Convert.ToHexString(hash), expectedSha256,
-                StringComparison.OrdinalIgnoreCase);
+            progress?.Invoke(global::DS4Windows.UiText.Format("Verifying bundled {0}…", component));
+            // Hold a handle that denies writes and replacement through launch.
+            using FileStream stream = new FileStream(target, FileMode.Open, FileAccess.Read,
+                FileShare.Read, bufferSize: 81920, useAsync: true);
+            byte[] hash = await SHA256.HashDataAsync(stream);
+            if (!string.Equals(Convert.ToHexString(hash), digest, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException(global::DS4Windows.UiText.Format("The bundled {0} installer failed verification.", component));
+
+            progress?.Invoke(global::DS4Windows.UiText.Format("Installing {0}…", component));
+            var start = new ProcessStartInfo { UseShellExecute = true, Verb = "runas" };
+            if (hidHide)
+            {
+                start.FileName = target;
+                start.ArgumentList.Add("/norestart");
+            }
+            else
+            {
+                start.FileName = Path.Combine(Environment.SystemDirectory, "msiexec.exe");
+                start.ArgumentList.Add("/i");
+                start.ArgumentList.Add(target);
+                start.ArgumentList.Add("/norestart");
+            }
+            using Process process = Process.Start(start) ??
+                throw new InvalidOperationException(global::DS4Windows.UiText.Format("Windows did not start the {0} installer.", component));
+            await process.WaitForExitAsync();
+            if (process.ExitCode is not (0 or 3010 or 1641))
+                throw new InvalidOperationException(global::DS4Windows.UiText.Format("The {0} installer exited with code {1}.", component, process.ExitCode));
+            if (hidHide) DS4Windows.Global.RefreshHidHideInfo();
+            else DS4Windows.Global.RefreshFakerInputInfo();
+            return process.ExitCode != 0;
         }
 
         private void SetInstallerControlsEnabled(bool enabled)

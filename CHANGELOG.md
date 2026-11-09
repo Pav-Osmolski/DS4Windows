@@ -9,6 +9,13 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.67](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.67) - 2026-11-09
+
+- Add Settings > Components for VIIPER, USB/IP, HidHide and FakerInput, with themed icons, version and status details, refresh, logs and copyable diagnostics. Keep the VIIPER setup-prompt and tray-icon preferences on one row with tooltip help.
+- Add administrator-approved USB/IP removal, reboot verification and restoration. Stop virtual controller output before removal, reject removal while another USB/IP import is attached and preserve the pause across app restarts and upgrades until the driver is restored.
+- Show both the DS4Windows HidHide preference and the system-wide hiding state. The Hiding settings shortcut opens Controllers with Prevent double input at the top of the scroll area.
+- Install missing optional drivers from Components, open Windows Installed apps to manage shared drivers and choose the Windows keyboard and mouse handler in place of automatic selection. Handler changes apply after Stop/Start.
+
 ### [5.0.66](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.66) - 2026-11-09
 
 - Preview Normal lightbar RGB edits on screen and on the selected controller when its active lightbar mode is Normal. Thanks [@nben](https://github.com/nben) for the request ([#116](https://github.com/Pav-Osmolski/DS4Windows/issues/116)).

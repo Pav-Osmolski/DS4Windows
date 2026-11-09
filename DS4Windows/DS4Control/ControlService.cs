@@ -650,6 +650,9 @@ namespace DS4Windows
         private void InitOutputKBMHandler()
         {
             string attemptVirtualkbmHandler = cmdParser.VirtualkbmHandler;
+            useWindowsKeyboardMouseForSession = Global.PreferWindowsKeyboardMouse;
+            if (useWindowsKeyboardMouseForSession && attemptVirtualkbmHandler == VirtualKBMFactory.DEFAULT_IDENTIFIER)
+                attemptVirtualkbmHandler = SendInputHandler.IDENTIFIER;
             InitOutputKBMHandler(attemptVirtualkbmHandler);
         }
 
@@ -727,9 +730,11 @@ namespace DS4Windows
             }
         }
 
+        private bool useWindowsKeyboardMouseForSession;
+
         private void EnsureVirtualMouseForStickMouseProfile(int ind)
         {
-            if (!ProfileUsesStickMouse(ind))
+            if (useWindowsKeyboardMouseForSession || !ProfileUsesStickMouse(ind))
             {
                 return;
             }
@@ -2883,7 +2888,7 @@ namespace DS4Windows
                 {
                     var backendStatus = ViiperSetupManager.GetStatus();
                     foreach (string line in ViiperStartupDiagnostics.Describe(backendStatus))
-                        LogDebug(line, warning: !backendStatus.Ready);
+                        LogDebug(line, warning: !backendStatus.Ready && !backendStatus.UsbipPaused);
                     LogDebug("USB/IP virtual host driver (usbip2_ude): " + DriverDiagnostics.Describe("usbip2_ude"));
                     LogDebug("USB/IP filter driver (usbip2_filter): " + DriverDiagnostics.Describe("usbip2_filter"));
                 }

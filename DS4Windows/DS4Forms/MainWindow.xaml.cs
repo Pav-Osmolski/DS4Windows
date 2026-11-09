@@ -179,7 +179,7 @@ namespace DS4WinWPF.DS4Forms
             };
             settingsNavigator = new SettingsNavigator(settingsPages, new[]
             {
-                settingsGeneralNav, settingsAppearanceNav, settingsControllersNav,
+                settingsGeneralNav, settingsAppearanceNav, settingsControllersNav, settingsComponentsNav,
                 settingsToolsNav, settingsIntegrationsNav, settingsAdvancedNav
             });
             settingsNavigator.RestoreSection(Global.LastSettingsSection);
@@ -1368,6 +1368,7 @@ Suspend support not enabled.", true);
 
                 StartStopBtn.IsEnabled = true;
                 slotManControl.IsEnabled = service.running;
+                if (mainTabCon.SelectedItem == settingsTab) RefreshViiperStatusText();
             }));
         }
 
@@ -1380,7 +1381,7 @@ Suspend support not enabled.", true);
 
         public async void ChangeService()
         {
-            if (!StartStopBtn.IsEnabled)
+            if (!StartStopBtn.IsEnabled || componentActionRunning)
             {
                 return;
             }
@@ -1441,6 +1442,7 @@ Suspend support not enabled.", true);
             if (settingsNavigator == null || sender is not RadioButton category) return;
             settingsSearchTextBox.Clear();
             Global.LastSettingsSection = category.Tag as string;
+            if (ReferenceEquals(category, settingsComponentsNav)) RefreshViiperStatusText();
         }
 
         private void SettingsSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -1506,6 +1508,7 @@ Suspend support not enabled.", true);
             {
                 RefreshSwitch2AssociationCandidates();
                 RefreshSwitch2JoyConPairCandidates();
+                RefreshViiperStatusText();
             }
             if (mainTabCon.SelectedItem == controllersTab)
             {
@@ -2918,29 +2921,14 @@ Suspend support not enabled.", true);
 
         private void ViiperSetupBtn_Click(object sender, RoutedEventArgs e)
         {
-            ViiperSetupManager.EnsureReadyWithPrompt(this,
-                forcePrompt: true);
+            if (componentActionRunning || componentRefreshRunning) return;
+            ViiperSetupManager.EnsureReadyWithPrompt(this, forcePrompt: true);
+            RefreshViiperStatusText();
         }
 
         private void ViiperRefreshBtn_Click(object sender, RoutedEventArgs e)
         {
             RefreshViiperStatusText();
-        }
-
-        private void RefreshViiperStatusText()
-        {
-            if (viiperStatusText == null)
-            {
-                return;
-            }
-
-            ViiperPrerequisiteStatus status = ViiperSetupManager.GetStatus(tryStartServer: false);
-            viiperStatusText.ToolTip = status.StartupPreferenceReadError;
-            viiperStatusText.Text = $"{status.DisplayText}.\n" +
-                global::DS4Windows.UiText.Format("USB/IP: {0} · ", status.UsbipVersion ?? "not detected") +
-                global::DS4Windows.UiText.Format("Server: {0}.", (status.ServerRunning ? "running" : "not running"));
-            viiperStatusText.SetResourceReference(TextBlock.ForegroundProperty,
-                status.Ready ? "SuccessColor" : "DangerColor");
         }
 
         private sealed class Switch2AssociationListItem

@@ -64,7 +64,10 @@ namespace DS4Windows
         // maintenance. A healthy compatible VIIPER server must remain usable
         // when DS4Windows or VIIPER is run portably; a stale/missing task can
         // be repaired without preventing virtual devices from being created.
-        public bool Ready => ViiperInstalled && ViiperPackageCurrent &&
+        internal string UsbipPauseState { get; set; }
+        internal bool UsbipPaused => Installation.UsbipComponentState.IsPaused(UsbipPauseState);
+
+        public bool Ready => !UsbipPaused && ViiperInstalled && ViiperPackageCurrent &&
             !ViiperProcessConflict && ServerRunning && UsbipInstalled &&
             UsbipExecutableSafe && UsbipDriverFilesSafe &&
             UsbipRuntimeReady &&
@@ -74,6 +77,8 @@ namespace DS4Windows
         {
             get
             {
+                if (UsbipPaused) return "Virtual controller output is paused by choice";
+
                 if (Ready)
                 {
                     if (!string.IsNullOrEmpty(StartupPreferenceReadError))
@@ -153,7 +158,7 @@ namespace DS4Windows
         }
     }
 
-    public static class ViiperSetupManager
+    public static partial class ViiperSetupManager
     {
         public const string ApiHost = "127.0.0.1";
         public const int ApiPort = 3242;
@@ -253,6 +258,8 @@ namespace DS4Windows
 
         private static ViiperPrerequisiteStatus GetStatusCore(bool tryStartServer, bool refreshDependencies)
         {
+            string usbipPauseState = Installation.UsbipComponentState.Read();
+            if (Installation.UsbipComponentState.IsPaused(usbipPauseState)) tryStartServer = false;
             string canonicalViiperPath = GetCanonicalViiperExePath();
             // Location is not identity. Portable users may keep the exact
             // bundled VIIPER executable anywhere; the preferred/running/task
@@ -355,6 +362,7 @@ namespace DS4Windows
 
             ViiperPrerequisiteStatus status = new ViiperPrerequisiteStatus
             {
+                UsbipPauseState = usbipPauseState,
                 ViiperPath = viiperPath,
                 SetupScriptPath = setupScriptPath,
                 ViiperInstalled = File.Exists(viiperPath),
@@ -391,7 +399,7 @@ namespace DS4Windows
 
         public static bool EnsureReadyWithPrompt(Window owner, bool forcePrompt = false)
         {
-            if (ViiperRecovery.IsRecovering) return false;
+            if (ViiperRecovery.IsRecovering || Installation.UsbipComponentState.IsPaused(Installation.UsbipComponentState.Read())) return false;
             ViiperPrerequisiteStatus status = ViiperStartupProbe.Check(
                 () => GetStatus(tryStartServer: true), Thread.Sleep,
                 message => NLog.LogManager.GetCurrentClassLogger().Info(message));
@@ -543,7 +551,7 @@ namespace DS4Windows
         }
 
         internal static bool HasSafeRuntimePrerequisites(ViiperPrerequisiteStatus status) =>
-            status != null && status.UsbipInstalled && status.UsbipExecutableSafe &&
+            status != null && !status.UsbipPaused && status.UsbipInstalled && status.UsbipExecutableSafe &&
             status.UsbipDriverFilesSafe && status.UsbipRuntimeReady &&
             !status.UsbipRebootOrRepairRequired && !status.CitrixUsbMonitorConflict;
 

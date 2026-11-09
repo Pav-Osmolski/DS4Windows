@@ -6773,4 +6773,20 @@ El backup: </value>
   <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
     <value>Aumenta la distancia para evitar pulsaciones accidentales al deslizar.</value>
   </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Componentes</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Compatibilidad con mandos virtuales y controladores opcionales</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Administrar componentes…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Salida de mando virtual</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Comprobando el estado de los componentes…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Administra el software y los controladores de tus mandos.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Comprobando…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Abrir el registro de VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Desinstalar USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Controladores opcionales</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Otras aplicaciones de este equipo también pueden usar estos controladores.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Opciones de ocultación</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Abrir HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Usar la entrada de Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Administrar controladores compartidos…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Copiar el diagnóstico de componentes</value></data>
 </root>

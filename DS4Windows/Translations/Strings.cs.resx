@@ -6770,4 +6770,20 @@ Zálohování : </value>
   <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
     <value>Zvětšením vzdálenosti předejdete nechtěnému stisku tlačítka při přejetí.</value>
   </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Součásti</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Podpora virtuálních ovladačů a volitelné ovladače zařízení</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Spravovat součásti…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Výstup virtuálního ovladače</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Kontrola stavu součástí…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Spravujte software a ovladače zařízení pro herní ovladače.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Probíhá kontrola…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Otevřít protokol VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Odebrat USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Volitelné ovladače zařízení</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Tyto ovladače mohou používat i jiné aplikace v tomto počítači.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Nastavení skrývání</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Otevřít HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Použít vstup Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Spravovat sdílené ovladače…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Kopírovat diagnostiku součástí</value></data>
 </root>

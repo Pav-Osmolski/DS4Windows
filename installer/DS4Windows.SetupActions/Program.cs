@@ -112,6 +112,13 @@ namespace DS4Windows.SetupActions
             // older payload, so do not touch it before owning the setup mutex.
             RemoveObsoleteBundledViiperPayloads(Path.GetDirectoryName(ds4Path),
                 preserveCurrent: true);
+            if (Installation.UsbipComponentState.IsPaused(Installation.UsbipComponentState.Read()))
+            {
+                WriteFallbackLog("USB/IP is intentionally paused. Keeping the existing backend and shared drivers.");
+                try { ConfigureCommonShortcuts(ds4Path, desktopShortcut); }
+                catch (Exception error) { WriteFallbackLog("Common shortcut setup was skipped: " + error.Message); }
+                return 0;
+            }
             ResetInfrastructureLog(targetUser);
             WriteFallbackLog("Infrastructure setup starting for interactive user " +
                 targetUser.Name + " (" + targetUser.Sid + ").");

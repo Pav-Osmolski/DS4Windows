@@ -69,6 +69,11 @@ namespace DS4Windows.Bootstrapper
             ViiperLabel.Text = InfrastructureProbe.ViiperDisplayName;
             ViiperStatus.Text = infrastructureHealthy ? "Ready" : "Will install or repair";
             UsbipStatus.Text = infrastructureHealthy ? "Ready" : "Will verify before changing";
+            if (Installation.UsbipComponentState.IsPaused(Installation.UsbipComponentState.Read()))
+            {
+                ViiperStatus.Text = "Virtual controller output paused";
+                UsbipStatus.Text = "Will preserve your choice";
+            }
             optionalDrivers.Detect(packages, relatedFakerInput);
             Ds4Label.Text = "DS4Windows " + typeof(InstallerWindow).Assembly.GetName().Version.ToString(3);
             HidHideLabel.Text = OptionalDriverVersions.Label("HidHide", optionalDrivers.HidHide, hidHideVersion, OptionalDriverVersions.BundledHidHide);

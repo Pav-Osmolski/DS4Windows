@@ -156,6 +156,51 @@ public sealed class SettingsNavigationTests
 HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
+    [TestMethod]
+    [DataRow("DarkTheme")]
+    [DataRow("DefaultTheme")]
+    public void ComponentsPreferencesAlignAndHidingSettingsAnchorsTheCard(string theme)
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            Grid root = LoadSettings(theme);
+            ((RadioButton)root.FindName("settingsComponentsNav")).IsChecked = true;
+            Layout(root, 980);
+            var components = (StackPanel)root.FindName("settingsComponentsPage");
+            var trayIcon = (CheckBox)root.FindName("showViiperTrayIconCk");
+            var prompt = ((WrapPanel)trayIcon.Parent).Children.OfType<CheckBox>().First();
+            double promptCenter = prompt.TranslatePoint(new Point(0, prompt.ActualHeight / 2), components).Y;
+            double trayIconCenter = trayIcon.TranslatePoint(new Point(0, trayIcon.ActualHeight / 2), components).Y;
+            Assert.AreEqual(promptCenter, trayIconCenter, 0.5);
+            Assert.IsNull(prompt.ContentTemplate);
+            Assert.IsNull(trayIcon.ContentTemplate);
+            Assert.IsNotNull(prompt.ToolTip);
+            Assert.IsNotNull(trayIcon.ToolTip);
+            foreach (string statusName in new[] { "componentViiperStatus", "componentUsbipStatus", "componentHidHideStatus", "componentFakerInputStatus" })
+            {
+                var status = (TextBlock)root.FindName(statusName);
+                var row = (Grid)((StackPanel)status.Parent).Parent;
+                var icon = (System.Windows.Shapes.Path)row.Children.OfType<Border>().Single().Child;
+                Assert.IsNotNull(icon.Data);
+                Assert.IsNotNull(icon.Stroke);
+                Assert.IsTrue(icon.ActualWidth > 0);
+            }
+
+            var viewer = (ScrollViewer)root.FindName("settingsScrollViewer");
+            var controllers = (RadioButton)root.FindName("settingsControllersNav");
+            controllers.Checked += (_, _) => viewer.ScrollToTop();
+            controllers.IsChecked = true;
+            var card = (Border)root.FindName("preventDoubleInputCard");
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Loaded,
+                new Action(() => DS4WinWPF.DS4Forms.SettingsNavigator.ScrollCardToTop(viewer, card)));
+            Layout(root, 980);
+            var viewport = (ScrollContentPresenter)viewer.Template.FindName("PART_ScrollContentPresenter", viewer);
+            Assert.IsTrue(viewer.VerticalOffset > 0);
+            Assert.AreEqual(0d, card.TranslatePoint(new Point(), viewport).Y, 0.5,
+                "Prevent double input should start at the top of the scroll viewport.");
+        });
+    }
+
     private static Grid LoadSettings(string theme)
     {
         // Exercise the production layout without constructing the main window,

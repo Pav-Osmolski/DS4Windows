@@ -6,7 +6,7 @@ internal static class SettingsSectionInfo
 {
     internal static string Normalize(string section) => section switch
     {
-        "Appearance" or "Controllers" or "Tools" or "Integrations" or "Advanced" => section,
+        "Appearance" or "Controllers" or "Components" or "Tools" or "Integrations" or "Advanced" => section,
         _ => "General"
     };
 }

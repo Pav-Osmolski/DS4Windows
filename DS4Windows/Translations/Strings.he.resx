@@ -6773,4 +6773,20 @@
   <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
     <value>הגדילו את המרחק כדי למנוע לחיצות לא מכוונות על כפתורים בעקבות החלקה.</value>
   </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>רכיבים</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>תמיכה בבקרים וירטואליים ומנהלי התקנים אופציונליים</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>ניהול רכיבים…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>פלט בקר וירטואלי</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>מתבצעת בדיקה של מצב הרכיבים…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>ניהול התוכנות ומנהלי ההתקנים המשמשים את הבקרים שלך.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>מתבצעת בדיקה…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>פתיחת יומן VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>הסרת USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>מנהלי התקנים אופציונליים</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>גם יישומים אחרים במחשב זה יכולים להשתמש במנהלי התקנים אלה.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>הגדרות הסתרה</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>פתיחת HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>שימוש בקלט של Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>ניהול מנהלי התקנים משותפים…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>העתקת פרטי האבחון של הרכיבים</value></data>
 </root>
