@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -120,6 +121,15 @@ public sealed class SettingsNavigationTests
                         var page = (StackPanel)root.FindName(category.Name.Replace("Nav", "Page"));
                         var description = page.Children.OfType<TextBlock>().First(t => t.Visibility == Visibility.Visible);
                         var card = page.Children.OfType<Border>().First();
+                        var scroll = (ScrollViewer)root.FindName("settingsScrollViewer");
+                        var bar = (ScrollBar)scroll.Template.FindName("PART_VerticalScrollBar", scroll);
+                        if (bar.Visibility == Visibility.Visible)
+                        {
+                            double cardRight = card.TranslatePoint(new Point(card.ActualWidth, 0), scroll).X;
+                            double barLeft = bar.TranslatePoint(new Point(), scroll).X;
+                            Assert.AreEqual(8d, barLeft - cardRight, 0.5,
+                                "Settings cards must keep the same gutter beside the scrollbar in both themes.");
+                        }
                         Point start = description.TranslatePoint(new Point(), root);
                         double cardTop = card.TranslatePoint(new Point(), root).Y;
                         expectedDescription ??= start;

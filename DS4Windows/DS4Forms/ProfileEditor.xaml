@@ -1541,6 +1541,28 @@
                                         <ComboBoxItem Content="{lex:Loc Passthru}"/>
                                     </ComboBox>
                                 </StackPanel>
+                                <WrapPanel Margin="0,0,0,6">
+                                    <Label Target="{Binding ElementName=touchpadSwipeDistanceInput}" Content="{lex:Loc TouchpadSwipeDistance}"
+                                           Padding="0" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                    <xctk:IntegerUpDown x:Name="touchpadSwipeDistanceInput" MinWidth="80" MinHeight="34"
+                                                        Minimum="50" Maximum="600" Increment="10"
+                                                        Value="{Binding TouchpadSwipeDistance}">
+                                        <xctk:IntegerUpDown.Style>
+                                            <Style TargetType="{x:Type xctk:IntegerUpDown}" BasedOn="{StaticResource {x:Type xctk:IntegerUpDown}}">
+                                                <Setter Property="IsEnabled" Value="False"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedIndex, ElementName=touchpadOutModeCombo}" Value="1">
+                                                        <Setter Property="IsEnabled" Value="True"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </xctk:IntegerUpDown.Style>
+                                    </xctk:IntegerUpDown>
+                                </WrapPanel>
+                                <TextBlock Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,0,0,4">
+                                    <Run Text="{lex:Loc OutputMode}"/><Run Text=" → "/><Run Text="{lex:Loc Controls}"/>
+                                </TextBlock>
+                                <TextBlock Text="{lex:Loc TouchpadSwipeDistanceHelp}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0"/>
                             </StackPanel>
                         </Border>
                         <TabControl x:Name="touchOutputTabControl" SelectedIndex="{Binding TouchpadOutputIndex, FallbackValue='0'}" BorderBrush="{x:Null}" Margin="0" Style="{StaticResource ProfileModeTabControlStyle}">
@@ -1659,15 +1681,6 @@
                                     <Border Style="{DynamicResource BridgeCardStyle}">
                                         <StackPanel>
                                             <TextBlock Text="{lex:Loc Strings:UI_98C12125DE2CCBDB}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
-
-                                            <TextBlock Text="{lex:Loc TouchpadSwipeDistanceHelp}" Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap"/>
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                                                <Label Target="{Binding ElementName=touchpadSwipeDistanceInput}" Content="{lex:Loc TouchpadSwipeDistance}"
-                                                       Padding="0" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                                                <xctk:IntegerUpDown x:Name="touchpadSwipeDistanceInput" MinWidth="80" MinHeight="34"
-                                                                    Minimum="50" Maximum="600" Increment="10"
-                                                                    Value="{Binding TouchpadSwipeDistance}"/>
-                                            </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
                                                 <Button x:Name="swipeUpBtn" Content="{lex:Loc Strings:UI_7BAAA24E318F98A9}" MinWidth="100" Tag="{Binding SwipeUp, Source={StaticResource controlIndexCheck}}" Click="SwipeControlsButton_Click" MinHeight="34" Padding="12,7" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
@@ -3380,14 +3393,14 @@
                                             <TextBlock Text="{lex:Loc Strings:UI_9C44D44557A2A834}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                                             <TextBlock Text="{lex:Loc Strings:UI_AF29390120EF0E8C}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                                             <StackPanel>
-                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                                                <WrapPanel Margin="0,0,0,8">
                                                     <Label Content="{lex:Loc DualSRumbleModeNPowerLevelTxt}" Margin="0,0,10,0" VerticalAlignment="Center" Padding="0"/>
-                                                    <ComboBox x:Name="dualSRumbleEmuMode" SelectedIndex="{Binding DualSenseRumbleEmulationPerIndex, FallbackValue=0}" MinWidth="40" ToolTip="{lex:Loc DualSRumbleModes_Tip}" Margin="0,0,0,0" Width="100" MinHeight="34" VerticalAlignment="Center">
+                                                    <ComboBox x:Name="dualSRumbleEmuMode" SelectedIndex="{Binding DualSenseRumbleEmulationPerIndex, FallbackValue=0}" MinWidth="174" ToolTip="{lex:Loc DualSRumbleModes_Tip}" Margin="0,0,8,4" MinHeight="34" VerticalAlignment="Center">
                                                         <ComboBoxItem Content="{lex:Loc DualSRumbleModeAccurate}"/>
                                                         <ComboBoxItem Content="{lex:Loc DualSRumbleModeLegacy}"/>
                                                         <ComboBoxItem Content="{lex:Loc DualSRumbleModeDisabled}"/>
                                                     </ComboBox>
-                                                    <ComboBox SelectedIndex="{Binding DualSenseHapticPowerLevelPerIndex, FallbackValue=0}" MinWidth="40" ToolTip="{lex:Loc DualSRumblePowerLevel_Tip}" Margin="4,0,0,0" Width="58" MinHeight="34" VerticalAlignment="Center">
+                                                    <ComboBox SelectedIndex="{Binding DualSenseHapticPowerLevelPerIndex, FallbackValue=0}" MinWidth="100" ToolTip="{lex:Loc DualSRumblePowerLevel_Tip}" Margin="0,0,0,4" MinHeight="34" VerticalAlignment="Center">
                                                         <ComboBoxItem Content="100%"/>
                                                         <ComboBoxItem Content="87%"/>
                                                         <ComboBoxItem Content="75%"/>
@@ -3397,7 +3410,7 @@
                                                         <ComboBoxItem Content="25%"/>
                                                         <ComboBoxItem Content="12%"/>
                                                     </ComboBox>
-                                                </StackPanel>
+                                                </WrapPanel>
                                                 <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" x:Name="dualSForceGenRumbleRescale" IsChecked="{Binding EnableGenericRumbleStrRescaleForDualSenseDevices}" Content="{lex:Loc DualSRumbleForceGenericRescale}" ToolTip="{lex:Loc DualSRumbleForceGenericRescale_Tip}" Margin="3,8,0,0" HorizontalAlignment="Left" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                                             </StackPanel>
                                         </StackPanel>
