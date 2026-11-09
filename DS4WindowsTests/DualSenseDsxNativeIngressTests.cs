@@ -152,7 +152,15 @@ public class DualSenseDsxNativeIngressTests
             DS4LightBar.defaultLight = false;
             lighting.mode = LightbarMode.DS4Win;
             DS4LightBar.updateLightBar(device, slot);
-            Assert.IsTrue(Mailbox(device).ReadLatest().ProfileOwnsLightbar);
+            var normal = Mailbox(device).ReadLatest();
+            Assert.IsTrue(normal.ProfileOwnsLightbar);
+            device.ProfileLightbarPreviewArgb = unchecked((int)0xFF0708EF);
+            DS4LightBar.updateLightBar(device, slot);
+            Assert.AreEqual(new DS4Color(7, 8, 239), Mailbox(device).ReadLatest().ProfileLightbar.LightBarColor);
+            device.ProfileLightbarPreviewArgb = 0;
+            DS4LightBar.updateLightBar(device, slot);
+            Assert.AreEqual(normal.ProfileLightbar.LightBarColor, Mailbox(device).ReadLatest().ProfileLightbar.LightBarColor);
+            device.ProfileLightbarPreviewArgb = unchecked((int)0xFF0708EF);
             lighting.mode = LightbarMode.Passthru;
             DS4LightBar.updateLightBar(device, slot);
             Assert.IsFalse(Mailbox(device).ReadLatest().ProfileOwnsLightbar);

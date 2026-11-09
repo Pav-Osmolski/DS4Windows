@@ -1195,6 +1195,8 @@ namespace DS4WinWPF.DS4Forms
             mappingListBox.SelectionChanged += MappingListBox_SelectionChanged;
             Closed += ProfileEditor_Closed;
             profileSettingsVM.JoyConPresentationChanged += JoyConPresentationChanged;
+            profileSettingsVM.MainColorEdited += PreviewMainLightbarColor;
+            colorGB.IsVisibleChanged += MainLightbarColorGroup_IsVisibleChanged;
 
             profileSettingsVM.LSDeadZoneChanged += UpdateReadingsLsDeadZone;
             profileSettingsVM.RSDeadZoneChanged += UpdateReadingsRsDeadZone;
@@ -1217,6 +1219,8 @@ namespace DS4WinWPF.DS4Forms
             mappingListBox.SelectionChanged -= MappingListBox_SelectionChanged;
             Closed -= ProfileEditor_Closed;
             profileSettingsVM.JoyConPresentationChanged -= JoyConPresentationChanged;
+            profileSettingsVM.MainColorEdited -= PreviewMainLightbarColor;
+            colorGB.IsVisibleChanged -= MainLightbarColorGroup_IsVisibleChanged;
 
             profileSettingsVM.LSDeadZoneChanged -= UpdateReadingsLsDeadZone;
             profileSettingsVM.RSDeadZoneChanged -= UpdateReadingsRsDeadZone;
@@ -2008,6 +2012,7 @@ namespace DS4WinWPF.DS4Forms
 
         private void StopEditorBindings()
         {
+            ClearMainLightbarPreview();
             profileSettingsTabCon.DataContext = null;
             mappingListBox.DataContext = null;
             specialActionsTab.DataContext = null;
@@ -2041,7 +2046,8 @@ namespace DS4WinWPF.DS4Forms
                     AppLogger.LogToGui($"[ProfileEditorTiming] cancel {phase}: total={cancelTimer.ElapsedMilliseconds}ms", false);
             }
             ClearRumblePreview();
-            Mark("rumble preview cleared");
+            ClearMainLightbarPreview();
+            Mark("rumble and lightbar previews cleared");
 
             Global.outDevTypeTemp[deviceNum] = OutContType.ViiperX360;
             profileTriggerLabControl?.RestorePhysicalProfileEffects();
@@ -2251,7 +2257,8 @@ namespace DS4WinWPF.DS4Forms
             {
                 SetLateProperties(false);
                 result = SaveProfileChanges(temp);
-                if (!result) ShowProfileSaveError();
+                if (result) ClearMainLightbarPreview();
+                else ShowProfileSaveError();
             }
             else
             {
@@ -2878,6 +2885,28 @@ namespace DS4WinWPF.DS4Forms
             specialActionsVM.ExportEnabledActions();
         }
 
+        private void PreviewMainLightbarColor(object sender, EventArgs e)
+        {
+            if (editorRetired || colorGB?.IsVisible != true ||
+                diagramPhysicalController is not { IsDisconnecting: false, IsRemoving: false } controller)
+                return;
+
+            Color color = profileSettingsVM.MainColor;
+            controller.ProfileLightbarPreviewArgb =
+                System.Drawing.Color.FromArgb(color.R, color.G, color.B).ToArgb();
+        }
+
+        private void ClearMainLightbarPreview()
+        {
+            if (diagramPhysicalController != null)
+                diagramPhysicalController.ProfileLightbarPreviewArgb = 0;
+        }
+
+        private void MainLightbarColorGroup_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(bool)e.NewValue) ClearMainLightbarPreview();
+        }
+
         private void Ds4LightbarColorBtn_MouseEnter(object sender, MouseEventArgs e)
         {
             highlightControlDisplayLb.Content = "Click the lightbar for color picker";
@@ -2947,6 +2976,7 @@ namespace DS4WinWPF.DS4Forms
         {
             if (editorRetired) return;
             editorRetired = true;
+            ClearMainLightbarPreview();
             foreach (var page in DeferredPages) page.Retired = true;
             profileSettingsVM.RetireEditor();
             mappingReadingsActive = false;

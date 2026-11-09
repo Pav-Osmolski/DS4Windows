@@ -6764,4 +6764,13 @@ O backup: </value>
     <value>Publicado por Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Prévia da cor</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Distância mínima do gesto de deslizar</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Aumente a distância para evitar que gestos acidentais acionem botões.</value>
+  </data>
 </root>

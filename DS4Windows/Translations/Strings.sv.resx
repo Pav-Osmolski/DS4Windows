@@ -6764,4 +6764,13 @@ och backup: </value>
     <value>Utgiven av Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Förhandsvisning av färg</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Minsta svepavstånd</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Öka avståndet för att undvika knapptryckningar vid oavsiktliga svep.</value>
+  </data>
 </root>

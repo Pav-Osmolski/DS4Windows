@@ -1525,10 +1525,13 @@ namespace DS4Windows
             {
                 if (!(swipeUp || swipeDown || swipeLeft || swipeRight) && arg.Touches.Length == 1)
                 {
-                    if (arg.Touches[0].HwX - firstTouch.HwX > 300) swipeRight = true;
-                    if (arg.Touches[0].HwX - firstTouch.HwX < -300) swipeLeft = true;
-                    if (arg.Touches[0].HwY - firstTouch.HwY > 300) swipeDown = true;
-                    if (arg.Touches[0].HwY - firstTouch.HwY < -300) swipeUp = true;
+                    int distance = Global.TouchpadSwipeDistance[deviceNum];
+                    int deltaX = arg.Touches[0].HwX - firstTouch.HwX;
+                    int deltaY = arg.Touches[0].HwY - firstTouch.HwY;
+                    swipeRight = deltaX > distance;
+                    swipeLeft = deltaX < -distance;
+                    swipeDown = deltaY > distance;
+                    swipeUp = deltaY < -distance;
                 }
 
                 swipeUpB = (byte)Math.Min(255, Math.Max(0, (firstTouch.HwY - arg.Touches[0].HwY) * 1.5f));

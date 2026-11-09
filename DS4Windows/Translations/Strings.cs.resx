@@ -6761,4 +6761,13 @@ Zálohování : </value>
     <value>Vydává Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Náhled barvy</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Minimální vzdálenost přejetí</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Zvětšením vzdálenosti předejdete nechtěnému stisku tlačítka při přejetí.</value>
+  </data>
 </root>

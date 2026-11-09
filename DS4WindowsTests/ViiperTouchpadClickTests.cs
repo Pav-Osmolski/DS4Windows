@@ -112,6 +112,28 @@ public sealed class ViiperTouchpadClickTests
     }
 
     [TestMethod]
+    [DataRow(300, 300, 0, false)]
+    [DataRow(300, 301, 0, true)]
+    [DataRow(450, 301, 0, false)]
+    [DataRow(450, -451, 0, true)]
+    [DataRow(450, 0, -451, true)]
+    [DataRow(450, 0, 451, true)]
+    public void ButtonSwipeRequiresConfiguredDistance(int distance, int deltaX, int deltaY, bool triggered)
+    {
+        Global.TouchOutMode[Slot] = TouchpadOutMode.Controls;
+        Global.TouchpadSwipeDistance[Slot] = distance;
+        DateTime start = DateTime.UtcNow;
+        var firstTouch = new Touch(900, 460, 0);
+        mouse.touchesBegan(null, new TouchpadEventArgs(start, false, true, firstTouch, null));
+        var movedTouch = new Touch(900 + deltaX, 460 + deltaY, 0, firstTouch);
+        mouse.touchesMoved(null, new TouchpadEventArgs(start.AddMilliseconds(5), false, true, movedTouch, null));
+        Assert.AreEqual(triggered && deltaX > 0, mouse.swipeRight);
+        Assert.AreEqual(triggered && deltaX < 0, mouse.swipeLeft);
+        Assert.AreEqual(triggered && deltaY > 0, mouse.swipeDown);
+        Assert.AreEqual(triggered && deltaY < 0, mouse.swipeUp);
+    }
+
+    [TestMethod]
     [DataRow(DS4Controls.TouchLeft, false)]
     [DataRow(DS4Controls.TouchLeft, true)]
     [DataRow(DS4Controls.TouchRight, false)]

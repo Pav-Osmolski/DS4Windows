@@ -6765,4 +6765,13 @@ Backup : </value>
     <value>公開元: Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>色のプレビュー</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>スワイプの最小距離</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>距離を長くすると、意図しないスワイプによるボタン入力を防ぎやすくなります。</value>
+  </data>
 </root>

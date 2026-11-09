@@ -6788,4 +6788,13 @@ backup için: </value>
     <value>Yayınlayan: Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Renk önizlemesi</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>En kısa kaydırma mesafesi</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Yanlışlıkla yapılan kaydırmaların düğmeleri tetiklemesini önlemek için mesafeyi artırın.</value>
+  </data>
 </root>
