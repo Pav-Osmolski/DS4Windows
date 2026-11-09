@@ -10843,5 +10843,101 @@
     "files": [
       "DS4Windows/DS4Forms/About.xaml"
     ]
+  },
+  "UI_1F7E729BF03F4FA1": {
+    "source": "Hiding settings",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_271AA17B0FD7E5D4": {
+    "source": "Checking component status…",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_3D46B9AAEB6A7B4D": {
+    "source": "Open VIIPER log",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_4246DC6CCF612AED": {
+    "source": "Copy component diagnostics",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_5C442E378A74B375": {
+    "source": "Optional drivers",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_606E3477AC6CFC6A": {
+    "source": "Virtual controller output",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_6FF14A035524A4A2": {
+    "source": "Use Windows input",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_7BF46D09674F2182": {
+    "source": "Manage the software and drivers that support your controller setup.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_A150CE2216025931": {
+    "source": "Components",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_A28F5DD1BC8B559E": {
+    "source": "Open HidHide…",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_A7B3C719D03BDBC3": {
+    "source": "Manage shared drivers…",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_AEE83A92A713F644": {
+    "source": "Virtual controller support and optional drivers",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_BB0D58B4D58B1A64": {
+    "source": "Manage components…",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_BBB914BBBAC725B7": {
+    "source": "These drivers can also be used by other apps on this PC.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_E692F1479C36CCB8": {
+    "source": "Remove USB/IP…",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_EC963FFC911B8401": {
+    "source": "Checking…",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
   }
 }
