@@ -1196,7 +1196,6 @@ namespace DS4WinWPF.DS4Forms
             Closed += ProfileEditor_Closed;
             profileSettingsVM.JoyConPresentationChanged += JoyConPresentationChanged;
             profileSettingsVM.MainColorEdited += PreviewMainLightbarColor;
-            colorGB.IsVisibleChanged += MainLightbarColorGroup_IsVisibleChanged;
 
             profileSettingsVM.LSDeadZoneChanged += UpdateReadingsLsDeadZone;
             profileSettingsVM.RSDeadZoneChanged += UpdateReadingsRsDeadZone;
@@ -1220,7 +1219,7 @@ namespace DS4WinWPF.DS4Forms
             Closed -= ProfileEditor_Closed;
             profileSettingsVM.JoyConPresentationChanged -= JoyConPresentationChanged;
             profileSettingsVM.MainColorEdited -= PreviewMainLightbarColor;
-            colorGB.IsVisibleChanged -= MainLightbarColorGroup_IsVisibleChanged;
+            if (colorGB != null) colorGB.IsVisibleChanged -= MainLightbarColorGroup_IsVisibleChanged;
 
             profileSettingsVM.LSDeadZoneChanged -= UpdateReadingsLsDeadZone;
             profileSettingsVM.RSDeadZoneChanged -= UpdateReadingsRsDeadZone;
