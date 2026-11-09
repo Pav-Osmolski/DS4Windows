@@ -195,9 +195,11 @@ writer can send another command. Use Apply/Save to persist the selections.
 | Absolute mouse | Position the pointer using the touch surface |
 | Passthrough | Let a compatible game use virtual-controller touch data |
 
-In **Controls** mode, raise **Minimum swipe distance** to make accidental
-one-finger swipe button presses less likely. It defaults to 300 and is saved
-per profile. Two-finger profile switching has its own gesture settings.
+Set **Output Mode** to **Controls** to enable **Minimum swipe distance** in
+the **Touchpad output** card. Raise it to make accidental one-finger swipe
+button presses less likely. It defaults to 300 and is saved per profile.
+Configure two-finger profile switching in **Settings → Controllers → Profile
+switching → Config Swipe Profiles**.
 
 For a desktop mouse, start with Slide and moderate sensitivity. Add Tap, Scroll,
 Double Tap or Lower Right as RMB only if needed. Rotation changes movement

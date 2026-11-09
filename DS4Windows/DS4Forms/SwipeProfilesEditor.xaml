@@ -5,36 +5,53 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DS4WinWPF.DS4Forms"
         mc:Ignorable="d"
-        Title="{lex:Loc Strings:UI_827148F589912A2D}" Height="460" Width="380"
+        Title="{lex:Loc Strings:UI_827148F589912A2D}" Height="460" Width="500" MinHeight="350" MinWidth="360"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         Style="{DynamicResource WindowStyle}"
         xmlns:lex="http://wpflocalizeextension.codeplex.com"
-        lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows">
-    <DockPanel Margin="10">
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,0,0,8"
-                   Text="{lex:Loc Strings:UI_FFAB65072A87595C}" />
-
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,6">
-            <Button x:Name="selectAllBtn" Content="{lex:Loc Strings:UI_D1EC69E64B9609D0}" Padding="8,2" Click="SelectAllBtn_Click" />
-            <Button x:Name="clearAllBtn" Content="{lex:Loc Strings:UI_DDCEB7ADFDB8816E}" Margin="8,0,0,0" Padding="8,2" Click="ClearAllBtn_Click" />
+        lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows"
+        lex:ResxLocalizationProvider.DefaultDictionary="Strings">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="0,0,0,12">
+            <TextBlock Text="{lex:Loc Strings:UI_0F1679DB641954F9}" Style="{DynamicResource BridgeSectionTitleStyle}" FontSize="22"/>
+            <TextBlock Text="{lex:Loc Strings:UI_FFAB65072A87595C}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0"/>
         </StackPanel>
 
-        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
-            <Button x:Name="okBtn" Content="OK" Width="80" IsDefault="True" Click="OkBtn_Click" />
-            <Button x:Name="cancelBtn" Content="{lex:Loc Strings:UI_19766ED6CCB2F4A3}" Width="80" Margin="8,0,0,0" IsCancel="True" Click="CancelBtn_Click" />
-        </StackPanel>
-
-        <Border BorderBrush="Gray" BorderThickness="1">
-            <ListBox x:Name="profilesListBox" ItemsSource="{Binding Items}"
-                     HorizontalContentAlignment="Stretch"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox Content="{Binding Name}" IsChecked="{Binding IsAllowed, Mode=TwoWay}" Margin="2" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+        <Border Grid.Row="1" Style="{DynamicResource BridgeCardStyle}" Margin="0" Padding="12">
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                    <WrapPanel DockPanel.Dock="Right" HorizontalAlignment="Right">
+                        <Button x:Name="selectAllBtn" Content="{lex:Loc Strings:UI_D1EC69E64B9609D0}" Click="SelectAllBtn_Click"
+                                Margin="0,0,6,0" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
+                        <Button x:Name="clearAllBtn" Content="{lex:Loc Strings:UI_DDCEB7ADFDB8816E}" Click="ClearAllBtn_Click"
+                                Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
+                    </WrapPanel>
+                    <TextBlock Text="{lex:Loc Profiles}" VerticalAlignment="Center" Style="{DynamicResource BridgeSectionTitleStyle}" Margin="0,0,10,0"/>
+                </DockPanel>
+                <ScrollViewer Style="{DynamicResource BridgeDropDownScrollViewerStyle}" CanContentScroll="False" Padding="0,0,6,0">
+                    <ItemsControl x:Name="profilesListBox" ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsAllowed, Mode=TwoWay}"
+                                          Margin="0,0,0,4" MinHeight="30" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
         </Border>
-    </DockPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+            <Button x:Name="cancelBtn" Content="{lex:Loc Cancel}" MinWidth="96" Margin="0,0,8,0" IsCancel="True"
+                    Click="CancelBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
+            <Button x:Name="okBtn" Content="{lex:Loc Save}" MinWidth="96" IsDefault="True"
+                    Click="OkBtn_Click" Style="{DynamicResource BridgePrimaryButtonStyle}"/>
+        </StackPanel>
+    </Grid>
 </Window>

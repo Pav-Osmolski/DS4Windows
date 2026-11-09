@@ -9,99 +9,152 @@
         lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         mc:Ignorable="d"
-        Title="{lex:Loc ControllerRegOptWin.WinTitle}" Height="450" Width="800"
+        Title="{lex:Loc ControllerRegOptWin.WinTitle}" Height="500" Width="760" MinHeight="390" MinWidth="560"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Style="{DynamicResource WindowStyle}" Closed="Window_Closed">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
-    <DockPanel x:Name="devOptionsDockPanel" Margin="4">
-        <DockPanel>
-            <StackPanel DockPanel.Dock="Top">
-                <CheckBox Content="{lex:Loc ControllerSupportDS4}" IsChecked="{Binding DS4DeviceOpts.Enabled}" />
-                <CheckBox Content="{lex:Loc ControllerSupportDualSense}" IsChecked="{Binding DSDeviceOpts.Enabled}" />
-                <CheckBox Content="{lex:Loc ControllerSupportSwitchPro}" IsChecked="{Binding SwitchProDeviceOpts.Enabled}" />
-                <CheckBox Content="{lex:Loc ControllerSupportJoyCon}" IsChecked="{Binding JoyConDeviceOpts.Enabled}" />
-                <CheckBox Content="{lex:Loc ControllerSupportDS3}" IsChecked="{Binding DS3DeviceOpts.Enabled}" />
-                <CheckBox Content="{lex:Loc Strings:UI_8DD8CBAABF98A695}"
-                          IsChecked="{Binding UseMoonlight}"
-                          ToolTip="{lex:Loc Strings:UI_E326981106F123EC}" />
-                <TextBlock>
-                    <Hyperlink NavigateUri="https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/moonlight-support.md"
-                               RequestNavigate="Hyperlink_RequestNavigate">
-                        About virtual controller support
-                    </Hyperlink>
-                </TextBlock>
-            </StackPanel>
-
-            <StackPanel DockPanel.Dock="Top" Margin="0,16,0,0">
-                <CheckBox Content="{lex:Loc EnableVerboseLog}" IsChecked="{Binding VerboseLogMessages}" ToolTip="{lex:Loc EnableVerboseLogTip}"/>
-            </StackPanel>
-            
-            <DockPanel DockPanel.Dock="Bottom" Margin="0,20,0,0">
-                <Label Content="{lex:Loc DetectedControllers}" ContentStringFormat="{}{0}:" DockPanel.Dock="Top" FontWeight="Bold" />
-                <ListBox x:Name="controllerListBox" ItemsSource="{Binding CurrentInputDevices}" SelectedIndex="{Binding ControllerSelectedIndex}"
-                      Margin="0,8,0,0" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding IdText}" TextTrimming="CharacterEllipsis" ToolTip="{Binding IdText}" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </DockPanel>
-            
-        </DockPanel>
-
-        <TabControl x:Name="deviceSettingsTabControl" DockPanel.Dock="Right" SelectedIndex="{Binding CurrentTabSelectedIndex}" Margin="40,4,4,4">
-            <TabItem Header="{lex:Loc Strings:UI_2C3D371CBFD31225}" Visibility="Collapsed">
-            </TabItem>
-
-            <TabItem x:Name="ds4OptsTabItem" Header="DS4" Visibility="Collapsed">
-                <StackPanel Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4">
-                    <CheckBox Content="{lex:Loc Copycat}" IsChecked="{Binding Options.IsCopyCat, FallbackValue='False'}" ToolTip="{lex:Loc CopycatTip}" />
+    <Grid x:Name="devOptionsDockPanel" Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{lex:Loc DeviceOptions}" Style="{DynamicResource BridgeSectionTitleStyle}" FontSize="22" Margin="0,0,0,14"/>
+        <ScrollViewer Grid.Row="1" Style="{DynamicResource BridgeDropDownScrollViewerStyle}" CanContentScroll="False" Padding="0,0,8,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="14"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <Border Style="{DynamicResource BridgeCardStyle}">
+                        <StackPanel>
+                            <TextBlock Text="{lex:Loc Controllers}" Style="{DynamicResource BridgeSectionTitleStyle}" Margin="0,0,0,10"/>
+                            <StackPanel>
+                                <StackPanel.Resources>
+                                    <Style TargetType="CheckBox" BasedOn="{StaticResource BridgeLabeledCheckBoxStyle}">
+                                        <Setter Property="Margin" Value="0,0,0,8"/>
+                                    </Style>
+                                </StackPanel.Resources>
+                                <CheckBox Content="{lex:Loc ControllerSupportDS4}" IsChecked="{Binding DS4DeviceOpts.Enabled}" />
+                                <CheckBox Content="{lex:Loc ControllerSupportDualSense}" IsChecked="{Binding DSDeviceOpts.Enabled}" />
+                                <CheckBox Content="{lex:Loc ControllerSupportSwitchPro}" IsChecked="{Binding SwitchProDeviceOpts.Enabled}" />
+                                <CheckBox Content="{lex:Loc ControllerSupportJoyCon}" IsChecked="{Binding JoyConDeviceOpts.Enabled}" />
+                                <CheckBox Content="{lex:Loc ControllerSupportDS3}" IsChecked="{Binding DS3DeviceOpts.Enabled}" />
+                                <CheckBox Content="{lex:Loc Strings:UI_8DD8CBAABF98A695}"
+                                          IsChecked="{Binding UseMoonlight}" ToolTip="{lex:Loc Strings:UI_E326981106F123EC}" />
+                            </StackPanel>
+                            <TextBlock TextWrapping="Wrap">
+                                <Hyperlink NavigateUri="https://github.com/Pav-Osmolski/DS4Windows/blob/main/docs/moonlight-support.md"
+                                           RequestNavigate="Hyperlink_RequestNavigate" Foreground="{DynamicResource AccentColor}">
+                                    <Run Text="{lex:Loc Strings:UI_7EAD29233D4E2E15}"/>
+                                </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{DynamicResource BridgeCardStyle}" Margin="0">
+                        <StackPanel>
+                            <TextBlock Text="{lex:Loc Strings:UI_268F14BBFE119C1E}" Style="{DynamicResource BridgeSectionTitleStyle}" Margin="0,0,0,8"/>
+                            <CheckBox Content="{lex:Loc EnableVerboseLog}" IsChecked="{Binding VerboseLogMessages}"
+                                      ToolTip="{lex:Loc EnableVerboseLogTip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
-            </TabItem>
-            
-            <TabItem x:Name="dualSenseOptsTabItem" Header="DualSense" Visibility="Collapsed">
-                <StackPanel Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4">
-                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                        <Label Content="{lex:Loc ControllerRegOptWin.PlayerLEDMode}" ContentStringFormat="{}{0}:" />
-                        <ComboBox ItemsSource="{Binding Path=DsLEDModes}" DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue" SelectedValue="{Binding Options.LedMode}" Margin="8,0,0,0" />
+                <Border Grid.Column="2" Style="{DynamicResource BridgeCardStyle}" VerticalAlignment="Top" Margin="0">
+                    <StackPanel>
+                        <TextBlock Text="{lex:Loc DetectedControllers}" Style="{DynamicResource BridgeSectionTitleStyle}" Margin="0,0,0,10"/>
+                        <ListBox x:Name="controllerListBox" ItemsSource="{Binding CurrentInputDevices}" SelectedIndex="{Binding ControllerSelectedIndex}"
+                                 Background="{DynamicResource SurfaceBackgroundColor}" BorderBrush="{DynamicResource BorderColor}"
+                                 MaxHeight="170" HorizontalContentAlignment="Stretch"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <ListBox.Resources>
+                                <Style TargetType="ScrollViewer" BasedOn="{StaticResource BridgeDropDownScrollViewerStyle}">
+                                    <Setter Property="CanContentScroll" Value="False"/>
+                                </Style>
+                            </ListBox.Resources>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding IdText}" Padding="5,6" TextTrimming="CharacterEllipsis" ToolTip="{Binding IdText}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <TabControl x:Name="deviceSettingsTabControl" SelectedIndex="{Binding CurrentTabSelectedIndex}" Margin="0,10,0,0">
+                            <TabControl.Template>
+                                <ControlTemplate TargetType="TabControl">
+                                    <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent"/>
+                                </ControlTemplate>
+                            </TabControl.Template>
+                            <TabItem Visibility="Collapsed">
+                                <TextBlock Text="{lex:Loc Strings:UI_AB318CEC52C4562A}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource BridgeSectionDescriptionStyle}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedIndex, ElementName=controllerListBox}" Value="-1">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </TabItem>
+
+                            <TabItem x:Name="ds4OptsTabItem" Header="DS4" Visibility="Collapsed">
+                                <StackPanel Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0">
+                                    <CheckBox Content="{lex:Loc Copycat}" IsChecked="{Binding Options.IsCopyCat, FallbackValue='False'}" ToolTip="{lex:Loc CopycatTip}" />
+                                </StackPanel>
+                            </TabItem>
+
+                            <TabItem x:Name="dualSenseOptsTabItem" Header="DualSense" Visibility="Collapsed">
+                                <StackPanel Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0">
+                                    <StackPanel Margin="0,0,0,10">
+                                        <Label Content="{lex:Loc ControllerRegOptWin.PlayerLEDMode}" ContentStringFormat="{}{0}:" Padding="0" Margin="0,0,0,4" />
+                                        <ComboBox ItemsSource="{Binding Path=DsLEDModes}" DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue" SelectedValue="{Binding Options.LedMode}" MinHeight="34" />
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,0,0,10">
+                                        <Label Content="{lex:Loc ControllerRegOptWin.MuteLEDMode}" ContentStringFormat="{}{0}:" Padding="0" Margin="0,0,0,4" />
+                                        <ComboBox ItemsSource="{Binding Path=DsMuteLEDModes}" DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue" SelectedValue="{Binding Options.MuteLedMode}" MinHeight="34" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </TabItem>
+
+                            <TabItem x:Name="switchProOptsTabItem" Header="Switch Pro" Visibility="Collapsed">
+                                <StackPanel Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0">
+                                    <TextBlock Foreground="#FFDE4343" FontWeight="Bold">
+                                        <Run Text="*  -  " />
+                                        <Run Text="{lex:Loc ChangeOnNewDeviceConn}" />
+                                    </TextBlock>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                        <TextBlock Text="*" Foreground="Red" />
+                                        <CheckBox Content="{lex:Loc ControllerRegOptWin.EnableHomeLED}" IsChecked="{Binding Options.EnableHomeLED, FallbackValue='False'}" Margin="8,0,0,0" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </TabItem>
+
+                            <TabItem x:Name="joyConOptsTabItem" Header="{lex:Loc Strings:UI_B62B3BC00532441A}" Visibility="Collapsed">
+                                <StackPanel Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0">
+                                    <TextBlock Foreground="#FFDE4343" FontWeight="Bold">
+                                        <Run Text="*  -  " />
+                                        <Run Text="{lex:Loc ChangeOnNewDeviceConn}" />
+                                    </TextBlock>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                                        <TextBlock Text="*" Foreground="Red" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <CheckBox Content="{lex:Loc ControllerRegOptWin.EnableHomeLED}" IsChecked="{Binding Options.EnableHomeLED, FallbackValue='False'}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </TabItem>
+                        </TabControl>
                     </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                        <Label Content="{lex:Loc ControllerRegOptWin.MuteLEDMode}" ContentStringFormat="{}{0}:" />
-                        <ComboBox ItemsSource="{Binding Path=DsMuteLEDModes}" DisplayMemberPath="DisplayName" SelectedValuePath="ChoiceValue" SelectedValue="{Binding Options.MuteLedMode}" Margin="8,0,0,0" />
-                    </StackPanel>
-                </StackPanel>
-            </TabItem>
-
-            <TabItem x:Name="switchProOptsTabItem" Header="Switch Pro" Visibility="Collapsed">
-                <StackPanel Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4">
-                    <TextBlock Foreground="#FFDE4343" FontWeight="Bold">
-                        <Run Text="*  -  " />
-                        <Run Text="{lex:Loc ChangeOnNewDeviceConn}" />
-                    </TextBlock>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                        <TextBlock Text="*" Foreground="Red" />
-                        <CheckBox Content="{lex:Loc ControllerRegOptWin.EnableHomeLED}" IsChecked="{Binding Options.EnableHomeLED, FallbackValue='False'}" Margin="8,0,0,0" />
-                    </StackPanel>
-                </StackPanel>
-            </TabItem>
-
-            <TabItem x:Name="joyConOptsTabItem" Header="{lex:Loc Strings:UI_B62B3BC00532441A}" Visibility="Collapsed">
-                <StackPanel Visibility="{Binding Visible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4">
-                    <TextBlock Foreground="#FFDE4343" FontWeight="Bold">
-                        <Run Text="*  -  " />
-                        <Run Text="{lex:Loc ChangeOnNewDeviceConn}" />
-                    </TextBlock>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
-                        <TextBlock Text="*" Foreground="Red" Margin="0,0,8,0" VerticalAlignment="Center" />
-                        <CheckBox Content="{lex:Loc ControllerRegOptWin.EnableHomeLED}" IsChecked="{Binding Options.EnableHomeLED, FallbackValue='False'}" />
-                    </StackPanel>
-                </StackPanel>
-            </TabItem>
-        </TabControl>
-    </DockPanel>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+        <Button Grid.Row="2" HorizontalAlignment="Right" Margin="0,14,0,0" MinWidth="96"
+                Content="{lex:Loc Close}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="CloseBtn_Click"/>
+    </Grid>
 </Window>

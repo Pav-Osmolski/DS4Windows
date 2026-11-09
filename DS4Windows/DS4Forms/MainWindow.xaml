@@ -491,10 +491,21 @@
                                         <TextBlock x:Name="profileModifiedHeader" Grid.Column="2" Foreground="{DynamicResource MutedForegroundColor}"/>
                                     </Grid>
                                     <ListBox Grid.Row="1" x:Name="profilesListBox" Background="Transparent" BorderThickness="0"
-                                             Padding="10" SelectionChanged="ProfilesListBox_SelectionChanged"
+                                             Padding="1" SelectionChanged="ProfilesListBox_SelectionChanged"
                                              MouseDoubleClick="ProfilesListBox_MouseDoubleClick"
                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                        <ListBox.Template>
+                                            <ControlTemplate TargetType="ListBox">
+                                                <ScrollViewer Style="{DynamicResource BridgeDropDownScrollViewerStyle}"
+                                                              Padding="{TemplateBinding Padding}"
+                                                              VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                                              HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                                              CanContentScroll="False">
+                                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </ScrollViewer>
+                                            </ControlTemplate>
+                                        </ListBox.Template>
                                         <ListBox.Resources>
                                             <localConverters:EscapeAccessKeysConverter x:Key="escapeAccessConvert" />
                                         </ListBox.Resources>
@@ -654,7 +665,7 @@
                         <RadioButton x:Name="settingsIntegrationsNav" Tag="Integrations" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="{lex:Loc Strings:UI_090512D93FCC3C0D}" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" ToolTip="{lex:Loc Strings:UI_649D5C58D98A430C}" />
                         <RadioButton x:Name="settingsAdvancedNav" Tag="Advanced" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="{lex:Loc Strings:UI_9F088DBEBD6C3C70}" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" ToolTip="{lex:Loc Strings:UI_90AD95946D2D4248}" />
                     </WrapPanel>
-                    <ScrollViewer x:Name="settingsScrollViewer" Grid.Row="3" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Background="{DynamicResource SurfaceBackgroundColor}">
+                    <ScrollViewer x:Name="settingsScrollViewer" Grid.Row="3" Style="{DynamicResource BridgeDropDownScrollViewerStyle}" CanContentScroll="False" Padding="0,0,8,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Background="{DynamicResource SurfaceBackgroundColor}">
                         <Grid x:Name="settingsPages" Margin="0,0,0,8" Grid.IsSharedSizeScope="True">
                             <Grid.Resources>
                                 <Thickness x:Key="spaceMargin" Left="0" Right="0" Bottom="14" Top="0" />
