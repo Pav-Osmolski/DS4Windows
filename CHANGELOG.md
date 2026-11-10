@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are no unreleased changes.
+- Testing preview: filter the smallest mapped trigger step for USB DualSense controllers using Xbox One / Series emulation and count the affected samples in verbose logs. Thanks [u/No_Disk_1042](https://www.reddit.com/user/No_Disk_1042/) for the report and paired logs.
 
 ## Released
 

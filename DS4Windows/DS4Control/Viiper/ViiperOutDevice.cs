@@ -410,6 +410,7 @@ namespace DS4Windows
         private bool xbox360PendingResynchronization;
         private OrderedEgressPublicationLease xboxOnePendingResynchronizationLease;
         private XboxOneEgressState xboxOnePendingResynchronizationState;
+        private long xboxOneTriggerRestNoiseSamples;
         private long xboxOnePendingResynchronizationTimestamp;
         private bool xboxOnePendingResynchronization;
         private OrderedEgressPublicationLease switch2PendingResynchronizationLease;
@@ -2796,8 +2797,15 @@ namespace DS4Windows
                 {
                     XboxOneEgressState projected = XboxOneEgressState.
                         FromLegacyMappedState(state, device);
+                    XboxOneEgressState filtered = projected.
+                        SuppressDualSenseUsbTriggerRestNoise(
+                            ResolvePhysicalControllerTarget(device));
+                    if (!filtered.Equals(projected))
+                    {
+                        Interlocked.Increment(ref xboxOneTriggerRestNoiseSamples);
+                    }
                     long projectedAt = Stopwatch.GetTimestamp();
-                    if (PublishXboxOneState(orderedLease, projected,
+                    if (PublishXboxOneState(orderedLease, filtered,
                             projectedAt))
                     {
                         RecordStateQueued(projectedAt);
@@ -5955,6 +5963,10 @@ namespace DS4Windows
                     $" orderedResyncRequired={orderedSnapshot.ResynchronizationRequired}" +
                     $" orderedResyncs={orderedSnapshot.ResynchronizationCount}" +
                     $" orderedInvalidTimestamps={orderedSnapshot.InvalidTimestampCount}";
+            }
+            if (UsesXboxOneEgressScheduler())
+            {
+                orderedEgressStats += $" triggerRestNoiseSamples={Interlocked.Read(ref xboxOneTriggerRestNoiseSamples)}";
             }
             string latencyDistributions = string.Empty;
             if (ViiperLatencyHistogram.Enabled)

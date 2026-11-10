@@ -235,7 +235,13 @@ jobs:
           if ($package -cnotmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$' -or $product -cne "$package.0") {
             throw 'Project release and Windows versions must agree.'
           }
-          $version = if ($env:MAIN_CANDIDATE -ceq 'true') { $package } else { "$(Get-Date -Format yyyy.MM.dd)-ci-$($env:GITHUB_SHA.Substring(0,7))" }
+          $version = if ($env:GITHUB_REF_NAME -ceq 'preview/xbox-one-usb-trigger-noise') {
+            '5.0.68-xbox-one-usb-preview20261110'
+          } elseif ($env:MAIN_CANDIDATE -ceq 'true') {
+            $package
+          } else {
+            "$(Get-Date -Format yyyy.MM.dd)-ci-$($env:GITHUB_SHA.Substring(0,7))"
+          }
           $bundle = if ($env:MAIN_CANDIDATE -ceq 'true') { $product } else { "$package-ci.$env:GITHUB_RUN_NUMBER" }
           "VERSION=$version" >> $env:GITHUB_ENV
           "PRODUCT_VERSION=$product" >> $env:GITHUB_ENV

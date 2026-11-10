@@ -10,6 +10,7 @@ the Free Software Foundation, either version 3 of the License, or
 
 using System;
 using System.Buffers.Binary;
+using DS4Windows.InputDevices;
 
 namespace DS4Windows
 {
@@ -124,6 +125,26 @@ namespace DS4Windows
                 ExpandTrigger(legacy.LeftTrigger),
                 ExpandTrigger(legacy.RightTrigger), legacy.LeftStickX,
                 legacy.LeftStickY, legacy.RightStickX, legacy.RightStickY);
+        }
+
+        // A mapped eight-bit value of 1 expands to 4. Discard only this
+        // first step at rest so 0/1 chatter cannot consume ordered history.
+        // Exact zero still releases immediately and the next step is unchanged.
+        internal XboxOneEgressState SuppressDualSenseUsbTriggerRestNoise(
+            DS4Device physical)
+        {
+            const ushort firstMappedTriggerStep = 4;
+            if (physical is not DualSenseDevice { ConnectionType: ConnectionType.USB } ||
+                (LeftTrigger > firstMappedTriggerStep || LeftTrigger == 0) &&
+                (RightTrigger > firstMappedTriggerStep || RightTrigger == 0))
+            {
+                return this;
+            }
+
+            return new XboxOneEgressState(Buttons,
+                LeftTrigger <= firstMappedTriggerStep ? (ushort)0 : LeftTrigger,
+                RightTrigger <= firstMappedTriggerStep ? (ushort)0 : RightTrigger,
+                LeftStickX, LeftStickY, RightStickX, RightStickY);
         }
 
         public bool HasOrderedTransitionTo(in XboxOneEgressState current) =>

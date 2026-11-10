@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using DS4Windows;
+using DS4Windows.InputDevices;
 
 namespace DS4WindowsTests
 {
@@ -217,6 +218,92 @@ namespace DS4WindowsTests
             }
             Assert.AreEqual(0L,
                 GC.GetAllocatedBytesForCurrentThread() - before);
+        }
+
+        [TestMethod]
+        public void DualSenseUsbFilterKeepsRestNoiseOutOfOrderedHistory()
+        {
+            DS4Device physical = MakeDualSense(ConnectionType.USB);
+            var scheduler = new XboxOneEgressScheduler(maximumOrderedAge: 1_000_000);
+            OrderedEgressProducerEpoch epoch = scheduler.CurrentProducerEpoch;
+
+            for (int sample = 1; sample <= 1000; sample++)
+            {
+                var mapped = new DS4State
+                {
+                    L2 = (byte)(sample % 2),
+                    R2 = (byte)((sample + 1) % 2),
+                    LX = 128,
+                    LY = 128,
+                    RX = 128,
+                    RY = 128,
+                };
+                XboxOneEgressState projected =
+                    XboxOneEgressState.FromLegacyMappedState(mapped, -1);
+                XboxOneEgressState filtered =
+                    projected.SuppressDualSenseUsbTriggerRestNoise(physical);
+                Assert.IsTrue(filtered.IsNeutral);
+                scheduler.Publish(epoch, filtered, sample);
+            }
+
+            Assert.AreEqual(0, scheduler.Snapshot().OrderedDepth);
+            Assert.AreEqual(0L, scheduler.Snapshot().OverflowFaults);
+        }
+
+        [TestMethod]
+        public void DualSenseUsbFilterPreservesQuickTapsAndButtonEdges()
+        {
+            DS4Device physical = MakeDualSense(ConnectionType.USB);
+            var scheduler = new XboxOneEgressScheduler(maximumOrderedAge: 1_000_000);
+            OrderedEgressProducerEpoch epoch = scheduler.CurrentProducerEpoch;
+            XboxOneEgressState[] expected =
+            [
+                State(buttons: XboxOneEgressState.AButton, leftTrigger: 8, rightTrigger: 1023),
+                State(buttons: XboxOneEgressState.AButton, rightTrigger: 1023),
+                State(),
+            ];
+            XboxOneEgressState[] samples =
+            [
+                expected[0],
+                State(buttons: XboxOneEgressState.AButton, leftTrigger: 4, rightTrigger: 1023),
+                expected[2],
+            ];
+            for (int i = 0; i < samples.Length; i++)
+            {
+                XboxOneEgressState filtered = samples[i].SuppressDualSenseUsbTriggerRestNoise(physical);
+                Assert.AreEqual(OrderedEgressPublishDisposition.AcceptedOrdered,
+                    scheduler.Publish(epoch, filtered, i + 1));
+            }
+            foreach (XboxOneEgressState expectedState in expected)
+            {
+                Assert.IsTrue(scheduler.TryClaim(4, out OrderedEgressClaim<XboxOneEgressState> claim));
+                Assert.AreEqual(expectedState, claim.State);
+                Assert.IsTrue(scheduler.TryAdmit(claim, 4));
+                Assert.IsTrue(scheduler.Complete(claim, OrderedEgressCompletion.Commit));
+            }
+        }
+
+        [TestMethod]
+        public void TriggerFilterOnlyChangesDualSenseUsbAndLeavesAxesUntouched()
+        {
+            XboxOneEgressState sample = State(XboxOneEgressState.ShareButton,
+                4, 8, short.MinValue, -10, 10, short.MaxValue);
+            XboxOneEgressState expected = State(XboxOneEgressState.ShareButton,
+                0, 8, short.MinValue, -10, 10, short.MaxValue);
+
+            Assert.AreEqual(expected,
+                sample.SuppressDualSenseUsbTriggerRestNoise(MakeDualSense(ConnectionType.USB)));
+            Assert.AreEqual(sample,
+                sample.SuppressDualSenseUsbTriggerRestNoise(MakeDualSense(ConnectionType.BT)));
+            Assert.AreEqual(sample, sample.SuppressDualSenseUsbTriggerRestNoise(null));
+        }
+
+        private static DS4Device MakeDualSense(ConnectionType connectionType)
+        {
+            var device = (DualSenseDevice)RuntimeHelpers.GetUninitializedObject(typeof(DualSenseDevice));
+            typeof(DS4Device).GetField("conType", BindingFlags.NonPublic | BindingFlags.Instance)!
+                .SetValue(device, connectionType);
+            return device;
         }
 
         private static XboxOneEgressState State(uint buttons = 0,
