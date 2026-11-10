@@ -11,6 +11,7 @@ the Free Software Foundation, either version 3 of the License, or
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 using DS4Windows;
@@ -28,12 +29,103 @@ namespace DS4WinWPF.DS4Forms
         private OutContType? initialOutputController;
         private OutContType? pendingOutputController;
         private MainWindowsViewModel outputControllerViewModel;
+        private LatestPreferenceWriter<OverviewLayoutPreferences> overviewLayoutWriter;
 
         public ControllerOverviewControl()
         {
             InitializeComponent();
+            overviewCustomization.CustomPopupPlacementCallback = PlaceOverviewCustomization;
             DataContextChanged += ControllerOverviewControl_DataContextChanged;
             Unloaded += ControllerOverviewControl_Unloaded;
+            Loaded += ControllerOverviewControl_Loaded;
+            SizeChanged += ControllerOverviewControl_SizeChanged;
+            IsVisibleChanged += (_, _) =>
+            {
+                if (!IsVisible) overviewCustomization.SetCurrentValue(
+                    Popup.IsOpenProperty, false);
+            };
+        }
+
+        private void ControllerOverviewControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            HookOutputControllerViewModel(DataContext as MainWindowsViewModel, true);
+            if (overviewLayoutWriter != null) return;
+
+            var layout = new OverviewLayoutPreferences();
+            var logger = NLog.LogManager.GetLogger(nameof(ControllerOverviewControl));
+            try { layout = SettingsStorage.Current.OverviewLayout; }
+            catch (Exception error) { logger.Warn(error, "Could not load Overview layout preferences."); }
+
+            showFeedback.IsChecked = layout.ShowFeedback;
+            showAudio.IsChecked = layout.ShowAudio;
+            showLevels.IsChecked = layout.ShowLevels;
+            showMicrophone.IsChecked = layout.ShowMicrophone;
+            showInputRate.IsChecked = layout.ShowInputRate;
+            compactSpacing.IsChecked = layout.CompactSpacing;
+            overviewLayoutWriter = new(value => SettingsStorage.Current.SetOverviewLayout(value),
+                error => logger.Warn(error, "Could not remember Overview layout preferences."));
+            overviewLayoutWriter.Initialize(layout);
+            ArrangeOverviewCards();
+        }
+
+        private void OverviewLayout_Changed(object sender, RoutedEventArgs e)
+        {
+            ArrangeOverviewCards();
+            if (overviewLayoutWriter == null) return;
+            overviewLayoutWriter.Queue(new OverviewLayoutPreferences
+            {
+                ShowFeedback = showFeedback.IsChecked == true,
+                ShowAudio = showAudio.IsChecked == true,
+                ShowLevels = showLevels.IsChecked == true,
+                ShowMicrophone = showMicrophone.IsChecked == true,
+                ShowInputRate = showInputRate.IsChecked == true,
+                CompactSpacing = compactSpacing.IsChecked == true
+            });
+        }
+
+        private void ControllerOverviewControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.WidthChanged) ArrangeOverviewCards();
+        }
+
+        private void OverviewCapabilityVisibility_Changed(object sender, DependencyPropertyChangedEventArgs e) =>
+            ArrangeOverviewCards();
+
+        private void ArrangeOverviewCards()
+        {
+            if (overviewMicrophoneCard == null) return;
+
+            bool hasAudio = managedAudioLevelsPanel.Visibility == Visibility.Visible;
+            bool hasLeftCards = showFeedback.IsChecked == true ||
+                (showAudio.IsChecked == true && (hasAudio || nativeUsbHeadsetCard.Visibility == Visibility.Visible));
+            bool hasRightCards = hasAudio && (showLevels.IsChecked == true || showMicrophone.IsChecked == true);
+            bool split = ActualWidth >= 724 && hasLeftCards && hasRightCards;
+            overviewSecondaryColumn.Width = split ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+            Grid.SetColumn(overviewSecondaryCards, split ? 1 : 0);
+            Grid.SetRow(overviewSecondaryCards, split ? 0 : 1);
+            overviewPrimaryCards.Margin = split ? new Thickness(0, 0, 6, 0) : default;
+            overviewSecondaryCards.Margin = split ? new Thickness(6, 0, 0, 0) : default;
+            bool alignAudioCards = split && hasAudio &&
+                showAudio.IsChecked == true && showMicrophone.IsChecked == true;
+            var audioAlignment = alignAudioCards ? VerticalAlignment.Stretch : VerticalAlignment.Top;
+            overviewAudioCard.VerticalAlignment = audioAlignment;
+            overviewMicrophoneCard.VerticalAlignment = audioAlignment;
+        }
+
+        private void OverviewCustomization_Opened(object sender, EventArgs e) => showFeedback.Focus();
+
+        private static CustomPopupPlacement[] PlaceOverviewCustomization(Size popup, Size target, Point offset) =>
+            [
+                new(new Point(target.Width - popup.Width, target.Height + 4), PopupPrimaryAxis.Horizontal),
+                new(new Point(target.Width - popup.Width, -popup.Height - 4), PopupPrimaryAxis.Horizontal)
+            ];
+
+        private void OverviewCustomization_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Escape) return;
+            customizeOverviewButton.SetCurrentValue(ToggleButton.IsCheckedProperty, false);
+            customizeOverviewButton.Focus();
+            e.Handled = true;
         }
 
         private void ControllerOverviewControl_DataContextChanged(object sender,

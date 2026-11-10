@@ -6813,4 +6813,49 @@ Le backup : </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Utiliser la saisie Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Gérer les pilotes partagés…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Copier le diagnostic des composants</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Zone morte du gyroscope</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Filtre les faibles valeurs du gyroscope au repos. Réglez sur 0 pour les transmettre au jeu. La valeur par défaut est 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Personnaliser</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Sortie et retour</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Niveaux de sortie et traitement</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Fréquence d’entrée</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Afficher la fréquence des rapports d’entrée</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Espacement compact</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Accès</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Niveau de batterie indiqué par la manette. Le signe (+) indique une charge ou une alimentation externe.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Indique comment la manette physique est connectée à cet ordinateur.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Indique comment DS4Windows accède à la manette physique. HidHide peut la masquer aux jeux pour éviter les entrées en double.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Choisissez les cartes et les mesures affichées dans la vue d’ensemble.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Choisissez où le son de la manette est diffusé. Activez la diffusion pour modifier ce réglage.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Déconnecte la manette sans fil sélectionnée. Débranchez les manettes USB.</value>
+  </data>
 </root>

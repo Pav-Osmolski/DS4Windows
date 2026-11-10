@@ -6813,4 +6813,49 @@ backup için: </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows girişini kullan</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Paylaşılan sürücüleri yönet…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Bileşen tanı bilgilerini kopyala</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Jiroskop ölü bölgesi</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Hareketsizliğe yakın küçük jiroskop değerlerini filtreler. Bunları oyuna iletmek için 0 kullanın. Varsayılan değer 32’dir.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Özelleştir</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Çıkış ve geri bildirim</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Çıkış düzeyleri ve işleme</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Giriş hızı</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Giriş raporu hızını göster</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Dar aralıklar</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Erişim</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Kontrolcünün bildirdiği pil düzeyi. Artı işareti (+), şarjı veya harici gücü gösterir.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Fiziksel kontrolcünün bu bilgisayara nasıl bağlandığını gösterir.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>DS4Windows’un fiziksel kontrolcüye nasıl eriştiğini gösterir. HidHide, çift girişi önlemek için kontrolcüyü oyunlardan gizleyebilir.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Genel bakışta hangi kartların ve ölçümlerin görüneceğini seçin.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Kontrolcü sesinin nerede çalacağını seçin. Bu ayarı değiştirmek için ses akışını etkinleştirin.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Seçilen kablosuz kontrolcünün bağlantısını keser. USB kontrolcünün kablosu çıkarılmalıdır.</value>
+  </data>
 </root>

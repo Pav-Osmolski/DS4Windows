@@ -5,9 +5,15 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+There are no unreleased changes.
 
 ## Released
+
+### [5.0.68](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.68) - 2026-11-10
+
+- Add a per-profile gyro deadband for virtual DualSense Passthru. Keep 32 as the default and allow 0 to preserve small aiming movements. Thanks [@MariolloPL](https://github.com/MariolloPL) for the request ([#121](https://github.com/Pav-Osmolski/DS4Windows/issues/121)).
+- Add a separate Start menu shortcut option to the installer and remember the choice across updates and repairs. Thanks [@soredake](https://github.com/soredake) for the request ([upstream #157](https://github.com/hbashton/DS4Windows/issues/157)).
+- Refresh Overview with a compact controller summary, configurable quick profile cards and Quick actions that stay above the footer as you scroll.
 
 ### [5.0.67](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.67) - 2026-11-09
 

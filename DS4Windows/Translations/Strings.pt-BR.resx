@@ -6789,4 +6789,49 @@ O backup: </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Usar a entrada do Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Gerenciar drivers compartilhados…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Copiar diagnóstico dos componentes</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Zona morta do giroscópio</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Filtra pequenas leituras do giroscópio perto do repouso. Use 0 para enviá-las ao jogo. O valor padrão é 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Personalizar</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Saída e resposta tátil</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Níveis de saída e processamento</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Taxa de entrada</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Mostrar a taxa de relatórios de entrada</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Espaçamento compacto</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Acesso</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Nível da bateria informado pelo controle. O sinal de mais (+) indica carregamento ou alimentação externa.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Mostra como o controle físico está conectado a este computador.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Mostra como o DS4Windows acessa o controle físico. O HidHide pode ocultá-lo dos jogos para evitar entradas duplicadas.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Escolha os cartões e as leituras exibidos na visão geral.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Escolha onde o áudio do controle é reproduzido. Ative a transmissão para alterar esta configuração.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Desconecta o controle sem fio selecionado. Retire o cabo dos controles USB.</value>
+  </data>
 </root>

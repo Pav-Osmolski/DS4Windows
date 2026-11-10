@@ -6811,4 +6811,49 @@ Untuk backup: </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Gunakan input Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Kelola driver bersama…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Salin diagnostik komponen</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Zona mati giroskop</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Menyaring pembacaan kecil giroskop saat hampir diam. Gunakan 0 untuk meneruskannya ke gim. Nilai bawaan adalah 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Sesuaikan</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Keluaran dan umpan balik</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Level keluaran dan pemrosesan</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Laju input</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Tampilkan laju laporan input</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Jarak rapat</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Akses</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Tingkat baterai yang dilaporkan pengontrol. Tanda plus (+) menunjukkan pengisian daya atau daya eksternal.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Cara pengontrol fisik terhubung ke PC ini.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Cara DS4Windows mengakses pengontrol fisik. HidHide dapat menyembunyikannya dari gim untuk mencegah input ganda.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Pilih kartu dan data yang ditampilkan di Ikhtisar.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Pilih tempat audio pengontrol diputar. Aktifkan streaming untuk mengubah pengaturan ini.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Memutus pengontrol nirkabel yang dipilih. Cabut kabel pengontrol USB.</value>
+  </data>
 </root>

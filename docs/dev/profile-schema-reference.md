@@ -52,6 +52,9 @@ These optional fields do not require a profile schema-version bump:
 - `GyroStickActivationMode`: Disabled / WhileMoving / WhileCentered; missing
   values default to Disabled. `GyroActivationStick`: Left / Right / Either.
   `GyroStickThreshold` defaults to 15 and is clamped to 1-95.
+- `DualSenseGyroDeadband`: per-axis rest threshold for virtual DualSense gyro
+  passthrough. Defaults to 32, is clamped to 0–256, and 0 passes through
+  small nonzero readings.
 - `PlayerIndicators` and `MicrophoneIndicator`: default to DeviceSettings when
   absent. Their runtime interpretation also uses the existing `LightbarMode`:
   inherited indicators follow application requests in Passthru. Explicit choices

@@ -6791,4 +6791,49 @@ Backup : </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Dùng phương thức nhập liệu của Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Quản lý trình điều khiển dùng chung…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Sao chép thông tin chẩn đoán thành phần</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Vùng chết của con quay hồi chuyển</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Lọc các giá trị nhỏ của con quay hồi chuyển khi gần như đứng yên. Đặt 0 để chuyển chúng đến trò chơi. Giá trị mặc định là 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Tùy chỉnh</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Đầu ra và phản hồi</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Mức đầu ra và xử lý</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Tần số đầu vào</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Hiện tần số báo cáo đầu vào</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Khoảng cách thu gọn</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Quyền truy cập</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Mức pin do tay cầm báo cáo. Dấu cộng (+) cho biết tay cầm đang sạc hoặc dùng nguồn ngoài.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Cho biết tay cầm vật lý kết nối với máy tính này bằng cách nào.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Cho biết cách DS4Windows truy cập tay cầm vật lý. HidHide có thể ẩn tay cầm khỏi trò chơi để tránh nhận lệnh hai lần.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Chọn thẻ và số liệu hiển thị trong Tổng quan.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Chọn nơi phát âm thanh của tay cầm. Bật truyền âm thanh để thay đổi tùy chọn này.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Ngắt kết nối tay cầm không dây đã chọn. Với tay cầm USB, hãy rút cáp.</value>
+  </data>
 </root>

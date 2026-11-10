@@ -1291,6 +1291,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 }
 
                 RaiseControllerMicrophoneUiStateChanged();
+                ShowDualSenseGyroDeadbandChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -1324,6 +1325,15 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public OutContType TempConType =>
             GetOutputControllerType(tempControllerIndex);
+
+        public bool ShowDualSenseGyroDeadband => TempConType == OutContType.ViiperDualSense;
+        public event EventHandler ShowDualSenseGyroDeadbandChanged;
+
+        public int DualSenseGyroDeadband
+        {
+            get => Global.DualSenseGyroDeadbands[device];
+            set => Global.DualSenseGyroDeadbands[device] = BackingStore.NormalizeDualSenseGyroDeadband(value);
+        }
 
         public int GyroStickActivationIndex
         {

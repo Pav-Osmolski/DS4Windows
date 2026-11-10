@@ -131,7 +131,7 @@ namespace DS4Windows.Bootstrapper
                     Environment.SpecialFolder.ApplicationData), true);
         }
 
-        internal void Begin(LaunchAction action, bool desktopShortcut, bool hidHide, bool fakerInput)
+        internal void Begin(LaunchAction action, bool desktopShortcut, bool startMenuShortcut, bool hidHide, bool fakerInput)
         {
             // The incoming Burn engine owns the transaction mutex for its
             // complete package chain, including related-bundle removal. An
@@ -154,6 +154,7 @@ namespace DS4Windows.Bootstrapper
                         "Deferring shared infrastructure until older related bundles are removed.");
                 }
                 engine.SetVariableNumeric("CreateDesktopShortcut", desktopShortcut ? 1 : 0);
+                engine.SetVariableNumeric("CreateStartMenuShortcut", startMenuShortcut ? 1 : 0);
                 engine.SetVariableNumeric("InstallHidHide", hidHide ? 1 : 0);
                 engine.SetVariableNumeric("InstallFakerInput", fakerInput ? 1 : 0);
             });
@@ -653,13 +654,16 @@ namespace DS4Windows.Bootstrapper
                 var resumeAction = requestedSetupResume ? LaunchAction.Repair : command.Action == LaunchAction.Unknown
                     ? LaunchAction.Install
                     : command.Action;
+                if (requestedSetupResume && command.Resume != ResumeType.Reboot)
+                    engine.SetVariableNumeric("CreateStartMenuShortcut", ReadStartMenuShortcutPreference() ? 1 : 0);
                 StartPlan(resumeAction);
                 return;
             }
 
             string hidHideVersion = OptionalDriverVersions.Installed("HidHide");
             string fakerInputVersion = relatedFakerInputVersion ?? OptionalDriverVersions.Installed("FakerInput");
-            Ui(() => window.ShowConfirmation(mode, packageStates, infrastructureHealthy, relatedFakerInput, hidHideVersion, fakerInputVersion));
+            bool startMenuShortcut = ReadStartMenuShortcutPreference();
+            Ui(() => window.ShowConfirmation(mode, packageStates, infrastructureHealthy, startMenuShortcut, relatedFakerInput, hidHideVersion, fakerInputVersion));
 
             if (command.Display != Display.Full)
             {
@@ -671,7 +675,7 @@ namespace DS4Windows.Bootstrapper
                         : command.LayoutDirectory;
                     engine.SetVariableString("WixBundleLayoutDirectory", layoutDirectory, false);
                 }
-                Begin(action, true, false, false);
+                Begin(action, true, startMenuShortcut, false, false);
             }
         }
 
@@ -799,11 +803,13 @@ namespace DS4Windows.Bootstrapper
                 result = 3010;
             }
 
+            bool needsDeferredInfrastructure = deferInfrastructureUntilUpgradeCompletes && !infrastructureRecoveryPass;
             if (!restartRequired &&
                 (plannedAction == LaunchAction.Install ||
                  plannedAction == LaunchAction.Repair) &&
-                !Installation.UsbipComponentState.IsPaused(Installation.UsbipComponentState.Read()) &&
-                !InfrastructureProbe.IsHealthy())
+                (needsDeferredInfrastructure ||
+                 (!Installation.UsbipComponentState.IsPaused(Installation.UsbipComponentState.Read()) &&
+                  !InfrastructureProbe.IsHealthy())))
             {
                 if (infrastructureRecoveryPass)
                 {
@@ -846,6 +852,22 @@ namespace DS4Windows.Bootstrapper
                     window.ShowComplete(plannedAction, startupWarning);
                 }
             });
+        }
+
+        private bool ReadStartMenuShortcutPreference()
+        {
+            try
+            {
+                using var machine = Microsoft.Win32.RegistryKey.OpenBaseKey(
+                    Microsoft.Win32.RegistryHive.LocalMachine, Microsoft.Win32.RegistryView.Registry64);
+                using var key = machine.OpenSubKey(@"SOFTWARE\DS4Windows");
+                return key?.GetValue("CreateStartMenuShortcut") is not 0;
+            }
+            catch (Exception ex)
+            {
+                engine.Log(LogLevel.Verbose, "Could not read Start menu shortcut preference: " + ex.Message);
+                return true;
+            }
         }
 
         private bool HasCurrentStartupWarning()

@@ -609,6 +609,7 @@
         <Setter Property="ItemContainerStyle" Value="{StaticResource BridgeNavigationTabItemStyle}" />
         <Setter Property="Background" Value="{DynamicResource SurfaceBackgroundColor}" />
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="28,22" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="Template">
@@ -891,13 +892,22 @@
                                 </local:PageHeaderControl>
                             </Grid>
                             <ContentPresenter Grid.Row="1" x:Name="PART_SelectedContentHost"
-                                              ContentSource="SelectedContent" Margin="28,22"
+                                              ContentSource="SelectedContent" Margin="{TemplateBinding Padding}"
                                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                         </Grid>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding SelectedItem.Name, RelativeSource={RelativeSource Self}}" Value="overviewTab" />
+                    <Condition Binding="{Binding HasSelectedController}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Padding" Value="28,22,28,0" />
+            </MultiDataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="BridgeProfileTabItemStyle" TargetType="TabItem">

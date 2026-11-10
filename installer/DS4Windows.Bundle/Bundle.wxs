@@ -15,6 +15,7 @@
     <BootstrapperApplication SourceFile="$(var.BootstrapperRoot)\DS4Windows.Bootstrapper.exe" />
 
     <Variable Name="CreateDesktopShortcut" Type="numeric" Value="1" />
+    <Variable Name="CreateStartMenuShortcut" Type="numeric" Value="1" Persisted="yes" />
     <Variable Name="InstallHidHide" Type="numeric" Value="1" />
     <Variable Name="InstallFakerInput" Type="numeric" Value="0" />
     <Variable Name="SetupCorrelationId" Type="string" Value="" Persisted="yes" />
@@ -115,8 +116,8 @@
           Permanent="yes"
           Vital="yes"
           DetectCondition="InfrastructureInstalled = &quot;VIIPER-0.1.17+USBIP-0.9.8.1&quot; OR ManagedInstallRegistered OR ManagedViiperPresent"
-          InstallArguments="install --correlation-id &quot;[SetupCorrelationId]&quot; --install-root &quot;[ProgramFiles64Folder]DS4Windows&quot; --bundle-id &quot;[WixBundleProviderKey]&quot; --desktop-shortcut &quot;[CreateDesktopShortcut]&quot; --target-user-sid &quot;[TargetUserSid]&quot; --target-user-name &quot;[TargetUserName]&quot; --target-local-appdata &quot;[TargetLocalAppData]&quot; --target-roaming-appdata &quot;[TargetRoamingAppData]&quot;"
-          RepairArguments="repair --correlation-id &quot;[SetupCorrelationId]&quot; --install-root &quot;[ProgramFiles64Folder]DS4Windows&quot; --bundle-id &quot;[WixBundleProviderKey]&quot; --desktop-shortcut &quot;[CreateDesktopShortcut]&quot; --target-user-sid &quot;[TargetUserSid]&quot; --target-user-name &quot;[TargetUserName]&quot; --target-local-appdata &quot;[TargetLocalAppData]&quot; --target-roaming-appdata &quot;[TargetRoamingAppData]&quot;"
+          InstallArguments="install --correlation-id &quot;[SetupCorrelationId]&quot; --install-root &quot;[ProgramFiles64Folder]DS4Windows&quot; --bundle-id &quot;[WixBundleProviderKey]&quot; --desktop-shortcut &quot;[CreateDesktopShortcut]&quot; --start-menu-shortcut &quot;[CreateStartMenuShortcut]&quot; --target-user-sid &quot;[TargetUserSid]&quot; --target-user-name &quot;[TargetUserName]&quot; --target-local-appdata &quot;[TargetLocalAppData]&quot; --target-roaming-appdata &quot;[TargetRoamingAppData]&quot;"
+          RepairArguments="repair --correlation-id &quot;[SetupCorrelationId]&quot; --install-root &quot;[ProgramFiles64Folder]DS4Windows&quot; --bundle-id &quot;[WixBundleProviderKey]&quot; --desktop-shortcut &quot;[CreateDesktopShortcut]&quot; --start-menu-shortcut &quot;[CreateStartMenuShortcut]&quot; --target-user-sid &quot;[TargetUserSid]&quot; --target-user-name &quot;[TargetUserName]&quot; --target-local-appdata &quot;[TargetLocalAppData]&quot; --target-roaming-appdata &quot;[TargetRoamingAppData]&quot;"
           UninstallArguments="uninstall --correlation-id &quot;[SetupCorrelationId]&quot; --install-root &quot;[ProgramFiles64Folder]DS4Windows&quot;">
         <ExitCode Value="0" Behavior="success" />
         <ExitCode Value="3010" Behavior="scheduleReboot" />

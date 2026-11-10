@@ -6789,4 +6789,49 @@
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>שימוש בקלט של Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>ניהול מנהלי התקנים משותפים…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>העתקת פרטי האבחון של הרכיבים</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>אזור מת של הג׳יירוסקופ</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>מסנן קריאות קטנות של הג׳יירוסקופ במנוחה. בחרו 0 כדי להעביר אותן למשחק. ברירת המחדל היא 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>התאמה אישית</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>פלט ומשוב</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>עוצמות פלט ועיבוד</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>קצב קלט</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>הצגת קצב דיווחי קלט</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>ריווח צפוף</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>גישה</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>רמת הסוללה שעליה מדווח הבקר. סימן הפלוס (+) מציין טעינה או אספקת חשמל חיצונית.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>מציג כיצד הבקר הפיזי מחובר למחשב הזה.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>מציג כיצד DS4Windows ניגש לבקר הפיזי. HidHide יכול להסתיר אותו ממשחקים כדי למנוע קלט כפול.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>בחרו אילו כרטיסים ונתונים יופיעו בסקירה.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>בחרו היכן יושמע שמע הבקר. הפעילו הזרמה כדי לשנות הגדרה זו.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>מנתק את הבקר האלחוטי שנבחר. יש לנתק בקרי USB מהכבל.</value>
+  </data>
 </root>

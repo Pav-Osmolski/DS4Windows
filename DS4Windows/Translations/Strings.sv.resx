@@ -6789,4 +6789,49 @@ och backup: </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Använd Windows-inmatning</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Hantera delade drivrutiner…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Kopiera komponentdiagnostik</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Gyroskopets dödzon</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Filtrerar bort små gyroskopvärden nära viloläget. Ange 0 för att skicka dem till spelet. Standardvärdet är 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Anpassa</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Utmatning och återkoppling</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Utgångsnivåer och bearbetning</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Inmatningsfrekvens</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Visa frekvensen för inmatningsrapporter</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Kompakta mellanrum</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Åtkomst</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Batterinivån som handkontrollen rapporterar. Plustecknet (+) anger laddning eller extern strömförsörjning.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Visar hur den fysiska handkontrollen är ansluten till den här datorn.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Visar hur DS4Windows får åtkomst till den fysiska handkontrollen. HidHide kan dölja den för spel för att undvika dubbla inmatningar.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Välj vilka kort och värden som visas i översikten.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Välj var handkontrollens ljud spelas upp. Aktivera strömning för att ändra inställningen.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Kopplar från den valda trådlösa handkontrollen. USB-handkontroller måste kopplas ur.</value>
+  </data>
 </root>

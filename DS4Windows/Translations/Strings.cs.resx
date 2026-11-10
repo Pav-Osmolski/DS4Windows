@@ -6786,4 +6786,49 @@ Zálohování : </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Použít vstup Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Spravovat sdílené ovladače…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Kopírovat diagnostiku součástí</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Mrtvá zóna gyroskopu</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Potlačuje malé hodnoty gyroskopu v klidu. Nastavením na 0 je předáte hře. Výchozí hodnota je 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Přizpůsobit</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Výstup a odezva</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Úrovně výstupu a zpracování</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Frekvence vstupu</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Zobrazit frekvenci vstupních hlášení</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Kompaktní rozestupy</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Přístup</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Úroveň baterie hlášená ovladačem. Znaménko (+) označuje nabíjení nebo externí napájení.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Jak je fyzický ovladač připojen k tomuto počítači.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Jak DS4Windows přistupuje k fyzickému ovladači. HidHide ho může skrýt před hrami a zabránit dvojímu vstupu.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Vyberte karty a údaje zobrazené v přehledu.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Zvolte, kde se přehrává zvuk ovladače. Pro změnu povolte streamování.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Odpojí vybraný bezdrátový ovladač. Ovladače USB je nutné fyzicky odpojit.</value>
+  </data>
 </root>

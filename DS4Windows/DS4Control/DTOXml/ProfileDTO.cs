@@ -1759,6 +1759,13 @@ namespace DS4WinWPF.DS4Control.DTOXml
         public GyroActivationStick GyroActivationStick { get; set; }
         public int GyroStickThreshold { get; set; } = 15;
 
+        private int _dualSenseGyroDeadband = BackingStore.DefaultDualSenseGyroDeadband;
+        public int DualSenseGyroDeadband
+        {
+            get => _dualSenseGyroDeadband;
+            set => _dualSenseGyroDeadband = BackingStore.NormalizeDualSenseGyroDeadband(value);
+        }
+
         [XmlElement("GyroOutputMode")]
         public GyroOutMode GyroOutputMode
         {
@@ -2619,6 +2626,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             GyroStickActivationMode = source.gyroStickModes[deviceIndex];
             GyroActivationStick = source.gyroActivationSticks[deviceIndex];
             GyroStickThreshold = source.gyroStickThresholds[deviceIndex];
+            DualSenseGyroDeadband = source.dualSenseGyroDeadbands[deviceIndex];
             GyroControlsSettings = new GyroControlsSettings()
             {
                 Triggers = source.gyroControlsInf[deviceIndex].triggers,
@@ -3509,6 +3517,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.gyroActivationSticks[deviceIndex] = Enum.IsDefined(GyroActivationStick) ?
                 GyroActivationStick : DS4Windows.GyroActivationStick.Left;
             destination.gyroStickThresholds[deviceIndex] = Math.Clamp(GyroStickThreshold, 1, 95);
+            destination.dualSenseGyroDeadbands[deviceIndex] = DualSenseGyroDeadband;
 
             if (GyroControlsSettings != null)
             {

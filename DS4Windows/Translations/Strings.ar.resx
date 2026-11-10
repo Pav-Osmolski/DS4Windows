@@ -6794,4 +6794,49 @@ Backup : </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>استخدام إدخال Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>إدارة برامج التشغيل المشتركة…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>نسخ تشخيصات المكوّنات</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>المنطقة الميتة للجيروسكوب</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>تتجاهل القراءات الصغيرة للجيروسكوب قرب وضع السكون. استخدم 0 لتمريرها إلى اللعبة. القيمة الافتراضية 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>تخصيص</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>الإخراج والتغذية الراجعة</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>مستويات الإخراج والمعالجة</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>معدل الإدخال</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>إظهار معدل تقارير الإدخال</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>تباعد مضغوط</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>الوصول</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>مستوى البطارية الذي تبلغ عنه وحدة التحكم. تشير علامة (+) إلى الشحن أو التغذية الخارجية.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>طريقة اتصال وحدة التحكم الفعلية بهذا الكمبيوتر.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>طريقة وصول DS4Windows إلى وحدة التحكم الفعلية. يمكن لـ HidHide إخفاؤها عن الألعاب لمنع الإدخال المزدوج.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>اختر البطاقات والقراءات المعروضة في النظرة العامة.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>اختر مكان تشغيل صوت وحدة التحكم. فعّل البث لتغيير هذا الإعداد.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>يفصل وحدة التحكم اللاسلكية المحددة. افصل كابل USB لوحدات التحكم السلكية.</value>
+  </data>
 </root>

@@ -10,6 +10,12 @@ selected by your profile. Available settings depend on the controller and connec
 ![Overview dashboard](images/site/overview.webp)
 
 Start here for a summary of your connected controller, active profile and backend status.
+Use **Customize** beside **Quick profile controls** to choose which cards to
+show, hide the input report rate or use compact spacing. Overview remembers
+these choices separately from your controller profiles.
+
+**Quick actions** stays above the footer as you scroll. Use it to edit the active
+profile, open controller information, change the lightbar or disconnect a wireless controller.
 
 ### Footer and activity details
 
