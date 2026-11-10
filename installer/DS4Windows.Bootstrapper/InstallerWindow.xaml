@@ -126,6 +126,7 @@
               <StackPanel>
                 <TextBlock Text="Options" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,7" />
                 <CheckBox x:Name="DesktopShortcutCheckBox" IsChecked="True" Content="Create a desktop shortcut" />
+                <CheckBox x:Name="StartMenuShortcutCheckBox" IsChecked="True" Content="Create a Start menu shortcut" />
                 <CheckBox x:Name="HidHideCheckBox" IsChecked="False" Content="Install HidHide (recommended — prevents double input)" Click="OptionalDriver_Click" />
                 <TextBlock Text="Optional system driver. Existing healthy installations are left unchanged." Foreground="{DynamicResource MutedBrush}" FontSize="12" Margin="24,-2,0,5" />
                 <CheckBox x:Name="FakerInputCheckBox" IsChecked="False" Content="Install FakerInput (virtual keyboard and mouse)" Click="OptionalDriver_Click" />

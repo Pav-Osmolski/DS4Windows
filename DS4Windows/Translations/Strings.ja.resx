@@ -6790,4 +6790,49 @@ Backup : </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows の入力を使用</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>共有ドライバーを管理…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>コンポーネントの診断情報をコピー</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>ジャイロのデッドゾーン</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>静止時に近い微小なジャイロ入力を抑制します。0 にするとゲームにそのまま渡します。既定値は 32 です。</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>カスタマイズ</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>出力とフィードバック</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>出力レベルと処理</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>入力レート</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>入力レポートのレートを表示</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>間隔を詰める</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>アクセス</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>コントローラーが報告するバッテリー残量です。プラス記号（+）は充電中または外部給電を示します。</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>物理コントローラーがこの PC にどのように接続されているかを示します。</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>DS4Windows が物理コントローラーにアクセスする方法です。HidHide でゲームから隠すと、入力の重複を防げます。</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>概要に表示するカードと測定値を選びます。</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>コントローラーの音声を再生する場所を選びます。変更するにはストリーミングを有効にしてください。</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>選択したワイヤレスコントローラーを切断します。USB コントローラーはケーブルを抜いてください。</value>
+  </data>
 </root>

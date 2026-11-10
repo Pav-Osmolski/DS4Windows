@@ -6790,4 +6790,49 @@ i backup: </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Użyj wejścia Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Zarządzaj udostępnionymi sterownikami…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Kopiuj dane diagnostyczne składników</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Martwa strefa żyroskopu</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Tłumi niewielkie odczyty żyroskopu w pobliżu spoczynku. Ustaw 0, aby przekazywać je do gry. Wartość domyślna to 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Dostosuj</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Wyjście i sprzężenie zwrotne</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Poziomy wyjściowe i przetwarzanie</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Częstotliwość wejścia</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Pokaż częstotliwość raportów wejściowych</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Kompaktowe odstępy</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Dostęp</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Poziom baterii zgłaszany przez kontroler. Znak plus (+) oznacza ładowanie lub zasilanie zewnętrzne.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Pokazuje, jak fizyczny kontroler jest połączony z tym komputerem.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Pokazuje, jak DS4Windows uzyskuje dostęp do fizycznego kontrolera. HidHide może ukryć go przed grami, aby zapobiec podwójnemu wejściu.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Wybierz karty i odczyty widoczne w przeglądzie.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Wybierz miejsce odtwarzania dźwięku kontrolera. Włącz przesyłanie dźwięku, aby zmienić to ustawienie.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Rozłącza wybrany kontroler bezprzewodowy. Kontroler USB należy odłączyć od kabla.</value>
+  </data>
 </root>

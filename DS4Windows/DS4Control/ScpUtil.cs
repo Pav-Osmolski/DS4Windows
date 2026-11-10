@@ -2626,6 +2626,7 @@ namespace DS4Windows
         public static int[] GyroStickThresholds => m_Config.gyroStickThresholds;
 
         public static GyroOutMode[] GyroOutputMode => m_Config.gyroOutMode;
+        internal static int[] DualSenseGyroDeadbands => m_Config.dualSenseGyroDeadbands;
         public static GyroOutMode GetGyroOutMode(int device)
         {
             return m_Config.gyroOutMode[device];
@@ -5049,6 +5050,12 @@ namespace DS4Windows
         public GyroStickActivationMode[] gyroStickModes = new GyroStickActivationMode[Global.TEST_PROFILE_ITEM_COUNT];
         public GyroActivationStick[] gyroActivationSticks = new GyroActivationStick[Global.TEST_PROFILE_ITEM_COUNT];
         public int[] gyroStickThresholds = Enumerable.Repeat(15, Global.TEST_PROFILE_ITEM_COUNT).ToArray();
+
+        internal const int DefaultDualSenseGyroDeadband = 32;
+        internal const int MaximumDualSenseGyroDeadband = 256;
+        internal static int NormalizeDualSenseGyroDeadband(int value) => Math.Clamp(value, 0, MaximumDualSenseGyroDeadband);
+        internal readonly int[] dualSenseGyroDeadbands =
+            Enumerable.Repeat(DefaultDualSenseGyroDeadband, Global.TEST_PROFILE_ITEM_COUNT).ToArray();
         public GyroOutMode[] gyroOutMode = new GyroOutMode[Global.TEST_PROFILE_ITEM_COUNT]
         { DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE,
           DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE,
@@ -6024,7 +6031,8 @@ namespace DS4Windows
 
                 foreach (var setting in new[] { ("GyroStickActivationMode", gyroStickModes[device].ToString()),
                     ("GyroActivationStick", gyroActivationSticks[device].ToString()),
-                    ("GyroStickThreshold", gyroStickThresholds[device].ToString()) })
+                    ("GyroStickThreshold", gyroStickThresholds[device].ToString()),
+                    ("DualSenseGyroDeadband", dualSenseGyroDeadbands[device].ToString()) })
                 {
                     XmlNode node = m_Xdoc.CreateElement(setting.Item1);
                     node.InnerText = setting.Item2;
@@ -8112,6 +8120,9 @@ namespace DS4Windows
                 if (!Enum.IsDefined(gyroActivationSticks[device])) gyroActivationSticks[device] = GyroActivationStick.Left;
                 gyroStickThresholds[device] = int.TryParse(m_Xdoc.SelectSingleNode("/" + rootname +
                     "/GyroStickThreshold")?.InnerText, out int stickThreshold) ? Math.Clamp(stickThreshold, 1, 95) : 15;
+                dualSenseGyroDeadbands[device] = int.TryParse(m_Xdoc.SelectSingleNode("/" + rootname +
+                    "/DualSenseGyroDeadband")?.InnerText, out int deadband)
+                    ? NormalizeDualSenseGyroDeadband(deadband) : DefaultDualSenseGyroDeadband;
 
                 XmlNode xmlGyroControlsElement =
                     m_Xdoc.SelectSingleNode("/" + rootname + "/GyroControlsSettings");
@@ -11484,6 +11495,7 @@ namespace DS4Windows
             gyroStickModes[device] = GyroStickActivationMode.Disabled;
             gyroActivationSticks[device] = GyroActivationStick.Left;
             gyroStickThresholds[device] = 15;
+            dualSenseGyroDeadbands[device] = DefaultDualSenseGyroDeadband;
             sAMouseStickTriggers[device] = BackingStore.DEFAULT_GYRO_MSTICK_TRIGGERS;
             sAMouseStickTriggerCond[device] = true;
 

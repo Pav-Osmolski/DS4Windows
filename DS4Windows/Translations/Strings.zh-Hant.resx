@@ -6796,4 +6796,49 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>使用 Windows 輸入</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>管理共用驅動程式…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>複製元件診斷資訊</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>陀螺儀死區</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>濾除接近靜止時的微小陀螺儀讀數。設為 0 可將這些讀數傳給遊戲。預設值為 32。</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>自訂</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>輸出與回饋</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>輸出音量與處理</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>輸入速率</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>顯示輸入報告速率</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>緊湊間距</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>存取</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>控制器回報的電池電量。加號（+）表示正在充電或使用外部電源。</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>顯示實體控制器與這部電腦的連線方式。</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>顯示 DS4Windows 存取實體控制器的方式。HidHide 可向遊戲隱藏實體控制器，避免重複輸入。</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>選擇在總覽中顯示的卡片與讀數。</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>選擇控制器音訊的播放位置。啟用音訊串流後即可變更此設定。</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>中斷所選無線控制器的連線。USB 控制器需要拔除連接線。</value>
+  </data>
 </root>

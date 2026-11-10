@@ -2306,6 +2306,15 @@
                             </TabItem>
                             <TabItem Header="{lex:Loc Passthru}" Visibility="Collapsed">
                                 <StackPanel x:Name="passthruPanel">
+                                    <Border Visibility="{Binding ShowDualSenseGyroDeadband, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" Style="{DynamicResource BridgeCardStyle}">
+                                        <StackPanel>
+                                            <WrapPanel>
+                                                <Label Target="{Binding ElementName=dualSenseGyroDeadbandInput}" Content="{lex:Loc DualSenseGyroDeadband}" VerticalAlignment="Center" Padding="0"/>
+                                                <xctk:IntegerUpDown x:Name="dualSenseGyroDeadbandInput" Value="{Binding DualSenseGyroDeadband}" Minimum="0" Maximum="256" DefaultValue="32" MinWidth="80" MinHeight="34" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                            </WrapPanel>
+                                            <TextBlock Text="{lex:Loc DualSenseGyroDeadbandHelp}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,8,0,0"/>
+                                        </StackPanel>
+                                    </Border>
                                     <Border Style="{DynamicResource BridgeCardStyle}">
                                         <StackPanel>
                                             <TextBlock Text="{lex:Loc Strings:UI_252526ECD4314302}" Style="{DynamicResource BridgeSectionTitleStyle}"/>

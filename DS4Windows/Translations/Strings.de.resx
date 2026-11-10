@@ -6788,4 +6788,49 @@ Das Backup: </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows-Eingabe verwenden</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Gemeinsam genutzte Treiber verwalten…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Komponentendiagnose kopieren</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Gyro-Totzone</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Unterdrückt kleine Gyro-Messwerte im Ruhezustand. Mit 0 werden sie an das Spiel weitergegeben. Der Standardwert ist 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Anpassen</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Ausgabe und Feedback</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Ausgabepegel und Verarbeitung</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Eingaberate</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Eingabeberichtsrate anzeigen</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Kompakte Abstände</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Zugriff</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Vom Controller gemeldeter Akkustand. Das Pluszeichen (+) steht für Laden oder externe Stromversorgung.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Zeigt, wie der physische Controller mit diesem PC verbunden ist.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Zeigt, wie DS4Windows auf den physischen Controller zugreift. HidHide kann ihn vor Spielen verbergen und so doppelte Eingaben verhindern.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Wählen Sie die Karten und Messwerte für die Übersicht.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Wählen Sie, wo der Controller-Ton wiedergegeben wird. Aktivieren Sie das Streaming, um diese Einstellung zu ändern.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Trennt den ausgewählten Funkcontroller. Bei USB-Controllern muss das Kabel abgezogen werden.</value>
+  </data>
 </root>

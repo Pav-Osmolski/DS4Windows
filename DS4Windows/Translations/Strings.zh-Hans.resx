@@ -6957,4 +6957,49 @@
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>使用 Windows 输入</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>管理共享驱动程序…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>复制组件诊断信息</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>陀螺仪死区</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>滤除接近静止时的微小陀螺仪读数。设为 0 可将这些读数传给游戏。默认值为 32。</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>输出与反馈</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>输出电平与处理</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>输入速率</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>显示输入报告速率</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>紧凑间距</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>访问</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>控制器报告的电池电量。加号（+）表示正在充电或使用外部电源。</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>显示实体控制器与此电脑的连接方式。</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>显示 DS4Windows 访问实体控制器的方式。HidHide 可对游戏隐藏实体控制器，以防止重复输入。</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>选择在概览中显示的卡片和读数。</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>选择控制器音频的播放位置。启用音频串流后即可更改此设置。</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>断开所选无线控制器。USB 控制器需要拔下线缆。</value>
+  </data>
 </root>

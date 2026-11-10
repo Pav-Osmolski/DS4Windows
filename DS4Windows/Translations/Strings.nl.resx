@@ -6819,4 +6819,49 @@ De backup: </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows-invoer gebruiken</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Gedeelde stuurprogramma’s beheren…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Diagnosegegevens van onderdelen kopiëren</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Dode zone van gyroscoop</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Onderdrukt kleine gyroscoopwaarden rond de ruststand. Gebruik 0 om ze aan het spel door te geven. De standaardwaarde is 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Aanpassen</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Uitvoer en feedback</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Uitvoerniveaus en verwerking</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Invoerfrequentie</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Frequentie van invoerrapporten tonen</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Compacte tussenruimte</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Toegang</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Batterijniveau dat de controller meldt. Het plusteken (+) duidt op opladen of externe voeding.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Toont hoe de fysieke controller met deze pc is verbonden.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Toont hoe DS4Windows toegang heeft tot de fysieke controller. HidHide kan deze voor games verbergen om dubbele invoer te voorkomen.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Kies welke kaarten en meetwaarden in het overzicht staan.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Kies waar het geluid van de controller wordt afgespeeld. Schakel streaming in om dit te wijzigen.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Verbreekt de verbinding met de geselecteerde draadloze controller. Trek de kabel van USB-controllers los.</value>
+  </data>
 </root>

@@ -1823,8 +1823,8 @@ Suspend support not enabled.", true);
                 return;
             }
 
-            controller.LightContext.PlacementTarget = controllerOverviewControl;
-            controller.LightContext.Placement = PlacementMode.MousePoint;
+            controller.LightContext.PlacementTarget = controllerOverviewControl.overviewLightbarButton;
+            controller.LightContext.Placement = PlacementMode.Top;
             controller.LightContext.IsOpen = true;
         }
 

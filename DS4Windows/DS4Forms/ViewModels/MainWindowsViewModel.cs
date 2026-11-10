@@ -133,6 +133,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
 
         public event EventHandler SelectedControllerChanged;
+        public event EventHandler SelectedControllerNumberChanged;
         public event EventHandler HasSelectedControllerChanged;
         public event EventHandler CurrentProfileNameChanged;
         public event EventHandler HasSelectedProfileChanged;
@@ -172,6 +173,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler<QuickProfileSettingChangedEventArgs> QuickProfileSettingChanged;
 
         public bool HasSelectedController => selectedController != null;
+        public string SelectedControllerNumber => selectedController == null
+            ? string.Empty : UiText.Format("Controller {0}", selectedController.DisplayDevIndex);
         public bool HasSelectedProfile => HasValidSelectedDevice &&
             !string.IsNullOrWhiteSpace(selectedController.SelectedProfile);
         public bool NeedsProfileSelection => HasSelectedController && !HasSelectedProfile;
@@ -634,6 +637,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             CaptureRuntimeSnapshot(App.rootHub);
             SelectedControllerChanged?.Invoke(this, EventArgs.Empty);
+            SelectedControllerNumberChanged?.Invoke(this, EventArgs.Empty);
             HasSelectedControllerChanged?.Invoke(this, EventArgs.Empty);
             CurrentProfileNameChanged?.Invoke(this, EventArgs.Empty);
             HasSelectedProfileChanged?.Invoke(this, EventArgs.Empty);

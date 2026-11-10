@@ -29,7 +29,9 @@ this fork currently publishes unsigned builds.
 
 For a standard installation, download the **Setup_x64.exe** asset and run it.
 Setup shows the application/backend versions and checks the shared drivers.
-Review the optional HidHide and FakerInput selections, then choose **Install**.
+Choose whether to create desktop and Start menu shortcuts, review the optional
+HidHide and FakerInput selections, then choose **Install**. Setup remembers
+your Start menu choice for later repairs and updates.
 Healthy existing driver installations are kept; follow any repair or restart
 instructions shown before testing your controller.
 

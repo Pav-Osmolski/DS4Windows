@@ -8511,4 +8511,49 @@ X axis: {0}, Y axis: {1}</value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Use Windows input</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Manage shared drivers…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Copy component diagnostics</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Gyro deadband</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Suppresses small gyro readings near rest. Use 0 to pass them through to the game. The default is 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Customize</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Output &amp; feedback</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Output levels &amp; processing</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Input rate</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Show input report rate</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Compact spacing</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Access</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Battery level reported by the controller. The plus sign (+) indicates charging or external power.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>How the physical controller is connected to this PC.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>How DS4Windows accesses the physical controller. HidHide can keep it out of games to prevent double input.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Choose which cards and readings appear on Overview.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Choose where controller audio plays. Enable streaming to change this setting.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Disconnects the selected wireless controller. USB controllers must be unplugged.</value>
+  </data>
 </root>

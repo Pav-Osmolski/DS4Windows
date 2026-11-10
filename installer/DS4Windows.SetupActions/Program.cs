@@ -99,15 +99,24 @@ namespace DS4Windows.SetupActions
             var desktopShortcut = !string.Equals(
                 ReadArgument(args, "--desktop-shortcut"), "0",
                 StringComparison.OrdinalIgnoreCase);
+            bool startMenuShortcut = ReadArgument(args, "--start-menu-shortcut") != "0";
             return RunWithSetupMutex(() => InstallOrRepairLocked(ds4Path,
                 extrasRoot, scriptPath, bundleId, targetUser,
-                desktopShortcut));
+                desktopShortcut, startMenuShortcut));
         }
 
         private static int InstallOrRepairLocked(string ds4Path,
             string extrasRoot, string scriptPath, string bundleId,
-            InteractiveUser targetUser, bool desktopShortcut)
+            InteractiveUser targetUser, bool desktopShortcut, bool startMenuShortcut)
         {
+            // The app package is present by this point. Save the choice before
+            // infrastructure setup can request a reboot and a new installer process.
+            try
+            {
+                using var key = CreateMachineKey64(RegistryKeyPath);
+                key.SetValue("CreateStartMenuShortcut", startMenuShortcut ? 1 : 0, RegistryValueKind.DWord);
+            }
+            catch (Exception error) { WriteFallbackLog("Could not save the Start menu shortcut preference: " + error.Message); }
             // Cleanup is mutation too: a concurrent repair may still need an
             // older payload, so do not touch it before owning the setup mutex.
             RemoveObsoleteBundledViiperPayloads(Path.GetDirectoryName(ds4Path),
@@ -115,7 +124,7 @@ namespace DS4Windows.SetupActions
             if (Installation.UsbipComponentState.IsPaused(Installation.UsbipComponentState.Read()))
             {
                 WriteFallbackLog("USB/IP is intentionally paused. Keeping the existing backend and shared drivers.");
-                try { ConfigureCommonShortcuts(ds4Path, desktopShortcut); }
+                try { ConfigureCommonShortcuts(ds4Path, desktopShortcut, startMenuShortcut); }
                 catch (Exception error) { WriteFallbackLog("Common shortcut setup was skipped: " + error.Message); }
                 return 0;
             }
@@ -193,7 +202,7 @@ namespace DS4Windows.SetupActions
                 ClearRebootResume();
                 try
                 {
-                    ConfigureCommonShortcuts(ds4Path, desktopShortcut);
+                    ConfigureCommonShortcuts(ds4Path, desktopShortcut, startMenuShortcut);
                 }
                 catch (Exception ex)
                 {
@@ -296,7 +305,7 @@ namespace DS4Windows.SetupActions
         }
 
         private static void ConfigureCommonShortcuts(string ds4Path,
-            bool desktopShortcut)
+            bool desktopShortcut, bool startMenuShortcut)
         {
             var workingDirectory = Path.GetDirectoryName(ds4Path) ??
                 throw new InvalidOperationException(
@@ -305,9 +314,16 @@ namespace DS4Windows.SetupActions
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.CommonPrograms),
                 "DS4Windows");
-            Directory.CreateDirectory(programsDirectory);
-            CreateShellShortcut(Path.Combine(programsDirectory,
-                    "DS4Windows.lnk"), ds4Path, workingDirectory);
+            var startMenuPath = Path.Combine(programsDirectory, "DS4Windows.lnk");
+            if (startMenuShortcut)
+            {
+                Directory.CreateDirectory(programsDirectory);
+                CreateShellShortcut(startMenuPath, ds4Path, workingDirectory);
+            }
+            else
+            {
+                RemoveStartMenuShortcut(startMenuPath, programsDirectory);
+            }
 
             var desktopPath = Path.Combine(
                 Environment.GetFolderPath(
@@ -361,10 +377,13 @@ namespace DS4Windows.SetupActions
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.CommonDesktopDirectory),
                 "DS4Windows.lnk");
-            foreach (var path in new[] { startMenuShortcut, desktopShortcut })
-            {
-                if (File.Exists(path)) File.Delete(path);
-            }
+            RemoveStartMenuShortcut(startMenuShortcut, startMenuDirectory);
+            if (File.Exists(desktopShortcut)) File.Delete(desktopShortcut);
+        }
+
+        private static void RemoveStartMenuShortcut(string path, string startMenuDirectory)
+        {
+            if (File.Exists(path)) File.Delete(path);
             if (Directory.Exists(startMenuDirectory) &&
                 !Directory.EnumerateFileSystemEntries(startMenuDirectory).Any())
             {
@@ -399,6 +418,7 @@ namespace DS4Windows.SetupActions
             using (var key = OpenMachineKey64(RegistryKeyPath, writable: true))
             {
                 key?.DeleteValue("InfrastructureVersion", false);
+                key?.DeleteValue("CreateStartMenuShortcut", false);
                 key?.SetValue("InfrastructureState", "Uninstalled",
                     RegistryValueKind.String);
                 key?.SetValue("InfrastructureStateUtc",

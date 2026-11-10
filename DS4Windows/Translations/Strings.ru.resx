@@ -6827,4 +6827,49 @@
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Использовать ввод Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Управление общими драйверами…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Копировать диагностику компонентов</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Мёртвая зона гироскопа</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Подавляет небольшие показания гироскопа вблизи покоя. Установите 0, чтобы передавать их в игру. Значение по умолчанию — 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Настроить</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Выход и обратная связь</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Уровни выхода и обработка</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Частота ввода</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Показать частоту отчётов о вводе</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Компактные интервалы</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Доступ</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Уровень заряда, сообщаемый контроллером. Знак «+» указывает на зарядку или внешнее питание.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Показывает, как физический контроллер подключён к этому компьютеру.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Показывает, как DS4Windows получает доступ к физическому контроллеру. HidHide может скрыть его от игр, чтобы избежать двойного ввода.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Выберите карточки и показания для экрана обзора.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Выберите, где воспроизводится звук контроллера. Включите передачу звука, чтобы изменить эту настройку.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Отключает выбранный беспроводной контроллер. Контроллер USB нужно отсоединить от кабеля.</value>
+  </data>
 </root>

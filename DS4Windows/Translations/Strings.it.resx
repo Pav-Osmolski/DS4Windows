@@ -6787,4 +6787,49 @@ Il backup: </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Usa l’input di Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Gestisci driver condivisi…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Copia diagnostica dei componenti</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Zona morta del giroscopio</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Filtra le piccole letture del giroscopio a riposo. Imposta 0 per inviarle al gioco. Il valore predefinito è 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Personalizza</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Uscita e feedback</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Livelli di uscita ed elaborazione</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Frequenza di input</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Mostra la frequenza dei report di input</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Spaziatura compatta</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Accesso</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Livello della batteria indicato dal controller. Il segno (+) indica ricarica o alimentazione esterna.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Indica come il controller fisico è collegato a questo PC.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Indica come DS4Windows accede al controller fisico. HidHide può nasconderlo ai giochi per evitare doppi input.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Scegli le schede e i valori da mostrare nella panoramica.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Scegli dove riprodurre l’audio del controller. Attiva lo streaming per modificare questa impostazione.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Disconnette il controller wireless selezionato. I controller USB devono essere scollegati.</value>
+  </data>
 </root>

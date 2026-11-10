@@ -6787,4 +6787,49 @@ A háttérben: </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows-bemenet használata</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Megosztott illesztőprogramok kezelése…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Összetevők diagnosztikájának másolása</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Giroszkóp holtzónája</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Kiszűri a giroszkóp kis értékeit nyugalmi helyzet közelében. A 0 továbbítja ezeket a játéknak. Az alapérték 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Testreszabás</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Kimenet és visszajelzés</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Kimeneti szintek és feldolgozás</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Bemeneti gyakoriság</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Bemeneti jelentések gyakoriságának megjelenítése</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Kompakt térköz</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Hozzáférés</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>A vezérlő által jelentett akkumulátorszint. A pluszjel (+) töltést vagy külső tápellátást jelez.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Megmutatja, hogyan csatlakozik a fizikai vezérlő ehhez a számítógéphez.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Megmutatja, hogyan éri el a DS4Windows a fizikai vezérlőt. A HidHide elrejtheti a játékok elől a kettős bevitel elkerülésére.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Válassza ki az áttekintésben megjelenő kártyákat és értékeket.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Válassza ki a vezérlő hangjának lejátszási helyét. A beállítás módosításához engedélyezze a hangátvitelt.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Leválasztja a kiválasztott vezeték nélküli vezérlőt. Az USB-s vezérlő kábelét ki kell húzni.</value>
+  </data>
 </root>

@@ -6813,4 +6813,49 @@ Sokongan : </value>
   <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Gunakan input Windows</value></data>
   <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Urus pemacu dikongsi…</value></data>
   <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Salin diagnostik komponen</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Zon mati giroskop</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Menapis bacaan kecil giroskop ketika hampir pegun. Gunakan 0 untuk menghantarnya kepada permainan. Nilai lalai ialah 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Sesuaikan</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Output dan maklum balas</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Aras output dan pemprosesan</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Kadar input</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Tunjukkan kadar laporan input</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Jarak padat</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Akses</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Aras bateri yang dilaporkan oleh pengawal. Tanda tambah (+) menunjukkan pengecasan atau kuasa luaran.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Cara pengawal fizikal disambungkan ke PC ini.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Cara DS4Windows mengakses pengawal fizikal. HidHide boleh menyembunyikannya daripada permainan untuk mengelakkan input berganda.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Pilih kad dan bacaan yang dipaparkan dalam Gambaran keseluruhan.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Pilih tempat audio pengawal dimainkan. Dayakan penstriman untuk menukar tetapan ini.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Memutuskan sambungan pengawal wayarles yang dipilih. Cabut kabel pengawal USB.</value>
+  </data>
 </root>
