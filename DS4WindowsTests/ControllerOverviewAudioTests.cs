@@ -130,6 +130,23 @@ public sealed class ControllerOverviewAudioTests
             {
                 CurrentExclusiveStatus = DS4Device.ExclusiveStatus.HidHideAffected
             };
+            themedOverview.DataContext = Model(protectedController);
+            ThemeConsistencyValidation.Layout(themedOverview, 1100, 950);
+            var fill = (Border)themedOverview.FindName("overviewBatteryFill");
+            foreach (var (percent, brush) in new[]
+            {
+                (100, "SuccessColor"), (50, "SuccessColor"), (25, "SuccessColor"),
+                (24, "WarningColor"), (11, "WarningColor"), (10, "DangerColor"), (0, "DangerColor")
+            })
+            {
+                protectedController.SetBattery(percent);
+                themedOverview.DataContext = Model(protectedController);
+                themedOverview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+                Assert.AreEqual(percent / 100d, ((ScaleTransform)fill.RenderTransform).ScaleX, 0.001);
+                Assert.AreEqual(((SolidColorBrush)themedOverview.FindResource(brush)).Color,
+                    ((SolidColorBrush)fill.Background).Color);
+            }
+
             var model = Model(protectedController, "");
             themedOverview.DataContext = model;
             Assert.AreEqual("Select a profile", model.SelectedControllerStartupTitle);
@@ -303,6 +320,7 @@ public sealed class ControllerOverviewAudioTests
                     { VendorID = 0x054C, ProductID = 0x0CE6 }));
             }
         }
+        internal void SetBattery(int percent) => battery = percent;
         public override bool IsAlive() => true;
     }
 

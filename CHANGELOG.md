@@ -9,6 +9,12 @@ There are no unreleased changes.
 
 ## Released
 
+### [5.0.69](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.69) - 2026-11-10
+
+- Fill the Overview battery icon in proportion to the reported charge. The fill turns yellow below 25% and red at 10% or lower.
+- Stack Audio Haptics and Trigger Lab cards at the same window width as Overview. Keep the first Audio Haptics card steady as the layout changes.
+- Show a starting status while controller speaker and headset audio is being set up, avoiding a brief false warning when streaming is enabled.
+
 ### [5.0.68](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.68) - 2026-11-10
 
 - Add a per-profile gyro deadband for virtual DualSense Passthru. Keep 32 as the default and allow 0 to preserve small aiming movements. Thanks [@MariolloPL](https://github.com/MariolloPL) for the request ([#121](https://github.com/Pav-Osmolski/DS4Windows/issues/121)).

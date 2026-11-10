@@ -114,6 +114,42 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
     }
 
     [TestMethod]
+    [DoNotParallelize]
+    [DataRow("profileOptionsRefreshQueues")]
+    [DataRow("profileColdWorkQueues")]
+    public async Task SpeakerReportsStartingWhileProfileRefreshIsPending(string queueField)
+    {
+        using var profile = new ProfileScope();
+        Global.DualSenseEnableMicrophonePassthrough[0] = false;
+        Global.store.audioHapticsSettings[0].Enabled = false;
+        var service = Service(new TestDualSense(ConnectionType.USB), installAudioServices: true);
+        var queue = ((ProfileColdWorkQueue[])typeof(ControlService).GetField(queueField,
+            PrivateInstance).GetValue(service))[0];
+
+        int finish = 0;
+        Task update = queue.Queue(() => Volatile.Read(ref finish) != 0);
+        try
+        {
+            var signals = service.GetControllerRuntimeSignals(0);
+            Assert.AreEqual(ControllerRuntimeLaneState.Starting, signals.Speaker);
+            Assert.AreEqual(ControllerStartupStage.StartingSpeaker,
+                ControllerRuntimeStatusPolicy.Evaluate(signals).Stage);
+            Global.DualSenseEnableSpeakerOutput[0] = false;
+            Assert.IsTrue(ControllerRuntimeStatusPolicy.Evaluate(service.GetControllerRuntimeSignals(0)).IsReady);
+        }
+        finally
+        {
+            Volatile.Write(ref finish, 1);
+            await update.WaitAsync(TimeSpan.FromSeconds(5));
+        }
+
+        Global.DualSenseEnableSpeakerOutput[0] = true;
+        var failed = ControllerRuntimeStatusPolicy.Evaluate(service.GetControllerRuntimeSignals(0));
+        Assert.IsTrue(failed.NeedsAttention);
+        StringAssert.Contains(failed.Detail, "speaker");
+    }
+
+    [TestMethod]
     public void UnknownLiveIdentityDoesNotBorrowOfflineProfileAudioCapabilities()
     {
         Assert.IsFalse(ControllerAudioCapabilityPolicy.SupportsControllerAudio(null));
@@ -173,6 +209,8 @@ public sealed class ControllerAudioRuntimeApplicabilityTests
         service.outputDevices = new OutputDevice[1];
         SetServiceField("playStationFeatureOutputLock", new object());
         SetServiceField("playStationFeatureOutputDevices", new ViiperOutDevice[1]);
+        SetServiceField("profileOptionsRefreshQueues", new[] { new ProfileColdWorkQueue(_ => { }) });
+        SetServiceField("profileColdWorkQueues", new[] { new ProfileColdWorkQueue(_ => { }) });
         if (installAudioServices)
         {
             SetServiceField("dualSenseAudioPassthrough", new DualSenseAudioPassthrough());

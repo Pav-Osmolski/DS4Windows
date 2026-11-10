@@ -218,6 +218,7 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
+            HeadlessWpfDispatcher.Invoke(ThemeConsistencyValidation.ValidateAudioHapticsTopEdge);
             Assert.AreEqual(155, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
