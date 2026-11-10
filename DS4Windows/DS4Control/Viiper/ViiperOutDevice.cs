@@ -6637,18 +6637,24 @@ namespace DS4Windows
         {
             context = default;
             if (audioOnlySidecar || !IsDualSenseType() ||
-                !IsExactNativeDualSenseCommand(feedback, length) ||
-                IsUnsupportedEdgeNativeOutput(viiperType, feedback, length)) return false;
+                !IsExactNativeDualSenseCommand(feedback, length)) return false;
             lock (feedbackCallbackAdmissionLock)
             {
                 DualSenseDevice target = ResolvePhysicalControllerTarget(deviceIndex);
                 if (deviceIndex != Volatile.Read(ref lastInputDeviceIndex) ||
-                    target == null || !IsNativeDualSenseFeedbackCompatible(target) ||
-                    IsUnsupportedEdgeNativeOutput(viiperType, feedback, length,
-                        target.SubType == DualSenseDevice.DeviceSubType.DSEdge)) return false;
+                    target == null || !IsNativeDualSenseFeedbackCompatible(target)) return false;
+                long issue123TraceId = target.TraceIssue123TriggerReceived(
+                    feedback.AsSpan(DualSenseNativeOutputReportOffset, DualSenseNativeOutputReportLength),
+                    Interlocked.Read(ref streamGeneration), deviceIndex);
+                if (IsUnsupportedEdgeNativeOutput(viiperType, feedback, length,
+                        target.SubType == DualSenseDevice.DeviceSubType.DSEdge))
+                {
+                    Issue123UsbTriggerTrace.Record("unsupported native command", issue123TraceId, 0);
+                    return false;
+                }
                 context = new(target, Interlocked.Read(ref physicalControllerBindingRevision),
                     Global.ReadProfileSwitchRevision(deviceIndex), feedbackDispatchBuffer.PendingBoundaryRevision,
-                    feedbackDispatchBuffer.NativeRepeatBoundaryRevision);
+                    feedbackDispatchBuffer.NativeRepeatBoundaryRevision, issue123TraceId);
                 return true;
             }
         }
@@ -6717,6 +6723,7 @@ namespace DS4Windows
             if (length > feedbackDispatchBuffer.ControlSlotLength) return false;
             long boundary = feedbackDispatchBuffer.PendingBoundaryRevision;
             long waitStarted = 0;
+            bool queued = false;
             try
             {
                 while (true)
@@ -6730,7 +6737,11 @@ namespace DS4Windows
                             boundary != feedbackDispatchBuffer.PendingBoundaryRevision) return false;
                         if (feedbackDispatchBuffer.TryEnqueueOrderedControl(payload,
                             length, sourceGeneration, deviceIndex, nativeCommand: true,
-                            expectedBoundaryRevision: boundary, nativeContext: context)) return true;
+                            expectedBoundaryRevision: boundary, nativeContext: context))
+                        {
+                            queued = true;
+                            return true;
+                        }
                     }
                     // Only this dedicated feedback reader waits, outside callback
                     // admission. TCP input writes and physical input are independent.
@@ -6748,9 +6759,12 @@ namespace DS4Windows
             }
             finally
             {
+                long waitTicks = waitStarted == 0 ? 0 : Stopwatch.GetTimestamp() - waitStarted;
                 if (waitStarted != 0)
-                    RecordMaximum(ref feedbackNativeAdmissionMaximumWaitTicks,
-                        Stopwatch.GetTimestamp() - waitStarted);
+                    RecordMaximum(ref feedbackNativeAdmissionMaximumWaitTicks, waitTicks);
+                Issue123UsbTriggerTrace.Record(queued ? "dispatch queued" : "dispatch cancelled",
+                    context.Issue123TraceId, 0, stream: sourceGeneration, slot: deviceIndex,
+                    queueTicks: waitTicks);
             }
         }
 
@@ -6767,7 +6781,12 @@ namespace DS4Windows
                 if (!connected || feedbackDispatchStopRequested ||
                     sourceGeneration != Interlocked.Read(ref streamGeneration) ||
                     !IsNativeCommandTargetCurrent(deviceIndex, context) ||
-                    !Global.EnableOutputDataToDS4[deviceIndex]) return true;
+                    !Global.EnableOutputDataToDS4[deviceIndex])
+                {
+                    Issue123UsbTriggerTrace.Record("dispatch target changed or output disabled",
+                        context.Issue123TraceId, 0);
+                    return true;
+                }
                 target = (DualSenseDevice)context.Target;
                 if (!IsExactNativeDualSenseCommand(feedback, length) ||
                     IsUnsupportedEdgeNativeOutput(viiperType, feedback, length,
@@ -6778,7 +6797,8 @@ namespace DS4Windows
                     DualSenseNativeOutputReportLength, out revision, feedback,
                     DualSenseNativeOutputReportOffset, triggerLabValidity,
                     DualSenseNativeFeedbackRepeatPolicy.IsRepeatable(feedback.AsSpan(0, length), allowPowerState: true)
-                        ? new DualSenseNativeRepeatContext(this, sourceGeneration, context) : default)) return false;
+                        ? new DualSenseNativeRepeatContext(this, sourceGeneration, context) : default,
+                    issue123TraceId: context.Issue123TraceId)) return false;
             }
             // Foreground/process diagnostics must not extend the short physical
             // target admission boundary or prevent a stop from sealing it.

@@ -892,6 +892,8 @@ namespace DS4Windows.InputDevices
             new long[PhysicalOutputCommandCapacity];
         private readonly long[] physicalOutputCommandQueuedAt = new long[PhysicalOutputCommandCapacity];
         private readonly DualSenseNativeFeedbackDiagnostics nativeFeedbackDiagnostics = new();
+        private readonly long[] issue123TraceIds = new long[PhysicalOutputCommandCapacity];
+        private Issue123UsbTriggerTrace issue123UsbTriggerTrace;
         private readonly byte[] physicalOutputCommandBuffer =
             new byte[USB_OUTPUT_CHANGE_LENGTH];
         private readonly byte[] latestUsbNativeGameOutputReport =
@@ -3842,9 +3844,17 @@ namespace DS4Windows.InputDevices
             FlushPreparedOutputReport(ownerRequestGeneration);
         }
 
+        internal long TraceIssue123TriggerReceived(ReadOnlySpan<byte> report, long stream, int slot)
+        {
+            if (!Global.VerboseStartupLogging || conType != ConnectionType.USB ||
+                SubType != DeviceSubType.DSEdge) return 0;
+
+            return (issue123UsbTriggerTrace ??= new()).Received(report, stream, slot);
+        }
+
         private bool TryQueuePhysicalOutputCommand(byte[] report, int offset,
             out long nativeOutputRevision, byte[] nativeUnderlay, int nativeUnderlayOffset,
-            byte preparedTriggerLabValidity, DualSenseNativeRepeatContext repeatContext)
+            byte preparedTriggerLabValidity, DualSenseNativeRepeatContext repeatContext, long issue123TraceId)
         {
             lock (physicalOutputCommandLock)
             {
@@ -3888,6 +3898,7 @@ namespace DS4Windows.InputDevices
                     Interlocked.Increment(
                         ref physicalOutputCommandOverflows);
                     nativeFeedbackDiagnostics.RejectAdmission();
+                    issue123UsbTriggerTrace?.QueueFull(issue123TraceId);
                     return false;
                 }
 
@@ -3907,9 +3918,13 @@ namespace DS4Windows.InputDevices
                 physicalOutputCommandRevisions[tail] =
                     nativeOutputRevision;
                 physicalOutputCommandQueuedAt[tail] = Stopwatch.GetTimestamp();
+                issue123TraceIds[tail] = issue123TraceId;
                 physicalOutputCommandCount++;
                 nativeFeedbackDiagnostics.Admit(physicalOutputUnderlaySlots[tail],
                     nativeOutputRevision, physicalOutputCommandCount);
+                Issue123UsbTriggerTrace.Record("physical queued", issue123TraceId,
+                    nativeOutputRevision, physicalOutputCommandSlots[tail],
+                    depth: physicalOutputCommandCount, profileMask: preparedTriggerLabValidity);
             }
             physicalOutputSignal.Set();
             return true;
@@ -3919,7 +3934,7 @@ namespace DS4Windows.InputDevices
             ProcessNextPhysicalOutputCommand()
         {
             if (!TryPeekPhysicalOutputCommand(physicalOutputCommandBuffer,
-                    out long nativeOutputRevision, out long queuedAt))
+                    out long nativeOutputRevision, out long queuedAt, out long issue123TraceId))
             {
                 if (conType == ConnectionType.BT)
                 {
@@ -3951,7 +3966,7 @@ namespace DS4Windows.InputDevices
             {
                 succeeded = ProcessRawPhysicalOutputCommand(
                     physicalOutputCommandBuffer, nativeOutputRevision,
-                    physicalOutputUnderlayBuffer, physicalOutputTriggerLabMask);
+                    physicalOutputUnderlayBuffer, physicalOutputTriggerLabMask, issue123TraceId, queuedAt);
             }
             finally
             {
@@ -3965,7 +3980,7 @@ namespace DS4Windows.InputDevices
         }
 
         private bool TryPeekPhysicalOutputCommand(byte[] destination,
-            out long nativeOutputRevision, out long queuedAt)
+            out long nativeOutputRevision, out long queuedAt, out long issue123TraceId)
         {
             lock (physicalOutputCommandLock)
             {
@@ -3973,9 +3988,11 @@ namespace DS4Windows.InputDevices
                 {
                     nativeOutputRevision = 0;
                     queuedAt = 0;
+                    issue123TraceId = 0;
                     return false;
                 }
                 queuedAt = physicalOutputCommandQueuedAt[physicalOutputCommandHead];
+                issue123TraceId = issue123TraceIds[physicalOutputCommandHead];
                 Buffer.BlockCopy(
                     physicalOutputCommandSlots[physicalOutputCommandHead], 0,
                     destination, 0, USB_OUTPUT_CHANGE_LENGTH);
@@ -4324,7 +4341,8 @@ namespace DS4Windows.InputDevices
         }
 
         private bool ProcessRawPhysicalOutputCommand(byte[] report,
-            long nativeOutputRevision, byte[] nativeUnderlay, byte preparedTriggerLabValidity)
+            long nativeOutputRevision, byte[] nativeUnderlay, byte preparedTriggerLabValidity,
+            long issue123TraceId, long queuedAt)
         {
             if (conType == ConnectionType.BT)
             {
@@ -4405,8 +4423,14 @@ namespace DS4Windows.InputDevices
                 report, outputReport, outputState, preparedTriggerLabValidity: preparedTriggerLabValidity);
             Func<byte[], bool> testWrite =
                 PhysicalRawOutputWriteTestHook;
+            long writeStarted = issue123TraceId != 0 ? Stopwatch.GetTimestamp() : 0;
             bool written = testWrite != null ?
-                testWrite(outputReport) : WriteReport();
+                testWrite(outputReport) : WriteReport(fromNativeCommand: true);
+            if (issue123TraceId != 0)
+            {
+                issue123UsbTriggerTrace?.UsbWrite(issue123TraceId, nativeOutputRevision,
+                    outputReport, queuedAt, writeStarted, written);
+            }
             if (!written)
             {
                 return false;
@@ -6257,7 +6281,7 @@ namespace DS4Windows.InputDevices
             }
         }
 
-        private bool WriteReport()
+        private bool WriteReport(bool fromNativeCommand = false)
         {
             if (conType == ConnectionType.BT)
             {
@@ -6278,8 +6302,11 @@ namespace DS4Windows.InputDevices
                 return published;
             }
 
-            return hDevice.WriteOutputReportViaInterrupt(outputReport,
+            bool written = hDevice.WriteOutputReportViaInterrupt(outputReport,
                 READ_STREAM_TIMEOUT);
+            if (written && !fromNativeCommand)
+                issue123UsbTriggerTrace?.LocalWrite(outputReport);
+            return written;
         }
 
         public bool WriteRawOutputReportFromGame(byte[] report, int offset, int length)
@@ -6290,7 +6317,7 @@ namespace DS4Windows.InputDevices
 
         internal bool WriteRawOutputReportFromGame(byte[] report, int offset,
             int length, out long nativeOutputRevision, byte[] nativeUnderlay = null, int nativeUnderlayOffset = 0,
-            byte preparedTriggerLabValidity = 0, DualSenseNativeRepeatContext repeatContext = default)
+            byte preparedTriggerLabValidity = 0, DualSenseNativeRepeatContext repeatContext = default, long issue123TraceId = 0)
         {
             nativeOutputRevision = 0;
             if (report == null ||
@@ -6306,7 +6333,7 @@ namespace DS4Windows.InputDevices
             }
 
             return TryQueuePhysicalOutputCommand(report, offset,
-                out nativeOutputRevision, nativeUnderlay, nativeUnderlayOffset, preparedTriggerLabValidity, repeatContext);
+                out nativeOutputRevision, nativeUnderlay, nativeUnderlayOffset, preparedTriggerLabValidity, repeatContext, issue123TraceId);
         }
 
         internal bool RequestNativeGameLedOwnershipRelease(

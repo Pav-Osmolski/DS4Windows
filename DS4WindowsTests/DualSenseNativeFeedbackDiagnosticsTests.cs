@@ -127,6 +127,63 @@ public sealed class DualSenseNativeFeedbackDiagnosticsTests
         }
     }
 
+    [TestMethod]
+    public async Task PreviewTraceCorrelatesNativeReleaseWithUsbRetryAndCompletion()
+    {
+        var device = OfflineDevice();
+        typeof(DualSenseDevice).GetField("subType", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(device, DualSenseDevice.DeviceSubType.DSEdge);
+        byte[] report = Report(0x04, 0);
+        report[11] = 0x05;
+        bool verbose = Global.VerboseStartupLogging;
+        var lines = new System.Collections.Concurrent.ConcurrentQueue<string>();
+        var complete = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        void Observe(object sender, DebugEventArgs args)
+        {
+            if (!args.Data.StartsWith("[Issue123 USB triggers]", StringComparison.Ordinal)) return;
+            lines.Enqueue(args.Data);
+            if (args.Data.Contains("USB write completed")) complete.TrySetResult();
+        }
+
+        AppLogger.GuiLog += Observe;
+        try
+        {
+            Global.VerboseStartupLogging = false;
+            Assert.AreEqual(0L, device.TraceIssue123TriggerReceived(report, 7, 0));
+            Global.VerboseStartupLogging = true;
+            long id = device.TraceIssue123TriggerReceived(report, 7, 0);
+            Assert.IsGreaterThan(0L, id);
+            Assert.AreEqual(0L, device.TraceIssue123TriggerReceived(report, 7, 0));
+
+            bool written = false;
+            device.PhysicalRawOutputWriteTestHook = _ => written;
+            Assert.IsTrue(device.WriteRawOutputReportFromGame(report, 0, 48, out long revision,
+                issue123TraceId: id));
+            Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Retry,
+                device.ProcessNextPhysicalOutputCommand());
+            Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Retry,
+                device.ProcessNextPhysicalOutputCommand());
+            written = true;
+            Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Published,
+                device.ProcessNextPhysicalOutputCommand());
+
+            await complete.Task.WaitAsync(TimeSpan.FromSeconds(5));
+            string[] events = lines.Where(line => line.Contains($"id={id} ")).ToArray();
+            Assert.HasCount(4, events);
+            StringAssert.Contains(events[0], "VIIPER received");
+            StringAssert.Contains(events[0], "triggerFlags=0x04 R2=05/");
+            StringAssert.Contains(events[1], $"physical queued id={id} revision={revision}");
+            StringAssert.Contains(events[2], $"USB write failed id={id} revision={revision}");
+            StringAssert.Contains(events[3], $"USB write completed id={id} revision={revision}");
+            StringAssert.Contains(events[3], "triggerFlags=0x04 R2=05/");
+        }
+        finally
+        {
+            AppLogger.GuiLog -= Observe;
+            Global.VerboseStartupLogging = verbose;
+        }
+    }
+
     internal static byte[] Report(byte flags, byte strength)
     {
         var report = new byte[48];

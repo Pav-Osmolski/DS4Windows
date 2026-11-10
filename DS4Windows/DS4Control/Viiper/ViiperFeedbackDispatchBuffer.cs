@@ -16,7 +16,7 @@ namespace DS4Windows
 {
     internal readonly record struct ViiperNativeCommandContext(
         object Target, long BindingRevision, long ProfileRevision,
-        long PendingBoundaryRevision, long RepeatBoundaryRevision = 0);
+        long PendingBoundaryRevision, long RepeatBoundaryRevision = 0, long Issue123TraceId = 0);
 
     // Eligibility metadata only. This never turns translated Nintendo feedback
     // into a raw Sony command or changes its existing real-time age/overflow policy.
