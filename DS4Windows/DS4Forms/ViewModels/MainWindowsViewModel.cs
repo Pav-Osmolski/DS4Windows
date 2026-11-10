@@ -31,6 +31,13 @@ using DS4Windows.InputDevices;
 
 namespace DS4WinWPF.DS4Forms.ViewModels
 {
+    public readonly record struct OverviewBatteryIndicator(int Percent)
+    {
+        public double Fill => Math.Clamp(Percent, 0, 100) / 100d;
+        public bool IsLow => Percent is >= 0 and < 25;
+        public bool IsCritical => Percent is >= 0 and <= 10;
+    }
+
     public sealed class OverviewOutputControllerChoice
     {
         public OverviewOutputControllerChoice(string name, OutContType type)
@@ -142,6 +149,11 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler SelectedControllerConnectionChanged;
         public event EventHandler SelectedControllerLatencyChanged;
         public event EventHandler SelectedControllerBatteryChanged;
+        public event EventHandler SelectedControllerBatteryIndicatorChanged
+        {
+            add => SelectedControllerBatteryChanged += value;
+            remove => SelectedControllerBatteryChanged -= value;
+        }
         public event EventHandler SelectedControllerStartupTitleChanged;
         public event EventHandler SelectedControllerStartupDetailChanged;
         public event EventHandler SelectedControllerIsReadyChanged;
@@ -193,6 +205,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public string SelectedControllerBattery =>
             selectedController?.BatteryState ?? "--";
+
+        public OverviewBatteryIndicator SelectedControllerBatteryIndicator =>
+            new(selectedController?.Device?.Battery ?? -1);
 
         public string SelectedControllerStartupTitle =>
             selectedControllerStartupStatus.Title;

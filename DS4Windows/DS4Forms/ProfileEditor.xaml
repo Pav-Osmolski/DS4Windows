@@ -2346,7 +2346,9 @@
                 <local:DeferredProfilePage x:Name="audioHapticsPage" Tag="audioHaptics" Materializing="AudioHapticsPage_Materializing">
                     <local:DeferredProfilePage.PageTemplate>
                         <DataTemplate>
-<local:AudioHapticsControl x:Name="profileAudioHapticsControl"
+                            <local:AudioHapticsControl x:Name="profileAudioHapticsControl"
+                                HorizontalAlignment="Left"
+                                Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={StaticResource ShellViewportWidth}, ConverterParameter=318}"
                                            SettingsChanged="ProfileAudioHapticsControl_SettingsChanged" />
                         </DataTemplate>
                     </local:DeferredProfilePage.PageTemplate>
@@ -2357,7 +2359,9 @@
                 <local:DeferredProfilePage x:Name="triggerLabPage" Tag="triggerLab" Materializing="TriggerLabPage_Materializing">
                     <local:DeferredProfilePage.PageTemplate>
                         <DataTemplate>
-<local:TriggerLabControl x:Name="profileTriggerLabControl"
+                            <local:TriggerLabControl x:Name="profileTriggerLabControl"
+                                HorizontalAlignment="Left"
+                                Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={StaticResource ShellViewportWidth}, ConverterParameter=318}"
                                          SettingsChanged="ProfileTriggerLabControl_SettingsChanged" />
                         </DataTemplate>
                     </local:DeferredProfilePage.PageTemplate>

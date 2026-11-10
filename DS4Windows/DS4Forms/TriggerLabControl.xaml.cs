@@ -113,6 +113,11 @@ namespace DS4WinWPF.DS4Forms
         public TriggerLabControl()
         {
             InitializeComponent();
+            SizeChanged += (_, e) =>
+            {
+                if (e.WidthChanged)
+                    ControllerPageLayout.ArrangePair(e.NewSize.Width, cardGutter, secondaryColumn, secondaryCard);
+            };
             leftUi = BuildSide(true);
             rightUi = BuildSide(false);
             leftCard.Content = BuildSideCard(leftUi);

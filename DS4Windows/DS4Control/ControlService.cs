@@ -5321,9 +5321,16 @@ namespace DS4Windows
                 ControllerRuntimeLaneState.NotRequired;
             if (speakerRequired)
             {
+                // A saved profile can request speaker audio before its queued
+                // refresh has armed the route. Sample the queues before the
+                // transport so completion cannot expose a stale failure.
+                bool speakerUpdatePending = profileOptionsRefreshQueues[index].HasPendingWork ||
+                    profileColdWorkQueues[index].HasPendingWork;
                 speaker = device is InputDevices.DualSenseDevice
                     ? dualSenseAudioPassthrough.GetStatus(index)
                     : dualShock4AudioPassthrough.GetStatus(index);
+                if (speakerUpdatePending && speaker == ControllerRuntimeLaneState.Unavailable)
+                    speaker = ControllerRuntimeLaneState.Starting;
             }
 
             bool microphoneRequired = (controllerAudioApplicable ||
