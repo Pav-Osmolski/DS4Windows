@@ -8556,4 +8556,25 @@ X axis: {0}, Y axis: {1}</value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Disconnects the selected wireless controller. USB controllers must be unplugged.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Recover hidden controllers</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Select only the physical controller you want to use outside DS4Windows. Older hiding rules may have been added manually or by another app. Nothing is selected automatically.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Restore selected controllers</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>No recoverable hiding rules were found. Rules in use by another DS4Windows session are protected.</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>A backup is saved before changes. Unselected rules and HidHide application permissions are preserved. Your controller will be hidden again if you start DS4Windows with hiding enabled.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Selected hiding rules were removed. Reconnect your controller if Windows has not refreshed it yet. Backup:</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Recover hidden controllers…</value>
+  </data>
 </root>

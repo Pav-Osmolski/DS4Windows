@@ -10939,5 +10939,47 @@
     "files": [
       "DS4Windows/DS4Forms/MainWindow.xaml"
     ]
+  },
+  "UI_07E96FD7696559AD": {
+    "source": "Recover hidden controllers",
+    "files": [
+      "DS4Windows/DS4Forms/HidHideRecoveryWindow.cs"
+    ]
+  },
+  "UI_183ED4F8416FCA19": {
+    "source": "Select only the physical controller you want to use outside DS4Windows. Older hiding rules may have been added manually or by another app. Nothing is selected automatically.",
+    "files": [
+      "DS4Windows/DS4Forms/HidHideRecoveryWindow.cs"
+    ]
+  },
+  "UI_8855E34F014B0B81": {
+    "source": "Restore selected controllers",
+    "files": [
+      "DS4Windows/DS4Forms/HidHideRecoveryWindow.cs"
+    ]
+  },
+  "UI_325EF42B55F5057C": {
+    "source": "No recoverable hiding rules were found. Rules in use by another DS4Windows session are protected.",
+    "files": [
+      "DS4Windows/DS4Forms/HidHideRecoveryWindow.cs"
+    ]
+  },
+  "UI_EF54576158C7AF18": {
+    "source": "A backup is saved before changes. Unselected rules and HidHide application permissions are preserved. Your controller will be hidden again if you start DS4Windows with hiding enabled.",
+    "files": [
+      "DS4Windows/DS4Forms/HidHideRecoveryWindow.cs"
+    ]
+  },
+  "UI_1868EE53775E4D0C": {
+    "source": "Selected hiding rules were removed. Reconnect your controller if Windows has not refreshed it yet. Backup:",
+    "files": [
+      "DS4Windows/DS4Forms/HidHideRecoveryWindow.cs"
+    ]
+  },
+  "UI_442FD3C0BEDEE357": {
+    "source": "Recover hidden controllers…",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
   }
 }

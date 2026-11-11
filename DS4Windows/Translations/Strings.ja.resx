@@ -6835,4 +6835,25 @@ Backup : </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>選択したワイヤレスコントローラーを切断します。USB コントローラーはケーブルを抜いてください。</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>隠れたコントローラーを復元</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>DS4Windows以外で使用したい物理コントローラのみを選択します。 古い隠しルールは手動または別のアプリによって追加された場合があります。</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>選択された隠しルールが削除されました. Windows がまだ更新されていない場合は、コントローラを再接続してください. Backup:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>回復可能な隠しルールが見つかりませんでした. Rules in use by another DS4Windows session are protected.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>隠されたコントローラーを復元する</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>選択したコントローラの復元</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>変更前にバックアップが保存されます。未選択のルールと HidHide アプリケーションの許可が保存されます。 DS4Windows を起動すると、コントローラは再び隠されます。</value>
+  </data>
 </root>

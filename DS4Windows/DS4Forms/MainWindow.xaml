@@ -1091,6 +1091,7 @@
                                                 <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
                                                     <Button Content="{lex:Loc Strings:UI_1F7E729BF03F4FA1}" Click="ComponentHidingSettings_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,0" />
                                                     <Button x:Name="componentHidHideButton" Content="{lex:Loc Strings:UI_A28F5DD1BC8B559E}" Click="ComponentHidHide_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0" />
+                                                    <Button x:Name="recoverHiddenControllersButton" Content="{lex:Loc Strings:UI_442FD3C0BEDEE357}" Click="RecoverHiddenControllers_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="8,0,0,0" />
                                                 </WrapPanel>
                                             </Grid>
                                         </Border>

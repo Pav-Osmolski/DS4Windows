@@ -6841,4 +6841,25 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>中斷所選無線控制器的連線。USB 控制器需要拔除連接線。</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>恢復隱藏的控制器</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>僅選擇您想要在 DS4Windows 外部使用的物理控制器。 可能已透過手動或其他應用程式新增了較舊的隱藏規則。</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>已刪除選定的隱藏規則。如果 Windows 尚未更新,請重新連線控制器。</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>未找到可恢復的隱藏規則,另一個 DS4Windows 會話使用的規則受到保護。</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>找回隱藏的控制器</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>恢復選定的控制器</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>在更改之前儲存備份。未選擇的規則和 HidHide 應用程式許可權保留,如果啟動,您的控制器將再次隱藏。 DS4Windows 隱藏的能力。</value>
+  </data>
 </root>

@@ -6832,4 +6832,25 @@ Il backup: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Disconnette il controller wireless selezionato. I controller USB devono essere scollegati.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Recuperare i controller nascosti</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Selezionare solo il controller fisico che si desidera utilizzare al di fuori di DS4Windows. Le regole di nascondimento precedenti potrebbero essere state aggiunte manualmente o da un'altra app. Niente viene selezionato automaticamente.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Le regole di nascosto selezionate sono state rimosse. riconnettere il controller se Windows non l'ha ancora aggiornato. Backup:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Nessuna regola di nascosto recuperabile è stata trovata. Le regole in uso da un'altra sessione DS4Windows sono protette.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Recuperare i controller nascosti.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Ripristino dei controller selezionati</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Una copia di backup viene salvata prima delle modifiche. Le regole non selezionate e le autorizzazioni dell'applicazione HidHide vengono conservate. Il controller verrà nuovamente nascosto se si avvia DS4Windows con nascondere abilitato.</value>
+  </data>
 </root>

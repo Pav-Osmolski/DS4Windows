@@ -21,8 +21,9 @@ not ownership of a controller name or of an entire USB container.
 
 Released HidHide 1.5 builds do not provide the process-lifetime session IOCTL,
 so DS4Windows may have to add a persistent fallback rule. Only instance IDs
-that this process actually inserted are removable ownership. A matching rule
-that was already present protects the controller but remains user-owned.
+with confirmed DS4Windows ownership are removed automatically. A matching rule
+that was already present without that evidence protects the controller but
+remains externally managed.
 
 The live identity set is captured before PnP removal. With reconnect protection
 enabled (the default), DS4Windows retains its persistent additions until Stop or
@@ -40,7 +41,32 @@ generation only after cleanup completes.
 
 A wired controller whose instance ID changes from A to B is resolved and hidden
 as a new generation; retention of A cannot cloak an unknown B before discovery.
-User-created HidHide entries are never adopted and deleted by DS4Windows.
+User-created HidHide entries are never adopted and deleted automatically.
+
+## Durable ownership and recovery
+
+New persistent fallback additions are recorded before the driver write in
+`%LOCALAPPDATA%\DS4Windows\HidHideOwnership`. Ownership is confirmed only after
+the write and readback succeed. Participating copies running as the same Windows
+user share this journal; the last owner releases a rule. Process-lifetime file
+leases protect active owners without relying on reusable process IDs.
+
+Start backs up HidHide configuration and recovers confirmed rules whose owners
+have exited. Failed cleanup retains evidence for the next attempt. An unreadable
+or locked lease is treated as active. A crash before write confirmation is
+ambiguous and requires explicit recovery rather than automatic removal.
+
+**Settings > Components > Recover hidden controllers…** works while DS4Windows
+is stopped. Nothing is selected automatically. Select only the physical controller
+to restore. The action backs up configuration, rechecks that configuration and
+ownership are unchanged, removes only selected rules and verifies the result.
+Application permissions, inverse mode, global hiding state and unselected devices
+are preserved. Rules in use by another tracked session cannot be selected.
+
+Backups are in the ownership folder's `Backups/HidHide` subfolder. This mechanism
+does not claim ownership of rules created by other Windows users, older builds
+or other mappers. Starting DS4Windows with hiding enabled hides the controller
+again for the new managed session.
 
 Application-list inverse mode, active state, and blacklist reads are treated as
 fallible driver queries. DS4Windows does not mutate whitelist policy, cache a

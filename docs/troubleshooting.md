@@ -17,6 +17,25 @@ output reproduce the problem.
 4. If Device Manager shows the controller disabled, verify its identity before
    enabling that device. Avoid disabling unrelated HID devices.
 
+### Controller stays hidden after Stop or exit
+
+Normal **Stop** or tray-menu **Exit** releases DS4Windows-managed hiding rules,
+including rules retained by **Keep controllers hidden between reconnects**.
+Closing the window may only minimize the app, depending on your settings.
+
+A crash, forced termination or older build can leave persistent HidHide rules
+behind. Builds with ownership recovery restore confirmed abandoned rules at
+Start. For older or untracked rules, use **Stop**, then **Settings > Components >
+Recover hidden controllers…**. Select only your physical controller's entries
+and choose **Restore selected controllers**. Nothing is selected automatically.
+Unselected rules and application permissions are preserved, with a backup saved
+before changes. Reconnect the controller if Windows has not refreshed its list.
+
+There is no need to uninstall HidHide to perform recovery. If another DS4Windows
+session owns a rule, stop that session too. Rules created by another mapper or
+a manual setup require explicit selection because DS4Windows cannot safely
+assume they are abandoned. See [HidHide recovery](hidhide-device-lifecycle.md).
+
 ### A second Bluetooth controller will not connect
 
 Check **Windows > Bluetooth & devices** during the failed attempt. If Windows
