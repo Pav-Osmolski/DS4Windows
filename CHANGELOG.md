@@ -5,11 +5,15 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- Recover confirmed DS4Windows-owned persistent HidHide rules after interrupted sessions. Preserve rules used by another participating copy, and offer selective recovery for older untracked rules in Settings > Components.
-- Explain remaining externally managed hiding rules after Stop, with verified cleanup and configuration backups for recovery. Thanks [u/JoeRLL](https://www.reddit.com/user/JoeRLL/) for reporting controllers remaining hidden outside the app.
-- Refresh documentation screenshots captured on 10 November 2026.
+There are currently no unreleased changes.
 
 ## Released
+
+### [5.0.70](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.70) - 2026-11-11
+
+- Fix a critical HidHide cleanup gap that could leave physical controllers hidden outside DS4Windows after an interrupted session. Persist and verify ownership, recover confirmed abandoned rules on Start, and protect rules still used by another participating copy. Thanks [u/JoeRLL](https://www.reddit.com/user/JoeRLL/) for the report that helped identify this issue ([PR #125](https://github.com/Pav-Osmolski/DS4Windows/pull/125)).
+- Add **Settings > Components > Recover hidden controllers…** for explicitly restoring controllers affected by older or untracked hiding rules. Back up and recheck configuration before changes; preserve unrelated rules and application permissions. Explain remaining externally managed rules after Stop.
+- Refresh documentation screenshots and add illustrated Controllers settings, Components and notification-area menu guidance.
 
 ### [5.0.69](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.69) - 2026-11-10
 

@@ -469,10 +469,22 @@ Use [Swipe profiles](swipe-profiles.md) to limit profile cycling. For double
 input, configure HidHide and check overlapping Steam Input mappings.
 Run at Startup and Start Minimized are separate choices.
 
+### Notification-area menu
+
+Right-click the DS4Windows icon in the Windows notification area to select a
+controller's profile, open or minimise the window, or open the program folder.
+**Stop** stops controller processing and releases DS4Windows-managed hiding rules.
+**Exit** quits the app; closing the main window may only minimise it, depending
+on your window preferences.
+
+![Notification-area menu with profile selection, Stop and Exit](images/site/systray.webp)
+
 ### Manage controller components
 
 Open **Settings > Components** or use **Manage components…** from the
 virtual output status in **Settings > Controllers**.
+
+![Component management showing backend status, optional drivers and recovery](images/site/settings-components.webp)
 
 - **VIIPER** shows the selected backend and its running status. Use
   **Install / Repair VIIPER** to fix a backend that needs attention.
@@ -484,7 +496,10 @@ virtual output status in **Settings > Controllers**.
   verify the supported driver, then reopen DS4Windows to start the backend.
 - **HidHide** shows both the DS4Windows hiding preference and the system-wide
   hiding state. Use **Hiding settings** for DS4Windows or **Open HidHide…**
-  to manage the driver's settings in its configuration client.
+  to manage the driver's settings in its configuration client. After **Stop**,
+  **Recover hidden controllers…** offers selective recovery of older hiding rules.
+  Nothing is selected automatically; configuration is backed up before changes.
+  See [hidden-controller recovery](troubleshooting.md#controller-stays-hidden-after-stop-or-exit).
 - **FakerInput** shows the installed driver and the keyboard and mouse
   handler in use. Choose **Use Windows input** to use the Windows handler
   after the next Stop/Start. Return to automatic selection to let DS4Windows
@@ -494,6 +509,8 @@ Install missing optional drivers here. To remove an optional shared driver,
 use **Manage shared drivers…** to open Windows Installed apps.
 
 ### Battery alerts
+
+![Controller settings with battery alert and connection options](images/site/settings-controllers.webp)
 
 Open **Settings > Controllers > Battery alerts**. Automatic low-battery and
 fully-charged alerts are off by default. Enable the alerts you want, choose a

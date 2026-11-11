@@ -2,8 +2,8 @@
 
 [Documentation index](README.md) · [Getting started](getting-started.md)
 
-These current interface captures were supplied by Pav-Osmolski on 28 October 2026,
-covering the updated app, Profile Editor and supporting windows. Selected options
+These interface captures were supplied by Pav-Osmolski during October and November
+2026, including the latest Settings, component-management and installer screens. Selected options
 illustrate the interface; they are not recommendations for every controller.
 
 ## Overview
@@ -145,6 +145,30 @@ Inspect virtual output slots and manage reservations. [Output Slots guide](user-
 Find startup, appearance, controller and integration preferences. [Settings guide](user-guide.md#settings).
 
 ![Settings General page with startup and window preferences](images/site/settings.webp)
+
+### Controller settings
+
+Manage battery alerts, physical-controller hiding and connection preferences. [Controller settings guide](user-guide.md#settings).
+
+![Settings Controllers tab showing battery alerts and physical-controller preferences](images/site/settings-controllers.webp)
+
+### Components
+
+Inspect VIIPER, USB/IP, HidHide and FakerInput, or recover a controller left hidden by older rules. [Component management guide](user-guide.md#manage-controller-components).
+
+![Settings Components tab with backend status, optional drivers and hidden-controller recovery](images/site/settings-components.webp)
+
+## Notification-area menu
+
+Right-click the DS4Windows tray icon to switch profiles, stop the controller service or exit the app. [Tray menu guide](user-guide.md#notification-area-menu).
+
+![DS4Windows notification-area menu with controller profile selection and Exit](images/site/systray.webp)
+
+## Installation
+
+Setup displays the bundled component versions and offers desktop and Start-menu shortcuts. [Installation guide](getting-started.md).
+
+![DS4Windows Setup showing component status and installation options](images/site/installer.webp)
 
 ## Log and diagnostics
 
