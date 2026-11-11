@@ -5,7 +5,9 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are no unreleased changes.
+- Recover confirmed DS4Windows-owned persistent HidHide rules after interrupted sessions. Preserve rules used by another participating copy, and offer selective recovery for older untracked rules in Settings > Components.
+- Explain remaining externally managed hiding rules after Stop, with verified cleanup and configuration backups for recovery. Thanks [u/JoeRLL](https://www.reddit.com/user/JoeRLL/) for reporting controllers remaining hidden outside the app.
+- Refresh documentation screenshots captured on 10 November 2026.
 
 ## Released
 

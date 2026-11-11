@@ -6835,4 +6835,25 @@ i backup: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Rozłącza wybrany kontroler bezprzewodowy. Kontroler USB należy odłączyć od kabla.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Odzyskiwanie ukrytych kontrolerów</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Wybierz tylko kontroler fizyczny, którego chcesz użyć poza DS4Windows. Starsze zasady ukrywania mogą być dodane ręcznie lub przez inną aplikację.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Wybrane zasady ukrywania zostały usunięte. Ponownie podłącz kontroler, jeśli Windows jeszcze go nie odświeżył. Kopia zapasowa:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Nie znaleziono odzyskiwalnych zasad ukrywania. Zasady używane przez inną sesję DS4Windows są chronione.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Odzyskiwanie ukrytych kontrolerów...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Przywracanie wybranych kontrolerów</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Kopia zapasowa jest zapisywana przed wprowadzeniem zmian. Niewybrane reguły i uprawnienia aplikacji HidHide są zachowywane. Twój kontroler zostanie ponownie ukryty, jeśli zaczniesz DS4Windows z włączoną funkcją ukrywania.</value>
+  </data>
 </root>

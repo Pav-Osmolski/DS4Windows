@@ -6834,4 +6834,25 @@ och backup: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Kopplar från den valda trådlösa handkontrollen. USB-handkontroller måste kopplas ur.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Återställ dolda kontroller</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Välj endast den fysiska styrenheten som du vill använda utanför DS4Windows. Äldre regler för att dölja kan ha lagts till manuellt eller av en annan app. Inget väljs automatiskt.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Valda regler för att dölja har tagits bort. Anslut din handkontroll igen om Windows inte har uppdaterat den ännu.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Inga återställbara dolda regler hittades. Regler som används av en annan DS4Windows-session skyddas.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Återställa dolda kontroller ...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Återställa utvalda kontroller</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>En säkerhetskopia sparas innan ändringar görs. Ovalda regler och HidHide applikationsbehörigheter bevaras. Din handkontroll döljs igen om du startar DS4Windows med att dölja aktiverat.</value>
+  </data>
 </root>

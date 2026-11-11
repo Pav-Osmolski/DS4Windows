@@ -6834,4 +6834,25 @@
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>מנתק את הבקר האלחוטי שנבחר. יש לנתק בקרי USB מהכבל.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>להחזיר את המנהלים הסתתרים</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>בחר רק את השליטה הפיזית שברצונך להשתמש בה מחוץ ל- DS4Windows. ייתכן שהוסרו כללי הסתרת קודמים באופן ידני או על ידי אפליקציה אחרת.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>הסר כללים שנבחרו כדי להסתיר את התוכנה מחדש אם Windows עוד לא חידשה אותה.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>לא נמצאו כללים מוסתרים שניתן לשחזר, כללים בשימוש על ידי ישיבה אחרת DS4Windows מוגנים.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>לשחזר את השליטה הנסתרת...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>להחזיר את המנהלים שנבחרו</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>גיבוי נשמר לפני שינויים. כללי לא נבחר ו- HidHide הרשאות יישמרו. המעבד שלך יהיה מוסתר שוב אם תתחיל DS4Windows עם הסתרת מופעלת.</value>
+  </data>
 </root>

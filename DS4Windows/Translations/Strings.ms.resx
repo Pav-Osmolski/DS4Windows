@@ -6858,4 +6858,25 @@ Sokongan : </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Memutuskan sambungan pengawal wayarles yang dipilih. Cabut kabel pengawal USB.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Mengembalikan pengawal tersembunyi</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Pilih hanya kawalan fizikal yang anda ingin gunakan di luar DS4Windows. peraturan menyembunyikan yang lebih lama mungkin telah ditambah secara manual atau oleh aplikasi lain.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Aturan tersembunyi yang dipilih telah dipadamkan. Sambungkan semula kawalan anda jika Windows belum mengemas kini.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Tiada peraturan tersembunyi yang boleh dipulihkan ditemui. Peraturan yang digunakan oleh sesi DS4Windows lain dilindungi.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Memulihkan pengawal tersembunyi ...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Mengembalikan pengawal yang dipilih</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Salinan cadangan disimpan sebelum perubahan. peraturan yang tidak dipilih dan keizinan aplikasi HidHide disimpan. pengendali anda akan disembunyikan lagi jika anda memulakan DS4Windows dengan menyembunyikan diaktifkan.</value>
+  </data>
 </root>

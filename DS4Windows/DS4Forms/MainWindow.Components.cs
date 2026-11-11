@@ -139,6 +139,7 @@ public partial class MainWindow
         bool hasClient = !string.IsNullOrEmpty(Util.GetHidHideClientPath());
         componentHidHideButton.Content = UiText.Get(Global.hidHideInstalled ? "Open HidHide…" : "Install HidHide…");
         componentHidHideButton.IsEnabled = settingsWrapVM.SystemIntegrationEnabled && (!Global.hidHideInstalled || hasClient);
+        recoverHiddenControllersButton.IsEnabled = settingsWrapVM.SystemIntegrationEnabled && Global.hidHideInstalled;
 
         string activeHandler = App.rootHub.running ? Global.outputKBMHandler?.GetFullDisplayName() : null;
         componentFakerInputStatus.Text = UiText.Format("{0} · {1}",
@@ -244,6 +245,17 @@ public partial class MainWindow
     {
         if (Global.hidHideInstalled) HidHideBtn_Click(sender, e);
         else await InstallComponentDriverAsync(hidHide: true);
+    }
+
+    private async void RecoverHiddenControllers_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var audit = await Task.Run(() => App.rootHub.InspectHiddenControllerRecovery());
+            var window = new HidHideRecoveryWindow(audit) { Owner = this };
+            window.ShowDialog();
+        }
+        catch (Exception ex) { ShowComponentResult(UiText.Get(ex.Message)); }
     }
 
     private async void ComponentFakerInput_Click(object sender, RoutedEventArgs e)

@@ -6858,4 +6858,25 @@ Le backup : </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Déconnecte la manette sans fil sélectionnée. Débranchez les manettes USB.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Récupérer les contrôleurs cachés</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Sélectionnez uniquement le contrôleur physique que vous souhaitez utiliser en dehors de DS4Windows. Des règles plus anciennes d'occulte peuvent avoir été ajoutées manuellement ou par une autre application.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Les règles de dissimulation sélectionnées ont été supprimées. Reconnectez votre contrôleur si Windows ne l'a pas encore renouvelé.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Aucune règle cachée récupérable n'a été trouvée. Les règles utilisées par une autre session DS4Windows sont protégées.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Récupérer les contrôleurs cachés...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Rétablir les contrôleurs sélectionnés</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Une sauvegarde est enregistrée avant les modifications. Les règles non sélectionnées et les autorisations d'application HidHide sont conservées. Votre contrôleur sera à nouveau masqué si vous commencez DS4Windows avec cacher activé.</value>
+  </data>
 </root>

@@ -6831,4 +6831,25 @@ Zálohování : </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Odpojí vybraný bezdrátový ovladač. Ovladače USB je nutné fyzicky odpojit.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Obnovení skrytých ovladačů</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Vyberte pouze fyzický ovladač, který chcete použít mimo DS4Windows. Starší pravidla pro skrytí mohou být přidána ručně nebo jinou aplikací.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Vybraná pravidla pro skrytí byla odstraněna. Připojte ovladač znovu, pokud ho Windows dosud neaktualizoval.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Pravidla používaná jinou DS4Windows relací jsou chráněna.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Obnovení skrytých ovladačů...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Obnovení vybraných ovladačů</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Před změnami je uložena záložní kopie. Nezvolená pravidla a oprávnění aplikace HidHide jsou zachována. Váš ovladač bude znovu skryt, pokud začnete DS4Windows pomocí možnosti skrýt zapnutou.</value>
+  </data>
 </root>

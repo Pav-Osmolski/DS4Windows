@@ -207,6 +207,7 @@ namespace DS4WindowsTests
                     SettingsStorageLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     UpdateStorageLayoutValidation.Validate(application, renderedFiles);
                     new ContextualHeaderTests { TestContext = TestContext }.ValidateProfileActions();
+                    HidHideRecoveryWindowTests.ValidateExplicitSelection();
                 }
                 catch (Exception ex)
                 {
