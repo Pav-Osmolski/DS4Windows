@@ -14,8 +14,10 @@ Use **Customize** beside **Quick profile controls** to choose which cards to
 show, hide the input report rate or the titles beside its summary icons, or use
 compact spacing. Icons and their tooltips remain available when titles are hidden, and the layout
 keeps exactly the same spacing and height.
-Overview remembers
-these choices separately from your controller profiles.
+Use **Show quick profile title and description** to hide the complete heading
+without moving the controls. The heading also hides automatically when all four
+quick-control sections are unticked; your heading preference is preserved.
+Overview remembers these choices separately from your controller profiles.
 
 **Controller info** on the controller summary card opens information for that
 selected controller.

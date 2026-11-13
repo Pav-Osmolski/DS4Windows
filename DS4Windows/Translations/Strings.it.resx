@@ -6883,4 +6883,19 @@ Il backup: </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Mostra Windows uscita audio</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Mostra titolo e descrizione dei controlli rapidi del profilo</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Scegli i controller supportati e le opzioni del dispositivo.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Apri i controller di gioco di Windows per verificare gli input.</value>
+  </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Visualizza identità, connessione e firmware di questo controller.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Apri il profilo attivo del controller nell’editor dei profili completo.</value>
+  </data>
 </root>

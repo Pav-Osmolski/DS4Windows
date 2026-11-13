@@ -162,6 +162,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler SelectedControllerShowsUsbHeadsetHelpChanged;
         public event EventHandler SelectedControllerSupportsMicrophoneChanged;
         public event EventHandler MicrophoneAvailabilityTextChanged;
+        public event EventHandler MicrophoneInputHelpChanged;
         public event EventHandler ShowMicrophoneAvailabilityMessageChanged;
         public event EventHandler CanChangeMicrophoneInputChanged;
         public event EventHandler MicrophoneLevelControlsEnabledChanged;
@@ -264,6 +265,11 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public string MicrophoneAvailabilityText =>
             SelectedControllerMicrophoneUiState.Message;
+
+        public string MicrophoneInputHelp =>
+            !string.IsNullOrWhiteSpace(MicrophoneAvailabilityText)
+                ? MicrophoneAvailabilityText
+                : selectedController?.MicrophoneDescription;
 
         public bool ShowMicrophoneAvailabilityMessage =>
             SelectedControllerMicrophoneUiState.ShowMessage;
@@ -846,6 +852,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             SelectedControllerSupportsMicrophoneChanged?.Invoke(this,
                 EventArgs.Empty);
             MicrophoneAvailabilityTextChanged?.Invoke(this, EventArgs.Empty);
+            MicrophoneInputHelpChanged?.Invoke(this, EventArgs.Empty);
             ShowMicrophoneAvailabilityMessageChanged?.Invoke(this,
                 EventArgs.Empty);
             CanChangeMicrophoneInputChanged?.Invoke(this, EventArgs.Empty);

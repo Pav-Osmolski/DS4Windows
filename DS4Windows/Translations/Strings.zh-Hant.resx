@@ -6892,4 +6892,19 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>顯示 Windows 音訊輸出</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>顯示設定檔快速控制的標題和說明</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>選擇支援的控制器和裝置選項。</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>開啟 Windows 遊戲控制器以測試控制器輸入。</value>
+  </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>檢視此控制器的識別、連線和韌體詳細資訊。</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>在完整的設定檔編輯器中開啟目前的控制器設定檔。</value>
+  </data>
 </root>
