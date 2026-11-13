@@ -148,8 +148,7 @@ public sealed class DualSensePhysicalPendingRepeatTests
         device.PhysicalRawOutputWriteTestHook = r => { writes.Add((byte[])r.Clone()); return true; };
         for (int i = 0; i < 10000; i++)
         {
-            var traced = context with { Command = context.Command with { Issue123TraceId = i + 1 } };
-            Assert.IsTrue(Enqueue(device, Bow((byte)(i % 3 == 0 ? 4 : i % 3 == 1 ? 8 : 12)), traced, out _));
+            Assert.IsTrue(Enqueue(device, Bow((byte)(i % 3 == 0 ? 4 : i % 3 == 1 ? 8 : 12)), context, out _));
         }
         Assert.IsTrue(Field<int>(device, "physicalOutputCommandCount") <= 4);
         Assert.IsTrue(Enqueue(device, Bow(4, 5), context, out _));

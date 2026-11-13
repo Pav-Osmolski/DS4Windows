@@ -35,8 +35,7 @@ jobs:
       github.event_name != 'release' ||
       github.repository != 'Pav-Osmolski/DS4Windows' ||
       !github.event.release.prerelease ||
-      (github.event.release.tag_name != '5.0.47-issue66-connection-preview20261023' &&
-       github.event.release.tag_name != '5.0.68-issue123-usb-trigger-trace20261110')
+      github.event.release.tag_name != '5.0.47-issue66-connection-preview20261023'
     runs-on: windows-2022
     timeout-minutes: 45
     outputs:
