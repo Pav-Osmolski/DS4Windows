@@ -49,6 +49,8 @@
                                                  EditProfileRequested="ControllerOverview_EditProfileRequested"
                                                  ControllerDetailsRequested="ControllerOverview_ControllerDetailsRequested"
                                                  ControllerInfoRequested="ControllerOverview_ControllerInfoRequested"
+                                                 DeviceOptionsRequested="ControllerOverview_DeviceOptionsRequested"
+                                                 ControlPanelRequested="ControllerOverview_ControlPanelRequested"
                                                  LightbarRequested="ControllerOverview_LightbarRequested"
                                                  DisconnectRequested="ControllerOverview_DisconnectRequested" />
                 </DockPanel>

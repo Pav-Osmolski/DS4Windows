@@ -67,7 +67,7 @@ public sealed class SettingsStorageTests
         storage.Remember(SettingsFolder.Program);
         var layout = new OverviewLayoutPreferences { ShowLevels = false, ShowInputRate = false, CompactSpacing = true,
             ShowFactTitles = false, ShowQuickActions = false, ShowEditProfileAction = false,
-            ShowControllerInfoAction = false, ShowLightbarAction = false, ShowDisconnectAction = false };
+            ShowDeviceOptionsAction = false, ShowControlPanelAction = false, ShowLightbarAction = false, ShowDisconnectAction = false };
         storage.SetOverviewLayout(layout);
         storage.Remember(SettingsFolder.AppData);
 

@@ -12,12 +12,17 @@ selected by your profile. Available settings depend on the controller and connec
 Start here for a summary of your connected controller, active profile and backend status.
 Use **Customize** beside **Quick profile controls** to choose which cards to
 show, hide the input report rate or the titles beside its summary icons, or use
-compact spacing. Icons and their tooltips remain available when titles are hidden.
+compact spacing. Icons and their tooltips remain available when titles are hidden, and the layout
+keeps exactly the same spacing and height.
 Overview remembers
 these choices separately from your controller profiles.
 
+**Controller info** on the controller summary card opens information for that
+selected controller.
+
 **Quick actions** stays above the footer as you scroll. Use it to edit the active
-profile, open controller information, change the lightbar or disconnect a wireless controller.
+profile, open Device Options or the Windows Game Controllers control panel,
+change the lightbar or disconnect a wireless controller.
 In **Customize**, you can hide this Overview action bar or choose each button
 individually. Hiding the bar keeps your button choices for when you show it again.
 These options do not hide the app-wide service footer.

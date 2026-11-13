@@ -145,6 +145,15 @@
             <Setter Property="StrokeEndLineCap" Value="Round" />
             <Setter Property="StrokeLineJoin" Value="Round" />
         </Style>
+        <Style x:Key="OverviewFactTitleStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource MutedForegroundColor}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=showFactTitles}" Value="False">
+                    <!-- Keep the text's width and line height when hiding titles. -->
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="OverviewFactStyle" TargetType="StackPanel">
             <Setter Property="Margin" Value="0,0,24,0" />
             <Setter Property="MinWidth" Value="106" />
@@ -305,9 +314,14 @@
                                    Foreground="{DynamicResource MutedForegroundColor}"
                                    Visibility="{Binding SelectedControllerNeedsAttention, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <DockPanel Margin="0,12,0,0">
-                            <Button DockPanel.Dock="Right" Style="{StaticResource BridgeSecondaryButtonStyle}"
-                                    Click="ControllerDetailsBtn_Click" Content="{lex:Loc Strings:Controllers}"
-                                    VerticalAlignment="Center" MinHeight="30" Padding="10,4" Margin="6,0,0,0" />
+                            <Button x:Name="overviewControllerInfoButton" DockPanel.Dock="Right" Style="{StaticResource BridgeSecondaryButtonStyle}"
+                                    Click="ControllerInfoBtn_Click" AutomationProperties.Name="{lex:Loc Strings:UI_55026208AB1964FE}"
+                                    VerticalAlignment="Center" MinHeight="30" Padding="10,4" Margin="6,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE946;" />
+                                    <TextBlock Text="{lex:Loc Strings:UI_55026208AB1964FE}" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
                             <WrapPanel>
                                 <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTip="{lex:Loc Strings:OverviewConnectionHelp}">
                                     <DockPanel>
@@ -326,7 +340,7 @@
                                                 </Style>
                                             </Path.Style>
                                         </Path>
-                                        <TextBlock x:Name="overviewConnectionTitle" Text="{lex:Loc Strings:UI_639A40E82B9A96F0}" Foreground="{DynamicResource MutedForegroundColor}" Visibility="{Binding IsChecked, ElementName=showFactTitles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock x:Name="overviewConnectionTitle" Text="{lex:Loc Strings:UI_639A40E82B9A96F0}" Style="{StaticResource OverviewFactTitleStyle}" />
                                     </DockPanel>
                                     <TextBlock Text="{Binding SelectedControllerConnection}" FontWeight="SemiBold" />
                                 </StackPanel>
@@ -335,7 +349,7 @@
                                     <DockPanel>
                                         <Path DockPanel.Dock="Left" Style="{StaticResource OverviewFactIconStyle}"
                                               Data="M 2,12 H 6 L 9,4 L 14,20 L 17,12 H 22" />
-                                        <TextBlock x:Name="overviewInputRateTitle" Text="{lex:Loc Strings:OverviewInputRate}" Foreground="{DynamicResource MutedForegroundColor}" Visibility="{Binding IsChecked, ElementName=showFactTitles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock x:Name="overviewInputRateTitle" Text="{lex:Loc Strings:OverviewInputRate}" Style="{StaticResource OverviewFactTitleStyle}" />
                                     </DockPanel>
                                     <TextBlock Text="{Binding SelectedControllerLatency}" FontWeight="SemiBold" />
                                 </StackPanel>
@@ -347,7 +361,7 @@
                                                 <ImageBrush ImageSource="{Binding SelectedController.ExclusiveSource}" Stretch="Uniform" />
                                             </Border.OpacityMask>
                                         </Border>
-                                        <TextBlock x:Name="overviewAccessTitle" Text="{lex:Loc Strings:OverviewAccess}" Foreground="{DynamicResource MutedForegroundColor}" Visibility="{Binding IsChecked, ElementName=showFactTitles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock x:Name="overviewAccessTitle" Text="{lex:Loc Strings:OverviewAccess}" Style="{StaticResource OverviewFactTitleStyle}" />
                                     </DockPanel>
                                     <TextBlock x:Name="overviewAccessStatus" Text="{Binding SelectedController.IsExclusiveText}" FontWeight="SemiBold" />
                                 </StackPanel>
@@ -355,7 +369,7 @@
                                     <DockPanel>
                                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource OverviewGlyphStyle}"
                                                    Text="&#xE7FC;" Foreground="{DynamicResource MutedForegroundColor}" />
-                                        <TextBlock x:Name="overviewOutputTitle" Text="{lex:Loc Strings:UI_B7A098F1ABCAC8A2}" Foreground="{DynamicResource MutedForegroundColor}" Visibility="{Binding IsChecked, ElementName=showFactTitles, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock x:Name="overviewOutputTitle" Text="{lex:Loc Strings:UI_B7A098F1ABCAC8A2}" Style="{StaticResource OverviewFactTitleStyle}" />
                                     </DockPanel>
                                     <TextBlock Text="{Binding SelectedOutputControllerName}" FontWeight="SemiBold" />
                                 </StackPanel>
@@ -422,7 +436,9 @@
                                 <StackPanel Margin="16,0,0,0" IsEnabled="{Binding IsChecked, ElementName=showQuickActions}">
                                 <CheckBox x:Name="showEditProfileAction" Content="{lex:Loc Strings:UI_936A2401794924E0}" IsChecked="True" Margin="0,0,0,6"
                                           Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
-                                <CheckBox x:Name="showControllerInfoAction" Content="{lex:Loc Strings:UI_55026208AB1964FE}" IsChecked="True" Margin="0,0,0,6"
+                                <CheckBox x:Name="showDeviceOptionsAction" Content="{lex:Loc Strings:DeviceOptions}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showControlPanelAction" Content="{lex:Loc Strings:ControlPanel}" IsChecked="True" Margin="0,0,0,6"
                                           Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
                                 <CheckBox x:Name="showLightbarAction" Content="{lex:Loc Strings:Lightbar}" IsChecked="True" Margin="0,0,0,6"
                                           Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
@@ -775,12 +791,20 @@
                     <TextBlock Text="{lex:Loc Strings:UI_936A2401794924E0}" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
-            <Button x:Name="overviewControllerInfoButton" Visibility="{Binding IsChecked, ElementName=showControllerInfoAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
-                    AutomationProperties.Name="{lex:Loc Strings:UI_55026208AB1964FE}"
-                    Style="{StaticResource BridgeSecondaryButtonStyle}" Click="ControllerInfoBtn_Click">
+            <Button x:Name="overviewDeviceOptionsButton" Visibility="{Binding IsChecked, ElementName=showDeviceOptionsAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
+                    AutomationProperties.Name="{lex:Loc Strings:DeviceOptions}"
+                    Style="{StaticResource BridgeSecondaryButtonStyle}" Click="DeviceOptionsBtn_Click">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE946;" />
-                    <TextBlock Text="{lex:Loc Strings:UI_55026208AB1964FE}" VerticalAlignment="Center" />
+                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE713;" />
+                    <TextBlock Text="{lex:Loc Strings:DeviceOptions}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button x:Name="overviewControlPanelButton" Visibility="{Binding IsChecked, ElementName=showControlPanelAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
+                    AutomationProperties.Name="{lex:Loc Strings:ControlPanel}"
+                    Style="{StaticResource BridgeSecondaryButtonStyle}" Click="ControlPanelBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE7F8;" />
+                    <TextBlock Text="{lex:Loc Strings:ControlPanel}" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
             <Button x:Name="overviewLightbarButton" Visibility="{Binding IsChecked, ElementName=showLightbarAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"

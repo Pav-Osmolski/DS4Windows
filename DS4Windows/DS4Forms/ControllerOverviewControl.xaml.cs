@@ -64,7 +64,8 @@ namespace DS4WinWPF.DS4Forms
             showFactTitles.IsChecked = layout.ShowFactTitles;
             showQuickActions.IsChecked = layout.ShowQuickActions;
             showEditProfileAction.IsChecked = layout.ShowEditProfileAction;
-            showControllerInfoAction.IsChecked = layout.ShowControllerInfoAction;
+            showDeviceOptionsAction.IsChecked = layout.ShowDeviceOptionsAction;
+            showControlPanelAction.IsChecked = layout.ShowControlPanelAction;
             showLightbarAction.IsChecked = layout.ShowLightbarAction;
             showDisconnectAction.IsChecked = layout.ShowDisconnectAction;
             compactSpacing.IsChecked = layout.CompactSpacing;
@@ -88,7 +89,8 @@ namespace DS4WinWPF.DS4Forms
                 ShowFactTitles = showFactTitles.IsChecked == true,
                 ShowQuickActions = showQuickActions.IsChecked == true,
                 ShowEditProfileAction = showEditProfileAction.IsChecked == true,
-                ShowControllerInfoAction = showControllerInfoAction.IsChecked == true,
+                ShowDeviceOptionsAction = showDeviceOptionsAction.IsChecked == true,
+                ShowControlPanelAction = showControlPanelAction.IsChecked == true,
                 ShowLightbarAction = showLightbarAction.IsChecked == true,
                 ShowDisconnectAction = showDisconnectAction.IsChecked == true,
                 CompactSpacing = compactSpacing.IsChecked == true
@@ -217,6 +219,10 @@ namespace DS4WinWPF.DS4Forms
 
         public event EventHandler EditProfileRequested;
         public event EventHandler ControllerDetailsRequested;
+        public event EventHandler DeviceOptionsRequested;
+        public event EventHandler ControlPanelRequested;
+        private void DeviceOptionsBtn_Click(object sender, RoutedEventArgs e) => DeviceOptionsRequested?.Invoke(this, EventArgs.Empty);
+        private void ControlPanelBtn_Click(object sender, RoutedEventArgs e) => ControlPanelRequested?.Invoke(this, EventArgs.Empty);
         public event EventHandler ControllerInfoRequested;
         private void ControllerInfoBtn_Click(object sender, RoutedEventArgs e) => ControllerInfoRequested?.Invoke(this, EventArgs.Empty);
         public event EventHandler LightbarRequested;
