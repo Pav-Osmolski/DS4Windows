@@ -6825,7 +6825,7 @@ Das Backup: </value>
     <value>Zeigt, wie DS4Windows auf den physischen Controller zugreift. HidHide kann ihn vor Spielen verbergen und so doppelte Eingaben verhindern.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Wählen Sie die Karten und Messwerte für die Übersicht.</value>
+    <value>Bereiche der Übersicht, Symbolbeschriftungen, Abstände und Schaltflächen der Fußleiste auswählen.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Wählen Sie, wo der Controller-Ton wiedergegeben wird. Aktivieren Sie das Streaming, um diese Einstellung zu ändern.</value>
@@ -6853,5 +6853,35 @@ Das Backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Eine Sicherungskopie wird vor Änderungen gespeichert. Nicht ausgewählte Regeln und HidHide Anwendungsberechtigungen werden beibehalten. Ihr Controller wird erneut verborgen, wenn Sie DS4Windows mit verstecken aktivieren.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Beschriftungen der Symbole anzeigen</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Fußleiste der Übersicht anzeigen</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Halten Sie die aktuelle Windows Audioausgabe</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Geben Sie das vorherige Wiedergabegerät wieder her, wenn Windows während des Starts oder der Wiederaufnahme ein neu erstelltes DS4Windows Audiogerät auswählt. Die Mikrofon- und Kommunikationsstandards bleiben unverändert.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows Audioausgabe: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Sound-Einstellungen</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Wählen Sie das Wiedergabegerät Windows aus, das von Ihren Spielen und Apps verwendet wird.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows sendet Audio an einen virtuellen Controller. Die Controller-Audioübertragung ist aktiviert; überprüfen Sie die Audioquelle und den Ausgangsweg, wenn Sie nichts hören.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows sendet Audio an einen virtuellen Controller. Wählen Sie Ihre üblichen Lautsprecher oder Kopfhörer in den Sound-Einstellungen aus oder aktivieren Sie die Übermittlung von Controller-Audio für diesen Controller.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Anzeige Windows Audioausgabe</value>
   </data>
 </root>

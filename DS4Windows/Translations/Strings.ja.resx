@@ -6827,7 +6827,7 @@ Backup : </value>
     <value>DS4Windows が物理コントローラーにアクセスする方法です。HidHide でゲームから隠すと、入力の重複を防げます。</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>概要に表示するカードと測定値を選びます。</value>
+    <value>概要のセクション、アイコンの見出し、間隔、フッターのボタンを選択します。</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>コントローラーの音声を再生する場所を選びます。変更するにはストリーミングを有効にしてください。</value>
@@ -6855,5 +6855,35 @@ Backup : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>変更前にバックアップが保存されます。未選択のルールと HidHide アプリケーションの許可が保存されます。 DS4Windows を起動すると、コントローラは再び隠されます。</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>アイコンの見出しを表示</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>概要のフッターを表示</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>現在の Windows オーディオ出力を保持する</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Windows が起動または再接続中に新しく作成された DS4Windows オーディオ デバイスを選択した場合、以前の再生デバイスを復元します. マイクロフォンおよび通信のデフォルトは変更されません。</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windowsオーディオ出力: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>サウンド設定</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>ゲームやアプリで使用する Windows 再生デバイスを選択します。</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows は、音声を仮想コントローラに送信しています。コントローラの音声転送が有効です。音源と出力ルートを確認して、何も聞こえません。</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows は、音声を仮想コントローラに送信します。音声設定で通常のスピーカーまたはヘッドフォンを選択するか、コントローラーの音声転送を有効にします。</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>オーディオ出力 Windows</value>
   </data>
 </root>

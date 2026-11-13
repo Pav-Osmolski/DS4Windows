@@ -6833,7 +6833,7 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
     <value>顯示 DS4Windows 存取實體控制器的方式。HidHide 可向遊戲隱藏實體控制器，避免重複輸入。</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>選擇在總覽中顯示的卡片與讀數。</value>
+    <value>選擇概覽區塊、圖示標題、間距和底欄按鈕。</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>選擇控制器音訊的播放位置。啟用音訊串流後即可變更此設定。</value>
@@ -6861,5 +6861,35 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>在更改之前儲存備份。未選擇的規則和 HidHide 應用程式許可權保留,如果啟動,您的控制器將再次隱藏。 DS4Windows 隱藏的能力。</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>顯示圖示標題</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>顯示概覽底欄</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>保持當前的 Windows 音訊輸出</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>如果 Windows 在啟動或重新連線時選擇新建立的 DS4Windows 音訊裝置,請恢復以前的播放裝置。</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows 音訊輸出: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>聲音設定</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>選擇您遊戲和應用所使用的 Windows 播放裝置。</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows 正在向虛擬控制器傳送音訊. 已啟用控制器音訊傳輸;如果聽不到,請檢查其音訊源和輸出路線。</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows 正在向虛擬控制器傳送音訊. 在音訊設定中選擇您的常規揚聲器或耳機,或者為該控制器啟用控制器音訊傳輸。</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>顯示 Windows 音訊輸出</value>
   </data>
 </root>

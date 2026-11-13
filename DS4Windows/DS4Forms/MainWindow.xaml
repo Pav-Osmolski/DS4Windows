@@ -49,6 +49,8 @@
                                                  EditProfileRequested="ControllerOverview_EditProfileRequested"
                                                  ControllerDetailsRequested="ControllerOverview_ControllerDetailsRequested"
                                                  ControllerInfoRequested="ControllerOverview_ControllerInfoRequested"
+                                                 DeviceOptionsRequested="ControllerOverview_DeviceOptionsRequested"
+                                                 ControlPanelRequested="ControllerOverview_ControlPanelRequested"
                                                  LightbarRequested="ControllerOverview_LightbarRequested"
                                                  DisconnectRequested="ControllerOverview_DisconnectRequested" />
                 </DockPanel>
@@ -1063,10 +1065,15 @@
                                             </StackPanel>
                                         </Border>
                                         <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="0,10,0,0">
+                                            <StackPanel>
                                             <WrapPanel>
                                                 <CheckBox Content="{lex:Loc Strings:UI_8D6119ABAE8F59DF}" IsChecked="{Binding PromptForViiperSetup}" ToolTip="{lex:Loc Strings:UI_F4F20496B29348C6}" Style="{DynamicResource CheckBoxStyle}" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,2,16,2" />
                                                 <CheckBox x:Name="showViiperTrayIconCk" Content="{lex:Loc Strings:UI_35DCB5EE8EF9B079}" IsChecked="{Binding ShowViiperTrayIcon}" IsEnabled="{Binding SystemIntegrationEnabled}" ToolTip="{lex:Loc Strings:UI_BE9648022D712E1D}" Style="{DynamicResource CheckBoxStyle}" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,2,0,2" />
                                             </WrapPanel>
+                                            <CheckBox x:Name="preserveWindowsAudioOutputCk" Content="{lex:Loc Strings:UI_E961EA2FFCD04682}"
+                                                      IsChecked="{Binding PreserveWindowsAudioOutput}" Style="{DynamicResource CheckBoxStyle}"
+                                                      Margin="0,12,0,0" ToolTip="{lex:Loc Strings:UI_A413DAFF9BAA9DBA}" />
+                                            </StackPanel>
                                         </Border>
                                     </StackPanel>
                                 </Border>

@@ -6850,7 +6850,7 @@ Sokongan : </value>
     <value>Cara DS4Windows mengakses pengawal fizikal. HidHide boleh menyembunyikannya daripada permainan untuk mengelakkan input berganda.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Pilih kad dan bacaan yang dipaparkan dalam Gambaran keseluruhan.</value>
+    <value>Pilih bahagian Gambaran keseluruhan, tajuk ikon, jarak dan butang pengaki.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Pilih tempat audio pengawal dimainkan. Dayakan penstriman untuk menukar tetapan ini.</value>
@@ -6878,5 +6878,35 @@ Sokongan : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Salinan cadangan disimpan sebelum perubahan. peraturan yang tidak dipilih dan keizinan aplikasi HidHide disimpan. pengendali anda akan disembunyikan lagi jika anda memulakan DS4Windows dengan menyembunyikan diaktifkan.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Tunjukkan tajuk ikon</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Tunjukkan pengaki Gambaran keseluruhan</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mengekalkan output audio Windows semasa</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Memulihkan peranti pemutaran terdahulu jika Windows memilih peranti audio DS4Windows yang baru dicipta semasa memulakan atau menyambung semula. Default mikrofon dan komunikasi tidak berubah.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows output audio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Pengaturan bunyi</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Pilih peranti pemutaran Windows yang digunakan oleh permainan dan aplikasi anda.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows sedang menghantar audio kepada pengawal maya. pengawal pemindahan audio diaktifkan; semak sumber audio dan laluan output jika anda tidak mendengar apa-apa.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows sedang menghantar audio kepada pengawal maya. Pilih speaker atau headphone biasa anda dalam tetapan Suara, atau mengaktifkan pemindahan audio pengawal untuk pengawal itu.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Menunjukkan Windows output audio</value>
   </data>
 </root>

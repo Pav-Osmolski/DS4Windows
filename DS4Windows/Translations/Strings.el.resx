@@ -6852,7 +6852,7 @@ Example: whyme_DS4Windows</value>
     <value>Δείχνει πώς αποκτά πρόσβαση το DS4Windows στο φυσικό χειριστήριο. Το HidHide μπορεί να το κρύψει από τα παιχνίδια για να αποφευχθεί η διπλή είσοδος.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Επιλέξτε ποιες κάρτες και μετρήσεις εμφανίζονται στην επισκόπηση.</value>
+    <value>Επιλέξτε ενότητες επισκόπησης, τίτλους εικονιδίων, αποστάσεις και κουμπιά υποσέλιδου.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Επιλέξτε πού αναπαράγεται ο ήχος του χειριστηρίου. Ενεργοποιήστε τη ροή για να αλλάξετε αυτή τη ρύθμιση.</value>
@@ -6880,5 +6880,35 @@ Example: whyme_DS4Windows</value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Ένα αντίγραφο ασφαλείας αποθηκεύεται πριν από τις αλλαγές. Οι μη επιλεγμένοι κανόνες και οι άδειες εφαρμογής HidHide διατηρούνται. Ο ελεγκτής σας θα κρυφτεί ξανά εάν ξεκινήσετε το DS4Windows με το κρύψιμο ενεργοποιημένο.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Εμφάνιση τίτλων εικονιδίων</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Εμφάνιση υποσέλιδου επισκόπησης</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Διατηρήστε την τρέχουσα έκδοση ήχου Windows</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Επαναφέρετε την προηγούμενη συσκευή αναπαραγωγής εάν το Windows επιλέξει μια νεοσύστατη συσκευή ήχου DS4Windows κατά την εκκίνηση ή την επανασύνδεση. Τα προεπιλεγμένα χαρακτηριστικά του μικροφώνου και των επικοινωνιών παραμένουν αμετάβλητα.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Έκδοση ήχου Windows {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Ηχητικές ρυθμίσεις</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Επιλέξτε τη συσκευή αναπαραγωγής Windows που χρησιμοποιείται από τα παιχνίδια και τις εφαρμογές σας.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Το Windows στέλνει ήχο σε έναν εικονικό ελεγκτή. Η αναμετάδοση ήχου του ελεγκτή είναι ενεργοποιημένη. ελέγξτε την πηγή ήχου και τη διαδρομή εξόδου αν δεν ακούσετε τίποτα.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows στέλνει ήχο σε έναν εικονικό ελεγκτή. Επιλέξτε τα συνηθισμένα ηχεία ή ακουστικά σας στις ρυθμίσεις ήχου ή ενεργοποιήστε την αναμετάδοση ήχου του ελεγκτή για αυτόν τον ελεγκτή.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Εμφάνιση Windows εξόδου ήχου</value>
   </data>
 </root>

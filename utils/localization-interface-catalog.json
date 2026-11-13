@@ -10981,5 +10981,47 @@
     "files": [
       "DS4Windows/DS4Forms/MainWindow.xaml"
     ]
+  },
+  "UI_E961EA2FFCD04682": {
+    "source": "Keep my current Windows audio output",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_A413DAFF9BAA9DBA": {
+    "source": "Restore the previous playback device if Windows selects a newly created DS4Windows audio device during startup or reconnect. Microphone and communications defaults are unchanged. Turn this off to select a newly created controller output yourself.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.xaml"
+    ]
+  },
+  "UI_5DDE6382F84AB2C8": {
+    "source": "Windows audio output: {0}",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml.cs"
+    ]
+  },
+  "UI_55C4121106329520": {
+    "source": "Sound settings",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml.cs"
+    ]
+  },
+  "UI_68D1CFD9C8DA4D97": {
+    "source": "Choose the Windows playback device used by your games and apps.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml.cs"
+    ]
+  },
+  "UI_DB9AC2D227B091F9": {
+    "source": "Windows is sending audio to a virtual controller. Controller audio forwarding is enabled; check its audio source and output route if you hear nothing.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml.cs"
+    ]
+  },
+  "UI_49D2863948572913": {
+    "source": "Windows is sending audio to a virtual controller. Choose your usual speakers or headphones in Sound settings, or enable controller audio forwarding for that controller.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml.cs"
+    ]
   }
 }

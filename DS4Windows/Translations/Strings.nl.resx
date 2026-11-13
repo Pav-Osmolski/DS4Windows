@@ -6856,7 +6856,7 @@ De backup: </value>
     <value>Toont hoe DS4Windows toegang heeft tot de fysieke controller. HidHide kan deze voor games verbergen om dubbele invoer te voorkomen.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Kies welke kaarten en meetwaarden in het overzicht staan.</value>
+    <value>Kies de overzichtssecties, pictogramtitels, tussenruimte en knoppen op de onderbalk.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Kies waar het geluid van de controller wordt afgespeeld. Schakel streaming in om dit te wijzigen.</value>
@@ -6884,5 +6884,35 @@ De backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Een back-up wordt opgeslagen voordat wijzigingen worden uitgevoerd. Niet-selecteerde regels en HidHide toepassingsmachtigingen worden bewaard. Uw controller wordt opnieuw verborgen als u DS4Windows start met verbergen ingeschakeld.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Pictogramtitels tonen</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Onderbalk van Overzicht tonen</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Bewaar mijn huidige Windows audio-uitvoer</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Herstel het vorige afspelen apparaat als Windows een nieuw gecreëerd DS4Windows audio-apparaat selecteert tijdens het opstarten of opnieuw verbinden. De microfoon- en communicatievoorkeuren blijven ongewijzigd.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows audio uitvoer: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Sound instellingen</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Selecteer het Windows afspelen apparaat dat wordt gebruikt door uw games en apps.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows stuurt audio naar een virtuele controller. Controller-audiooverdracht is ingeschakeld; controleer de audiobron en uitvoerroute als u niets hoort.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows stuurt audio naar een virtuele controller.Kies uw gebruikelijke luidsprekers of hoofdtelefoon in de geluidsinstellingen of schakel controller-audiooverdracht voor die controller in.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Toon Windows audio-uitvoer</value>
   </data>
 </root>

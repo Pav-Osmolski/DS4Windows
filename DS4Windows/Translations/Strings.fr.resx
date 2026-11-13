@@ -6850,7 +6850,7 @@ Le backup : </value>
     <value>Indique comment DS4Windows accède à la manette physique. HidHide peut la masquer aux jeux pour éviter les entrées en double.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Choisissez les cartes et les mesures affichées dans la vue d’ensemble.</value>
+    <value>Choisissez les sections de la vue d’ensemble, les titres des icônes, l’espacement et les boutons du pied de page.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Choisissez où le son de la manette est diffusé. Activez la diffusion pour modifier ce réglage.</value>
@@ -6878,5 +6878,35 @@ Le backup : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Une sauvegarde est enregistrée avant les modifications. Les règles non sélectionnées et les autorisations d'application HidHide sont conservées. Votre contrôleur sera à nouveau masqué si vous commencez DS4Windows avec cacher activé.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Afficher les titres des icônes</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Afficher le pied de la vue d’ensemble</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Maintenir ma sortie audio Windows actuelle</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Rétablissez le périphérique de lecture précédent si Windows sélectionne un périphérique audio DS4Windows nouvellement créé lors du démarrage ou de la reconnexion. Les paramètres par défaut de microphone et de communication ne sont pas modifiés.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Sortie audio Windows {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Réglages sonores</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Choisissez le périphérique de lecture Windows utilisé par vos jeux et applications.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows envoie de l'audio à un contrôleur virtuel. Le transfert audio du contrôleur est activé; vérifiez sa source audio et son itinéraire de sortie si vous n'entendez rien.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows envoie de l'audio à un contrôleur virtuel. Choisissez vos haut-parleurs ou écouteurs habituels dans les paramètres son ou activez la transmission audio du contrôleur pour ce contrôleur.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Afficher la sortie audio Windows</value>
   </data>
 </root>

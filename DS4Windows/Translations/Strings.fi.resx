@@ -6850,7 +6850,7 @@ Varmuuskopiointi : </value>
     <value>Näyttää, miten DS4Windows käyttää fyysistä ohjainta. HidHide voi piilottaa sen peleiltä kaksoissyötön estämiseksi.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Valitse yleiskatsauksessa näkyvät kortit ja lukemat.</value>
+    <value>Valitse yleiskatsauksen osiot, kuvakkeiden otsikot, välit ja alapalkin painikkeet.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Valitse ohjaimen äänen toistopaikka. Ota suoratoisto käyttöön muuttaaksesi asetusta.</value>
@@ -6878,5 +6878,35 @@ Varmuuskopiointi : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Varmuuskopio tallennetaan ennen muutoksia. Valitsemattomat säännöt ja HidHide sovellusvaltuudet säilytetään. Ohjain piilotetaan uudelleen, jos aloitat DS4Windows piilottamalla käytössä.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Näytä kuvakkeiden otsikot</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Näytä yleiskatsauksen alapalkki</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Pidä nykyinen Windows äänitulostani</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Palauta aiempi toistolaite, jos Windows valitsee käynnistyksen tai uudelleenliittämisen aikana äskettäin luodun DS4Windows äänilaitteen. Mikrofonin ja viestinnän oletusasetukset pysyvät ennallaan.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows äänen ulostulo: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Ääniasetukset</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Valitse pelien ja sovellusten käyttämä Windows toistolaite.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows lähettää ääntä virtuaaliselle ohjaimelle. Ohjaimen äänensiirto on käytössä; tarkista sen äänilähteen ja lähtöreitin, jos et kuule mitään.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows lähettää ääntä virtuaaliselle ohjaimelle. Valitse tavalliset kaiuttimet tai kuulokkeet Äänen asetuksissa tai ota ohjaimen äänenlähetys käyttöön kyseiselle ohjaimelle.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Näytä Windows äänen ulostulo</value>
   </data>
 </root>

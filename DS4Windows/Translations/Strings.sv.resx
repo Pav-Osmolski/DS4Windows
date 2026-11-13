@@ -6826,7 +6826,7 @@ och backup: </value>
     <value>Visar hur DS4Windows får åtkomst till den fysiska handkontrollen. HidHide kan dölja den för spel för att undvika dubbla inmatningar.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Välj vilka kort och värden som visas i översikten.</value>
+    <value>Välj översiktens avsnitt, ikonrubriker, mellanrum och knappar i det nedre fältet.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Välj var handkontrollens ljud spelas upp. Aktivera strömning för att ändra inställningen.</value>
@@ -6854,5 +6854,35 @@ och backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>En säkerhetskopia sparas innan ändringar görs. Ovalda regler och HidHide applikationsbehörigheter bevaras. Din handkontroll döljs igen om du startar DS4Windows med att dölja aktiverat.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Visa ikonrubriker</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Visa översiktens nedre fält</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Håll den aktuella Windows ljudutgången</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Återställ den tidigare uppspelningsenheten om Windows väljer en nyskapad DS4Windows-ljudenhet under start eller återanslutning. Mikrofon- och kommunikationsstandarderna förblir oförändrade.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows ljudutgång: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Ljudinställningar</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Välj den Windows uppspelningsenhet som används av dina spel och appar.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows skickar ljud till en virtuell controller. Controller-ljudöverföring är aktiverad; kontrollera dess ljudkälla och utmatningsväg om du inte hör något.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows skickar ljud till en virtuell styrenhet. Välj dina vanliga högtalare eller hörlurar i Ljudinställningar, eller aktivera styrenhetens ljudöverföring för den styrenheten.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Visa Windows ljudutgång</value>
   </data>
 </root>

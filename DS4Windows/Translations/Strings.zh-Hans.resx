@@ -6994,7 +6994,7 @@
     <value>显示 DS4Windows 访问实体控制器的方式。HidHide 可对游戏隐藏实体控制器，以防止重复输入。</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>选择在概览中显示的卡片和读数。</value>
+    <value>选择概览分区、图标标题、间距和底栏按钮。</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>选择控制器音频的播放位置。启用音频串流后即可更改此设置。</value>
@@ -7022,5 +7022,35 @@
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>在更改之前保存备份。未选择的规则和 HidHide 应用程序权限保留,如果启动,您的控制器将再次隐藏。 DS4Windows 隐藏的能力。</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>显示图标标题</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>显示概览底栏</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>保持当前的 Windows 音频输出</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>如果 Windows 在启动或重新连接时选择新创建的 DS4Windows 音频设备,请恢复以前的播放设备。</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows 音频输出: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>声音设置</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>选择您游戏和应用所使用的 Windows 播放设备。</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows 正在向虚拟控制器发送音频. 已启用控制器音频传输;如果听不到,请检查其音频源和输出路线。</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows 正在向虚拟控制器发送音频. 在音频设置中选择您的常规扬声器或耳机,或者为该控制器启用控制器音频传输。</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>显示 Windows 音频输出</value>
   </data>
 </root>

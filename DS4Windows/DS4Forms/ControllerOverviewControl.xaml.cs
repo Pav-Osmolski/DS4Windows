@@ -48,6 +48,10 @@ namespace DS4WinWPF.DS4Forms
 
         private void ControllerOverviewControl_Loaded(object sender, RoutedEventArgs e)
         {
+            WindowsPlaybackProtection.OutputChanged -= WindowsAudioOutput_Changed;
+            WindowsPlaybackProtection.OutputChanged += WindowsAudioOutput_Changed;
+            WindowsPlaybackProtection.EnsureStarted();
+            RefreshWindowsAudioOutput();
             HookOutputControllerViewModel(DataContext as MainWindowsViewModel, true);
             if (overviewLayoutWriter != null) return;
 
@@ -61,6 +65,14 @@ namespace DS4WinWPF.DS4Forms
             showLevels.IsChecked = layout.ShowLevels;
             showMicrophone.IsChecked = layout.ShowMicrophone;
             showInputRate.IsChecked = layout.ShowInputRate;
+            showFactTitles.IsChecked = layout.ShowFactTitles;
+            showWindowsAudioOutput.IsChecked = layout.ShowWindowsAudioOutput;
+            showQuickActions.IsChecked = layout.ShowQuickActions;
+            showEditProfileAction.IsChecked = layout.ShowEditProfileAction;
+            showDeviceOptionsAction.IsChecked = layout.ShowDeviceOptionsAction;
+            showControlPanelAction.IsChecked = layout.ShowControlPanelAction;
+            showLightbarAction.IsChecked = layout.ShowLightbarAction;
+            showDisconnectAction.IsChecked = layout.ShowDisconnectAction;
             compactSpacing.IsChecked = layout.CompactSpacing;
             overviewLayoutWriter = new(value => SettingsStorage.Current.SetOverviewLayout(value),
                 error => logger.Warn(error, "Could not remember Overview layout preferences."));
@@ -71,6 +83,7 @@ namespace DS4WinWPF.DS4Forms
         private void OverviewLayout_Changed(object sender, RoutedEventArgs e)
         {
             ArrangeOverviewCards();
+            RefreshWindowsAudioOutput();
             if (overviewLayoutWriter == null) return;
             overviewLayoutWriter.Queue(new OverviewLayoutPreferences
             {
@@ -79,6 +92,14 @@ namespace DS4WinWPF.DS4Forms
                 ShowLevels = showLevels.IsChecked == true,
                 ShowMicrophone = showMicrophone.IsChecked == true,
                 ShowInputRate = showInputRate.IsChecked == true,
+                ShowFactTitles = showFactTitles.IsChecked == true,
+                ShowWindowsAudioOutput = showWindowsAudioOutput.IsChecked == true,
+                ShowQuickActions = showQuickActions.IsChecked == true,
+                ShowEditProfileAction = showEditProfileAction.IsChecked == true,
+                ShowDeviceOptionsAction = showDeviceOptionsAction.IsChecked == true,
+                ShowControlPanelAction = showControlPanelAction.IsChecked == true,
+                ShowLightbarAction = showLightbarAction.IsChecked == true,
+                ShowDisconnectAction = showDisconnectAction.IsChecked == true,
                 CompactSpacing = compactSpacing.IsChecked == true
             });
         }
@@ -139,8 +160,53 @@ namespace DS4WinWPF.DS4Forms
         }
 
         private void ControllerOverviewControl_Unloaded(object sender,
-            RoutedEventArgs e) =>
+            RoutedEventArgs e)
+        {
+            WindowsPlaybackProtection.OutputChanged -= WindowsAudioOutput_Changed;
             HookOutputControllerViewModel(outputControllerViewModel, false);
+        }
+
+        private void WindowsAudioOutput_Changed(object sender, EventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                if (!Dispatcher.HasShutdownStarted)
+                    Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(RefreshWindowsAudioOutput));
+                return;
+            }
+            RefreshWindowsAudioOutput();
+        }
+
+        private void RefreshWindowsAudioOutput()
+        {
+            if (!IsLoaded) return;
+            ApplyWindowsAudioOutput(WindowsPlaybackProtection.CurrentOutput);
+        }
+
+        internal void ApplyWindowsAudioOutput(WindowsPlaybackProtection.Output output)
+        {
+            windowsAudioRoute.Visibility = showWindowsAudioOutput.IsChecked != true || string.IsNullOrEmpty(output?.Name)
+                ? Visibility.Collapsed : Visibility.Visible;
+            windowsAudioOutputText.Text = UiText.Format("Windows audio output: {0}", output?.Name ?? "");
+            windowsSoundSettingsButton.Content = UiText.Get("Sound settings");
+            windowsSoundSettingsButton.ToolTip = UiText.Get("Choose the Windows playback device used by your games and apps.");
+            int slot = output?.ControllerIndex ?? -1;
+            bool forwarding = slot >= 0 && slot < ControlService.MAX_DS4_CONTROLLER_COUNT &&
+                Global.DualSenseEnableSpeakerOutput[slot];
+            bool virtualOutput = output?.Port > 0 && slot >= 0;
+            windowsAudioRouteHelp.Visibility = virtualOutput ? Visibility.Visible : Visibility.Collapsed;
+            windowsAudioRouteHelp.SetResourceReference(TextBlock.ForegroundProperty,
+                forwarding ? "MutedForegroundColor" : "WarningColor");
+            windowsAudioRouteHelp.Text = forwarding
+                ? UiText.Get("Windows is sending audio to a virtual controller. Controller audio forwarding is enabled; check its audio source and output route if you hear nothing.")
+                : UiText.Get("Windows is sending audio to a virtual controller. Choose your usual speakers or headphones in Sound settings, or enable controller audio forwarding for that controller.");
+        }
+
+        private void WindowsSoundSettings_Click(object sender, RoutedEventArgs e)
+        {
+            try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("ms-settings:sound") { UseShellExecute = true }); }
+            catch (Exception error) { NLog.LogManager.GetCurrentClassLogger().Warn(error, "Could not open Windows Sound settings."); }
+        }
 
         private void HookOutputControllerViewModel(
             MainWindowsViewModel viewModel, bool hook)
@@ -159,11 +225,15 @@ namespace DS4WinWPF.DS4Forms
                 outputControllerViewModel = viewModel;
                 viewModel.SelectedOutputControllerChanged +=
                     ViewModel_SelectedOutputControllerChanged;
+                viewModel.SpeakerOutputEnabledChanged += WindowsAudioOutput_Changed;
+                viewModel.SelectedControllerChanged += WindowsAudioOutput_Changed;
             }
             else
             {
                 viewModel.SelectedOutputControllerChanged -=
                     ViewModel_SelectedOutputControllerChanged;
+                viewModel.SpeakerOutputEnabledChanged -= WindowsAudioOutput_Changed;
+                viewModel.SelectedControllerChanged -= WindowsAudioOutput_Changed;
                 if (ReferenceEquals(outputControllerViewModel, viewModel))
                 {
                     outputControllerViewModel = null;
@@ -205,6 +275,10 @@ namespace DS4WinWPF.DS4Forms
 
         public event EventHandler EditProfileRequested;
         public event EventHandler ControllerDetailsRequested;
+        public event EventHandler DeviceOptionsRequested;
+        public event EventHandler ControlPanelRequested;
+        private void DeviceOptionsBtn_Click(object sender, RoutedEventArgs e) => DeviceOptionsRequested?.Invoke(this, EventArgs.Empty);
+        private void ControlPanelBtn_Click(object sender, RoutedEventArgs e) => ControlPanelRequested?.Invoke(this, EventArgs.Empty);
         public event EventHandler ControllerInfoRequested;
         private void ControllerInfoBtn_Click(object sender, RoutedEventArgs e) => ControllerInfoRequested?.Invoke(this, EventArgs.Empty);
         public event EventHandler LightbarRequested;

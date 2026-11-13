@@ -8548,7 +8548,7 @@ X axis: {0}, Y axis: {1}</value>
     <value>How DS4Windows accesses the physical controller. HidHide can keep it out of games to prevent double input.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Choose which cards and readings appear on Overview.</value>
+    <value>Choose Overview sections, icon titles, spacing and footer buttons.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Choose where controller audio plays. Enable streaming to change this setting.</value>
@@ -8577,4 +8577,18 @@ X axis: {0}, Y axis: {1}</value>
   <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
     <value>Recover hidden controllers…</value>
   </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Show icon titles</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Show Overview footer</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve"><value>Keep my current Windows audio output</value></data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve"><value>Restore the previous playback device if Windows selects a newly created DS4Windows audio device during startup or reconnect. Microphone and communications defaults are unchanged. Turn this off to select a newly created controller output yourself.</value></data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve"><value>Windows audio output: {0}</value></data>
+  <data name="UI_55C4121106329520" xml:space="preserve"><value>Sound settings</value></data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve"><value>Choose the Windows playback device used by your games and apps.</value></data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve"><value>Windows is sending audio to a virtual controller. Controller audio forwarding is enabled; check its audio source and output route if you hear nothing.</value></data>
+  <data name="UI_49D2863948572913" xml:space="preserve"><value>Windows is sending audio to a virtual controller. Choose your usual speakers or headphones in Sound settings, or enable controller audio forwarding for that controller.</value></data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve"><value>Show Windows audio output</value></data>
 </root>

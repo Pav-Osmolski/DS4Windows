@@ -20,6 +20,14 @@ internal sealed record OverviewLayoutPreferences
     public bool ShowLevels { get; init; } = true;
     public bool ShowMicrophone { get; init; } = true;
     public bool ShowInputRate { get; init; } = true;
+    public bool ShowFactTitles { get; init; } = true;
+    public bool ShowWindowsAudioOutput { get; init; } = true;
+    public bool ShowQuickActions { get; init; } = true;
+    public bool ShowEditProfileAction { get; init; } = true;
+    public bool ShowDeviceOptionsAction { get; init; } = true;
+    public bool ShowControlPanelAction { get; init; } = true;
+    public bool ShowLightbarAction { get; init; } = true;
+    public bool ShowDisconnectAction { get; init; } = true;
     public bool CompactSpacing { get; init; }
 }
 

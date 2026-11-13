@@ -6824,7 +6824,7 @@ Il backup: </value>
     <value>Indica come DS4Windows accede al controller fisico. HidHide può nasconderlo ai giochi per evitare doppi input.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Scegli le schede e i valori da mostrare nella panoramica.</value>
+    <value>Scegli le sezioni della panoramica, i titoli delle icone, la spaziatura e i pulsanti della barra inferiore.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Scegli dove riprodurre l’audio del controller. Attiva lo streaming per modificare questa impostazione.</value>
@@ -6852,5 +6852,35 @@ Il backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Una copia di backup viene salvata prima delle modifiche. Le regole non selezionate e le autorizzazioni dell'applicazione HidHide vengono conservate. Il controller verrà nuovamente nascosto se si avvia DS4Windows con nascondere abilitato.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Mostra i titoli delle icone</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Mostra la barra inferiore della panoramica</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mantenere l'attuale uscita audio Windows</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Ripristinare il dispositivo di riproduzione precedente se Windows seleziona un dispositivo audio DS4Windows appena creato durante l'avvio o la riconnessione. Le impostazioni predefinite per il microfono e le comunicazioni rimangono invariate.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows uscita audio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Impostazioni sonore</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Selezionare il dispositivo di riproduzione Windows utilizzato dai giochi e dalle app.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows sta inviando l'audio a un controller virtuale. il trasferimento audio del controller è abilitato; controllare la sua fonte audio e la rotta di uscita se non si sente nulla.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows sta inviando l'audio a un controller virtuale. Selezionare gli altoparlanti o le cuffie abituali nelle impostazioni audio o abilitare il trasferimento audio del controller per quel controller.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Mostra Windows uscita audio</value>
   </data>
 </root>

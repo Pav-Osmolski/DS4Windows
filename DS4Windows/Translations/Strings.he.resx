@@ -6826,7 +6826,7 @@
     <value>מציג כיצד DS4Windows ניגש לבקר הפיזי. HidHide יכול להסתיר אותו ממשחקים כדי למנוע קלט כפול.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>בחרו אילו כרטיסים ונתונים יופיעו בסקירה.</value>
+    <value>בחירת מקטעי הסקירה, כותרות הסמלים, המרווחים וכפתורי סרגל הפעולות.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>בחרו היכן יושמע שמע הבקר. הפעילו הזרמה כדי לשנות הגדרה זו.</value>
@@ -6854,5 +6854,35 @@
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>גיבוי נשמר לפני שינויים. כללי לא נבחר ו- HidHide הרשאות יישמרו. המעבד שלך יהיה מוסתר שוב אם תתחיל DS4Windows עם הסתרת מופעלת.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>הצגת כותרות הסמלים</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>הצגת סרגל הפעולות בסקירה</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>שמור את ההפעלה הקולית Windows הנוכחית שלי</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>לשחזר את המכשיר הקודם אם Windows בוחר מכשיר אודיו DS4Windows שנוצר לאחרונה במהלך ההתחלה או החיבור מחדש. מיקרופון ותקשורת הסטנדרטים אינם משתנים.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>יציאת אודיו Windows {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>תצוגת sound</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>בחר את מכשיר ההפעלה Windows המשמש עבור המשחקים והאפליקציות שלך.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows שולח אודיו למפקח וירטואלי.העברת אודיו של המפקח מופעלת; בדוק את מקור האודיו ומסלול היציאה אם אינך שומע דבר.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows שולח אודיו למפקח וירטואלי. בחר את הרמקולים או האוזניות הרגילים שלך בהגדרות הצליל, או להפעיל העברת אודיו של המפקח עבור המפקח הזה.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>תצוגת Windows פלט אודיו</value>
   </data>
 </root>

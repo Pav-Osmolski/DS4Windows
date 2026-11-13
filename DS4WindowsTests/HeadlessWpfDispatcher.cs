@@ -22,7 +22,7 @@ internal static class HeadlessWpfDispatcher
         return ready.Task.GetAwaiter().GetResult();
     });
 
-    internal static void Invoke(Action action, Func<string> progress = null)
+    internal static void Invoke(Action action, Func<string> progress = null, TimeSpan? timeout = null)
     {
         // Allow nested fixture helpers without dispatching work behind ourselves.
         if (uiDispatcher.Value.CheckAccess())
@@ -32,7 +32,7 @@ internal static class HeadlessWpfDispatcher
         }
         var operation = uiDispatcher.Value.InvokeAsync(action);
         Assert.AreSame(operation.Task,
-            Task.WhenAny(operation.Task, Task.Delay(TimeSpan.FromSeconds(30))).GetAwaiter().GetResult(),
+            Task.WhenAny(operation.Task, Task.Delay(timeout ?? TimeSpan.FromSeconds(30))).GetAwaiter().GetResult(),
             $"Headless WPF test timed out: {progress?.Invoke() ?? "render / selection"}.");
         operation.Task.GetAwaiter().GetResult();
     }

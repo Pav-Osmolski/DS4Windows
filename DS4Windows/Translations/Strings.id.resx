@@ -6848,7 +6848,7 @@ Untuk backup: </value>
     <value>Cara DS4Windows mengakses pengontrol fisik. HidHide dapat menyembunyikannya dari gim untuk mencegah input ganda.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Pilih kartu dan data yang ditampilkan di Ikhtisar.</value>
+    <value>Pilih bagian Ringkasan, judul ikon, jarak, dan tombol bilah bawah.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Pilih tempat audio pengontrol diputar. Aktifkan streaming untuk mengubah pengaturan ini.</value>
@@ -6876,5 +6876,35 @@ Untuk backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Sebuah cadangan disimpan sebelum perubahan. aturan yang tidak dipilih dan izin aplikasi HidHide dipertahankan. kontroler Anda akan tersembunyi lagi jika Anda memulai DS4Windows dengan menyembunyikan diaktifkan.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Tampilkan judul ikon</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Tampilkan bilah bawah Ringkasan</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Menjaga output audio Windows saya saat ini</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Mengembalikan perangkat pemutaran sebelumnya jika Windows memilih perangkat audio DS4Windows yang baru dibuat saat memulai atau menghubungkan kembali. default mikrofon dan komunikasi tidak berubah.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows output audio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Pengaturan Suara</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Pilih perangkat pemutaran Windows yang digunakan oleh game dan aplikasi Anda.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows mengirimkan audio ke kontroler virtual. pengalihan audio kontroler diaktifkan; periksa sumber audio dan rute output jika Anda tidak mendengar apa-apa.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows mengirimkan audio ke controller virtual. pilih speaker atau headphone Anda yang biasa dalam pengaturan suara, atau mengaktifkan transmisi audio controller untuk controller tersebut.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Menampilkan Windows output audio</value>
   </data>
 </root>

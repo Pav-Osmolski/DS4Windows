@@ -6850,7 +6850,7 @@ backup için: </value>
     <value>DS4Windows’un fiziksel kontrolcüye nasıl eriştiğini gösterir. HidHide, çift girişi önlemek için kontrolcüyü oyunlardan gizleyebilir.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Genel bakışta hangi kartların ve ölçümlerin görüneceğini seçin.</value>
+    <value>Genel bakış bölümlerini, simge başlıklarını, aralıkları ve alt çubuk düğmelerini seçin.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Kontrolcü sesinin nerede çalacağını seçin. Bu ayarı değiştirmek için ses akışını etkinleştirin.</value>
@@ -6878,5 +6878,35 @@ backup için: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Değişikliklerden önce bir yedekleme kaydedilir. Seçilmemiş kurallar ve HidHide uygulama izinleri korunur. DS4Windows'i gizleme etkinleştirerek başlatırsanız denetleyiciniz tekrar gizlenir.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Simge başlıklarını göster</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Genel bakış alt çubuğunu göster</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mevcut Windows ses çıkışını koruyun</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Windows yeni oluşturulan DS4Windows ses aygıtını başlatma veya yeniden bağlanma sırasında seçerse, önceki oynatma aygıtını geri yükleyin. Mikrofon ve iletişim varsayımları değişmez.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows ses çıkışı: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Ses ayarları</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Oyunlarınız ve uygulamalarınız için kullanılan Windows oynatma aygıtını seçin.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows bir sanal denetleyiciye ses gönderiyor. Denetleyici ses iletimi etkinleştirilmiştir; hiçbir şey duymazsanız ses kaynağını ve çıkış rotasını kontrol edin.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows bir sanal denetleyiciye ses gönderiyor. Ses ayarları'nda normal hoparlörlerinizi veya kulaklıklarınızı seçin veya bu denetleyici için denetleyicinin ses iletimini etkinleştirin.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Windows ses çıkışı</value>
   </data>
 </root>

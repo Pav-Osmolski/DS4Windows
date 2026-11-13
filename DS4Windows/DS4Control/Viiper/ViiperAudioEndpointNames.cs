@@ -153,6 +153,17 @@ namespace DS4Windows
             }
         }
 
+        // Isolated Windows compatibility API. The playback policy supplies only
+        // a previously active render endpoint; capture/communications are forbidden.
+        internal static void SetDefaultPlaybackEndpoint(string endpointId, Role role)
+        {
+            if (role is not (Role.Console or Role.Multimedia))
+                throw new ArgumentOutOfRangeException(nameof(role));
+            object client = new PolicyConfigClient();
+            try { Marshal.ThrowExceptionForHR(((IPolicyConfig)client).SetDefaultEndpoint(endpointId, role)); }
+            finally { if (Marshal.IsComObject(client)) Marshal.ReleaseComObject(client); }
+        }
+
         [StructLayout(LayoutKind.Explicit, Size = 24)]
         private struct StringVariant
         {
@@ -182,6 +193,8 @@ namespace DS4Windows
             [PreserveSig] int SetPropertyValue(
                 [MarshalAs(UnmanagedType.LPWStr)] string endpointId,
                 [MarshalAs(UnmanagedType.Bool)] bool fxStore, ref PropertyKey key, ref StringVariant value);
+            [PreserveSig] int SetDefaultEndpoint(
+                [MarshalAs(UnmanagedType.LPWStr)] string endpointId, Role role);
         }
     }
 }

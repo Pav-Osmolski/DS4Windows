@@ -1787,6 +1787,12 @@ Suspend support not enabled.", true);
 
         private readonly System.Collections.Generic.Dictionary<DS4Device, ControllerInfoWindow> controllerInfoWindows = new();
 
+        private void ControllerOverview_DeviceOptionsRequested(object sender, EventArgs e) =>
+            DeviceOptionSettingsBtn_Click(sender, new RoutedEventArgs());
+
+        private void ControllerOverview_ControlPanelRequested(object sender, EventArgs e) =>
+            ControlPanelBtn_Click(sender, new RoutedEventArgs());
+
         private void ControllerOverview_ControllerInfoRequested(object sender, EventArgs e) =>
             ShowControllerInfo(mainWinVM.SelectedController);
 

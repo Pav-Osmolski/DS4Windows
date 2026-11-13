@@ -3881,6 +3881,39 @@ namespace DS4Windows.InputDevices
                         return true;
                     }
                 }
+                // Partial L2/R2 updates may alternate while describing the
+                // same pending state. Compare each side with its most recent
+                // unclaimed command; never fold a real transition or other lane.
+                ReadOnlySpan<byte> prepared = new(report, offset, USB_OUTPUT_CHANGE_LENGTH);
+                if (ConnectionType == ConnectionType.USB && physicalOutputCommandCount > 1 &&
+                    ReferenceEquals(repeatContext.Command.Target, this) && repeatContext.Producer != null &&
+                    DualSensePendingTriggerState.IsEligible(original) &&
+                    DualSensePendingTriggerState.IsEligible(prepared))
+                {
+                    byte underlayRemaining = (byte)(original[1] & 0x0C);
+                    byte preparedRemaining = (byte)(prepared[1] & 0x0C);
+                    int pendingTailIndex = (physicalOutputCommandHead + physicalOutputCommandCount - 1) % PhysicalOutputCommandCapacity;
+                    for (int distance = 0; distance < physicalOutputCommandCount - 1; distance++)
+                    {
+                        int index = (pendingTailIndex - distance + PhysicalOutputCommandCapacity) % PhysicalOutputCommandCapacity;
+                        var prior = physicalOutputRepeatContexts[index];
+                        if (!ReferenceEquals(prior.Producer, repeatContext.Producer) ||
+                            prior.StreamGeneration != repeatContext.StreamGeneration ||
+                            !ReferenceEquals(prior.Command.Target, repeatContext.Command.Target) ||
+                            prior.Command.BindingRevision != repeatContext.Command.BindingRevision ||
+                            prior.Command.ProfileRevision != repeatContext.Command.ProfileRevision ||
+                            prior.Command.PendingBoundaryRevision != repeatContext.Command.PendingBoundaryRevision ||
+                            prior.Command.RepeatBoundaryRevision != repeatContext.Command.RepeatBoundaryRevision ||
+                            physicalOutputRepeatLocalGenerations[index] != localGeneration ||
+                            physicalOutputTriggerLabMasks[index] != preparedTriggerLabValidity ||
+                            !DualSensePendingTriggerState.MatchPrevious(original, physicalOutputUnderlaySlots[index], ref underlayRemaining) ||
+                            !DualSensePendingTriggerState.MatchPrevious(prepared, physicalOutputCommandSlots[index], ref preparedRemaining)) break;
+                        if (underlayRemaining != 0 || preparedRemaining != 0) continue;
+                        nativeOutputRevision = physicalOutputCommandRevisions[pendingTailIndex];
+                        nativeFeedbackDiagnostics.SuppressPendingRepeat();
+                        return true;
+                    }
+                }
                 if (physicalOutputCommandCount >=
                     PhysicalOutputCommandCapacity)
                 {

@@ -6827,7 +6827,7 @@ O backup: </value>
     <value>Mostra como o DS4Windows acede ao comando físico. O HidHide pode ocultá-lo dos jogos para evitar entradas duplicadas.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Escolha os cartões e as leituras apresentados na vista geral.</value>
+    <value>Escolha as secções da visão geral, os títulos dos ícones, o espaçamento e os botões do rodapé.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Escolha onde é reproduzido o áudio do comando. Ative a transmissão para alterar esta opção.</value>
@@ -6855,5 +6855,35 @@ O backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Uma cópia de segurança é salvo antes das alterações. Regras não selecionadas e HidHide permissões de aplicação são preservados. Seu controlador será oculto novamente se você começar DS4Windows com ocultar habilitado.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Mostrar títulos dos ícones</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Mostrar rodapé da visão geral</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mantenha a saída de áudio Windows atual</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Restaurar o dispositivo de reprodução anterior se Windows selecionar um dispositivo de áudio DS4Windows recém-criado durante a inicialização ou reconectar. Os padrões de microfone e comunicação permanecem inalterados.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows saída de áudio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Configurações de som</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Selecione o dispositivo de reprodução Windows usado pelos seus jogos e aplicativos.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows está enviando áudio para um controlador virtual. O encaminhamento de áudio do controlador está habilitado; verifique sua fonte de áudio e rota de saída se você não ouvir nada.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows está enviando áudio para um controlador virtual. Selecione seus alto-falantes ou fones de ouvido usuais nas configurações de som, ou habilite a transmissão de áudio do controlador para esse controlador.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Exibir a saída de áudio Windows</value>
   </data>
 </root>
