@@ -77,7 +77,7 @@ public sealed class AxisConfigScrollingTests
                 "Readings must not squeeze the axis controls out of view.");
             foreach (Border card in Visuals(readings).OfType<Border>().Where(card => card.Width == 292))
             {
-                var cards = (WrapPanel)LogicalTreeHelper.GetParent(card);
+                var cards = (FrameworkElement)LogicalTreeHelper.GetParent(card);
                 Point position = card.TranslatePoint(new Point(), cards);
                 Assert.IsTrue(position.X + card.ActualWidth + card.Margin.Right <= cards.ActualWidth + 1,
                     "Docked readings cards must fit inside the actual scroll viewport, including its gutter.");

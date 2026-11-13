@@ -9,7 +9,7 @@
         lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         mc:Ignorable="d"
-        Title="{lex:Loc ControllerRegOptWin.WinTitle}" Height="500" Width="760" MinHeight="390" MinWidth="560"
+        Title="{lex:Loc ControllerRegOptWin.WinTitle}" Height="514" Width="760" MinHeight="390" MinWidth="560"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Style="{DynamicResource WindowStyle}" Closed="Window_Closed">
     <Window.Resources>
@@ -22,7 +22,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{lex:Loc DeviceOptions}" Style="{DynamicResource BridgeSectionTitleStyle}" FontSize="22" Margin="0,0,0,14"/>
-        <ScrollViewer Grid.Row="1" Style="{DynamicResource BridgeDropDownScrollViewerStyle}" CanContentScroll="False" Padding="0,0,8,0">
+        <ScrollViewer x:Name="deviceOptionsScroll" Grid.Row="1" Style="{DynamicResource BridgeDropDownScrollViewerStyle}" CanContentScroll="False" Padding="0,0,8,0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

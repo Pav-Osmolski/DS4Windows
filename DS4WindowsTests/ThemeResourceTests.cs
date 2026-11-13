@@ -77,7 +77,10 @@ namespace DS4WindowsTests
                         Assert.IsFalse(string.IsNullOrWhiteSpace(logging.ToolTip?.ToString()));
                         var controllerList = (ListBox)devices.FindName("controllerListBox");
                         controllerList.ItemsSource = new[] { new { IdText = "DualSense" } };
-                        ThemeConsistencyValidation.Layout((FrameworkElement)devices.Content, 760, 500);
+                        ThemeConsistencyValidation.Layout((FrameworkElement)devices.Content, devices.Width,
+                            devices.Height - SystemParameters.WindowCaptionHeight - 2 * SystemParameters.ResizeFrameHorizontalBorderHeight);
+                        Assert.AreEqual(0d, ((ScrollViewer)devices.FindName("deviceOptionsScroll")).ScrollableHeight, 0.1,
+                            "The default window size must include both diagnostics options without scrolling.");
                         var row = (ListBoxItem)controllerList.ItemContainerGenerator.ContainerFromIndex(0);
                         var inset = row.TranslatePoint(new Point(), controllerList);
                         Assert.AreEqual(inset.Y, controllerList.ActualHeight - inset.Y - row.ActualHeight, 1d,
@@ -86,7 +89,8 @@ namespace DS4WindowsTests
                             "A single detected controller must have equal space to the left and right.");
 
                         controllerList.ItemsSource = Enumerable.Repeat(new { IdText = "DualSense" }, 8).ToArray();
-                        ThemeConsistencyValidation.Layout((FrameworkElement)devices.Content, 760, 500);
+                        ThemeConsistencyValidation.Layout((FrameworkElement)devices.Content, devices.Width,
+                            devices.Height - SystemParameters.WindowCaptionHeight - 2 * SystemParameters.ResizeFrameHorizontalBorderHeight);
                         var controllerScroll = ThemeConsistencyValidation.Visuals(controllerList).OfType<ScrollViewer>().First();
                         Assert.IsGreaterThan(0d, controllerScroll.ScrollableHeight, "Long controller lists must scroll.");
                         var details = (TabControl)devices.FindName("deviceSettingsTabControl");

@@ -108,14 +108,22 @@ public class AxisConfigAlignmentTests
             if (theme is not "DefaultTheme" and not "DarkTheme")
                 readings.Resources.MergedDictionaries.Add(DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.Create(
                     Enum.Parse<DS4Windows.AppThemeChoice>(theme), highContrast: false));
-            readings.Measure(new Size(360, 1200));
-            readings.Arrange(new Rect(0, 0, 360, 1200));
+            readings.Measure(new Size(330, 1200));
+            readings.Arrange(new Rect(0, 0, 330, 1200));
             readings.UpdateLayout();
             var cards = Visuals(readings).OfType<Border>().Where(b => b.Child is StackPanel && b.Width == 292).ToArray();
             Assert.IsGreaterThan(3, cards.Length);
             var status = (Border)readings.FindName("controllerStatusCard");
             foreach (var card in cards)
                 Assert.AreEqual(status.ActualWidth, card.ActualWidth, 0.1, "Controller status and plots must share their width in every theme.");
+            var scrollBar = Visuals(readings).OfType<System.Windows.Controls.Primitives.ScrollBar>()
+                .Single(b => b.Orientation == Orientation.Vertical);
+            foreach (var card in cards)
+            {
+                double gap = scrollBar.TranslatePoint(new Point(), readings).X -
+                    card.TranslatePoint(new Point(card.ActualWidth, 0), readings).X;
+                Assert.IsTrue(gap >= 12 && gap <= 24, $"Readings gutter must stay compact in {theme}: {gap}.");
+            }
             Save(status, $"readings-status-{theme}.png");
         });
     }
