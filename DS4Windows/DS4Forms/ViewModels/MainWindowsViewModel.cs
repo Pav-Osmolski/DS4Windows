@@ -31,6 +31,13 @@ using DS4Windows.InputDevices;
 
 namespace DS4WinWPF.DS4Forms.ViewModels
 {
+    public readonly record struct OverviewBatteryIndicator(int Percent)
+    {
+        public double Fill => Math.Clamp(Percent, 0, 100) / 100d;
+        public bool IsLow => Percent is >= 0 and < 25;
+        public bool IsCritical => Percent is >= 0 and <= 10;
+    }
+
     public sealed class OverviewOutputControllerChoice
     {
         public OverviewOutputControllerChoice(string name, OutContType type, bool isEnabled = true)
@@ -136,6 +143,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
 
         public event EventHandler SelectedControllerChanged;
+        public event EventHandler SelectedControllerNumberChanged;
         public event EventHandler HasSelectedControllerChanged;
         public event EventHandler CurrentProfileNameChanged;
         public event EventHandler HasSelectedProfileChanged;
@@ -144,6 +152,11 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler SelectedControllerConnectionChanged;
         public event EventHandler SelectedControllerLatencyChanged;
         public event EventHandler SelectedControllerBatteryChanged;
+        public event EventHandler SelectedControllerBatteryIndicatorChanged
+        {
+            add => SelectedControllerBatteryChanged += value;
+            remove => SelectedControllerBatteryChanged -= value;
+        }
         public event EventHandler SelectedControllerStartupTitleChanged;
         public event EventHandler SelectedControllerStartupDetailChanged;
         public event EventHandler SelectedControllerIsReadyChanged;
@@ -175,6 +188,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler<QuickProfileSettingChangedEventArgs> QuickProfileSettingChanged;
 
         public bool HasSelectedController => selectedController != null;
+        public string SelectedControllerNumber => selectedController == null
+            ? string.Empty : UiText.Format("Controller {0}", selectedController.DisplayDevIndex);
         public bool HasSelectedProfile => HasValidSelectedDevice &&
             !string.IsNullOrWhiteSpace(selectedController.SelectedProfile);
         public bool NeedsProfileSelection => HasSelectedController && !HasSelectedProfile;
@@ -193,6 +208,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public string SelectedControllerBattery =>
             selectedController?.BatteryState ?? "--";
+
+        public OverviewBatteryIndicator SelectedControllerBatteryIndicator =>
+            new(selectedController?.Device?.Battery ?? -1);
 
         public string SelectedControllerStartupTitle =>
             selectedControllerStartupStatus.Title;
@@ -638,6 +656,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         {
             CaptureRuntimeSnapshot(App.rootHub);
             SelectedControllerChanged?.Invoke(this, EventArgs.Empty);
+            SelectedControllerNumberChanged?.Invoke(this, EventArgs.Empty);
             HasSelectedControllerChanged?.Invoke(this, EventArgs.Empty);
             CurrentProfileNameChanged?.Invoke(this, EventArgs.Empty);
             HasSelectedProfileChanged?.Invoke(this, EventArgs.Empty);

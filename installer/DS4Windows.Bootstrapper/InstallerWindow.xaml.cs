@@ -31,13 +31,14 @@ namespace DS4Windows.Bootstrapper
             Closed += (_, __) => application.OnWindowClosed();
         }
 
-        internal void ShowConfirmation(InstallerMode detectedMode, IReadOnlyDictionary<string, PackageState> packages, bool infrastructureHealthy, bool relatedFakerInput = false,
+        internal void ShowConfirmation(InstallerMode detectedMode, IReadOnlyDictionary<string, PackageState> packages, bool infrastructureHealthy, bool startMenuShortcut, bool relatedFakerInput = false,
             string hidHideVersion = null, string fakerInputVersion = null)
         {
             mode = detectedMode;
             HidePages();
             ConfirmationPage.Visibility = Visibility.Visible;
             OptionsCard.Visibility = Visibility.Visible;
+            StartMenuShortcutCheckBox.IsChecked = startMenuShortcut;
             applying = false;
 
             switch (mode)
@@ -69,6 +70,11 @@ namespace DS4Windows.Bootstrapper
             ViiperLabel.Text = InfrastructureProbe.ViiperDisplayName;
             ViiperStatus.Text = infrastructureHealthy ? "Ready" : "Will install or repair";
             UsbipStatus.Text = infrastructureHealthy ? "Ready" : "Will verify before changing";
+            if (Installation.UsbipComponentState.IsPaused(Installation.UsbipComponentState.Read()))
+            {
+                ViiperStatus.Text = "Virtual controller output paused";
+                UsbipStatus.Text = "Will preserve your choice";
+            }
             optionalDrivers.Detect(packages, relatedFakerInput);
             Ds4Label.Text = "DS4Windows " + typeof(InstallerWindow).Assembly.GetName().Version.ToString(3);
             HidHideLabel.Text = OptionalDriverVersions.Label("HidHide", optionalDrivers.HidHide, hidHideVersion, OptionalDriverVersions.BundledHidHide);
@@ -250,7 +256,7 @@ namespace DS4Windows.Bootstrapper
             var action = mode == InstallerMode.Uninstall ? LaunchAction.Uninstall :
                          mode == InstallerMode.Repair ? LaunchAction.Repair : LaunchAction.Install;
             application.Begin(action, DesktopShortcutCheckBox.IsChecked == true,
-                HidHideCheckBox.IsChecked == true, FakerInputCheckBox.IsChecked == true);
+                StartMenuShortcutCheckBox.IsChecked == true, HidHideCheckBox.IsChecked == true, FakerInputCheckBox.IsChecked == true);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) => application.Close(1223);

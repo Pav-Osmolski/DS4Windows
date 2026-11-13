@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using DS4WinWPF;
 using DS4WinWPF.DS4Forms;
 using System;
 using System.Threading;
@@ -12,6 +13,102 @@ namespace DS4WindowsTests
     public class ThemeResourceTests
     {
         public TestContext TestContext { get; set; }
+
+        private static void ValidateProfileEditorLightbarLifecycle(Application application)
+        {
+            // App.xaml supplies this diagram-button style in the running app.
+            application.Resources.Add("NoBGHoverBtn", new Style(typeof(Button)));
+            try
+            {
+                foreach (bool visitLightbar in new[] { false, true })
+                {
+                    var editor = new ProfileEditor(DS4Windows.Global.TEST_PROFILE_INDEX);
+                    try
+                    {
+                        var lightbar = (DeferredProfilePage)editor.FindName("lightbarPage");
+                        Assert.IsFalse(lightbar.IsMaterialized);
+                        if (visitLightbar)
+                        {
+                            lightbar.Ready = true;
+                            lightbar.EnsureContent();
+                            Assert.IsNotNull(((FrameworkElement)lightbar.Content).FindName("colorGB"));
+                            var touchpad = (DeferredProfilePage)editor.FindName("touchpadPage");
+                            touchpad.Ready = true;
+                            touchpad.EnsureContent();
+                            var content = (FrameworkElement)touchpad.Content;
+                            var mode = (ComboBox)content.FindName("touchpadOutModeCombo");
+                            var distance = (Xceed.Wpf.Toolkit.IntegerUpDown)content.FindName("touchpadSwipeDistanceInput");
+                            ThemeConsistencyValidation.Layout(content, 640, 600);
+                            Assert.IsGreaterThan(0d, distance.ActualHeight);
+                            Assert.IsFalse(distance.IsEnabled, "Mouse mode must show the field as unavailable.");
+                            mode.SelectedIndex = 1;
+                            ThemeConsistencyValidation.Layout(content, 640, 600);
+                            Assert.IsTrue(distance.IsEnabled, "Controls mode must enable the distance field.");
+                        }
+                    }
+                    finally { editor.RetireEditorSession(); }
+                }
+            }
+            finally { application.Resources.Remove("NoBGHoverBtn"); }
+        }
+
+        private static void ValidateControllerSettingsDialogs(Application application)
+        {
+            var service = (DS4Windows.ControlService)System.Runtime.CompilerServices.RuntimeHelpers
+                .GetUninitializedObject(typeof(DS4Windows.ControlService));
+            service.DS4Controllers = System.Array.Empty<DS4Windows.DS4Device>();
+            var dark = new ResourceDictionary
+            {
+                Source = new Uri("/DS4Windows;component/DS4Forms/Themes/DarkTheme.xaml", UriKind.Relative),
+            };
+            try
+            {
+                foreach (bool useDarkTheme in new[] { false, true })
+                {
+                    if (useDarkTheme) application.Resources.MergedDictionaries.Add(dark);
+                    var devices = new ControllerRegisterOptionsWindow(new DS4Windows.ControlServiceDeviceOptions(), service);
+                    try
+                    {
+                        var controllerList = (ListBox)devices.FindName("controllerListBox");
+                        controllerList.ItemsSource = new[] { new { IdText = "DualSense" } };
+                        ThemeConsistencyValidation.Layout((FrameworkElement)devices.Content, 760, 500);
+                        var row = (ListBoxItem)controllerList.ItemContainerGenerator.ContainerFromIndex(0);
+                        var inset = row.TranslatePoint(new Point(), controllerList);
+                        Assert.AreEqual(inset.Y, controllerList.ActualHeight - inset.Y - row.ActualHeight, 1d,
+                            "A single detected controller must have equal space above and below its row.");
+                        Assert.AreEqual(inset.X, controllerList.ActualWidth - inset.X - row.ActualWidth, 1d,
+                            "A single detected controller must have equal space to the left and right.");
+
+                        controllerList.ItemsSource = Enumerable.Repeat(new { IdText = "DualSense" }, 8).ToArray();
+                        ThemeConsistencyValidation.Layout((FrameworkElement)devices.Content, 760, 500);
+                        var controllerScroll = ThemeConsistencyValidation.Visuals(controllerList).OfType<ScrollViewer>().First();
+                        Assert.IsGreaterThan(0d, controllerScroll.ScrollableHeight, "Long controller lists must scroll.");
+                        var details = (TabControl)devices.FindName("deviceSettingsTabControl");
+                        Assert.IsNotNull(details.Template.FindName("PART_SelectedContentHost", details));
+                    }
+                    finally { devices.Close(); }
+                }
+            }
+            finally { application.Resources.MergedDictionaries.Remove(dark); }
+
+            var profiles = new ProfileList();
+            profiles.ProfileListCol.Add(new ProfileEntity { Name = "Default" });
+            profiles.ProfileListCol.Add(new ProfileEntity { Name = "Testing" });
+            var swipe = new SwipeProfilesEditor(profiles, new[] { "Testing" });
+            try
+            {
+                ThemeConsistencyValidation.Layout((FrameworkElement)swipe.Content, 500, 460);
+                var rows = (ItemsControl)swipe.FindName("profilesListBox");
+                Assert.AreEqual(2, rows.Items.Count);
+                Assert.IsTrue(((SwipeProfileItem)rows.Items[1]).IsAllowed);
+                ((Button)swipe.FindName("clearAllBtn")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                Assert.IsFalse(((SwipeProfileItem)rows.Items[1]).IsAllowed);
+                ((Button)swipe.FindName("selectAllBtn")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                Assert.IsTrue(((SwipeProfileItem)rows.Items[0]).IsAllowed);
+            }
+            finally { swipe.Close(); }
+        }
+
         [TestMethod]
         public void DefaultThemeLoadsBridgeShellStylesOnFreshConfiguration()
         {
@@ -94,6 +191,8 @@ namespace DS4WindowsTests
                     Assert.AreEqual("Preparing verified package...",
                         ((TextBlock)setupProgress.FindName(
                             "phaseText")).Text);
+                    ValidateProfileEditorLightbarLifecycle(application);
+                    ValidateControllerSettingsDialogs(application);
                     Switch2StickCalibrationEditorTests.ValidateStickCalibrationWindow(application);
                     BindingWindowLiveInputLayoutTests.ValidateRenderedBindingWindows(
                         application, resultsDirectory, renderedFiles);
@@ -108,19 +207,24 @@ namespace DS4WindowsTests
                     SettingsStorageLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     UpdateStorageLayoutValidation.Validate(application, renderedFiles);
                     new ContextualHeaderTests { TestContext = TestContext }.ValidateProfileActions();
+                    HidHideRecoveryWindowTests.ValidateExplicitSelection();
                 }
                 catch (Exception ex)
                 {
                     failure = ex;
                 }
             };
-            HeadlessWpfDispatcher.Invoke(thread);
+            // This matrix constructs many editor pages and exports 157 PNGs.
+            // Keep a bounded deadline without imposing a single-interaction
+            // budget on the entire render/export workload.
+            HeadlessWpfDispatcher.Invoke(thread, timeout: TimeSpan.FromSeconds(90));
             if (failure != null)
             {
                 Assert.Fail(failure.ToString());
             }
+            HeadlessWpfDispatcher.Invoke(ThemeConsistencyValidation.ValidateAudioHapticsTopEdge);
             // Main theme coverage plus one DirectInput view for each of six themes.
-            Assert.AreEqual(161, renderedFiles.Count);
+            Assert.AreEqual(163, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

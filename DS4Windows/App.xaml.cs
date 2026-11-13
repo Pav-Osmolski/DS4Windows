@@ -183,6 +183,13 @@ namespace DS4WinWPF
                 return;
             }
 
+            if (DS4Windows.ViiperSetupManager.TryRunUsbipComponentHost(e.Args, out int usbipExitCode))
+            {
+                runShutdown = false;
+                Current.Shutdown(usbipExitCode);
+                return;
+            }
+
             if (DS4Windows.ViiperSetupManager.
                 TryRunElevatedInstallerHost(e.Args,
                     out int viiperInstallerExitCode))
@@ -432,7 +439,7 @@ namespace DS4WinWPF
             logHolder = new LoggerHolder(rootHub);
             Logger logger = logHolder.Logger;
             string version = DS4Windows.Global.exeDisplayVersion;
-            logger.Info($"DS4Windows version {version}");
+            logger.Info($"DS4Windows version {version}{DS4Windows.Global.ForkLogSuffix}");
             logger.Info($".NET runtime: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
             logger.Info($"DS4Windows exe file: {DS4Windows.Global.exeFileName}");
             logger.Info($"DS4Windows Assembly Architecture: {(Environment.Is64BitProcess ? "x64" : "x86")}");
@@ -507,8 +514,8 @@ namespace DS4WinWPF
             // elevation itself, so DS4Windows does not need to stay elevated.
             if (Environment.Is64BitProcess)
             {
-                DS4Windows.ViiperSetupManager.
-                    RefreshSelectedStartupTaskOnLaunch();
+                if (!DS4Windows.Installation.UsbipComponentState.IsPaused(DS4Windows.Installation.UsbipComponentState.Read()))
+                    DS4Windows.ViiperSetupManager.RefreshSelectedStartupTaskOnLaunch();
                 // Keep the UI and repair diagnostics available when the
                 // backend is unhealthy. Virtual output already fails closed
                 // at its own readiness gate; exiting here made an install
@@ -610,7 +617,7 @@ namespace DS4WinWPF
         {
             DS4Windows.PortableBrokerContext portable =
                 DS4Windows.PortableBrokerContext.Current;
-            if (portable == null) return true;
+            if (portable == null || DS4Windows.Installation.UsbipComponentState.IsPaused(DS4Windows.Installation.UsbipComponentState.Read())) return true;
             if (!portable.IsVerifiedBackend(portable.ViiperPath)) return true;
             try
             {
@@ -1252,6 +1259,7 @@ namespace DS4WinWPF
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            DS4Windows.WindowsPlaybackProtection.Shutdown();
             if (watchingThemePreferences) Microsoft.Win32.SystemEvents.UserPreferenceChanged -= WindowsThemePreferenceChanged;
             try
             {

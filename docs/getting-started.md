@@ -29,7 +29,9 @@ this fork currently publishes unsigned builds.
 
 For a standard installation, download the **Setup_x64.exe** asset and run it.
 Setup shows the application/backend versions and checks the shared drivers.
-Review the optional HidHide and FakerInput selections, then choose **Install**.
+Choose whether to create desktop and Start menu shortcuts, review the optional
+HidHide and FakerInput selections, then choose **Install**. Setup remembers
+your Start menu choice for later repairs and updates.
 Healthy existing driver installations are kept; follow any repair or restart
 instructions shown before testing your controller.
 
@@ -245,7 +247,7 @@ Current fork builds check this repository and use the matching fork DS4Updater
 - **Double input:** check HidHide is installed and enabled for the physical
   controller, then disable overlapping remapping software for the game.
 - **No virtual controller / backend not ready:** follow the displayed startup
-  error. Use **Settings > Controllers > Install / Repair VIIPER** when requested, and restart
+  error. Use **Settings > Components > Install / Repair VIIPER** when requested, and restart
   only if setup asks. Keep DS4Windows and its bundled VIIPER version together.
 - **No native haptics:** confirm the game supports them, the profile emulates
   DualSense, controller audio/speaker support is enabled, and Steam Input is

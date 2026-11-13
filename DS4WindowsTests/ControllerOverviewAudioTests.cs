@@ -152,7 +152,28 @@ public sealed class ControllerOverviewAudioTests
             var themedOverview = new ControllerOverviewControl();
             themedOverview.SetResourceReference(Control.ForegroundProperty, "ForegroundColor");
             themedOverview.SetResourceReference(Control.BackgroundProperty, "SurfaceBackgroundColor");
-            var model = Model(new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB, sony: true), "");
+            var protectedController = new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB, sony: true)
+            {
+                CurrentExclusiveStatus = DS4Device.ExclusiveStatus.HidHideAffected
+            };
+            themedOverview.DataContext = Model(protectedController);
+            ThemeConsistencyValidation.Layout(themedOverview, 1100, 950);
+            var fill = (Border)themedOverview.FindName("overviewBatteryFill");
+            foreach (var (percent, brush) in new[]
+            {
+                (100, "SuccessColor"), (50, "SuccessColor"), (25, "SuccessColor"),
+                (24, "WarningColor"), (11, "WarningColor"), (10, "DangerColor"), (0, "DangerColor")
+            })
+            {
+                protectedController.SetBattery(percent);
+                themedOverview.DataContext = Model(protectedController);
+                themedOverview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+                Assert.AreEqual(percent / 100d, ((ScaleTransform)fill.RenderTransform).ScaleX, 0.001);
+                Assert.AreEqual(((SolidColorBrush)themedOverview.FindResource(brush)).Color,
+                    ((SolidColorBrush)fill.Background).Color);
+            }
+
+            var model = Model(protectedController, "");
             themedOverview.DataContext = model;
             Assert.AreEqual("Select a profile", model.SelectedControllerStartupTitle);
             themedOverview.Measure(new Size(1100, 950));
@@ -173,10 +194,137 @@ public sealed class ControllerOverviewAudioTests
             string path = Path.Combine(resultsDirectory, $"overview-no-profile-{name}.png");
             using (var stream = File.Create(path)) encoder.Save(stream);
             renderedFiles.Add(path);
-            themedOverview.DataContext = Model(new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB, sony: true));
+            themedOverview.DataContext = Model(protectedController);
             themedOverview.UpdateLayout();
             Assert.IsTrue(((FrameworkElement)themedOverview.FindName("quickProfileControls")).IsEnabled);
             Assert.AreEqual(Visibility.Collapsed, ((FrameworkElement)themedOverview.FindName("profileSelectionNotice")).Visibility);
+            Assert.AreEqual(DS4WinWPF.Translations.Strings.HidHideAccess,
+                ((TextBlock)themedOverview.FindName("overviewAccessStatus")).Text);
+            var audioCard = (Border)themedOverview.FindName("managedSpeakerRouteCard");
+            var microphoneCard = (Border)themedOverview.FindName("overviewMicrophoneCardBorder");
+            double Bottom(Border card) => card.TranslatePoint(new Point(0, card.ActualHeight), themedOverview).Y;
+            Assert.AreEqual(Bottom(audioCard), Bottom(microphoneCard), 0.1);
+
+            themedOverview.Measure(new Size(660, 430));
+            themedOverview.Arrange(new Rect(0, 0, 660, 430));
+            themedOverview.UpdateLayout();
+            Assert.IsTrue(Bottom(audioCard) < Bottom(microphoneCard));
+            var scroll = (ScrollViewer)themedOverview.FindName("overviewScroll");
+            var actions = (Panel)themedOverview.FindName("overviewQuickActions");
+            Assert.IsNull(actions.Background);
+            Assert.IsGreaterThan(0d, scroll.ScrollableHeight);
+            var initialPosition = actions.TranslatePoint(new Point(), themedOverview);
+            foreach (Button button in actions.Children)
+            {
+                double top = button.TranslatePoint(new Point(), themedOverview).Y;
+                Assert.AreEqual(16d, top - scroll.ActualHeight, 0.1);
+                Assert.AreEqual(16d, themedOverview.ActualHeight - top - button.ActualHeight, 0.1);
+            }
+            scroll.ScrollToEnd();
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(initialPosition, actions.TranslatePoint(new Point(), themedOverview),
+                "Quick actions must stay above the footer while Overview scrolls.");
+
+            var showActions = (CheckBox)themedOverview.FindName("showQuickActions");
+            var showOptions = (CheckBox)themedOverview.FindName("showDeviceOptionsAction");
+            var optionsButton = (Button)themedOverview.FindName("overviewDeviceOptionsButton");
+            var controlButton = (Button)themedOverview.FindName("overviewControlPanelButton");
+            var infoButton = (Button)themedOverview.FindName("overviewControllerInfoButton");
+            showOptions.IsChecked = false;
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Collapsed, optionsButton.Visibility);
+            Assert.AreEqual(Visibility.Visible, infoButton.Visibility, "Controller info belongs to the controller card.");
+            showActions.IsChecked = false;
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Collapsed, actions.Visibility);
+            Assert.AreEqual(Visibility.Visible, scroll.Visibility, "Hiding the action bar must not hide Overview.");
+            showActions.IsChecked = true;
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Visible, actions.Visibility);
+            Assert.AreEqual(Visibility.Collapsed, optionsButton.Visibility, "Restoring the bar must retain button choices.");
+            showOptions.IsChecked = true;
+            bool optionsRequested = false, panelRequested = false, infoRequested = false;
+            themedOverview.DeviceOptionsRequested += (_, _) => optionsRequested = true;
+            themedOverview.ControlPanelRequested += (_, _) => panelRequested = true;
+            themedOverview.ControllerInfoRequested += (_, _) => infoRequested = true;
+            optionsButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            controlButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            infoButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            Assert.IsTrue(optionsRequested && panelRequested && infoRequested);
+            Assert.IsFalse(infoButton.IsDescendantOf(actions));
+            var showPanel = (CheckBox)themedOverview.FindName("showControlPanelAction");
+            showPanel.IsChecked = false;
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Collapsed, controlButton.Visibility);
+            showPanel.IsChecked = true;
+            themedOverview.UpdateLayout();
+
+            var titleToggle = (CheckBox)themedOverview.FindName("showFactTitles");
+            var titles = new[] { "overviewConnectionTitle", "overviewInputRateTitle", "overviewAccessTitle", "overviewOutputTitle" }
+                .Select(n => (TextBlock)themedOverview.FindName(n)).ToArray();
+            Rect Bounds(FrameworkElement element) => new(element.TranslatePoint(new Point(), themedOverview), element.RenderSize);
+            var headers = titles.Select(t => (DockPanel)t.Parent).ToArray();
+            var icons = headers.Select(h => (FrameworkElement)h.Children[0]).ToArray();
+            var values = headers.Select(h => (FrameworkElement)((Panel)h.Parent).Children[1]).ToArray();
+            var iconBounds = icons.Select(Bounds).ToArray();
+            var valueBounds = values.Select(Bounds).ToArray();
+            var headerBounds = headers.Select(Bounds).ToArray();
+            var cards = (FrameworkElement)themedOverview.FindName("quickProfileControls");
+            var cardsBefore = Bounds(cards);
+            titleToggle.IsChecked = false;
+            themedOverview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+            themedOverview.UpdateLayout();
+            for (int i = 0; i < titles.Length; i++)
+            {
+                Assert.AreEqual(Visibility.Hidden, titles[i].Visibility);
+                Assert.AreEqual(iconBounds[i], Bounds(icons[i]), "Icon positions and size must not change.");
+                Assert.AreEqual(valueBounds[i], Bounds(values[i]), "Values must retain their original line height and position.");
+                Assert.AreEqual(headerBounds[i], Bounds(headers[i]));
+            }
+            Assert.AreEqual(cardsBefore, Bounds(cards), "Hiding titles must not shift the rest of Overview.");
+            Assert.AreEqual(Visibility.Visible, ((TextBlock)themedOverview.FindName("overviewAccessStatus")).Visibility);
+            titleToggle.IsChecked = true;
+            var levels = (FrameworkElement)themedOverview.FindName("overviewLevelsCard");
+            var showLevels = (CheckBox)themedOverview.FindName("showLevels");
+            var microphone = (FrameworkElement)themedOverview.FindName("overviewMicrophoneCard");
+            showLevels.IsChecked = false;
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Collapsed, levels.Visibility);
+            Assert.AreEqual(Visibility.Visible, microphone.Visibility);
+            showLevels.IsChecked = true;
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Visible, levels.Visibility);
+            // Synthetic endpoint snapshots exercise the real UI without changing
+            // the user's Windows audio defaults or enumerating test devices.
+            themedOverview.ApplyWindowsAudioOutput(new("Desktop headphones", 0, -1));
+            themedOverview.UpdateLayout();
+            var routeHelp = (TextBlock)themedOverview.FindName("windowsAudioRouteHelp");
+            Assert.AreEqual(Visibility.Collapsed, routeHelp.Visibility);
+            themedOverview.ApplyWindowsAudioOutput(new("DS4Windows Controller 1 Audio", 4, 0));
+            themedOverview.Measure(new Size(1100, 950));
+            themedOverview.Arrange(new Rect(0, 0, 1100, 950));
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Visible, routeHelp.Visibility);
+            StringAssert.Contains(((TextBlock)themedOverview.FindName("windowsAudioOutputText")).Text, "DS4Windows Controller 1 Audio");
+            var routeImage = new RenderTargetBitmap(1100, 950, 96, 96, PixelFormats.Pbgra32);
+            routeImage.Render(themedOverview);
+            var routeEncoder = new PngBitmapEncoder();
+            routeEncoder.Frames.Add(BitmapFrame.Create(routeImage));
+            string routePath = Path.Combine(resultsDirectory, $"overview-windows-audio-{name}.png");
+            using (var stream = File.Create(routePath)) routeEncoder.Save(stream);
+            renderedFiles.Add(routePath);
+            var showWindowsAudio = (CheckBox)themedOverview.FindName("showWindowsAudioOutput");
+            showWindowsAudio.IsChecked = false;
+            themedOverview.ApplyWindowsAudioOutput(new("DS4Windows Controller 1 Audio", 4, 0));
+            Assert.AreEqual(Visibility.Collapsed, ((FrameworkElement)themedOverview.FindName("windowsAudioRoute")).Visibility,
+                "Audio notifications must not override the saved visibility choice.");
+            showWindowsAudio.IsChecked = true;
+            themedOverview.ApplyWindowsAudioOutput(new("Desktop headphones", 0, -1));
+            Assert.AreEqual(Visibility.Visible, ((FrameworkElement)themedOverview.FindName("windowsAudioRoute")).Visibility);
+            themedOverview.ApplyWindowsAudioOutput(new("Unrelated USB/IP audio", 6, -1));
+            Assert.AreEqual(Visibility.Collapsed, routeHelp.Visibility, "Never claim ownership of another app's virtual audio device.");
+            themedOverview.ApplyWindowsAudioOutput(null);
+            Assert.AreEqual(Visibility.Collapsed, ((FrameworkElement)themedOverview.FindName("windowsAudioRoute")).Visibility);
         }
         resources[0] = originalTheme;
         var managed = (FrameworkElement)overview.FindName("managedAudioLevelsPanel");
@@ -309,6 +457,7 @@ public sealed class ControllerOverviewAudioTests
                     { VendorID = 0x054C, ProductID = 0x0CE6 }));
             }
         }
+        internal void SetBattery(int percent) => battery = percent;
         public override bool IsAlive() => true;
     }
 

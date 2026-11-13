@@ -304,6 +304,17 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
         public event EventHandler ShowViiperTrayIconChanged;
 
+        public bool PreserveWindowsAudioOutput
+        {
+            get => Global.PreserveWindowsAudioOutput;
+            set
+            {
+                if (value == Global.PreserveWindowsAudioOutput) return;
+                Global.PreserveWindowsAudioOutput = value;
+                Global.Save();
+            }
+        }
+
         public int IconChoiceIndex
         {
             get => (int)DS4Windows.Global.UseIconChoice;

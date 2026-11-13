@@ -390,7 +390,7 @@ Example: whyme_DS4Windows</value>
     <value>Real World Calibration</value>
   </data>
   <data name="ViGEmPluginFailure" xml:space="preserve">
-    <value>The virtual controller could not start (error {0}). Open Settings &gt; Controllers and select Install / Repair VIIPER. Check Log for details.</value>
+    <value>The virtual controller could not start (error {0}). Open Settings &gt; Components and select Install / Repair VIIPER. Check Log for details.</value>
   </data>
   <data name="CRC32Fail" xml:space="preserve">
     <value>Data integrity checks failed for wireless device. Closing device.</value>
@@ -849,7 +849,7 @@ Disabled:
     <value>Touchpad</value>
   </data>
   <data name="ViGEm117MinNeeded" xml:space="preserve">
-    <value>Requires the supported VIIPER and USB/IP versions. Open Settings &gt; Controllers and select Install / Repair VIIPER.</value>
+    <value>Requires the supported VIIPER and USB/IP versions. Open Settings &gt; Components and select Install / Repair VIIPER.</value>
   </data>
   <data name="AbsoluteMouse" xml:space="preserve">
     <value>Absolute Mouse</value>
@@ -8486,4 +8486,109 @@ X axis: {0}, Y axis: {1}</value>
     <value>Published by Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Color preview</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Minimum swipe distance</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Increase the distance to prevent accidental swipe button presses.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Components</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Virtual controller support and optional drivers</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Manage components…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Virtual controller output</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Checking component status…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Manage the software and drivers that support your controller setup.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Checking…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Open VIIPER log</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Remove USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Optional drivers</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>These drivers can also be used by other apps on this PC.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Hiding settings</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Open HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Use Windows input</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Manage shared drivers…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Copy component diagnostics</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Gyro deadband</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Suppresses small gyro readings near rest. Use 0 to pass them through to the game. The default is 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Customize</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Output &amp; feedback</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Output levels &amp; processing</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Input rate</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Show input report rate</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Compact spacing</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Access</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Battery level reported by the controller. The plus sign (+) indicates charging or external power.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>How the physical controller is connected to this PC.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>How DS4Windows accesses the physical controller. HidHide can keep it out of games to prevent double input.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Choose Overview sections, icon titles, spacing and footer buttons.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Choose where controller audio plays. Enable streaming to change this setting.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Disconnects the selected wireless controller. USB controllers must be unplugged.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Recover hidden controllers</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Select only the physical controller you want to use outside DS4Windows. Older hiding rules may have been added manually or by another app. Nothing is selected automatically.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Restore selected controllers</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>No recoverable hiding rules were found. Rules in use by another DS4Windows session are protected.</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>A backup is saved before changes. Unselected rules and HidHide application permissions are preserved. Your controller will be hidden again if you start DS4Windows with hiding enabled.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Selected hiding rules were removed. Reconnect your controller if Windows has not refreshed it yet. Backup:</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Recover hidden controllers…</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Show icon titles</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Show Overview footer</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve"><value>Keep my current Windows audio output</value></data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve"><value>Restore the previous playback device if Windows selects a newly created DS4Windows audio device during startup or reconnect. Microphone and communications defaults are unchanged. Turn this off to select a newly created controller output yourself.</value></data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve"><value>Windows audio output: {0}</value></data>
+  <data name="UI_55C4121106329520" xml:space="preserve"><value>Sound settings</value></data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve"><value>Choose the Windows playback device used by your games and apps.</value></data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve"><value>Windows is sending audio to a virtual controller. Controller audio forwarding is enabled; check its audio source and output route if you hear nothing.</value></data>
+  <data name="UI_49D2863948572913" xml:space="preserve"><value>Windows is sending audio to a virtual controller. Choose your usual speakers or headphones in Sound settings, or enable controller audio forwarding for that controller.</value></data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve"><value>Show Windows audio output</value></data>
 </root>

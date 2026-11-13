@@ -6,6 +6,11 @@ namespace DS4Windows
     {
         internal static IEnumerable<string> Describe(ViiperPrerequisiteStatus status)
         {
+            if (status.UsbipPaused)
+            {
+                yield return "Virtual controller output is paused by choice. Manage USB/IP in Settings > Components.";
+                yield break;
+            }
             yield return $"USB/IP (usbip-win2): installed version {status.UsbipVersion ?? "unknown or missing"}; required {ViiperSetupManager.RequiredUsbipVersion}";
             yield return $"USB/IP runtime: {(status.UsbipRuntimeReady ? "ready (driver communication succeeded)" : "not ready")}";
             if (!status.UsbipRuntimeReady && !string.IsNullOrWhiteSpace(status.UsbipProbeMessage))

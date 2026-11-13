@@ -317,7 +317,7 @@ def validate_setup_actions(setup_actions: str, setup_mutation_ownership: str) ->
         'AppendLogWithRetry',
         'SystemTool("WindowsPowerShell", "v1.0",',
         'arguments.Append(" -CorrelationId ")',
-        'ConfigureCommonShortcuts(ds4Path, desktopShortcut)',
+        'ConfigureCommonShortcuts(ds4Path, desktopShortcut, startMenuShortcut)',
         'ReadArgument(args, "--correlation-id")',
         'NormalizeCorrelationId(',
         'Environment.SpecialFolder.CommonPrograms',
@@ -461,6 +461,7 @@ def main() -> int:
     bundle = args.bundle_source.read_text(encoding="utf-8")
     required_contracts = [
         'Name="CreateDesktopShortcut"',
+        'Name="CreateStartMenuShortcut" Type="numeric" Value="1" Persisted="yes"',
         'Name="InstallHidHide"',
         'Name="InstallFakerInput"',
         'Id="ViiperUsbipSetup"',
@@ -509,6 +510,10 @@ def main() -> int:
             raise SystemExit(f"Bundle package is missing: {package_id}")
         if packages[package_id].get("Vital") != "yes":
             raise SystemExit(f"Bundle package must be vital: {package_id}")
+    for attribute in ("InstallArguments", "RepairArguments"):
+        arguments = packages["ViiperUsbipSetup"].get(attribute, "")
+        if '--start-menu-shortcut "[CreateStartMenuShortcut]"' not in arguments:
+            raise SystemExit(f"Start menu shortcut choice missing from {attribute}.")
     for package_id in ("HidHide", "FakerInput"):
         if package_id not in packages:
             raise SystemExit(f"Bundle package is missing: {package_id}")

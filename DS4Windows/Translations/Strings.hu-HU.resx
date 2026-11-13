@@ -6762,4 +6762,125 @@ A háttérben: </value>
     <value>Kiadó: Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Színelőnézet</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Csúsztatás minimális távolsága</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Növelje a távolságot a csúsztatás miatti véletlen gombnyomások elkerüléséhez.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Összetevők</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Virtuális vezérlők támogatása és választható illesztőprogramok</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Összetevők kezelése…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Virtuális vezérlőkimenet</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Összetevők állapotának ellenőrzése…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>A vezérlőkhöz használt szoftverek és illesztőprogramok kezelése.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Ellenőrzés…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>VIIPER-napló megnyitása</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>USB/IP eltávolítása…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Választható illesztőprogramok</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>A számítógép más alkalmazásai is használhatják ezeket az illesztőprogramokat.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Elrejtési beállítások</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>HidHide megnyitása…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows-bemenet használata</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Megosztott illesztőprogramok kezelése…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Összetevők diagnosztikájának másolása</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Giroszkóp holtzónája</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Kiszűri a giroszkóp kis értékeit nyugalmi helyzet közelében. A 0 továbbítja ezeket a játéknak. Az alapérték 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Testreszabás</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Kimenet és visszajelzés</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Kimeneti szintek és feldolgozás</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Bemeneti gyakoriság</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Bemeneti jelentések gyakoriságának megjelenítése</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Kompakt térköz</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Hozzáférés</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>A vezérlő által jelentett akkumulátorszint. A pluszjel (+) töltést vagy külső tápellátást jelez.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Megmutatja, hogyan csatlakozik a fizikai vezérlő ehhez a számítógéphez.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Megmutatja, hogyan éri el a DS4Windows a fizikai vezérlőt. A HidHide elrejtheti a játékok elől a kettős bevitel elkerülésére.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Az áttekintés szakaszainak, ikonfeliratainak, térközeinek és alsó gombjainak kiválasztása.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Válassza ki a vezérlő hangjának lejátszási helyét. A beállítás módosításához engedélyezze a hangátvitelt.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Leválasztja a kiválasztott vezeték nélküli vezérlőt. Az USB-s vezérlő kábelét ki kell húzni.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>A rejtett vezérlők visszaállítása</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Csak azt a fizikai vezérlőt válassza ki, amelyet a DS4Windows-on kívül szeretne használni. Előfordulhat, hogy a régebbi elrejtési szabályokat manuálisan vagy egy másik alkalmazás is hozzáadta.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>A kiválasztott elrejtési szabályokat eltávolították. Csatlakoztassa újra a vezérlőt, ha az Windows még nem frissítette.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Nem találtunk helyreállítható rejtett szabályokat. Egy másik DS4Windows munkamenet által használt szabályok védettek.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>A rejtett vezérlők helyreállítása.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>A kiválasztott vezérlők visszaállítása</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>A biztonsági mentés a módosítások előtt mentésre kerül. A nem kiválasztott szabályok és az HidHide alkalmazásengedélyek megmaradnak. A vezérlő ismét el lesz rejtve, ha elindítja a DS4Windows beállítást.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Ikonfeliratok megjelenítése</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Áttekintés alsó sávjának megjelenítése</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Az aktuális Windows audio kimenet megtartása</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Az előző lejátszási eszközt visszaállíthatja, ha a Windows kiválaszt egy újonnan létrehozott DS4Windows hangeszközt indítás vagy újbóli csatlakozás során. A mikrofon és a kommunikációs alapértelmezések változatlanok.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows audio kimenet: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Sound beállítások</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Válassza ki a játékok és alkalmazások által használt Windows lejátszási eszközt.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows hangot küld egy virtuális vezérlőhöz. A vezérlő hangátvitel engedélyezve van; ellenőrizze a hangforrást és kimeneti útvonalat, ha nem hall semmit.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>A Windows a hangot egy virtuális vezérlőhöz küldi. Válassza ki a szokásos hangszórókat vagy fejhallgatót a Hangbeállításokban, vagy engedélyezze a vezérlő audio továbbítását az adott vezérlőhöz.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>A Windows audio kimenet megjelenítése</value>
+  </data>
 </root>

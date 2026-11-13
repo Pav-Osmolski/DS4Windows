@@ -82,6 +82,8 @@ namespace DS4WinWPF.DS4Forms
             e.Handled = true;
         }
 
+        private void CloseBtn_Click(object sender, RoutedEventArgs e) => Close();
+
         private void Window_Closed(object sender, EventArgs e)
         {
             deviceOptsVM.SaveControllerConfigs();

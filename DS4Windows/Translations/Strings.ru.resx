@@ -6802,4 +6802,125 @@
     <value>Издатель: Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Предпросмотр цвета</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Минимальная длина свайпа</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Увеличьте расстояние, чтобы случайные свайпы не вызывали нажатия кнопок.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Компоненты</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Поддержка виртуальных геймпадов и дополнительные драйверы</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Управление компонентами…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Вывод виртуального геймпада</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Проверка состояния компонентов…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Управляйте программами и драйверами для ваших геймпадов.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Проверка…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Открыть журнал VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Удалить USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Дополнительные драйверы</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Эти драйверы могут использоваться и другими приложениями на этом ПК.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Настройки скрытия</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Открыть HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Использовать ввод Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Управление общими драйверами…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Копировать диагностику компонентов</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Мёртвая зона гироскопа</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Подавляет небольшие показания гироскопа вблизи покоя. Установите 0, чтобы передавать их в игру. Значение по умолчанию — 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Настроить</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Выход и обратная связь</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Уровни выхода и обработка</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Частота ввода</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Показать частоту отчётов о вводе</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Компактные интервалы</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Доступ</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Уровень заряда, сообщаемый контроллером. Знак «+» указывает на зарядку или внешнее питание.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Показывает, как физический контроллер подключён к этому компьютеру.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Показывает, как DS4Windows получает доступ к физическому контроллеру. HidHide может скрыть его от игр, чтобы избежать двойного ввода.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Выберите разделы обзора, подписи значков, интервалы и кнопки нижней панели.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Выберите, где воспроизводится звук контроллера. Включите передачу звука, чтобы изменить эту настройку.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Отключает выбранный беспроводной контроллер. Контроллер USB нужно отсоединить от кабеля.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Восстановить скрытые контроллеры</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Выберите только физический контролер, который вы хотите использовать вне DS4Windows. Более старые правила сокрытия могут быть добавлены вручную или другим приложением.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Выбранные правила сокрытия были удалены. Возобновите подключение к контроллеру, если Windows еще не обновил его.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Не найдено восстанавливаемых правил скрытия. Правила, используемые другой DS4Windows сессией, защищены.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Восстановление скрытых контроллеров.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Восстановление выбранных контроллеров</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Перед изменениями сохраняется резервная копия. Невыбранные правила и HidHide разрешения приложений сохраняются. Ваш контролер снова будет скрыт, если вы начнете DS4Windows с включенного скрывания.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Показывать подписи значков</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Показывать нижнюю панель обзора</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Сохраните текущий аудиовыход Windows</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Восстановите предыдущее устройство воспроизведения, если Windows выберет вновь созданное аудиоустройство DS4Windows во время запуска или повторного подключения. По умолчанию микрофон и коммуникации остаются неизменными.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Выход звука Windows {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Звуковые настройки</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Выберите устройство воспроизведения Windows, используемое вашими играми и приложениями.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows отправляет звук в виртуальный контролер. аудиопередача контроллера включена; проверьте его источник звука и маршрут выхода, если ничего не слышно.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows отправляет аудио на виртуальный контролер. Выберите обычные громкоговорители или наушники в настройках звука или включите передачу звука контроллером для этого контроллера.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Показать Windows аудиовыход</value>
+  </data>
 </root>

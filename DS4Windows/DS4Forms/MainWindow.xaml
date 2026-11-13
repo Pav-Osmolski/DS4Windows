@@ -49,6 +49,8 @@
                                                  EditProfileRequested="ControllerOverview_EditProfileRequested"
                                                  ControllerDetailsRequested="ControllerOverview_ControllerDetailsRequested"
                                                  ControllerInfoRequested="ControllerOverview_ControllerInfoRequested"
+                                                 DeviceOptionsRequested="ControllerOverview_DeviceOptionsRequested"
+                                                 ControlPanelRequested="ControllerOverview_ControlPanelRequested"
                                                  LightbarRequested="ControllerOverview_LightbarRequested"
                                                  DisconnectRequested="ControllerOverview_DisconnectRequested" />
                 </DockPanel>
@@ -491,10 +493,21 @@
                                         <TextBlock x:Name="profileModifiedHeader" Grid.Column="2" Foreground="{DynamicResource MutedForegroundColor}"/>
                                     </Grid>
                                     <ListBox Grid.Row="1" x:Name="profilesListBox" Background="Transparent" BorderThickness="0"
-                                             Padding="10" SelectionChanged="ProfilesListBox_SelectionChanged"
+                                             Padding="1" SelectionChanged="ProfilesListBox_SelectionChanged"
                                              MouseDoubleClick="ProfilesListBox_MouseDoubleClick"
                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                        <ListBox.Template>
+                                            <ControlTemplate TargetType="ListBox">
+                                                <ScrollViewer Style="{DynamicResource BridgeDropDownScrollViewerStyle}"
+                                                              Padding="{TemplateBinding Padding}"
+                                                              VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                                              HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                                              CanContentScroll="False">
+                                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </ScrollViewer>
+                                            </ControlTemplate>
+                                        </ListBox.Template>
                                         <ListBox.Resources>
                                             <localConverters:EscapeAccessKeysConverter x:Key="escapeAccessConvert" />
                                         </ListBox.Resources>
@@ -650,11 +663,12 @@
                         <RadioButton x:Name="settingsGeneralNav" Tag="General" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="{lex:Loc Strings:UI_C910D474DCD724BF}" IsChecked="True" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" ToolTip="{lex:Loc Strings:UI_8D53B1E0D958A669}" />
                         <RadioButton x:Name="settingsAppearanceNav" Tag="Appearance" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="{lex:Loc Strings:UI_3907FA7F80722A6F}" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" ToolTip="{lex:Loc Strings:UI_3A12DB04327C3CC4}" />
                         <RadioButton x:Name="settingsControllersNav" Tag="Controllers" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="{lex:Loc Strings:UI_BAEBF11E8395F926}" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" ToolTip="{lex:Loc Strings:UI_8F28E32CE3E90AD3}" />
+                        <RadioButton x:Name="settingsComponentsNav" Tag="Components" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="{lex:Loc Strings:UI_A150CE2216025931}" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" ToolTip="{lex:Loc Strings:UI_AEE83A92A713F644}" />
                         <RadioButton x:Name="settingsToolsNav" Tag="Tools" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="{lex:Loc Strings:UI_8DE934BDBAD6F478}" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" ToolTip="{lex:Loc Strings:UI_2642935903EB5C3C}" />
                         <RadioButton x:Name="settingsIntegrationsNav" Tag="Integrations" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="{lex:Loc Strings:UI_090512D93FCC3C0D}" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" ToolTip="{lex:Loc Strings:UI_649D5C58D98A430C}" />
                         <RadioButton x:Name="settingsAdvancedNav" Tag="Advanced" Click="SettingsCategory_Checked" GroupName="SettingsCategory" Content="{lex:Loc Strings:UI_9F088DBEBD6C3C70}" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" Checked="SettingsCategory_Checked" ToolTip="{lex:Loc Strings:UI_90AD95946D2D4248}" />
                     </WrapPanel>
-                    <ScrollViewer x:Name="settingsScrollViewer" Grid.Row="3" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Background="{DynamicResource SurfaceBackgroundColor}">
+                    <ScrollViewer x:Name="settingsScrollViewer" Grid.Row="3" Style="{DynamicResource BridgeDropDownScrollViewerStyle}" CanContentScroll="False" Padding="0,0,8,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Background="{DynamicResource SurfaceBackgroundColor}">
                         <Grid x:Name="settingsPages" Margin="0,0,0,8" Grid.IsSharedSizeScope="True">
                             <Grid.Resources>
                                 <Thickness x:Key="spaceMargin" Left="0" Right="0" Bottom="14" Top="0" />
@@ -881,21 +895,16 @@
                                 </StackPanel.Style>
                                 <TextBlock Text="{lex:Loc Strings:UI_8F28E32CE3E90AD3}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,0,0,16" />
                                 <Border Style="{DynamicResource BridgeCardStyle}">
-                                    <StackPanel>
-                                        <TextBlock Text="{lex:Loc Strings:UI_7EAD29233D4E2E15}" Style="{DynamicResource BridgeSectionTitleStyle}" />
-                                        <TextBlock Text="{lex:Loc Strings:UI_74F4CBA018AE9D93}" Style="{DynamicResource BridgeSectionDescriptionStyle}" />
-                                        <TextBlock x:Name="viiperStatusText" Text="{lex:Loc Strings:UI_FBE3B925F47287BC}" TextWrapping="Wrap" Margin="0,0,0,14" FontWeight="SemiBold" />
-                                        <WrapPanel>
-                                            <Button x:Name="viiperSetupBtn" Content="{lex:Loc Strings:UI_FB55C412158E8F13}" Click="ViiperSetupBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,10,10" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                            <Button x:Name="viiperRefreshBtn" Content="{lex:Loc Strings:UI_0E91610117029A62}" Margin="0,0,10,10" Click="ViiperRefreshBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                        </WrapPanel>
-                                        <CheckBox Content="{lex:Loc Strings:UI_8D6119ABAE8F59DF}" IsChecked="{Binding PromptForViiperSetup}" ToolTip="{lex:Loc Strings:UI_F4F20496B29348C6}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,4,0,0" />
-                                        <CheckBox x:Name="showViiperTrayIconCk" Content="{lex:Loc Strings:UI_35DCB5EE8EF9B079}" IsChecked="{Binding ShowViiperTrayIcon}" IsEnabled="{Binding SystemIntegrationEnabled}" ToolTip="{lex:Loc Strings:UI_BE9648022D712E1D}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}" Margin="0,10,0,0" />
-                                        <TextBlock Text="{lex:Loc Strings:UI_ACB2FE3FC90938F5}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="28,4,0,0" />
-                                    </StackPanel>
+                                    <DockPanel LastChildFill="True">
+                                        <Button DockPanel.Dock="Right" Margin="14,0,0,0" VerticalAlignment="Center" Content="{lex:Loc Strings:UI_BB0D58B4D58B1A64}" Click="ManageComponents_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" />
+                                        <StackPanel>
+                                            <TextBlock Text="{lex:Loc Strings:UI_606E3477AC6CFC6A}" Style="{DynamicResource BridgeSectionTitleStyle}" />
+                                            <TextBlock x:Name="componentControllerSummary" Text="{lex:Loc Strings:UI_271AA17B0FD7E5D4}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0" />
+                                        </StackPanel>
+                                    </DockPanel>
                                 </Border>
                                 <Border Style="{DynamicResource BridgeCardStyle}"><local:BatteryAlertsControl/></Border>
-                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                <Border x:Name="preventDoubleInputCard" Style="{DynamicResource BridgeCardStyle}">
                                     <StackPanel>
                                         <TextBlock Text="{lex:Loc Strings:UI_B8F50E0DE4A680C6}" Style="{DynamicResource BridgeSectionTitleStyle}" />
                                         <TextBlock Text="{lex:Loc Strings:UI_D61F08F73EFF234E}" Style="{DynamicResource BridgeSectionDescriptionStyle}" />
@@ -980,6 +989,148 @@
                                         </StackPanel>
                                     </Border>
                                 </Expander>
+                            </StackPanel>
+                            <StackPanel x:Name="settingsComponentsPage">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsChecked, ElementName=settingsComponentsNav}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                <TextBlock Text="{lex:Loc Strings:UI_7BF46D09674F2182}" Style="{DynamicResource BridgeSectionDescriptionStyle}" />
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <Grid Margin="0,0,0,14">
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="{lex:Loc Strings:UI_7EAD29233D4E2E15}" Style="{DynamicResource BridgeSectionTitleStyle}" />
+                                                <TextBlock Text="{lex:Loc Strings:UI_74F4CBA018AE9D93}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0" />
+                                            </StackPanel>
+                                            <Border Grid.Column="1" Margin="12,0,0,0" Padding="9,5" CornerRadius="4" BorderThickness="1" BorderBrush="{DynamicResource BorderColor}" VerticalAlignment="Top">
+                                                <TextBlock x:Name="componentReadiness" Text="{lex:Loc Strings:UI_EC963FFC911B8401}" FontWeight="SemiBold" />
+                                            </Border>
+                                        </Grid>
+                                        <TextBlock x:Name="viiperStatusText" TextWrapping="Wrap" Margin="0,0,0,12" />
+                                        <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="0,12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Border Style="{DynamicResource BridgeComponentIconTileStyle}">
+                                                    <Path Style="{DynamicResource BridgeComponentIconStyle}" Data="M6 8 H18 C20 8 21 9.4 21.5 11.5 L22.5 15.5 C23 18.4 20.4 19.5 19 17.9 L16.5 15.5 H7.5 L5 17.9 C3.4 19.5 1 18.4 1.5 15.5 L2.5 11.5 C3 9.4 4 8 6 8 Z M6 12 H10 M8 10 V14 M15.7 12 H15.8 M18.8 12 H18.9" />
+                                                </Border>
+                                                <StackPanel Grid.Column="1" Margin="0,0,12,0" VerticalAlignment="Center">
+                                                    <TextBlock Text="VIIPER" FontWeight="SemiBold" />
+                                                    <TextBlock x:Name="componentViiperStatus" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,3,0,0" />
+                                                </StackPanel>
+                                                <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <Button Content="{lex:Loc Strings:UI_3D46B9AAEB6A7B4D}" Click="OpenViiperComponentLog_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,0" />
+                                                    <Button x:Name="viiperSetupBtn" Content="{lex:Loc Strings:UI_FB55C412158E8F13}" Click="ViiperSetupBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0" />
+                                                </WrapPanel>
+                                            </Grid>
+                                        </Border>
+                                        <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="0,12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Border Style="{DynamicResource BridgeComponentIconTileStyle}">
+                                                    <Path Style="{DynamicResource BridgeComponentIconStyle}" Data="M12 3 V19 M9.5 5.5 L12 3 L14.5 5.5 M12 15 H8 L5 12 V9 M12 12 H16 L19 9 V7 M17 3.5 H21 V7 H17 Z M5 9 A1.5 1.5 0 1 0 5 6 A1.5 1.5 0 1 0 5 9 M12 22 A1.5 1.5 0 1 0 12 19 A1.5 1.5 0 1 0 12 22" />
+                                                </Border>
+                                                <StackPanel Grid.Column="1" Margin="0,0,12,0" VerticalAlignment="Center">
+                                                    <TextBlock Text="USB/IP" FontWeight="SemiBold" />
+                                                    <TextBlock x:Name="componentUsbipStatus" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,3,0,0" />
+                                                </StackPanel>
+                                                <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <Button x:Name="componentUsbipButton" Content="{lex:Loc Strings:UI_E692F1479C36CCB8}" Click="UsbipComponent_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0" />
+                                                </WrapPanel>
+                                            </Grid>
+                                        </Border>
+                                        <Border x:Name="componentConfirmation" Visibility="Collapsed" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="4" Padding="12" Margin="0,0,0,12">
+                                            <StackPanel>
+                                                <TextBlock x:Name="componentConfirmTitle" FontWeight="SemiBold" />
+                                                <TextBlock x:Name="componentConfirmText" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,4,0,10" />
+                                                <WrapPanel>
+                                                    <Button Content="{lex:Loc Strings:UI_19766ED6CCB2F4A3}" Click="CancelUsbipComponent_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,0" />
+                                                    <Button x:Name="componentConfirmButton" Click="ConfirmUsbipComponent_Click" Style="{DynamicResource BridgePrimaryButtonStyle}" />
+                                                </WrapPanel>
+                                            </StackPanel>
+                                        </Border>
+                                        <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="0,10,0,0">
+                                            <StackPanel>
+                                            <WrapPanel>
+                                                <CheckBox Content="{lex:Loc Strings:UI_8D6119ABAE8F59DF}" IsChecked="{Binding PromptForViiperSetup}" ToolTip="{lex:Loc Strings:UI_F4F20496B29348C6}" Style="{DynamicResource CheckBoxStyle}" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,2,16,2" />
+                                                <CheckBox x:Name="showViiperTrayIconCk" Content="{lex:Loc Strings:UI_35DCB5EE8EF9B079}" IsChecked="{Binding ShowViiperTrayIcon}" IsEnabled="{Binding SystemIntegrationEnabled}" ToolTip="{lex:Loc Strings:UI_BE9648022D712E1D}" Style="{DynamicResource CheckBoxStyle}" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="0,2,0,2" />
+                                            </WrapPanel>
+                                            <CheckBox x:Name="preserveWindowsAudioOutputCk" Content="{lex:Loc Strings:UI_E961EA2FFCD04682}"
+                                                      IsChecked="{Binding PreserveWindowsAudioOutput}" Style="{DynamicResource CheckBoxStyle}"
+                                                      Margin="0,12,0,0" ToolTip="{lex:Loc Strings:UI_A413DAFF9BAA9DBA}" />
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="{lex:Loc Strings:UI_5C442E378A74B375}" Style="{DynamicResource BridgeSectionTitleStyle}" />
+                                        <TextBlock Text="{lex:Loc Strings:UI_BBB914BBBAC725B7}" Style="{DynamicResource BridgeSectionDescriptionStyle}" />
+                                        <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="0,12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Border Style="{DynamicResource BridgeComponentIconTileStyle}">
+                                                    <Path Style="{DynamicResource BridgeComponentIconStyle}" Data="M12 22 C6 19.3 4 15.7 4 11.5 V5.8 C6.8 5.4 9.7 4.1 12 2.5 C14.3 4.1 17.2 5.4 20 5.8 V11.5 C20 15.7 18 19.3 12 22 Z M8.5 12 L11 14.5 L15.5 9.8" />
+                                                </Border>
+                                                <StackPanel Grid.Column="1" Margin="0,0,12,0" VerticalAlignment="Center">
+                                                    <TextBlock Text="HidHide" FontWeight="SemiBold" />
+                                                    <TextBlock x:Name="componentHidHideStatus" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,3,0,0" />
+                                                </StackPanel>
+                                                <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <Button Content="{lex:Loc Strings:UI_1F7E729BF03F4FA1}" Click="ComponentHidingSettings_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,0" />
+                                                    <Button x:Name="componentHidHideButton" Content="{lex:Loc Strings:UI_A28F5DD1BC8B559E}" Click="ComponentHidHide_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0" />
+                                                    <Button x:Name="recoverHiddenControllersButton" Content="{lex:Loc Strings:UI_442FD3C0BEDEE357}" Click="RecoverHiddenControllers_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="8,0,0,0" />
+                                                </WrapPanel>
+                                            </Grid>
+                                        </Border>
+                                        <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="0,12">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Border Style="{DynamicResource BridgeComponentIconTileStyle}">
+                                                    <Path Style="{DynamicResource BridgeComponentIconStyle}" Data="M4 5 H20 Q22 5 22 7 V17 Q22 19 20 19 H4 Q2 19 2 17 V7 Q2 5 4 5 Z M6 9 H6.4 M10 9 H10.4 M14 9 H14.4 M18 9 H18.4 M6 12 H6.4 M10 12 H10.4 M14 12 H14.4 M18 12 H18.4 M8 15.2 H16" />
+                                                </Border>
+                                                <StackPanel Grid.Column="1" Margin="0,0,12,0" VerticalAlignment="Center">
+                                                    <TextBlock Text="FakerInput" FontWeight="SemiBold" />
+                                                    <TextBlock x:Name="componentFakerInputStatus" Style="{DynamicResource BridgeSectionDescriptionStyle}" Margin="0,3,0,0" />
+                                                </StackPanel>
+                                                <WrapPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <Button x:Name="componentFakerInputButton" Content="{lex:Loc Strings:UI_6FF14A035524A4A2}" Click="ComponentFakerInput_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0" />
+                                                </WrapPanel>
+                                            </Grid>
+                                        </Border>
+                                        <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Padding="0,10,0,0">
+                                            <WrapPanel>
+                                                <Button Content="{lex:Loc Strings:UI_A7B3C719D03BDBC3}" Click="ManageSharedDrivers_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,0" />
+                                                <Button x:Name="viiperRefreshBtn" Content="{lex:Loc Strings:UI_0E91610117029A62}" Click="ViiperRefreshBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0,0,8,0" />
+                                                <Button Content="{lex:Loc Strings:UI_4246DC6CCF612AED}" Click="CopyComponentDiagnostics_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}" Margin="0" />
+                                            </WrapPanel>
+                                        </Border>
+                                        <TextBlock x:Name="componentOperationStatus" TextWrapping="Wrap" Margin="0,10,0,0" Visibility="Collapsed" AutomationProperties.LiveSetting="Polite" />
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
                             <StackPanel x:Name="settingsToolsPage">
                                 <StackPanel.Style>

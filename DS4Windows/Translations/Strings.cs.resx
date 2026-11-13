@@ -6761,4 +6761,125 @@ Zálohování : </value>
     <value>Vydává Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Náhled barvy</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Minimální vzdálenost přejetí</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Zvětšením vzdálenosti předejdete nechtěnému stisku tlačítka při přejetí.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Součásti</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Podpora virtuálních ovladačů a volitelné ovladače zařízení</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Spravovat součásti…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Výstup virtuálního ovladače</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Kontrola stavu součástí…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Spravujte software a ovladače zařízení pro herní ovladače.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Probíhá kontrola…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Otevřít protokol VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Odebrat USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Volitelné ovladače zařízení</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Tyto ovladače mohou používat i jiné aplikace v tomto počítači.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Nastavení skrývání</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Otevřít HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Použít vstup Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Spravovat sdílené ovladače…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Kopírovat diagnostiku součástí</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Mrtvá zóna gyroskopu</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Potlačuje malé hodnoty gyroskopu v klidu. Nastavením na 0 je předáte hře. Výchozí hodnota je 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Přizpůsobit</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Výstup a odezva</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Úrovně výstupu a zpracování</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Frekvence vstupu</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Zobrazit frekvenci vstupních hlášení</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Kompaktní rozestupy</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Přístup</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Úroveň baterie hlášená ovladačem. Znaménko (+) označuje nabíjení nebo externí napájení.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Jak je fyzický ovladač připojen k tomuto počítači.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Jak DS4Windows přistupuje k fyzickému ovladači. HidHide ho může skrýt před hrami a zabránit dvojímu vstupu.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Vyberte části přehledu, názvy u ikon, rozestupy a tlačítka zápatí.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Zvolte, kde se přehrává zvuk ovladače. Pro změnu povolte streamování.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Odpojí vybraný bezdrátový ovladač. Ovladače USB je nutné fyzicky odpojit.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Obnovení skrytých ovladačů</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Vyberte pouze fyzický ovladač, který chcete použít mimo DS4Windows. Starší pravidla pro skrytí mohou být přidána ručně nebo jinou aplikací.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Vybraná pravidla pro skrytí byla odstraněna. Připojte ovladač znovu, pokud ho Windows dosud neaktualizoval.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Pravidla používaná jinou DS4Windows relací jsou chráněna.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Obnovení skrytých ovladačů...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Obnovení vybraných ovladačů</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Před změnami je uložena záložní kopie. Nezvolená pravidla a oprávnění aplikace HidHide jsou zachována. Váš ovladač bude znovu skryt, pokud začnete DS4Windows pomocí možnosti skrýt zapnutou.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Zobrazit názvy u ikon</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Zobrazit zápatí přehledu</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Udržujte aktuální Windows audio výstup</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Obnovte předchozí přehrávací zařízení, pokud Windows vybere nově vytvořené audio zařízení DS4Windows během spuštění nebo opětovného připojení. Předvolby mikrofonu a komunikace zůstávají nezměněny.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows zvukový výstup: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>zvukové nastavení</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Vyberte zařízení pro přehrávání Windows, které používají vaše hry a aplikace.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows odesílá zvuk do virtuálního ovladače. ovladač je povolen pro přenos zvuku; zkontrolujte zdroj zvuku a výstupní trasu, pokud nic neslyšíte.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows odesílá zvuk do virtuálního ovladače.Vyberte si obvyklé reproduktory nebo sluchátka v nastavení zvuku nebo povolte pro daný ovladač přenos zvuku ovladačem.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Zobrazení Windows audio výstupu</value>
+  </data>
 </root>

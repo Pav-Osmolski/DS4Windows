@@ -47,7 +47,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public LogViewModel(DS4Windows.ControlService service) : this()
         {
             string version = DS4Windows.Global.exeDisplayVersion;
-            logItems.Add(new LogItem { Datetime = DateTime.Now, Message = global::DS4Windows.UiText.Format("DS4Windows version {0}", version) });
+            logItems.Add(new LogItem { Datetime = DateTime.Now, Message = global::DS4Windows.UiText.Format("DS4Windows version {0}", version) + Global.ForkLogSuffix });
             logItems.Add(new LogItem { Datetime = DateTime.Now, Message = global::DS4Windows.UiText.Format(".NET runtime: {0}", System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription) });
             logItems.Add(new LogItem { Datetime = DateTime.Now, Message = global::DS4Windows.UiText.Format("DS4Windows Assembly Architecture: {0}", (Environment.Is64BitProcess ? "x64" : "x86")) });
             logItems.Add(new LogItem { Datetime = DateTime.Now, Message = InstallationModeInfo.Read() });

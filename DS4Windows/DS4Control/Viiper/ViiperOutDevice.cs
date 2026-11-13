@@ -1136,6 +1136,7 @@ namespace DS4Windows
 
         private readonly object audioEndpointNamesGate = new object();
         private ViiperAudioEndpointNames audioEndpointNames;
+        private WindowsPlaybackProtection.Lease playbackProtection;
         private bool audioEndpointNamesEnabled;
 
         private void RefreshAudioEndpointNames()
@@ -1146,6 +1147,9 @@ namespace DS4Windows
                 audioEndpointNames = null;
                 ViiperDeviceStream stream = Volatile.Read(ref deviceStream);
                 int index = Volatile.Read(ref lastInputDeviceIndex);
+                if (stream != null)
+                    playbackProtection?.Bind(stream.UsbipPort, index,
+                        () => connected && ReferenceEquals(stream, Volatile.Read(ref deviceStream)));
                 if (!audioEndpointNamesEnabled || !connected || gamepadOnly || stream == null ||
                     stream.UsbipPort <= 0 || index < 0 ||
                     index >= ControlService.MAX_DS4_CONTROLLER_COUNT ||
@@ -1176,18 +1180,27 @@ namespace DS4Windows
             if (!status.Ready)
             {
                 throw new IOException(
-                    status.ServerProbeMessage != null
-                        ? $"{status.DisplayText}. Check the running broker connection in Settings > VIIPER Virtual Controller Support."
-                        : $"{status.DisplayText}. Use Settings > VIIPER Virtual Controller Support to install or repair VIIPER and usbip-win2.");
+                    status.UsbipPaused
+                        ? $"{status.DisplayText}. Manage USB/IP in Settings > Components."
+                        : status.ServerProbeMessage != null
+                        ? $"{status.DisplayText}. Check the running broker connection in Settings > Components."
+                        : $"{status.DisplayText}. Use Settings > Components to install or repair VIIPER and usbip-win2.");
             }
 
-            deviceStream = CreateDeviceStreamWithServerFallback();
+            playbackProtection = gamepadOnly ? null : WindowsPlaybackProtection.BeforeVirtualDeviceCreation();
+            try { deviceStream = CreateDeviceStreamWithServerFallback(); }
+            catch
+            {
+                Interlocked.Exchange(ref playbackProtection, null)?.Dispose();
+                throw;
+            }
             try
             {
                 PrepareSwitch2VirtualFeedbackSession();
             }
             catch
             {
+                Interlocked.Exchange(ref playbackProtection, null)?.Dispose();
                 Interlocked.Exchange(ref deviceStream, null)?.Dispose();
                 Interlocked.Exchange(ref switch2FeedbackSession, null)?
                     .TryRetire();
@@ -2068,6 +2081,7 @@ namespace DS4Windows
 
         public override void Disconnect()
         {
+            Interlocked.Exchange(ref playbackProtection, null)?.Dispose();
             lock (audioEndpointNamesGate)
             {
                 audioEndpointNamesEnabled = false;
@@ -2852,7 +2866,7 @@ namespace DS4Windows
                 else if (UsesMappedInputScheduler())
                 {
                     ViiperMappedInputState mapped = ViiperStatePacketBuilder.
-                        BuildMappedState(state, device, followDigitalTriggers: viiperType != ViiperVirtualDeviceType.GenericJoystick);
+                        BuildMappedState(state, device, viiperType, followDigitalTriggers: viiperType != ViiperVirtualDeviceType.GenericJoystick);
                     long mappedReadyAt = Stopwatch.GetTimestamp();
                     ViiperInputPublication publication = inputScheduler.Publish(
                         mapped, mappedReadyAt);
@@ -13313,7 +13327,6 @@ namespace DS4Windows
         private const byte DualSenseRawInputStatusEdgeLayoutFlag = 0x02;
         private const int Switch2PacketSize = 24;
         private const int DualSenseFeedbackPacketSize = 76;
-        private const int DualSenseGyroRestDeadband = 32;
         private const int DualSenseAccelRestZ = -8192;
         private const float X360RecipInputPosResolution = 1 / 127f;
         private const float X360RecipInputNegResolution = 1 / 128f;
@@ -13378,8 +13391,7 @@ namespace DS4Windows
                 ViiperVirtualDeviceType.Xbox360 => BuildXbox360(state, device),
                 ViiperVirtualDeviceType.XboxOne => BuildXboxOne(state, device),
                 ViiperVirtualDeviceType.DualShock4 => BuildDualShock4(state, device),
-                ViiperVirtualDeviceType.DualSense => BuildDualSense(state, device),
-                ViiperVirtualDeviceType.DualSenseEdge => BuildDualSense(state, device),
+                ViiperVirtualDeviceType.DualSense or ViiperVirtualDeviceType.DualSenseEdge => BuildDualSense(state, device, type),
                 ViiperVirtualDeviceType.Switch2Pro => BuildSwitch2Pro(state, device),
                 ViiperVirtualDeviceType.GenericJoystick => BuildGenericJoystick(state, device),
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
@@ -13390,7 +13402,7 @@ namespace DS4Windows
         {
             var options = device >= 0 ? Global.GenericJoystickSettings[device].Options : GenericJoystickOptions.Default;
             var packet = new byte[GenericJoystickFrame.Size];
-            GenericJoystickMappedBridge.Build(BuildMappedState(state, device, false), options).WriteWire(packet);
+            GenericJoystickMappedBridge.Build(BuildMappedState(state, device, ViiperVirtualDeviceType.GenericJoystick, followDigitalTriggers: false), options).WriteWire(packet);
             return packet;
         }
 
@@ -13482,10 +13494,10 @@ namespace DS4Windows
             return packet;
         }
 
-        private static byte[] BuildDualSense(DS4State state, int device)
+        private static byte[] BuildDualSense(DS4State state, int device, ViiperVirtualDeviceType type)
         {
             byte[] packet = new byte[DualSensePacketSize];
-            ViiperMappedInputState mapped = BuildMappedState(state, device);
+            ViiperMappedInputState mapped = BuildMappedState(state, device, type);
             BuildInto(mapped, packet);
             return packet;
         }
@@ -13495,7 +13507,7 @@ namespace DS4Windows
         /// classification and serialization. No managed object is created.
         /// </summary>
         internal static ViiperMappedInputState BuildMappedState(DS4State state,
-            int device, bool followDigitalTriggers = true)
+            int device, ViiperVirtualDeviceType type = ViiperVirtualDeviceType.DualSense, bool followDigitalTriggers = true)
         {
             ArgumentNullException.ThrowIfNull(state);
 
@@ -13554,12 +13566,12 @@ namespace DS4Windows
                 return mapped;
             }
 
-            mapped.GyroX = ClampShort(SnapToZero((state.GyroStickGateOpen ? motion.gyroPitchFull : 0),
-                DualSenseGyroRestDeadband));
-            mapped.GyroY = ClampShort(SnapToZero(-(state.GyroStickGateOpen ? motion.gyroYawFull : 0),
-                DualSenseGyroRestDeadband));
-            mapped.GyroZ = ClampShort(SnapToZero(-(state.GyroStickGateOpen ? motion.gyroRollFull : 0),
-                DualSenseGyroRestDeadband));
+            int deadband = type == ViiperVirtualDeviceType.DualSense &&
+                (uint)device < Global.DualSenseGyroDeadbands.Length && Global.GyroOutputMode[device] == GyroOutMode.Passthru
+                ? Global.DualSenseGyroDeadbands[device] : BackingStore.DefaultDualSenseGyroDeadband;
+            mapped.GyroX = ClampShort(SnapToZero(state.GyroStickGateOpen ? motion.gyroPitchFull : 0, deadband));
+            mapped.GyroY = ClampShort(SnapToZero(-(state.GyroStickGateOpen ? motion.gyroYawFull : 0), deadband));
+            mapped.GyroZ = ClampShort(SnapToZero(-(state.GyroStickGateOpen ? motion.gyroRollFull : 0), deadband));
             mapped.AccelX = ClampShort(-motion.accelXFull);
             mapped.AccelY = ClampShort(-motion.accelYFull);
             mapped.AccelZ = ClampShort(motion.accelZFull);

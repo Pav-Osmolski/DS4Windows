@@ -6794,4 +6794,125 @@ De backup: </value>
     <value>Uitgegeven door Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Kleurvoorbeeld</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Minimale veegafstand</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Vergroot de afstand om te voorkomen dat onbedoeld vegen knoppen activeert.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Onderdelen</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Ondersteuning voor virtuele controllers en optionele stuurprogramma’s</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Onderdelen beheren…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Virtuele controlleruitvoer</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Status van onderdelen controleren…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Beheer de software en stuurprogramma’s voor je controllers.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Bezig met controleren…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>VIIPER-logboek openen</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>USB/IP verwijderen…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Optionele stuurprogramma’s</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Ook andere apps op deze pc kunnen deze stuurprogramma’s gebruiken.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Verberginstellingen</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>HidHide openen…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows-invoer gebruiken</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Gedeelde stuurprogramma’s beheren…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Diagnosegegevens van onderdelen kopiëren</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Dode zone van gyroscoop</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Onderdrukt kleine gyroscoopwaarden rond de ruststand. Gebruik 0 om ze aan het spel door te geven. De standaardwaarde is 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Aanpassen</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Uitvoer en feedback</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Uitvoerniveaus en verwerking</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Invoerfrequentie</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Frequentie van invoerrapporten tonen</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Compacte tussenruimte</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Toegang</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Batterijniveau dat de controller meldt. Het plusteken (+) duidt op opladen of externe voeding.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Toont hoe de fysieke controller met deze pc is verbonden.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Toont hoe DS4Windows toegang heeft tot de fysieke controller. HidHide kan deze voor games verbergen om dubbele invoer te voorkomen.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Kies de overzichtssecties, pictogramtitels, tussenruimte en knoppen op de onderbalk.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Kies waar het geluid van de controller wordt afgespeeld. Schakel streaming in om dit te wijzigen.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Verbreekt de verbinding met de geselecteerde draadloze controller. Trek de kabel van USB-controllers los.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Verborgen controller herstellen</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Selecteer alleen de fysieke controller die u wilt gebruiken buiten DS4Windows. Oudere verborgen regels zijn mogelijk handmatig of door een andere app toegevoegd.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Selecteerde regels voor het verbergen zijn verwijderd.Connecteer uw controller opnieuw als Windows het nog niet heeft vernieuwd. Back-up:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Er zijn geen herstelbare verborgen regels gevonden. Regels die worden gebruikt door een andere DS4Windows-sessie zijn beschermd.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Recover verborgen controllers...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>De geselecteerde controller herstellen</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Een back-up wordt opgeslagen voordat wijzigingen worden uitgevoerd. Niet-selecteerde regels en HidHide toepassingsmachtigingen worden bewaard. Uw controller wordt opnieuw verborgen als u DS4Windows start met verbergen ingeschakeld.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Pictogramtitels tonen</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Onderbalk van Overzicht tonen</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Bewaar mijn huidige Windows audio-uitvoer</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Herstel het vorige afspelen apparaat als Windows een nieuw gecreëerd DS4Windows audio-apparaat selecteert tijdens het opstarten of opnieuw verbinden. De microfoon- en communicatievoorkeuren blijven ongewijzigd.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows audio uitvoer: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Sound instellingen</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Selecteer het Windows afspelen apparaat dat wordt gebruikt door uw games en apps.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows stuurt audio naar een virtuele controller. Controller-audiooverdracht is ingeschakeld; controleer de audiobron en uitvoerroute als u niets hoort.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows stuurt audio naar een virtuele controller.Kies uw gebruikelijke luidsprekers of hoofdtelefoon in de geluidsinstellingen of schakel controller-audiooverdracht voor die controller in.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Toon Windows audio-uitvoer</value>
+  </data>
 </root>

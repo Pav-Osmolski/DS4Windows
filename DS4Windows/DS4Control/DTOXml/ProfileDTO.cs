@@ -912,6 +912,13 @@ namespace DS4WinWPF.DS4Control.DTOXml
             get; set;
         } = BackingStore.DEFAULT_TOUCHPAD_SENS;
 
+        private int _touchpadSwipeDistance = BackingStore.DefaultTouchpadSwipeDistance;
+        public int TouchpadSwipeDistance
+        {
+            get => _touchpadSwipeDistance;
+            set => _touchpadSwipeDistance = BackingStore.NormalizeTouchpadSwipeDistance(value);
+        }
+
         private DS4Color _lowColor = new DS4Color();
         [XmlElement("LowColor")]
         public string LowColorString
@@ -1752,6 +1759,13 @@ namespace DS4WinWPF.DS4Control.DTOXml
         public GyroActivationStick GyroActivationStick { get; set; }
         public int GyroStickThreshold { get; set; } = 15;
 
+        private int _dualSenseGyroDeadband = BackingStore.DefaultDualSenseGyroDeadband;
+        public int DualSenseGyroDeadband
+        {
+            get => _dualSenseGyroDeadband;
+            set => _dualSenseGyroDeadband = BackingStore.NormalizeDualSenseGyroDeadband(value);
+        }
+
         [XmlElement("GyroOutputMode")]
         public GyroOutMode GyroOutputMode
         {
@@ -2468,6 +2482,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             FlashType = lightInfo.flashType;
             FlashBatteryAt = lightInfo.flashAt;
             TouchSensitivity = source.touchSensitivity[deviceIndex];
+            TouchpadSwipeDistance = source.touchpadSwipeDistance[deviceIndex];
             _lowColor = new DS4Color(lightInfo.m_LowLed.red, lightInfo.m_LowLed.green, lightInfo.m_LowLed.blue);
             LowColorString = $"{lightInfo.m_LowLed.red},{lightInfo.m_LowLed.green},{lightInfo.m_LowLed.blue}";
 
@@ -2614,6 +2629,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             GyroStickActivationMode = source.gyroStickModes[deviceIndex];
             GyroActivationStick = source.gyroActivationSticks[deviceIndex];
             GyroStickThreshold = source.gyroStickThresholds[deviceIndex];
+            DualSenseGyroDeadband = source.dualSenseGyroDeadbands[deviceIndex];
             GyroControlsSettings = new GyroControlsSettings()
             {
                 Triggers = source.gyroControlsInf[deviceIndex].triggers,
@@ -3276,6 +3292,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             lightInfo.flashType = FlashType;
             lightInfo.flashAt = FlashBatteryAt;
             destination.touchSensitivity[deviceIndex] = TouchSensitivity;
+            destination.touchpadSwipeDistance[deviceIndex] = TouchpadSwipeDistance;
             lightInfo.m_LowLed = _lowColor;
             lightInfo.m_ChargingLed = _chargingColor;
             lightInfo.m_FlashLed = _flashColor;
@@ -3505,6 +3522,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.gyroActivationSticks[deviceIndex] = Enum.IsDefined(GyroActivationStick) ?
                 GyroActivationStick : DS4Windows.GyroActivationStick.Left;
             destination.gyroStickThresholds[deviceIndex] = Math.Clamp(GyroStickThreshold, 1, 95);
+            destination.dualSenseGyroDeadbands[deviceIndex] = DualSenseGyroDeadband;
 
             if (GyroControlsSettings != null)
             {

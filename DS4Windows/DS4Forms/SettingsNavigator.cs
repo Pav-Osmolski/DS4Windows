@@ -81,6 +81,13 @@ internal sealed class SettingsNavigator
         sections.Single(section => (string)section.Navigation.Tag == normalized).Navigation.IsChecked = true;
     }
 
+    internal static void ScrollCardToTop(ScrollViewer viewer, FrameworkElement card)
+    {
+        viewer.UpdateLayout();
+        if (viewer.Content is FrameworkElement content)
+            viewer.ScrollToVerticalOffset(card.TranslatePoint(new Point(), content).Y);
+    }
+
     internal int SetSearch(string query)
     {
         bool searching = SettingsSearchMatcher.HasQuery(query);

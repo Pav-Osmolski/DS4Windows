@@ -89,6 +89,8 @@ internal static class SettingsStorageLayoutValidation
                 var selected = list.SelectedItem;
                 var tileItem = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(0);
                 Point tileInset = tileItem.TranslatePoint(new Point(), list);
+                Assert.AreEqual(7d, tileInset.X, 0.5, "Tiles must use the same left inset in every theme.");
+                Assert.AreEqual(7d, tileInset.Y, 0.5, "Tiles must use the same top inset in every theme.");
                 foreach (var view in new[] { ProfileViewChoice.List, ProfileViewChoice.Details })
                 {
                     browser.Apply(view);

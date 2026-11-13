@@ -6932,4 +6932,125 @@
     <value>发布者：Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>颜色预览</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>最小滑动距离</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>增大距离可避免意外滑动触发按键。</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>组件</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>虚拟手柄支持和可选驱动程序</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>管理组件…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>虚拟手柄输出</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>正在检查组件状态…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>管理手柄所用的软件和驱动程序。</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>正在检查…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>打开 VIIPER 日志</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>卸载 USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>可选驱动程序</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>此电脑上的其他应用也可以使用这些驱动程序。</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>隐藏设置</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>打开 HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>使用 Windows 输入</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>管理共享驱动程序…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>复制组件诊断信息</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>陀螺仪死区</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>滤除接近静止时的微小陀螺仪读数。设为 0 可将这些读数传给游戏。默认值为 32。</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>输出与反馈</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>输出电平与处理</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>输入速率</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>显示输入报告速率</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>紧凑间距</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>访问</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>控制器报告的电池电量。加号（+）表示正在充电或使用外部电源。</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>显示实体控制器与此电脑的连接方式。</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>显示 DS4Windows 访问实体控制器的方式。HidHide 可对游戏隐藏实体控制器，以防止重复输入。</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>选择概览分区、图标标题、间距和底栏按钮。</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>选择控制器音频的播放位置。启用音频串流后即可更改此设置。</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>断开所选无线控制器。USB 控制器需要拔下线缆。</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>恢复隐藏的控制器</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>仅选择您想要在 DS4Windows 外部使用的物理控制器。 可能已通过手动或其他应用程序添加了较旧的隐藏规则。</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>已删除选定的隐藏规则。如果 Windows 尚未更新,请重新连接控制器。</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>未找到可恢复的隐藏规则,另一个 DS4Windows 会话使用的规则受到保护。</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>找回隐藏的控制器</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>恢复选定的控制器</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>在更改之前保存备份。未选择的规则和 HidHide 应用程序权限保留,如果启动,您的控制器将再次隐藏。 DS4Windows 隐藏的能力。</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>显示图标标题</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>显示概览底栏</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>保持当前的 Windows 音频输出</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>如果 Windows 在启动或重新连接时选择新创建的 DS4Windows 音频设备,请恢复以前的播放设备。</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows 音频输出: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>声音设置</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>选择您游戏和应用所使用的 Windows 播放设备。</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows 正在向虚拟控制器发送音频. 已启用控制器音频传输;如果听不到,请检查其音频源和输出路线。</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows 正在向虚拟控制器发送音频. 在音频设置中选择您的常规扬声器或耳机,或者为该控制器启用控制器音频传输。</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>显示 Windows 音频输出</value>
+  </data>
 </root>

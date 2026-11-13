@@ -79,7 +79,7 @@ public class ContextualHeaderTests
                     ProfileEditorMode = editor, ProfileEditorSectionTitle = "Button mapping",
                     ProfileEditorSectionDescription = "Assign controller buttons and shortcuts." };
                 shell.DataContext = State(false);
-                var overview = new TabItem { Header = "Overview", Content = new Grid() };
+                var overview = new TabItem { Name = "overviewTab", Header = "Overview", Content = new Grid() };
                 AppToolTips.SetHeaderHelp(overview, "Your controller, profile and output."); shell.Items.Add(overview);
                 var profiles = new TabItem { Header = "Profiles", Content = new Grid() };
                 AppToolTips.SetHeaderHelp(profiles, "Create and organise controller profiles."); shell.Items.Add(profiles);
@@ -87,6 +87,8 @@ public class ContextualHeaderTests
                 ThemeConsistencyValidation.Layout(shell, 1180, 680);
                 var ordinary = (PageHeaderControl)shell.Template.FindName("sectionHeader", shell);
                 var editorHeader = (PageHeaderControl)shell.Template.FindName("editorSectionHeader", shell);
+                var contentHost = (ContentPresenter)shell.Template.FindName("PART_SelectedContentHost", shell);
+                Assert.AreEqual(new Thickness(28, 22, 28, 0), contentHost.Margin);
                 Assert.AreEqual("Overview", ordinary.Title);
                 Assert.AreEqual("Your controller, profile and output.", ordinary.Description);
                 Assert.AreEqual(Visibility.Visible, ordinary.Visibility);
@@ -94,6 +96,7 @@ public class ContextualHeaderTests
                 shell.SelectedIndex = 1;
                 ThemeConsistencyValidation.Layout(shell, 1180, 680);
                 Assert.AreEqual("Profiles", ordinary.Title);
+                Assert.AreEqual(new Thickness(28, 22, 28, 22), contentHost.Margin);
                 Assert.AreEqual("Create and organise controller profiles.", ordinary.Description);
                 AssertCentred(ordinary);
                 var list = (ListBox)shell.Template.FindName("SidebarControllerList", shell);
@@ -180,6 +183,7 @@ public class ContextualHeaderTests
     {
         public object[] ControllerCol { get; set; }
         public object SelectedController { get; set; }
+        public bool HasSelectedController => SelectedController != null;
         public bool ProfileEditorMode { get; set; }
         public string ProfileEditorSectionTitle { get; set; }
         public string ProfileEditorSectionDescription { get; set; }

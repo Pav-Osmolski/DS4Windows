@@ -9,6 +9,45 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.71](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.71) - 2026-11-13
+
+- Reduce redundant pending USB adaptive-trigger updates, including alternating L2/R2 bow-resistance reports, while preserving effect changes, releases and feedback ownership boundaries. Thanks [@bbbbbbbbxh](https://github.com/bbbbbbbbxh) for the diagnostic logs and pause-menu reproduction ([#123](https://github.com/Pav-Osmolski/DS4Windows/issues/123)). Hardware verification remains pending.
+- Expand Overview **Customize** with icon-title visibility and individual action-bar button controls. Preserve layout when titles are hidden, keep Controller info on the controller card, and add Device Options and Windows Game Controllers shortcuts to the action bar. Remember the layout without changing controller profiles, including whether to show Windows audio output and its Sound settings shortcut.
+- Use compact, consistent numeric field widths throughout Profile Editor > Axis Config. Align radial fields with the selector, equalise shaping-row spacing, place enable checkboxes after their fields and keep Delta Acceleration's checkbox beside its label.
+- Preserve the previous Windows playback output when Windows selects a newly appearing DS4Windows virtual audio device during startup or reconnect. Add an enabled-by-default option in Settings > Components and show the current Windows output with routing guidance on Overview. Keep microphone/communications defaults and native haptics intact. Thanks [@VenomCARNAGE122](https://github.com/VenomCARNAGE122) and [@Jobima1st](https://github.com/Jobima1st) for the reports ([upstream #158](https://github.com/hbashton/DS4Windows/issues/158), [upstream #100](https://github.com/hbashton/DS4Windows/issues/100)).
+
+### [5.0.70](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.70) - 2026-11-11
+
+- Fix a critical HidHide cleanup gap that could leave physical controllers hidden outside DS4Windows after an interrupted session. Persist and verify ownership, recover confirmed abandoned rules on Start, and protect rules still used by another participating copy. Thanks [u/JoeRLL](https://www.reddit.com/user/JoeRLL/) for the report that helped identify this issue ([PR #125](https://github.com/Pav-Osmolski/DS4Windows/pull/125)).
+- Add **Settings > Components > Recover hidden controllers…** for explicitly restoring controllers affected by older or untracked hiding rules. Back up and recheck configuration before changes; preserve unrelated rules and application permissions. Explain remaining externally managed rules after Stop.
+- Refresh documentation screenshots and add illustrated Controllers settings, Components and notification-area menu guidance.
+
+### [5.0.69](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.69) - 2026-11-10
+
+- Fill the Overview battery icon in proportion to the reported charge. The fill turns yellow below 25% and red at 10% or lower.
+- Stack Audio Haptics and Trigger Lab cards at the same window width as Overview. Keep the first Audio Haptics card steady as the layout changes.
+- Show a starting status while controller speaker and headset audio is being set up, avoiding a brief false warning when streaming is enabled.
+
+### [5.0.68](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.68) - 2026-11-10
+
+- Add a per-profile gyro deadband for virtual DualSense Passthru. Keep 32 as the default and allow 0 to preserve small aiming movements. Thanks [@MariolloPL](https://github.com/MariolloPL) for the request ([#121](https://github.com/Pav-Osmolski/DS4Windows/issues/121)).
+- Add a separate Start menu shortcut option to the installer and remember the choice across updates and repairs. Thanks [@soredake](https://github.com/soredake) for the request ([upstream #157](https://github.com/hbashton/DS4Windows/issues/157)).
+- Refresh Overview with a compact controller summary, configurable quick profile cards and Quick actions that stay above the footer as you scroll.
+
+### [5.0.67](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.67) - 2026-11-09
+
+- Add Settings > Components for VIIPER, USB/IP, HidHide and FakerInput, with themed icons, version and status details, refresh, logs and copyable diagnostics. Keep the VIIPER setup-prompt and tray-icon preferences on one row with tooltip help.
+- Add administrator-approved USB/IP removal, reboot verification and restoration. Stop virtual controller output before removal, reject removal while another USB/IP import is attached and preserve the pause across app restarts and upgrades until the driver is restored.
+- Show both the DS4Windows HidHide preference and the system-wide hiding state. The Hiding settings shortcut opens Controllers with Prevent double input at the top of the scroll area.
+- Install missing optional drivers from Components, open Windows Installed apps to manage shared drivers and choose the Windows keyboard and mouse handler in place of automatic selection. Handler changes apply after Stop/Start.
+
+### [5.0.66](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.66) - 2026-11-09
+
+- Preview Normal lightbar RGB edits on screen and on the selected controller when its active lightbar mode is Normal. Thanks [@nben](https://github.com/nben) for the request ([#116](https://github.com/Pav-Osmolski/DS4Windows/issues/116)).
+- Add a per-profile minimum distance for one-finger touchpad swipe button mappings. Increase it to reduce accidental swipes. Existing profiles retain the default of 300. Thanks [u/AEKarim](https://www.reddit.com/user/AEKarim/) for the [suggestion](https://www.reddit.com/r/DS4Windows/comments/1xqe2sp/ds4_touch_pad_swipesensitivity/).
+- Identify the Pav-Osmolski fork beside the version in the Log tab and the saved startup log.
+- Refresh Device Options and Config Swipe Profiles, align profile and Settings spacing across themes, and give the DualSense feedback selectors enough room for their labels.
+
 ### [5.0.65](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.65) - 2026-11-07
 
 - Fix inverted gyro passthrough on DS4-compatible controllers that report reversed calibration endpoints. Validate calibration reads and preserve motion direction when applying their sensitivity. Thanks [@Raine-07](https://github.com/Raine-07) for reporting and comparing controllers, and [@nben](https://github.com/nben) for confirming the preview fix and sharing the calibration capture ([upstream #154](https://github.com/hbashton/DS4Windows/issues/154)).

@@ -22,7 +22,12 @@
             <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="5" />
-            <Setter Property="Padding" Value="18" />
+            <Setter Property="Padding" Value="16" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=compactSpacing}" Value="True">
+                    <Setter Property="Padding" Value="10" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="OverviewEyebrowStyle" TargetType="TextBlock">
@@ -56,6 +61,12 @@
             <Setter Property="CornerRadius" Value="6" />
             <Setter Property="Padding" Value="15" />
             <Setter Property="Margin" Value="0,0,0,12" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=compactSpacing}" Value="True">
+                    <Setter Property="Padding" Value="10" />
+                    <Setter Property="Margin" Value="0,0,0,8" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="OverviewSettingsComboBoxStyle" TargetType="ComboBox"
@@ -113,9 +124,74 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="OverviewGlyphStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="0,0,7,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="OverviewCardGlyphStyle" TargetType="TextBlock" BasedOn="{StaticResource OverviewGlyphStyle}">
+            <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
+        </Style>
+        <Style x:Key="OverviewFactIconStyle" TargetType="Path">
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+            <Setter Property="Margin" Value="0,0,6,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Stretch" Value="Uniform" />
+            <Setter Property="Stroke" Value="{DynamicResource MutedForegroundColor}" />
+            <Setter Property="StrokeThickness" Value="1.3" />
+            <Setter Property="StrokeStartLineCap" Value="Round" />
+            <Setter Property="StrokeEndLineCap" Value="Round" />
+            <Setter Property="StrokeLineJoin" Value="Round" />
+        </Style>
+        <Style x:Key="OverviewFactTitleStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource MutedForegroundColor}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=showFactTitles}" Value="False">
+                    <!-- Keep the text's width and line height when hiding titles. -->
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="OverviewFactStyle" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0,0,24,0" />
+            <Setter Property="MinWidth" Value="106" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style x:Key="OverviewCustomizeStyle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+            <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Chrome" CornerRadius="5" BorderThickness="1"
+                                Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}" />
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Border HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="470" Padding="30">
             <Border.Style>
                 <Style TargetType="Border" BasedOn="{StaticResource OverviewCardStyle}">
@@ -143,334 +219,431 @@
             </StackPanel>
         </Border>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <Grid Margin="0,0,8,6">
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Setter Property="Visibility" Value="Collapsed" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasSelectedController}" Value="True">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Border Style="{StaticResource OverviewCardStyle}" Padding="20" Margin="0,0,0,14">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <Border Width="152" Height="92" CornerRadius="5" Margin="0,0,20,0"
-                                Background="{DynamicResource RaisedBackgroundColor}"
-                                BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" Padding="7">
-                            <Image Source="{Binding SelectedController.ControllerImageSource}"
-                                   Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   RenderOptions.BitmapScalingMode="HighQuality" />
-                        </Border>
-
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="{lex:Loc Strings:UI_1D39526F5EFFADFE}" Style="{StaticResource OverviewEyebrowStyle}" />
-                            <TextBlock Text="{Binding SelectedController.ControllerDisplayName}"
-                                       Margin="0,5,0,3" FontSize="22" FontWeight="SemiBold"
-                                       Foreground="{DynamicResource ForegroundColor}" />
-                            <TextBlock Text="{Binding SelectedController.IdText}"
-                                       ToolTip="{Binding SelectedController.IdText}"
-                                       Foreground="{DynamicResource MutedForegroundColor}"
-                                       TextTrimming="CharacterEllipsis" />
-                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                <Border Background="{DynamicResource RaisedBackgroundColor}"
-                                        BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
-                                        CornerRadius="3" Padding="8,4" Margin="0,0,8,0">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{lex:Loc Strings:UI_08BE2C7BB5BF7CAC}" Foreground="{DynamicResource MutedForegroundColor}" />
-                                        <TextBlock Text="{Binding CurrentProfileName}" FontWeight="SemiBold"
-                                                   Foreground="{DynamicResource AccentColor}"
-                                                   MaxWidth="190" TextTrimming="CharacterEllipsis"
-                                                   ToolTip="{Binding CurrentProfileName}" />
-                                    </StackPanel>
-                                </Border>
-                                <Border Background="{DynamicResource RaisedBackgroundColor}"
-                                        BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
-                                        CornerRadius="3" Padding="8,4">
-                                    <TextBlock Text="{Binding SelectedControllerConnection}" />
-                                </Border>
+        <ScrollViewer x:Name="overviewScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                      Visibility="{Binding HasSelectedController, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Margin="0,0,8,2">
+                <Border Style="{StaticResource OverviewCardStyle}" Margin="0,0,0,14">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border Width="96" Height="62" CornerRadius="6" Margin="0,0,12,0" VerticalAlignment="Top"
+                                    Background="{DynamicResource RaisedBackgroundColor}"
+                                    BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" Padding="5">
+                                <Image Source="{Binding SelectedController.ControllerImageSource}" Stretch="Uniform"
+                                       RenderOptions.BitmapScalingMode="HighQuality" />
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0,0,12,0">
+                                <TextBlock Text="{Binding SelectedControllerNumber}" Style="{StaticResource OverviewEyebrowStyle}" />
+                                <TextBlock Text="{Binding SelectedController.ControllerDisplayName}" FontSize="21" FontWeight="SemiBold"
+                                           Margin="0,1,0,2" TextTrimming="CharacterEllipsis" ToolTip="{Binding SelectedController.IdText}" />
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Text="{lex:Loc Strings:Profile}" Margin="0,0,6,0"
+                                               Foreground="{DynamicResource MutedForegroundColor}" />
+                                    <TextBlock Text="{Binding CurrentProfileName}" FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis" ToolTip="{Binding ProfileGuidance}" />
+                                </DockPanel>
                             </StackPanel>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="18,0,0,0">
-                            <TextBlock Text="{lex:Loc Strings:UI_EB690390D504C803}" Style="{StaticResource OverviewEyebrowStyle}"
-                                       HorizontalAlignment="Right" />
-                            <TextBlock Text="{Binding SelectedControllerBattery}" Margin="0,5,0,0"
-                                       FontSize="20" FontWeight="SemiBold"
-                                       Foreground="{DynamicResource SuccessColor}" HorizontalAlignment="Right" />
-                            <Button x:Name="overviewControllerInfoButton" Style="{DynamicResource ControllerInfoButtonStyle}"
-                                    HorizontalAlignment="Right" Margin="0,9,0,0" Click="ControllerInfoBtn_Click">
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" MaxWidth="185">
+                                <Border Background="{DynamicResource RaisedBackgroundColor}" BorderBrush="{DynamicResource BorderColor}"
+                                        BorderThickness="1" CornerRadius="12" Padding="9,3" HorizontalAlignment="Right"
+                                        ToolTip="{Binding SelectedControllerStartupDetail}">
+                                    <DockPanel>
+                                        <Ellipse DockPanel.Dock="Left" Width="7" Height="7" VerticalAlignment="Center"
+                                                 Fill="{Binding Foreground, ElementName=controllerStartupTitle}" />
+                                        <TextBlock x:Name="controllerStartupTitle" Text="{Binding SelectedControllerStartupTitle}"
+                                                   Margin="6,0,0,0" FontSize="13">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource OverviewValueStyle}">
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding SelectedControllerIsReady}" Value="True">
+                                                            <Setter Property="Foreground" Value="{DynamicResource SuccessColor}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SelectedControllerNeedsAttention}" Value="True">
+                                                            <Setter Property="Foreground" Value="{DynamicResource DangerColor}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SelectedControllerStartupStage}" Value="{x:Static runtime:ControllerStartupStage.ProfileRequired}">
+                                                            <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DockPanel>
+                                </Border>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0"
+                                            Background="Transparent" ToolTip="{lex:Loc Strings:OverviewBatteryHelp}">
+                                    <Viewbox Width="20" Height="{Binding FontSize, ElementName=overviewBatteryText}"
+                                             Margin="0,0,6,0" VerticalAlignment="Center" FlowDirection="LeftToRight">
+                                        <Grid Width="23" Height="14">
+                                            <Border x:Name="overviewBatteryFill" Width="14" Height="8" CornerRadius="1"
+                                                    Margin="3,3,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                                <Border.RenderTransform>
+                                                    <ScaleTransform ScaleX="{Binding SelectedControllerBatteryIndicator.Fill, FallbackValue=0}" />
+                                                </Border.RenderTransform>
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="{DynamicResource SuccessColor}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding SelectedControllerBatteryIndicator.IsLow}" Value="True">
+                                                                <Setter Property="Background" Value="{DynamicResource WarningColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding SelectedControllerBatteryIndicator.IsCritical}" Value="True">
+                                                                <Setter Property="Background" Value="{DynamicResource DangerColor}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+                                            <Path Stroke="{DynamicResource MutedForegroundColor}" StrokeThickness="1.3"
+                                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                                                  Data="M 3,1 H 17 Q 19,1 19,3 V 11 Q 19,13 17,13 H 3 Q 1,13 1,11 V 3 Q 1,1 3,1 Z M 22,5 V 9" />
+                                        </Grid>
+                                    </Viewbox>
+                                    <TextBlock x:Name="overviewBatteryText" Text="{Binding SelectedControllerBattery}"
+                                               FontWeight="SemiBold" VerticalAlignment="Center"
+                                               Foreground="{DynamicResource SuccessColor}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="{Binding SelectedControllerStartupDetail}" TextWrapping="Wrap" Margin="0,8,0,0"
+                                   Foreground="{DynamicResource MutedForegroundColor}"
+                                   Visibility="{Binding SelectedControllerNeedsAttention, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <DockPanel Margin="0,12,0,0">
+                            <Button x:Name="overviewControllerInfoButton" DockPanel.Dock="Right" Style="{StaticResource BridgeSecondaryButtonStyle}"
+                                    Click="ControllerInfoBtn_Click" AutomationProperties.Name="{lex:Loc Strings:UI_55026208AB1964FE}"
+                                    VerticalAlignment="Center" MinHeight="30" Padding="10,4" Margin="6,0,0,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE946;" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0"/>
-                                    <TextBlock Text="{lex:Loc Strings:UI_55026208AB1964FE}" VerticalAlignment="Center"/>
+                                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE946;" />
+                                    <TextBlock Text="{lex:Loc Strings:UI_55026208AB1964FE}" VerticalAlignment="Center" />
                                 </StackPanel>
                             </Button>
-                        </StackPanel>
-                    </Grid>
+                            <WrapPanel>
+                                <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTip="{lex:Loc Strings:OverviewConnectionHelp}">
+                                    <DockPanel>
+                                        <Path DockPanel.Dock="Left">
+                                            <Path.Style>
+                                                <Style TargetType="Path" BasedOn="{StaticResource OverviewFactIconStyle}">
+                                                    <Setter Property="Data" Value="M 3,12 H 21 M 17,8 L 21,12 L 17,16 M 7,12 L 12,7 H 15 V 4 H 12 V 7 M 10,12 L 14,16 H 16 M 16,16 A 2,2 0 1 0 20,16 A 2,2 0 1 0 16,16 M 1,12 A 1,1 0 1 0 3,12 A 1,1 0 1 0 1,12" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding SelectedController.Device.ConnectionType}" Value="{x:Static runtime:ConnectionType.BT}">
+                                                            <Setter Property="Data" Value="M 6,7 L 18,17 L 12,22 V 2 L 18,7 L 6,17" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SelectedController.Device.ConnectionType}" Value="{x:Static runtime:ConnectionType.SONYWA}">
+                                                            <Setter Property="Data" Value="M 3,9 Q 12,1 21,9 M 6,13 Q 12,7 18,13 M 9,17 Q 12,14 15,17 M 12,21 H 12.1" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Path.Style>
+                                        </Path>
+                                        <TextBlock x:Name="overviewConnectionTitle" Text="{lex:Loc Strings:UI_639A40E82B9A96F0}" Style="{StaticResource OverviewFactTitleStyle}" />
+                                    </DockPanel>
+                                    <TextBlock Text="{Binding SelectedControllerConnection}" FontWeight="SemiBold" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTip="{lex:Loc Strings:UI_9D82CF2BFF83FCF9}"
+                                            Visibility="{Binding IsChecked, ElementName=showInputRate, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <DockPanel>
+                                        <Path DockPanel.Dock="Left" Style="{StaticResource OverviewFactIconStyle}"
+                                              Data="M 2,12 H 6 L 9,4 L 14,20 L 17,12 H 22" />
+                                        <TextBlock x:Name="overviewInputRateTitle" Text="{lex:Loc Strings:OverviewInputRate}" Style="{StaticResource OverviewFactTitleStyle}" />
+                                    </DockPanel>
+                                    <TextBlock Text="{Binding SelectedControllerLatency}" FontWeight="SemiBold" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTip="{lex:Loc Strings:OverviewAccessHelp}">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Left" Width="14" Height="14" Margin="0,0,6,0"
+                                                VerticalAlignment="Center" Background="{DynamicResource MutedForegroundColor}">
+                                            <Border.OpacityMask>
+                                                <ImageBrush ImageSource="{Binding SelectedController.ExclusiveSource}" Stretch="Uniform" />
+                                            </Border.OpacityMask>
+                                        </Border>
+                                        <TextBlock x:Name="overviewAccessTitle" Text="{lex:Loc Strings:OverviewAccess}" Style="{StaticResource OverviewFactTitleStyle}" />
+                                    </DockPanel>
+                                    <TextBlock x:Name="overviewAccessStatus" Text="{Binding SelectedController.IsExclusiveText}" FontWeight="SemiBold" />
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTip="{lex:Loc Strings:UI_8ED4DCE8B648CE47}">
+                                    <DockPanel>
+                                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource OverviewGlyphStyle}"
+                                                   Text="&#xE7FC;" Foreground="{DynamicResource MutedForegroundColor}" />
+                                        <TextBlock x:Name="overviewOutputTitle" Text="{lex:Loc Strings:UI_B7A098F1ABCAC8A2}" Style="{StaticResource OverviewFactTitleStyle}" />
+                                    </DockPanel>
+                                    <TextBlock Text="{Binding SelectedOutputControllerName}" FontWeight="SemiBold" />
+                                </StackPanel>
+                            </WrapPanel>
+                        </DockPanel>
+                    </StackPanel>
                 </Border>
 
-                <WrapPanel Grid.Row="1" Margin="-6,0,-6,8">
-                    <Border Style="{StaticResource OverviewCardStyle}" Width="218" MinHeight="112" Margin="6">
-                        <StackPanel>
-                            <TextBlock Text="{lex:Loc Strings:UI_453E643A57D4F5EC}" Style="{StaticResource OverviewEyebrowStyle}" />
-                            <TextBlock Text="{Binding SelectedControllerConnection}" Margin="0,11,0,3"
-                                       Style="{StaticResource OverviewValueStyle}" />
-                            <TextBlock Text="{lex:Loc Strings:UI_582646A81487A5AD}" Margin="0,5,0,2"
-                                       FontSize="11"
-                                       Foreground="{DynamicResource MutedForegroundColor}" />
-                            <TextBlock Text="{Binding SelectedControllerLatency}"
-                                       FontSize="12" FontWeight="SemiBold"
-                                       Foreground="{DynamicResource AccentColor}"
-                                       TextWrapping="Wrap"
-                                       ToolTip="{lex:Loc Strings:UI_9D82CF2BFF83FCF9}" />
+                <Grid x:Name="windowsAudioRoute" Margin="0,0,0,16" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                        <TextBlock x:Name="windowsAudioOutputText" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
+                        <TextBlock x:Name="windowsAudioRouteHelp" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
+                                   Foreground="{DynamicResource WarningColor}" />
+                    </StackPanel>
+                    <Button x:Name="windowsSoundSettingsButton" Grid.Column="1" Style="{DynamicResource BridgeSecondaryButtonStyle}"
+                            VerticalAlignment="Center" Click="WindowsSoundSettings_Click" />
+                </Grid>
+
+                <StackPanel x:Name="profileSelectionNotice" Margin="0,0,0,16"
+                            Visibility="{Binding NeedsProfileSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="{lex:Loc Strings:UI_18BCA2DAF670B6A1}" FontSize="18" FontWeight="SemiBold" />
+                    <TextBlock Text="{lex:Loc Strings:UI_0F55C369B95D6658}"
+                               TextWrapping="Wrap" Margin="0,5,0,10" Foreground="{DynamicResource MutedForegroundColor}" />
+                    <Button x:Name="selectProfileButton" Content="{lex:Loc Strings:UI_D42C2434603D234A}" HorizontalAlignment="Left"
+                            Style="{StaticResource BridgePrimaryButtonStyle}" Click="ControllerDetailsBtn_Click" />
+                </StackPanel>
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="{lex:Loc Strings:UI_FAFBA7D222C9E997}" FontSize="18" FontWeight="SemiBold" />
+                        <TextBlock Text="{lex:Loc Strings:UI_73633F28FF75F010}" Margin="0,3,0,0" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource MutedForegroundColor}" />
+                    </StackPanel>
+                    <ToggleButton x:Name="customizeOverviewButton" Grid.Column="1" Margin="12,0,0,0" Padding="10,5" MinHeight="32"
+                                  Style="{StaticResource OverviewCustomizeStyle}"
+                                  ToolTip="{lex:Loc Strings:OverviewCustomizeHelp}"
+                                  VerticalAlignment="Center" AutomationProperties.Name="{lex:Loc Strings:OverviewCustomize}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE713;" />
+                            <TextBlock Text="{lex:Loc Strings:OverviewCustomize}" VerticalAlignment="Center" />
                         </StackPanel>
-                    </Border>
-
-                    <Border Style="{StaticResource OverviewCardStyle}" Width="218" MinHeight="112" Margin="6">
-                        <StackPanel>
-                            <TextBlock Text="{lex:Loc Strings:UI_81805FBA72EB727E}" Style="{StaticResource OverviewEyebrowStyle}" />
-                            <TextBlock Text="{Binding CurrentProfileName}" Margin="0,11,0,3"
-                                       Style="{StaticResource OverviewValueStyle}" />
-                             <TextBlock Text="{Binding ProfileGuidance}"
-                                        TextWrapping="Wrap"
-                                       Foreground="{DynamicResource MutedForegroundColor}" />
-                        </StackPanel>
-                    </Border>
-
-                    <Border Style="{StaticResource OverviewCardStyle}" Width="218" MinHeight="112" Margin="6">
-                        <StackPanel>
-                            <TextBlock Text="{lex:Loc Strings:UI_F3326952EBDD8103}" Style="{StaticResource OverviewEyebrowStyle}" />
-                            <TextBlock Margin="0,11,0,3" Style="{StaticResource OverviewValueStyle}"
-                                       Text="{Binding SelectedOutputControllerName}" />
-                             <TextBlock Text="{lex:Loc Strings:UI_93F23D0D0C93A363}"
-                                        TextWrapping="Wrap"
-                                       Foreground="{DynamicResource MutedForegroundColor}" />
-                        </StackPanel>
-                    </Border>
-
-                    <Border Style="{StaticResource OverviewCardStyle}" Width="218" MinHeight="112" Margin="6">
-                        <StackPanel>
-                            <TextBlock Text="{lex:Loc Strings:UI_461A6F2045908873}" Style="{StaticResource OverviewEyebrowStyle}" />
-                            <TextBlock x:Name="controllerStartupTitle" Text="{Binding SelectedControllerStartupTitle}"
-                                       Margin="0,11,0,3">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource OverviewValueStyle}">
-                                        <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding SelectedControllerIsReady}" Value="True">
-                                                <Setter Property="Foreground" Value="{DynamicResource SuccessColor}" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding SelectedControllerNeedsAttention}" Value="True">
-                                                <Setter Property="Foreground" Value="#FFFFB020" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding SelectedControllerStartupStage}" Value="{x:Static runtime:ControllerStartupStage.ProfileRequired}">
-                                                <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                             <TextBlock Text="{Binding SelectedControllerStartupDetail}"
-                                        TextWrapping="Wrap"
-                                       Foreground="{DynamicResource MutedForegroundColor}" />
-                        </StackPanel>
-                    </Border>
-                </WrapPanel>
-
-                <Border Grid.Row="2" Style="{StaticResource OverviewCardStyle}" Margin="0,0,0,14">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <StackPanel Margin="0,0,0,18">
-                            <StackPanel x:Name="profileSelectionNotice" Margin="0,0,0,16"
-                                        Visibility="{Binding NeedsProfileSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <TextBlock Text="{lex:Loc Strings:UI_18BCA2DAF670B6A1}" FontSize="18" FontWeight="SemiBold" />
-                                <TextBlock Text="{lex:Loc Strings:UI_0F55C369B95D6658}"
-                                           TextWrapping="Wrap" Margin="0,5,0,10" Foreground="{DynamicResource MutedForegroundColor}" />
-                                <Button x:Name="selectProfileButton" Content="{lex:Loc Strings:UI_D42C2434603D234A}" HorizontalAlignment="Left"
-                                        Style="{StaticResource BridgePrimaryButtonStyle}" Click="ControllerDetailsBtn_Click" />
-                            </StackPanel>
-                            <TextBlock Text="{lex:Loc Strings:UI_FAFBA7D222C9E997}" FontSize="18" FontWeight="SemiBold" />
-                            <TextBlock Text="{lex:Loc Strings:UI_73633F28FF75F010}"
-                                       Margin="0,3,0,0" TextWrapping="Wrap"
-                                       Foreground="{DynamicResource MutedForegroundColor}" />
-                        </StackPanel>
-
-                        <Grid x:Name="quickProfileControls" Grid.Row="1" IsEnabled="{Binding HasSelectedProfile}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5*" />
-                                <ColumnDefinition Width="24" />
-                                <ColumnDefinition Width="6*" />
-                            </Grid.ColumnDefinitions>
-
+                    </ToggleButton>
+                    <Popup x:Name="overviewCustomization" Grid.Column="1" AllowsTransparency="True" Placement="Custom" StaysOpen="False"
+                           PlacementTarget="{Binding ElementName=customizeOverviewButton}" Opened="OverviewCustomization_Opened"
+                           IsOpen="{Binding IsChecked, ElementName=customizeOverviewButton, Mode=TwoWay}">
+                        <Border Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource AccentColor}"
+                                BorderThickness="1" CornerRadius="6" Padding="14" MinWidth="230" KeyboardNavigation.TabNavigation="Cycle"
+                                TextElement.Foreground="{DynamicResource ForegroundColor}"
+                                PreviewKeyDown="OverviewCustomization_PreviewKeyDown">
+                            <ScrollViewer MaxHeight="540" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <StackPanel>
-                                <Border Style="{StaticResource OverviewInsetCardStyle}">
-                                    <StackPanel>
-                                        <TextBlock Text="{lex:Loc Strings:UI_B7A098F1ABCAC8A2}" FontSize="15" FontWeight="SemiBold" />
-                                        <TextBlock Text="{lex:Loc Strings:UI_8ED4DCE8B648CE47}"
-                                                   Margin="0,3,0,11" FontSize="11" TextWrapping="Wrap"
-                                                   Foreground="{DynamicResource MutedForegroundColor}" />
-                                        <ComboBox x:Name="outputControllerCombo"
-                                                  ItemsSource="{Binding OutputControllerChoices}"
-                                                  SelectedValuePath="Type"
-                                                  SelectedValue="{Binding SelectedOutputController, Mode=OneWay}"
-                                                  SelectionChanged="OutputControllerCombo_SelectionChanged"
-                                                  DropDownOpened="OutputControllerCombo_DropDownOpened"
-                                                  DropDownClosed="OutputControllerCombo_DropDownClosed"
-                                                  PreviewKeyDown="OutputControllerCombo_PreviewKeyDown"
-                                                  Style="{StaticResource OverviewSettingsComboBoxStyle}">
-                                            <ComboBox.ItemContainerStyle>
-                                                <Style TargetType="ComboBoxItem" BasedOn="{StaticResource BridgeDropDownItemStyle}">
-                                                    <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
-                                                </Style>
-                                            </ComboBox.ItemContainerStyle>
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                        <TextBlock Text="{lex:Loc Strings:UI_D072432036B7D428}"
-                                                   Margin="0,7,0,0" TextWrapping="Wrap" FontSize="11"
-                                                   Foreground="{DynamicResource MutedForegroundColor}" />
-                                    </StackPanel>
-                                </Border>
-
-                                <Border Style="{StaticResource OverviewInsetCardStyle}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding SelectedController.FeedbackControlLabel}"
-                                                   FontSize="15" FontWeight="SemiBold" />
-                                        <TextBlock Grid.Column="1"
-                                                   Text="{Binding Value, ElementName=overviewHapticStrengthSlider, StringFormat={}{0:0}%}"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="{DynamicResource AccentColor}" />
-                                        <Slider x:Name="overviewHapticStrengthSlider" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,11,0,0"
-                                                Style="{StaticResource OverviewQuickSliderStyle}"
-                                                Minimum="0" Maximum="100" TickFrequency="1"
-                                                Value="{Binding HapticStrengthPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=220}" />
-                                    </Grid>
-                                </Border>
-
-                                <Border x:Name="managedSpeakerRouteCard" Style="{StaticResource OverviewInsetCardStyle}" Margin="0"
-                                        Visibility="{Binding SelectedControllerSupportsAudio, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <Grid Style="{StaticResource OverviewSpeakerPanelStyle}">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Text="{Binding SelectedController.ControllerAudioHeader}"
-                                                   FontSize="15" FontWeight="SemiBold" />
-                                        <TextBlock Grid.Row="1"
-                                                   Text="{Binding SelectedController.ControllerAudioDescription}"
-                                                   Margin="0,3,0,13" FontSize="11" TextWrapping="Wrap"
-                                                   Foreground="{DynamicResource MutedForegroundColor}" />
-                                        <StackPanel Grid.Row="2">
-                                            <CheckBox Content="{lex:Loc Strings:UI_E0CE522B70470B1D}"
-                                                      Style="{StaticResource OverviewToggleStyle}"
-                                                      IsChecked="{Binding SpeakerOutputEnabled, Mode=TwoWay}"
-                                                      ToolTip="{lex:Loc Strings:UI_C9D4739D7E6FA770}"
-                                                      Margin="0,0,0,12" />
-                                            <TextBlock Text="{lex:Loc Strings:UI_BDBDB91EB847C4AF}" Margin="0,0,0,7" />
-                                            <ComboBox SelectedIndex="{Binding ControllerAudioRoute, Mode=TwoWay}"
-                                                      IsEnabled="{Binding SpeakerOutputEnabled}" Margin="0,0,0,13">
-                                                <ComboBoxItem Content="{lex:Loc Strings:UI_45EB3D17B6D39E4B}" />
-                                                <ComboBoxItem Content="{lex:Loc Strings:UI_6E3B4116187DF042}" />
-                                                <ComboBoxItem Content="{lex:Loc Strings:UI_F9F5196A5ACCAE02}" />
-                                            </ComboBox>
-                                        </StackPanel>
-                                        <StackPanel Grid.Row="3">
-                                            <TextBlock Text="{lex:Loc Strings:UI_F6479EB15E423313}" Margin="0,0,0,7" FontWeight="SemiBold"
-                                                       ToolTip="{lex:Loc Strings:UI_2518864D93F54545}" />
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-                                                <ComboBox x:Name="controllerAudioSourceCombo"
-                                                          ItemsSource="{Binding ControllerAudioSourceChoices}"
-                                                          SelectedValuePath="EndpointId"
-                                                          SelectedValue="{Binding ControllerAudioSourceId, Mode=OneWay}"
-                                                          SelectionChanged="ControllerAudioSourceCombo_SelectionChanged"
-                                                          DropDownOpened="ControllerAudioSourceCombo_DropDownOpened"
-                                                          DropDownClosed="ControllerAudioSourceCombo_DropDownClosed"
-                                                          PreviewKeyDown="ControllerAudioSourceCombo_PreviewKeyDown"
-                                                          IsEnabled="{Binding AudioHapticsSpeakerOverrideActive, Converter={StaticResource InverseBoolConverter}}"
-                                                          Style="{StaticResource OverviewSettingsComboBoxStyle}"
-                                                          ToolTip="{Binding SelectedItem.Name, RelativeSource={RelativeSource Self}}">
-                                                    <ComboBox.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
-                                                        </DataTemplate>
-                                                    </ComboBox.ItemTemplate>
-                                                </ComboBox>
-                                                <Button x:Name="refreshControllerAudioSourcesButton"
-                                                        Grid.Column="1"
-                                                        Width="42" Height="42" Margin="8,0,0,0"
-                                                        Content="&#xE72C;"
-                                                        FontFamily="Segoe MDL2 Assets"
-                                                        FontSize="15"
-                                                        ToolTip="{lex:Loc Strings:UI_C0BB0BC24A916263}"
-                                                        Click="RefreshControllerAudioSources_Click" />
-                                            </Grid>
-                                        </StackPanel>
-                                        <Border Grid.Row="4" Margin="0,10,0,0" Padding="9,7"
-                                                CornerRadius="4" Background="#26FFB020"
-                                                BorderBrush="#80FFB020" BorderThickness="1"
-                                                Visibility="{Binding AudioHapticsSpeakerOverrideActive, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <TextBlock Text="{lex:Loc Strings:UI_1E197380E1B15FCF}"
-                                                       TextWrapping="Wrap" FontSize="11" Foreground="#FFFFC45C" />
-                                        </Border>
-                                    </Grid>
-                                </Border>
+                                <TextBlock Text="{lex:Loc Strings:OverviewCustomize}" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
+                                <CheckBox x:Name="showFeedback" Content="{lex:Loc Strings:OverviewOutputFeedback}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showAudio" Content="{lex:Loc Strings:UI_82DED80528D9A9C1}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showLevels" Content="{lex:Loc Strings:OverviewLevelsProcessing}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showMicrophone" Content="{lex:Loc Strings:UI_186352A881D0550E}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Margin="0,3,0,8" />
+                                <CheckBox x:Name="showInputRate" Content="{lex:Loc Strings:OverviewShowInputRate}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showFactTitles" Content="{lex:Loc Strings:OverviewShowFactTitles}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showWindowsAudioOutput" Content="{lex:Loc Strings:OverviewShowWindowsAudioOutput}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="compactSpacing" Content="{lex:Loc Strings:OverviewCompactSpacing}" IsChecked="False" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Margin="0,3,0,8" />
+                                <CheckBox x:Name="showQuickActions" Content="{lex:Loc Strings:OverviewShowQuickActions}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <StackPanel Margin="16,0,0,0" IsEnabled="{Binding IsChecked, ElementName=showQuickActions}">
+                                <CheckBox x:Name="showEditProfileAction" Content="{lex:Loc Strings:UI_936A2401794924E0}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showDeviceOptionsAction" Content="{lex:Loc Strings:DeviceOptions}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showControlPanelAction" Content="{lex:Loc Strings:ControlPanel}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showLightbarAction" Content="{lex:Loc Strings:Lightbar}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showDisconnectAction" Content="{lex:Loc Strings:UI_ACFC5BE785A9BB3D}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                </StackPanel>
                             </StackPanel>
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
+                </Grid>
 
-                            <StackPanel Grid.Column="2">
-                                <Border x:Name="nativeUsbHeadsetCard" Style="{StaticResource OverviewInsetCardStyle}"
-                                        Visibility="{Binding SelectedControllerShowsUsbHeadsetHelp, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <StackPanel>
-                                        <TextBlock Text="{lex:Loc Strings:UI_3F6F3681E1836CEE}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap" />
-                                        <TextBlock Text="{lex:Loc Strings:UI_38CB7E08FF501881}" Margin="0,10,0,10" TextWrapping="Wrap" />
-                                        <TextBlock Text="{lex:Loc Strings:UI_5988DDE8CAAC1548}" Margin="0,0,0,10" TextWrapping="Wrap" />
-                                        <TextBlock Text="{lex:Loc Strings:UI_6F83DB5E00837CA1}" Margin="0,0,0,12" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
-                                        <Button Content="{lex:Loc Strings:UI_8747828ECAFC30CE}" HorizontalAlignment="Left" Padding="10,6"
-                                                Style="{StaticResource BridgeSecondaryButtonStyle}"
-                                                Click="OpenWindowsSoundSettings_Click" ToolTip="{lex:Loc Strings:UI_960D4D84E9E5AA61}" />
+                <Grid x:Name="quickProfileControls" IsEnabled="{Binding HasSelectedProfile}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition x:Name="overviewSecondaryColumn" Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DockPanel x:Name="overviewPrimaryCards" Margin="0,0,6,0">
+                        <Border DockPanel.Dock="Top" Style="{StaticResource OverviewInsetCardStyle}"
+                                Visibility="{Binding IsChecked, ElementName=showFeedback, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Style="{StaticResource OverviewCardGlyphStyle}" Text="&#xE7FC;" />
+                                    <TextBlock Text="{lex:Loc Strings:OverviewOutputFeedback}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                </DockPanel>
+                                <StackPanel Margin="0,12,0,0">
+                                    <TextBlock Text="{lex:Loc Strings:UI_B7A098F1ABCAC8A2}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{lex:Loc Strings:UI_8ED4DCE8B648CE47}"
+                                               Margin="0,3,0,11" FontSize="11" TextWrapping="Wrap"
+                                               Foreground="{DynamicResource MutedForegroundColor}" />
+                                    <ComboBox x:Name="outputControllerCombo"
+                                              ToolTip="{lex:Loc Strings:UI_D072432036B7D428}"
+                                              ItemsSource="{Binding OutputControllerChoices}"
+                                              SelectedValuePath="Type"
+                                              SelectedValue="{Binding SelectedOutputController, Mode=OneWay}"
+                                              SelectionChanged="OutputControllerCombo_SelectionChanged"
+                                              DropDownOpened="OutputControllerCombo_DropDownOpened"
+                                              DropDownClosed="OutputControllerCombo_DropDownClosed"
+                                              PreviewKeyDown="OutputControllerCombo_PreviewKeyDown"
+                                              Style="{StaticResource OverviewSettingsComboBoxStyle}">
+                                        <ComboBox.ItemContainerStyle>
+                                            <Style TargetType="ComboBoxItem" BasedOn="{StaticResource BridgeDropDownItemStyle}">
+                                                <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                                            </Style>
+                                        </ComboBox.ItemContainerStyle>
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <TextBlock Text="{lex:Loc Strings:UI_D072432036B7D428}"
+                                               Margin="0,7,0,0" TextWrapping="Wrap" FontSize="11"
+                                               Foreground="{DynamicResource MutedForegroundColor}" />
+                                </StackPanel>
+                                <Grid Margin="0,14,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding SelectedController.FeedbackControlLabel}"
+                                               FontWeight="SemiBold" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Value, ElementName=overviewHapticStrengthSlider, StringFormat={}{0:0}%}"
+                                               FontWeight="SemiBold"
+                                               Foreground="{DynamicResource AccentColor}" />
+                                    <Slider x:Name="overviewHapticStrengthSlider" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,11,0,0"
+                                            Style="{StaticResource OverviewQuickSliderStyle}"
+                                            ToolTip="{lex:Loc Strings:UI_3F33CB8FFADB96A1}"
+                                            Minimum="0" Maximum="100" TickFrequency="1"
+                                            Value="{Binding HapticStrengthPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=220}" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        <Grid x:Name="overviewAudioCard" VerticalAlignment="Top"
+                              Visibility="{Binding IsChecked, ElementName=showAudio, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Border x:Name="managedSpeakerRouteCard" Style="{StaticResource OverviewInsetCardStyle}"
+                                    Visibility="{Binding SelectedControllerSupportsAudio, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Grid Style="{StaticResource OverviewSpeakerPanelStyle}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource OverviewCardGlyphStyle}" Text="&#xE767;" />
+                                        <TextBlock Text="{Binding SelectedController.ControllerAudioHeader}" FontSize="15" FontWeight="SemiBold" />
                                     </StackPanel>
-                                </Border>
-                                <StackPanel x:Name="managedAudioLevelsPanel"
-                                            Visibility="{Binding SelectedControllerSupportsAudio, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                <Border Style="{StaticResource OverviewInsetCardStyle}">
+                                    <TextBlock Grid.Row="1"
+                                               Text="{Binding SelectedController.ControllerAudioDescription}"
+                                               Margin="0,3,0,13" FontSize="11" TextWrapping="Wrap"
+                                               Foreground="{DynamicResource MutedForegroundColor}" />
+                                    <StackPanel Grid.Row="2">
+                                        <CheckBox Content="{lex:Loc Strings:UI_E0CE522B70470B1D}"
+                                                  Style="{StaticResource OverviewToggleStyle}"
+                                                  IsChecked="{Binding SpeakerOutputEnabled, Mode=TwoWay}"
+                                                  ToolTip="{lex:Loc Strings:UI_C9D4739D7E6FA770}"
+                                                  Margin="0,0,0,12" />
+                                        <TextBlock Text="{lex:Loc Strings:UI_BDBDB91EB847C4AF}" Margin="0,0,0,7" />
+                                        <ComboBox SelectedIndex="{Binding ControllerAudioRoute, Mode=TwoWay}"
+                                                  ToolTip="{lex:Loc Strings:OverviewAudioOutputHelp}" ToolTipService.ShowOnDisabled="True"
+                                                  IsEnabled="{Binding SpeakerOutputEnabled}" Margin="0,0,0,13">
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_45EB3D17B6D39E4B}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_6E3B4116187DF042}" />
+                                            <ComboBoxItem Content="{lex:Loc Strings:UI_F9F5196A5ACCAE02}" />
+                                        </ComboBox>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="3">
+                                        <TextBlock Text="{lex:Loc Strings:UI_F6479EB15E423313}" Margin="0,0,0,7" FontWeight="SemiBold"
+                                                   ToolTip="{lex:Loc Strings:UI_2518864D93F54545}" />
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <ComboBox x:Name="controllerAudioSourceCombo"
+                                                      ItemsSource="{Binding ControllerAudioSourceChoices}"
+                                                      SelectedValuePath="EndpointId"
+                                                      SelectedValue="{Binding ControllerAudioSourceId, Mode=OneWay}"
+                                                      SelectionChanged="ControllerAudioSourceCombo_SelectionChanged"
+                                                      DropDownOpened="ControllerAudioSourceCombo_DropDownOpened"
+                                                      DropDownClosed="ControllerAudioSourceCombo_DropDownClosed"
+                                                      PreviewKeyDown="ControllerAudioSourceCombo_PreviewKeyDown"
+                                                      IsEnabled="{Binding AudioHapticsSpeakerOverrideActive, Converter={StaticResource InverseBoolConverter}}"
+                                                      Style="{StaticResource OverviewSettingsComboBoxStyle}"
+                                                      ToolTip="{Binding SelectedItem.Name, RelativeSource={RelativeSource Self}}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                            <Button x:Name="refreshControllerAudioSourcesButton"
+                                                    Grid.Column="1"
+                                                    Width="42" Height="42" Margin="8,0,0,0"
+                                                    Content="&#xE72C;"
+                                                    FontFamily="Segoe MDL2 Assets"
+                                                    FontSize="15"
+                                                    ToolTip="{lex:Loc Strings:UI_C0BB0BC24A916263}"
+                                                    AutomationProperties.Name="{lex:Loc Strings:UI_C0BB0BC24A916263}"
+                                                    Click="RefreshControllerAudioSources_Click" />
+                                        </Grid>
+                                    </StackPanel>
+                                    <Border Grid.Row="4" Margin="0,10,0,0" Padding="9,7"
+                                            CornerRadius="4" Background="#26FFB020"
+                                            BorderBrush="#80FFB020" BorderThickness="1"
+                                            Visibility="{Binding AudioHapticsSpeakerOverrideActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <TextBlock Text="{lex:Loc Strings:UI_1E197380E1B15FCF}"
+                                                   TextWrapping="Wrap" FontSize="11" Foreground="#FFFFC45C" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                            <Border x:Name="nativeUsbHeadsetCard" Style="{StaticResource OverviewInsetCardStyle}"
+                                    IsVisibleChanged="OverviewCapabilityVisibility_Changed"
+                                    Visibility="{Binding SelectedControllerShowsUsbHeadsetHelp, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <StackPanel>
+                                    <TextBlock Text="{lex:Loc Strings:UI_3F6F3681E1836CEE}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                    <TextBlock Text="{lex:Loc Strings:UI_38CB7E08FF501881}" Margin="0,10,0,10" TextWrapping="Wrap" />
+                                    <TextBlock Text="{lex:Loc Strings:UI_5988DDE8CAAC1548}" Margin="0,0,0,10" TextWrapping="Wrap" />
+                                    <TextBlock Text="{lex:Loc Strings:UI_6F83DB5E00837CA1}" Margin="0,0,0,12" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
+                                    <Button Content="{lex:Loc Strings:UI_8747828ECAFC30CE}" HorizontalAlignment="Left" Padding="10,6"
+                                            Style="{StaticResource BridgeSecondaryButtonStyle}"
+                                            Click="OpenWindowsSoundSettings_Click" ToolTip="{lex:Loc Strings:UI_960D4D84E9E5AA61}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </DockPanel>
+                    <Grid x:Name="overviewSecondaryCards" Grid.Column="1" Margin="6,0,0,0">
+                        <DockPanel x:Name="managedAudioLevelsPanel"
+                                    IsVisibleChanged="OverviewCapabilityVisibility_Changed"
+                                    Visibility="{Binding SelectedControllerSupportsAudio, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Border x:Name="overviewLevelsCard" DockPanel.Dock="Top" Style="{StaticResource OverviewInsetCardStyle}"
+                                    Visibility="{Binding IsChecked, ElementName=showLevels, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <StackPanel>
+                                    <DockPanel>
+                                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource OverviewCardGlyphStyle}" Text="&#xE9E9;" />
+                                        <TextBlock Text="{lex:Loc Strings:OverviewLevelsProcessing}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                    </DockPanel>
                                     <StackPanel>
-                                        <TextBlock Text="{lex:Loc Strings:UI_B9626A4BE2859E41}" FontSize="15" FontWeight="SemiBold" />
                                         <Grid Margin="0,13,0,0">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
@@ -502,16 +675,13 @@
                                                        Foreground="{DynamicResource AccentColor}" />
                                             <Slider x:Name="overviewHeadphoneVolumeSlider" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,7,0,0"
                                                     Style="{StaticResource OverviewQuickSliderStyle}"
+                                                    ToolTip="{lex:Loc Strings:UI_D63398FCBCB31030}"
                                                     Minimum="0" Maximum="100" TickFrequency="1"
                                                     IsEnabled="{Binding SpeakerOutputEnabled}"
                                                     Value="{Binding HeadphoneVolumePercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=220}" />
                                         </Grid>
                                     </StackPanel>
-                                </Border>
-
-                                <Border Style="{StaticResource OverviewInsetCardStyle}">
                                     <StackPanel>
-                                        <TextBlock Text="{lex:Loc Strings:UI_FA06334FF2993A2A}" FontSize="15" FontWeight="SemiBold" />
                                         <Grid Margin="0,12,0,0">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
@@ -525,6 +695,7 @@
                                                        ToolTip="{lex:Loc Strings:UI_938EBD0298A1C86B}" />
                                             <ComboBox Grid.Column="1"
                                                       Style="{StaticResource OverviewSettingsComboBoxStyle}"
+                                                      ToolTip="{lex:Loc Strings:UI_938EBD0298A1C86B}"
                                                       SelectedIndex="{Binding SpeakerCompressionIndex, Mode=TwoWay}">
                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_CA7981B46ECF2C17}" />
                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}" />
@@ -538,6 +709,7 @@
                                                            MinWidth="34" TextAlignment="Right"
                                                            Text="{Binding Value, ElementName=overviewSpeakerBassSlider, StringFormat={}{0:0} dB}" />
                                                 <Slider x:Name="overviewSpeakerBassSlider" Style="{StaticResource OverviewQuickSliderStyle}"
+                                                        ToolTip="{lex:Loc Strings:UI_0CD971F14ABEF79D}"
                                                         Minimum="0" Maximum="6" TickFrequency="1"
                                                         TickPlacement="BottomRight"
                                                         IsSnapToTickEnabled="True"
@@ -545,16 +717,22 @@
                                             </DockPanel>
                                         </Grid>
                                     </StackPanel>
-                                </Border>
-
-                                <Border Style="{StaticResource OverviewInsetCardStyle}" Margin="0">
+                                </StackPanel>
+                            </Border>
+                            <Grid x:Name="overviewMicrophoneCard" VerticalAlignment="Top"
+                                  Visibility="{Binding IsChecked, ElementName=showMicrophone, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Border x:Name="overviewMicrophoneCardBorder" Style="{StaticResource OverviewInsetCardStyle}">
                                     <StackPanel>
-                                        <TextBlock Text="{lex:Loc Strings:UI_186352A881D0550E}" FontSize="15" FontWeight="SemiBold" />
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Left" Style="{StaticResource OverviewCardGlyphStyle}" Text="&#xE720;" />
+                                            <TextBlock Text="{lex:Loc Strings:UI_186352A881D0550E}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                        </DockPanel>
                                         <CheckBox Content="{Binding SelectedController.MicrophoneToggleLabel}"
                                                   Style="{StaticResource OverviewToggleStyle}"
                                                   IsChecked="{Binding MicrophoneInputEnabled, Mode=TwoWay}"
                                                   IsEnabled="{Binding CanChangeMicrophoneInput}"
                                                   ToolTip="{Binding MicrophoneAvailabilityText}"
+                                                  ToolTipService.ShowOnDisabled="True"
                                                   Margin="0,12,0,9" />
                                         <TextBlock Text="{Binding SelectedController.MicrophoneDescription}"
                                                    Margin="0,0,0,8" FontSize="11" TextWrapping="Wrap"
@@ -578,6 +756,7 @@
                                                        Foreground="{DynamicResource AccentColor}" />
                                             <Slider x:Name="overviewMicrophoneVolumeSlider" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,7,0,12"
                                                     Style="{StaticResource OverviewQuickSliderStyle}"
+                                                    ToolTip="{lex:Loc Strings:UI_0BF370DAEE7C4319}"
                                                     Minimum="0" Maximum="100" TickFrequency="1"
                                                     Value="{Binding MicrophoneVolumePercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=220}" />
                                         </Grid>
@@ -589,6 +768,7 @@
                                             <TextBlock Text="{lex:Loc Strings:UI_A5C124C188C58D67}" VerticalAlignment="Center" />
                                             <ComboBox Grid.Column="1"
                                                       Style="{StaticResource OverviewSettingsComboBoxStyle}"
+                                                      ToolTip="{lex:Loc Strings:UI_EC7D998467B9324A}"
                                                       SelectedIndex="{Binding MicrophoneNoiseSuppressionIndex, Mode=TwoWay}">
                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_CA7981B46ECF2C17}" />
                                                 <ComboBoxItem Content="{lex:Loc Strings:UI_5386EA5DB81C8579}" />
@@ -600,39 +780,72 @@
                                         </Grid>
                                     </StackPanel>
                                 </Border>
-                            </StackPanel>
-                            </StackPanel>
-                        </Grid>
+                            </Grid>
+                        </DockPanel>
                     </Grid>
-                </Border>
-
-                <Border Grid.Row="3" Style="{StaticResource OverviewCardStyle}">
-                    <StackPanel>
-                        <StackPanel>
-                            <TextBlock Text="{lex:Loc Strings:UI_1810407F5AB7093C}" FontSize="18" FontWeight="SemiBold" />
-                             <TextBlock Text="{lex:Loc Strings:UI_F11B455C20516607}"
-                                        Margin="0,3,0,0" TextWrapping="Wrap"
-                                        Foreground="{DynamicResource MutedForegroundColor}" />
-                        </StackPanel>
-                        <WrapPanel Margin="0,15,0,0">
-                            <Button Content="{lex:Loc Strings:UI_936A2401794924E0}" Margin="0,0,8,0" IsEnabled="{Binding HasSelectedProfile}"
-                                    Style="{StaticResource BridgePrimaryButtonStyle}"
-                                    Click="EditProfileBtn_Click" />
-                            <Button Content="{lex:Loc Strings:UI_698491699B80232C}" Margin="0,0,8,0"
-                                    Style="{StaticResource BridgeSecondaryButtonStyle}"
-                                    Click="ControllerDetailsBtn_Click" />
-                            <Button Content="{lex:Loc Strings:UI_3931782CB23A9E60}" Margin="0,0,8,0" IsEnabled="{Binding HasSelectedProfile}"
-                                    Style="{StaticResource BridgeSecondaryButtonStyle}"
-                                    ToolTip="{lex:Loc Strings:UI_FAA486CB307449D7}"
-                                    Click="LightbarBtn_Click" />
-                            <Button Content="{lex:Loc Strings:UI_ACFC5BE785A9BB3D}"
-                                    Style="{StaticResource BridgeSecondaryButtonStyle}"
-                                    IsEnabled="{Binding SelectedControllerIsWireless}"
-                                    Click="DisconnectBtn_Click" />
-                        </WrapPanel>
-                    </StackPanel>
-                </Border>
-            </Grid>
+                </Grid>
+            </StackPanel>
         </ScrollViewer>
+
+        <WrapPanel x:Name="overviewQuickActions" Grid.Row="1" HorizontalAlignment="Center" Margin="0,16"
+                   AutomationProperties.Name="{lex:Loc Strings:UI_1810407F5AB7093C}"
+                   >
+            <WrapPanel.Style>
+                <Style TargetType="WrapPanel">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding HasSelectedController}" Value="True" />
+                                <Condition Binding="{Binding IsChecked, ElementName=showQuickActions}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Visibility" Value="Visible" />
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </WrapPanel.Style>
+            <Button x:Name="overviewEditProfileButton" Visibility="{Binding IsChecked, ElementName=showEditProfileAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
+                    AutomationProperties.Name="{lex:Loc Strings:UI_936A2401794924E0}"
+                    Style="{StaticResource BridgePrimaryButtonStyle}" Click="EditProfileBtn_Click" IsEnabled="{Binding HasSelectedProfile}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE70F;" />
+                    <TextBlock Text="{lex:Loc Strings:UI_936A2401794924E0}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button x:Name="overviewDeviceOptionsButton" Visibility="{Binding IsChecked, ElementName=showDeviceOptionsAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
+                    AutomationProperties.Name="{lex:Loc Strings:DeviceOptions}"
+                    Style="{StaticResource BridgeSecondaryButtonStyle}" Click="DeviceOptionsBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE713;" />
+                    <TextBlock Text="{lex:Loc Strings:DeviceOptions}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button x:Name="overviewControlPanelButton" Visibility="{Binding IsChecked, ElementName=showControlPanelAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
+                    AutomationProperties.Name="{lex:Loc Strings:ControlPanel}"
+                    Style="{StaticResource BridgeSecondaryButtonStyle}" Click="ControlPanelBtn_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE7F8;" />
+                    <TextBlock Text="{lex:Loc Strings:ControlPanel}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button x:Name="overviewLightbarButton" Visibility="{Binding IsChecked, ElementName=showLightbarAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
+                    AutomationProperties.Name="{lex:Loc Strings:Lightbar}"
+                    Style="{StaticResource BridgeSecondaryButtonStyle}" Click="LightbarBtn_Click" IsEnabled="{Binding HasSelectedProfile}"
+                    ToolTip="{lex:Loc Strings:UI_FAA486CB307449D7}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE781;" />
+                    <TextBlock Text="{lex:Loc Strings:Lightbar}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button x:Name="overviewDisconnectButton" Visibility="{Binding IsChecked, ElementName=showDisconnectAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
+                    AutomationProperties.Name="{lex:Loc Strings:UI_ACFC5BE785A9BB3D}"
+                    ToolTip="{lex:Loc Strings:OverviewDisconnectHelp}" ToolTipService.ShowOnDisabled="True"
+                    Style="{StaticResource BridgeSecondaryButtonStyle}" Click="DisconnectBtn_Click" IsEnabled="{Binding SelectedControllerIsWireless}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE8CD;" />
+                    <TextBlock Text="{lex:Loc Strings:UI_ACFC5BE785A9BB3D}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </WrapPanel>
     </Grid>
 </UserControl>

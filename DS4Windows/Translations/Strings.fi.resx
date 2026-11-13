@@ -6788,4 +6788,125 @@ Varmuuskopiointi : </value>
     <value>Julkaisija: Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Värin esikatselu</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Pyyhkäisyn vähimmäismatka</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Suurenna matkaa, jotta tahattomat pyyhkäisyt eivät paina painikkeita.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Komponentit</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Virtuaaliohjainten tuki ja valinnaiset ajurit</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Hallitse komponentteja…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Virtuaaliohjaimen lähtö</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Tarkistetaan komponenttien tilaa…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Hallitse peliohjainten tarvitsemia ohjelmistoja ja ajureita.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Tarkistetaan…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Avaa VIIPER-loki</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Poista USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Valinnaiset ajurit</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Myös muut tämän tietokoneen sovellukset voivat käyttää näitä ajureita.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Piilotusasetukset</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Avaa HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Käytä Windowsin syötettä</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Hallitse jaettuja ajureita…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Kopioi komponenttien diagnostiikka</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Gyroskoopin kuollut alue</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Suodattaa pienet gyroskoopin lukemat lähellä lepotilaa. Arvo 0 välittää ne peliin. Oletusarvo on 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Mukauta</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Lähtö ja palaute</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Lähtötasot ja käsittely</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Syöttötaajuus</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Näytä syöttöraporttien taajuus</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Tiivis asettelu</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Käyttöoikeus</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Ohjaimen ilmoittama akun varaustaso. Plusmerkki (+) tarkoittaa latausta tai ulkoista virransyöttöä.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Näyttää, miten fyysinen ohjain on liitetty tähän tietokoneeseen.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Näyttää, miten DS4Windows käyttää fyysistä ohjainta. HidHide voi piilottaa sen peleiltä kaksoissyötön estämiseksi.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Valitse yleiskatsauksen osiot, kuvakkeiden otsikot, välit ja alapalkin painikkeet.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Valitse ohjaimen äänen toistopaikka. Ota suoratoisto käyttöön muuttaaksesi asetusta.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Katkaisee valitun langattoman ohjaimen yhteyden. USB-ohjain on irrotettava kaapelista.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Palauta piilotetut ohjaimet</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Valitse vain fyysinen ohjain, jota haluat käyttää DS4Windows:n ulkopuolella. Vanhemmat piilotussäännöt on ehkä lisätty manuaalisesti tai toisen sovelluksen kautta.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Valitut piilotussäännöt poistettiin. Yhdistä ohjain uudelleen, jos Windows ei ole vielä päivittänyt sitä. Varmuuskopio:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Toisen DS4Windows-istunnon käytössä olevia sääntöjä suojataan.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Palauta piilotetut ohjaimet.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Valittujen ohjainten palauttaminen</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Varmuuskopio tallennetaan ennen muutoksia. Valitsemattomat säännöt ja HidHide sovellusvaltuudet säilytetään. Ohjain piilotetaan uudelleen, jos aloitat DS4Windows piilottamalla käytössä.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Näytä kuvakkeiden otsikot</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Näytä yleiskatsauksen alapalkki</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Pidä nykyinen Windows äänitulostani</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Palauta aiempi toistolaite, jos Windows valitsee käynnistyksen tai uudelleenliittämisen aikana äskettäin luodun DS4Windows äänilaitteen. Mikrofonin ja viestinnän oletusasetukset pysyvät ennallaan.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows äänen ulostulo: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Ääniasetukset</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Valitse pelien ja sovellusten käyttämä Windows toistolaite.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows lähettää ääntä virtuaaliselle ohjaimelle. Ohjaimen äänensiirto on käytössä; tarkista sen äänilähteen ja lähtöreitin, jos et kuule mitään.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows lähettää ääntä virtuaaliselle ohjaimelle. Valitse tavalliset kaiuttimet tai kuulokkeet Äänen asetuksissa tai ota ohjaimen äänenlähetys käyttöön kyseiselle ohjaimelle.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Näytä Windows äänen ulostulo</value>
+  </data>
 </root>

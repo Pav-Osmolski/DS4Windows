@@ -6762,4 +6762,125 @@ Il backup: </value>
     <value>Pubblicato da Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Anteprima del colore</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Distanza minima di scorrimento</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Aumenta la distanza per evitare pressioni accidentali dei pulsanti durante lo scorrimento.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Componenti</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Supporto dei controller virtuali e driver facoltativi</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Gestisci componenti…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Output del controller virtuale</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Verifica dello stato dei componenti…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Gestisci il software e i driver usati dai tuoi controller.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Verifica in corso…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Apri registro VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Disinstalla USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Driver facoltativi</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Anche altre app su questo PC possono usare questi driver.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Impostazioni di occultamento</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Apri HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Usa l’input di Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Gestisci driver condivisi…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Copia diagnostica dei componenti</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Zona morta del giroscopio</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Filtra le piccole letture del giroscopio a riposo. Imposta 0 per inviarle al gioco. Il valore predefinito è 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Personalizza</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Uscita e feedback</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Livelli di uscita ed elaborazione</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Frequenza di input</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Mostra la frequenza dei report di input</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Spaziatura compatta</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Accesso</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Livello della batteria indicato dal controller. Il segno (+) indica ricarica o alimentazione esterna.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Indica come il controller fisico è collegato a questo PC.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Indica come DS4Windows accede al controller fisico. HidHide può nasconderlo ai giochi per evitare doppi input.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Scegli le sezioni della panoramica, i titoli delle icone, la spaziatura e i pulsanti della barra inferiore.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Scegli dove riprodurre l’audio del controller. Attiva lo streaming per modificare questa impostazione.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Disconnette il controller wireless selezionato. I controller USB devono essere scollegati.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Recuperare i controller nascosti</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Selezionare solo il controller fisico che si desidera utilizzare al di fuori di DS4Windows. Le regole di nascondimento precedenti potrebbero essere state aggiunte manualmente o da un'altra app. Niente viene selezionato automaticamente.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Le regole di nascosto selezionate sono state rimosse. riconnettere il controller se Windows non l'ha ancora aggiornato. Backup:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Nessuna regola di nascosto recuperabile è stata trovata. Le regole in uso da un'altra sessione DS4Windows sono protette.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Recuperare i controller nascosti.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Ripristino dei controller selezionati</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Una copia di backup viene salvata prima delle modifiche. Le regole non selezionate e le autorizzazioni dell'applicazione HidHide vengono conservate. Il controller verrà nuovamente nascosto se si avvia DS4Windows con nascondere abilitato.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Mostra i titoli delle icone</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Mostra la barra inferiore della panoramica</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mantenere l'attuale uscita audio Windows</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Ripristinare il dispositivo di riproduzione precedente se Windows seleziona un dispositivo audio DS4Windows appena creato durante l'avvio o la riconnessione. Le impostazioni predefinite per il microfono e le comunicazioni rimangono invariate.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows uscita audio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Impostazioni sonore</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Selezionare il dispositivo di riproduzione Windows utilizzato dai giochi e dalle app.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows sta inviando l'audio a un controller virtuale. il trasferimento audio del controller è abilitato; controllare la sua fonte audio e la rotta di uscita se non si sente nulla.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows sta inviando l'audio a un controller virtuale. Selezionare gli altoparlanti o le cuffie abituali nelle impostazioni audio o abilitare il trasferimento audio del controller per quel controller.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Mostra Windows uscita audio</value>
+  </data>
 </root>

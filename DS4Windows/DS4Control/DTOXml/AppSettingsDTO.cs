@@ -459,11 +459,17 @@ namespace DS4WinWPF.DS4Control.DTOXml
             set;
         }
 
+        [XmlElement("PreferWindowsKeyboardMouse")]
+        public bool PreferWindowsKeyboardMouse { get; set; }
+
         [XmlElement("ViiperDebugLogging")]
         public bool ViiperDebugLogging { get; set; }
 
         [XmlElement("ShowViiperTrayIcon")]
         public bool ShowViiperTrayIcon { get; set; } = true;
+
+        [XmlElement("PreserveWindowsAudioOutput")]
+        public bool PreserveWindowsAudioOutput { get; set; } = true;
 
         [XmlElement("PreferredViiperPath")]
         public string PreferredViiperPath
@@ -1015,6 +1021,8 @@ namespace DS4WinWPF.DS4Control.DTOXml
             OutputSlotsColumnWidths = source.outputSlotsColumnWidths?.ToArray() ?? Array.Empty<double>();
             SuppressViiperSetupPrompt = source.suppressViiperSetupPrompt;
             ShowViiperTrayIcon = source.showViiperTrayIcon;
+            PreserveWindowsAudioOutput = source.preserveWindowsAudioOutput;
+            PreferWindowsKeyboardMouse = source.preferWindowsKeyboardMouse;
             ViiperDebugLogging = source.viiperDebugLogging;
             PreferredViiperPath = source.preferredViiperPath;
             CloseMinimizes = source.closeMini;
@@ -1139,6 +1147,8 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.suppressViiperSetupPrompt =
                 SuppressViiperSetupPrompt;
             destination.showViiperTrayIcon = ShowViiperTrayIcon;
+            destination.preserveWindowsAudioOutput = PreserveWindowsAudioOutput;
+            destination.preferWindowsKeyboardMouse = PreferWindowsKeyboardMouse;
             destination.viiperDebugLogging = ViiperDebugLogging;
             destination.preferredViiperPath = PreferredViiperPath ??
                 string.Empty;

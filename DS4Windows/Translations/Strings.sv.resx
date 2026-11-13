@@ -6764,4 +6764,125 @@ och backup: </value>
     <value>Utgiven av Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Förhandsvisning av färg</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Minsta svepavstånd</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Öka avståndet för att undvika knapptryckningar vid oavsiktliga svep.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Komponenter</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Stöd för virtuella handkontroller och valfria drivrutiner</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Hantera komponenter…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Utmatning för virtuell handkontroll</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Kontrollerar komponentstatus…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Hantera programvara och drivrutiner för dina handkontroller.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Kontrollerar…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Öppna VIIPER-loggen</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Avinstallera USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Valfria drivrutiner</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Även andra appar på datorn kan använda dessa drivrutiner.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Inställningar för döljning</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Öppna HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Använd Windows-inmatning</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Hantera delade drivrutiner…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Kopiera komponentdiagnostik</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Gyroskopets dödzon</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Filtrerar bort små gyroskopvärden nära viloläget. Ange 0 för att skicka dem till spelet. Standardvärdet är 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Anpassa</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Utmatning och återkoppling</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Utgångsnivåer och bearbetning</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Inmatningsfrekvens</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Visa frekvensen för inmatningsrapporter</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Kompakta mellanrum</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Åtkomst</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Batterinivån som handkontrollen rapporterar. Plustecknet (+) anger laddning eller extern strömförsörjning.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Visar hur den fysiska handkontrollen är ansluten till den här datorn.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Visar hur DS4Windows får åtkomst till den fysiska handkontrollen. HidHide kan dölja den för spel för att undvika dubbla inmatningar.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Välj översiktens avsnitt, ikonrubriker, mellanrum och knappar i det nedre fältet.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Välj var handkontrollens ljud spelas upp. Aktivera strömning för att ändra inställningen.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Kopplar från den valda trådlösa handkontrollen. USB-handkontroller måste kopplas ur.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Återställ dolda kontroller</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Välj endast den fysiska styrenheten som du vill använda utanför DS4Windows. Äldre regler för att dölja kan ha lagts till manuellt eller av en annan app. Inget väljs automatiskt.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Valda regler för att dölja har tagits bort. Anslut din handkontroll igen om Windows inte har uppdaterat den ännu.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Inga återställbara dolda regler hittades. Regler som används av en annan DS4Windows-session skyddas.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Återställa dolda kontroller ...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Återställa utvalda kontroller</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>En säkerhetskopia sparas innan ändringar görs. Ovalda regler och HidHide applikationsbehörigheter bevaras. Din handkontroll döljs igen om du startar DS4Windows med att dölja aktiverat.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Visa ikonrubriker</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Visa översiktens nedre fält</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Håll den aktuella Windows ljudutgången</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Återställ den tidigare uppspelningsenheten om Windows väljer en nyskapad DS4Windows-ljudenhet under start eller återanslutning. Mikrofon- och kommunikationsstandarderna förblir oförändrade.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows ljudutgång: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Ljudinställningar</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Välj den Windows uppspelningsenhet som används av dina spel och appar.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows skickar ljud till en virtuell controller. Controller-ljudöverföring är aktiverad; kontrollera dess ljudkälla och utmatningsväg om du inte hör något.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows skickar ljud till en virtuell styrenhet. Välj dina vanliga högtalare eller hörlurar i Ljudinställningar, eller aktivera styrenhetens ljudöverföring för den styrenheten.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Visa Windows ljudutgång</value>
+  </data>
 </root>

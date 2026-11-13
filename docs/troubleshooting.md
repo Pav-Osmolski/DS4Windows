@@ -17,6 +17,25 @@ output reproduce the problem.
 4. If Device Manager shows the controller disabled, verify its identity before
    enabling that device. Avoid disabling unrelated HID devices.
 
+### Controller stays hidden after Stop or exit
+
+Normal **Stop** or tray-menu **Exit** releases DS4Windows-managed hiding rules,
+including rules retained by **Keep controllers hidden between reconnects**.
+Closing the window may only minimize the app, depending on your settings.
+
+A crash, forced termination or older build can leave persistent HidHide rules
+behind. Builds with ownership recovery restore confirmed abandoned rules at
+Start. For older or untracked rules, use **Stop**, then **Settings > Components >
+Recover hidden controllers…**. Select only your physical controller's entries
+and choose **Restore selected controllers**. Nothing is selected automatically.
+Unselected rules and application permissions are preserved, with a backup saved
+before changes. Reconnect the controller if Windows has not refreshed its list.
+
+There is no need to uninstall HidHide to perform recovery. If another DS4Windows
+session owns a rule, stop that session too. Rules created by another mapper or
+a manual setup require explicit selection because DS4Windows cannot safely
+assume they are abandoned. See [HidHide recovery](hidhide-device-lifecycle.md).
+
 ### A second Bluetooth controller will not connect
 
 Check **Windows > Bluetooth & devices** during the failed attempt. If Windows
@@ -195,6 +214,31 @@ Disable profile Trigger Lab effects while testing game-authored triggers.
 Test native game haptics separately from Audio Haptics capture. Use the
 [controller audio guide](controller-audio.md) for endpoint/mute setup and
 [compatibility guide](controller-compatibility.md) for hardware limits.
+
+### Game audio goes silent when the virtual controller appears
+
+Check **Windows audio output** on Overview. If Windows selected **DS4Windows
+Controller N Audio**, choose your usual speakers or headphones using **Sound
+settings**, or enable controller audio forwarding and check its source/route.
+Creating a virtual sound device does not automatically enable forwarding.
+You can hide this status section under **Overview > Customize > Show Windows
+audio output**. Hiding it does not turn off playback protection.
+
+**Settings > Components > Keep my current Windows audio output** is on by
+default. It captures the current console and multimedia playback defaults before
+creating a virtual device, then restores each at most once if Windows selects
+that device within two seconds of its arrival during startup/reconnect. The
+previous device must still be available. Microphone and communications defaults
+are not changed. Other devices, existing endpoints and later selections are left
+alone. If you want to select a newly appearing controller output yourself,
+turn the option off: Windows notifications do not distinguish an automatic
+selection from a manual selection made at the same instant.
+
+The protection cannot recover an unknown previous output if Windows already
+switched to a physical USB controller before DS4Windows started. Use Sound
+settings in that case. Keep the virtual playback endpoint **enabled** for native
+DualSense game haptics; it does not have to be the default output. Disabling
+**Audio Haptics** stops audio-to-vibration processing, not audio-device creation.
 
 ### Triggers work, but native DualSense speaker/haptics are silent
 

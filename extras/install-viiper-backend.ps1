@@ -15,7 +15,9 @@ param(
     [switch]$SkipStartupTasks,
     [switch]$SetupMutexAlreadyHeld,
     [switch]$InstallerMode,
-    [string]$CorrelationId
+    [string]$CorrelationId,
+    [ValidateSet("Remove", "Verify", "Restore")]
+    [string]$UsbipComponentAction
 )
 
 # DS4Windows normally streams this script from an embedded resource into the
@@ -943,10 +945,11 @@ function Disconnect-UsbipImports([string]$usbipPath) {
 }
 
 function Remove-MismatchedUsbipPackage($entry, [Version]$installedVersion,
-        [Version]$requiredVersion, [switch]$ForceUnsafeReplacement) {
+        [Version]$requiredVersion, [switch]$ForceUnsafeReplacement,
+        [switch]$IntentionalRemoval) {
     if (-not $installedVersion -or
             ($installedVersion -eq $requiredVersion -and
-            -not $ForceUnsafeReplacement)) {
+            -not $ForceUnsafeReplacement -and -not $IntentionalRemoval)) {
         return $false
     }
     if (-not $entry) {
@@ -996,8 +999,16 @@ function Remove-MismatchedUsbipPackage($entry, [Version]$installedVersion,
         throw "The exact-version usbip-win2 uninstall record points outside " +
             "the canonical install directory: $uninstaller"
     }
+    if ($IntentionalRemoval) {
+        [void](Assert-SafeManagedDirectory $canonicalUsbipDir "USB/IP installation" -RequireExisting)
+        if ((Get-Item -LiteralPath $uninstaller).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+            throw "The USB/IP uninstaller is a link. No driver change was made."
+        }
+    }
 
-    $reason = if ($ForceUnsafeReplacement) {
+    $reason = if ($IntentionalRemoval) {
+        "usbip-win2 $installedVersion at the user's request"
+    } elseif ($ForceUnsafeReplacement) {
         "unsafe or mixed usbip-win2 $installedVersion driver files"
     } else {
         "unsupported usbip-win2 $installedVersion"
@@ -1013,6 +1024,9 @@ function Remove-MismatchedUsbipPackage($entry, [Version]$installedVersion,
     $uninstallLogPath = Join-Path $script:InstallerLogRoot (
         "usbip-uninstall-" + [Guid]::NewGuid().ToString("N") + ".log")
     Set-UsbipReplacementBoundary $installedVersion $requiredVersion $uninstallLogPath
+    if ($IntentionalRemoval) {
+        Set-UsbipComponentState ("Removing:" + (Get-WindowsBootSessionId))
+    }
     Write-SetupLog ("USBIP phase-one uninstall log: $uninstallLogPath") Cyan
     try {
         $uninstall = Start-Process -FilePath $uninstaller `
@@ -1022,8 +1036,10 @@ function Remove-MismatchedUsbipPackage($entry, [Version]$installedVersion,
     }
     catch {
         $startFailure = $_.Exception.Message
-        Remove-Item -LiteralPath $script:UsbipReplacementStatePath -Force `
-            -ErrorAction Stop
+        if (-not $IntentionalRemoval) {
+            Remove-Item -LiteralPath $script:UsbipReplacementStatePath -Force `
+                -ErrorAction Stop
+        }
         throw "Could not start the usbip-win2 uninstaller: $startFailure"
     }
     $script:UsbipReplacementPhaseOne = $true
@@ -1047,8 +1063,10 @@ function Remove-MismatchedUsbipPackage($entry, [Version]$installedVersion,
         "Driver removal still requires post-reboot verification.") Cyan
     if ($uninstall.ExitCode -ne 0) {
         $script:UsbipReplacementPhaseOne = $false
-        Remove-Item -LiteralPath $script:UsbipReplacementStatePath -Force `
-            -ErrorAction Stop
+        if (-not $IntentionalRemoval) {
+            Remove-Item -LiteralPath $script:UsbipReplacementStatePath -Force `
+                -ErrorAction Stop
+        }
         throw "usbip-win2 uninstall failed with exit code " +
             "$($uninstall.ExitCode)."
     }
@@ -1062,6 +1080,99 @@ function Remove-MismatchedUsbipPackage($entry, [Version]$installedVersion,
         "Install / Repair again to install packaged $requiredVersion."
     ) Yellow
     return $true
+}
+
+function Get-UsbipComponentState {
+    return (Get-ItemProperty -LiteralPath $script:InfrastructureRegistryPath `
+        -ErrorAction SilentlyContinue).UsbipComponentState
+}
+
+function Set-UsbipComponentState([string]$state) {
+    if (-not (Test-Path -LiteralPath $script:InfrastructureRegistryPath)) {
+        New-Item -Path $script:InfrastructureRegistryPath | Out-Null
+    }
+    if ($state) {
+        Set-ItemProperty -LiteralPath $script:InfrastructureRegistryPath `
+            -Name UsbipComponentState -Value $state
+    }
+    else {
+        Remove-ItemProperty -LiteralPath $script:InfrastructureRegistryPath `
+            -Name UsbipComponentState -ErrorAction Stop
+    }
+}
+
+function Test-PinnedUsbipComponent {
+    $directory = Split-Path -Parent $script:CanonicalUsbipPath
+    if (-not (Test-Path -LiteralPath $script:CanonicalUsbipPath -PathType Leaf)) { return $false }
+    [void](Assert-SafeManagedDirectory $directory "USB/IP installation" -RequireExisting)
+    return (Test-FileSha256 $script:CanonicalUsbipPath $script:UsbipExecutableSha256) -and
+        (Test-FileSha256 (Join-Path $directory "libusbip.dll") $script:UsbipLibrarySha256) -and
+        (Get-UsbipDriverIntegrity).Safe -and
+        (Test-UsbipRuntime $script:CanonicalUsbipPath)
+}
+
+function Invoke-UsbipComponentAction([string]$action) {
+    $state = Get-UsbipComponentState
+    $boot = Get-WindowsBootSessionId
+    $citrix = Get-CitrixUsbMonitorState
+    if ($action -ne "Verify" -and $citrix -and ($citrix.State -eq "Running" -or $citrix.Start -ne 4)) {
+        throw "Resolve the Citrix USB Monitor conflict before changing USB/IP."
+    }
+    if ($state -eq "Removing:$boot" -or $state -eq "Restoring:$boot") {
+        return 3010
+    }
+    if ($action -eq "Remove") {
+        $retryRemoval = $state -like "Removing:*"
+        if ($state -and -not $retryRemoval) {
+            throw "A USB/IP transition is already recorded. Refresh its status before continuing."
+        }
+        if (-not $retryRemoval -and (Test-Path -LiteralPath $script:UsbipReplacementStatePath)) {
+            throw "Finish the pending USB/IP driver repair before requesting removal."
+        }
+        $version = Get-UsbipInstalledVersion
+        if ($version -ne $script:RequiredUsbipVersion -or -not (Test-PinnedUsbipComponent)) {
+            throw "USB/IP cannot be safely inspected. Use its registered uninstaller in Windows Installed apps."
+        }
+        $entry = Get-UsbipUninstallEntry $version
+        if (-not $entry) { throw "The verified USB/IP package has no matching Windows uninstall record." }
+        if (@(Get-UsbipImportedPortBlocks $script:CanonicalUsbipPath).Count -ne 0) {
+            throw "USB/IP devices are still attached. Close the owning applications or detach those devices and retry. No driver change was made."
+        }
+        $script:InstallDir = Assert-SafeManagedDirectory $script:InstallDir "VIIPER installation"
+        New-Item -ItemType Directory -Path $script:InstallDir -Force | Out-Null
+        Protect-ElevatedTaskTargetDirectory $script:InstallDir "VIIPER"
+        [void](Remove-MismatchedUsbipPackage $entry $version $script:RequiredUsbipVersion -IntentionalRemoval)
+        return 3010
+    }
+    if ($action -eq "Verify") {
+        if ($state -notlike "Removing:*") { throw "There is no pending USB/IP removal to verify." }
+        if (Test-Path -LiteralPath $script:CanonicalUsbipPath) {
+            throw "USB/IP is still installed. Check the uninstall log and Windows Installed apps before proceeding."
+        }
+        if (Test-Path -LiteralPath $script:UsbipReplacementStatePath) { Resolve-UsbipReplacementBoundary }
+        else { Assert-UsbipPostRebootState }
+        Set-UsbipComponentState "Removed"
+        return 0
+    }
+    if ($state -ne "Removed" -and $state -notlike "Restoring:*") {
+        throw "Verify USB/IP removal before restoring it."
+    }
+    if (-not (Test-PinnedUsbipComponent)) {
+        if (Test-Path -LiteralPath $script:CanonicalUsbipPath) {
+            throw "USB/IP files are present but the supported driver is not ready. Check the setup log before retrying."
+        }
+        Assert-UsbipPostRebootState
+        Assert-FileSha256 $script:BundledUsbipInstallerPath $script:UsbipInstallerSha256
+        Set-UsbipComponentState ("Restoring:" + $boot)
+        $installer = Start-Process -FilePath $script:BundledUsbipInstallerPath `
+            -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /RESTARTEXITCODE=3010" `
+            -PassThru -Wait -WindowStyle Hidden
+        if ($installer.ExitCode -eq 3010) { return 3010 }
+        if ($installer.ExitCode -ne 0) { throw "USB/IP setup failed with exit code $($installer.ExitCode)." }
+        if (-not (Test-PinnedUsbipComponent)) { return 3010 }
+    }
+    Set-UsbipComponentState $null
+    return 0
 }
 
 function Disable-ViiperStartup {
@@ -3136,6 +3247,16 @@ try {
             "The all-in-one installer owns the cross-session setup mutex " +
             "through child verification and reboot-resume staging."
         ) Green
+    }
+
+    if ($UsbipComponentAction) {
+        $script:ExitCode = Invoke-UsbipComponentAction $UsbipComponentAction
+        Write-SetupLog "USB/IP component action $UsbipComponentAction finished (exit=$script:ExitCode)." Cyan
+        exit $script:ExitCode
+    }
+    if (Get-UsbipComponentState) {
+        Write-SetupLog "USB/IP is paused by choice. Restore it from Settings > Components." Yellow
+        exit 1
     }
 
     Write-Host ""

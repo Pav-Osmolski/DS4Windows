@@ -6766,4 +6766,125 @@ Backup : </value>
     <value>Phát hành bởi Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Xem trước màu</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Khoảng cách vuốt tối thiểu</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Tăng khoảng cách để tránh vô tình kích hoạt nút khi vuốt.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Thành phần</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Hỗ trợ tay cầm ảo và trình điều khiển tùy chọn</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Quản lý thành phần…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Đầu ra tay cầm ảo</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Đang kiểm tra trạng thái thành phần…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Quản lý phần mềm và trình điều khiển hỗ trợ tay cầm của bạn.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Đang kiểm tra…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Mở nhật ký VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Gỡ cài đặt USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Trình điều khiển tùy chọn</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Các ứng dụng khác trên PC này cũng có thể dùng các trình điều khiển này.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Cài đặt ẩn thiết bị</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Mở HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Dùng phương thức nhập liệu của Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Quản lý trình điều khiển dùng chung…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Sao chép thông tin chẩn đoán thành phần</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Vùng chết của con quay hồi chuyển</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Lọc các giá trị nhỏ của con quay hồi chuyển khi gần như đứng yên. Đặt 0 để chuyển chúng đến trò chơi. Giá trị mặc định là 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Tùy chỉnh</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Đầu ra và phản hồi</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Mức đầu ra và xử lý</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Tần số đầu vào</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Hiện tần số báo cáo đầu vào</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Khoảng cách thu gọn</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Quyền truy cập</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Mức pin do tay cầm báo cáo. Dấu cộng (+) cho biết tay cầm đang sạc hoặc dùng nguồn ngoài.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Cho biết tay cầm vật lý kết nối với máy tính này bằng cách nào.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Cho biết cách DS4Windows truy cập tay cầm vật lý. HidHide có thể ẩn tay cầm khỏi trò chơi để tránh nhận lệnh hai lần.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Chọn các mục Tổng quan, tiêu đề biểu tượng, khoảng cách và nút trên thanh dưới.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Chọn nơi phát âm thanh của tay cầm. Bật truyền âm thanh để thay đổi tùy chọn này.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Ngắt kết nối tay cầm không dây đã chọn. Với tay cầm USB, hãy rút cáp.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Khôi phục các bộ điều khiển ẩn</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Chỉ chọn bộ điều khiển vật lý mà bạn muốn sử dụng bên ngoài DS4Windows. Các quy tắc ẩn cũ có thể đã được thêm bằng tay hoặc bởi một ứng dụng khác. không có gì được chọn tự động.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Các quy tắc ẩn đã được loại bỏ. Kết nối lại bộ điều khiển của bạn nếu Windows chưa làm mới nó. Sao lưu:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Không có quy tắc ẩn có thể phục hồi được tìm thấy. Các quy tắc đang được sử dụng bởi phiên DS4Windows khác được bảo vệ.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Khôi phục các bộ điều khiển ẩn ...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Khôi phục các bộ điều khiển đã chọn</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Một bản sao lưu được lưu trước khi thay đổi. Các quy tắc chưa chọn và quyền ứng dụng HidHide được giữ lại. bộ điều khiển của bạn sẽ được ẩn một lần nữa nếu bạn bắt đầu DS4Windows với ẩn bật.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Hiện tiêu đề biểu tượng</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Hiện thanh dưới của Tổng quan</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Giữ âm thanh Windows hiện tại của tôi</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Khôi phục thiết bị phát trước đó nếu Windows chọn một thiết bị âm thanh DS4Windows mới được tạo trong khi khởi động hoặc kết nối lại. Microphone và thông tin liên lạc mặc định không thay đổi. Tắt điều này để tự chọn đầu ra bộ điều khiển mới được tạo.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows đầu ra âm thanh: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Âm thanh Settings</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Chọn thiết bị phát Windows được sử dụng bởi các trò chơi và ứng dụng của bạn.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows đang gửi âm thanh đến một bộ điều khiển ảo. Bộ điều khiển chuyển tiếp âm thanh được bật; kiểm tra nguồn âm thanh của nó và đường dẫn đầu ra nếu bạn không nghe thấy gì.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows đang gửi âm thanh đến một bộ điều khiển ảo.Chọn loa hoặc tai nghe thông thường của bạn trong cài đặt âm thanh, hoặc bật chuyển tiếp âm thanh của bộ điều khiển cho bộ điều khiển đó.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Hiển thị Windows đầu ra âm thanh</value>
+  </data>
 </root>

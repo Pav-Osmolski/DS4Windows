@@ -3290,6 +3290,9 @@ namespace DS4Windows
             return true;
         }
 
+        // An opaque ARGB value is published atomically by the profile editor. Zero clears it.
+        internal volatile int ProfileLightbarPreviewArgb;
+
         protected DS4HapticState currentHap = new DS4HapticState();
         public virtual void SetHapticState(ref DS4HapticState hs)
         {

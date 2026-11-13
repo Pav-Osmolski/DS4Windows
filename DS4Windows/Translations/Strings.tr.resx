@@ -6788,4 +6788,125 @@ backup için: </value>
     <value>Yayınlayan: Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Renk önizlemesi</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>En kısa kaydırma mesafesi</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Yanlışlıkla yapılan kaydırmaların düğmeleri tetiklemesini önlemek için mesafeyi artırın.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Bileşenler</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Sanal kontrolcü desteği ve isteğe bağlı sürücüler</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Bileşenleri yönet…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Sanal kontrolcü çıkışı</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Bileşen durumu denetleniyor…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Kontrolcülerinizi destekleyen yazılım ve sürücüleri yönetin.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Denetleniyor…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>VIIPER günlüğünü aç</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>USB/IP’yi kaldır…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>İsteğe bağlı sürücüler</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Bu bilgisayardaki diğer uygulamalar da bu sürücüleri kullanabilir.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Gizleme ayarları</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>HidHide’ı aç…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Windows girişini kullan</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Paylaşılan sürücüleri yönet…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Bileşen tanı bilgilerini kopyala</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Jiroskop ölü bölgesi</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Hareketsizliğe yakın küçük jiroskop değerlerini filtreler. Bunları oyuna iletmek için 0 kullanın. Varsayılan değer 32’dir.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Özelleştir</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Çıkış ve geri bildirim</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Çıkış düzeyleri ve işleme</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Giriş hızı</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Giriş raporu hızını göster</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Dar aralıklar</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Erişim</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Kontrolcünün bildirdiği pil düzeyi. Artı işareti (+), şarjı veya harici gücü gösterir.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Fiziksel kontrolcünün bu bilgisayara nasıl bağlandığını gösterir.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>DS4Windows’un fiziksel kontrolcüye nasıl eriştiğini gösterir. HidHide, çift girişi önlemek için kontrolcüyü oyunlardan gizleyebilir.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Genel bakış bölümlerini, simge başlıklarını, aralıkları ve alt çubuk düğmelerini seçin.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Kontrolcü sesinin nerede çalacağını seçin. Bu ayarı değiştirmek için ses akışını etkinleştirin.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Seçilen kablosuz kontrolcünün bağlantısını keser. USB kontrolcünün kablosu çıkarılmalıdır.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Gizli Kontrolörleri Geri Alın</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Sadece DS4Windows dışında kullanmak istediğiniz fiziksel denetleyiciyi seçin. Eski gizleme kuralları el ile veya başka bir uygulama tarafından eklenmiş olabilir. hiçbir şey otomatik olarak seçilmez.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Seçilen gizleme kuralları kaldırıldı. Windows henüz güncellenmemişse denetleyicinizi yeniden bağlayın. Yedekleme:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Başka bir DS4Windows oturum tarafından kullanılan kurallar korunmaktadır.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Gizli Kontrolörleri Geri Alın...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Seçilen Kontrolörleri Geri Dönüştürme</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Değişikliklerden önce bir yedekleme kaydedilir. Seçilmemiş kurallar ve HidHide uygulama izinleri korunur. DS4Windows'i gizleme etkinleştirerek başlatırsanız denetleyiciniz tekrar gizlenir.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Simge başlıklarını göster</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Genel bakış alt çubuğunu göster</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mevcut Windows ses çıkışını koruyun</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Windows yeni oluşturulan DS4Windows ses aygıtını başlatma veya yeniden bağlanma sırasında seçerse, önceki oynatma aygıtını geri yükleyin. Mikrofon ve iletişim varsayımları değişmez.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows ses çıkışı: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Ses ayarları</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Oyunlarınız ve uygulamalarınız için kullanılan Windows oynatma aygıtını seçin.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows bir sanal denetleyiciye ses gönderiyor. Denetleyici ses iletimi etkinleştirilmiştir; hiçbir şey duymazsanız ses kaynağını ve çıkış rotasını kontrol edin.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows bir sanal denetleyiciye ses gönderiyor. Ses ayarları'nda normal hoparlörlerinizi veya kulaklıklarınızı seçin veya bu denetleyici için denetleyicinin ses iletimini etkinleştirin.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Windows ses çıkışı</value>
+  </data>
 </root>

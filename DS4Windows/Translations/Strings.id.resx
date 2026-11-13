@@ -6786,4 +6786,125 @@ Untuk backup: </value>
     <value>Diterbitkan oleh Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Pratinjau warna</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Jarak usap minimum</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Perbesar jarak agar usapan yang tidak disengaja tidak memicu tombol.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Komponen</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Dukungan pengontrol virtual dan driver opsional</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Kelola komponen…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Output pengontrol virtual</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Memeriksa status komponen…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Kelola perangkat lunak dan driver yang mendukung pengontrol Anda.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Memeriksa…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Buka log VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Copot USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Driver opsional</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Aplikasi lain di PC ini juga dapat menggunakan driver ini.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Pengaturan penyembunyian</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Buka HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Gunakan input Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Kelola driver bersama…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Salin diagnostik komponen</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Zona mati giroskop</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Menyaring pembacaan kecil giroskop saat hampir diam. Gunakan 0 untuk meneruskannya ke gim. Nilai bawaan adalah 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Sesuaikan</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Keluaran dan umpan balik</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Level keluaran dan pemrosesan</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Laju input</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Tampilkan laju laporan input</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Jarak rapat</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Akses</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Tingkat baterai yang dilaporkan pengontrol. Tanda plus (+) menunjukkan pengisian daya atau daya eksternal.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Cara pengontrol fisik terhubung ke PC ini.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Cara DS4Windows mengakses pengontrol fisik. HidHide dapat menyembunyikannya dari gim untuk mencegah input ganda.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Pilih bagian Ringkasan, judul ikon, jarak, dan tombol bilah bawah.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Pilih tempat audio pengontrol diputar. Aktifkan streaming untuk mengubah pengaturan ini.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Memutus pengontrol nirkabel yang dipilih. Cabut kabel pengontrol USB.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Mengembalikan Controller Tersembunyi</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Pilih hanya kontrol fisik yang ingin Anda gunakan di luar DS4Windows. aturan menyembunyikan yang lebih lama mungkin telah ditambahkan secara manual atau oleh aplikasi lain.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Atur ulang kontroler Anda jika Windows belum memperbarui.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Tidak ada aturan menyembunyikan yang dapat dipulihkan ditemukan. aturan yang digunakan oleh sesi DS4Windows lainnya dilindungi.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Mengembalikan pengendali tersembunyi</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Mengembalikan kontroler yang dipilih</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Sebuah cadangan disimpan sebelum perubahan. aturan yang tidak dipilih dan izin aplikasi HidHide dipertahankan. kontroler Anda akan tersembunyi lagi jika Anda memulai DS4Windows dengan menyembunyikan diaktifkan.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Tampilkan judul ikon</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Tampilkan bilah bawah Ringkasan</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Menjaga output audio Windows saya saat ini</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Mengembalikan perangkat pemutaran sebelumnya jika Windows memilih perangkat audio DS4Windows yang baru dibuat saat memulai atau menghubungkan kembali. default mikrofon dan komunikasi tidak berubah.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows output audio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Pengaturan Suara</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Pilih perangkat pemutaran Windows yang digunakan oleh game dan aplikasi Anda.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows mengirimkan audio ke kontroler virtual. pengalihan audio kontroler diaktifkan; periksa sumber audio dan rute output jika Anda tidak mendengar apa-apa.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows mengirimkan audio ke controller virtual. pilih speaker atau headphone Anda yang biasa dalam pengaturan suara, atau mengaktifkan transmisi audio controller untuk controller tersebut.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Menampilkan Windows output audio</value>
+  </data>
 </root>

@@ -10,6 +10,22 @@ selected by your profile. Available settings depend on the controller and connec
 ![Overview dashboard](images/site/overview.webp)
 
 Start here for a summary of your connected controller, active profile and backend status.
+Use **Customize** beside **Quick profile controls** to choose which cards to
+show, hide the input report rate or the titles beside its summary icons, or use
+compact spacing. Icons and their tooltips remain available when titles are hidden, and the layout
+keeps exactly the same spacing and height.
+Overview remembers
+these choices separately from your controller profiles.
+
+**Controller info** on the controller summary card opens information for that
+selected controller.
+
+**Quick actions** stays above the footer as you scroll. Use it to edit the active
+profile, open Device Options or the Windows Game Controllers control panel,
+change the lightbar or disconnect a wireless controller.
+In **Customize**, you can hide this Overview action bar or choose each button
+individually. Hiding the bar keeps your button choices for when you show it again.
+These options do not hide the app-wide service footer.
 
 ### Footer and activity details
 
@@ -412,7 +428,8 @@ Settings fills the available window width and groups related options into cards.
 | --- | --- |
 | General | Startup, window behavior, notifications and latency warnings |
 | Appearance | App theme, sidebar icon, tray icon, language and tooltips |
-| Controllers | VIIPER setup, HidHide, Steam Input recovery, device options and swipe profiles; optional Nintendo pairing |
+| Controllers | Virtual output status, device hiding, Steam Input recovery, connection options, swipe profiles and Nintendo pairing |
+| Components | VIIPER setup and logs, USB/IP removal and restoration, and optional HidHide and FakerInput drivers |
 | Updates & tools | Update checks, profile folder, diagnostic utilities, verbose logging and optional profile-editor timing logs (off by default) |
 | Integrations | DSX game mods, UDP motion output and OSC control/monitoring |
 | Advanced | Custom Steam folder, executable name, process priority and absolute mouse display |
@@ -462,7 +479,48 @@ Use [Swipe profiles](swipe-profiles.md) to limit profile cycling. For double
 input, configure HidHide and check overlapping Steam Input mappings.
 Run at Startup and Start Minimized are separate choices.
 
+### Notification-area menu
+
+Right-click the DS4Windows icon in the Windows notification area to select a
+controller's profile, open or minimise the window, or open the program folder.
+**Stop** stops controller processing and releases DS4Windows-managed hiding rules.
+**Exit** quits the app; closing the main window may only minimise it, depending
+on your window preferences.
+
+![Notification-area menu with profile selection, Stop and Exit](images/site/systray.webp)
+
+### Manage controller components
+
+Open **Settings > Components** or use **Manage components…** from the
+virtual output status in **Settings > Controllers**.
+
+![Component management showing backend status, optional drivers and recovery](images/site/settings-components.webp)
+
+- **VIIPER** shows the selected backend and its running status. Use
+  **Install / Repair VIIPER** to fix a backend that needs attention.
+- **USB/IP** can be removed from Windows with administrator approval.
+  Close games and other applications using USB/IP first. If an import is
+  still attached, removal stops. Restart Windows, reopen Components and
+  choose **Verify removal…** to finish. Virtual output stays paused across
+  app restarts and updates. Choose **Restore USB/IP…** to reinstall and
+  verify the supported driver, then reopen DS4Windows to start the backend.
+- **HidHide** shows both the DS4Windows hiding preference and the system-wide
+  hiding state. Use **Hiding settings** for DS4Windows or **Open HidHide…**
+  to manage the driver's settings in its configuration client. After **Stop**,
+  **Recover hidden controllers…** offers selective recovery of older hiding rules.
+  Nothing is selected automatically; configuration is backed up before changes.
+  See [hidden-controller recovery](troubleshooting.md#controller-stays-hidden-after-stop-or-exit).
+- **FakerInput** shows the installed driver and the keyboard and mouse
+  handler in use. Choose **Use Windows input** to use the Windows handler
+  after the next Stop/Start. Return to automatic selection to let DS4Windows
+  choose the handler again.
+
+Install missing optional drivers here. To remove an optional shared driver,
+use **Manage shared drivers…** to open Windows Installed apps.
+
 ### Battery alerts
+
+![Controller settings with battery alert and connection options](images/site/settings-controllers.webp)
 
 Open **Settings > Controllers > Battery alerts**. Automatic low-battery and
 fully-charged alerts are off by default. Enable the alerts you want, choose a

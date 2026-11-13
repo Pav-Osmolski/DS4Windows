@@ -12,6 +12,25 @@ namespace DS4Windows;
 
 internal enum SettingsFolder { AppData, Program }
 
+internal sealed record OverviewLayoutPreferences
+{
+    public int Version { get; init; } = 1;
+    public bool ShowFeedback { get; init; } = true;
+    public bool ShowAudio { get; init; } = true;
+    public bool ShowLevels { get; init; } = true;
+    public bool ShowMicrophone { get; init; } = true;
+    public bool ShowInputRate { get; init; } = true;
+    public bool ShowFactTitles { get; init; } = true;
+    public bool ShowWindowsAudioOutput { get; init; } = true;
+    public bool ShowQuickActions { get; init; } = true;
+    public bool ShowEditProfileAction { get; init; } = true;
+    public bool ShowDeviceOptionsAction { get; init; } = true;
+    public bool ShowControlPanelAction { get; init; } = true;
+    public bool ShowLightbarAction { get; init; } = true;
+    public bool ShowDisconnectAction { get; init; } = true;
+    public bool CompactSpacing { get; init; }
+}
+
 // The preference lives outside either settings directory, so choosing a protected
 // program directory does not require elevation. All persisted paths are relative
 // names from an allowlist; callers cannot select arbitrary directories.
@@ -140,6 +159,25 @@ internal sealed class SettingsStorage
         RejectLink(file);
         Save(file, new ProfileViewPreference { View = value });
     }
+    internal OverviewLayoutPreferences OverviewLayout
+    {
+        get
+        {
+            string file = Path.Combine(stateDirectory, "overview-layout.json");
+            if (!File.Exists(file)) return new();
+            RejectLink(file);
+            var preference = JsonSerializer.Deserialize<OverviewLayoutPreferences>(File.ReadAllText(file));
+            return preference?.Version == 1 ? preference : new();
+        }
+    }
+    internal void SetOverviewLayout(OverviewLayoutPreferences value)
+    {
+        RejectLink(stateDirectory);
+        string file = Path.Combine(stateDirectory, "overview-layout.json");
+        RejectLink(file);
+        Save(file, value);
+    }
+
     private sealed class SpecialActionOrderPreference
     {
         public int Version { get; set; } = 1;

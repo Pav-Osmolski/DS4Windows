@@ -139,6 +139,87 @@ public sealed class DualSensePhysicalPendingRepeatTests
         StringAssert.Contains(device.FormatNativeFeedbackHealth(), $"nativeLastStopCompletedRevision={stopRevision} ");
     }
 
+    [TestMethod]
+    public void CapturedAlternatingBowUpdatesLeaveRoomForBothPauseReleases()
+    {
+        var device = DualSenseNativeFeedbackDiagnosticsTests.OfflineDevice(ConnectionType.USB);
+        var context = Context(device);
+        var writes = new List<byte[]>();
+        device.PhysicalRawOutputWriteTestHook = r => { writes.Add((byte[])r.Clone()); return true; };
+        for (int i = 0; i < 10000; i++)
+        {
+            Assert.IsTrue(Enqueue(device, Bow((byte)(i % 3 == 0 ? 4 : i % 3 == 1 ? 8 : 12)), context, out _));
+        }
+        Assert.IsTrue(Field<int>(device, "physicalOutputCommandCount") <= 4);
+        Assert.IsTrue(Enqueue(device, Bow(4, 5), context, out _));
+        Assert.IsTrue(Enqueue(device, Bow(8, 5), context, out _));
+        while (Field<int>(device, "physicalOutputCommandCount") > 0)
+            Assert.AreEqual(DualSenseDevice.PhysicalOutputCommandProcessResult.Published, device.ProcessNextPhysicalOutputCommand());
+        Assert.AreEqual((byte)5, writes[^2][11]);
+        Assert.AreEqual((byte)5, writes[^1][22]);
+        Assert.IsTrue(Enqueue(device, Bow(12), context, out _), "An occurrence after delivery must be admitted again.");
+        Assert.AreEqual(1, Field<int>(device, "physicalOutputCommandCount"));
+    }
+
+    [TestMethod]
+    public void BowOffOnTransitionsAndOtherLaneCommandsRemainInOrder()
+    {
+        var device = DualSenseNativeFeedbackDiagnosticsTests.OfflineDevice(ConnectionType.USB);
+        var context = Context(device);
+        var barrier = Bow(12); barrier[5] = 1; // audio/vendor command barrier
+        byte[][] reports = { Bow(12), Bow(4, 5), Bow(4), Bow(8, 5), Bow(8), barrier, Bow(12) };
+        foreach (var r in reports) Assert.IsTrue(Enqueue(device, r, context, out _));
+        Assert.AreEqual(reports.Length, Field<int>(device, "physicalOutputCommandCount"));
+        var writes = new List<byte[]>();
+        device.PhysicalRawOutputWriteTestHook = r => { writes.Add((byte[])r.Clone()); return true; };
+        foreach (var r in reports)
+        {
+            device.ProcessNextPhysicalOutputCommand();
+            Assert.AreEqual(r[1] & 0x0C, writes[^1][1] & 0x0C);
+            for (int side = 0; side < 2; side++)
+                if ((r[1] & (4 << side)) != 0)
+                    CollectionAssert.AreEqual(r.Skip(11 + side * 11).Take(11).ToArray(),
+                        writes[^1].Skip(11 + side * 11).Take(11).ToArray());
+        }
+    }
+
+    [TestMethod]
+    [DataRow("profile")]
+    [DataRow("stream")]
+    [DataRow("producer")]
+    [DataRow("local")]
+    [DataRow("overlay")]
+    [DataRow("rumble")]
+    [DataRow("extension")]
+    public void PartialTriggerSharingHonoursLifecycleAndOtherState(string change)
+    {
+        var device = DualSenseNativeFeedbackDiagnosticsTests.OfflineDevice(ConnectionType.USB);
+        var context = Context(device);
+        foreach (var r in new[] { Bow(12), Bow(4), Bow(8) }) Assert.IsTrue(Enqueue(device, r, context, out _));
+        int before = Field<int>(device, "physicalOutputCommandCount");
+        byte[] candidate = Bow(12); byte mask = 0;
+        switch (change)
+        {
+            case "profile": context = context with { Command = context.Command with { ProfileRevision = 2 } }; break;
+            case "stream": context = context with { StreamGeneration = 2 }; break;
+            case "producer": context = context with { Producer = new object() }; break;
+            case "local": typeof(DualSenseDevice).GetField("physicalOutputRequestedGeneration", Private)!.SetValue(device, 2L); break;
+            case "overlay": mask = 4; break;
+            case "rumble": candidate[3] = 20; break;
+            case "extension": candidate[18] = 1; break;
+        }
+        Assert.IsTrue(device.WriteRawOutputReportFromGame(candidate, 0, 48, out _, preparedTriggerLabValidity: mask, repeatContext: context));
+        Assert.AreEqual(before + 1, Field<int>(device, "physicalOutputCommandCount"));
+    }
+
+    private static byte[] Bow(byte mask, byte mode = 0x22)
+    {
+        byte[] r = new byte[48]; r[0] = 2; r[1] = mask;
+        if ((mask & 4) != 0) { r[11] = mode; if (mode == 0x22) { r[12] = 0x44; r[14] = 0x29; } }
+        if ((mask & 8) != 0) { r[22] = mode; if (mode == 0x22) { r[23] = 2; r[24] = 2; r[25] = 0x3C; } }
+        return r;
+    }
+
     private static byte[] Report(byte strength, bool improved = false)
     {
         byte[] report = DualSenseNativeFeedbackDiagnosticsTests.Report(improved ? (byte)2 : (byte)3, strength);

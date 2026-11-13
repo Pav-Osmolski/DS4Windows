@@ -290,6 +290,31 @@
         <Setter Property="Margin" Value="0,0,0,6" />
     </Style>
 
+    <Style x:Key="BridgeComponentIconTileStyle" TargetType="Border">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Margin" Value="0,0,10,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Background" Value="{DynamicResource SurfaceBackgroundColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <Style x:Key="BridgeComponentIconStyle" TargetType="Path">
+        <Setter Property="Width" Value="17" />
+        <Setter Property="Height" Value="17" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Stretch" Value="Uniform" />
+        <Setter Property="Stroke" Value="{DynamicResource AccentColor}" />
+        <Setter Property="StrokeThickness" Value="1.5" />
+        <Setter Property="StrokeStartLineCap" Value="Round" />
+        <Setter Property="StrokeEndLineCap" Value="Round" />
+        <Setter Property="StrokeLineJoin" Value="Round" />
+    </Style>
+
     <Style x:Key="BridgeSettingsCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource CheckBoxStyle}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Top" />
@@ -584,6 +609,7 @@
         <Setter Property="ItemContainerStyle" Value="{StaticResource BridgeNavigationTabItemStyle}" />
         <Setter Property="Background" Value="{DynamicResource SurfaceBackgroundColor}" />
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="28,22" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="Template">
@@ -866,13 +892,22 @@
                                 </local:PageHeaderControl>
                             </Grid>
                             <ContentPresenter Grid.Row="1" x:Name="PART_SelectedContentHost"
-                                              ContentSource="SelectedContent" Margin="28,22"
+                                              ContentSource="SelectedContent" Margin="{TemplateBinding Padding}"
                                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                         </Grid>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding SelectedItem.Name, RelativeSource={RelativeSource Self}}" Value="overviewTab" />
+                    <Condition Binding="{Binding HasSelectedController}" Value="True" />
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Padding" Value="28,22,28,0" />
+            </MultiDataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="BridgeProfileTabItemStyle" TargetType="TabItem">

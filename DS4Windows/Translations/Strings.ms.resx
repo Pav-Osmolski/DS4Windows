@@ -6788,4 +6788,125 @@ Sokongan : </value>
     <value>Diterbitkan oleh Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Pratonton warna</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Jarak leret minimum</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Tingkatkan jarak untuk mengelakkan leretan yang tidak disengajakan daripada mencetuskan butang.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Komponen</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Sokongan alat kawalan maya dan pemacu pilihan</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Urus komponen…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Output alat kawalan maya</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Menyemak status komponen…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Urus perisian dan pemacu yang menyokong alat kawalan anda.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Menyemak…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Buka log VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Nyahpasang USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Pemacu pilihan</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>Apl lain pada PC ini juga boleh menggunakan pemacu ini.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Tetapan penyembunyian</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Buka HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Gunakan input Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Urus pemacu dikongsi…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Salin diagnostik komponen</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Zon mati giroskop</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Menapis bacaan kecil giroskop ketika hampir pegun. Gunakan 0 untuk menghantarnya kepada permainan. Nilai lalai ialah 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Sesuaikan</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Output dan maklum balas</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Aras output dan pemprosesan</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Kadar input</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Tunjukkan kadar laporan input</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Jarak padat</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Akses</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Aras bateri yang dilaporkan oleh pengawal. Tanda tambah (+) menunjukkan pengecasan atau kuasa luaran.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Cara pengawal fizikal disambungkan ke PC ini.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Cara DS4Windows mengakses pengawal fizikal. HidHide boleh menyembunyikannya daripada permainan untuk mengelakkan input berganda.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Pilih bahagian Gambaran keseluruhan, tajuk ikon, jarak dan butang pengaki.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Pilih tempat audio pengawal dimainkan. Dayakan penstriman untuk menukar tetapan ini.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Memutuskan sambungan pengawal wayarles yang dipilih. Cabut kabel pengawal USB.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Mengembalikan pengawal tersembunyi</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Pilih hanya kawalan fizikal yang anda ingin gunakan di luar DS4Windows. peraturan menyembunyikan yang lebih lama mungkin telah ditambah secara manual atau oleh aplikasi lain.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Aturan tersembunyi yang dipilih telah dipadamkan. Sambungkan semula kawalan anda jika Windows belum mengemas kini.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Tiada peraturan tersembunyi yang boleh dipulihkan ditemui. Peraturan yang digunakan oleh sesi DS4Windows lain dilindungi.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Memulihkan pengawal tersembunyi ...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Mengembalikan pengawal yang dipilih</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Salinan cadangan disimpan sebelum perubahan. peraturan yang tidak dipilih dan keizinan aplikasi HidHide disimpan. pengendali anda akan disembunyikan lagi jika anda memulakan DS4Windows dengan menyembunyikan diaktifkan.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Tunjukkan tajuk ikon</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Tunjukkan pengaki Gambaran keseluruhan</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mengekalkan output audio Windows semasa</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Memulihkan peranti pemutaran terdahulu jika Windows memilih peranti audio DS4Windows yang baru dicipta semasa memulakan atau menyambung semula. Default mikrofon dan komunikasi tidak berubah.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows output audio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Pengaturan bunyi</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Pilih peranti pemutaran Windows yang digunakan oleh permainan dan aplikasi anda.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows sedang menghantar audio kepada pengawal maya. pengawal pemindahan audio diaktifkan; semak sumber audio dan laluan output jika anda tidak mendengar apa-apa.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows sedang menghantar audio kepada pengawal maya. Pilih speaker atau headphone biasa anda dalam tetapan Suara, atau mengaktifkan pemindahan audio pengawal untuk pengawal itu.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Menunjukkan Windows output audio</value>
+  </data>
 </root>

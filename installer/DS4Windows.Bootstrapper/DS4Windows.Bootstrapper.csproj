@@ -23,5 +23,6 @@
     <Resource Include="..\..\DS4Windows\DS4W.ico" Link="DS4W.ico" />
     <Compile Include="..\InstallerStartupTaskPolicy.cs" Link="InstallerStartupTaskPolicy.cs" />
     <Compile Include="..\StartupSetupState.cs" Link="StartupSetupState.cs" />
+    <Compile Include="..\UsbipComponentState.cs" Link="UsbipComponentState.cs" />
   </ItemGroup>
 </Project>

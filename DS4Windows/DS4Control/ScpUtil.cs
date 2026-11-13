@@ -701,6 +701,8 @@ namespace DS4Windows
         public static string exeFileName = Path.GetFileName(exelocation);
         public static FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(exelocation);
         public static string exeversion = fileVersion.FileVersion;
+        internal const string ForkLogSuffix = " (Pav-Osmolski fork)";
+
         public static string exeDisplayVersion = string.IsNullOrWhiteSpace(fileVersion.ProductVersion) ?
             exeversion : fileVersion.ProductVersion;
         public static ulong exeversionLong = (ulong)fileVersion.ProductMajorPart << 48 |
@@ -1921,6 +1923,12 @@ namespace DS4Windows
             set => m_Config.profileEditorTimingLogging = value;
         }
 
+        public static bool PreferWindowsKeyboardMouse
+        {
+            get => m_Config.preferWindowsKeyboardMouse;
+            set => m_Config.preferWindowsKeyboardMouse = value;
+        }
+
         public static bool SuppressViiperSetupPrompt
         {
             get => m_Config.suppressViiperSetupPrompt;
@@ -1937,6 +1945,12 @@ namespace DS4Windows
         {
             get => m_Config.showViiperTrayIcon;
             set => m_Config.showViiperTrayIcon = value;
+        }
+
+        public static bool PreserveWindowsAudioOutput
+        {
+            get => m_Config.preserveWindowsAudioOutput;
+            set => m_Config.preserveWindowsAudioOutput = value;
         }
 
         public static string PreferredViiperPath
@@ -2551,6 +2565,8 @@ namespace DS4Windows
             return m_Config.enableOutputDataToDS4[index];
         }
 
+        internal static int[] TouchpadSwipeDistance => m_Config.touchpadSwipeDistance;
+
         public static byte[] TouchSensitivity => m_Config.touchSensitivity;
         public static byte[] getTouchSensitivity()
         {
@@ -2622,6 +2638,7 @@ namespace DS4Windows
         public static int[] GyroStickThresholds => m_Config.gyroStickThresholds;
 
         public static GyroOutMode[] GyroOutputMode => m_Config.gyroOutMode;
+        internal static int[] DualSenseGyroDeadbands => m_Config.dualSenseGyroDeadbands;
         public static GyroOutMode GetGyroOutMode(int device)
         {
             return m_Config.gyroOutMode[device];
@@ -4362,6 +4379,12 @@ namespace DS4Windows
         public const bool DEFAULT_TOUCH_TOGGLE = true;
         public const bool DEFAULT_TOUCHPAD_JITTER_COMP = true;
         public const int DEFAULT_TOUCHPAD_SENS = 100;
+        internal const int DefaultTouchpadSwipeDistance = 300;
+        internal const int MinimumTouchpadSwipeDistance = 50;
+        internal const int MaximumTouchpadSwipeDistance = 600;
+
+        internal static int NormalizeTouchpadSwipeDistance(int value) =>
+            Math.Clamp(value, MinimumTouchpadSwipeDistance, MaximumTouchpadSwipeDistance);
         public const int DEFAULT_DS4_BT_POLL_RATE = 4;
         public const int DEFAULT_RUMBLE = 100;
         public const double DEFAULT_ANALOG_SENS = 1.0;
@@ -4431,6 +4454,9 @@ namespace DS4Windows
           DEFAULT_RUMBLE, DEFAULT_RUMBLE, DEFAULT_RUMBLE,
           DEFAULT_RUMBLE, DEFAULT_RUMBLE, DEFAULT_RUMBLE };
         public int[] rumbleAutostopTime = new int[Global.TEST_PROFILE_ITEM_COUNT] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // Value in milliseconds (0=autustop timer disabled)
+        internal readonly int[] touchpadSwipeDistance =
+            Enumerable.Repeat(DefaultTouchpadSwipeDistance, Global.TEST_PROFILE_ITEM_COUNT).ToArray();
+
         public Byte[] touchSensitivity = new Byte[Global.TEST_PROFILE_ITEM_COUNT]
         { DEFAULT_TOUCHPAD_SENS, DEFAULT_TOUCHPAD_SENS, DEFAULT_TOUCHPAD_SENS,
           DEFAULT_TOUCHPAD_SENS, DEFAULT_TOUCHPAD_SENS, DEFAULT_TOUCHPAD_SENS,
@@ -5037,6 +5063,12 @@ namespace DS4Windows
         public GyroStickActivationMode[] gyroStickModes = new GyroStickActivationMode[Global.TEST_PROFILE_ITEM_COUNT];
         public GyroActivationStick[] gyroActivationSticks = new GyroActivationStick[Global.TEST_PROFILE_ITEM_COUNT];
         public int[] gyroStickThresholds = Enumerable.Repeat(15, Global.TEST_PROFILE_ITEM_COUNT).ToArray();
+
+        internal const int DefaultDualSenseGyroDeadband = 32;
+        internal const int MaximumDualSenseGyroDeadband = 256;
+        internal static int NormalizeDualSenseGyroDeadband(int value) => Math.Clamp(value, 0, MaximumDualSenseGyroDeadband);
+        internal readonly int[] dualSenseGyroDeadbands =
+            Enumerable.Repeat(DefaultDualSenseGyroDeadband, Global.TEST_PROFILE_ITEM_COUNT).ToArray();
         public GyroOutMode[] gyroOutMode = new GyroOutMode[Global.TEST_PROFILE_ITEM_COUNT]
         { DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE,
           DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE, DEFAULT_GYRO_OUT_MODE,
@@ -5138,8 +5170,10 @@ namespace DS4Windows
         public bool profileEditorTimingLogging = false;
         public bool outputSlotsAutoFit = true;
         public double[] outputSlotsColumnWidths = Array.Empty<double>();
+        public bool preferWindowsKeyboardMouse;
         public bool suppressViiperSetupPrompt = false;
         public bool showViiperTrayIcon = true;
+        public bool preserveWindowsAudioOutput = true;
         public bool viiperDebugLogging = false;
         public string preferredViiperPath = string.Empty;
         public bool closeMini = false;
@@ -6016,7 +6050,8 @@ namespace DS4Windows
 
                 foreach (var setting in new[] { ("GyroStickActivationMode", gyroStickModes[device].ToString()),
                     ("GyroActivationStick", gyroActivationSticks[device].ToString()),
-                    ("GyroStickThreshold", gyroStickThresholds[device].ToString()) })
+                    ("GyroStickThreshold", gyroStickThresholds[device].ToString()),
+                    ("DualSenseGyroDeadband", dualSenseGyroDeadbands[device].ToString()) })
                 {
                     XmlNode node = m_Xdoc.CreateElement(setting.Item1);
                     node.InnerText = setting.Item2;
@@ -8106,6 +8141,9 @@ namespace DS4Windows
                 if (!Enum.IsDefined(gyroActivationSticks[device])) gyroActivationSticks[device] = GyroActivationStick.Left;
                 gyroStickThresholds[device] = int.TryParse(m_Xdoc.SelectSingleNode("/" + rootname +
                     "/GyroStickThreshold")?.InnerText, out int stickThreshold) ? Math.Clamp(stickThreshold, 1, 95) : 15;
+                dualSenseGyroDeadbands[device] = int.TryParse(m_Xdoc.SelectSingleNode("/" + rootname +
+                    "/DualSenseGyroDeadband")?.InnerText, out int deadband)
+                    ? NormalizeDualSenseGyroDeadband(deadband) : DefaultDualSenseGyroDeadband;
 
                 XmlNode xmlGyroControlsElement =
                     m_Xdoc.SelectSingleNode("/" + rootname + "/GyroControlsSettings");
@@ -9688,10 +9726,12 @@ namespace DS4Windows
                     catch { missingSetting = true; }
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/startMinimized"); Boolean.TryParse(Item.InnerText, out startMinimized); }
                     catch { missingSetting = true; }
+                    preferWindowsKeyboardMouse = Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/PreferWindowsKeyboardMouse")?.InnerText, out bool windowsInput) && windowsInput;
                     viiperDebugLogging = Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/ViiperDebugLogging")?.InnerText, out bool viiperDebug) && viiperDebug;
                     gameBarBluetoothInputRecovery = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/GameBarBluetoothInputRecovery")?.InnerText, out bool recoverGameBarInput) || recoverGameBarInput;
                     keepControllersHiddenOnReconnect = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/KeepControllersHiddenOnReconnect")?.InnerText, out bool keepHidden) || keepHidden;
                     showViiperTrayIcon = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/ShowViiperTrayIcon")?.InnerText, out bool visibleTray) || visibleTray;
+                    preserveWindowsAudioOutput = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/PreserveWindowsAudioOutput")?.InnerText, out bool preserveOutput) || preserveOutput;
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/minimizeToTaskbar"); Boolean.TryParse(Item.InnerText, out minToTaskbar); }
                     catch { missingSetting = true; }
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/formWidth"); Int32.TryParse(Item.InnerText, out formWidth); }
@@ -10106,8 +10146,12 @@ namespace DS4Windows
             XmlNode xmlKeepHidden = m_Xdoc.CreateNode(XmlNodeType.Element, "KeepControllersHiddenOnReconnect", null); xmlKeepHidden.InnerText = keepControllersHiddenOnReconnect.ToString(); rootElement.AppendChild(xmlKeepHidden);
             XmlNode xmlReclaimSteamInput = m_Xdoc.CreateNode(XmlNodeType.Element, "ReclaimSteamInput", null); xmlReclaimSteamInput.InnerText = reclaimSteamInput.ToString(); rootElement.AppendChild(xmlReclaimSteamInput);
             XmlNode xmlStartMinimized = m_Xdoc.CreateNode(XmlNodeType.Element, "startMinimized", null); xmlStartMinimized.InnerText = startMinimized.ToString(); rootElement.AppendChild(xmlStartMinimized);
+            XmlNode xmlWindowsInput = m_Xdoc.CreateElement("PreferWindowsKeyboardMouse");
+            xmlWindowsInput.InnerText = preferWindowsKeyboardMouse.ToString();
+            rootElement.AppendChild(xmlWindowsInput);
             XmlNode xmlViiperDebug = m_Xdoc.CreateNode(XmlNodeType.Element, "ViiperDebugLogging", null); xmlViiperDebug.InnerText = viiperDebugLogging.ToString(); rootElement.AppendChild(xmlViiperDebug);
             XmlNode xmlViiperTray = m_Xdoc.CreateNode(XmlNodeType.Element, "ShowViiperTrayIcon", null); xmlViiperTray.InnerText = showViiperTrayIcon.ToString(); rootElement.AppendChild(xmlViiperTray);
+            XmlNode xmlPreserveOutput = m_Xdoc.CreateElement("PreserveWindowsAudioOutput"); xmlPreserveOutput.InnerText = preserveWindowsAudioOutput.ToString(); rootElement.AppendChild(xmlPreserveOutput);
             XmlNode xmlminToTaskbar = m_Xdoc.CreateNode(XmlNodeType.Element, "minimizeToTaskbar", null); xmlminToTaskbar.InnerText = minToTaskbar.ToString(); rootElement.AppendChild(xmlminToTaskbar);
             XmlNode xmlFormWidth = m_Xdoc.CreateNode(XmlNodeType.Element, "formWidth", null); xmlFormWidth.InnerText = formWidth.ToString(); rootElement.AppendChild(xmlFormWidth);
             XmlNode xmlFormHeight = m_Xdoc.CreateNode(XmlNodeType.Element, "formHeight", null); xmlFormHeight.InnerText = formHeight.ToString(); rootElement.AppendChild(xmlFormHeight);
@@ -11396,6 +11440,7 @@ namespace DS4Windows
             Mapping.ResetStickFilters(device);
             Mapping.RequestPostMapStickReset(device);
             touchSensitivity[device] = DEFAULT_TOUCHPAD_SENS;
+            touchpadSwipeDistance[device] = DefaultTouchpadSwipeDistance;
 
             lsModInfo[device].Reset();
             rsModInfo[device].Reset();
@@ -11477,6 +11522,7 @@ namespace DS4Windows
             gyroStickModes[device] = GyroStickActivationMode.Disabled;
             gyroActivationSticks[device] = GyroActivationStick.Left;
             gyroStickThresholds[device] = 15;
+            dualSenseGyroDeadbands[device] = DefaultDualSenseGyroDeadband;
             sAMouseStickTriggers[device] = BackingStore.DEFAULT_GYRO_MSTICK_TRIGGERS;
             sAMouseStickTriggerCond[device] = true;
 

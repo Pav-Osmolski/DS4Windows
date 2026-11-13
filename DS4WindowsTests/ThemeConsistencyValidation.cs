@@ -80,6 +80,7 @@ internal static class ThemeConsistencyValidation
                 }
                 Save(host, Path.Combine(directory, "Theme-consistency-" + theme + ".png"), 1500, 1250);
                 host.Children.Clear();
+                ValidateResponsiveCards(new TriggerLabControl());
                 ValidateRgb(theme, directory);
             }
             foreach (string theme in new[] { "DarkTheme", "DefaultTheme" })
@@ -94,6 +95,58 @@ internal static class ThemeConsistencyValidation
             if (converter == null) application.Resources.Remove("ShellViewportWidth");
             else application.Resources["ShellViewportWidth"] = converter;
         }
+    }
+
+    private static void ValidateResponsiveCards(UserControl page)
+    {
+        var second = (Border)page.FindName("secondaryCard");
+        var cards = (Grid)second.Parent;
+        var first = cards.Children.OfType<Border>().First();
+        var host = new Border { Child = page };
+        foreach (double width in new[] { 900d, ControllerPageLayout.SplitWidth - 1, ControllerPageLayout.SplitWidth })
+        {
+            Layout(host, width, 650);
+            Assert.AreEqual(width, page.ActualWidth, 0.1, page.GetType().Name);
+            var firstPosition = first.TranslatePoint(new Point(), cards);
+            var secondPosition = second.TranslatePoint(new Point(), cards);
+            Assert.AreEqual(first.ActualWidth, second.ActualWidth, 0.1);
+            if (width < ControllerPageLayout.SplitWidth)
+            {
+                Assert.AreEqual(firstPosition.X, secondPosition.X, 0.1);
+                Assert.AreEqual(firstPosition.Y + first.ActualHeight + 16, secondPosition.Y, 0.1);
+            }
+            else
+            {
+                Assert.AreEqual(firstPosition.Y, secondPosition.Y, 0.1);
+                Assert.AreEqual(firstPosition.X + first.ActualWidth + 16, secondPosition.X, 0.1);
+            }
+        }
+    }
+
+    internal static void ValidateAudioHapticsTopEdge()
+    {
+        var page = new AudioHapticsControl();
+        var host = new Border { Child = page, UseLayoutRounding = true, SnapsToDevicePixels = true };
+        var response = (Border)page.FindName("secondaryCard");
+        var mainCard = ((Grid)response.Parent).Children.OfType<Border>().First();
+        var scroll = (ScrollViewer)page.FindName("audioHapticsScroll");
+
+        VisualTreeHelper.SetRootDpi(host, new DpiScale(2, 2));
+        Layout(host, ControllerPageLayout.SplitWidth, 714);
+        Assert.AreEqual(Visibility.Collapsed, scroll.ComputedVerticalScrollBarVisibility);
+        Assert.AreEqual(2, Grid.GetColumn(response));
+        var gain = (Slider)page.FindName("gainSlider");
+        double wideTop = mainCard.TranslatePoint(new Point(), host).Y;
+        double wideGainTop = gain.TranslatePoint(new Point(), host).Y;
+        Layout(host, ControllerPageLayout.SplitWidth - 1, 714);
+        Assert.AreEqual(Visibility.Visible, scroll.ComputedVerticalScrollBarVisibility);
+        Assert.AreEqual(1, Grid.GetRow(response));
+        Assert.AreEqual(mainCard.ActualWidth, response.ActualWidth, 0.1);
+        Assert.AreEqual(wideTop, mainCard.TranslatePoint(new Point(), host).Y, 0.01);
+        Assert.AreEqual(wideGainTop, gain.TranslatePoint(new Point(), host).Y, 0.01);
+        Layout(host, ControllerPageLayout.SplitWidth, 714);
+        Assert.AreEqual(wideTop, mainCard.TranslatePoint(new Point(), host).Y, 0.01);
+        Assert.AreEqual(wideGainTop, gain.TranslatePoint(new Point(), host).Y, 0.01);
     }
 
     private static ResourceDictionary Dictionary(string name) => new()

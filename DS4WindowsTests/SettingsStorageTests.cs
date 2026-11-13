@@ -61,6 +61,22 @@ public sealed class SettingsStorageTests
     }
 
     [TestMethod]
+    public void OverviewLayoutKeepsPresentationSeparateFromSettingsLocation()
+    {
+        Assert.AreEqual(new OverviewLayoutPreferences(), storage.OverviewLayout);
+        storage.Remember(SettingsFolder.Program);
+        var layout = new OverviewLayoutPreferences { ShowLevels = false, ShowInputRate = false, CompactSpacing = true,
+            ShowFactTitles = false, ShowWindowsAudioOutput = false, ShowQuickActions = false, ShowEditProfileAction = false,
+            ShowDeviceOptionsAction = false, ShowControlPanelAction = false, ShowLightbarAction = false, ShowDisconnectAction = false };
+        storage.SetOverviewLayout(layout);
+        storage.Remember(SettingsFolder.AppData);
+
+        var reopened = new SettingsStorage(program, appData, preferences);
+        Assert.AreEqual(layout, reopened.OverviewLayout);
+        Assert.AreEqual(SettingsFolder.AppData, reopened.Selected);
+    }
+
+    [TestMethod]
     public void MigrationPreservesSourceAndCopiesAllSettingsButNeverApplicationFiles()
     {
         foreach (string name in new[] { "Profiles.xml", "Auto Profiles.xml", "Actions.xml", "LinkedProfiles.xml", "ControllerConfigs.xml", "OutputSlots.xml", "Profiles/Example.xml" }) Put(program, name);

@@ -16,6 +16,8 @@ internal sealed class ProfileColdWorkQueue
     private Func<bool> pending;
     private TaskCompletionSource<bool> completion;
 
+    internal bool HasPendingWork => Volatile.Read(ref completion) != null;
+
     internal ProfileColdWorkQueue(Action<Exception> onError) =>
         this.onError = onError ?? throw new ArgumentNullException(nameof(onError));
 

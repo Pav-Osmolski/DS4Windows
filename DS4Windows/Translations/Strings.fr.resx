@@ -6788,4 +6788,125 @@ Le backup : </value>
     <value>Publié par Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>Aperçu de la couleur</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>Distance minimale de balayage</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>Augmentez la distance pour éviter de déclencher des boutons par un balayage involontaire.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>Composants</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>Prise en charge des manettes virtuelles et pilotes facultatifs</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>Gérer les composants…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>Sortie de manette virtuelle</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>Vérification de l’état des composants…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>Gérez les logiciels et pilotes utilisés par vos manettes.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>Vérification…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>Ouvrir le journal de VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>Désinstaller USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>Pilotes facultatifs</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>D’autres applications de ce PC peuvent aussi utiliser ces pilotes.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>Paramètres de masquage</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>Ouvrir HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>Utiliser la saisie Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>Gérer les pilotes partagés…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>Copier le diagnostic des composants</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>Zone morte du gyroscope</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>Filtre les faibles valeurs du gyroscope au repos. Réglez sur 0 pour les transmettre au jeu. La valeur par défaut est 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>Personnaliser</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>Sortie et retour</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>Niveaux de sortie et traitement</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>Fréquence d’entrée</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>Afficher la fréquence des rapports d’entrée</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>Espacement compact</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>Accès</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>Niveau de batterie indiqué par la manette. Le signe (+) indique une charge ou une alimentation externe.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>Indique comment la manette physique est connectée à cet ordinateur.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>Indique comment DS4Windows accède à la manette physique. HidHide peut la masquer aux jeux pour éviter les entrées en double.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>Choisissez les sections de la vue d’ensemble, les titres des icônes, l’espacement et les boutons du pied de page.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>Choisissez où le son de la manette est diffusé. Activez la diffusion pour modifier ce réglage.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>Déconnecte la manette sans fil sélectionnée. Débranchez les manettes USB.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Récupérer les contrôleurs cachés</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Sélectionnez uniquement le contrôleur physique que vous souhaitez utiliser en dehors de DS4Windows. Des règles plus anciennes d'occulte peuvent avoir été ajoutées manuellement ou par une autre application.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Les règles de dissimulation sélectionnées ont été supprimées. Reconnectez votre contrôleur si Windows ne l'a pas encore renouvelé.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Aucune règle cachée récupérable n'a été trouvée. Les règles utilisées par une autre session DS4Windows sont protégées.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Récupérer les contrôleurs cachés...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Rétablir les contrôleurs sélectionnés</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Une sauvegarde est enregistrée avant les modifications. Les règles non sélectionnées et les autorisations d'application HidHide sont conservées. Votre contrôleur sera à nouveau masqué si vous commencez DS4Windows avec cacher activé.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Afficher les titres des icônes</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Afficher le pied de la vue d’ensemble</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Maintenir ma sortie audio Windows actuelle</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Rétablissez le périphérique de lecture précédent si Windows sélectionne un périphérique audio DS4Windows nouvellement créé lors du démarrage ou de la reconnexion. Les paramètres par défaut de microphone et de communication ne sont pas modifiés.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Sortie audio Windows {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Réglages sonores</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Choisissez le périphérique de lecture Windows utilisé par vos jeux et applications.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows envoie de l'audio à un contrôleur virtuel. Le transfert audio du contrôleur est activé; vérifiez sa source audio et son itinéraire de sortie si vous n'entendez rien.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows envoie de l'audio à un contrôleur virtuel. Choisissez vos haut-parleurs ou écouteurs habituels dans les paramètres son ou activez la transmission audio du contrôleur pour ce contrôleur.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Afficher la sortie audio Windows</value>
+  </data>
 </root>

@@ -6764,4 +6764,125 @@
     <value>פורסם על ידי Pav-Osmolski</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
+  <data name="LightbarColorPreview" xml:space="preserve">
+    <value>תצוגה מקדימה של הצבע</value>
+  </data>
+  <data name="TouchpadSwipeDistance" xml:space="preserve">
+    <value>מרחק החלקה מזערי</value>
+  </data>
+  <data name="TouchpadSwipeDistanceHelp" xml:space="preserve">
+    <value>הגדילו את המרחק כדי למנוע לחיצות לא מכוונות על כפתורים בעקבות החלקה.</value>
+  </data>
+  <data name="UI_A150CE2216025931" xml:space="preserve"><value>רכיבים</value></data>
+  <data name="UI_AEE83A92A713F644" xml:space="preserve"><value>תמיכה בבקרים וירטואליים ומנהלי התקנים אופציונליים</value></data>
+  <data name="UI_BB0D58B4D58B1A64" xml:space="preserve"><value>ניהול רכיבים…</value></data>
+  <data name="UI_606E3477AC6CFC6A" xml:space="preserve"><value>פלט בקר וירטואלי</value></data>
+  <data name="UI_271AA17B0FD7E5D4" xml:space="preserve"><value>מתבצעת בדיקה של מצב הרכיבים…</value></data>
+  <data name="UI_7BF46D09674F2182" xml:space="preserve"><value>ניהול התוכנות ומנהלי ההתקנים המשמשים את הבקרים שלך.</value></data>
+  <data name="UI_EC963FFC911B8401" xml:space="preserve"><value>מתבצעת בדיקה…</value></data>
+  <data name="UI_3D46B9AAEB6A7B4D" xml:space="preserve"><value>פתיחת יומן VIIPER</value></data>
+  <data name="UI_E692F1479C36CCB8" xml:space="preserve"><value>הסרת USB/IP…</value></data>
+  <data name="UI_5C442E378A74B375" xml:space="preserve"><value>מנהלי התקנים אופציונליים</value></data>
+  <data name="UI_BBB914BBBAC725B7" xml:space="preserve"><value>גם יישומים אחרים במחשב זה יכולים להשתמש במנהלי התקנים אלה.</value></data>
+  <data name="UI_1F7E729BF03F4FA1" xml:space="preserve"><value>הגדרות הסתרה</value></data>
+  <data name="UI_A28F5DD1BC8B559E" xml:space="preserve"><value>פתיחת HidHide…</value></data>
+  <data name="UI_6FF14A035524A4A2" xml:space="preserve"><value>שימוש בקלט של Windows</value></data>
+  <data name="UI_A7B3C719D03BDBC3" xml:space="preserve"><value>ניהול מנהלי התקנים משותפים…</value></data>
+  <data name="UI_4246DC6CCF612AED" xml:space="preserve"><value>העתקת פרטי האבחון של הרכיבים</value></data>
+  <data name="DualSenseGyroDeadband" xml:space="preserve">
+    <value>אזור מת של הג׳יירוסקופ</value>
+  </data>
+  <data name="DualSenseGyroDeadbandHelp" xml:space="preserve">
+    <value>מסנן קריאות קטנות של הג׳יירוסקופ במנוחה. בחרו 0 כדי להעביר אותן למשחק. ברירת המחדל היא 32.</value>
+  </data>
+  <data name="OverviewCustomize" xml:space="preserve">
+    <value>התאמה אישית</value>
+  </data>
+  <data name="OverviewOutputFeedback" xml:space="preserve">
+    <value>פלט ומשוב</value>
+  </data>
+  <data name="OverviewLevelsProcessing" xml:space="preserve">
+    <value>עוצמות פלט ועיבוד</value>
+  </data>
+  <data name="OverviewInputRate" xml:space="preserve">
+    <value>קצב קלט</value>
+  </data>
+  <data name="OverviewShowInputRate" xml:space="preserve">
+    <value>הצגת קצב דיווחי קלט</value>
+  </data>
+  <data name="OverviewCompactSpacing" xml:space="preserve">
+    <value>ריווח צפוף</value>
+  </data>
+  <data name="OverviewAccess" xml:space="preserve">
+    <value>גישה</value>
+  </data>
+  <data name="OverviewBatteryHelp" xml:space="preserve">
+    <value>רמת הסוללה שעליה מדווח הבקר. סימן הפלוס (+) מציין טעינה או אספקת חשמל חיצונית.</value>
+  </data>
+  <data name="OverviewConnectionHelp" xml:space="preserve">
+    <value>מציג כיצד הבקר הפיזי מחובר למחשב הזה.</value>
+  </data>
+  <data name="OverviewAccessHelp" xml:space="preserve">
+    <value>מציג כיצד DS4Windows ניגש לבקר הפיזי. HidHide יכול להסתיר אותו ממשחקים כדי למנוע קלט כפול.</value>
+  </data>
+  <data name="OverviewCustomizeHelp" xml:space="preserve">
+    <value>בחירת מקטעי הסקירה, כותרות הסמלים, המרווחים וכפתורי סרגל הפעולות.</value>
+  </data>
+  <data name="OverviewAudioOutputHelp" xml:space="preserve">
+    <value>בחרו היכן יושמע שמע הבקר. הפעילו הזרמה כדי לשנות הגדרה זו.</value>
+  </data>
+  <data name="OverviewDisconnectHelp" xml:space="preserve">
+    <value>מנתק את הבקר האלחוטי שנבחר. יש לנתק בקרי USB מהכבל.</value>
+  </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>להחזיר את המנהלים הסתתרים</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>בחר רק את השליטה הפיזית שברצונך להשתמש בה מחוץ ל- DS4Windows. ייתכן שהוסרו כללי הסתרת קודמים באופן ידני או על ידי אפליקציה אחרת.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>הסר כללים שנבחרו כדי להסתיר את התוכנה מחדש אם Windows עוד לא חידשה אותה.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>לא נמצאו כללים מוסתרים שניתן לשחזר, כללים בשימוש על ידי ישיבה אחרת DS4Windows מוגנים.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>לשחזר את השליטה הנסתרת...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>להחזיר את המנהלים שנבחרו</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>גיבוי נשמר לפני שינויים. כללי לא נבחר ו- HidHide הרשאות יישמרו. המעבד שלך יהיה מוסתר שוב אם תתחיל DS4Windows עם הסתרת מופעלת.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>הצגת כותרות הסמלים</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>הצגת סרגל הפעולות בסקירה</value>
+  </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>שמור את ההפעלה הקולית Windows הנוכחית שלי</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>לשחזר את המכשיר הקודם אם Windows בוחר מכשיר אודיו DS4Windows שנוצר לאחרונה במהלך ההתחלה או החיבור מחדש. מיקרופון ותקשורת הסטנדרטים אינם משתנים.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>יציאת אודיו Windows {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>תצוגת sound</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>בחר את מכשיר ההפעלה Windows המשמש עבור המשחקים והאפליקציות שלך.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows שולח אודיו למפקח וירטואלי.העברת אודיו של המפקח מופעלת; בדוק את מקור האודיו ומסלול היציאה אם אינך שומע דבר.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows שולח אודיו למפקח וירטואלי. בחר את הרמקולים או האוזניות הרגילים שלך בהגדרות הצליל, או להפעיל העברת אודיו של המפקח עבור המפקח הזה.</value>
+  </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>תצוגת Windows פלט אודיו</value>
+  </data>
 </root>
