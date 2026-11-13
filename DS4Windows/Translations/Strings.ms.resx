@@ -6906,4 +6906,7 @@ Sokongan : </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows sedang menghantar audio kepada pengawal maya. Pilih speaker atau headphone biasa anda dalam tetapan Suara, atau mengaktifkan pemindahan audio pengawal untuk pengawal itu.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Menunjukkan Windows output audio</value>
+  </data>
 </root>

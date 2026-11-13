@@ -6920,4 +6920,7 @@
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows отправляет аудио на виртуальный контролер. Выберите обычные громкоговорители или наушники в настройках звука или включите передачу звука контроллером для этого контроллера.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Показать Windows аудиовыход</value>
+  </data>
 </root>

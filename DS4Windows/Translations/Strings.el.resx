@@ -6908,4 +6908,7 @@ Example: whyme_DS4Windows</value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows στέλνει ήχο σε έναν εικονικό ελεγκτή. Επιλέξτε τα συνηθισμένα ηχεία ή ακουστικά σας στις ρυθμίσεις ήχου ή ενεργοποιήστε την αναμετάδοση ήχου του ελεγκτή για αυτόν τον ελεγκτή.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Εμφάνιση Windows εξόδου ήχου</value>
+  </data>
 </root>

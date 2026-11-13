@@ -6884,4 +6884,7 @@ Backup : </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows đang gửi âm thanh đến một bộ điều khiển ảo.Chọn loa hoặc tai nghe thông thường của bạn trong cài đặt âm thanh, hoặc bật chuyển tiếp âm thanh của bộ điều khiển cho bộ điều khiển đó.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Hiển thị Windows đầu ra âm thanh</value>
+  </data>
 </root>

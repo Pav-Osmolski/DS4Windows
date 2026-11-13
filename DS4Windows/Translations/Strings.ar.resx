@@ -6887,4 +6887,7 @@ Backup : </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows يتم إرسال الصوت إلى جهاز التحكم الفعلي. اختار الكاميرات المعتادة أو أقراصك في إعدادات الصوت، أو تمكن من إرسال الصوت من جهاز التحكم في هذا الجهاز.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>عرض Windows إرسال الصوت</value>
+  </data>
 </root>

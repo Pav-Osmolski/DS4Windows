@@ -6906,4 +6906,7 @@ Varmuuskopiointi : </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows lähettää ääntä virtuaaliselle ohjaimelle. Valitse tavalliset kaiuttimet tai kuulokkeet Äänen asetuksissa tai ota ohjaimen äänenlähetys käyttöön kyseiselle ohjaimelle.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Näytä Windows äänen ulostulo</value>
+  </data>
 </root>

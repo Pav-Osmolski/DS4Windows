@@ -6882,4 +6882,7 @@ och backup: </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows skickar ljud till en virtuell styrenhet. Välj dina vanliga högtalare eller hörlurar i Ljudinställningar, eller aktivera styrenhetens ljudöverföring för den styrenheten.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Visa Windows ljudutgång</value>
+  </data>
 </root>

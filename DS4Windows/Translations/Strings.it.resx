@@ -6880,4 +6880,7 @@ Il backup: </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows sta inviando l'audio a un controller virtuale. Selezionare gli altoparlanti o le cuffie abituali nelle impostazioni audio o abilitare il trasferimento audio del controller per quel controller.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Mostra Windows uscita audio</value>
+  </data>
 </root>

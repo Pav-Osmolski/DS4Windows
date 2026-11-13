@@ -7050,4 +7050,7 @@
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows 正在向虚拟控制器发送音频. 在音频设置中选择您的常规扬声器或耳机,或者为该控制器启用控制器音频传输。</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>显示 Windows 音频输出</value>
+  </data>
 </root>

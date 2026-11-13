@@ -6883,4 +6883,7 @@ i backup: </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows wysyła dźwięk do wirtualnego kontrolera. Wybierz zwykłe głośniki lub słuchawki w ustawieniach dźwięku lub włączyć przekazywanie dźwięku przez kontroler dla tego kontrolera.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Wyświetlanie wyjścia audio Windows</value>
+  </data>
 </root>

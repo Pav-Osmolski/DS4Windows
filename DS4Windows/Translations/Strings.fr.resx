@@ -6906,4 +6906,7 @@ Le backup : </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows envoie de l'audio à un contrôleur virtuel. Choisissez vos haut-parleurs ou écouteurs habituels dans les paramètres son ou activez la transmission audio du contrôleur pour ce contrôleur.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Afficher la sortie audio Windows</value>
+  </data>
 </root>

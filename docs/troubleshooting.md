@@ -221,6 +221,8 @@ Check **Windows audio output** on Overview. If Windows selected **DS4Windows
 Controller N Audio**, choose your usual speakers or headphones using **Sound
 settings**, or enable controller audio forwarding and check its source/route.
 Creating a virtual sound device does not automatically enable forwarding.
+You can hide this status section under **Overview > Customize > Show Windows
+audio output**. Hiding it does not turn off playback protection.
 
 **Settings > Components > Keep my current Windows audio output** is on by
 default. It captures the current console and multimedia playback defaults before

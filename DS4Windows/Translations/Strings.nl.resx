@@ -6912,4 +6912,7 @@ De backup: </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows stuurt audio naar een virtuele controller.Kies uw gebruikelijke luidsprekers of hoofdtelefoon in de geluidsinstellingen of schakel controller-audiooverdracht voor die controller in.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Toon Windows audio-uitvoer</value>
+  </data>
 </root>

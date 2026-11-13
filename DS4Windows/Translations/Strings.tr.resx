@@ -6906,4 +6906,7 @@ backup için: </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows bir sanal denetleyiciye ses gönderiyor. Ses ayarları'nda normal hoparlörlerinizi veya kulaklıklarınızı seçin veya bu denetleyici için denetleyicinin ses iletimini etkinleştirin.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Windows ses çıkışı</value>
+  </data>
 </root>

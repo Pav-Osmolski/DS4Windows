@@ -6882,4 +6882,7 @@
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows שולח אודיו למפקח וירטואלי. בחר את הרמקולים או האוזניות הרגילים שלך בהגדרות הצליל, או להפעיל העברת אודיו של המפקח עבור המפקח הזה.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>תצוגת Windows פלט אודיו</value>
+  </data>
 </root>

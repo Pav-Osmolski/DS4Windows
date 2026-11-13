@@ -6881,4 +6881,7 @@ Das Backup: </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows sendet Audio an einen virtuellen Controller. Wählen Sie Ihre üblichen Lautsprecher oder Kopfhörer in den Sound-Einstellungen aus oder aktivieren Sie die Übermittlung von Controller-Audio für diesen Controller.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Anzeige Windows Audioausgabe</value>
+  </data>
 </root>

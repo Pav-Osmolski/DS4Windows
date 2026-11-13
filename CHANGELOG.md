@@ -5,12 +5,16 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- Reduce redundant pending USB adaptive-trigger updates, including alternating L2/R2 bow-resistance reports, while preserving effect changes, releases and feedback ownership boundaries. Thanks [@bbbbbbbbxh](https://github.com/bbbbbbbbxh) for the diagnostic logs and pause-menu reproduction ([#123](https://github.com/Pav-Osmolski/DS4Windows/issues/123)). Hardware verification remains pending.
-- Expand Overview **Customize** with icon-title visibility and individual action-bar button controls. Preserve layout when titles are hidden, keep Controller info on the controller card, and add Device Options and Windows Game Controllers shortcuts to the action bar. Remember the layout without changing controller profiles.
-- Use compact, consistent numeric field widths throughout Profile Editor > Axis Config. Align radial fields with the selector, equalise shaping-row spacing, place enable checkboxes after their fields and keep Delta Acceleration's checkbox beside its label.
-- Preserve the previous Windows playback output when Windows selects a newly appearing DS4Windows virtual audio device during startup or reconnect. Add an enabled-by-default option in Settings > Components and show the current Windows output with routing guidance on Overview. Keep microphone/communications defaults and native haptics intact. Thanks [@VenomCARNAGE122](https://github.com/VenomCARNAGE122) and [@Jobima1st](https://github.com/Jobima1st) for the reports ([upstream #158](https://github.com/hbashton/DS4Windows/issues/158), [upstream #100](https://github.com/hbashton/DS4Windows/issues/100)).
+There are currently no unreleased changes.
 
 ## Released
+
+### [5.0.71](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.71) - 2026-11-13
+
+- Reduce redundant pending USB adaptive-trigger updates, including alternating L2/R2 bow-resistance reports, while preserving effect changes, releases and feedback ownership boundaries. Thanks [@bbbbbbbbxh](https://github.com/bbbbbbbbxh) for the diagnostic logs and pause-menu reproduction ([#123](https://github.com/Pav-Osmolski/DS4Windows/issues/123)). Hardware verification remains pending.
+- Expand Overview **Customize** with icon-title visibility and individual action-bar button controls. Preserve layout when titles are hidden, keep Controller info on the controller card, and add Device Options and Windows Game Controllers shortcuts to the action bar. Remember the layout without changing controller profiles, including whether to show Windows audio output and its Sound settings shortcut.
+- Use compact, consistent numeric field widths throughout Profile Editor > Axis Config. Align radial fields with the selector, equalise shaping-row spacing, place enable checkboxes after their fields and keep Delta Acceleration's checkbox beside its label.
+- Preserve the previous Windows playback output when Windows selects a newly appearing DS4Windows virtual audio device during startup or reconnect. Add an enabled-by-default option in Settings > Components and show the current Windows output with routing guidance on Overview. Keep microphone/communications defaults and native haptics intact. Thanks [@VenomCARNAGE122](https://github.com/VenomCARNAGE122) and [@Jobima1st](https://github.com/Jobima1st) for the reports ([upstream #158](https://github.com/hbashton/DS4Windows/issues/158), [upstream #100](https://github.com/hbashton/DS4Windows/issues/100)).
 
 ### [5.0.70](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.70) - 2026-11-11
 

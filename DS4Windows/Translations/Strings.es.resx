@@ -6882,4 +6882,7 @@ El backup: </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows está enviando audio a un controlador virtual. Seleccione sus altavoces o auriculares habituales en la configuración de sonido, o habilite la transmisión de audio del controlador para ese controlador.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Mostrar la salida de audio Windows</value>
+  </data>
 </root>

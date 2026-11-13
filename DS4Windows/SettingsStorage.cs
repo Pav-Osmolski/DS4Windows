@@ -21,6 +21,7 @@ internal sealed record OverviewLayoutPreferences
     public bool ShowMicrophone { get; init; } = true;
     public bool ShowInputRate { get; init; } = true;
     public bool ShowFactTitles { get; init; } = true;
+    public bool ShowWindowsAudioOutput { get; init; } = true;
     public bool ShowQuickActions { get; init; } = true;
     public bool ShowEditProfileAction { get; init; } = true;
     public bool ShowDeviceOptionsAction { get; init; } = true;

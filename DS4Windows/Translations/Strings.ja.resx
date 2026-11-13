@@ -6883,4 +6883,7 @@ Backup : </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows は、音声を仮想コントローラに送信します。音声設定で通常のスピーカーまたはヘッドフォンを選択するか、コントローラーの音声転送を有効にします。</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>オーディオ出力 Windows</value>
+  </data>
 </root>

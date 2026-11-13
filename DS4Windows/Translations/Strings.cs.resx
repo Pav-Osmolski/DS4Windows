@@ -6879,4 +6879,7 @@ Zálohování : </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows odesílá zvuk do virtuálního ovladače.Vyberte si obvyklé reproduktory nebo sluchátka v nastavení zvuku nebo povolte pro daný ovladač přenos zvuku ovladačem.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Zobrazení Windows audio výstupu</value>
+  </data>
 </root>

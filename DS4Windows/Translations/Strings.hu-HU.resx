@@ -6880,4 +6880,7 @@ A háttérben: </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>A Windows a hangot egy virtuális vezérlőhöz küldi. Válassza ki a szokásos hangszórókat vagy fejhallgatót a Hangbeállításokban, vagy engedélyezze a vezérlő audio továbbítását az adott vezérlőhöz.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>A Windows audio kimenet megjelenítése</value>
+  </data>
 </root>

@@ -8590,4 +8590,5 @@ X axis: {0}, Y axis: {1}</value>
   <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve"><value>Choose the Windows playback device used by your games and apps.</value></data>
   <data name="UI_DB9AC2D227B091F9" xml:space="preserve"><value>Windows is sending audio to a virtual controller. Controller audio forwarding is enabled; check its audio source and output route if you hear nothing.</value></data>
   <data name="UI_49D2863948572913" xml:space="preserve"><value>Windows is sending audio to a virtual controller. Choose your usual speakers or headphones in Sound settings, or enable controller audio forwarding for that controller.</value></data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve"><value>Show Windows audio output</value></data>
 </root>

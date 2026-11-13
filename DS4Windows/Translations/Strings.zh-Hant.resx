@@ -6889,4 +6889,7 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows 正在向虛擬控制器傳送音訊. 在音訊設定中選擇您的常規揚聲器或耳機,或者為該控制器啟用控制器音訊傳輸。</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>顯示 Windows 音訊輸出</value>
+  </data>
 </root>

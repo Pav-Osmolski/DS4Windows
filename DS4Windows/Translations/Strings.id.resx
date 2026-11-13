@@ -6904,4 +6904,7 @@ Untuk backup: </value>
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows mengirimkan audio ke controller virtual. pilih speaker atau headphone Anda yang biasa dalam pengaturan suara, atau mengaktifkan transmisi audio controller untuk controller tersebut.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Menampilkan Windows output audio</value>
+  </data>
 </root>

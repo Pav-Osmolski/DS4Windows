@@ -287,6 +287,14 @@ public sealed class ControllerOverviewAudioTests
             string routePath = Path.Combine(resultsDirectory, $"overview-windows-audio-{name}.png");
             using (var stream = File.Create(routePath)) routeEncoder.Save(stream);
             renderedFiles.Add(routePath);
+            var showWindowsAudio = (CheckBox)themedOverview.FindName("showWindowsAudioOutput");
+            showWindowsAudio.IsChecked = false;
+            themedOverview.ApplyWindowsAudioOutput(new("DS4Windows Controller 1 Audio", 4, 0));
+            Assert.AreEqual(Visibility.Collapsed, ((FrameworkElement)themedOverview.FindName("windowsAudioRoute")).Visibility,
+                "Audio notifications must not override the saved visibility choice.");
+            showWindowsAudio.IsChecked = true;
+            themedOverview.ApplyWindowsAudioOutput(new("Desktop headphones", 0, -1));
+            Assert.AreEqual(Visibility.Visible, ((FrameworkElement)themedOverview.FindName("windowsAudioRoute")).Visibility);
             themedOverview.ApplyWindowsAudioOutput(new("Unrelated USB/IP audio", 6, -1));
             Assert.AreEqual(Visibility.Collapsed, routeHelp.Visibility, "Never claim ownership of another app's virtual audio device.");
             themedOverview.ApplyWindowsAudioOutput(null);

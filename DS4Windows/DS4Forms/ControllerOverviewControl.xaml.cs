@@ -66,6 +66,7 @@ namespace DS4WinWPF.DS4Forms
             showMicrophone.IsChecked = layout.ShowMicrophone;
             showInputRate.IsChecked = layout.ShowInputRate;
             showFactTitles.IsChecked = layout.ShowFactTitles;
+            showWindowsAudioOutput.IsChecked = layout.ShowWindowsAudioOutput;
             showQuickActions.IsChecked = layout.ShowQuickActions;
             showEditProfileAction.IsChecked = layout.ShowEditProfileAction;
             showDeviceOptionsAction.IsChecked = layout.ShowDeviceOptionsAction;
@@ -82,6 +83,7 @@ namespace DS4WinWPF.DS4Forms
         private void OverviewLayout_Changed(object sender, RoutedEventArgs e)
         {
             ArrangeOverviewCards();
+            RefreshWindowsAudioOutput();
             if (overviewLayoutWriter == null) return;
             overviewLayoutWriter.Queue(new OverviewLayoutPreferences
             {
@@ -91,6 +93,7 @@ namespace DS4WinWPF.DS4Forms
                 ShowMicrophone = showMicrophone.IsChecked == true,
                 ShowInputRate = showInputRate.IsChecked == true,
                 ShowFactTitles = showFactTitles.IsChecked == true,
+                ShowWindowsAudioOutput = showWindowsAudioOutput.IsChecked == true,
                 ShowQuickActions = showQuickActions.IsChecked == true,
                 ShowEditProfileAction = showEditProfileAction.IsChecked == true,
                 ShowDeviceOptionsAction = showDeviceOptionsAction.IsChecked == true,
@@ -182,7 +185,8 @@ namespace DS4WinWPF.DS4Forms
 
         internal void ApplyWindowsAudioOutput(WindowsPlaybackProtection.Output output)
         {
-            windowsAudioRoute.Visibility = string.IsNullOrEmpty(output?.Name) ? Visibility.Collapsed : Visibility.Visible;
+            windowsAudioRoute.Visibility = showWindowsAudioOutput.IsChecked != true || string.IsNullOrEmpty(output?.Name)
+                ? Visibility.Collapsed : Visibility.Visible;
             windowsAudioOutputText.Text = UiText.Format("Windows audio output: {0}", output?.Name ?? "");
             windowsSoundSettingsButton.Content = UiText.Get("Sound settings");
             windowsSoundSettingsButton.ToolTip = UiText.Get("Choose the Windows playback device used by your games and apps.");

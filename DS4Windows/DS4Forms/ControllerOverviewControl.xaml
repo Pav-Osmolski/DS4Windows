@@ -442,6 +442,8 @@
                                           Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
                                 <CheckBox x:Name="showFactTitles" Content="{lex:Loc Strings:OverviewShowFactTitles}" IsChecked="True" Margin="0,0,0,6"
                                           Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
+                                <CheckBox x:Name="showWindowsAudioOutput" Content="{lex:Loc Strings:OverviewShowWindowsAudioOutput}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
                                 <CheckBox x:Name="compactSpacing" Content="{lex:Loc Strings:OverviewCompactSpacing}" IsChecked="False" Margin="0,0,0,6"
                                           Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
                                 <Border BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0" Margin="0,3,0,8" />

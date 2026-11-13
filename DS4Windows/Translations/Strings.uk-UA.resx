@@ -6879,4 +6879,7 @@
   <data name="UI_49D2863948572913" xml:space="preserve">
     <value>Windows відправляє аудіо на віртуальний контролер. Виберіть звичайні гучники або навушники в Налаштуваннях звуку або увімкніть передачу аудіо контролером для цього контролера.</value>
   </data>
+  <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
+    <value>Показати Windows аудіо вихід</value>
+  </data>
 </root>
