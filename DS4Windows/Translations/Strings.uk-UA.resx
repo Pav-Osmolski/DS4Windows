@@ -6823,7 +6823,7 @@
     <value>Показує, як DS4Windows отримує доступ до фізичного контролера. HidHide може приховати його від ігор, щоб запобігти подвійному вводу.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Виберіть картки та показники для екрана огляду.</value>
+    <value>Виберіть розділи огляду, підписи піктограм, інтервали та кнопки нижньої панелі.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Виберіть, де відтворюватиметься звук контролера. Увімкніть передавання звуку, щоб змінити цей параметр.</value>
@@ -6851,5 +6851,11 @@
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Безкоштовна копія зберігається до внесення змін. Невибрані правила та HidHide дозволи програм зберігаються. Ваш контролер буде знову прихований, якщо ви почнете DS4Windows з увімкненням приховування.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Показувати підписи піктограм</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Показувати нижню панель огляду</value>
   </data>
 </root>

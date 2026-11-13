@@ -6833,7 +6833,7 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
     <value>顯示 DS4Windows 存取實體控制器的方式。HidHide 可向遊戲隱藏實體控制器，避免重複輸入。</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>選擇在總覽中顯示的卡片與讀數。</value>
+    <value>選擇概覽區塊、圖示標題、間距和底欄按鈕。</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>選擇控制器音訊的播放位置。啟用音訊串流後即可變更此設定。</value>
@@ -6861,5 +6861,11 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>在更改之前儲存備份。未選擇的規則和 HidHide 應用程式許可權保留,如果啟動,您的控制器將再次隱藏。 DS4Windows 隱藏的能力。</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>顯示圖示標題</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>顯示概覽底欄</value>
   </data>
 </root>

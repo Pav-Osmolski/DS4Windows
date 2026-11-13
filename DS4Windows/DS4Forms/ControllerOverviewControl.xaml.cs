@@ -61,6 +61,12 @@ namespace DS4WinWPF.DS4Forms
             showLevels.IsChecked = layout.ShowLevels;
             showMicrophone.IsChecked = layout.ShowMicrophone;
             showInputRate.IsChecked = layout.ShowInputRate;
+            showFactTitles.IsChecked = layout.ShowFactTitles;
+            showQuickActions.IsChecked = layout.ShowQuickActions;
+            showEditProfileAction.IsChecked = layout.ShowEditProfileAction;
+            showControllerInfoAction.IsChecked = layout.ShowControllerInfoAction;
+            showLightbarAction.IsChecked = layout.ShowLightbarAction;
+            showDisconnectAction.IsChecked = layout.ShowDisconnectAction;
             compactSpacing.IsChecked = layout.CompactSpacing;
             overviewLayoutWriter = new(value => SettingsStorage.Current.SetOverviewLayout(value),
                 error => logger.Warn(error, "Could not remember Overview layout preferences."));
@@ -79,6 +85,12 @@ namespace DS4WinWPF.DS4Forms
                 ShowLevels = showLevels.IsChecked == true,
                 ShowMicrophone = showMicrophone.IsChecked == true,
                 ShowInputRate = showInputRate.IsChecked == true,
+                ShowFactTitles = showFactTitles.IsChecked == true,
+                ShowQuickActions = showQuickActions.IsChecked == true,
+                ShowEditProfileAction = showEditProfileAction.IsChecked == true,
+                ShowControllerInfoAction = showControllerInfoAction.IsChecked == true,
+                ShowLightbarAction = showLightbarAction.IsChecked == true,
+                ShowDisconnectAction = showDisconnectAction.IsChecked == true,
                 CompactSpacing = compactSpacing.IsChecked == true
             });
         }

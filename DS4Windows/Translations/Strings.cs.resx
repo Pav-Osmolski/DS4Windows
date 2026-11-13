@@ -6823,7 +6823,7 @@ Zálohování : </value>
     <value>Jak DS4Windows přistupuje k fyzickému ovladači. HidHide ho může skrýt před hrami a zabránit dvojímu vstupu.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Vyberte karty a údaje zobrazené v přehledu.</value>
+    <value>Vyberte části přehledu, názvy u ikon, rozestupy a tlačítka zápatí.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Zvolte, kde se přehrává zvuk ovladače. Pro změnu povolte streamování.</value>
@@ -6851,5 +6851,11 @@ Zálohování : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Před změnami je uložena záložní kopie. Nezvolená pravidla a oprávnění aplikace HidHide jsou zachována. Váš ovladač bude znovu skryt, pokud začnete DS4Windows pomocí možnosti skrýt zapnutou.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Zobrazit názvy u ikon</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Zobrazit zápatí přehledu</value>
   </data>
 </root>

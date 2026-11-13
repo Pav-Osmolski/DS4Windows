@@ -6856,7 +6856,7 @@ De backup: </value>
     <value>Toont hoe DS4Windows toegang heeft tot de fysieke controller. HidHide kan deze voor games verbergen om dubbele invoer te voorkomen.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Kies welke kaarten en meetwaarden in het overzicht staan.</value>
+    <value>Kies de overzichtssecties, pictogramtitels, tussenruimte en knoppen op de onderbalk.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Kies waar het geluid van de controller wordt afgespeeld. Schakel streaming in om dit te wijzigen.</value>
@@ -6884,5 +6884,11 @@ De backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Een back-up wordt opgeslagen voordat wijzigingen worden uitgevoerd. Niet-selecteerde regels en HidHide toepassingsmachtigingen worden bewaard. Uw controller wordt opnieuw verborgen als u DS4Windows start met verbergen ingeschakeld.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Pictogramtitels tonen</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Onderbalk van Overzicht tonen</value>
   </data>
 </root>

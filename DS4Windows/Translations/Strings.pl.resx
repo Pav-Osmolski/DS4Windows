@@ -6827,7 +6827,7 @@ i backup: </value>
     <value>Pokazuje, jak DS4Windows uzyskuje dostęp do fizycznego kontrolera. HidHide może ukryć go przed grami, aby zapobiec podwójnemu wejściu.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Wybierz karty i odczyty widoczne w przeglądzie.</value>
+    <value>Wybierz sekcje przeglądu, podpisy ikon, odstępy i przyciski dolnego paska.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Wybierz miejsce odtwarzania dźwięku kontrolera. Włącz przesyłanie dźwięku, aby zmienić to ustawienie.</value>
@@ -6855,5 +6855,11 @@ i backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Kopia zapasowa jest zapisywana przed wprowadzeniem zmian. Niewybrane reguły i uprawnienia aplikacji HidHide są zachowywane. Twój kontroler zostanie ponownie ukryty, jeśli zaczniesz DS4Windows z włączoną funkcją ukrywania.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Pokaż podpisy ikon</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Pokaż dolny pasek przeglądu</value>
   </data>
 </root>

@@ -199,6 +199,28 @@ public sealed class ControllerOverviewAudioTests
             Assert.AreEqual(initialPosition, actions.TranslatePoint(new Point(), themedOverview),
                 "Quick actions must stay above the footer while Overview scrolls.");
 
+            var showActions = (CheckBox)themedOverview.FindName("showQuickActions");
+            var showInfo = (CheckBox)themedOverview.FindName("showControllerInfoAction");
+            var infoButton = (Button)themedOverview.FindName("overviewControllerInfoButton");
+            showInfo.IsChecked = false;
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Collapsed, infoButton.Visibility);
+            showActions.IsChecked = false;
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Collapsed, actions.Visibility);
+            Assert.AreEqual(Visibility.Visible, scroll.Visibility, "Hiding the action bar must not hide Overview.");
+            showActions.IsChecked = true;
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Visible, actions.Visibility);
+            Assert.AreEqual(Visibility.Collapsed, infoButton.Visibility, "Restoring the bar must retain button choices.");
+            showInfo.IsChecked = true;
+            var titleToggle = (CheckBox)themedOverview.FindName("showFactTitles");
+            titleToggle.IsChecked = false;
+            themedOverview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+            foreach (string titleName in new[] { "overviewConnectionTitle", "overviewInputRateTitle", "overviewAccessTitle", "overviewOutputTitle" })
+                Assert.AreEqual(Visibility.Collapsed, ((TextBlock)themedOverview.FindName(titleName)).Visibility);
+            Assert.AreEqual(Visibility.Visible, ((TextBlock)themedOverview.FindName("overviewAccessStatus")).Visibility);
+            titleToggle.IsChecked = true;
             var levels = (FrameworkElement)themedOverview.FindName("overviewLevelsCard");
             var showLevels = (CheckBox)themedOverview.FindName("showLevels");
             var microphone = (FrameworkElement)themedOverview.FindName("overviewMicrophoneCard");

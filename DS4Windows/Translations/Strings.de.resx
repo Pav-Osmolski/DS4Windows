@@ -6825,7 +6825,7 @@ Das Backup: </value>
     <value>Zeigt, wie DS4Windows auf den physischen Controller zugreift. HidHide kann ihn vor Spielen verbergen und so doppelte Eingaben verhindern.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Wählen Sie die Karten und Messwerte für die Übersicht.</value>
+    <value>Bereiche der Übersicht, Symbolbeschriftungen, Abstände und Schaltflächen der Fußleiste auswählen.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Wählen Sie, wo der Controller-Ton wiedergegeben wird. Aktivieren Sie das Streaming, um diese Einstellung zu ändern.</value>
@@ -6853,5 +6853,11 @@ Das Backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Eine Sicherungskopie wird vor Änderungen gespeichert. Nicht ausgewählte Regeln und HidHide Anwendungsberechtigungen werden beibehalten. Ihr Controller wird erneut verborgen, wenn Sie DS4Windows mit verstecken aktivieren.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Beschriftungen der Symbole anzeigen</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Fußleiste der Übersicht anzeigen</value>
   </data>
 </root>

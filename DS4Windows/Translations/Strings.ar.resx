@@ -6831,7 +6831,7 @@ Backup : </value>
     <value>طريقة وصول DS4Windows إلى وحدة التحكم الفعلية. يمكن لـ HidHide إخفاؤها عن الألعاب لمنع الإدخال المزدوج.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>اختر البطاقات والقراءات المعروضة في النظرة العامة.</value>
+    <value>اختر أقسام النظرة العامة وعناوين الأيقونات والتباعد وأزرار التذييل.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>اختر مكان تشغيل صوت وحدة التحكم. فعّل البث لتغيير هذا الإعداد.</value>
@@ -6859,5 +6859,11 @@ Backup : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>يتم تخزين نسخة احتياطية قبل التغييرات. يتم الحفاظ على القواعد غير الاختيارية والتوصيات التطبيقية HidHide. سيتم إخفاء جهاز التحكم الخاص بك مرة أخرى إذا بدأت DS4Windows مع إدخال الإخفاء فعال.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>إظهار عناوين الأيقونات</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>إظهار تذييل النظرة العامة</value>
   </data>
 </root>

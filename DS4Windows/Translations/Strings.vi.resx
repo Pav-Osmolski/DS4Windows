@@ -6828,7 +6828,7 @@ Backup : </value>
     <value>Cho biết cách DS4Windows truy cập tay cầm vật lý. HidHide có thể ẩn tay cầm khỏi trò chơi để tránh nhận lệnh hai lần.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Chọn thẻ và số liệu hiển thị trong Tổng quan.</value>
+    <value>Chọn các mục Tổng quan, tiêu đề biểu tượng, khoảng cách và nút trên thanh dưới.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Chọn nơi phát âm thanh của tay cầm. Bật truyền âm thanh để thay đổi tùy chọn này.</value>
@@ -6856,5 +6856,11 @@ Backup : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Một bản sao lưu được lưu trước khi thay đổi. Các quy tắc chưa chọn và quyền ứng dụng HidHide được giữ lại. bộ điều khiển của bạn sẽ được ẩn một lần nữa nếu bạn bắt đầu DS4Windows với ẩn bật.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Hiện tiêu đề biểu tượng</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Hiện thanh dưới của Tổng quan</value>
   </data>
 </root>

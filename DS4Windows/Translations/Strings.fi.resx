@@ -6850,7 +6850,7 @@ Varmuuskopiointi : </value>
     <value>Näyttää, miten DS4Windows käyttää fyysistä ohjainta. HidHide voi piilottaa sen peleiltä kaksoissyötön estämiseksi.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Valitse yleiskatsauksessa näkyvät kortit ja lukemat.</value>
+    <value>Valitse yleiskatsauksen osiot, kuvakkeiden otsikot, välit ja alapalkin painikkeet.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Valitse ohjaimen äänen toistopaikka. Ota suoratoisto käyttöön muuttaaksesi asetusta.</value>
@@ -6878,5 +6878,11 @@ Varmuuskopiointi : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Varmuuskopio tallennetaan ennen muutoksia. Valitsemattomat säännöt ja HidHide sovellusvaltuudet säilytetään. Ohjain piilotetaan uudelleen, jos aloitat DS4Windows piilottamalla käytössä.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Näytä kuvakkeiden otsikot</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Näytä yleiskatsauksen alapalkki</value>
   </data>
 </root>

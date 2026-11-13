@@ -6824,7 +6824,7 @@ Il backup: </value>
     <value>Indica come DS4Windows accede al controller fisico. HidHide può nasconderlo ai giochi per evitare doppi input.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Scegli le schede e i valori da mostrare nella panoramica.</value>
+    <value>Scegli le sezioni della panoramica, i titoli delle icone, la spaziatura e i pulsanti della barra inferiore.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Scegli dove riprodurre l’audio del controller. Attiva lo streaming per modificare questa impostazione.</value>
@@ -6852,5 +6852,11 @@ Il backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Una copia di backup viene salvata prima delle modifiche. Le regole non selezionate e le autorizzazioni dell'applicazione HidHide vengono conservate. Il controller verrà nuovamente nascosto se si avvia DS4Windows con nascondere abilitato.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Mostra i titoli delle icone</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Mostra la barra inferiore della panoramica</value>
   </data>
 </root>

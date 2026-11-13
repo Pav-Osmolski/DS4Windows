@@ -6826,7 +6826,7 @@ O backup: </value>
     <value>Mostra como o DS4Windows acessa o controle físico. O HidHide pode ocultá-lo dos jogos para evitar entradas duplicadas.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Escolha os cartões e as leituras exibidos na visão geral.</value>
+    <value>Escolha as seções da visão geral, os títulos dos ícones, o espaçamento e os botões do rodapé.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Escolha onde o áudio do controle é reproduzido. Ative a transmissão para alterar esta configuração.</value>
@@ -6854,5 +6854,11 @@ O backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Uma cópia de segurança é salvo antes das alterações. Regras não selecionadas e HidHide permissões de aplicação são preservados. Seu controlador será oculto novamente se você começar DS4Windows com ocultar habilitado.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Mostrar títulos dos ícones</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Mostrar rodapé da visão geral</value>
   </data>
 </root>

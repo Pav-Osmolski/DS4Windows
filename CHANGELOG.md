@@ -5,7 +5,9 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Reduce redundant pending USB adaptive-trigger updates, including alternating L2/R2 bow-resistance reports, while preserving effect changes, releases and feedback ownership boundaries. Thanks [@bbbbbbbbxh](https://github.com/bbbbbbbbxh) for the diagnostic logs and pause-menu reproduction ([#123](https://github.com/Pav-Osmolski/DS4Windows/issues/123)). Hardware verification remains pending.
+- Expand Overview **Customize** with icon-title visibility and individual action-bar button controls. Remember the layout without changing controller profiles.
+- Use compact, consistent numeric field widths throughout Profile Editor > Axis Config.
 
 ## Released
 

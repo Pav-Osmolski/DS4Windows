@@ -6994,7 +6994,7 @@
     <value>显示 DS4Windows 访问实体控制器的方式。HidHide 可对游戏隐藏实体控制器，以防止重复输入。</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>选择在概览中显示的卡片和读数。</value>
+    <value>选择概览分区、图标标题、间距和底栏按钮。</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>选择控制器音频的播放位置。启用音频串流后即可更改此设置。</value>
@@ -7022,5 +7022,11 @@
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>在更改之前保存备份。未选择的规则和 HidHide 应用程序权限保留,如果启动,您的控制器将再次隐藏。 DS4Windows 隐藏的能力。</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>显示图标标题</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>显示概览底栏</value>
   </data>
 </root>

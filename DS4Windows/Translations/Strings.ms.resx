@@ -6850,7 +6850,7 @@ Sokongan : </value>
     <value>Cara DS4Windows mengakses pengawal fizikal. HidHide boleh menyembunyikannya daripada permainan untuk mengelakkan input berganda.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Pilih kad dan bacaan yang dipaparkan dalam Gambaran keseluruhan.</value>
+    <value>Pilih bahagian Gambaran keseluruhan, tajuk ikon, jarak dan butang pengaki.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Pilih tempat audio pengawal dimainkan. Dayakan penstriman untuk menukar tetapan ini.</value>
@@ -6878,5 +6878,11 @@ Sokongan : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Salinan cadangan disimpan sebelum perubahan. peraturan yang tidak dipilih dan keizinan aplikasi HidHide disimpan. pengendali anda akan disembunyikan lagi jika anda memulakan DS4Windows dengan menyembunyikan diaktifkan.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Tunjukkan tajuk ikon</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Tunjukkan pengaki Gambaran keseluruhan</value>
   </data>
 </root>

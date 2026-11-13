@@ -6826,7 +6826,7 @@ och backup: </value>
     <value>Visar hur DS4Windows får åtkomst till den fysiska handkontrollen. HidHide kan dölja den för spel för att undvika dubbla inmatningar.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Välj vilka kort och värden som visas i översikten.</value>
+    <value>Välj översiktens avsnitt, ikonrubriker, mellanrum och knappar i det nedre fältet.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Välj var handkontrollens ljud spelas upp. Aktivera strömning för att ändra inställningen.</value>
@@ -6854,5 +6854,11 @@ och backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>En säkerhetskopia sparas innan ändringar görs. Ovalda regler och HidHide applikationsbehörigheter bevaras. Din handkontroll döljs igen om du startar DS4Windows med att dölja aktiverat.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Visa ikonrubriker</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Visa översiktens nedre fält</value>
   </data>
 </root>

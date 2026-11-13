@@ -6827,7 +6827,7 @@ Backup : </value>
     <value>DS4Windows が物理コントローラーにアクセスする方法です。HidHide でゲームから隠すと、入力の重複を防げます。</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>概要に表示するカードと測定値を選びます。</value>
+    <value>概要のセクション、アイコンの見出し、間隔、フッターのボタンを選択します。</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>コントローラーの音声を再生する場所を選びます。変更するにはストリーミングを有効にしてください。</value>
@@ -6855,5 +6855,11 @@ Backup : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>変更前にバックアップが保存されます。未選択のルールと HidHide アプリケーションの許可が保存されます。 DS4Windows を起動すると、コントローラは再び隠されます。</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>アイコンの見出しを表示</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>概要のフッターを表示</value>
   </data>
 </root>

@@ -6848,7 +6848,7 @@ Untuk backup: </value>
     <value>Cara DS4Windows mengakses pengontrol fisik. HidHide dapat menyembunyikannya dari gim untuk mencegah input ganda.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Pilih kartu dan data yang ditampilkan di Ikhtisar.</value>
+    <value>Pilih bagian Ringkasan, judul ikon, jarak, dan tombol bilah bawah.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Pilih tempat audio pengontrol diputar. Aktifkan streaming untuk mengubah pengaturan ini.</value>
@@ -6876,5 +6876,11 @@ Untuk backup: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Sebuah cadangan disimpan sebelum perubahan. aturan yang tidak dipilih dan izin aplikasi HidHide dipertahankan. kontroler Anda akan tersembunyi lagi jika Anda memulai DS4Windows dengan menyembunyikan diaktifkan.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Tampilkan judul ikon</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Tampilkan bilah bawah Ringkasan</value>
   </data>
 </root>

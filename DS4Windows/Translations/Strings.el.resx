@@ -6852,7 +6852,7 @@ Example: whyme_DS4Windows</value>
     <value>Δείχνει πώς αποκτά πρόσβαση το DS4Windows στο φυσικό χειριστήριο. Το HidHide μπορεί να το κρύψει από τα παιχνίδια για να αποφευχθεί η διπλή είσοδος.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Επιλέξτε ποιες κάρτες και μετρήσεις εμφανίζονται στην επισκόπηση.</value>
+    <value>Επιλέξτε ενότητες επισκόπησης, τίτλους εικονιδίων, αποστάσεις και κουμπιά υποσέλιδου.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Επιλέξτε πού αναπαράγεται ο ήχος του χειριστηρίου. Ενεργοποιήστε τη ροή για να αλλάξετε αυτή τη ρύθμιση.</value>
@@ -6880,5 +6880,11 @@ Example: whyme_DS4Windows</value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Ένα αντίγραφο ασφαλείας αποθηκεύεται πριν από τις αλλαγές. Οι μη επιλεγμένοι κανόνες και οι άδειες εφαρμογής HidHide διατηρούνται. Ο ελεγκτής σας θα κρυφτεί ξανά εάν ξεκινήσετε το DS4Windows με το κρύψιμο ενεργοποιημένο.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Εμφάνιση τίτλων εικονιδίων</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Εμφάνιση υποσέλιδου επισκόπησης</value>
   </data>
 </root>

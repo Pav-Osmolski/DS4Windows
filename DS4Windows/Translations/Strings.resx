@@ -8548,7 +8548,7 @@ X axis: {0}, Y axis: {1}</value>
     <value>How DS4Windows accesses the physical controller. HidHide can keep it out of games to prevent double input.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Choose which cards and readings appear on Overview.</value>
+    <value>Choose Overview sections, icon titles, spacing and footer buttons.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Choose where controller audio plays. Enable streaming to change this setting.</value>
@@ -8576,5 +8576,11 @@ X axis: {0}, Y axis: {1}</value>
   </data>
   <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
     <value>Recover hidden controllers…</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Show icon titles</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Show Overview footer</value>
   </data>
 </root>

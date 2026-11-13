@@ -6826,7 +6826,7 @@
     <value>מציג כיצד DS4Windows ניגש לבקר הפיזי. HidHide יכול להסתיר אותו ממשחקים כדי למנוע קלט כפול.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>בחרו אילו כרטיסים ונתונים יופיעו בסקירה.</value>
+    <value>בחירת מקטעי הסקירה, כותרות הסמלים, המרווחים וכפתורי סרגל הפעולות.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>בחרו היכן יושמע שמע הבקר. הפעילו הזרמה כדי לשנות הגדרה זו.</value>
@@ -6854,5 +6854,11 @@
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>גיבוי נשמר לפני שינויים. כללי לא נבחר ו- HidHide הרשאות יישמרו. המעבד שלך יהיה מוסתר שוב אם תתחיל DS4Windows עם הסתרת מופעלת.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>הצגת כותרות הסמלים</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>הצגת סרגל הפעולות בסקירה</value>
   </data>
 </root>

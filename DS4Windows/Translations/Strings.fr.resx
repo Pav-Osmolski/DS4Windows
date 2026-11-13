@@ -6850,7 +6850,7 @@ Le backup : </value>
     <value>Indique comment DS4Windows accède à la manette physique. HidHide peut la masquer aux jeux pour éviter les entrées en double.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Choisissez les cartes et les mesures affichées dans la vue d’ensemble.</value>
+    <value>Choisissez les sections de la vue d’ensemble, les titres des icônes, l’espacement et les boutons du pied de page.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Choisissez où le son de la manette est diffusé. Activez la diffusion pour modifier ce réglage.</value>
@@ -6878,5 +6878,11 @@ Le backup : </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>Une sauvegarde est enregistrée avant les modifications. Les règles non sélectionnées et les autorisations d'application HidHide sont conservées. Votre contrôleur sera à nouveau masqué si vous commencez DS4Windows avec cacher activé.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Afficher les titres des icônes</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Afficher le pied de la vue d’ensemble</value>
   </data>
 </root>

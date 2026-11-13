@@ -6824,7 +6824,7 @@ A háttérben: </value>
     <value>Megmutatja, hogyan éri el a DS4Windows a fizikai vezérlőt. A HidHide elrejtheti a játékok elől a kettős bevitel elkerülésére.</value>
   </data>
   <data name="OverviewCustomizeHelp" xml:space="preserve">
-    <value>Válassza ki az áttekintésben megjelenő kártyákat és értékeket.</value>
+    <value>Az áttekintés szakaszainak, ikonfeliratainak, térközeinek és alsó gombjainak kiválasztása.</value>
   </data>
   <data name="OverviewAudioOutputHelp" xml:space="preserve">
     <value>Válassza ki a vezérlő hangjának lejátszási helyét. A beállítás módosításához engedélyezze a hangátvitelt.</value>
@@ -6852,5 +6852,11 @@ A háttérben: </value>
   </data>
   <data name="UI_EF54576158C7AF18" xml:space="preserve">
     <value>A biztonsági mentés a módosítások előtt mentésre kerül. A nem kiválasztott szabályok és az HidHide alkalmazásengedélyek megmaradnak. A vezérlő ismét el lesz rejtve, ha elindítja a DS4Windows beállítást.</value>
+  </data>
+  <data name="OverviewShowFactTitles" xml:space="preserve">
+    <value>Ikonfeliratok megjelenítése</value>
+  </data>
+  <data name="OverviewShowQuickActions" xml:space="preserve">
+    <value>Áttekintés alsó sávjának megjelenítése</value>
   </data>
 </root>
