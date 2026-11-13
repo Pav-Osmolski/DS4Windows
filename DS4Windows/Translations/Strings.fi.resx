@@ -6858,4 +6858,25 @@ Varmuuskopiointi : </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Katkaisee valitun langattoman ohjaimen yhteyden. USB-ohjain on irrotettava kaapelista.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Palauta piilotetut ohjaimet</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Valitse vain fyysinen ohjain, jota haluat käyttää DS4Windows:n ulkopuolella. Vanhemmat piilotussäännöt on ehkä lisätty manuaalisesti tai toisen sovelluksen kautta.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Valitut piilotussäännöt poistettiin. Yhdistä ohjain uudelleen, jos Windows ei ole vielä päivittänyt sitä. Varmuuskopio:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Toisen DS4Windows-istunnon käytössä olevia sääntöjä suojataan.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Palauta piilotetut ohjaimet.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Valittujen ohjainten palauttaminen</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Varmuuskopio tallennetaan ennen muutoksia. Valitsemattomat säännöt ja HidHide sovellusvaltuudet säilytetään. Ohjain piilotetaan uudelleen, jos aloitat DS4Windows piilottamalla käytössä.</value>
+  </data>
 </root>

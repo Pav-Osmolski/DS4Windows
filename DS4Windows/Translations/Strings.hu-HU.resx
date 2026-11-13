@@ -6832,4 +6832,25 @@ A háttérben: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Leválasztja a kiválasztott vezeték nélküli vezérlőt. Az USB-s vezérlő kábelét ki kell húzni.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>A rejtett vezérlők visszaállítása</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Csak azt a fizikai vezérlőt válassza ki, amelyet a DS4Windows-on kívül szeretne használni. Előfordulhat, hogy a régebbi elrejtési szabályokat manuálisan vagy egy másik alkalmazás is hozzáadta.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>A kiválasztott elrejtési szabályokat eltávolították. Csatlakoztassa újra a vezérlőt, ha az Windows még nem frissítette.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Nem találtunk helyreállítható rejtett szabályokat. Egy másik DS4Windows munkamenet által használt szabályok védettek.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>A rejtett vezérlők helyreállítása.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>A kiválasztott vezérlők visszaállítása</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>A biztonsági mentés a módosítások előtt mentésre kerül. A nem kiválasztott szabályok és az HidHide alkalmazásengedélyek megmaradnak. A vezérlő ismét el lesz rejtve, ha elindítja a DS4Windows beállítást.</value>
+  </data>
 </root>

@@ -99,7 +99,7 @@ namespace DS4WinWPF.DS4Forms
             bool hasLeftCards = showFeedback.IsChecked == true ||
                 (showAudio.IsChecked == true && (hasAudio || nativeUsbHeadsetCard.Visibility == Visibility.Visible));
             bool hasRightCards = hasAudio && (showLevels.IsChecked == true || showMicrophone.IsChecked == true);
-            bool split = ActualWidth >= 724 && hasLeftCards && hasRightCards;
+            bool split = ActualWidth >= ControllerPageLayout.SplitWidth && hasLeftCards && hasRightCards;
             overviewSecondaryColumn.Width = split ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
             Grid.SetColumn(overviewSecondaryCards, split ? 1 : 0);
             Grid.SetRow(overviewSecondaryCards, split ? 0 : 1);

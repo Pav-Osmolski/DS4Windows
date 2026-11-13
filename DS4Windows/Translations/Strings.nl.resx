@@ -6864,4 +6864,25 @@ De backup: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Verbreekt de verbinding met de geselecteerde draadloze controller. Trek de kabel van USB-controllers los.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Verborgen controller herstellen</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Selecteer alleen de fysieke controller die u wilt gebruiken buiten DS4Windows. Oudere verborgen regels zijn mogelijk handmatig of door een andere app toegevoegd.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Selecteerde regels voor het verbergen zijn verwijderd.Connecteer uw controller opnieuw als Windows het nog niet heeft vernieuwd. Back-up:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Er zijn geen herstelbare verborgen regels gevonden. Regels die worden gebruikt door een andere DS4Windows-sessie zijn beschermd.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Recover verborgen controllers...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>De geselecteerde controller herstellen</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Een back-up wordt opgeslagen voordat wijzigingen worden uitgevoerd. Niet-selecteerde regels en HidHide toepassingsmachtigingen worden bewaard. Uw controller wordt opnieuw verborgen als u DS4Windows start met verbergen ingeschakeld.</value>
+  </data>
 </root>

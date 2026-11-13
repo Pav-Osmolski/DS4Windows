@@ -166,7 +166,7 @@ namespace DS4WinWPF.DS4Control
             }
         }
 
-        private static bool TryRead(IHidHideConfigurationDevice device,
+        internal static bool TryRead(IHidHideConfigurationDevice device,
             out HidHideConfigurationSnapshot snapshot)
         {
             snapshot = null;
@@ -224,7 +224,7 @@ namespace DS4WinWPF.DS4Control
                 System.ComponentModel.Win32Exception or NotSupportedException;
 
         internal static string WriteBackup(string settingsDirectory,
-            HidHideConfigurationSnapshot snapshot)
+            HidHideConfigurationSnapshot snapshot, string reason = "Confirmed Windows app-execution alias repair")
         {
             if (!HasLosslessPolicyText(snapshot))
                 throw new IOException("HidHide settings contain text that cannot be backed up without changes.");
@@ -234,13 +234,13 @@ namespace DS4WinWPF.DS4Control
             byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(new
             {
                 Schema = 1, CreatedUtc = DateTime.UtcNow,
-                Reason = "Confirmed Windows app-execution alias repair",
+                Reason = reason,
                 snapshot.Applications, snapshot.Devices, snapshot.Inverse, snapshot.Active
             }, new JsonSerializerOptions { WriteIndented = true });
             string directory = Path.Combine(settingsDirectory, "Backups", "HidHide");
             Directory.CreateDirectory(directory);
             string path = Path.Combine(directory,
-                $"before-alias-repair-{DateTime.UtcNow:yyyyMMdd-HHmmss}-{Guid.NewGuid():N}.json");
+                $"before-hidhide-repair-{DateTime.UtcNow:yyyyMMdd-HHmmss}-{Guid.NewGuid():N}.json");
             using var file = new FileStream(path, FileMode.CreateNew, FileAccess.Write,
                 FileShare.None);
             file.Write(bytes);

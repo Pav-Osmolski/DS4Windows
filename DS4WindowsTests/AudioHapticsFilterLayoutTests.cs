@@ -33,6 +33,9 @@ public sealed class AudioHapticsFilterLayoutTests
                 low.Value = 160; high.Value = 20;
                 ((TextBlock)root.FindName("lowPassValueText")).Text = "160 Hz";
                 ((TextBlock)root.FindName("highPassValueText")).Text = "20 Hz";
+                var secondary = (FrameworkElement)root.FindName("secondaryCard");
+                DS4WinWPF.DS4Forms.ControllerPageLayout.ArrangePair(width,
+                    (ColumnDefinition)root.FindName("cardGutter"), (ColumnDefinition)root.FindName("secondaryColumn"), secondary);
                 root.Measure(new Size(width, 1100));
                 root.Arrange(new Rect(0, 0, width, 1100));
                 root.UpdateLayout();
@@ -72,7 +75,6 @@ public sealed class AudioHapticsFilterLayoutTests
         XNamespace x = "http://schemas.microsoft.com/winfx/2006/xaml";
         XElement markup = LocalizedSource.Load(Path.Combine(forms, "AudioHapticsControl.xaml")).Root!;
         markup.Attribute(x + "Class")!.Remove();
-        markup.Attribute("Width")!.Remove();
         foreach (var attribute in markup.DescendantsAndSelf().Attributes().ToArray())
             if (attribute.Name.LocalName is "Click" or "SelectionChanged" or "ValueChanged") attribute.Remove();
         XElement bridge = LocalizedSource.Load(Path.Combine(forms, "Themes", "BridgeShellStyles.xaml")).Root!;

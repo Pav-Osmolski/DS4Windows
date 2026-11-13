@@ -5,9 +5,21 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are no unreleased changes.
+There are currently no unreleased changes.
 
 ## Released
+
+### [5.0.70](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.70) - 2026-11-11
+
+- Fix a critical HidHide cleanup gap that could leave physical controllers hidden outside DS4Windows after an interrupted session. Persist and verify ownership, recover confirmed abandoned rules on Start, and protect rules still used by another participating copy. Thanks [u/JoeRLL](https://www.reddit.com/user/JoeRLL/) for the report that helped identify this issue ([PR #125](https://github.com/Pav-Osmolski/DS4Windows/pull/125)).
+- Add **Settings > Components > Recover hidden controllers…** for explicitly restoring controllers affected by older or untracked hiding rules. Back up and recheck configuration before changes; preserve unrelated rules and application permissions. Explain remaining externally managed rules after Stop.
+- Refresh documentation screenshots and add illustrated Controllers settings, Components and notification-area menu guidance.
+
+### [5.0.69](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.69) - 2026-11-10
+
+- Fill the Overview battery icon in proportion to the reported charge. The fill turns yellow below 25% and red at 10% or lower.
+- Stack Audio Haptics and Trigger Lab cards at the same window width as Overview. Keep the first Audio Haptics card steady as the layout changes.
+- Show a starting status while controller speaker and headset audio is being set up, avoiding a brief false warning when streaming is enabled.
 
 ### [5.0.68](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.68) - 2026-11-10
 

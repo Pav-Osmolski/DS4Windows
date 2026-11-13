@@ -6833,4 +6833,25 @@ Das Backup: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Trennt den ausgewählten Funkcontroller. Bei USB-Controllern muss das Kabel abgezogen werden.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Versteckte Controller wiederherstellen</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Wählen Sie nur den physischen Controller aus, den Sie außerhalb von DS4Windows verwenden möchten. Ältere Versteckungsregeln wurden möglicherweise manuell oder von einer anderen App hinzugefügt.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Ausgewählte Vorgaben zum Verstecken wurden entfernt. Verbinden Sie Ihren Controller erneut, wenn Windows ihn noch nicht aktualisiert hat. Backup:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Es wurden keine wiederherstellbaren Versteckungsregeln gefunden. Regeln, die von einer anderen DS4Windows Sitzung verwendet werden, sind geschützt.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Wiederherstellung versteckter Controller.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Wiederherstellen ausgewählter Controller</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Eine Sicherungskopie wird vor Änderungen gespeichert. Nicht ausgewählte Regeln und HidHide Anwendungsberechtigungen werden beibehalten. Ihr Controller wird erneut verborgen, wenn Sie DS4Windows mit verstecken aktivieren.</value>
+  </data>
 </root>

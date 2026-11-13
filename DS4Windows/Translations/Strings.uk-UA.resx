@@ -6831,4 +6831,25 @@
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Від’єднує вибраний бездротовий контролер. Контролери USB потрібно від’єднати від кабелю.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Відновлення прихованих контролерів</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Виберіть тільки фізичний контролер, який ви хочете використовувати поза DS4Windows. Старі правила приховування можуть бути додані вручну або іншим додатком.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Вибрані правила приховування були видалені. Перев'язати контролер, якщо Windows ще не оновив його.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Правила, які використовуються іншою сесією DS4Windows, захищені.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Відновлення прихованих контролерів.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Відновлення вибраних контролерів</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Безкоштовна копія зберігається до внесення змін. Невибрані правила та HidHide дозволи програм зберігаються. Ваш контролер буде знову прихований, якщо ви почнете DS4Windows з увімкненням приховування.</value>
+  </data>
 </root>

@@ -7002,4 +7002,25 @@
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>断开所选无线控制器。USB 控制器需要拔下线缆。</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>恢复隐藏的控制器</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>仅选择您想要在 DS4Windows 外部使用的物理控制器。 可能已通过手动或其他应用程序添加了较旧的隐藏规则。</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>已删除选定的隐藏规则。如果 Windows 尚未更新,请重新连接控制器。</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>未找到可恢复的隐藏规则,另一个 DS4Windows 会话使用的规则受到保护。</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>找回隐藏的控制器</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>恢复选定的控制器</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>在更改之前保存备份。未选择的规则和 HidHide 应用程序权限保留,如果启动,您的控制器将再次隐藏。 DS4Windows 隐藏的能力。</value>
+  </data>
 </root>

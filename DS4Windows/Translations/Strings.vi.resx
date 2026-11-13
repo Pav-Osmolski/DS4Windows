@@ -6836,4 +6836,25 @@ Backup : </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Ngắt kết nối tay cầm không dây đã chọn. Với tay cầm USB, hãy rút cáp.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Khôi phục các bộ điều khiển ẩn</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Chỉ chọn bộ điều khiển vật lý mà bạn muốn sử dụng bên ngoài DS4Windows. Các quy tắc ẩn cũ có thể đã được thêm bằng tay hoặc bởi một ứng dụng khác. không có gì được chọn tự động.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Các quy tắc ẩn đã được loại bỏ. Kết nối lại bộ điều khiển của bạn nếu Windows chưa làm mới nó. Sao lưu:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Không có quy tắc ẩn có thể phục hồi được tìm thấy. Các quy tắc đang được sử dụng bởi phiên DS4Windows khác được bảo vệ.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Khôi phục các bộ điều khiển ẩn ...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Khôi phục các bộ điều khiển đã chọn</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Một bản sao lưu được lưu trước khi thay đổi. Các quy tắc chưa chọn và quyền ứng dụng HidHide được giữ lại. bộ điều khiển của bạn sẽ được ẩn một lần nữa nếu bạn bắt đầu DS4Windows với ẩn bật.</value>
+  </data>
 </root>

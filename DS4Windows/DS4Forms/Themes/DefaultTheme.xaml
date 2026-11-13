@@ -51,6 +51,7 @@
     <SolidColorBrush x:Key="NavigationSelectionColor" Color="#FFDCEBFF" />
     <SolidColorBrush x:Key="MutedForegroundColor" Color="#FF5F7086" />
     <SolidColorBrush x:Key="SuccessColor" Color="#FF16883F" />
+    <SolidColorBrush x:Key="WarningColor" Color="#FF886000" />
     <SolidColorBrush x:Key="DangerColor" Color="#FFB4232C" />
 
     <system:String x:Key="KeyImageImg">key-solid.png</system:String>

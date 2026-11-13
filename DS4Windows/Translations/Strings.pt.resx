@@ -6835,4 +6835,25 @@ O backup: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Desliga o comando sem fios selecionado. Os comandos USB têm de ser desligados do cabo.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Recuperar controladores ocultos</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Selecione apenas o controlador físico que você deseja usar fora de DS4Windows. Regras mais antigas de ocultação podem ter sido adicionadas manualmente ou por outro aplicativo.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>As regras de ocultação selecionadas foram removidas. Reconecte o seu controlador se Windows ainda não o tiver atualizado.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Nenhuma regra de ocultação recuperável foi encontrada. As regras em uso por outra sessão DS4Windows são protegidas.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Recuperação de controladores ocultos.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Restaurar controladores selecionados</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Uma cópia de segurança é salvo antes das alterações. Regras não selecionadas e HidHide permissões de aplicação são preservados. Seu controlador será oculto novamente se você começar DS4Windows com ocultar habilitado.</value>
+  </data>
 </root>

@@ -75,8 +75,10 @@ public static class AppThemeCatalog
         var surfaces = new[] { surface, ((SolidColorBrush)dictionary["CardBackgroundColor"]).Color,
             ((SolidColorBrush)dictionary["RaisedBackgroundColor"]).Color };
         if (choice != AppThemeChoice.HighContrast)
-            foreach (string key in new[] { "MutedForegroundColor", "SuccessColor", "DangerColor" })
+            foreach (string key in new[] { "MutedForegroundColor", "SuccessColor", "WarningColor", "DangerColor" })
                 dictionary[key] = Frozen(ReadableAccent(((SolidColorBrush)dictionary[key]).Color, surfaces));
+        else
+            dictionary["WarningColor"] = dictionary["ForegroundColor"];
         var original = ((SolidColorBrush)dictionary["AccentColor"]).Color;
         accent = NormalizeAccent(accent);
         Color selected = choice == AppThemeChoice.HighContrast || accent == "Theme" ? original : accent == "Windows"

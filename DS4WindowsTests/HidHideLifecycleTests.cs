@@ -286,7 +286,14 @@ namespace DS4WindowsTests
             StringAssert.Contains(exemption,
                 "lock (hidHideDriverMutationLock)");
             StringAssert.Contains(ensure, "TryGetBlacklist(");
-            StringAssert.Contains(release, "TryGetBlacklist(");
+            StringAssert.Contains(release, "ReleasePersistentHidHideRules(");
+            string recovery = File.ReadAllText(FindRepositoryFile(
+                "DS4Windows", "DS4Control", "ControlService.HidHideRecovery.cs"));
+            string mutation = Extract(recovery, "private void ReleasePersistentHidHideRules",
+                "private void RecoverHidHideOwnedRules");
+            StringAssert.Contains(mutation, "TryGetBlacklist(");
+            StringAssert.Contains(mutation, "ownership.Release(candidates)");
+            StringAssert.Contains(mutation, "TrySetHidHideBlacklist(");
             StringAssert.Contains(exemption, "TryGetBlacklist(");
         }
 

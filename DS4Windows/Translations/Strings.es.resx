@@ -6834,4 +6834,25 @@ El backup: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Desconecta el mando inalámbrico seleccionado. Los mandos USB deben desenchufarse.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Recuperar controladores ocultos</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Seleccione sólo el controlador físico que desee usar fuera de DS4Windows. Las reglas de ocultación anteriores pueden haber sido añadidas manualmente o por otra aplicación.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Se han eliminado las reglas de ocultación seleccionadas. Reconectar el controlador si Windows no lo ha actualizado todavía.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>No se encontraron reglas de ocultación recuperables. Las reglas en uso por otra sesión DS4Windows están protegidas.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Recuperar los controladores ocultos.</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Restaurar los controladores seleccionados</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Se guarda una copia de seguridad antes de realizar cambios. Se conservan las reglas no seleccionadas y los permisos de la aplicación HidHide. Su controlador se ocultará de nuevo si inicia DS4Windows con ocultar habilitado.</value>
+  </data>
 </root>

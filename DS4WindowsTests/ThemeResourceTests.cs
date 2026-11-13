@@ -207,6 +207,7 @@ namespace DS4WindowsTests
                     SettingsStorageLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     UpdateStorageLayoutValidation.Validate(application, renderedFiles);
                     new ContextualHeaderTests { TestContext = TestContext }.ValidateProfileActions();
+                    HidHideRecoveryWindowTests.ValidateExplicitSelection();
                 }
                 catch (Exception ex)
                 {
@@ -218,6 +219,7 @@ namespace DS4WindowsTests
             {
                 Assert.Fail(failure.ToString());
             }
+            HeadlessWpfDispatcher.Invoke(ThemeConsistencyValidation.ValidateAudioHapticsTopEdge);
             Assert.AreEqual(155, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {

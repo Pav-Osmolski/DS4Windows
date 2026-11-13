@@ -6856,4 +6856,25 @@ Untuk backup: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Memutus pengontrol nirkabel yang dipilih. Cabut kabel pengontrol USB.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Mengembalikan Controller Tersembunyi</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Pilih hanya kontrol fisik yang ingin Anda gunakan di luar DS4Windows. aturan menyembunyikan yang lebih lama mungkin telah ditambahkan secara manual atau oleh aplikasi lain.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Atur ulang kontroler Anda jika Windows belum memperbarui.</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Tidak ada aturan menyembunyikan yang dapat dipulihkan ditemukan. aturan yang digunakan oleh sesi DS4Windows lainnya dilindungi.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Mengembalikan pengendali tersembunyi</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Mengembalikan kontroler yang dipilih</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Sebuah cadangan disimpan sebelum perubahan. aturan yang tidak dipilih dan izin aplikasi HidHide dipertahankan. kontroler Anda akan tersembunyi lagi jika Anda memulai DS4Windows dengan menyembunyikan diaktifkan.</value>
+  </data>
 </root>

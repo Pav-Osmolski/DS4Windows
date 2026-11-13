@@ -43,6 +43,11 @@ namespace DS4WinWPF.DS4Forms
         {
             discoverAudioSessions = discovery ?? throw new ArgumentNullException(nameof(discovery));
             InitializeComponent();
+            SizeChanged += (_, e) =>
+            {
+                if (e.WidthChanged)
+                    ControllerPageLayout.ArrangePair(e.NewSize.Width, cardGutter, secondaryColumn, secondaryCard);
+            };
             statusRefreshTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromSeconds(1),

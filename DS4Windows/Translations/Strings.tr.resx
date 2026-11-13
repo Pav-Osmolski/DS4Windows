@@ -6858,4 +6858,25 @@ backup için: </value>
   <data name="OverviewDisconnectHelp" xml:space="preserve">
     <value>Seçilen kablosuz kontrolcünün bağlantısını keser. USB kontrolcünün kablosu çıkarılmalıdır.</value>
   </data>
+  <data name="UI_07E96FD7696559AD" xml:space="preserve">
+    <value>Gizli Kontrolörleri Geri Alın</value>
+  </data>
+  <data name="UI_183ED4F8416FCA19" xml:space="preserve">
+    <value>Sadece DS4Windows dışında kullanmak istediğiniz fiziksel denetleyiciyi seçin. Eski gizleme kuralları el ile veya başka bir uygulama tarafından eklenmiş olabilir. hiçbir şey otomatik olarak seçilmez.</value>
+  </data>
+  <data name="UI_1868EE53775E4D0C" xml:space="preserve">
+    <value>Seçilen gizleme kuralları kaldırıldı. Windows henüz güncellenmemişse denetleyicinizi yeniden bağlayın. Yedekleme:</value>
+  </data>
+  <data name="UI_325EF42B55F5057C" xml:space="preserve">
+    <value>Başka bir DS4Windows oturum tarafından kullanılan kurallar korunmaktadır.</value>
+  </data>
+  <data name="UI_442FD3C0BEDEE357" xml:space="preserve">
+    <value>Gizli Kontrolörleri Geri Alın...</value>
+  </data>
+  <data name="UI_8855E34F014B0B81" xml:space="preserve">
+    <value>Seçilen Kontrolörleri Geri Dönüştürme</value>
+  </data>
+  <data name="UI_EF54576158C7AF18" xml:space="preserve">
+    <value>Değişikliklerden önce bir yedekleme kaydedilir. Seçilmemiş kurallar ve HidHide uygulama izinleri korunur. DS4Windows'i gizleme etkinleştirerek başlatırsanız denetleyiciniz tekrar gizlenir.</value>
+  </data>
 </root>
