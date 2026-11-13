@@ -233,7 +233,8 @@ namespace DS4WindowsTests
                 Assert.Fail(failure.ToString());
             }
             HeadlessWpfDispatcher.Invoke(ThemeConsistencyValidation.ValidateAudioHapticsTopEdge);
-            Assert.AreEqual(157, renderedFiles.Count);
+            // Main theme coverage plus one DirectInput view for each of six themes.
+            Assert.AreEqual(163, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

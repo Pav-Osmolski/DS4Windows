@@ -58,6 +58,7 @@ namespace DS4WinWPF.DS4Forms
         private TextBlock Switch2MagnetometerCalibrationStatus;
         private ComboBox outConTypeCombo;
         private TextBlock outputControllerHintText;
+        private Border genericJoystickPanel;
         private StackPanel switch2ViiperLegendPanel;
         private Button heavyRumbleTestBtn;
         private Button lightRumbleTestBtn;
@@ -259,6 +260,7 @@ namespace DS4WinWPF.DS4Forms
         {
             outConTypeCombo = e.Find<ComboBox>("outConTypeCombo");
             outputControllerHintText = e.Find<TextBlock>("outputControllerHintText");
+            genericJoystickPanel = e.Find<Border>("genericJoystickPanel");
             switch2ViiperLegendPanel = e.Find<StackPanel>("switch2ViiperLegendPanel");
             heavyRumbleTestBtn = e.Find<Button>("heavyRumbleTestBtn");
             lightRumbleTestBtn = e.Find<Button>("lightRumbleTestBtn");
