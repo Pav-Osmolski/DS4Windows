@@ -6885,4 +6885,25 @@ Sokongan : </value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>Tunjukkan pengaki Gambaran keseluruhan</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mengekalkan output audio Windows semasa</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Memulihkan peranti pemutaran terdahulu jika Windows memilih peranti audio DS4Windows yang baru dicipta semasa memulakan atau menyambung semula. Default mikrofon dan komunikasi tidak berubah.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows output audio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Pengaturan bunyi</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Pilih peranti pemutaran Windows yang digunakan oleh permainan dan aplikasi anda.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows sedang menghantar audio kepada pengawal maya. pengawal pemindahan audio diaktifkan; semak sumber audio dan laluan output jika anda tidak mendengar apa-apa.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows sedang menghantar audio kepada pengawal maya. Pilih speaker atau headphone biasa anda dalam tetapan Suara, atau mengaktifkan pemindahan audio pengawal untuk pengawal itu.</value>
+  </data>
 </root>

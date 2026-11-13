@@ -1941,6 +1941,12 @@ namespace DS4Windows
             set => m_Config.showViiperTrayIcon = value;
         }
 
+        public static bool PreserveWindowsAudioOutput
+        {
+            get => m_Config.preserveWindowsAudioOutput;
+            set => m_Config.preserveWindowsAudioOutput = value;
+        }
+
         public static string PreferredViiperPath
         {
             get => m_Config.preferredViiperPath;
@@ -5160,6 +5166,7 @@ namespace DS4Windows
         public bool preferWindowsKeyboardMouse;
         public bool suppressViiperSetupPrompt = false;
         public bool showViiperTrayIcon = true;
+        public bool preserveWindowsAudioOutput = true;
         public bool viiperDebugLogging = false;
         public string preferredViiperPath = string.Empty;
         public bool closeMini = false;
@@ -9707,6 +9714,7 @@ namespace DS4Windows
                     gameBarBluetoothInputRecovery = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/GameBarBluetoothInputRecovery")?.InnerText, out bool recoverGameBarInput) || recoverGameBarInput;
                     keepControllersHiddenOnReconnect = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/KeepControllersHiddenOnReconnect")?.InnerText, out bool keepHidden) || keepHidden;
                     showViiperTrayIcon = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/ShowViiperTrayIcon")?.InnerText, out bool visibleTray) || visibleTray;
+                    preserveWindowsAudioOutput = !Boolean.TryParse(m_Xdoc.SelectSingleNode("/Profile/PreserveWindowsAudioOutput")?.InnerText, out bool preserveOutput) || preserveOutput;
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/minimizeToTaskbar"); Boolean.TryParse(Item.InnerText, out minToTaskbar); }
                     catch { missingSetting = true; }
                     try { Item = m_Xdoc.SelectSingleNode("/Profile/formWidth"); Int32.TryParse(Item.InnerText, out formWidth); }
@@ -10126,6 +10134,7 @@ namespace DS4Windows
             rootElement.AppendChild(xmlWindowsInput);
             XmlNode xmlViiperDebug = m_Xdoc.CreateNode(XmlNodeType.Element, "ViiperDebugLogging", null); xmlViiperDebug.InnerText = viiperDebugLogging.ToString(); rootElement.AppendChild(xmlViiperDebug);
             XmlNode xmlViiperTray = m_Xdoc.CreateNode(XmlNodeType.Element, "ShowViiperTrayIcon", null); xmlViiperTray.InnerText = showViiperTrayIcon.ToString(); rootElement.AppendChild(xmlViiperTray);
+            XmlNode xmlPreserveOutput = m_Xdoc.CreateElement("PreserveWindowsAudioOutput"); xmlPreserveOutput.InnerText = preserveWindowsAudioOutput.ToString(); rootElement.AppendChild(xmlPreserveOutput);
             XmlNode xmlminToTaskbar = m_Xdoc.CreateNode(XmlNodeType.Element, "minimizeToTaskbar", null); xmlminToTaskbar.InnerText = minToTaskbar.ToString(); rootElement.AppendChild(xmlminToTaskbar);
             XmlNode xmlFormWidth = m_Xdoc.CreateNode(XmlNodeType.Element, "formWidth", null); xmlFormWidth.InnerText = formWidth.ToString(); rootElement.AppendChild(xmlFormWidth);
             XmlNode xmlFormHeight = m_Xdoc.CreateNode(XmlNodeType.Element, "formHeight", null); xmlFormHeight.InnerText = formHeight.ToString(); rootElement.AppendChild(xmlFormHeight);

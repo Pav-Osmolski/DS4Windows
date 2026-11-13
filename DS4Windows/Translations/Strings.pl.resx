@@ -6862,4 +6862,25 @@ i backup: </value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>Pokaż dolny pasek przeglądu</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Utrzymuj bieżące wyjście audio Windows</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Przywróć poprzednie urządzenie odtwarzania, jeśli Windows wybierze nowo utworzone urządzenie audio DS4Windows podczas uruchamiania lub ponownego podłączenia. domyślne ustawienia mikrofonu i komunikacji pozostają niezmienione.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Wyjście audio Windows {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Ustawienia dźwiękowe</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Wybierz urządzenie odtwarzania Windows używane przez gry i aplikacje.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows wysyła dźwięk do wirtualnego sterownika. Przekazywanie dźwięku kontrolera jest włączone; sprawdź jego źródło dźwięku i trasę wyjścia, jeśli nic nie usłyszysz.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows wysyła dźwięk do wirtualnego kontrolera. Wybierz zwykłe głośniki lub słuchawki w ustawieniach dźwięku lub włączyć przekazywanie dźwięku przez kontroler dla tego kontrolera.</value>
+  </data>
 </root>

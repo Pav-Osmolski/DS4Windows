@@ -1118,6 +1118,7 @@ namespace DS4Windows
 
         private readonly object audioEndpointNamesGate = new object();
         private ViiperAudioEndpointNames audioEndpointNames;
+        private WindowsPlaybackProtection.Lease playbackProtection;
         private bool audioEndpointNamesEnabled;
 
         private void RefreshAudioEndpointNames()
@@ -1128,6 +1129,9 @@ namespace DS4Windows
                 audioEndpointNames = null;
                 ViiperDeviceStream stream = Volatile.Read(ref deviceStream);
                 int index = Volatile.Read(ref lastInputDeviceIndex);
+                if (stream != null)
+                    playbackProtection?.Bind(stream.UsbipPort, index,
+                        () => connected && ReferenceEquals(stream, Volatile.Read(ref deviceStream)));
                 if (!audioEndpointNamesEnabled || !connected || gamepadOnly || stream == null ||
                     stream.UsbipPort <= 0 || index < 0 ||
                     index >= ControlService.MAX_DS4_CONTROLLER_COUNT ||
@@ -1163,13 +1167,20 @@ namespace DS4Windows
                         : $"{status.DisplayText}. Use Settings > Components to install or repair VIIPER and usbip-win2.");
             }
 
-            deviceStream = CreateDeviceStreamWithServerFallback();
+            playbackProtection = gamepadOnly ? null : WindowsPlaybackProtection.BeforeVirtualDeviceCreation();
+            try { deviceStream = CreateDeviceStreamWithServerFallback(); }
+            catch
+            {
+                Interlocked.Exchange(ref playbackProtection, null)?.Dispose();
+                throw;
+            }
             try
             {
                 PrepareSwitch2VirtualFeedbackSession();
             }
             catch
             {
+                Interlocked.Exchange(ref playbackProtection, null)?.Dispose();
                 Interlocked.Exchange(ref deviceStream, null)?.Dispose();
                 Interlocked.Exchange(ref switch2FeedbackSession, null)?
                     .TryRetire();
@@ -2037,6 +2048,7 @@ namespace DS4Windows
 
         public override void Disconnect()
         {
+            Interlocked.Exchange(ref playbackProtection, null)?.Dispose();
             lock (audioEndpointNamesGate)
             {
                 audioEndpointNamesEnabled = false;

@@ -6891,4 +6891,25 @@ De backup: </value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>Onderbalk van Overzicht tonen</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Bewaar mijn huidige Windows audio-uitvoer</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Herstel het vorige afspelen apparaat als Windows een nieuw gecreëerd DS4Windows audio-apparaat selecteert tijdens het opstarten of opnieuw verbinden. De microfoon- en communicatievoorkeuren blijven ongewijzigd.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows audio uitvoer: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Sound instellingen</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Selecteer het Windows afspelen apparaat dat wordt gebruikt door uw games en apps.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows stuurt audio naar een virtuele controller. Controller-audiooverdracht is ingeschakeld; controleer de audiobron en uitvoerroute als u niets hoort.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows stuurt audio naar een virtuele controller.Kies uw gebruikelijke luidsprekers of hoofdtelefoon in de geluidsinstellingen of schakel controller-audiooverdracht voor die controller in.</value>
+  </data>
 </root>

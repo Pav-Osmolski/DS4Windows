@@ -378,6 +378,20 @@
                     </StackPanel>
                 </Border>
 
+                <Grid x:Name="windowsAudioRoute" Margin="0,0,0,16" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                        <TextBlock x:Name="windowsAudioOutputText" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
+                        <TextBlock x:Name="windowsAudioRouteHelp" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
+                                   Foreground="{DynamicResource WarningColor}" />
+                    </StackPanel>
+                    <Button x:Name="windowsSoundSettingsButton" Grid.Column="1" Style="{DynamicResource BridgeSecondaryButtonStyle}"
+                            VerticalAlignment="Center" Click="WindowsSoundSettings_Click" />
+                </Grid>
+
                 <StackPanel x:Name="profileSelectionNotice" Margin="0,0,0,16"
                             Visibility="{Binding NeedsProfileSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock Text="{lex:Loc Strings:UI_18BCA2DAF670B6A1}" FontSize="18" FontWeight="SemiBold" />

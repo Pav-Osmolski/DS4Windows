@@ -268,6 +268,29 @@ public sealed class ControllerOverviewAudioTests
             showLevels.IsChecked = true;
             themedOverview.UpdateLayout();
             Assert.AreEqual(Visibility.Visible, levels.Visibility);
+            // Synthetic endpoint snapshots exercise the real UI without changing
+            // the user's Windows audio defaults or enumerating test devices.
+            themedOverview.ApplyWindowsAudioOutput(new("Desktop headphones", 0, -1));
+            themedOverview.UpdateLayout();
+            var routeHelp = (TextBlock)themedOverview.FindName("windowsAudioRouteHelp");
+            Assert.AreEqual(Visibility.Collapsed, routeHelp.Visibility);
+            themedOverview.ApplyWindowsAudioOutput(new("DS4Windows Controller 1 Audio", 4, 0));
+            themedOverview.Measure(new Size(1100, 950));
+            themedOverview.Arrange(new Rect(0, 0, 1100, 950));
+            themedOverview.UpdateLayout();
+            Assert.AreEqual(Visibility.Visible, routeHelp.Visibility);
+            StringAssert.Contains(((TextBlock)themedOverview.FindName("windowsAudioOutputText")).Text, "DS4Windows Controller 1 Audio");
+            var routeImage = new RenderTargetBitmap(1100, 950, 96, 96, PixelFormats.Pbgra32);
+            routeImage.Render(themedOverview);
+            var routeEncoder = new PngBitmapEncoder();
+            routeEncoder.Frames.Add(BitmapFrame.Create(routeImage));
+            string routePath = Path.Combine(resultsDirectory, $"overview-windows-audio-{name}.png");
+            using (var stream = File.Create(routePath)) routeEncoder.Save(stream);
+            renderedFiles.Add(routePath);
+            themedOverview.ApplyWindowsAudioOutput(new("Unrelated USB/IP audio", 6, -1));
+            Assert.AreEqual(Visibility.Collapsed, routeHelp.Visibility, "Never claim ownership of another app's virtual audio device.");
+            themedOverview.ApplyWindowsAudioOutput(null);
+            Assert.AreEqual(Visibility.Collapsed, ((FrameworkElement)themedOverview.FindName("windowsAudioRoute")).Visibility);
         }
         resources[0] = originalTheme;
         var managed = (FrameworkElement)overview.FindName("managedAudioLevelsPanel");

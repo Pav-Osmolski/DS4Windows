@@ -7029,4 +7029,25 @@
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>显示概览底栏</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>保持当前的 Windows 音频输出</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>如果 Windows 在启动或重新连接时选择新创建的 DS4Windows 音频设备,请恢复以前的播放设备。</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows 音频输出: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>声音设置</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>选择您游戏和应用所使用的 Windows 播放设备。</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows 正在向虚拟控制器发送音频. 已启用控制器音频传输;如果听不到,请检查其音频源和输出路线。</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows 正在向虚拟控制器发送音频. 在音频设置中选择您的常规扬声器或耳机,或者为该控制器启用控制器音频传输。</value>
+  </data>
 </root>

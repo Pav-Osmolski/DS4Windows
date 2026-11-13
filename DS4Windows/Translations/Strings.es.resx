@@ -6861,4 +6861,25 @@ El backup: </value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>Mostrar el pie de la vista general</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mantenga la salida de audio Windows actual</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Restablezca el dispositivo de reproducción anterior si Windows selecciona un dispositivo de audio DS4Windows recién creado durante el arranque o la reconectividad. Los estándares del micrófono y las comunicaciones no cambian.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows salida de audio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Instalaciones de sonido</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Seleccione el dispositivo de reproducción Windows utilizado por sus juegos y aplicaciones.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows está enviando audio a un controlador virtual. está habilitado el reenvío de audio del controlador; compruebe su fuente de audio y ruta de salida si no oye nada.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows está enviando audio a un controlador virtual. Seleccione sus altavoces o auriculares habituales en la configuración de sonido, o habilite la transmisión de audio del controlador para ese controlador.</value>
+  </data>
 </root>

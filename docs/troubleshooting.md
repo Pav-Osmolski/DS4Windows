@@ -215,6 +215,29 @@ Test native game haptics separately from Audio Haptics capture. Use the
 [controller audio guide](controller-audio.md) for endpoint/mute setup and
 [compatibility guide](controller-compatibility.md) for hardware limits.
 
+### Game audio goes silent when the virtual controller appears
+
+Check **Windows audio output** on Overview. If Windows selected **DS4Windows
+Controller N Audio**, choose your usual speakers or headphones using **Sound
+settings**, or enable controller audio forwarding and check its source/route.
+Creating a virtual sound device does not automatically enable forwarding.
+
+**Settings > Components > Keep my current Windows audio output** is on by
+default. It captures the current console and multimedia playback defaults before
+creating a virtual device, then restores each at most once if Windows selects
+that device within two seconds of its arrival during startup/reconnect. The
+previous device must still be available. Microphone and communications defaults
+are not changed. Other devices, existing endpoints and later selections are left
+alone. If you want to select a newly appearing controller output yourself,
+turn the option off: Windows notifications do not distinguish an automatic
+selection from a manual selection made at the same instant.
+
+The protection cannot recover an unknown previous output if Windows already
+switched to a physical USB controller before DS4Windows started. Use Sound
+settings in that case. Keep the virtual playback endpoint **enabled** for native
+DualSense game haptics; it does not have to be the default output. Disabling
+**Audio Haptics** stops audio-to-vibration processing, not audio-device creation.
+
 ### Triggers work, but native DualSense speaker/haptics are silent
 
 A game can send trigger/lightbar commands without sending its separate audio

@@ -48,6 +48,10 @@ namespace DS4WinWPF.DS4Forms
 
         private void ControllerOverviewControl_Loaded(object sender, RoutedEventArgs e)
         {
+            WindowsPlaybackProtection.OutputChanged -= WindowsAudioOutput_Changed;
+            WindowsPlaybackProtection.OutputChanged += WindowsAudioOutput_Changed;
+            WindowsPlaybackProtection.EnsureStarted();
+            RefreshWindowsAudioOutput();
             HookOutputControllerViewModel(DataContext as MainWindowsViewModel, true);
             if (overviewLayoutWriter != null) return;
 
@@ -153,8 +157,52 @@ namespace DS4WinWPF.DS4Forms
         }
 
         private void ControllerOverviewControl_Unloaded(object sender,
-            RoutedEventArgs e) =>
+            RoutedEventArgs e)
+        {
+            WindowsPlaybackProtection.OutputChanged -= WindowsAudioOutput_Changed;
             HookOutputControllerViewModel(outputControllerViewModel, false);
+        }
+
+        private void WindowsAudioOutput_Changed(object sender, EventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                if (!Dispatcher.HasShutdownStarted)
+                    Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(RefreshWindowsAudioOutput));
+                return;
+            }
+            RefreshWindowsAudioOutput();
+        }
+
+        private void RefreshWindowsAudioOutput()
+        {
+            if (!IsLoaded) return;
+            ApplyWindowsAudioOutput(WindowsPlaybackProtection.CurrentOutput);
+        }
+
+        internal void ApplyWindowsAudioOutput(WindowsPlaybackProtection.Output output)
+        {
+            windowsAudioRoute.Visibility = string.IsNullOrEmpty(output?.Name) ? Visibility.Collapsed : Visibility.Visible;
+            windowsAudioOutputText.Text = UiText.Format("Windows audio output: {0}", output?.Name ?? "");
+            windowsSoundSettingsButton.Content = UiText.Get("Sound settings");
+            windowsSoundSettingsButton.ToolTip = UiText.Get("Choose the Windows playback device used by your games and apps.");
+            int slot = output?.ControllerIndex ?? -1;
+            bool forwarding = slot >= 0 && slot < ControlService.MAX_DS4_CONTROLLER_COUNT &&
+                Global.DualSenseEnableSpeakerOutput[slot];
+            bool virtualOutput = output?.Port > 0 && slot >= 0;
+            windowsAudioRouteHelp.Visibility = virtualOutput ? Visibility.Visible : Visibility.Collapsed;
+            windowsAudioRouteHelp.SetResourceReference(TextBlock.ForegroundProperty,
+                forwarding ? "MutedForegroundColor" : "WarningColor");
+            windowsAudioRouteHelp.Text = forwarding
+                ? UiText.Get("Windows is sending audio to a virtual controller. Controller audio forwarding is enabled; check its audio source and output route if you hear nothing.")
+                : UiText.Get("Windows is sending audio to a virtual controller. Choose your usual speakers or headphones in Sound settings, or enable controller audio forwarding for that controller.");
+        }
+
+        private void WindowsSoundSettings_Click(object sender, RoutedEventArgs e)
+        {
+            try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("ms-settings:sound") { UseShellExecute = true }); }
+            catch (Exception error) { NLog.LogManager.GetCurrentClassLogger().Warn(error, "Could not open Windows Sound settings."); }
+        }
 
         private void HookOutputControllerViewModel(
             MainWindowsViewModel viewModel, bool hook)
@@ -173,11 +221,15 @@ namespace DS4WinWPF.DS4Forms
                 outputControllerViewModel = viewModel;
                 viewModel.SelectedOutputControllerChanged +=
                     ViewModel_SelectedOutputControllerChanged;
+                viewModel.SpeakerOutputEnabledChanged += WindowsAudioOutput_Changed;
+                viewModel.SelectedControllerChanged += WindowsAudioOutput_Changed;
             }
             else
             {
                 viewModel.SelectedOutputControllerChanged -=
                     ViewModel_SelectedOutputControllerChanged;
+                viewModel.SpeakerOutputEnabledChanged -= WindowsAudioOutput_Changed;
+                viewModel.SelectedControllerChanged -= WindowsAudioOutput_Changed;
                 if (ReferenceEquals(outputControllerViewModel, viewModel))
                 {
                     outputControllerViewModel = null;

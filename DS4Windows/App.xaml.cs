@@ -1259,6 +1259,7 @@ namespace DS4WinWPF
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            DS4Windows.WindowsPlaybackProtection.Shutdown();
             if (watchingThemePreferences) Microsoft.Win32.SystemEvents.UserPreferenceChanged -= WindowsThemePreferenceChanged;
             try
             {

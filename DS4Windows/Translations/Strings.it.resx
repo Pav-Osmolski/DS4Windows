@@ -6859,4 +6859,25 @@ Il backup: </value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>Mostra la barra inferiore della panoramica</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Mantenere l'attuale uscita audio Windows</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Ripristinare il dispositivo di riproduzione precedente se Windows seleziona un dispositivo audio DS4Windows appena creato durante l'avvio o la riconnessione. Le impostazioni predefinite per il microfono e le comunicazioni rimangono invariate.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows uscita audio: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Impostazioni sonore</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Selezionare il dispositivo di riproduzione Windows utilizzato dai giochi e dalle app.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows sta inviando l'audio a un controller virtuale. il trasferimento audio del controller è abilitato; controllare la sua fonte audio e la rotta di uscita se non si sente nulla.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows sta inviando l'audio a un controller virtuale. Selezionare gli altoparlanti o le cuffie abituali nelle impostazioni audio o abilitare il trasferimento audio del controller per quel controller.</value>
+  </data>
 </root>

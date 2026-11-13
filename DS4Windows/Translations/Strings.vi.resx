@@ -6863,4 +6863,25 @@ Backup : </value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>Hiện thanh dưới của Tổng quan</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Giữ âm thanh Windows hiện tại của tôi</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Khôi phục thiết bị phát trước đó nếu Windows chọn một thiết bị âm thanh DS4Windows mới được tạo trong khi khởi động hoặc kết nối lại. Microphone và thông tin liên lạc mặc định không thay đổi. Tắt điều này để tự chọn đầu ra bộ điều khiển mới được tạo.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows đầu ra âm thanh: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>Âm thanh Settings</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Chọn thiết bị phát Windows được sử dụng bởi các trò chơi và ứng dụng của bạn.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows đang gửi âm thanh đến một bộ điều khiển ảo. Bộ điều khiển chuyển tiếp âm thanh được bật; kiểm tra nguồn âm thanh của nó và đường dẫn đầu ra nếu bạn không nghe thấy gì.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows đang gửi âm thanh đến một bộ điều khiển ảo.Chọn loa hoặc tai nghe thông thường của bạn trong cài đặt âm thanh, hoặc bật chuyển tiếp âm thanh của bộ điều khiển cho bộ điều khiển đó.</value>
+  </data>
 </root>

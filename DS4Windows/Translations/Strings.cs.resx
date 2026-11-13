@@ -6858,4 +6858,25 @@ Zálohování : </value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>Zobrazit zápatí přehledu</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>Udržujte aktuální Windows audio výstup</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Obnovte předchozí přehrávací zařízení, pokud Windows vybere nově vytvořené audio zařízení DS4Windows během spuštění nebo opětovného připojení. Předvolby mikrofonu a komunikace zůstávají nezměněny.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows zvukový výstup: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>zvukové nastavení</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>Vyberte zařízení pro přehrávání Windows, které používají vaše hry a aplikace.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows odesílá zvuk do virtuálního ovladače. ovladač je povolen pro přenos zvuku; zkontrolujte zdroj zvuku a výstupní trasu, pokud nic neslyšíte.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows odesílá zvuk do virtuálního ovladače.Vyberte si obvyklé reproduktory nebo sluchátka v nastavení zvuku nebo povolte pro daný ovladač přenos zvuku ovladačem.</value>
+  </data>
 </root>

@@ -6866,4 +6866,25 @@ Backup : </value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>إظهار تذييل النظرة العامة</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>الحفاظ على أرقام الصوت Windows الحالية</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>استعادة جهاز التشغيل السابق إذا اختار Windows جهاز الصوت DS4Windows الذي تم إنشاؤه حديثاً أثناء تشغيل أو الاتصال مرة أخرى.</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows إرسال الصوت: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>الإعدادات الصوتية</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>اختر جهاز التعبير Windows الذي يستخدمه ألعابك والتطبيقات.</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows يتم إرسال الصوت إلى جهاز التحكم الفعلي. يتم تشغيل إرسال الصوت من جهاز التحكم؛ تحقق من مصدر الصوت وطريق النتائج إذا كنت لا تسمع شيئاً.</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows يتم إرسال الصوت إلى جهاز التحكم الفعلي. اختار الكاميرات المعتادة أو أقراصك في إعدادات الصوت، أو تمكن من إرسال الصوت من جهاز التحكم في هذا الجهاز.</value>
+  </data>
 </root>

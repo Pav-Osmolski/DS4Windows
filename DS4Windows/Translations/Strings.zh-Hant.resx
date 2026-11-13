@@ -6868,4 +6868,25 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>顯示概覽底欄</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>保持當前的 Windows 音訊輸出</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>如果 Windows 在啟動或重新連線時選擇新建立的 DS4Windows 音訊裝置,請恢復以前的播放裝置。</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windows 音訊輸出: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>聲音設定</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>選擇您遊戲和應用所使用的 Windows 播放裝置。</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows 正在向虛擬控制器傳送音訊. 已啟用控制器音訊傳輸;如果聽不到,請檢查其音訊源和輸出路線。</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows 正在向虛擬控制器傳送音訊. 在音訊設定中選擇您的常規揚聲器或耳機,或者為該控制器啟用控制器音訊傳輸。</value>
+  </data>
 </root>

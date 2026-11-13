@@ -6862,4 +6862,25 @@ Backup : </value>
   <data name="OverviewShowQuickActions" xml:space="preserve">
     <value>概要のフッターを表示</value>
   </data>
+  <data name="UI_E961EA2FFCD04682" xml:space="preserve">
+    <value>現在の Windows オーディオ出力を保持する</value>
+  </data>
+  <data name="UI_A413DAFF9BAA9DBA" xml:space="preserve">
+    <value>Windows が起動または再接続中に新しく作成された DS4Windows オーディオ デバイスを選択した場合、以前の再生デバイスを復元します. マイクロフォンおよび通信のデフォルトは変更されません。</value>
+  </data>
+  <data name="UI_5DDE6382F84AB2C8" xml:space="preserve">
+    <value>Windowsオーディオ出力: {0}</value>
+  </data>
+  <data name="UI_55C4121106329520" xml:space="preserve">
+    <value>サウンド設定</value>
+  </data>
+  <data name="UI_68D1CFD9C8DA4D97" xml:space="preserve">
+    <value>ゲームやアプリで使用する Windows 再生デバイスを選択します。</value>
+  </data>
+  <data name="UI_DB9AC2D227B091F9" xml:space="preserve">
+    <value>Windows は、音声を仮想コントローラに送信しています。コントローラの音声転送が有効です。音源と出力ルートを確認して、何も聞こえません。</value>
+  </data>
+  <data name="UI_49D2863948572913" xml:space="preserve">
+    <value>Windows は、音声を仮想コントローラに送信します。音声設定で通常のスピーカーまたはヘッドフォンを選択するか、コントローラーの音声転送を有効にします。</value>
+  </data>
 </root>
