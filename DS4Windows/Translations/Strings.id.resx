@@ -6907,4 +6907,19 @@ Untuk backup: </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Menampilkan Windows output audio</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Tampilkan judul dan deskripsi kontrol cepat profil</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Pilih pengontrol yang didukung dan opsi perangkat.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Buka Pengontrol Game Windows untuk menguji input pengontrol.</value>
+  </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Lihat identitas, koneksi, dan detail firmware pengontrol ini.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Buka profil pengontrol aktif di Editor Profil lengkap.</value>
+  </data>
 </root>

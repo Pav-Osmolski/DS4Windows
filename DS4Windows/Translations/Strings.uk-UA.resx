@@ -6882,4 +6882,19 @@
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Показати Windows аудіо вихід</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Показувати заголовок і опис швидких налаштувань профілю</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Вибір підтримуваних контролерів і параметрів пристрою.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Відкрити ігрові пристрої Windows для перевірки введення контролера.</value>
+  </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Переглянути ідентифікаційні дані, підключення та прошивку цього контролера.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Відкрити активний профіль контролера в повному редакторі профілів.</value>
+  </data>
 </root>

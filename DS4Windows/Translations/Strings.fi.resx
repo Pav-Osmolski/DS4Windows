@@ -6909,4 +6909,19 @@ Varmuuskopiointi : </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Näytä Windows äänen ulostulo</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Näytä profiilin pika-asetusten otsikko ja kuvaus</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Valitse tuetut ohjaimet ja laiteasetukset.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Avaa Windowsin peliohjaimet ohjaimen syötteen testaamiseksi.</value>
+  </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Näytä tämän ohjaimen tunniste-, yhteys- ja laiteohjelmistotiedot.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Avaa ohjaimen aktiivinen profiili täydellisessä profiilieditorissa.</value>
+  </data>
 </root>

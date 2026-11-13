@@ -6909,4 +6909,19 @@ Le backup : </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Afficher la sortie audio Windows</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Afficher le titre et la description des réglages rapides du profil</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Choisir les manettes prises en charge et les options du périphérique.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Ouvrir les contrôleurs de jeu Windows pour tester les entrées.</value>
+  </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Afficher l’identité, la connexion et le micrologiciel de cette manette.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Ouvrir le profil actif de la manette dans l’éditeur de profils complet.</value>
+  </data>
 </root>

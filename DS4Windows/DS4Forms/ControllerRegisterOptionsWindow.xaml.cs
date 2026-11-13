@@ -43,13 +43,14 @@ namespace DS4WinWPF.DS4Forms
     {
         private ControllerRegDeviceOptsViewModel deviceOptsVM;
 
-        public ControllerRegisterOptionsWindow(ControlServiceDeviceOptions deviceOptions, ControlService service)
+        public ControllerRegisterOptionsWindow(ControlServiceDeviceOptions deviceOptions, ControlService service, SettingsViewModel settings = null)
         {
             InitializeComponent();
 
             deviceOptsVM = new ControllerRegDeviceOptsViewModel(deviceOptions, service);
 
             devOptionsDockPanel.DataContext = deviceOptsVM;
+            viiperDebugLoggingCheckBox.DataContext = settings;
             deviceOptsVM.ControllerSelectedIndexChanged += ChangeActiveDeviceTab;
         }
 

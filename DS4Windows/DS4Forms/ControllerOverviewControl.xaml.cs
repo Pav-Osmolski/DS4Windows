@@ -60,6 +60,7 @@ namespace DS4WinWPF.DS4Forms
             try { layout = SettingsStorage.Current.OverviewLayout; }
             catch (Exception error) { logger.Warn(error, "Could not load Overview layout preferences."); }
 
+            showQuickProfileHeading.IsChecked = layout.ShowQuickProfileHeading;
             showFeedback.IsChecked = layout.ShowFeedback;
             showAudio.IsChecked = layout.ShowAudio;
             showLevels.IsChecked = layout.ShowLevels;
@@ -87,6 +88,7 @@ namespace DS4WinWPF.DS4Forms
             if (overviewLayoutWriter == null) return;
             overviewLayoutWriter.Queue(new OverviewLayoutPreferences
             {
+                ShowQuickProfileHeading = showQuickProfileHeading.IsChecked == true,
                 ShowFeedback = showFeedback.IsChecked == true,
                 ShowAudio = showAudio.IsChecked == true,
                 ShowLevels = showLevels.IsChecked == true,
@@ -116,6 +118,11 @@ namespace DS4WinWPF.DS4Forms
         {
             if (overviewMicrophoneCard == null) return;
 
+            // Preserve the header's measured space even when all cards are hidden.
+            quickProfileHeading.Visibility = showQuickProfileHeading.IsChecked == true &&
+                (showFeedback.IsChecked == true || showAudio.IsChecked == true ||
+                 showLevels.IsChecked == true || showMicrophone.IsChecked == true)
+                ? Visibility.Visible : Visibility.Hidden;
             bool hasAudio = managedAudioLevelsPanel.Visibility == Visibility.Visible;
             bool hasLeftCards = showFeedback.IsChecked == true ||
                 (showAudio.IsChecked == true && (hasAudio || nativeUsbHeadsetCard.Visibility == Visibility.Visible));

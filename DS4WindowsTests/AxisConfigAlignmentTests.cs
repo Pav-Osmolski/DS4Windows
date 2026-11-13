@@ -70,6 +70,64 @@ public class AxisConfigAlignmentTests
         });
     }
 
+    [TestMethod]
+    [DataRow("DefaultTheme")]
+    [DataRow("DarkTheme")]
+    [DataRow("Graphite")]
+    [DataRow("Paper")]
+    [DataRow("Midnight")]
+    [DataRow("HighContrast")]
+    public void PairedCurvesHaveGuttersAndReadingsCardsHaveMatchingWidths(string theme)
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            string basis = theme == "DefaultTheme" || theme == "Paper" ? "DefaultTheme" : "DarkTheme";
+            Grid root = ProfileAdvancedLayoutTests.Load(basis, "AxisConfig");
+            if (theme is not "DefaultTheme" and not "DarkTheme")
+                root.Resources.MergedDictionaries.Add(DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.Create(
+                    Enum.Parse<DS4Windows.AppThemeChoice>(theme), highContrast: false));
+            root.Resources["spaceMargin"] = new Thickness(0, 0, 0, 10);
+            foreach (string name in new[] { "profileAxis2Nav", "profileAxis3Nav" })
+            {
+                ((RadioButton)root.FindName(name)).IsChecked = true;
+                Layout(root);
+                var categories = ((Grid)root.FindName("axisContentArea")).Children.OfType<Grid>().Single();
+                var category = categories.Children.OfType<ScrollViewer>().Single(v => v.Visibility == Visibility.Visible);
+                var selector = Visuals(category).OfType<ComboBox>().Single(c => Grid.GetColumn(c) == 1);
+                var pair = (Grid)selector.Parent;
+                var right = pair.Children.OfType<ComboBox>().Single(c => Grid.GetColumn(c) == 2);
+                Assert.IsTrue(right.TranslatePoint(new Point(), pair).X -
+                    selector.TranslatePoint(new Point(selector.ActualWidth, 0), pair).X >= 11.9);
+                var leftCurve = pair.Children.OfType<DockPanel>().Single(c => Grid.GetColumn(c) == 1);
+                var rightCurve = pair.Children.OfType<DockPanel>().Single(c => Grid.GetColumn(c) == 2);
+                Assert.IsTrue(rightCurve.TranslatePoint(new Point(), pair).X -
+                    leftCurve.TranslatePoint(new Point(leftCurve.ActualWidth, 0), pair).X >= 11.9);
+                Save(category, $"paired-curves-{theme}-{name}.png");
+            }
+            Grid readings = ProfileAdvancedLayoutTests.Load(basis, "ControllerReadings");
+            if (theme is not "DefaultTheme" and not "DarkTheme")
+                readings.Resources.MergedDictionaries.Add(DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.Create(
+                    Enum.Parse<DS4Windows.AppThemeChoice>(theme), highContrast: false));
+            readings.Measure(new Size(330, 1200));
+            readings.Arrange(new Rect(0, 0, 330, 1200));
+            readings.UpdateLayout();
+            var cards = Visuals(readings).OfType<Border>().Where(b => b.Child is StackPanel && b.Width == 292).ToArray();
+            Assert.IsGreaterThan(3, cards.Length);
+            var status = (Border)readings.FindName("controllerStatusCard");
+            foreach (var card in cards)
+                Assert.AreEqual(status.ActualWidth, card.ActualWidth, 0.1, "Controller status and plots must share their width in every theme.");
+            var scrollBar = Visuals(readings).OfType<System.Windows.Controls.Primitives.ScrollBar>()
+                .Single(b => b.Orientation == Orientation.Vertical);
+            foreach (var card in cards)
+            {
+                double gap = scrollBar.TranslatePoint(new Point(), readings).X -
+                    card.TranslatePoint(new Point(card.ActualWidth, 0), readings).X;
+                Assert.IsTrue(gap >= 12 && gap <= 24, $"Readings gutter must stay compact in {theme}: {gap}.");
+            }
+            Save(status, $"readings-status-{theme}.png");
+        });
+    }
+
     private static void Layout(FrameworkElement root)
     {
         root.Measure(new Size(850, 1100));

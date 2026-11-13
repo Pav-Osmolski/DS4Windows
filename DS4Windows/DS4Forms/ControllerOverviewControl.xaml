@@ -315,7 +315,7 @@
                                    Visibility="{Binding SelectedControllerNeedsAttention, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <DockPanel Margin="0,12,0,0">
                             <Button x:Name="overviewControllerInfoButton" DockPanel.Dock="Right" Style="{StaticResource BridgeSecondaryButtonStyle}"
-                                    Click="ControllerInfoBtn_Click" AutomationProperties.Name="{lex:Loc Strings:UI_55026208AB1964FE}"
+                                    ToolTip="{lex:Loc Strings:ControllerInfoHelp}" Click="ControllerInfoBtn_Click" AutomationProperties.Name="{lex:Loc Strings:UI_55026208AB1964FE}"
                                     VerticalAlignment="Center" MinHeight="30" Padding="10,4" Margin="6,0,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE946;" />
@@ -405,7 +405,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel VerticalAlignment="Center">
+                    <StackPanel x:Name="quickProfileHeading" VerticalAlignment="Center">
                         <TextBlock Text="{lex:Loc Strings:UI_FAFBA7D222C9E997}" FontSize="18" FontWeight="SemiBold" />
                         <TextBlock Text="{lex:Loc Strings:UI_73633F28FF75F010}" Margin="0,3,0,0" TextWrapping="Wrap"
                                    Foreground="{DynamicResource MutedForegroundColor}" />
@@ -429,6 +429,8 @@
                             <ScrollViewer MaxHeight="540" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <StackPanel>
                                 <TextBlock Text="{lex:Loc Strings:OverviewCustomize}" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8" />
+                                <CheckBox x:Name="showQuickProfileHeading" Content="{lex:Loc Strings:OverviewShowQuickProfileHeading}" IsChecked="True" Margin="0,0,0,6"
+                                          Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
                                 <CheckBox x:Name="showFeedback" Content="{lex:Loc Strings:OverviewOutputFeedback}" IsChecked="True" Margin="0,0,0,6"
                                           Checked="OverviewLayout_Changed" Unchecked="OverviewLayout_Changed" />
                                 <CheckBox x:Name="showAudio" Content="{lex:Loc Strings:UI_82DED80528D9A9C1}" IsChecked="True" Margin="0,0,0,6"
@@ -727,11 +729,11 @@
                                             <TextBlock DockPanel.Dock="Left" Style="{StaticResource OverviewCardGlyphStyle}" Text="&#xE720;" />
                                             <TextBlock Text="{lex:Loc Strings:UI_186352A881D0550E}" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap" />
                                         </DockPanel>
-                                        <CheckBox Content="{Binding SelectedController.MicrophoneToggleLabel}"
+                                        <CheckBox x:Name="overviewMicrophoneInputToggle" Content="{Binding SelectedController.MicrophoneToggleLabel}"
                                                   Style="{StaticResource OverviewToggleStyle}"
                                                   IsChecked="{Binding MicrophoneInputEnabled, Mode=TwoWay}"
                                                   IsEnabled="{Binding CanChangeMicrophoneInput}"
-                                                  ToolTip="{Binding MicrophoneAvailabilityText}"
+                                                  ToolTip="{Binding MicrophoneInputHelp}"
                                                   ToolTipService.ShowOnDisabled="True"
                                                   Margin="0,12,0,9" />
                                         <TextBlock Text="{Binding SelectedController.MicrophoneDescription}"
@@ -805,7 +807,7 @@
                 </Style>
             </WrapPanel.Style>
             <Button x:Name="overviewEditProfileButton" Visibility="{Binding IsChecked, ElementName=showEditProfileAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
-                    AutomationProperties.Name="{lex:Loc Strings:UI_936A2401794924E0}"
+                    AutomationProperties.Name="{lex:Loc Strings:UI_936A2401794924E0}" ToolTip="{lex:Loc Strings:OverviewEditProfileHelp}"
                     Style="{StaticResource BridgePrimaryButtonStyle}" Click="EditProfileBtn_Click" IsEnabled="{Binding HasSelectedProfile}">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE70F;" />
@@ -813,7 +815,7 @@
                 </StackPanel>
             </Button>
             <Button x:Name="overviewDeviceOptionsButton" Visibility="{Binding IsChecked, ElementName=showDeviceOptionsAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
-                    AutomationProperties.Name="{lex:Loc Strings:DeviceOptions}"
+                    AutomationProperties.Name="{lex:Loc Strings:DeviceOptions}" ToolTip="{lex:Loc Strings:OverviewDeviceOptionsHelp}"
                     Style="{StaticResource BridgeSecondaryButtonStyle}" Click="DeviceOptionsBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE713;" />
@@ -821,7 +823,7 @@
                 </StackPanel>
             </Button>
             <Button x:Name="overviewControlPanelButton" Visibility="{Binding IsChecked, ElementName=showControlPanelAction, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="4,0" Padding="10,5" MinHeight="32"
-                    AutomationProperties.Name="{lex:Loc Strings:ControlPanel}"
+                    AutomationProperties.Name="{lex:Loc Strings:ControlPanel}" ToolTip="{lex:Loc Strings:OverviewControlPanelHelp}"
                     Style="{StaticResource BridgeSecondaryButtonStyle}" Click="ControlPanelBtn_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE7F8;" />

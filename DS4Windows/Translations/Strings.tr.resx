@@ -6909,4 +6909,19 @@ backup için: </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Windows ses çıkışı</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Hızlı profil denetimlerinin başlığını ve açıklamasını göster</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Desteklenen denetleyicileri ve aygıt seçeneklerini seçin.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Denetleyici girişini test etmek için Windows Oyun Kumandalarını açın.</value>
+  </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Bu denetleyicinin kimlik, bağlantı ve ürün yazılımı ayrıntılarını görüntüleyin.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Etkin kontrolcü profilini tam Profil Düzenleyicisi’nde açın.</value>
+  </data>
 </root>

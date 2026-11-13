@@ -3134,9 +3134,9 @@ namespace DS4WinWPF.DS4Forms
             Grid.SetColumn(dock, 0);
             Grid.SetRow(dock, beside ? 0 : 1);
             Grid.SetColumnSpan(dock, beside ? 1 : 2);
-            // The 292-DIP cards also need their margins, the page gutter and
-            // a vertical scrollbar. A 330-DIP dock clips each card's right edge.
-            dock.Width = beside ? 360 : double.NaN;
+            // One card gutter and the scrollbar fit without reserving a second
+            // page gutter between the cards and the scrollbar.
+            dock.Width = beside ? 330 : double.NaN;
             dock.Height = visible && !beside ? 220 : double.NaN;
             dock.Margin = beside ? new Thickness(0, 0, 12, 0) : new Thickness(0, 12, 0, 0);
         }

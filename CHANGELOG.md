@@ -9,6 +9,11 @@ There are currently no unreleased changes.
 
 ## Released
 
+### [5.0.72](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.72) - 2026-11-13
+
+- Refine Overview customization with a remembered quick-profile heading toggle and tooltips for Controller info, Edit active profile, Device Options and Control Panel. Keep the heading space stable and hide it automatically when all quick-control sections are disabled.
+- Add spacing between paired trigger/motion curve fields, match the controller-status card width to the readings cards in every theme, and expose the existing VIIPER debug logging preference in Device Options. Increase its default height slightly so both diagnostic controls fit without scrolling, and remove the duplicate readings scrollbar gutter.
+
 ### [5.0.71](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.71) - 2026-11-13
 
 - Reduce redundant pending USB adaptive-trigger updates, including alternating L2/R2 bow-resistance reports, while preserving effect changes, releases and feedback ownership boundaries. Thanks [@bbbbbbbbxh](https://github.com/bbbbbbbbxh) for the diagnostic logs and pause-menu reproduction ([#123](https://github.com/Pav-Osmolski/DS4Windows/issues/123)). Hardware verification remains pending.

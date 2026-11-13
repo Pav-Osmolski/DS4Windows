@@ -1255,7 +1255,7 @@
                                             <xctk:DoubleUpDown Width="100" HorizontalAlignment="Left" d:IsHidden="True" FormatString="F2" Value="{Binding L2Sens}" Grid.Row="5" Grid.Column="1" Maximum="10.0" Minimum="0.1" Increment="0.1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                             <xctk:DoubleUpDown Width="100" HorizontalAlignment="Left" d:IsHidden="True" FormatString="F2" Value="{Binding R2Sens}" Grid.Row="5" Grid.Column="2" Maximum="10.0" Minimum="0.1" Increment="0.1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                             <Label Content="{lex:Loc OutputCurve}" ContentStringFormat="{}{0}:" Grid.Row="6" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,0,12,10"/>
-                                            <ComboBox Grid.Row="6" Grid.Column="1" SelectedIndex="{Binding L2OutputCurveIndex}" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
+                                            <ComboBox Grid.Row="6" Grid.Column="1" SelectedIndex="{Binding L2OutputCurveIndex}" Margin="0,0,12,10" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
                                                 <ComboBoxItem Content="{lex:Loc Linear}"/>
                                                 <ComboBoxItem Content="{lex:Loc EnhancedPrecision}"/>
                                                 <ComboBoxItem Content="{lex:Loc Quadratic}"/>
@@ -1273,7 +1273,7 @@
                                                 <ComboBoxItem Content="{lex:Loc EaseoutCubic}"/>
                                                 <ComboBoxItem Content="{lex:Loc Custom}"/>
                                             </ComboBox>
-                                            <DockPanel Grid.Row="7" Grid.Column="1" IsEnabled="{Binding L2CustomCurveSelected}">
+                                            <DockPanel Grid.Row="7" Grid.Column="1" IsEnabled="{Binding L2CustomCurveSelected}" Margin="0,0,12,0">
                                                 <Button x:Name="l2CustomEditorBtn" Content="..." Tag="L2" Width="34" DockPanel.Dock="Right" Click="CustomEditorBtn_Click" Margin="{StaticResource spaceMargin}" MinHeight="34" Padding="4" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
                                                 <TextBox Text="{Binding L2CustomCurve,FallbackValue='0.00, 0.00, 1.00, 1.00'}" DockPanel.Dock="Left" Margin="{StaticResource spaceMargin}"/>
                                             </DockPanel>
@@ -1322,7 +1322,7 @@
                                             <xctk:DoubleUpDown Width="100" HorizontalAlignment="Left" d:IsHidden="True" FormatString="F2" Value="{Binding SXSens}" Grid.Row="4" Grid.Column="1" Maximum="5.0" Minimum="0.0" Increment="0.1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                             <xctk:DoubleUpDown Width="100" HorizontalAlignment="Left" d:IsHidden="True" FormatString="F2" Value="{Binding SZSens}" Grid.Row="4" Grid.Column="2" Maximum="5.0" Minimum="0.0" Increment="0.1" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
                                             <Label Content="{lex:Loc OutputCurve}" ContentStringFormat="{}{0}:" Grid.Row="5" Grid.Column="0" Padding="0" VerticalAlignment="Center" Margin="0,0,12,10"/>
-                                            <ComboBox Grid.Row="5" Grid.Column="1" SelectedIndex="{Binding SXOutputCurveIndex}" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
+                                            <ComboBox Grid.Row="5" Grid.Column="1" SelectedIndex="{Binding SXOutputCurveIndex}" Margin="0,0,12,10" MinHeight="34" VerticalAlignment="Center" MinWidth="140">
                                                 <ComboBoxItem Content="{lex:Loc Linear}"/>
                                                 <ComboBoxItem Content="{lex:Loc EnhancedPrecision}"/>
                                                 <ComboBoxItem Content="{lex:Loc Quadratic}"/>
@@ -1340,7 +1340,7 @@
                                                 <ComboBoxItem Content="{lex:Loc EaseoutCubic}"/>
                                                 <ComboBoxItem Content="{lex:Loc Custom}"/>
                                             </ComboBox>
-                                            <DockPanel Grid.Row="6" Grid.Column="1" IsEnabled="{Binding SXCustomCurveSelected}">
+                                            <DockPanel Grid.Row="6" Grid.Column="1" IsEnabled="{Binding SXCustomCurveSelected}" Margin="0,0,12,0">
                                                 <Button x:Name="sxCustomEditorBtn" Content="..." Tag="SX" Width="34" DockPanel.Dock="Right" Click="CustomEditorBtn_Click" Margin="{StaticResource spaceMargin}" MinHeight="34" Padding="4" Style="{DynamicResource BridgeSecondaryButtonStyle}"/>
                                                 <TextBox Text="{Binding SXCustomCurve,FallbackValue='0.00, 0.00, 1.00, 1.00'}" DockPanel.Dock="Left" Margin="{StaticResource spaceMargin}"/>
                                             </DockPanel>

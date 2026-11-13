@@ -155,7 +155,7 @@
                                                        Foreground="{DynamicResource SuccessColor}" />
                                         </StackPanel>
                                     </Border>
-<Button x:Name="controllerCardInfoButton" Style="{DynamicResource ControllerInfoButtonStyle}"
+<Button x:Name="controllerCardInfoButton" Style="{DynamicResource ControllerInfoButtonStyle}" ToolTip="{lex:Loc Strings:ControllerInfoHelp}"
                                     HorizontalAlignment="Right" Margin="0,9,0,0" Click="ControllerCardInfo_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE946;" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0"/>

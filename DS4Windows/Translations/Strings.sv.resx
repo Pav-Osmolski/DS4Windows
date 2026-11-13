@@ -6885,4 +6885,19 @@ och backup: </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Visa Windows ljudutgång</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Visa rubrik och beskrivning för profilens snabbinställningar</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Välj handkontroller som stöds och enhetsalternativ.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Öppna Windows spelenheter för att testa handkontrollens inmatning.</value>
+  </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Visa handkontrollens identitet, anslutning och firmwareinformation.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Öppna handkontrollens aktiva profil i den fullständiga profilredigeraren.</value>
+  </data>
 </root>

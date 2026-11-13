@@ -6885,4 +6885,19 @@ El backup: </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Mostrar la salida de audio Windows</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Mostrar el título y la descripción de los controles rápidos del perfil</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Elegir mandos compatibles y opciones del dispositivo.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Abrir los dispositivos de juego de Windows para probar el mando.</value>
+  </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Ver la identidad, la conexión y el firmware de este mando.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Abrir el perfil activo del mando en el editor de perfiles completo.</value>
+  </data>
 </root>
