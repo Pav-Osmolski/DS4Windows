@@ -6894,4 +6894,10 @@ El backup: </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Abrir los dispositivos de juego de Windows para probar el mando.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Ver la identidad, la conexión y el firmware de este mando.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Abrir el perfil activo del mando en el editor de perfiles completo.</value>
+  </data>
 </root>

@@ -6895,4 +6895,10 @@ i backup: </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Otwórz kontrolery gier systemu Windows, aby przetestować ich działanie.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Wyświetl dane identyfikacyjne, połączenie i szczegóły oprogramowania układowego tego kontrolera.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Otwórz aktywny profil kontrolera w pełnym edytorze profili.</value>
+  </data>
 </root>

@@ -6895,4 +6895,10 @@ Backup : </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Windows のゲーム コントローラーを開いて入力をテストします。</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>このコントローラーの識別情報、接続、ファームウェアの詳細を表示します。</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>使用中のコントローラープロファイルを完全なプロファイルエディターで開きます。</value>
+  </data>
 </root>

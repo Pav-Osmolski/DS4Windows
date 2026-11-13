@@ -6899,4 +6899,10 @@ Backup : </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>فتح وحدات التحكم بالألعاب في Windows لاختبار الإدخال.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>عرض هوية وحدة التحكم هذه وتفاصيل الاتصال والبرنامج الثابت.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>افتح ملف تعريف وحدة التحكم النشط في محرر ملفات التعريف الكامل.</value>
+  </data>
 </root>

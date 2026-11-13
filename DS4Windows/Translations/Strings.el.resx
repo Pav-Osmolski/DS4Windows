@@ -6920,4 +6920,10 @@ Example: whyme_DS4Windows</value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Ανοίξτε τα χειριστήρια παιχνιδιών των Windows για δοκιμή εισόδου.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Προβολή ταυτότητας, σύνδεσης και υλικολογισμικού αυτού του χειριστηρίου.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Ανοίξτε το ενεργό προφίλ χειριστηρίου στον πλήρη επεξεργαστή προφίλ.</value>
+  </data>
 </root>

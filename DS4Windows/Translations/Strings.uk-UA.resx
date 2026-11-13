@@ -6891,4 +6891,10 @@
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Відкрити ігрові пристрої Windows для перевірки введення контролера.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Переглянути ідентифікаційні дані, підключення та прошивку цього контролера.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Відкрити активний профіль контролера в повному редакторі профілів.</value>
+  </data>
 </root>

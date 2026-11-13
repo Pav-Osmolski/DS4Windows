@@ -204,6 +204,11 @@ public sealed class ControllerOverviewAudioTests
             var optionsButton = (Button)themedOverview.FindName("overviewDeviceOptionsButton");
             var controlButton = (Button)themedOverview.FindName("overviewControlPanelButton");
             var infoButton = (Button)themedOverview.FindName("overviewControllerInfoButton");
+            var editButton = (Button)themedOverview.FindName("overviewEditProfileButton");
+            var microphoneToggle = (CheckBox)themedOverview.FindName("overviewMicrophoneInputToggle");
+            Assert.IsFalse(string.IsNullOrWhiteSpace(editButton.ToolTip?.ToString()));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(microphoneToggle.ToolTip?.ToString()));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(infoButton.ToolTip?.ToString()));
             Assert.IsFalse(string.IsNullOrWhiteSpace(optionsButton.ToolTip?.ToString()));
             Assert.IsFalse(string.IsNullOrWhiteSpace(controlButton.ToolTip?.ToString()));
             showOptions.IsChecked = false;

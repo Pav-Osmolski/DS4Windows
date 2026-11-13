@@ -6894,4 +6894,10 @@
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>פתיחת בקרי המשחק של Windows לבדיקת קלט הבקר.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>הצגת הזהות, החיבור ופרטי הקושחה של בקר זה.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>פתיחת הפרופיל הפעיל של הבקר בעורך הפרופילים המלא.</value>
+  </data>
 </root>

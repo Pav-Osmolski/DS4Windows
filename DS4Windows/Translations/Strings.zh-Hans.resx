@@ -7062,4 +7062,10 @@
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>打开 Windows 游戏控制器以测试控制器输入。</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>查看此控制器的身份、连接和固件详细信息。</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>在完整的配置编辑器中打开当前控制器配置。</value>
+  </data>
 </root>

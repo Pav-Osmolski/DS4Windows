@@ -6894,4 +6894,10 @@ och backup: </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Öppna Windows spelenheter för att testa handkontrollens inmatning.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Visa handkontrollens identitet, anslutning och firmwareinformation.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Öppna handkontrollens aktiva profil i den fullständiga profilredigeraren.</value>
+  </data>
 </root>

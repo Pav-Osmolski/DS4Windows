@@ -6892,4 +6892,10 @@ Il backup: </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Apri i controller di gioco di Windows per verificare gli input.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Visualizza identità, connessione e firmware di questo controller.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Apri il profilo attivo del controller nell’editor dei profili completo.</value>
+  </data>
 </root>

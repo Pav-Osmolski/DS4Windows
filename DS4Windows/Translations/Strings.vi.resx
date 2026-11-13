@@ -6896,4 +6896,10 @@ Backup : </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Mở bộ điều khiển trò chơi Windows để kiểm tra đầu vào tay cầm.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Xem danh tính, kết nối và chi tiết phần sụn của tay cầm này.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Mở hồ sơ tay cầm đang dùng trong Trình chỉnh sửa hồ sơ đầy đủ.</value>
+  </data>
 </root>

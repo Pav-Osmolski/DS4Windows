@@ -6916,4 +6916,10 @@ Untuk backup: </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Buka Pengontrol Game Windows untuk menguji input pengontrol.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Lihat identitas, koneksi, dan detail firmware pengontrol ini.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Buka profil pengontrol aktif di Editor Profil lengkap.</value>
+  </data>
 </root>

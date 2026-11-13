@@ -6918,4 +6918,10 @@ Le backup : </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Ouvrir les contrôleurs de jeu Windows pour tester les entrées.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Afficher l’identité, la connexion et le micrologiciel de cette manette.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Ouvrir le profil actif de la manette dans l’éditeur de profils complet.</value>
+  </data>
 </root>

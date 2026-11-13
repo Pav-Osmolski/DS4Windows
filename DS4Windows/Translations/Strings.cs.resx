@@ -6891,4 +6891,10 @@ Zálohování : </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Otevřít Herní zařízení Windows a otestovat vstup ovladače.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Zobrazit identitu, připojení a firmware tohoto ovladače.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Otevřít aktivní profil ovladače v úplném editoru profilů.</value>
+  </data>
 </root>

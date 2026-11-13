@@ -8600,4 +8600,10 @@ X axis: {0}, Y axis: {1}</value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Open Windows Game Controllers to test controller input.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>View this controller’s identity, connection and firmware details.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Open the active controller profile in the full Profile Editor.</value>
+  </data>
 </root>

@@ -6918,4 +6918,10 @@ Sokongan : </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Buka Pengawal Permainan Windows untuk menguji input pengawal.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Lihat identiti, sambungan dan butiran perisian tegar pengawal ini.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Buka profil pengawal aktif dalam Editor Profil penuh.</value>
+  </data>
 </root>

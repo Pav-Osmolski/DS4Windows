@@ -6932,4 +6932,10 @@
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Открыть игровые устройства Windows для проверки ввода контроллера.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Показать идентификационные данные, подключение и прошивку этого контроллера.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Открыть активный профиль контроллера в полном редакторе профилей.</value>
+  </data>
 </root>

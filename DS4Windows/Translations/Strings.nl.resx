@@ -6924,4 +6924,10 @@ De backup: </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>Windows-spelbesturingen openen om controllerinvoer te testen.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>Identiteit, verbinding en firmwaregegevens van deze controller bekijken.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Open het actieve controllerprofiel in de volledige profieleditor.</value>
+  </data>
 </root>

@@ -6892,4 +6892,10 @@ A háttérben: </value>
   <data name="OverviewControlPanelHelp" xml:space="preserve">
     <value>A Windows játékvezérlők megnyitása a bemenet teszteléséhez.</value>
   </data>
+  <data name="ControllerInfoHelp" xml:space="preserve">
+    <value>A vezérlő azonosítási, kapcsolati és firmware-adatainak megtekintése.</value>
+  </data>
+  <data name="OverviewEditProfileHelp" xml:space="preserve">
+    <value>Az aktív vezérlőprofil megnyitása a teljes profilszerkesztőben.</value>
+  </data>
 </root>
