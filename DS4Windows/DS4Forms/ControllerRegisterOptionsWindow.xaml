@@ -59,7 +59,11 @@
                         <StackPanel>
                             <TextBlock Text="{lex:Loc Strings:UI_268F14BBFE119C1E}" Style="{DynamicResource BridgeSectionTitleStyle}" Margin="0,0,0,8"/>
                             <CheckBox Content="{lex:Loc EnableVerboseLog}" IsChecked="{Binding VerboseLogMessages}"
-                                      ToolTip="{lex:Loc EnableVerboseLogTip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                      ToolTip="{lex:Loc EnableVerboseLogTip}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}" Margin="0,0,0,8"/>
+                            <CheckBox x:Name="viiperDebugLoggingCheckBox" Content="{lex:Loc Strings:UI_08E5FA182E781596}"
+                                      IsChecked="{Binding ViiperDebugLogging}" IsEnabled="{Binding SystemIntegrationEnabled}"
+                                      ToolTip="{lex:Loc Strings:UI_635661E968564E2C}"
+                                      Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>

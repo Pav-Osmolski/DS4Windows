@@ -66,9 +66,15 @@ namespace DS4WindowsTests
                 foreach (bool useDarkTheme in new[] { false, true })
                 {
                     if (useDarkTheme) application.Resources.MergedDictionaries.Add(dark);
-                    var devices = new ControllerRegisterOptionsWindow(new DS4Windows.ControlServiceDeviceOptions(), service);
+                    var loggingSettings = (DS4WinWPF.DS4Forms.ViewModels.SettingsViewModel)System.Runtime.CompilerServices.RuntimeHelpers
+                        .GetUninitializedObject(typeof(DS4WinWPF.DS4Forms.ViewModels.SettingsViewModel));
+                    var devices = new ControllerRegisterOptionsWindow(new DS4Windows.ControlServiceDeviceOptions(), service, loggingSettings);
                     try
                     {
+                        var logging = (CheckBox)devices.FindName("viiperDebugLoggingCheckBox");
+                        Assert.AreSame(loggingSettings, logging.DataContext, "Both entry points must share the existing logging preference.");
+                        Assert.AreEqual("ViiperDebugLogging", logging.GetBindingExpression(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty).ParentBinding.Path.Path);
+                        Assert.IsFalse(string.IsNullOrWhiteSpace(logging.ToolTip?.ToString()));
                         var controllerList = (ListBox)devices.FindName("controllerListBox");
                         controllerList.ItemsSource = new[] { new { IdText = "DualSense" } };
                         ThemeConsistencyValidation.Layout((FrameworkElement)devices.Content, 760, 500);

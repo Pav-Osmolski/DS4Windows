@@ -6886,4 +6886,13 @@ Backup : </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>オーディオ出力 Windows</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>プロファイルのクイック操作のタイトルと説明を表示</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>対応コントローラーとデバイス設定を選択します。</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Windows のゲーム コントローラーを開いて入力をテストします。</value>
+  </data>
 </root>

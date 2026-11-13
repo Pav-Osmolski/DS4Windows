@@ -6923,4 +6923,13 @@
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Показать Windows аудиовыход</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Показывать заголовок и описание быстрых настроек профиля</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Выбор поддерживаемых контроллеров и параметров устройства.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Открыть игровые устройства Windows для проверки ввода контроллера.</value>
+  </data>
 </root>

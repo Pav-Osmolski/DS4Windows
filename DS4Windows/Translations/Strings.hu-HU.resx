@@ -6883,4 +6883,13 @@ A háttérben: </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>A Windows audio kimenet megjelenítése</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>A profil gyorsbeállításai címének és leírásának megjelenítése</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Támogatott vezérlők és eszközbeállítások kiválasztása.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>A Windows játékvezérlők megnyitása a bemenet teszteléséhez.</value>
+  </data>
 </root>

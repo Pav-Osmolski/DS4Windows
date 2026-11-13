@@ -15,6 +15,7 @@ internal enum SettingsFolder { AppData, Program }
 internal sealed record OverviewLayoutPreferences
 {
     public int Version { get; init; } = 1;
+    public bool ShowQuickProfileHeading { get; init; } = true;
     public bool ShowFeedback { get; init; } = true;
     public bool ShowAudio { get; init; } = true;
     public bool ShowLevels { get; init; } = true;

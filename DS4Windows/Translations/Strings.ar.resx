@@ -6890,4 +6890,13 @@ Backup : </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>عرض Windows إرسال الصوت</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>إظهار عنوان وإرشادات عناصر التحكم السريعة بالملف</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>اختيار وحدات التحكم المدعومة وخيارات الجهاز.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>فتح وحدات التحكم بالألعاب في Windows لاختبار الإدخال.</value>
+  </data>
 </root>

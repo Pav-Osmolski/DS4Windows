@@ -6884,4 +6884,13 @@ Das Backup: </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Anzeige Windows Audioausgabe</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Titel und Beschreibung der Profil-Schnellsteuerung anzeigen</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Unterstützte Controller und Geräteoptionen auswählen.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Windows-Spielcontroller öffnen und Controllereingaben testen.</value>
+  </data>
 </root>

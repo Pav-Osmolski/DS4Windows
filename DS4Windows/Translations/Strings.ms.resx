@@ -6909,4 +6909,13 @@ Sokongan : </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Menunjukkan Windows output audio</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Tunjukkan tajuk dan penerangan kawalan pantas profil</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Pilih pengawal yang disokong dan pilihan peranti.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Buka Pengawal Permainan Windows untuk menguji input pengawal.</value>
+  </data>
 </root>

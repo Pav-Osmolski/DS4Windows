@@ -15,7 +15,7 @@
     Foreground="{DynamicResource ForegroundColor}">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="0,0,12,8">
-            <Border Style="{DynamicResource BridgeCardStyle}">
+            <Border x:Name="controllerStatusCard" Style="{DynamicResource BridgeCardStyle}" Width="292" HorizontalAlignment="Left" Margin="0,0,12,14">
                 <StackPanel>
                     <TextBlock Text="{lex:Loc Strings:UI_818915EC72C25C2E}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                     <TextBlock Text="{lex:Loc Strings:UI_2CE2D68611A1F110}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>

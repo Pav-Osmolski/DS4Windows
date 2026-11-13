@@ -4026,7 +4026,7 @@ Suspend support not enabled.", true);
         private void DeviceOptionSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
             ControllerRegisterOptionsWindow optsWindow =
-                new ControllerRegisterOptionsWindow(Program.rootHub.DeviceOptions, Program.rootHub);
+                new ControllerRegisterOptionsWindow(Program.rootHub.DeviceOptions, Program.rootHub, settingsWrapVM);
 
             optsWindow.Owner = this;
             optsWindow.Show();

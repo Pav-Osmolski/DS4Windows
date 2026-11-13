@@ -6885,4 +6885,13 @@ O backup: </value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Exibir a saída de áudio Windows</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Mostrar título e descrição dos controles rápidos do perfil</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Escolha controles compatíveis e opções do dispositivo.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Abra os controladores de jogo do Windows para testar as entradas.</value>
+  </data>
 </root>

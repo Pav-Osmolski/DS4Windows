@@ -6911,4 +6911,13 @@ Example: whyme_DS4Windows</value>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve">
     <value>Εμφάνιση Windows εξόδου ήχου</value>
   </data>
+  <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
+    <value>Εμφάνιση τίτλου και περιγραφής γρήγορων ρυθμίσεων προφίλ</value>
+  </data>
+  <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
+    <value>Επιλέξτε υποστηριζόμενα χειριστήρια και επιλογές συσκευής.</value>
+  </data>
+  <data name="OverviewControlPanelHelp" xml:space="preserve">
+    <value>Ανοίξτε τα χειριστήρια παιχνιδιών των Windows για δοκιμή εισόδου.</value>
+  </data>
 </root>

@@ -5,7 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Refine Overview customization with a remembered quick-profile heading toggle and tooltips for Device Options and Control Panel. Keep the heading space stable and hide it automatically when all quick-control sections are disabled.
+- Add spacing between paired trigger/motion curve fields, match the controller-status card width to the readings cards in every theme, and expose the existing VIIPER debug logging preference in Device Options.
 
 ## Released
 
