@@ -284,6 +284,7 @@ public sealed class ControllerOverviewAudioTests
             double expandedCardsTop = Bounds(cards).Top;
             Assert.AreEqual(soundBounds.Top, customizeBounds.Top, 0.1);
             Assert.AreEqual(soundBounds.Height, customizeBounds.Height, 0.1);
+            double? audioHiddenCardsTop = null;
             foreach (var state in new[] { (heading: false, audio: true), (heading: true, audio: false), (heading: false, audio: false), (heading: true, audio: true) })
             {
                 headingToggle.IsChecked = state.heading;
@@ -293,6 +294,24 @@ public sealed class ControllerOverviewAudioTests
                 themedOverview.UpdateLayout();
                 Assert.AreEqual(soundBounds, Bounds(soundButton), "Sound settings must stay anchored for every label combination.");
                 Assert.AreEqual(customizeBounds, Bounds(customizeButton), "Customize must stay anchored for every label combination.");
+                if (!state.audio)
+                {
+                    audioHiddenCardsTop ??= Bounds(cards).Top;
+                    Assert.AreEqual(audioHiddenCardsTop.Value, Bounds(cards).Top, 0.1,
+                        "Hiding the heading beside the buttons must not move the cards.");
+                    Assert.AreEqual(16d, Bounds(cards).Top - soundBounds.Bottom, 0.1,
+                        "Keep exactly 16 DIPs below the toolbar buttons.");
+                    var summary = (FrameworkElement)themedOverview.FindName("overviewControllerCard");
+                    Assert.AreEqual(16d, soundBounds.Top - Bounds(summary).Bottom, 0.1,
+                        "Keep exactly 16 DIPs above the toolbar buttons.");
+                    var toolbarImage = new RenderTargetBitmap(1100, 950, 96, 96, PixelFormats.Pbgra32);
+                    toolbarImage.Render(themedOverview);
+                    var toolbarEncoder = new PngBitmapEncoder();
+                    toolbarEncoder.Frames.Add(BitmapFrame.Create(toolbarImage));
+                    string toolbarPath = Path.Combine(resultsDirectory, $"overview-toolbar-heading-{state.heading}-{name}.png");
+                    using (var stream = File.Create(toolbarPath)) toolbarEncoder.Save(stream);
+                    renderedFiles.Add(toolbarPath);
+                }
                 Assert.AreEqual(state.heading ? Visibility.Visible : Visibility.Collapsed, heading.Visibility);
                 Assert.AreEqual(Visibility.Visible, soundButton.Visibility, "Hiding the output text must not hide its shortcut.");
                 if (!state.heading || !state.audio) Assert.IsTrue(Bounds(cards).Top < expandedCardsTop, "Hidden text must reclaim vertical space.");

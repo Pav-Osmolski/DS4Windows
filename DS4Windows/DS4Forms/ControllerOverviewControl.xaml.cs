@@ -145,10 +145,11 @@ namespace DS4WinWPF.DS4Forms
         {
             if (quickProfileHeading == null || windowsAudioRoute == null) return;
             bool showAudioRoute = windowsAudioRoute.Visibility == Visibility.Visible;
-            Grid.SetRow(quickProfileHeading, showAudioRoute ? 1 : 0);
+            Grid.SetRow(quickProfileHeading, showAudioRoute ? 3 : 0);
+            Grid.SetRowSpan(quickProfileHeading, showAudioRoute ? 1 : 3);
             Grid.SetColumnSpan(quickProfileHeading, showAudioRoute ? 2 : 1);
             quickProfileHeading.Margin = showAudioRoute
-                ? new Thickness(0, 16, 0, 0) : new Thickness(0, 0, 12, 0);
+                ? new Thickness(0, 0, 0, 12) : new Thickness(0, 0, 12, 0);
         }
 
         private void OverviewCustomization_Opened(object sender, EventArgs e) => showFeedback.Focus();

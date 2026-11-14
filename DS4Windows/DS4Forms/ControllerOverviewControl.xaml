@@ -228,7 +228,7 @@
         <ScrollViewer x:Name="overviewScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
                       Visibility="{Binding HasSelectedController, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel Margin="0,0,8,2">
-                <Border Style="{StaticResource OverviewCardStyle}" Margin="0,0,0,14">
+                <Border x:Name="overviewControllerCard" Style="{StaticResource OverviewCardStyle}" Margin="0">
                     <StackPanel>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -392,16 +392,20 @@
                     <Button x:Name="selectProfileButton" Content="{lex:Loc Strings:UI_D42C2434603D234A}" HorizontalAlignment="Left"
                             Style="{StaticResource BridgePrimaryButtonStyle}" Click="ControllerDetailsBtn_Click" />
                 </StackPanel>
-                <Grid x:Name="overviewToolbar" Margin="0,0,0,12">
+                <Grid x:Name="overviewToolbar">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+                    <!-- The heading spans the toolbar and its equal gutters when audio text is hidden.
+                         Keep the gutters even when the heading is collapsed. -->
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="16" />
                         <RowDefinition Height="Auto" MinHeight="32" />
+                        <RowDefinition Height="16" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <StackPanel x:Name="windowsAudioRoute" VerticalAlignment="Center" Margin="0,0,12,0" Visibility="Collapsed">
+                    <StackPanel x:Name="windowsAudioRoute" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,12,0" Visibility="Collapsed">
                         <TextBlock x:Name="windowsAudioOutputText" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
                         <TextBlock x:Name="windowsAudioRouteHelp" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
                                    Foreground="{DynamicResource WarningColor}" />
@@ -411,7 +415,7 @@
                         <TextBlock Text="{lex:Loc Strings:UI_73633F28FF75F010}" Margin="0,3,0,0" TextWrapping="Wrap"
                                    Foreground="{DynamicResource MutedForegroundColor}" />
                     </StackPanel>
-                    <StackPanel x:Name="overviewToolbarActions" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                    <StackPanel x:Name="overviewToolbarActions" Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
                         <Button x:Name="windowsSoundSettingsButton" Style="{StaticResource OverviewToolbarButtonStyle}"
                                 VerticalAlignment="Top" Click="WindowsSoundSettings_Click" />
                     <ToggleButton x:Name="customizeOverviewButton" Margin="12,0,0,0" Padding="10,5" MinHeight="32"
