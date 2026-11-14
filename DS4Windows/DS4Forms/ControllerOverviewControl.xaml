@@ -397,8 +397,7 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <!-- The heading spans the toolbar and its equal gutters when audio text is hidden.
-                         Keep the gutters even when the heading is collapsed. -->
+                    <!-- Keep equal toolbar gutters even when the shared heading is collapsed. -->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="16" />
                         <RowDefinition Height="Auto" MinHeight="32" />
@@ -410,11 +409,10 @@
                         <TextBlock x:Name="windowsAudioRouteHelp" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
                                    Foreground="{DynamicResource WarningColor}" />
                     </StackPanel>
-                    <StackPanel x:Name="quickProfileHeading" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,16,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="{lex:Loc Strings:UI_FAFBA7D222C9E997}" FontSize="18" FontWeight="SemiBold" />
-                        <TextBlock Text="{lex:Loc Strings:UI_73633F28FF75F010}" Margin="0,3,0,0" TextWrapping="Wrap"
-                                   Foreground="{DynamicResource MutedForegroundColor}" />
-                    </StackPanel>
+                    <TextBlock x:Name="quickProfileHeading" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,12"
+                               VerticalAlignment="Center" Text="{lex:Loc Strings:UI_FAFBA7D222C9E997}"
+                               FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"
+                               ToolTip="{lex:Loc Strings:UI_73633F28FF75F010}" />
                     <StackPanel x:Name="overviewToolbarActions" Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
                         <Button x:Name="windowsSoundSettingsButton" Style="{StaticResource OverviewToolbarButtonStyle}"
                                 VerticalAlignment="Top" Click="WindowsSoundSettings_Click" />

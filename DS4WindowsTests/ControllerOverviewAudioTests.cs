@@ -296,6 +296,14 @@ public sealed class ControllerOverviewAudioTests
                 Assert.AreEqual(customizeBounds, Bounds(customizeButton), "Customize must stay anchored for every label combination.");
                 if (!state.audio)
                 {
+                    if (state.heading)
+                    {
+                        Assert.AreEqual(soundBounds.Top + soundBounds.Height / 2,
+                            Bounds(heading).Top + Bounds(heading).Height / 2, 0.1,
+                            "The quick-profile heading must be vertically centred with the buttons.");
+                        Assert.AreEqual(DS4WinWPF.Translations.Strings.ResourceManager.GetString("UI_73633F28FF75F010"),
+                            heading.ToolTip as string, "Keep the former description available on hover.");
+                    }
                     audioHiddenCardsTop ??= Bounds(cards).Top;
                     Assert.AreEqual(audioHiddenCardsTop.Value, Bounds(cards).Top, 0.1,
                         "Hiding the heading beside the buttons must not move the cards.");
