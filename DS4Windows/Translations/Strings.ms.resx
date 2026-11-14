@@ -6910,7 +6910,7 @@ Sokongan : </value>
     <value>Menunjukkan Windows output audio</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Tunjukkan tajuk dan penerangan kawalan pantas profil</value>
+    <value>Tunjukkan pengepala kawalan pantas profil</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Pilih pengawal yang disokong dan pilihan peranti.</value>

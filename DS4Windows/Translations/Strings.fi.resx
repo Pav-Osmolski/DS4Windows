@@ -6910,7 +6910,7 @@ Varmuuskopiointi : </value>
     <value>Näytä Windows äänen ulostulo</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Näytä profiilin pika-asetusten otsikko ja kuvaus</value>
+    <value>Näytä profiilin pika-asetusten otsikko</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Valitse tuetut ohjaimet ja laiteasetukset.</value>

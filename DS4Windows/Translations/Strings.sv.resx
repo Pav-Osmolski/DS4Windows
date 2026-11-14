@@ -6886,7 +6886,7 @@ och backup: </value>
     <value>Visa Windows ljudutgång</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Visa rubrik och beskrivning för profilens snabbinställningar</value>
+    <value>Visa rubrik för profilens snabbinställningar</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Välj handkontroller som stöds och enhetsalternativ.</value>

@@ -6891,7 +6891,7 @@ Backup : </value>
     <value>عرض Windows إرسال الصوت</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>إظهار عنوان وإرشادات عناصر التحكم السريعة بالملف</value>
+    <value>إظهار عنوان عناصر التحكم السريعة بالملف</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>اختيار وحدات التحكم المدعومة وخيارات الجهاز.</value>

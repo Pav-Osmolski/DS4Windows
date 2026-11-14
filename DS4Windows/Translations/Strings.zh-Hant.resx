@@ -6893,7 +6893,7 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
     <value>顯示 Windows 音訊輸出</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>顯示設定檔快速控制的標題和說明</value>
+    <value>顯示設定檔快速控制標題</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>選擇支援的控制器和裝置選項。</value>

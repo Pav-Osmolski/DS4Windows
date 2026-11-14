@@ -6886,7 +6886,7 @@ El backup: </value>
     <value>Mostrar la salida de audio Windows</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Mostrar el título y la descripción de los controles rápidos del perfil</value>
+    <value>Mostrar encabezado de controles rápidos del perfil</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Elegir mandos compatibles y opciones del dispositivo.</value>

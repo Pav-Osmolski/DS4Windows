@@ -6884,7 +6884,7 @@ Il backup: </value>
     <value>Mostra Windows uscita audio</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Mostra titolo e descrizione dei controlli rapidi del profilo</value>
+    <value>Mostra intestazione dei controlli rapidi del profilo</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Scegli i controller supportati e le opzioni del dispositivo.</value>

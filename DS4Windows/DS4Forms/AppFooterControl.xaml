@@ -40,7 +40,8 @@
                 <TextBox x:Name="activityMessage" Text="—" IsReadOnly="True" TextWrapping="Wrap" MaxHeight="100"
                          VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0" Padding="0"
                          Foreground="{DynamicResource ForegroundColor}" AutomationProperties.Name="{lex:Loc Log}" />
-                <Button Content="{lex:Loc Strings:UI_7230E6FD98806CA9}" Style="{StaticResource FooterButton}" Margin="0,8,0,0"
+                <Button x:Name="openLogButton" Content="{lex:Loc Strings:UI_7230E6FD98806CA9}" Style="{StaticResource FooterButton}" Margin="0,8,0,0"
+                        Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource BorderColor}"
                         HorizontalAlignment="Left" Click="OpenLog_Click" />
             </StackPanel>
         </Border>

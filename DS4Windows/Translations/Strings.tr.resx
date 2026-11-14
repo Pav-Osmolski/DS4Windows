@@ -6910,7 +6910,7 @@ backup için: </value>
     <value>Windows ses çıkışı</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Hızlı profil denetimlerinin başlığını ve açıklamasını göster</value>
+    <value>Hızlı profil denetimleri başlığını göster</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Desteklenen denetleyicileri ve aygıt seçeneklerini seçin.</value>

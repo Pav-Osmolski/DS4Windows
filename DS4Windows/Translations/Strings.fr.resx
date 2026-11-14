@@ -6910,7 +6910,7 @@ Le backup : </value>
     <value>Afficher la sortie audio Windows</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Afficher le titre et la description des réglages rapides du profil</value>
+    <value>Afficher l’en-tête des contrôles rapides du profil</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Choisir les manettes prises en charge et les options du périphérique.</value>

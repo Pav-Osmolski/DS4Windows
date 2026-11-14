@@ -6887,7 +6887,7 @@ i backup: </value>
     <value>Wyświetlanie wyjścia audio Windows</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Pokaż tytuł i opis szybkich ustawień profilu</value>
+    <value>Pokaż nagłówek szybkich ustawień profilu</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Wybierz obsługiwane kontrolery i opcje urządzenia.</value>

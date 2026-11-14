@@ -6884,7 +6884,7 @@ A háttérben: </value>
     <value>A Windows audio kimenet megjelenítése</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>A profil gyorsbeállításai címének és leírásának megjelenítése</value>
+    <value>A profil gyorsbeállításai fejlécének megjelenítése</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Támogatott vezérlők és eszközbeállítások kiválasztása.</value>

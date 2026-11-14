@@ -6912,7 +6912,7 @@ Example: whyme_DS4Windows</value>
     <value>Εμφάνιση Windows εξόδου ήχου</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Εμφάνιση τίτλου και περιγραφής γρήγορων ρυθμίσεων προφίλ</value>
+    <value>Εμφάνιση κεφαλίδας γρήγορων ρυθμίσεων προφίλ</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Επιλέξτε υποστηριζόμενα χειριστήρια και επιλογές συσκευής.</value>

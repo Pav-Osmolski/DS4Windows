@@ -15,7 +15,7 @@ show, hide the input report rate or the titles beside its summary icons, or use
 compact spacing. Icons and their tooltips remain available when titles are hidden, and the layout
 keeps exactly the same spacing and height.
 Hover over **Quick profile controls** to see how changes are saved and applied.
-Use **Show quick profile title and description** to hide the heading and its tooltip
+Use **Show quick profile header** to hide the heading and its tooltip
 when it appears below the toolbar and reclaim that row. **Show Windows audio output** hides the output description;
 **Sound settings** and **Customize** remain available in the same position. When the audio description is hidden, toggling the heading beside these buttons preserves the card positions and the spacing above and below the buttons. The heading also hides automatically when all four
 quick-control sections are unticked; your heading preference is preserved.

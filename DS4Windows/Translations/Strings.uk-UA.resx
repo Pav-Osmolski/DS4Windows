@@ -6883,7 +6883,7 @@
     <value>Показати Windows аудіо вихід</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Показувати заголовок і опис швидких налаштувань профілю</value>
+    <value>Показувати заголовок швидких налаштувань профілю</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Вибір підтримуваних контролерів і параметрів пристрою.</value>

@@ -303,6 +303,12 @@ public sealed class ControllerOverviewAudioTests
                             "The quick-profile heading must be vertically centred with the buttons.");
                         Assert.AreEqual(DS4WinWPF.Translations.Strings.ResourceManager.GetString("UI_73633F28FF75F010"),
                             heading.ToolTip as string, "Keep the former description available on hover.");
+                        Point emptyHeadingSpace = new(Bounds(heading).Right + 8,
+                            soundBounds.Top + soundBounds.Height / 2);
+                        Assert.IsTrue(emptyHeadingSpace.X < soundBounds.Left,
+                            "The heading must end before the empty space beside it.");
+                        Assert.AreNotSame(heading, themedOverview.InputHitTest(emptyHeadingSpace),
+                            "Empty space beside the header must not trigger its tooltip.");
                     }
                     audioHiddenCardsTop ??= Bounds(cards).Top;
                     Assert.AreEqual(audioHiddenCardsTop.Value, Bounds(cards).Top, 0.1,

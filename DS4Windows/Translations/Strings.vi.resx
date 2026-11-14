@@ -6888,7 +6888,7 @@ Backup : </value>
     <value>Hiển thị Windows đầu ra âm thanh</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Hiện tiêu đề và mô tả điều khiển nhanh hồ sơ</value>
+    <value>Hiện tiêu đề điều khiển nhanh hồ sơ</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Chọn tay cầm được hỗ trợ và tùy chọn thiết bị.</value>
