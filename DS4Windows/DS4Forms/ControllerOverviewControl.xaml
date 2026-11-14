@@ -159,14 +159,16 @@
             <Setter Property="MinWidth" Value="106" />
             <Setter Property="Background" Value="Transparent" />
         </Style>
-        <Style x:Key="OverviewCustomizeStyle" TargetType="ToggleButton">
+        <Style x:Key="OverviewToolbarButtonStyle" TargetType="ButtonBase">
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="MinHeight" Value="32" />
             <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
             <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
             <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
             <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ToggleButton">
+                    <ControlTemplate TargetType="ButtonBase">
                         <Border x:Name="Chrome" CornerRadius="5" BorderThickness="1"
                                 Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                 Padding="{TemplateBinding Padding}">
@@ -176,14 +178,18 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
                             </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}" />
-                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style x:Key="OverviewCustomizeStyle" TargetType="ToggleButton" BasedOn="{StaticResource OverviewToolbarButtonStyle}">
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource NavigationSelectionColor}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
@@ -378,20 +384,6 @@
                     </StackPanel>
                 </Border>
 
-                <Grid x:Name="windowsAudioRoute" Margin="0,0,0,16" Visibility="Collapsed">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
-                        <TextBlock x:Name="windowsAudioOutputText" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
-                        <TextBlock x:Name="windowsAudioRouteHelp" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
-                                   Foreground="{DynamicResource WarningColor}" />
-                    </StackPanel>
-                    <Button x:Name="windowsSoundSettingsButton" Grid.Column="1" Style="{DynamicResource BridgeSecondaryButtonStyle}"
-                            VerticalAlignment="Center" Click="WindowsSoundSettings_Click" />
-                </Grid>
-
                 <StackPanel x:Name="profileSelectionNotice" Margin="0,0,0,16"
                             Visibility="{Binding NeedsProfileSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock Text="{lex:Loc Strings:UI_18BCA2DAF670B6A1}" FontSize="18" FontWeight="SemiBold" />
@@ -400,25 +392,38 @@
                     <Button x:Name="selectProfileButton" Content="{lex:Loc Strings:UI_D42C2434603D234A}" HorizontalAlignment="Left"
                             Style="{StaticResource BridgePrimaryButtonStyle}" Click="ControllerDetailsBtn_Click" />
                 </StackPanel>
-                <Grid Margin="0,0,0,12">
+                <Grid x:Name="overviewToolbar" Margin="0,0,0,12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel x:Name="quickProfileHeading" VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" MinHeight="32" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="windowsAudioRoute" VerticalAlignment="Center" Margin="0,0,12,0" Visibility="Collapsed">
+                        <TextBlock x:Name="windowsAudioOutputText" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
+                        <TextBlock x:Name="windowsAudioRouteHelp" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
+                                   Foreground="{DynamicResource WarningColor}" />
+                    </StackPanel>
+                    <StackPanel x:Name="quickProfileHeading" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,16,0,0" VerticalAlignment="Center">
                         <TextBlock Text="{lex:Loc Strings:UI_FAFBA7D222C9E997}" FontSize="18" FontWeight="SemiBold" />
                         <TextBlock Text="{lex:Loc Strings:UI_73633F28FF75F010}" Margin="0,3,0,0" TextWrapping="Wrap"
                                    Foreground="{DynamicResource MutedForegroundColor}" />
                     </StackPanel>
-                    <ToggleButton x:Name="customizeOverviewButton" Grid.Column="1" Margin="12,0,0,0" Padding="10,5" MinHeight="32"
+                    <StackPanel x:Name="overviewToolbarActions" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                        <Button x:Name="windowsSoundSettingsButton" Style="{StaticResource OverviewToolbarButtonStyle}"
+                                VerticalAlignment="Top" Click="WindowsSoundSettings_Click" />
+                    <ToggleButton x:Name="customizeOverviewButton" Margin="12,0,0,0" Padding="10,5" MinHeight="32"
                                   Style="{StaticResource OverviewCustomizeStyle}"
                                   ToolTip="{lex:Loc Strings:OverviewCustomizeHelp}"
-                                  VerticalAlignment="Center" AutomationProperties.Name="{lex:Loc Strings:OverviewCustomize}">
+                                  VerticalAlignment="Top" AutomationProperties.Name="{lex:Loc Strings:OverviewCustomize}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE713;" />
                             <TextBlock Text="{lex:Loc Strings:OverviewCustomize}" VerticalAlignment="Center" />
                         </StackPanel>
                     </ToggleButton>
+                    </StackPanel>
                     <Popup x:Name="overviewCustomization" Grid.Column="1" AllowsTransparency="True" Placement="Custom" StaysOpen="False"
                            PlacementTarget="{Binding ElementName=customizeOverviewButton}" Opened="OverviewCustomization_Opened"
                            IsOpen="{Binding IsChecked, ElementName=customizeOverviewButton, Mode=TwoWay}">

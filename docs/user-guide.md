@@ -10,12 +10,13 @@ selected by your profile. Available settings depend on the controller and connec
 ![Overview dashboard](images/site/overview.webp)
 
 Start here for a summary of your connected controller, active profile and backend status.
-Use **Customize** beside **Quick profile controls** to choose which cards to
+Use **Customize** beside **Sound settings** to choose which cards to
 show, hide the input report rate or the titles beside its summary icons, or use
 compact spacing. Icons and their tooltips remain available when titles are hidden, and the layout
 keeps exactly the same spacing and height.
 Use **Show quick profile title and description** to hide the complete heading
-without moving the controls. The heading also hides automatically when all four
+and reclaim its space. **Show Windows audio output** hides the output description;
+**Sound settings** and **Customize** remain available in the same position. The heading also hides automatically when all four
 quick-control sections are unticked; your heading preference is preserved.
 Overview remembers these choices separately from your controller profiles.
 

@@ -120,10 +120,14 @@ public sealed class ControllerOverviewAudioTests
         ValidateImmediateSliderLabels(overview);
         var resources = Application.Current.Resources.MergedDictionaries;
         var originalTheme = resources[0];
-        foreach (string name in new[] { "DefaultTheme", "DarkTheme" })
+        foreach (string name in new[] { "DefaultTheme", "DarkTheme", "Graphite", "Paper", "Midnight", "HighContrast" })
         {
-            resources[0] = new ResourceDictionary { Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{name}.xaml", UriKind.Relative) };
+            string basis = name is "DefaultTheme" or "Paper" ? "DefaultTheme" : "DarkTheme";
+            resources[0] = new ResourceDictionary { Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{basis}.xaml", UriKind.Relative) };
             var themedOverview = new ControllerOverviewControl();
+            if (name is not "DefaultTheme" and not "DarkTheme")
+                themedOverview.Resources.MergedDictionaries.Add(DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.Create(
+                    Enum.Parse<AppThemeChoice>(name), highContrast: false));
             themedOverview.SetResourceReference(Control.ForegroundProperty, "ForegroundColor");
             themedOverview.SetResourceReference(Control.BackgroundProperty, "SurfaceBackgroundColor");
             var protectedController = new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB, sony: true)
@@ -157,7 +161,7 @@ public sealed class ControllerOverviewAudioTests
             Assert.IsFalse(((FrameworkElement)themedOverview.FindName("quickProfileControls")).IsEnabled);
             Assert.AreEqual(Visibility.Visible, ((FrameworkElement)themedOverview.FindName("profileSelectionNotice")).Visibility);
             Assert.IsTrue(((Button)themedOverview.FindName("selectProfileButton")).IsEnabled);
-            Assert.AreEqual(((SolidColorBrush)Application.Current.FindResource("AccentColor")).Color,
+            Assert.AreEqual(((SolidColorBrush)themedOverview.FindResource("AccentColor")).Color,
                 ((SolidColorBrush)((TextBlock)themedOverview.FindName("controllerStartupTitle")).Foreground).Color,
                 "Profile guidance must retain readable contrast in light and dark themes.");
             var image = new RenderTargetBitmap(1100, 950, 96, 96, PixelFormats.Pbgra32);
@@ -268,22 +272,36 @@ public sealed class ControllerOverviewAudioTests
             var heading = (FrameworkElement)themedOverview.FindName("quickProfileHeading");
             var headingToggle = (CheckBox)themedOverview.FindName("showQuickProfileHeading");
             themedOverview.UpdateLayout();
-            cardsBefore = Bounds(cards);
-            var headingBefore = Bounds(heading);
-            var headingLocalY = heading.TranslatePoint(new Point(), (FrameworkElement)heading.Parent).Y;
-            headingToggle.IsChecked = false;
+            var soundButton = (Button)themedOverview.FindName("windowsSoundSettingsButton");
+            var customizeButton = (System.Windows.Controls.Primitives.ToggleButton)themedOverview.FindName("customizeOverviewButton");
+            var audioToggle = (CheckBox)themedOverview.FindName("showWindowsAudioOutput");
+            scroll.ScrollToHome();
+            audioToggle.IsChecked = true;
+            themedOverview.ApplyWindowsAudioOutput(new("Desktop headphones", 0, -1));
             themedOverview.UpdateLayout();
-            Assert.AreEqual(Visibility.Hidden, heading.Visibility);
-            Assert.AreEqual(headingBefore, Bounds(heading));
-            Assert.AreEqual(cardsBefore, Bounds(cards), "Hiding the complete heading must preserve the layout.");
-            headingToggle.IsChecked = true;
+            var soundBounds = Bounds(soundButton);
+            var customizeBounds = Bounds(customizeButton);
+            double expandedCardsTop = Bounds(cards).Top;
+            Assert.AreEqual(soundBounds.Top, customizeBounds.Top, 0.1);
+            Assert.AreEqual(soundBounds.Height, customizeBounds.Height, 0.1);
+            foreach (var state in new[] { (heading: false, audio: true), (heading: true, audio: false), (heading: false, audio: false), (heading: true, audio: true) })
+            {
+                headingToggle.IsChecked = state.heading;
+                audioToggle.IsChecked = state.audio;
+                themedOverview.ApplyWindowsAudioOutput(new("Desktop headphones", 0, -1));
+                scroll.ScrollToHome();
+                themedOverview.UpdateLayout();
+                Assert.AreEqual(soundBounds, Bounds(soundButton), "Sound settings must stay anchored for every label combination.");
+                Assert.AreEqual(customizeBounds, Bounds(customizeButton), "Customize must stay anchored for every label combination.");
+                Assert.AreEqual(state.heading ? Visibility.Visible : Visibility.Collapsed, heading.Visibility);
+                Assert.AreEqual(Visibility.Visible, soundButton.Visibility, "Hiding the output text must not hide its shortcut.");
+                if (!state.heading || !state.audio) Assert.IsTrue(Bounds(cards).Top < expandedCardsTop, "Hidden text must reclaim vertical space.");
+            }
             var sections = new[] { "showFeedback", "showAudio", "showLevels", "showMicrophone" }
                 .Select(n => (CheckBox)themedOverview.FindName(n)).ToArray();
             foreach (var section in sections) section.IsChecked = false;
             themedOverview.UpdateLayout();
-            Assert.AreEqual(Visibility.Hidden, heading.Visibility);
-            Assert.AreEqual(headingBefore.Height, heading.ActualHeight, 0.1);
-            Assert.AreEqual(headingLocalY, heading.TranslatePoint(new Point(), (FrameworkElement)heading.Parent).Y, 0.1);
+            Assert.AreEqual(Visibility.Collapsed, heading.Visibility);
             Assert.IsTrue(headingToggle.IsChecked == true, "Automatic hiding must not overwrite the user's choice.");
             sections[0].IsChecked = true;
             themedOverview.UpdateLayout();

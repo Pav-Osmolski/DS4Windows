@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-There are currently no unreleased changes.
+- Group Overview’s Sound settings and Customize buttons in one matching toolbar. Keep both shortcuts available and anchored when hiding the Windows audio text or quick-profile heading, while reclaiming unused heading space.
 
 ## Released
 

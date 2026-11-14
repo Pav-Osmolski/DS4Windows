@@ -118,11 +118,12 @@ namespace DS4WinWPF.DS4Forms
         {
             if (overviewMicrophoneCard == null) return;
 
-            // Preserve the header's measured space even when all cards are hidden.
+            // Hidden labels reclaim space; the shared toolbar keeps both actions anchored.
             quickProfileHeading.Visibility = showQuickProfileHeading.IsChecked == true &&
                 (showFeedback.IsChecked == true || showAudio.IsChecked == true ||
                  showLevels.IsChecked == true || showMicrophone.IsChecked == true)
-                ? Visibility.Visible : Visibility.Hidden;
+                ? Visibility.Visible : Visibility.Collapsed;
+            ArrangeOverviewToolbar();
             bool hasAudio = managedAudioLevelsPanel.Visibility == Visibility.Visible;
             bool hasLeftCards = showFeedback.IsChecked == true ||
                 (showAudio.IsChecked == true && (hasAudio || nativeUsbHeadsetCard.Visibility == Visibility.Visible));
@@ -138,6 +139,16 @@ namespace DS4WinWPF.DS4Forms
             var audioAlignment = alignAudioCards ? VerticalAlignment.Stretch : VerticalAlignment.Top;
             overviewAudioCard.VerticalAlignment = audioAlignment;
             overviewMicrophoneCard.VerticalAlignment = audioAlignment;
+        }
+
+        private void ArrangeOverviewToolbar()
+        {
+            if (quickProfileHeading == null || windowsAudioRoute == null) return;
+            bool showAudioRoute = windowsAudioRoute.Visibility == Visibility.Visible;
+            Grid.SetRow(quickProfileHeading, showAudioRoute ? 1 : 0);
+            Grid.SetColumnSpan(quickProfileHeading, showAudioRoute ? 2 : 1);
+            quickProfileHeading.Margin = showAudioRoute
+                ? new Thickness(0, 16, 0, 0) : new Thickness(0, 0, 12, 0);
         }
 
         private void OverviewCustomization_Opened(object sender, EventArgs e) => showFeedback.Focus();
@@ -194,6 +205,7 @@ namespace DS4WinWPF.DS4Forms
         {
             windowsAudioRoute.Visibility = showWindowsAudioOutput.IsChecked != true || string.IsNullOrEmpty(output?.Name)
                 ? Visibility.Collapsed : Visibility.Visible;
+            ArrangeOverviewToolbar();
             windowsAudioOutputText.Text = UiText.Format("Windows audio output: {0}", output?.Name ?? "");
             windowsSoundSettingsButton.Content = UiText.Get("Sound settings");
             windowsSoundSettingsButton.ToolTip = UiText.Get("Choose the Windows playback device used by your games and apps.");
