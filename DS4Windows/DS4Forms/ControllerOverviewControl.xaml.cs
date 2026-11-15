@@ -35,14 +35,18 @@ namespace DS4WinWPF.DS4Forms
         {
             InitializeComponent();
             overviewCustomization.CustomPopupPlacementCallback = PlaceOverviewCustomization;
+            controllerStatusPopup.CustomPopupPlacementCallback = PlaceOverviewCustomization;
             DataContextChanged += ControllerOverviewControl_DataContextChanged;
             Unloaded += ControllerOverviewControl_Unloaded;
             Loaded += ControllerOverviewControl_Loaded;
             SizeChanged += ControllerOverviewControl_SizeChanged;
             IsVisibleChanged += (_, _) =>
             {
-                if (!IsVisible) overviewCustomization.SetCurrentValue(
-                    Popup.IsOpenProperty, false);
+                if (!IsVisible)
+                {
+                    overviewCustomization.SetCurrentValue(Popup.IsOpenProperty, false);
+                    CloseControllerStatus();
+                }
             };
         }
 
@@ -170,6 +174,7 @@ namespace DS4WinWPF.DS4Forms
         private void ControllerOverviewControl_DataContextChanged(object sender,
             DependencyPropertyChangedEventArgs e)
         {
+            CloseControllerStatus();
             HookOutputControllerViewModel(e.OldValue as MainWindowsViewModel,
                 false);
             HookOutputControllerViewModel(e.NewValue as MainWindowsViewModel,
@@ -180,8 +185,38 @@ namespace DS4WinWPF.DS4Forms
         private void ControllerOverviewControl_Unloaded(object sender,
             RoutedEventArgs e)
         {
+            CloseControllerStatus();
             WindowsPlaybackProtection.OutputChanged -= WindowsAudioOutput_Changed;
             HookOutputControllerViewModel(outputControllerViewModel, false);
+        }
+
+        private void CloseControllerStatus() => controllerStatusButton?.SetCurrentValue(ToggleButton.IsCheckedProperty, false);
+
+        private void ControllerStatus_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Escape || controllerStatusButton.IsChecked != true) return;
+            CloseControllerStatus();
+            controllerStatusButton.Focus();
+            e.Handled = true;
+        }
+
+        private void ControllerStatusPopup_Opened(object sender, EventArgs e)
+        {
+            // Focus the content for keyboard scrolling and Escape without changing layout.
+            controllerStatusPopupContent.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+        }
+
+        private void ControllerStatusPopup_Closed(object sender, EventArgs e) => CloseControllerStatus();
+
+        private void ControllerStatus_SelectedControllerChanged(object sender, EventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(DispatcherPriority.DataBind, new Action(() => ControllerStatus_SelectedControllerChanged(sender, e)));
+                return;
+            }
+            CloseControllerStatus();
+            RefreshWindowsAudioOutput();
         }
 
         private void WindowsAudioOutput_Changed(object sender, EventArgs e)
@@ -245,14 +280,14 @@ namespace DS4WinWPF.DS4Forms
                 viewModel.SelectedOutputControllerChanged +=
                     ViewModel_SelectedOutputControllerChanged;
                 viewModel.SpeakerOutputEnabledChanged += WindowsAudioOutput_Changed;
-                viewModel.SelectedControllerChanged += WindowsAudioOutput_Changed;
+                viewModel.SelectedControllerChanged += ControllerStatus_SelectedControllerChanged;
             }
             else
             {
                 viewModel.SelectedOutputControllerChanged -=
                     ViewModel_SelectedOutputControllerChanged;
                 viewModel.SpeakerOutputEnabledChanged -= WindowsAudioOutput_Changed;
-                viewModel.SelectedControllerChanged -= WindowsAudioOutput_Changed;
+                viewModel.SelectedControllerChanged -= ControllerStatus_SelectedControllerChanged;
                 if (ReferenceEquals(outputControllerViewModel, viewModel))
                 {
                     outputControllerViewModel = null;

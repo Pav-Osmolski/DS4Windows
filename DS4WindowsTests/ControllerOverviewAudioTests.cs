@@ -178,6 +178,104 @@ public sealed class ControllerOverviewAudioTests
             Assert.AreEqual(Visibility.Collapsed, ((FrameworkElement)themedOverview.FindName("profileSelectionNotice")).Visibility);
             Assert.AreEqual(DS4WinWPF.Translations.Strings.HidHideAccess,
                 ((TextBlock)themedOverview.FindName("overviewAccessStatus")).Text);
+            // Status details live outside the card's layout, including long messages.
+            var statusOverview = new ControllerOverviewControl { Resources = themedOverview.Resources, DataContext = Model(protectedController) };
+            ThemeConsistencyValidation.Layout(statusOverview, 1100, 950);
+            var statusButton = (System.Windows.Controls.Primitives.ToggleButton)statusOverview.FindName("controllerStatusButton");
+            var statusPopup = (System.Windows.Controls.Primitives.Popup)statusOverview.FindName("controllerStatusPopup");
+            var summaryCard = (FrameworkElement)statusOverview.FindName("overviewControllerCard");
+            var toolbar = (FrameworkElement)statusOverview.FindName("overviewToolbar");
+            Rect StatusBounds(FrameworkElement element) => new(element.TranslatePoint(new Point(), statusOverview), element.RenderSize);
+            // Popup needs a connected presentation source. Suppress the production
+            // Loaded handler so this UI check cannot start endpoint discovery or save preferences.
+            var loadedHandler = (RoutedEventHandler)Delegate.CreateDelegate(typeof(RoutedEventHandler), statusOverview,
+                typeof(ControllerOverviewControl).GetMethod("ControllerOverviewControl_Loaded", BindingFlags.Instance | BindingFlags.NonPublic)!);
+            statusOverview.RemoveHandler(FrameworkElement.LoadedEvent, loadedHandler);
+            Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            var statusHost = new Window { Content = statusOverview, Width = statusOverview.ActualWidth,
+                Height = statusOverview.ActualHeight, WindowStyle = WindowStyle.None, ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false, ShowActivated = false, Left = -20000, Top = -20000 };
+            try
+            {
+                statusHost.Show();
+                statusHost.UpdateLayout();
+                Rect readyCardBounds = StatusBounds(summaryCard);
+                Rect readyToolbarBounds = StatusBounds(toolbar);
+                var attentionModel = Model(protectedController);
+                string attentionDetail = "Enable this controller's DS4Windows Audio playback device in Windows Sound to restore game haptics. Your headphones can remain the default output. " + new string('x', 1200);
+                typeof(MainWindowsViewModel).GetField("selectedControllerStartupStatus", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .SetValue(attentionModel, new ControllerStartupStatus(ControllerStartupStage.Attention, "Needs attention", attentionDetail));
+                statusOverview.DataContext = attentionModel;
+                statusOverview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+                statusOverview.UpdateLayout();
+                Assert.AreEqual(readyCardBounds, StatusBounds(summaryCard), "An attention message must not grow the controller card.");
+                Assert.AreEqual(readyToolbarBounds, StatusBounds(toolbar), "An attention message must not move the toolbar.");
+                var statusTitle = (TextBlock)statusOverview.FindName("controllerStartupTitle");
+                var statusDot = (FrameworkElement)statusOverview.FindName("controllerStatusDot");
+                var batteryRow = (FrameworkElement)statusOverview.FindName("overviewBatteryRow");
+                var arrowFrame = (FrameworkElement)statusButton.Template.FindName("ArrowFrame", statusButton);
+                double statusCentre = StatusBounds(statusButton).Top + statusButton.ActualHeight / 2;
+                foreach (var part in new FrameworkElement[] { statusTitle, statusDot, batteryRow, arrowFrame })
+                    Assert.AreEqual(statusCentre, StatusBounds(part).Top + part.ActualHeight / 2, 0.1, "Centre the badge text, dot, arrow and battery.");
+                Assert.IsTrue(StatusBounds(batteryRow).Left > StatusBounds(statusButton).Right, "Keep status and battery inline.");
+                Rect restingBadgeBounds = StatusBounds(statusButton);
+                var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null);
+                statusButton.SetValue(hoverKey, true);
+                Assert.IsTrue(VisualStateManager.GoToState(statusButton, "MouseOver", true));
+                DisclosureAnimationTests.Pump(140);
+                var activeArrow = (FrameworkElement)statusButton.Template.FindName("ActiveArrow", statusButton);
+                Assert.AreEqual(1d, activeArrow.Opacity, 0.01, "Cross-fade the arrow highlight on hover.");
+                Assert.AreEqual(restingBadgeBounds, StatusBounds(statusButton));
+                statusButton.SetValue(hoverKey, false);
+                Assert.IsTrue(VisualStateManager.GoToState(statusButton, "Normal", true));
+                DisclosureAnimationTests.Pump(140);
+                Assert.AreEqual(0d, activeArrow.Opacity, 0.01);
+                Assert.IsFalse(statusPopup.StaysOpen, "Clicking outside must dismiss the live popover.");
+                statusButton.IsChecked = true;
+                statusPopup.GetBindingExpression(System.Windows.Controls.Primitives.Popup.IsOpenProperty)?.UpdateTarget();
+                DisclosureAnimationTests.Pump(160);
+                statusOverview.UpdateLayout();
+                Assert.IsTrue(statusPopup.IsOpen);
+                Assert.AreEqual(180d, ((RotateTransform)arrowFrame.RenderTransform).Angle, 0.1);
+                Assert.AreEqual(attentionDetail, ((TextBlock)statusOverview.FindName("controllerStatusDetail")).Text);
+                Assert.AreEqual(readyCardBounds, StatusBounds(summaryCard), "Opening the status popover must not move the card.");
+                var popupContent = (FrameworkElement)statusOverview.FindName("controllerStatusPopupContent");
+                popupContent.UpdateLayout();
+                Assert.IsFalse(ThemeConsistencyValidation.Visuals(popupContent).OfType<Button>().Any(), "Do not duplicate Sound settings in the status popover.");
+                foreach (var capture in new[] { (element: (FrameworkElement)statusOverview, suffix: "card"), (element: popupContent, suffix: "popup") })
+                {
+                    int width = Math.Max(1, (int)Math.Ceiling(capture.element.ActualWidth));
+                    int height = Math.Max(1, (int)Math.Ceiling(capture.element.ActualHeight));
+                    var statusImage = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+                    statusImage.Render(capture.element);
+                    var statusEncoder = new PngBitmapEncoder(); statusEncoder.Frames.Add(BitmapFrame.Create(statusImage));
+                    string statusPath = Path.Combine(resultsDirectory, $"overview-status-{capture.suffix}-{name}.png");
+                    using (var stream = File.Create(statusPath)) statusEncoder.Save(stream);
+                    renderedFiles.Add(statusPath);
+                }
+                var source = PresentationSource.FromVisual(popupContent);
+                var escape = new System.Windows.Input.KeyEventArgs(System.Windows.Input.Keyboard.PrimaryDevice, source, 0, System.Windows.Input.Key.Escape)
+                    { RoutedEvent = System.Windows.Input.Keyboard.PreviewKeyDownEvent };
+                popupContent.RaiseEvent(escape);
+                DisclosureAnimationTests.Pump(160);
+                Assert.IsFalse(statusPopup.IsOpen, "Escape must close status details.");
+                Assert.AreEqual(false, statusButton.IsChecked);
+                Assert.AreEqual(0d, ((RotateTransform)arrowFrame.RenderTransform).Angle, 0.1);
+                statusButton.IsChecked = true;
+                DisclosureAnimationTests.Pump(10);
+                statusPopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
+                Assert.AreEqual(false, statusButton.IsChecked, "Outside dismissal must reset the arrow state.");
+                statusButton.IsChecked = true;
+                statusOverview.DataContext = Model(protectedController);
+                statusOverview.UpdateLayout();
+                Assert.IsFalse(statusPopup.IsOpen, "Changing the controller context must dismiss stale details.");
+            }
+            finally
+            {
+                statusPopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
+                statusHost.Content = null;
+                statusHost.Close();
+            }
             var audioCard = (Border)themedOverview.FindName("managedSpeakerRouteCard");
             var microphoneCard = (Border)themedOverview.FindName("overviewMicrophoneCardBorder");
             double Bottom(Border card) => card.TranslatePoint(new Point(0, card.ActualHeight), themedOverview).Y;

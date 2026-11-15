@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:runtime="clr-namespace:DS4Windows"
+             xmlns:theme="clr-namespace:DS4WinWPF.DS4Forms.Themes"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="940"
@@ -16,6 +17,49 @@
              relying on a theme-specific resource made the main window fail
              during first-run XAML construction. -->
         <xctk:InverseBoolConverter x:Key="InverseBoolConverter" />
+
+        <Style x:Key="OverviewStatusBadgeStyle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="{DynamicResource RaisedBackgroundColor}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="9,3" />
+            <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <VisualStateManager.CustomVisualStateManager><theme:DisclosureVisualStateManager /></VisualStateManager.CustomVisualStateManager>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions><VisualTransition GeneratedDuration="0:0:0.11" /></VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Normal"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="0" /><DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="0" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="MouseOver"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /><DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="Pressed"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /><DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualStateGroup.Transitions><VisualTransition GeneratedDuration="0:0:0.12" /></VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Unchecked"><Storyboard><DoubleAnimation Storyboard.TargetName="ArrowFrame" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" To="0" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="Checked"><Storyboard><DoubleAnimation Storyboard.TargetName="ArrowFrame" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" To="180" Duration="0" /></Storyboard></VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="14" />
+                            <Border x:Name="HoverSurface" Background="{DynamicResource NavigationSelectionColor}" BorderBrush="{DynamicResource AccentColor}" BorderThickness="1" CornerRadius="14" Opacity="0" IsHitTestVisible="False" />
+                            <Grid Margin="{TemplateBinding Padding}">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <ContentPresenter VerticalAlignment="Center" />
+                                <Grid x:Name="ArrowFrame" Grid.Column="1" Width="17" Height="17" Margin="4,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                    <Grid.RenderTransform><RotateTransform /></Grid.RenderTransform>
+                                    <Path Data="M 4,6.25 L 8.5,10.75 L 13,6.25" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.5" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                                    <Path x:Name="ActiveArrow" Opacity="0" Data="M 4,6.25 L 8.5,10.75 L 13,6.25" Stroke="{DynamicResource DisclosureActiveGlyphColor}" StrokeThickness="1.5" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <Style x:Key="OverviewCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
@@ -253,15 +297,17 @@
                                                TextTrimming="CharacterEllipsis" ToolTip="{Binding ProfileGuidance}" />
                                 </DockPanel>
                             </StackPanel>
-                            <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" MaxWidth="185">
-                                <Border Background="{DynamicResource RaisedBackgroundColor}" BorderBrush="{DynamicResource BorderColor}"
-                                        BorderThickness="1" CornerRadius="12" Padding="9,3" HorizontalAlignment="Right"
-                                        ToolTip="{Binding SelectedControllerStartupDetail}">
-                                    <DockPanel>
-                                        <Ellipse DockPanel.Dock="Left" Width="7" Height="7" VerticalAlignment="Center"
+                            <StackPanel x:Name="overviewStatusBatteryRow" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                <ToggleButton x:Name="controllerStatusButton" Style="{StaticResource OverviewStatusBadgeStyle}"
+                                              Foreground="{Binding Foreground, ElementName=controllerStartupTitle}" VerticalAlignment="Center"
+                                              AutomationProperties.Name="{Binding SelectedControllerStartupTitle}"
+                                              AutomationProperties.HelpText="{Binding SelectedControllerStartupDetail}"
+                                              PreviewKeyDown="ControllerStatus_PreviewKeyDown">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse x:Name="controllerStatusDot" Width="7" Height="7" VerticalAlignment="Center"
                                                  Fill="{Binding Foreground, ElementName=controllerStartupTitle}" />
                                         <TextBlock x:Name="controllerStartupTitle" Text="{Binding SelectedControllerStartupTitle}"
-                                                   Margin="6,0,0,0" FontSize="13">
+                                                   Margin="6,0,0,0" FontSize="13" VerticalAlignment="Center">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock" BasedOn="{StaticResource OverviewValueStyle}">
                                                     <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
@@ -279,9 +325,25 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                    </DockPanel>
-                                </Border>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0"
+                                    </StackPanel>
+                                </ToggleButton>
+                                <Popup x:Name="controllerStatusPopup" PlacementTarget="{Binding ElementName=controllerStatusButton}" Placement="Custom"
+                                       IsOpen="{Binding IsChecked, ElementName=controllerStatusButton, Mode=TwoWay}" StaysOpen="False"
+                                       AllowsTransparency="True" Opened="ControllerStatusPopup_Opened" Closed="ControllerStatusPopup_Closed">
+                                    <Border x:Name="controllerStatusPopupContent" Width="360" MaxWidth="{Binding ActualWidth, ElementName=overviewScroll}"
+                                            Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource BorderColor}"
+                                            BorderThickness="1" CornerRadius="6" Padding="16" PreviewKeyDown="ControllerStatus_PreviewKeyDown">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding SelectedControllerStartupTitle}" FontWeight="SemiBold" Margin="0,0,0,8"
+                                                       Foreground="{Binding Foreground, ElementName=controllerStartupTitle}" />
+                                            <ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                                <TextBlock x:Name="controllerStatusDetail" Text="{Binding SelectedControllerStartupDetail}" TextWrapping="Wrap"
+                                                           Foreground="{DynamicResource ForegroundColor}" />
+                                            </ScrollViewer>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
+                                <StackPanel x:Name="overviewBatteryRow" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0"
                                             Background="Transparent" ToolTip="{lex:Loc Strings:OverviewBatteryHelp}">
                                     <Viewbox Width="20" Height="{Binding FontSize, ElementName=overviewBatteryText}"
                                              Margin="0,0,6,0" VerticalAlignment="Center" FlowDirection="LeftToRight">
@@ -316,9 +378,6 @@
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
-                        <TextBlock Text="{Binding SelectedControllerStartupDetail}" TextWrapping="Wrap" Margin="0,8,0,0"
-                                   Foreground="{DynamicResource MutedForegroundColor}"
-                                   Visibility="{Binding SelectedControllerNeedsAttention, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <DockPanel Margin="0,12,0,0">
                             <Button x:Name="overviewControllerInfoButton" DockPanel.Dock="Right" Style="{StaticResource BridgeSecondaryButtonStyle}"
                                     ToolTip="{lex:Loc Strings:ControllerInfoHelp}" Click="ControllerInfoBtn_Click" AutomationProperties.Name="{lex:Loc Strings:UI_55026208AB1964FE}"
