@@ -178,6 +178,7 @@ public sealed class ControllerOverviewAudioTests
             Assert.AreEqual(Visibility.Collapsed, ((FrameworkElement)themedOverview.FindName("profileSelectionNotice")).Visibility);
             Assert.AreEqual(DS4WinWPF.Translations.Strings.HidHideAccess,
                 ((TextBlock)themedOverview.FindName("overviewAccessStatus")).Text);
+            ValidateControllerCardWrapping(themedOverview.Resources, protectedController, name, resultsDirectory, renderedFiles);
             // Status details live outside the card's layout, including long messages.
             var statusOverview = new ControllerOverviewControl { Resources = themedOverview.Resources, DataContext = Model(protectedController) };
             ThemeConsistencyValidation.Layout(statusOverview, 1100, 950);
@@ -589,6 +590,43 @@ public sealed class ControllerOverviewAudioTests
             if (File.Exists(file)) return LocalizedSource.Load(file);
         }
         throw new FileNotFoundException("Production Overview markup not found.");
+    }
+
+    private static void ValidateControllerCardWrapping(ResourceDictionary resources, PhysicalDevice device,
+        string theme, string directory, List<string> renderedFiles)
+    {
+        var overview = new ControllerOverviewControl { Resources = resources, DataContext = Model(device) };
+        var card = (Border)overview.FindName("overviewControllerCard");
+        var facts = (WrapPanel)overview.FindName("overviewFactsPanel");
+        var info = (Button)overview.FindName("overviewControllerInfoButton");
+        var compact = (CheckBox)overview.FindName("compactSpacing");
+        foreach (bool useCompact in new[] { false, true })
+        {
+            compact.IsChecked = useCompact;
+            foreach (int width in new[] { 1100, 760, 660, 540 })
+            {
+                ThemeConsistencyValidation.Layout(overview, width, 950);
+                var buttonBounds = new Rect(info.TranslatePoint(new Point(), card), info.RenderSize);
+                Assert.AreEqual(card.Padding.Bottom + card.BorderThickness.Bottom,
+                    card.ActualHeight - buttonBounds.Bottom, 0.1,
+                    $"Controller info must keep its bottom inset at width {width}, compact={useCompact}, {theme}.");
+                var rows = facts.Children.Cast<FrameworkElement>().Where(e => e.Visibility == Visibility.Visible)
+                    .Select(e => new Rect(e.TranslatePoint(new Point(), facts), e.RenderSize))
+                    .GroupBy(r => Math.Round(r.Top, 2)).OrderBy(g => g.Key).ToArray();
+                if (width == 1100) Assert.HasCount(1, rows, "The wide card should keep its facts on one row.");
+                if (width == 660) Assert.IsGreaterThan(1, rows.Length, "Check a width where facts actually wrap.");
+                for (int i = 1; i < rows.Length; i++)
+                    Assert.AreEqual(1d, rows[i].Key - rows[i - 1].Max(r => r.Bottom), 0.1,
+                        "Keep 2 physical pixels between wrapped fact rows at 200% scaling.");
+                if (width is not (1100 or 660)) continue;
+                var image = new RenderTargetBitmap((int)Math.Ceiling(card.ActualWidth), (int)Math.Ceiling(card.ActualHeight), 96, 96, PixelFormats.Pbgra32);
+                image.Render(card);
+                var png = new PngBitmapEncoder(); png.Frames.Add(BitmapFrame.Create(image));
+                string path = Path.Combine(directory, $"controller-card-wrap-{theme}-{width}-compact-{useCompact}.png");
+                using (var stream = File.Create(path)) png.Save(stream);
+                renderedFiles.Add(path);
+            }
+        }
     }
 
     private static void ValidateStatusLabelsAndBattery(ControllerOverviewControl overview, PhysicalDevice device,

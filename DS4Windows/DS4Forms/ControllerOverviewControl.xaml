@@ -200,7 +200,7 @@
             </Style.Triggers>
         </Style>
         <Style x:Key="OverviewFactStyle" TargetType="StackPanel">
-            <Setter Property="Margin" Value="0,0,24,0" />
+            <Setter Property="Margin" Value="0,1,24,0" />
             <Setter Property="MinWidth" Value="106" />
             <Setter Property="Background" Value="Transparent" />
         </Style>
@@ -392,13 +392,15 @@
                         <DockPanel Margin="0,12,0,0">
                             <Button x:Name="overviewControllerInfoButton" DockPanel.Dock="Right" Style="{StaticResource BridgeSecondaryButtonStyle}"
                                     ToolTip="{lex:Loc Strings:ControllerInfoHelp}" Click="ControllerInfoBtn_Click" AutomationProperties.Name="{lex:Loc Strings:UI_55026208AB1964FE}"
-                                    VerticalAlignment="Center" MinHeight="30" Padding="10,4" Margin="6,0,0,0">
+                                    VerticalAlignment="Bottom" MinHeight="30" Padding="10,4" Margin="6,0,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE946;" />
                                     <TextBlock Text="{lex:Loc Strings:UI_55026208AB1964FE}" VerticalAlignment="Center" />
                                 </StackPanel>
                             </Button>
-                            <WrapPanel>
+                            <!-- Each item contributes a 1-DIP row gutter (2 px at 200%).
+                                 Cancel it above the first row so single-line spacing stays unchanged. -->
+                            <WrapPanel x:Name="overviewFactsPanel" Margin="0,-1,0,0">
                                 <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTip="{lex:Loc Strings:OverviewConnectionHelp}">
                                     <DockPanel>
                                         <Path DockPanel.Dock="Left">
