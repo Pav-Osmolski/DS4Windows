@@ -23,6 +23,8 @@
             <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Padding" Value="9,3" />
+            <!-- At 200% scaling, 26 DIPs leaves 48 physical pixels inside the outline. -->
+            <Setter Property="MinHeight" Value="26" />
             <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Template">
@@ -33,9 +35,9 @@
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualStateGroup.Transitions><VisualTransition GeneratedDuration="0:0:0.11" /></VisualStateGroup.Transitions>
-                                    <VisualState x:Name="Normal"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="0" /><DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="0" Duration="0" /></Storyboard></VisualState>
-                                    <VisualState x:Name="MouseOver"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /><DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /></Storyboard></VisualState>
-                                    <VisualState x:Name="Pressed"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /><DoubleAnimation Storyboard.TargetName="ActiveArrow" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="Normal"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="MouseOver"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="Pressed"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /></Storyboard></VisualState>
                                     <VisualState x:Name="Disabled" />
                                 </VisualStateGroup>
                                 <VisualStateGroup x:Name="CheckStates">
@@ -52,7 +54,6 @@
                                 <Grid x:Name="ArrowFrame" Grid.Column="1" Width="17" Height="17" Margin="4,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                                     <Grid.RenderTransform><RotateTransform /></Grid.RenderTransform>
                                     <Path Data="M 4,6.25 L 8.5,10.75 L 13,6.25" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.5" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
-                                    <Path x:Name="ActiveArrow" Opacity="0" Data="M 4,6.25 L 8.5,10.75 L 13,6.25" Stroke="{DynamicResource DisclosureActiveGlyphColor}" StrokeThickness="1.5" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -298,15 +299,20 @@
                                 </DockPanel>
                             </StackPanel>
                             <StackPanel x:Name="overviewStatusBatteryRow" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                <!-- While open, clicking the badge dismisses through Popup's outside-click path.
+                                     Suppress pointer hit testing to prevent that same click from reopening it.
+                                     Keyboard focus and toggling remain available. -->
                                 <ToggleButton x:Name="controllerStatusButton" Style="{StaticResource OverviewStatusBadgeStyle}"
                                               Foreground="{Binding Foreground, ElementName=controllerStartupTitle}" VerticalAlignment="Center"
                                               AutomationProperties.Name="{Binding SelectedControllerStartupTitle}"
                                               AutomationProperties.HelpText="{Binding SelectedControllerStartupDetail}"
+                                              IsHitTestVisible="{Binding IsOpen, ElementName=controllerStatusPopup, Converter={StaticResource InverseBoolConverter}}"
                                               PreviewKeyDown="ControllerStatus_PreviewKeyDown">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Ellipse x:Name="controllerStatusDot" Width="7" Height="7" VerticalAlignment="Center"
                                                  Fill="{Binding Foreground, ElementName=controllerStartupTitle}" />
-                                        <TextBlock x:Name="controllerStartupTitle" Text="{Binding SelectedControllerStartupTitle}"
+                                        <TextBlock x:Name="controllerStartupTitle" Text="{Binding SelectedControllerStartupTitle, NotifyOnTargetUpdated=True}"
+                                                   Loaded="ControllerStatusTitle_Align" SizeChanged="ControllerStatusTitle_Align" TargetUpdated="ControllerStatusTitle_Align"
                                                    Margin="6,0,0,0" FontSize="13" VerticalAlignment="Center">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock" BasedOn="{StaticResource OverviewValueStyle}">

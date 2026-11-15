@@ -24,7 +24,7 @@ Overview remembers these choices separately from your controller profiles.
 The controller status badge and battery sit on the same line. Select the status
 badge to read the full status message in a popover; messages do not increase the
 controller card height. Select it again, press Escape, or click outside to close.
-The arrow highlights on hover and rotates when opened, following Windows’ animation setting.
+The badge background highlights on hover; the arrow keeps its status colour and rotates when opened, following Windows’ animation setting.
 
 **Controller info** on the controller summary card opens information for that
 selected controller.

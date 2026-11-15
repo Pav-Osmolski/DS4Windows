@@ -215,27 +215,51 @@ public sealed class ControllerOverviewAudioTests
                 var batteryRow = (FrameworkElement)statusOverview.FindName("overviewBatteryRow");
                 var arrowFrame = (FrameworkElement)statusButton.Template.FindName("ArrowFrame", statusButton);
                 double statusCentre = StatusBounds(statusButton).Top + statusButton.ActualHeight / 2;
-                foreach (var part in new FrameworkElement[] { statusTitle, statusDot, batteryRow, arrowFrame })
+                foreach (var part in new FrameworkElement[] { statusDot, batteryRow, arrowFrame })
                     Assert.AreEqual(statusCentre, StatusBounds(part).Top + part.ActualHeight / 2, 0.1, "Centre the badge text, dot, arrow and battery.");
                 Assert.IsTrue(StatusBounds(batteryRow).Left > StatusBounds(statusButton).Right, "Keep status and battery inline.");
-                Rect restingBadgeBounds = StatusBounds(statusButton);
+                Assert.AreEqual(26d, statusButton.ActualHeight, 0.1, "Leave 48 physical pixels inside the border at 200% scaling.");
+                // Check actual painted glyphs, not the font line-box bounds.
+                var badgeImage = new RenderTargetBitmap((int)Math.Ceiling(statusButton.ActualWidth), 26, 96, 96, PixelFormats.Pbgra32);
+                badgeImage.Render(statusButton);
+                byte[] pixels = new byte[badgeImage.PixelWidth * badgeImage.PixelHeight * 4];
+                badgeImage.CopyPixels(pixels, badgeImage.PixelWidth * 4, 0);
+                var textColour = ((SolidColorBrush)statusTitle.Foreground).Color;
+                int textLeft = (int)Math.Ceiling(statusTitle.TranslatePoint(new Point(), statusButton).X);
+                int textRight = Math.Min(badgeImage.PixelWidth, textLeft + (int)Math.Floor(statusTitle.ActualWidth));
+                var inkRows = new List<int>();
+                for (int y = 0; y < badgeImage.PixelHeight; y++)
+                    for (int x = textLeft; x < textRight; x++)
+                    {
+                        int i = (y * badgeImage.PixelWidth + x) * 4;
+                        if (pixels[i + 3] > 240 && Math.Abs(pixels[i] - textColour.B) < 16 &&
+                            Math.Abs(pixels[i + 1] - textColour.G) < 16 && Math.Abs(pixels[i + 2] - textColour.R) < 16)
+                            inkRows.Add(y);
+                    }
+                Assert.IsNotEmpty(inkRows, "The status label must be painted.");
+                Assert.AreEqual(13d, (inkRows.Min() + inkRows.Max() + 1) / 2d, 1.0,
+                    "Centre the visible text with the circle and arrow.");
+                // Exercise the hover states and verify the arrow retains its severity colour.
+                // The shared disclosure tests cover transition timing.
+                var hoverBadge = new System.Windows.Controls.Primitives.ToggleButton
+                    { Style = statusButton.Style, Resources = statusOverview.Resources, Foreground = statusTitle.Foreground, Content = "Needs attention" };
+                ThemeConsistencyValidation.Layout(hoverBadge, 200, 26);
                 var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null);
-                statusButton.SetValue(hoverKey, true);
-                Assert.IsTrue(VisualStateManager.GoToState(statusButton, "MouseOver", true));
-                DisclosureAnimationTests.Pump(140);
-                var activeArrow = (FrameworkElement)statusButton.Template.FindName("ActiveArrow", statusButton);
-                Assert.AreEqual(1d, activeArrow.Opacity, 0.01, "Cross-fade the arrow highlight on hover.");
-                Assert.AreEqual(restingBadgeBounds, StatusBounds(statusButton));
-                statusButton.SetValue(hoverKey, false);
-                Assert.IsTrue(VisualStateManager.GoToState(statusButton, "Normal", true));
-                DisclosureAnimationTests.Pump(140);
-                Assert.AreEqual(0d, activeArrow.Opacity, 0.01);
+                hoverBadge.SetValue(hoverKey, true);
+                Assert.IsTrue(VisualStateManager.GoToState(hoverBadge, "MouseOver", false));
+                var hoverArrowFrame = (FrameworkElement)hoverBadge.Template.FindName("ArrowFrame", hoverBadge);
+                var arrow = ThemeConsistencyValidation.Visuals(hoverArrowFrame).OfType<System.Windows.Shapes.Path>().Single();
+                Assert.AreEqual(textColour, ((SolidColorBrush)arrow.Stroke).Color, "Keep the arrow's status colour on hover.");
+                hoverBadge.SetValue(hoverKey, false);
+                Assert.IsTrue(VisualStateManager.GoToState(hoverBadge, "Normal", false));
                 Assert.IsFalse(statusPopup.StaysOpen, "Clicking outside must dismiss the live popover.");
                 statusButton.IsChecked = true;
                 statusPopup.GetBindingExpression(System.Windows.Controls.Primitives.Popup.IsOpenProperty)?.UpdateTarget();
                 DisclosureAnimationTests.Pump(160);
                 statusOverview.UpdateLayout();
                 Assert.IsTrue(statusPopup.IsOpen);
+                Assert.IsFalse(statusButton.IsHitTestVisible, "While open, clicking the badge must dismiss through the outside-click path without toggling it open again.");
+                Assert.IsTrue(statusButton.Focusable, "Keyboard toggling must remain available.");
                 Assert.AreEqual(180d, ((RotateTransform)arrowFrame.RenderTransform).Angle, 0.1);
                 Assert.AreEqual(attentionDetail, ((TextBlock)statusOverview.FindName("controllerStatusDetail")).Text);
                 Assert.AreEqual(readyCardBounds, StatusBounds(summaryCard), "Opening the status popover must not move the card.");
@@ -265,6 +289,13 @@ public sealed class ControllerOverviewAudioTests
                 DisclosureAnimationTests.Pump(10);
                 statusPopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
                 Assert.AreEqual(false, statusButton.IsChecked, "Outside dismissal must reset the arrow state.");
+                Assert.IsTrue(statusButton.IsHitTestVisible, "After dismissal the next deliberate click must open normally.");
+                typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(statusButton, null);
+                DisclosureAnimationTests.Pump(10);
+                Assert.IsTrue(statusPopup.IsOpen);
+                typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(statusButton, null);
+                DisclosureAnimationTests.Pump(10);
+                Assert.IsFalse(statusPopup.IsOpen, "A second keyboard toggle must close instead of reopen.");
                 statusButton.IsChecked = true;
                 statusOverview.DataContext = Model(protectedController);
                 statusOverview.UpdateLayout();

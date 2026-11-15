@@ -9,6 +9,8 @@ the Free Software Foundation, either version 3 of the License, or
 */
 
 using System;
+using System.Globalization;
+using System.Windows.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -188,6 +190,19 @@ namespace DS4WinWPF.DS4Forms
             CloseControllerStatus();
             WindowsPlaybackProtection.OutputChanged -= WindowsAudioOutput_Changed;
             HookOutputControllerViewModel(outputControllerViewModel, false);
+        }
+
+        private void ControllerStatusTitle_Align(object sender, RoutedEventArgs e)
+        {
+            if (sender is not TextBlock title || title.ActualHeight <= 0) return;
+            // Centre the visible glyphs, rather than Segoe UI's asymmetric line box.
+            // Recalculate for each status/localisation, including font fallback and DPI.
+            var text = new FormattedText(title.Text ?? string.Empty, CultureInfo.CurrentUICulture,
+                title.FlowDirection, new Typeface(title.FontFamily, title.FontStyle, title.FontWeight, title.FontStretch),
+                title.FontSize, title.Foreground, VisualTreeHelper.GetDpi(title).PixelsPerDip);
+            Rect ink = text.BuildGeometry(new Point()).Bounds;
+            title.RenderTransform = new TranslateTransform(0,
+                ink.IsEmpty ? 0 : title.ActualHeight / 2 - (ink.Top + ink.Height / 2));
         }
 
         private void CloseControllerStatus() => controllerStatusButton?.SetCurrentValue(ToggleButton.IsCheckedProperty, false);
