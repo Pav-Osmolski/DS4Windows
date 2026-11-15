@@ -6884,7 +6884,7 @@ A háttérben: </value>
     <value>A Windows audio kimenet megjelenítése</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>A profil gyorsbeállításai címének és leírásának megjelenítése</value>
+    <value>A profil gyorsbeállításai fejlécének megjelenítése</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Támogatott vezérlők és eszközbeállítások kiválasztása.</value>
@@ -6897,5 +6897,26 @@ A háttérben: </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Az aktív vezérlőprofil megnyitása a teljes profilszerkesztőben.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Nyomásérzékeny gombok</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Közös tartomány a DualShock 3 előlapi gombjaihoz, iránygombjaihoz, L1 és R1 gombjához, ha analóg ravaszokra vagy karirányokra vannak leképezve. A digitális gomb-, billentyű- és egérkiosztások nem változnak. A fizikai L2/R2 a Ravaszok lapon állítható.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Holtjáték (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Teljes nyomás ennél (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Az ennél kisebb vagy ezzel egyenlő gombnyomás nulla analóg kimenetet ad. A teljes nyomás pontjánál kisebb érték szükséges.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Az ennél nagyobb vagy ezzel egyenlő gombnyomás teljes kimenetet ad. A két pont között a nyomás lineárisan skálázódik.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Példa: 10% holtjáték és 80%-nál teljes nyomás esetén a 10–80% fizikai nyomás 0–100% kimenetté alakul. A gomb felengedése mindig semleges helyzetbe állítja a tengelyt.</value>
   </data>
 </root>

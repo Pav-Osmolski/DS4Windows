@@ -6883,7 +6883,7 @@ Zálohování : </value>
     <value>Zobrazení Windows audio výstupu</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Zobrazit název a popis rychlého nastavení profilu</value>
+    <value>Zobrazit záhlaví rychlého nastavení profilu</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Vybrat podporované ovladače a možnosti zařízení.</value>
@@ -6896,5 +6896,26 @@ Zálohování : </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Otevřít aktivní profil ovladače v úplném editoru profilů.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Tlačítka citlivá na tlak</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Společný rozsah pro čelní tlačítka, směrový ovladač, L1 a R1 ovladače DualShock 3 při mapování na analogové spouště nebo směry páček. Digitální tlačítka, klávesy a myš se nemění. Fyzické L2 a R2 nastavte na kartě Spouště.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Mrtvá zóna (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Plný tlak při (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Tlak na této hodnotě nebo pod ní vytváří nulový analogový výstup. Musí být nižší než bod plného tlaku.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Tlak na této hodnotě nebo nad ní vytváří plný výstup. Mezi oběma body se tlak převádí lineárně.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Příklad: mrtvá zóna 10% a plný tlak při 80% převádějí fyzický tlak 10–80% na výstup 0–100%. Uvolnění tlačítka vždy vrátí osu do neutrální polohy.</value>
   </data>
 </root>

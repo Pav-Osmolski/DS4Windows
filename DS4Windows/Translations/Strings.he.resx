@@ -6886,7 +6886,7 @@
     <value>תצוגת Windows פלט אודיו</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>הצגת הכותרת והתיאור של פקדי הפרופיל המהירים</value>
+    <value>הצגת כותרת פקדי הפרופיל המהירים</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>בחירת בקרים נתמכים ואפשרויות התקן.</value>
@@ -6899,5 +6899,26 @@
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>פתיחת הפרופיל הפעיל של הבקר בעורך הפרופילים המלא.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>כפתורים רגישים ללחץ</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>טווח משותף לכפתורי הפנים, לחיצי הכיוון, L1 ו-R1 של DualShock 3 הממופים להדקים אנלוגיים או לכיווני מוט. מיפויי כפתורים דיגיטליים, מקלדת ועכבר אינם משתנים. את L2/R2 הפיזיים יש לכוון בלשונית ההדקים.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>אזור מת (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>לחץ מלא ב־(%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>לחץ כפתור בערך זה או מתחתיו מפיק פלט אנלוגי אפס. הערך חייב להיות נמוך מנקודת הלחץ המלא.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>לחץ כפתור בערך זה או מעליו מפיק פלט מלא. הלחץ בין הנקודות מותאם באופן ליניארי.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>לדוגמה: אזור מת של 10% ולחץ מלא ב־80% ממפים לחץ פיזי של 10–80% לפלט 0–100%. שחרור הכפתור תמיד מחזיר את הציר למצב ניטרלי.</value>
   </data>
 </root>

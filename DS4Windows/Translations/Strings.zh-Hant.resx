@@ -6893,7 +6893,7 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
     <value>顯示 Windows 音訊輸出</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>顯示設定檔快速控制的標題和說明</value>
+    <value>顯示設定檔快速控制標題</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>選擇支援的控制器和裝置選項。</value>
@@ -6906,5 +6906,26 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>在完整的設定檔編輯器中開啟目前的控制器設定檔。</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>壓感按鈕</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>DualShock 3面部按鈕、方向鍵、L1和R1對應到類比扳機或搖桿方向時使用的共用範圍。數位按鈕、鍵盤和滑鼠對應保持不變。實體L2/R2請在扳機分頁中調整。</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>死區 (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>滿輸出壓力 (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>按鈕壓力不高於此值時，類比輸出為零。此值必須低於滿輸出壓力點。</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>按鈕壓力達到或超過此值時輸出最大值。兩點之間的壓力按線性比例轉換。</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>範例：死區10%、滿輸出壓力80%會將實際壓力10–80%對應為輸出0–100%。放開按鈕一律使軸回到中立位置。</value>
   </data>
 </root>

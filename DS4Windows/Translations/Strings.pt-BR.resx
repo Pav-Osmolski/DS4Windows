@@ -6886,7 +6886,7 @@ O backup: </value>
     <value>Exibir a saída de áudio Windows</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Mostrar título e descrição dos controles rápidos do perfil</value>
+    <value>Mostrar cabeçalho dos controles rápidos do perfil</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Escolha controles compatíveis e opções do dispositivo.</value>
@@ -6899,5 +6899,26 @@ O backup: </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Abrir o perfil ativo do controle no editor de perfis completo.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Botões sensíveis à pressão</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Faixa compartilhada para os botões frontais, direcional, L1 e R1 do DualShock 3 mapeados para gatilhos analógicos ou direções dos analógicos. Os mapeamentos digitais, de teclado e mouse não mudam. Ajuste os L2/R2 físicos na aba Gatilhos.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Zona morta (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Pressão máxima em (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Pressão igual ou inferior a este valor produz saída analógica zero. Deve ser menor que o ponto de pressão máxima.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Pressão igual ou superior a este valor produz saída máxima. Entre os dois pontos, a pressão é escalada linearmente.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Exemplo: zona morta de 10% e pressão máxima em 80% convertem pressão física de 10–80% em saída de 0–100%. Soltar o botão sempre retorna o eixo à posição neutra.</value>
   </data>
 </root>

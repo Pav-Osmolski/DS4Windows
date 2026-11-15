@@ -6910,7 +6910,7 @@ backup için: </value>
     <value>Windows ses çıkışı</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Hızlı profil denetimlerinin başlığını ve açıklamasını göster</value>
+    <value>Hızlı profil denetimleri başlığını göster</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Desteklenen denetleyicileri ve aygıt seçeneklerini seçin.</value>
@@ -6923,5 +6923,26 @@ backup için: </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Etkin kontrolcü profilini tam Profil Düzenleyicisi’nde açın.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Basınca duyarlı düğmeler</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Analog tetiklere veya çubuk yönlerine eşlenen DualShock 3 yüz düğmeleri, yön tuşları, L1 ve R1 için ortak aralık. Dijital düğme, klavye ve fare atamaları değişmez. Fiziksel L2/R2 tetiklerini Tetikler sekmesinde ayarlayın.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Ölü bölge (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Tam basınç noktası (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Bu değerdeki veya altındaki düğme basıncı sıfır analog çıkış üretir. Tam basınç noktasından düşük olmalıdır.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Bu değerdeki veya üzerindeki düğme basıncı tam çıkış üretir. İki nokta arasındaki basınç doğrusal ölçeklenir.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Örnek: %10 ölü bölge ve %80 tam basınç noktası, %10–80 fiziksel basıncı %0–100 çıkışa dönüştürür. Düğmeyi bırakmak ekseni her zaman nötr konuma döndürür.</value>
   </data>
 </root>

@@ -6885,7 +6885,7 @@ Das Backup: </value>
     <value>Anzeige Windows Audioausgabe</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Titel und Beschreibung der Profil-Schnellsteuerung anzeigen</value>
+    <value>Kopfzeile der Profil-Schnellsteuerung anzeigen</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Unterstützte Controller und Geräteoptionen auswählen.</value>
@@ -6898,5 +6898,26 @@ Das Backup: </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Das aktive Controllerprofil im vollständigen Profileditor öffnen.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Druckempfindliche Tasten</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Gemeinsamer Bereich für Aktionstasten, Steuerkreuz, L1 und R1 des DualShock 3 bei Zuordnung zu analogen Triggern oder Stickrichtungen. Digitale Tasten-, Tastatur- und Mausbelegungen bleiben unverändert. Physische L2/R2 werden unter Trigger eingestellt.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Totzone (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Voller Druck bei (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Bei oder unter diesem Tastendruck bleibt die analoge Ausgabe null. Der Wert muss unter dem Punkt für vollen Druck liegen.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Ab diesem Tastendruck wird die volle Ausgabe erreicht. Dazwischen wird der Druck linear skaliert.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Beispiel: 10% Totzone und voller Druck bei 80% bilden 10–80% physischen Druck auf 0–100% Ausgabe ab. Loslassen bringt die Achse immer in Neutralstellung.</value>
   </data>
 </root>

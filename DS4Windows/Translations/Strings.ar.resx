@@ -6891,7 +6891,7 @@ Backup : </value>
     <value>عرض Windows إرسال الصوت</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>إظهار عنوان وإرشادات عناصر التحكم السريعة بالملف</value>
+    <value>إظهار عنوان عناصر التحكم السريعة بالملف</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>اختيار وحدات التحكم المدعومة وخيارات الجهاز.</value>
@@ -6904,5 +6904,26 @@ Backup : </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>افتح ملف تعريف وحدة التحكم النشط في محرر ملفات التعريف الكامل.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>الأزرار الحساسة للضغط</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>نطاق مشترك لأزرار الواجهة والاتجاهات وL1 وR1 في DualShock 3 عند تعيينها إلى زنادات أو اتجاهات عصا تناظرية. لا تتغير تعيينات الأزرار الرقمية ولوحة المفاتيح والفأرة. اضبط الزنادين الفعليين L2 وR2 في تبويب الزنادات.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>المنطقة الميتة (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>الضغط الكامل عند (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>ضغط الزر عند هذه النسبة أو دونها يعطي خرجًا تناظريًا صفريًا. يجب أن تكون أقل من نقطة الضغط الكامل.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>ضغط الزر عند هذه النسبة أو فوقها يعطي الخرج الكامل. يُحوّل الضغط بين النقطتين خطيًا.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>مثال: منطقة ميتة 10% وضغط كامل عند 80% يحوّلان الضغط الفعلي 10–80% إلى خرج 0–100%. تحرير الزر يعيد المحور دائمًا إلى الوضع المحايد.</value>
   </data>
 </root>

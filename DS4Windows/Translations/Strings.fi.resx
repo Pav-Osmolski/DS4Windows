@@ -6910,7 +6910,7 @@ Varmuuskopiointi : </value>
     <value>Näytä Windows äänen ulostulo</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Näytä profiilin pika-asetusten otsikko ja kuvaus</value>
+    <value>Näytä profiilin pika-asetusten otsikko</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Valitse tuetut ohjaimet ja laiteasetukset.</value>
@@ -6923,5 +6923,26 @@ Varmuuskopiointi : </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Avaa ohjaimen aktiivinen profiili täydellisessä profiilieditorissa.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Paineherkät painikkeet</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Yhteinen alue DualShock 3:n etupainikkeille, ristiohjaimelle sekä L1- ja R1-painikkeille, kun ne on määritetty analogisiin liipaisimiin tai sauvan suuntiin. Digitaaliset painike-, näppäin- ja hiirimääritykset eivät muutu. Fyysiset L2/R2 säädetään Liipaisimet-välilehdellä.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Kuollut alue (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Täysi paine kohdassa (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Tämä paine tai sitä pienempi paine tuottaa nollan analogisen lähdön. Arvon on oltava täyden paineen pistettä pienempi.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Tämä paine tai sitä suurempi paine tuottaa täyden lähdön. Pisteiden välillä paine skaalataan lineaarisesti.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Esimerkki: 10% kuollut alue ja täysi paine kohdassa 80% muuntavat fyysisen paineen 10–80% lähdöksi 0–100%. Vapauttaminen palauttaa akselin aina neutraaliin.</value>
   </data>
 </root>

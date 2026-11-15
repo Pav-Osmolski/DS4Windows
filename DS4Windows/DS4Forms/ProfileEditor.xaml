@@ -603,6 +603,8 @@
                         <RadioButton Content="{lex:Loc Strings:UI_20FCDBFB7BC65BDC}" GroupName="ProfileAxisCategory" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" x:Name="profileAxis1Nav"/>
                         <RadioButton Content="{lex:Loc Strings:UI_E62F2148A64D96BB}" GroupName="ProfileAxisCategory" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" x:Name="profileAxis2Nav"/>
                         <RadioButton Content="{lex:Loc Strings:UI_EDF61AF9E1947310}" GroupName="ProfileAxisCategory" IsChecked="False" Style="{DynamicResource BridgeSettingsCategoryStyle}" x:Name="profileAxis3Nav"/>
+                        <RadioButton Content="{lex:Loc Strings:DS3PressureButtonsTitle}" GroupName="ProfileAxisCategory" IsChecked="False"
+                                     Style="{DynamicResource BridgeSettingsCategoryStyle}" x:Name="profileAxis4Nav"/>
                         <CheckBox x:Name="axisReadingsToggle" Content="{lex:Loc Strings:UI_F329ED2091EA8DAE}"
                                   Margin="12,0,0,0" VerticalAlignment="Center"
                                   Checked="AxisReadingsToggle_Changed" Unchecked="AxisReadingsToggle_Changed"
@@ -1349,6 +1351,28 @@
                                                 <TextBox Text="{Binding SZCustomCurve,FallbackValue='0.00, 0.00, 1.00, 1.00'}" DockPanel.Dock="Left" Margin="{StaticResource spaceMargin}"/>
                                             </DockPanel>
                                         </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ScrollViewer x:Name="ds3PressureScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                      Visibility="{Binding IsChecked, ElementName=profileAxis4Nav, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Margin="0,0,12,0">
+                                <Border Style="{DynamicResource BridgeCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="{lex:Loc Strings:DS3PressureButtonsTitle}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                        <TextBlock Text="{lex:Loc Strings:DS3PressureButtonsHelp}" Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap" Margin="0,4,0,16"/>
+                                        <Grid HorizontalAlignment="Left">
+                                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                            <Label Content="{lex:Loc Strings:DS3PressureStartLabel}" Padding="0" VerticalAlignment="Center" Margin="0,0,16,10"/>
+                                            <xctk:IntegerUpDown x:Name="ds3PressureStart" Grid.Column="1" Width="100" MinHeight="34" Minimum="0" Maximum="{Binding DS3PressureStartMaximum}"
+                                                               Value="{Binding DS3PressureStartPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Increment="1" Margin="0,0,0,10" ToolTip="{lex:Loc Strings:DS3PressureStartHelp}"/>
+                                            <Label Grid.Row="1" Content="{lex:Loc Strings:DS3PressureFullLabel}" Padding="0" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                                            <xctk:IntegerUpDown x:Name="ds3PressureFull" Grid.Row="1" Grid.Column="1" Width="100" MinHeight="34" Minimum="{Binding DS3PressureFullMinimum}" Maximum="100"
+                                                               Value="{Binding DS3PressureFullPercent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Increment="1" ToolTip="{lex:Loc Strings:DS3PressureFullHelp}"/>
+                                        </Grid>
+                                        <TextBlock Text="{lex:Loc Strings:DS3PressureExample}" Style="{DynamicResource BridgeSectionDescriptionStyle}" TextWrapping="Wrap" Margin="0,16,0,0"/>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>

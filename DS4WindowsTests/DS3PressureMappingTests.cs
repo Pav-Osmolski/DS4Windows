@@ -80,8 +80,12 @@ public sealed class DS3PressureMappingTests
     }
 
     [TestMethod]
-    public void RealProfileMappingsUsePressureAndReleaseWithoutChangingDigitalActions()
+    [DataRow(0, 100)]
+    [DataRow(10, 80)]
+    [DataRow(40, 41)]
+    public void RealProfileMappingsUsePressureAndReleaseWithoutChangingDigitalActions(int startPercent, int fullPercent)
     {
+        Global.store.ds3PressureSettings[Slot].SetRange(startPercent, fullPercent);
         Global.store.GetDS4CSetting(Slot, DS4Controls.Cross).UpdateSettings(false, X360Controls.RT, string.Empty, DS4KeyType.None);
         Global.store.GetDS4CSetting(Slot, DS4Controls.Square).UpdateSettings(false, X360Controls.LT, string.Empty, DS4KeyType.None);
         Global.store.GetDS4CSetting(Slot, DS4Controls.DpadUp).UpdateSettings(false, X360Controls.LYNeg, string.Empty, DS4KeyType.None);
@@ -92,6 +96,7 @@ public sealed class DS3PressureMappingTests
         DS4State source = device.getCurrentStateRef();
         foreach (byte pressure in new byte[] { 0, 1, 31, 64, 127, 128, 191, 254, 255, 128, 1, 0 })
         {
+            byte expected = (byte)Math.Clamp(Math.Round((pressure * 100d - startPercent * 255d) / (fullPercent - startPercent), MidpointRounding.AwayFromZero), 0, 255);
             var report = DS3PressureTests.Report(pressure);
             report[19] = report[20] = 0; // native L2/R2 must not supply the mapped trigger values
             report[17] = report[22] = 0; // down and R1 must not compete with the negative directions
@@ -99,28 +104,28 @@ public sealed class DS3PressureMappingTests
             source.elapsedTime = .004;
             var mapped = new DS4State(); source.CopyExtrasTo(mapped);
             Mapping.MapCustom(Slot, source, mapped, new DS4StateExposed(source), mouse, service);
-            Assert.AreEqual(pressure, mapped.R2, "Cross -> right trigger");
-            Assert.AreEqual(pressure, mapped.L2, "Square -> left trigger");
+            Assert.AreEqual(expected, mapped.R2, "Cross -> right trigger");
+            Assert.AreEqual(expected, mapped.L2, "Square -> left trigger");
             byte[] xbox360 = ViiperStatePacketBuilder.Build(ViiperVirtualDeviceType.Xbox360, mapped, Slot);
-            Assert.AreEqual(pressure, xbox360[4]); Assert.AreEqual(pressure, xbox360[5]);
+            Assert.AreEqual(expected, xbox360[4]); Assert.AreEqual(expected, xbox360[5]);
             byte[] xboxOne = ViiperStatePacketBuilder.Build(ViiperVirtualDeviceType.XboxOne, mapped, Slot);
-            ushort expanded = (ushort)((pressure * 1023u + 127u) / 255u);
+            ushort expanded = (ushort)((expected * 1023u + 127u) / 255u);
             Assert.AreEqual(expanded, BinaryPrimitives.ReadUInt16LittleEndian(xboxOne.AsSpan(8, 2)));
             Assert.AreEqual(expanded, BinaryPrimitives.ReadUInt16LittleEndian(xboxOne.AsSpan(10, 2)));
             byte[] ds4 = ViiperStatePacketBuilder.Build(ViiperVirtualDeviceType.DualShock4, mapped, Slot);
-            Assert.AreEqual(pressure, ds4[7]); Assert.AreEqual(pressure, ds4[8]);
+            Assert.AreEqual(expected, ds4[7]); Assert.AreEqual(expected, ds4[8]);
             foreach (var type in new[] { ViiperVirtualDeviceType.DualSense, ViiperVirtualDeviceType.DualSenseEdge })
             {
                 byte[] sony = ViiperStatePacketBuilder.Build(type, mapped, Slot);
-                Assert.AreEqual(pressure, sony[9]); Assert.AreEqual(pressure, sony[10]);
+                Assert.AreEqual(expected, sony[9]); Assert.AreEqual(expected, sony[10]);
             }
             // Switch 2 has digital triggers, but its stick directions retain partial pressure.
             var nintendo = ViiperStatePacketBuilder.BuildSwitch2State(mapped, Slot);
-            Assert.AreEqual((ushort)Math.Round(2048d - pressure * (2048d / 255d), MidpointRounding.AwayFromZero),
+            Assert.AreEqual((ushort)Math.Round(2048d - expected * (2048d / 255d), MidpointRounding.AwayFromZero),
                 nintendo.LeftStickY);
-            if (pressure > 0 && pressure < 255) Assert.IsTrue(nintendo.LeftStickY > 0 && nintendo.LeftStickY < 2048);
-            Assert.AreEqual(128d - pressure * (128d / 255d), mapped.LYAxis.ProfileCoordinate, 1e-10, "D-pad -> left stick");
-            Assert.AreEqual(128d - pressure * (128d / 255d), mapped.RXAxis.ProfileCoordinate, 1e-10, "L1 -> right stick");
+            if (expected > 0 && expected < 255) Assert.IsTrue(nintendo.LeftStickY > 0 && nintendo.LeftStickY < 2048);
+            Assert.AreEqual(128d - expected * (128d / 255d), mapped.LYAxis.ProfileCoordinate, 1e-10, "D-pad -> left stick");
+            Assert.AreEqual(128d - expected * (128d / 255d), mapped.RXAxis.ProfileCoordinate, 1e-10, "L1 -> right stick");
             Assert.AreEqual(pressure > 0, mapped.Circle, "Triangle -> B remains an ordinary digital action");
             Assert.IsFalse(mapped.Cross || mapped.Square || mapped.Triangle || mapped.L1, "Custom mappings must still remove their original default buttons.");
         }
@@ -129,6 +134,7 @@ public sealed class DS3PressureMappingTests
     [TestMethod]
     public void PressureChangesDoNotPulseOrScaleKeyboardAssignments()
     {
+        Global.store.ds3PressureSettings[Slot].SetRange(10, 80);
         var keySetting = Global.store.GetDS4CSetting(Slot, DS4Controls.Cross);
         keySetting.UpdateSettings(false, 0x4D, string.Empty, DS4KeyType.None);
         keySetting.action.actionAlias = 0x4D; // populated by profile loading for the selected keyboard backend
@@ -145,6 +151,50 @@ public sealed class DS3PressureMappingTests
         Assert.AreEqual(0, handler.Keys.Count, "Release must not leave a stuck key.");
         Assert.AreEqual(1, handler.KeyPresses, "Changing pressure must not re-press the held key.");
         Assert.AreEqual(1, handler.KeyReleases);
+    }
+
+    [TestMethod]
+    public void RangeDoesNotScaleNativeTriggersOrDigitalControllerFallback()
+    {
+        Global.store.ds3PressureSettings[Slot].SetRange(10, 80);
+        var input = new DS4State { Cross = true, L2 = 64, R2 = 128 };
+        var fields = new DS4StateFieldMapping(input, new DS4StateExposed(input), mouse);
+        Assert.AreEqual((byte)255, Mapping.GetByteMapping(Slot, DS4Controls.Cross, input, new DS4StateExposed(input), mouse, fields, true));
+        Assert.AreEqual((byte)64, Mapping.GetByteMapping(Slot, DS4Controls.L2, input, new DS4StateExposed(input), mouse, fields, true));
+        Assert.AreEqual((byte)128, Mapping.GetByteMapping(Slot, DS4Controls.R2, input, new DS4StateExposed(input), mouse, fields, true));
+        Assert.AreEqual(0d, Mapping.GetXYAxisMapping(Slot, DS4Controls.Cross, input, new DS4StateExposed(input), mouse, fields).ProfileCoordinate);
+    }
+
+    [TestMethod]
+    public void MouseMagnitudeStaysRawAndConsumedPressureCannotBeResurrected()
+    {
+        Global.store.ds3PressureSettings[Slot].SetRange(10, 80);
+        var input = new DS4State();
+        Assert.IsTrue(DS3InputReportParser.TryReadControls(DS3PressureTests.Report(64), 1, input));
+        var fields = new DS4StateFieldMapping(input, new DS4StateExposed(input), mouse);
+        Assert.AreEqual((byte)64, Mapping.GetByteMapping(Slot, DS4Controls.Cross, input, new DS4StateExposed(input), mouse, fields));
+        fields.buttons[(int)DS4Controls.Cross] = false;
+        Assert.AreEqual((byte)0, Mapping.GetByteMapping(Slot, DS4Controls.Cross, input, new DS4StateExposed(input), mouse, fields, true));
+    }
+
+    [TestMethod]
+    public void EveryPressureButtonUsesTheRangeForTriggersAndBothStickDirections()
+    {
+        Global.store.ds3PressureSettings[Slot].SetRange(10, 80);
+        var input = new DS4State();
+        var fields = new DS4StateFieldMapping();
+        for (int raw = 0; raw <= 255; raw++)
+        {
+            Assert.IsTrue(DS3InputReportParser.TryReadControls(DS3PressureTests.Report((byte)raw), 1, input));
+            var exposed = new DS4StateExposed(input); fields.PopulateFieldMapping(input, exposed, mouse);
+            byte expected = (byte)Math.Clamp(Math.Round((raw * 100d - 2550) / 70d, MidpointRounding.AwayFromZero), 0, 255);
+            foreach (DS4Controls control in DS3PressureTests.Controls)
+            {
+                Assert.AreEqual(expected, Mapping.GetByteMapping(Slot, control, input, exposed, mouse, fields, true));
+                Assert.AreEqual(128d - expected * (128d / 255d), Mapping.GetXYAxisMapping(Slot, control, input, exposed, mouse, fields).ProfileCoordinate, 1e-10);
+                Assert.AreEqual(128d + expected * (127d / 255d), Mapping.GetXYAxisMapping(Slot, control, input, exposed, mouse, fields, true).ProfileCoordinate, 1e-10);
+            }
+        }
     }
 
     private sealed class NoHidDevice : DS4Device

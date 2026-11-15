@@ -2102,6 +2102,35 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             }
         }
 
+        public int DS3PressureStartPercent
+        {
+            get => Global.store.ds3PressureSettings[device].StartPercent;
+            set
+            {
+                var range = Global.store.ds3PressureSettings[device];
+                range.SetRange(Math.Clamp(value, 0, range.FullPercent - 1), range.FullPercent);
+                DS3PressureStartPercentChanged?.Invoke(this, EventArgs.Empty);
+                DS3PressureFullMinimumChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler DS3PressureStartPercentChanged;
+        public int DS3PressureFullMinimum => DS3PressureStartPercent + 1;
+        public event EventHandler DS3PressureFullMinimumChanged;
+        public int DS3PressureFullPercent
+        {
+            get => Global.store.ds3PressureSettings[device].FullPercent;
+            set
+            {
+                var range = Global.store.ds3PressureSettings[device];
+                range.SetRange(range.StartPercent, value);
+                DS3PressureFullPercentChanged?.Invoke(this, EventArgs.Empty);
+                DS3PressureStartMaximumChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+        public event EventHandler DS3PressureFullPercentChanged;
+        public int DS3PressureStartMaximum => DS3PressureFullPercent - 1;
+        public event EventHandler DS3PressureStartMaximumChanged;
+
         public double L2DeadZone
         {
             get => Global.L2ModInfo[device].deadZone / 255.0;
