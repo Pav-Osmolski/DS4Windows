@@ -6902,4 +6902,25 @@ Backup : </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Mở hồ sơ tay cầm đang dùng trong Trình chỉnh sửa hồ sơ đầy đủ.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Nút nhạy theo lực nhấn</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Phạm vi chung cho các nút mặt trước, D-pad, L1 và R1 của DualShock 3 khi gán cho cò analog hoặc hướng cần. Các gán nút kỹ thuật số, bàn phím và chuột không thay đổi. Chỉnh L2/R2 vật lý trong thẻ Cò.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Vùng chết (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Lực nhấn tối đa tại (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Lực nhấn bằng hoặc thấp hơn giá trị này cho đầu ra analog bằng không. Phải thấp hơn điểm lực nhấn tối đa.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Lực nhấn bằng hoặc cao hơn giá trị này cho đầu ra tối đa. Lực giữa hai điểm được chuyển đổi tuyến tính.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Ví dụ: vùng chết 10% và điểm tối đa 80% chuyển lực nhấn thực 10–80% thành đầu ra 0–100%. Thả nút luôn đưa trục về vị trí trung tính.</value>
+  </data>
 </root>

@@ -29,16 +29,20 @@ public sealed class AxisConfigScrollingTests
                 .Where(button => button.GroupName == "ProfileAxisCategory"))
             {
                 category.IsChecked = true;
-                Layout(root, width, 360);
+                double height = 360;
+                Layout(root, width, height);
                 ScrollViewer page = Visuals(root).OfType<ScrollViewer>()
                     .Single(view => view.Visibility == Visibility.Visible &&
                         System.Windows.Data.BindingOperations.GetBinding(view, UIElement.VisibilityProperty) != null);
-                Assert.IsTrue(page.ViewportHeight > 0 && page.ViewportHeight < 360,
+                // Compact categories can fit at this height; shrink the viewport
+                // to exercise real overflow rather than requiring needless scrolling.
+                if (page.ScrollableHeight == 0) { height = 220; Layout(root, width, height); }
+                Assert.IsTrue(page.ViewportHeight > 0 && page.ViewportHeight < height,
                     $"{category.Content}: the category header must leave a finite viewport.");
                 Assert.IsTrue(page.ScrollableHeight > 0,
                     $"{category.Content}: overflowing settings must scroll instead of extending below the page.");
                 page.ScrollToEnd();
-                Layout(root, width, 360);
+                Layout(root, width, height);
                 Assert.IsTrue(page.VerticalOffset > 0);
                 Assert.AreEqual(page.ScrollableHeight, page.VerticalOffset, 1d,
                     $"{category.Content}: the last settings must be reachable.");

@@ -6922,4 +6922,25 @@ Untuk backup: </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Buka profil pengontrol aktif di Editor Profil lengkap.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Tombol peka tekanan</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Rentang bersama untuk tombol muka, D-pad, L1 dan R1 DualShock 3 yang dipetakan ke pemicu analog atau arah stik. Pemetaan tombol digital, papan ketik dan mouse tidak berubah. Atur L2/R2 fisik pada tab Pemicu.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Zona mati (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Tekanan penuh pada (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Tekanan tombol pada atau di bawah nilai ini menghasilkan keluaran analog nol. Harus lebih rendah dari titik tekanan penuh.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Tekanan tombol pada atau di atas nilai ini menghasilkan keluaran penuh. Tekanan di antara kedua titik diskalakan secara linear.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Contoh: zona mati 10% dan tekanan penuh pada 80% memetakan tekanan fisik 10–80% ke keluaran 0–100%. Melepas tombol selalu mengembalikan sumbu ke netral.</value>
+  </data>
 </root>

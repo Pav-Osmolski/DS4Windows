@@ -6938,4 +6938,25 @@
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Открыть активный профиль контроллера в полном редакторе профилей.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Чувствительные к нажатию кнопки</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Общий диапазон для лицевых кнопок, крестовины, L1 и R1 DualShock 3, назначенных на аналоговые курки или направления стиков. Цифровые назначения кнопок, клавиатуры и мыши не меняются. Физические L2/R2 настраиваются на вкладке «Курки».</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Мёртвая зона (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Полное нажатие при (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Нажатие на этом уровне или ниже даёт нулевой аналоговый выход. Значение должно быть ниже точки полного нажатия.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Нажатие на этом уровне или выше даёт полный выход. Между двумя точками давление масштабируется линейно.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Пример: мёртвая зона 10% и полное нажатие при 80% преобразуют физическое нажатие 10–80% в выход 0–100%. Отпускание кнопки всегда возвращает ось в нейтральное положение.</value>
+  </data>
 </root>

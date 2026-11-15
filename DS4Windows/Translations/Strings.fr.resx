@@ -6924,4 +6924,25 @@ Le backup : </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Ouvrir le profil actif de la manette dans l’éditeur de profils complet.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Boutons sensibles à la pression</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Plage commune aux boutons de façade, à la croix directionnelle, L1 et R1 de la DualShock 3 affectés à des gâchettes analogiques ou directions de stick. Les affectations numériques, clavier et souris restent inchangées. Réglez les L2/R2 physiques dans Gâchettes.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Zone morte (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Pression maximale à (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Une pression inférieure ou égale à cette valeur produit une sortie analogique nulle. Elle doit être inférieure au seuil de pression maximale.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Une pression supérieure ou égale à cette valeur produit la sortie maximale. Entre les deux seuils, la pression est mise à l’échelle linéairement.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Exemple : une zone morte de 10% et une pression maximale à 80% convertissent une pression physique de 10–80% en sortie de 0–100%. Relâcher le bouton ramène toujours l’axe au neutre.</value>
+  </data>
 </root>

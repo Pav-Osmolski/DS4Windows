@@ -6926,4 +6926,25 @@ Example: whyme_DS4Windows</value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Ανοίξτε το ενεργό προφίλ χειριστηρίου στον πλήρη επεξεργαστή προφίλ.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Κουμπιά ευαίσθητα στην πίεση</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Κοινό εύρος για τα κύρια κουμπιά, το D-pad, L1 και R1 του DualShock 3 όταν αντιστοιχίζονται σε αναλογικές σκανδάλες ή κατευθύνσεις μοχλού. Οι ψηφιακές αντιστοιχίσεις κουμπιών, πλήκτρων και ποντικιού δεν αλλάζουν. Ρυθμίστε τα φυσικά L2/R2 στην καρτέλα Σκανδάλες.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Νεκρή ζώνη (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Πλήρης πίεση στο (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Πίεση ίση ή μικρότερη από αυτήν την τιμή δίνει μηδενική αναλογική έξοδο. Πρέπει να είναι μικρότερη από το σημείο πλήρους πίεσης.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Πίεση ίση ή μεγαλύτερη από αυτήν την τιμή δίνει πλήρη έξοδο. Μεταξύ των δύο σημείων η κλιμάκωση είναι γραμμική.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Παράδειγμα: νεκρή ζώνη 10% και πλήρης πίεση στο 80% μετατρέπουν φυσική πίεση 10–80% σε έξοδο 0–100%. Η απελευθέρωση επαναφέρει πάντα τον άξονα στην ουδέτερη θέση.</value>
+  </data>
 </root>

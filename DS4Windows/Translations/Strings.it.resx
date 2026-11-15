@@ -6898,4 +6898,25 @@ Il backup: </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Apri il profilo attivo del controller nell’editor dei profili completo.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Pulsanti sensibili alla pressione</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Intervallo comune per i pulsanti frontali, la croce direzionale, L1 e R1 del DualShock 3 assegnati a grilletti analogici o direzioni delle levette. Le assegnazioni digitali, della tastiera e del mouse non cambiano. Regola L2/R2 fisici nella scheda Grilletti.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Zona morta (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Pressione massima al (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Una pressione pari o inferiore a questo valore produce un’uscita analogica nulla. Deve essere inferiore al punto di pressione massima.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Una pressione pari o superiore a questo valore produce l’uscita massima. Fra i due punti la pressione viene scalata linearmente.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Esempio: zona morta al 10% e pressione massima all’80% trasformano una pressione fisica del 10–80% in un’uscita dello 0–100%. Rilasciare il pulsante riporta sempre l’asse in posizione neutra.</value>
+  </data>
 </root>

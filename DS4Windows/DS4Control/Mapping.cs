@@ -3356,7 +3356,7 @@ namespace DS4Windows
                                 ResolveControlToXInputTriggerValue(in tempMap,
                                     axisZero) :
                                 GetByteMapping(device, tempMap.ds4input,
-                                    cState, eState, tp, fieldMapping);
+                                    cState, eState, tp, fieldMapping, applyButtonPressureRange: true);
                             if (axisMapping != axisZero)
                                 outputfieldMapping.triggers[tempOutControl] = axisMapping;
                         }
@@ -6863,7 +6863,7 @@ namespace DS4Windows
         /// <param name="fieldMap">DS4StateFieldMapping instance for current MapCustom run</param>
         /// <returns></returns>
         internal static byte GetByteMapping(int device, DS4Controls control, DS4State cState, DS4StateExposed eState, Mouse tp,
-            DS4StateFieldMapping fieldMap)
+            DS4StateFieldMapping fieldMap, bool applyButtonPressureRange = false)
         {
             byte result = 0;
 
@@ -6872,6 +6872,8 @@ namespace DS4Windows
             if (controlType == DS4StateFieldMapping.ControlType.Button)
             {
                 result = fieldMap.GetButtonMagnitude(control);
+                if (applyButtonPressureRange && fieldMap.TryGetButtonPressure(control, out byte pressure))
+                    result = Global.store.ds3PressureSettings[device].Map(pressure);
             }
             else if (controlType == DS4StateFieldMapping.ControlType.AxisDir)
             {
@@ -7337,6 +7339,7 @@ namespace DS4Windows
             {
                 if (fieldMap.TryGetButtonPressure(control, out byte pressure))
                 {
+                    pressure = Global.store.ds3PressureSettings[device].Map(pressure);
                     double coordinate = alt ? 128.0 + pressure * (127.0 / 255.0) :
                         128.0 - pressure * (128.0 / 255.0);
                     DS4MappedStickAxis.TryFromProfileCoordinate(coordinate, out var pressureAxis);

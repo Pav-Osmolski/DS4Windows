@@ -6930,4 +6930,25 @@ De backup: </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Open het actieve controllerprofiel in de volledige profieleditor.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Drukgevoelige knoppen</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Gedeeld bereik voor de actieknoppen, D-pad, L1 en R1 van de DualShock 3 bij toewijzing aan analoge triggers of stickrichtingen. Digitale knop-, toetsenbord- en muistoewijzingen blijven ongewijzigd. Stel fysieke L2/R2 in op het tabblad Triggers.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Dode zone (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Volledige druk bij (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Knopdruk op of onder deze waarde geeft geen analoge uitvoer. De waarde moet lager zijn dan het punt voor volledige druk.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Knopdruk op of boven deze waarde geeft volledige uitvoer. Tussen beide punten wordt de druk lineair geschaald.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Voorbeeld: een dode zone van 10% en volledige druk bij 80% zetten 10–80% fysieke druk om naar 0–100% uitvoer. Loslaten zet de as altijd terug op neutraal.</value>
+  </data>
 </root>

@@ -6924,4 +6924,25 @@ Sokongan : </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Buka profil pengawal aktif dalam Editor Profil penuh.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Butang sensitif tekanan</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Julat bersama untuk butang muka, D-pad, L1 dan R1 DualShock 3 yang dipetakan kepada picu analog atau arah kayu. Pemetaan butang digital, papan kekunci dan tetikus tidak berubah. Laraskan L2/R2 fizikal pada tab Picu.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Zon mati (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Tekanan penuh pada (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Tekanan butang pada atau di bawah nilai ini menghasilkan output analog sifar. Nilainya mesti lebih rendah daripada titik tekanan penuh.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Tekanan butang pada atau di atas nilai ini menghasilkan output penuh. Tekanan antara kedua-dua titik diskalakan secara linear.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Contoh: zon mati 10% dan tekanan penuh pada 80% memetakan tekanan fizikal 10–80% kepada output 0–100%. Melepaskan butang sentiasa mengembalikan paksi ke neutral.</value>
+  </data>
 </root>

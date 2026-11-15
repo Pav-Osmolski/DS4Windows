@@ -6900,4 +6900,25 @@ och backup: </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Öppna handkontrollens aktiva profil i den fullständiga profilredigeraren.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Tryckkänsliga knappar</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Gemensamt intervall för DualShock 3:s frontknappar, styrkors, L1 och R1 som tilldelats analoga avtryckare eller spakriktningar. Digitala knapp-, tangentbords- och mustilldelningar ändras inte. Fysiska L2/R2 ställs in på fliken Avtryckare.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Dödzon (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Fullt tryck vid (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Knapptryck på eller under detta värde ger noll analog utmatning. Värdet måste vara lägre än punkten för fullt tryck.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Knapptryck på eller över detta värde ger full utmatning. Trycket mellan de två punkterna skalas linjärt.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Exempel: 10% dödzon och fullt tryck vid 80% omvandlar 10–80% fysiskt tryck till 0–100% utmatning. När knappen släpps återgår axeln alltid till neutralläge.</value>
+  </data>
 </root>

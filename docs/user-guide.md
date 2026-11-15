@@ -89,8 +89,15 @@ triggers. Ordinary button, keyboard and macro assignments remain on/off actions.
    an analogue target. For example, map **Cross to R2 / right trigger** for
    acceleration and **Square to L2 / left trigger** for braking. D-pad directions
    can also map to stick directions for pressure-sensitive steering.
-3. Save the profile and test gradual presses in the game or a controller tester.
-   A light press produces a partial value; releasing the button returns it to zero.
+3. Under **Axis Config > Pressure-sensitive buttons**, set **Dead zone (%)** and
+   **Full pressure at (%)** if needed. The shared range applies to face buttons,
+   D-pad, L1 and R1 mapped to analogue axes. For example, **10** and **80** ignore
+   the first 10% of pressure, scale 10–80% to 0–100% output, and keep full output
+   above 80%. The default **0–100%** preserves the original response. The full-pressure
+   point must be above the dead zone. Use **Triggers** for physical L2/R2 settings.
+4. Save the profile and test gradual presses in the game or a controller tester.
+   Releasing the button returns the axis to neutral. Digital button, keyboard,
+   mouse and macro assignments keep their existing behaviour.
 
 Use an emulated controller with analogue triggers, such as Xbox 360, Xbox One,
 DualShock 4 or DualSense, for acceleration/braking. Switch 2 Pro has digital

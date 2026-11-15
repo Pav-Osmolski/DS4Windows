@@ -6900,4 +6900,25 @@ El backup: </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Abrir el perfil activo del mando en el editor de perfiles completo.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Botones sensibles a la presión</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Rango común para los botones frontales, la cruceta, L1 y R1 del DualShock 3 asignados a gatillos analógicos o direcciones de palanca. No cambia las asignaciones digitales de botones, teclado ni ratón. Ajusta los L2/R2 físicos en Gatillos.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Zona muerta (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Presión máxima al (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Una presión igual o inferior a este valor produce una salida analógica nula. Debe ser menor que el punto de presión máxima.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Una presión igual o superior a este valor produce la salida máxima. Entre ambos puntos la presión se escala linealmente.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Ejemplo: una zona muerta del 10% y presión máxima al 80% convierten una presión física del 10–80% en una salida del 0–100%. Soltar el botón siempre devuelve el eje a neutral.</value>
+  </data>
 </root>

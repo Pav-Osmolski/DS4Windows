@@ -6897,4 +6897,25 @@
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Відкрити активний профіль контролера в повному редакторі профілів.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Кнопки, чутливі до сили натискання</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Спільний діапазон для лицьових кнопок, хрестовини, L1 і R1 DualShock 3, призначених на аналогові тригери або напрямки стіків. Цифрові призначення кнопок, клавіатури й миші не змінюються. Фізичні L2/R2 налаштовуються на вкладці «Тригери».</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Мертва зона (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Повне натискання при (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Натискання на цьому рівні або нижче дає нульовий аналоговий вихід. Значення має бути нижчим за точку повного натискання.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Натискання на цьому рівні або вище дає повний вихід. Між двома точками тиск масштабується лінійно.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Приклад: мертва зона 10% і повне натискання при 80% перетворюють фізичне натискання 10–80% на вихід 0–100%. Відпускання кнопки завжди повертає вісь у нейтральне положення.</value>
+  </data>
 </root>

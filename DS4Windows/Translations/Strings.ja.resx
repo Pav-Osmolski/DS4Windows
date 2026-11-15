@@ -6901,4 +6901,25 @@ Backup : </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>使用中のコントローラープロファイルを完全なプロファイルエディターで開きます。</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>感圧ボタン</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>DualShock 3のフェイスボタン、方向キー、L1、R1をアナログトリガーやスティック方向に割り当てた場合の共通範囲です。デジタルボタン、キー、マウスの割り当ては変わりません。物理L2/R2はトリガータブで調整します。</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>デッドゾーン (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>最大出力になる圧力 (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>この値以下のボタン圧力ではアナログ出力がゼロになります。最大出力の圧力より低く設定してください。</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>この値以上のボタン圧力で最大出力になります。2点間の圧力は線形に変換されます。</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>例：デッドゾーン10%、最大出力の圧力80%の場合、実際の圧力10～80%が出力0～100%に変換されます。ボタンを離すと軸は必ずニュートラルに戻ります。</value>
+  </data>
 </root>

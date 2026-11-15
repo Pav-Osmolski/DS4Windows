@@ -6901,4 +6901,25 @@ i backup: </value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Otwórz aktywny profil kontrolera w pełnym edytorze profili.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Przyciski czułe na nacisk</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Wspólny zakres dla przycisków głównych, krzyżaka, L1 i R1 kontrolera DualShock 3 przypisanych do analogowych spustów lub kierunków drążków. Cyfrowe przypisania przycisków, klawiatury i myszy pozostają bez zmian. Fizyczne L2/R2 ustawisz na karcie Spusty.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Martwa strefa (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Pełny nacisk przy (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Nacisk równy tej wartości lub niższy daje zerowy sygnał analogowy. Wartość musi być niższa od progu pełnego nacisku.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Nacisk równy tej wartości lub wyższy daje pełny sygnał. Pomiędzy progami nacisk jest skalowany liniowo.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Przykład: martwa strefa 10% i pełny nacisk przy 80% przekształcają fizyczny nacisk 10–80% w sygnał 0–100%. Zwolnienie przycisku zawsze przywraca neutralne położenie osi.</value>
+  </data>
 </root>

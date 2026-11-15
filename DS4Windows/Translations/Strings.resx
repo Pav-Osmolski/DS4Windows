@@ -8606,4 +8606,25 @@ X axis: {0}, Y axis: {1}</value>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Open the active controller profile in the full Profile Editor.</value>
   </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Pressure-sensitive buttons</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Shared range for DualShock 3 face buttons, D-pad, L1 and R1 mapped to analogue triggers or stick directions. Digital button, key and mouse assignments keep their existing behaviour. Use the Triggers tab for the physical L2 and R2 triggers.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Dead zone (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Full pressure at (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Physical button pressure at or below this value produces zero analogue output. Must be lower than the full-pressure point.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Physical button pressure at or above this value produces full analogue output. Pressure between the two points is scaled linearly.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Example: a 10% dead zone and an 80% full-pressure point map 10–80% physical pressure to 0–100% output. Releasing the button always returns the axis to neutral.</value>
+  </data>
 </root>
