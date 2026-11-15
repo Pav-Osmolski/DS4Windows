@@ -195,9 +195,10 @@ namespace DS4WinWPF.DS4Forms
         private void ControllerStatusTitle_Align(object sender, RoutedEventArgs e)
         {
             if (sender is not TextBlock title || title.ActualHeight <= 0) return;
-            // Centre the visible glyphs, rather than Segoe UI's asymmetric line box.
-            // Recalculate for each status/localisation, including font fallback and DPI.
-            var text = new FormattedText(title.Text ?? string.Empty, CultureInfo.CurrentUICulture,
+            // Use one cap-height reference for every label. Centring each word's
+            // outline lifts labels such as Ready because its y has a descender.
+            // A shared baseline lets descenders extend naturally below the cap band.
+            var text = new FormattedText("H", CultureInfo.CurrentUICulture,
                 title.FlowDirection, new Typeface(title.FontFamily, title.FontStyle, title.FontWeight, title.FontStretch),
                 title.FontSize, title.Foreground, VisualTreeHelper.GetDpi(title).PixelsPerDip);
             Rect ink = text.BuildGeometry(new Point()).Bounds;

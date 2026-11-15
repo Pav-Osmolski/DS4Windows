@@ -224,7 +224,7 @@ namespace DS4WindowsTests
                     failure = ex;
                 }
             };
-            // This matrix constructs many editor pages and exports 189 PNGs.
+            // This matrix constructs many editor pages and exports 321 PNGs.
             // Keep a bounded deadline without imposing a single-interaction
             // budget on the entire render/export workload.
             HeadlessWpfDispatcher.Invoke(thread, timeout: TimeSpan.FromSeconds(90));
@@ -233,7 +233,7 @@ namespace DS4WindowsTests
                 Assert.Fail(failure.ToString());
             }
             HeadlessWpfDispatcher.Invoke(ThemeConsistencyValidation.ValidateAudioHapticsTopEdge);
-            Assert.AreEqual(189, renderedFiles.Count);
+            Assert.AreEqual(321, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

@@ -21,7 +21,7 @@ when it appears below the toolbar and reclaim that row. **Show Windows audio out
 quick-control sections are unticked; your heading preference is preserved.
 Overview remembers these choices separately from your controller profiles.
 
-The controller status badge and battery sit on the same line. Select the status
+The controller status badge and battery sit on the same line. The battery percentage reserves space for `100%+`, so changing digit counts or charging state keeps the badge and battery icon in place. Status labels share one baseline, including labels with descending letters such as Ready. Select the status
 badge to read the full status message in a popover; messages do not increase the
 controller card height. Select it again, press Escape, or click outside to close.
 The badge background highlights on hover; the arrow keeps its status colour and rotates when opened, following Windows’ animation setting.

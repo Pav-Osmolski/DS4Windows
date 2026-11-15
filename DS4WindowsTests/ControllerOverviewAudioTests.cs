@@ -201,6 +201,7 @@ public sealed class ControllerOverviewAudioTests
                 statusHost.UpdateLayout();
                 Rect readyCardBounds = StatusBounds(summaryCard);
                 Rect readyToolbarBounds = StatusBounds(toolbar);
+                ValidateStatusLabelsAndBattery(statusOverview, protectedController, name, resultsDirectory, renderedFiles);
                 var attentionModel = Model(protectedController);
                 string attentionDetail = "Enable this controller's DS4Windows Audio playback device in Windows Sound to restore game haptics. Your headphones can remain the default output. " + new string('x', 1200);
                 typeof(MainWindowsViewModel).GetField("selectedControllerStartupStatus", BindingFlags.Instance | BindingFlags.NonPublic)!
@@ -219,26 +220,7 @@ public sealed class ControllerOverviewAudioTests
                     Assert.AreEqual(statusCentre, StatusBounds(part).Top + part.ActualHeight / 2, 0.1, "Centre the badge text, dot, arrow and battery.");
                 Assert.IsTrue(StatusBounds(batteryRow).Left > StatusBounds(statusButton).Right, "Keep status and battery inline.");
                 Assert.AreEqual(26d, statusButton.ActualHeight, 0.1, "Leave 48 physical pixels inside the border at 200% scaling.");
-                // Check actual painted glyphs, not the font line-box bounds.
-                var badgeImage = new RenderTargetBitmap((int)Math.Ceiling(statusButton.ActualWidth), 26, 96, 96, PixelFormats.Pbgra32);
-                badgeImage.Render(statusButton);
-                byte[] pixels = new byte[badgeImage.PixelWidth * badgeImage.PixelHeight * 4];
-                badgeImage.CopyPixels(pixels, badgeImage.PixelWidth * 4, 0);
                 var textColour = ((SolidColorBrush)statusTitle.Foreground).Color;
-                int textLeft = (int)Math.Ceiling(statusTitle.TranslatePoint(new Point(), statusButton).X);
-                int textRight = Math.Min(badgeImage.PixelWidth, textLeft + (int)Math.Floor(statusTitle.ActualWidth));
-                var inkRows = new List<int>();
-                for (int y = 0; y < badgeImage.PixelHeight; y++)
-                    for (int x = textLeft; x < textRight; x++)
-                    {
-                        int i = (y * badgeImage.PixelWidth + x) * 4;
-                        if (pixels[i + 3] > 240 && Math.Abs(pixels[i] - textColour.B) < 16 &&
-                            Math.Abs(pixels[i + 1] - textColour.G) < 16 && Math.Abs(pixels[i + 2] - textColour.R) < 16)
-                            inkRows.Add(y);
-                    }
-                Assert.IsNotEmpty(inkRows, "The status label must be painted.");
-                Assert.AreEqual(13d, (inkRows.Min() + inkRows.Max() + 1) / 2d, 1.0,
-                    "Centre the visible text with the circle and arrow.");
                 // Exercise the hover states and verify the arrow retains its severity colour.
                 // The shared disclosure tests cover transition timing.
                 var hoverBadge = new System.Windows.Controls.Primitives.ToggleButton
@@ -609,6 +591,88 @@ public sealed class ControllerOverviewAudioTests
         throw new FileNotFoundException("Production Overview markup not found.");
     }
 
+    private static void ValidateStatusLabelsAndBattery(ControllerOverviewControl overview, PhysicalDevice device,
+        string theme, string directory, List<string> renderedFiles)
+    {
+        var model = (MainWindowsViewModel)overview.DataContext;
+        var title = (TextBlock)overview.FindName("controllerStartupTitle");
+        var badge = (FrameworkElement)overview.FindName("controllerStatusButton");
+        var card = (FrameworkElement)overview.FindName("overviewControllerCard");
+        var battery = (FrameworkElement)overview.FindName("overviewBatteryRow");
+        var batteryText = (TextBlock)overview.FindName("overviewBatteryText");
+        Rect Bounds(FrameworkElement e) => new(e.TranslatePoint(new Point(), overview), e.RenderSize);
+        void Flush()
+        {
+            overview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+            overview.UpdateLayout();
+        }
+        var statusField = typeof(MainWindowsViewModel).GetField("selectedControllerStartupStatus", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var notifyStatus = typeof(MainWindowsViewModel).GetMethod("RaiseControllerStartupStatusChanged", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var savedStatus = statusField.GetValue(model);
+        var labels = new[]
+        {
+            (ControllerStartupStage.Ready, "Ready"), (ControllerStartupStage.Attention, "Needs attention"),
+            (ControllerStartupStage.Disconnected, "Disconnected"), (ControllerStartupStage.Connecting, "Connecting"),
+            (ControllerStartupStage.Connected, "Connected"), (ControllerStartupStage.CreatingVirtualController, "Connected"),
+            (ControllerStartupStage.ArmingAdvancedHaptics, "Arming haptics"), (ControllerStartupStage.StartingSpeaker, "Starting speaker"),
+            (ControllerStartupStage.StartingMicrophone, "Starting microphone"), (ControllerStartupStage.StartingAudioHaptics, "Starting Audio Haptics"),
+            (ControllerStartupStage.ProfileRequired, "Select a profile")
+        };
+        Assert.AreEqual(Enum.GetValues<ControllerStartupStage>().Length, labels.Length, "Cover every runtime stage.");
+        double? baseline = null;
+        Rect originalCard = Bounds(card);
+        foreach (var (stage, label) in labels)
+        {
+            statusField.SetValue(model, new ControllerStartupStatus(stage, UiText.Get(label), "Status alignment test"));
+            notifyStatus.Invoke(model, null);
+            Flush();
+            double currentBaseline = title.TranslatePoint(new Point(0, title.BaselineOffset), badge).Y;
+            baseline ??= currentBaseline;
+            Assert.AreEqual(baseline.Value, currentBaseline, 0.05, $"Changing to {label} must preserve the baseline.");
+            Assert.AreEqual(originalCard, Bounds(card), $"Changing to {label} must not grow the card.");
+            var firstLetter = new FormattedText(title.Text[..1], System.Globalization.CultureInfo.CurrentUICulture,
+                title.FlowDirection, new Typeface(title.FontFamily, title.FontStyle, title.FontWeight, title.FontStretch),
+                title.FontSize, title.Foreground, 1);
+            foreach (int scale in new[] { 1, 2 })
+            {
+                int width = (int)Math.Ceiling(badge.ActualWidth * scale), height = (int)Math.Ceiling(badge.ActualHeight * scale);
+                var image = new RenderTargetBitmap(width, height, 96 * scale, 96 * scale, PixelFormats.Pbgra32);
+                image.Render(badge);
+                byte[] pixels = new byte[width * height * 4]; image.CopyPixels(pixels, width * 4, 0);
+                Color colour = ((SolidColorBrush)title.Foreground).Color;
+                int left = (int)Math.Ceiling(title.TranslatePoint(new Point(), badge).X * scale);
+                int right = Math.Min(width, left + (int)Math.Floor(firstLetter.Width * scale));
+                var rows = new List<int>();
+                for (int y = 0; y < height; y++)
+                    for (int x = left; x < right; x++)
+                    {
+                        int i = (y * width + x) * 4;
+                        if (pixels[i + 3] > 240 && Math.Abs(pixels[i] - colour.B) < 16 &&
+                            Math.Abs(pixels[i + 1] - colour.G) < 16 && Math.Abs(pixels[i + 2] - colour.R) < 16) rows.Add(y);
+                    }
+                Assert.IsNotEmpty(rows, label);
+                Assert.AreEqual(height / 2d, (rows.Min() + rows.Max() + 1) / 2d, scale,
+                    $"Centre the capital-letter band for {label}, {theme}, {scale * 100}% without lifting descenders.");
+                string path = Path.Combine(directory, $"status-label-{stage}-{theme}-{scale * 100}.png");
+                var png = new PngBitmapEncoder(); png.Frames.Add(BitmapFrame.Create(image));
+                using (var stream = File.Create(path)) png.Save(stream);
+                renderedFiles.Add(path);
+            }
+        }
+        statusField.SetValue(model, savedStatus); notifyStatus.Invoke(model, null); Flush();
+        Rect badgeBounds = Bounds(badge), batteryBounds = Bounds(battery), textBounds = Bounds(batteryText);
+        var batteryChanged = typeof(MainWindowsViewModel).GetField("SelectedControllerBatteryChanged", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        foreach (var (percent, charging) in new[] { (100, true), (99, true), (9, true), (0, false), (1, false), (10, false), (100, false), (100, true) })
+        {
+            device.SetBattery(percent, charging);
+            ((EventHandler)batteryChanged.GetValue(model))?.Invoke(model, EventArgs.Empty); Flush();
+            Assert.AreEqual($"{percent}%{(charging ? "+" : "")}", batteryText.Text);
+            Assert.AreEqual(badgeBounds, Bounds(badge), "Battery changes must not move the status badge.");
+            Assert.AreEqual(batteryBounds, Bounds(battery), "Battery icon and row must remain anchored.");
+            Assert.AreEqual(textBounds, Bounds(batteryText), "Reserve the same percentage area for every digit count and charging state.");
+        }
+    }
+
     private sealed class PhysicalDevice : DS4Device
     {
         internal PhysicalDevice(InputDeviceType type, ConnectionType connection, bool sony = false)
@@ -622,7 +686,7 @@ public sealed class ControllerOverviewAudioTests
                     { VendorID = 0x054C, ProductID = 0x0CE6 }));
             }
         }
-        internal void SetBattery(int percent) => battery = percent;
+        internal void SetBattery(int percent, bool isCharging = false) { battery = percent; charging = isCharging; }
         public override bool IsAlive() => true;
     }
 
