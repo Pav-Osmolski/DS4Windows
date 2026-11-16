@@ -18,6 +18,7 @@ that help maintain this fork.
 
 | Contributor | Contribution |
 | --- | --- |
+| [SundayMoments](https://github.com/SundayMoments) | [DS5 Bridge](https://github.com/SundayMoments/DS5_Bridge): Audio Haptics processing/settings, Trigger Lab settings/percentage mapping, process-loopback activation and the DualSense artwork adaptation. See [attribution and terms](DS5-BRIDGE-NOTICE.txt). |
 | [meiameiameia](https://github.com/meiameiameia) | Profile-save and rename safety, virtual-controller removal, Bluetooth disconnect and touchpad-click fixes. |
 | [petemess95](https://github.com/petemess95) | Reusing the profile XML serializer to reduce profile-switching overhead. |
 | [Cameron Beeley (anagnorisis2peripeteia)](https://github.com/anagnorisis2peripeteia) | OpenRGB and HidHide contributions credited upstream, plus settings, macro and profile-migration regression coverage. |

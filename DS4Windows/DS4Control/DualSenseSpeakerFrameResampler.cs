@@ -223,7 +223,7 @@ namespace DS4Windows
     }
 
     /// <summary>
-    /// DualSense direct-PCM route matching the validated implementation's signal stages while
+    /// DualSense direct-PCM route matching DS5 Bridge's signal stages while
     /// retaining DS4Windows' long-window source/controller clock correction.
     ///
     /// Stage one applies only the small dynamic clock ratio and always emits
@@ -382,7 +382,7 @@ namespace DS4Windows
             }
 
             preparedSourceFrames = 0;
-            // Match the validated implementation's feed-driven WDL stage with fixed storage. Its
+            // Match DS5 Bridge's feed-driven WDL stage with fixed storage. Its
             // nominal ratio is exactly 16:15, but retaining WDL's fractional
             // position and boundary frame also preserves its floating-point
             // continuity indefinitely without any Array.Resize calls.

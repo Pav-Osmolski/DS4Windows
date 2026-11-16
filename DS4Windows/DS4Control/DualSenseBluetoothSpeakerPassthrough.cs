@@ -1200,7 +1200,7 @@ namespace DS4Windows
         }
 
         /// <summary>
-        /// Creates the exact proven MeasuredTransport DualSense speaker encoder. The
+        /// Creates the DualSense speaker encoder configuration compared against PadForge. The
         /// 480-sample input passed to Encode selects a 10 ms Opus frame; leaving
         /// complexity at Concentus' recommended default preserves music quality.
         /// </summary>
@@ -2607,7 +2607,7 @@ namespace DS4Windows
                         // next physical reports. Do not replace one of them
                         // with an invented zero frame just because the drift
                         // resampler is waiting for the next callback block.
-                        // CombinedReportReference only hands a paired report to L2CAP after
+                        // DS5Dongle only hands a paired report to L2CAP after
                         // the speaker queue contains the next two frames; when
                         // our Windows source is one fractional frame short,
                         // wait for that source edge instead of sleeping an

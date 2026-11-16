@@ -9,6 +9,11 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.74](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.74) - 2026-11-16
+
+- Restore DS5 Bridge attribution for inherited Audio Haptics processing/settings, Trigger Lab settings and percentage mapping, and process-loopback activation. Include the full AGPL v3 text and modification notice in the app and release packages, show both GPL/AGPL licences offline in About, and restore the DS5 Bridge artwork-adaptation credit. Thanks to [@up2urheadlights](https://github.com/up2urheadlights) and [@SundayMoments](https://github.com/SundayMoments) for [discussion #126](https://github.com/Pav-Osmolski/DS4Windows/discussions/126).
+- Restore the inherited DS5 Bridge speaker-stage and frontend-inspiration acknowledgements, plus PadForge encoder-configuration and DS5Dongle transport-reference credits. Acknowledge [@SundayMoments](https://github.com/SundayMoments), [@hifihedgehog](https://github.com/hifihedgehog), [@awalol](https://github.com/awalol), and [@AL2009man](https://github.com/AL2009man) for DS5 Bridge, PadForge, DS5Dongle and Gamepad Asset Pack respectively. The original artwork MIT notice remains intact; reference work is distinguished from confirmed source derivation. See [PR #134](https://github.com/Pav-Osmolski/DS4Windows/pull/134).
+
 ### [5.0.73](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.73) - 2026-11-15
 
 - Add a saved pressure range under **Profile Editor > Axis Config > Pressure-sensitive buttons** for DualShock 3 buttons mapped to analogue trigger or stick axes. Set a dead zone and the point that reaches full output, with linear scaling between them; existing profiles keep their original 0–100% response. Digital button/key/mouse behaviour and physical L2/R2 settings remain unchanged. Thanks to [@eVenent](https://github.com/eVenent) for [issue #131](https://github.com/Pav-Osmolski/DS4Windows/issues/131).

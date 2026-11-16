@@ -22,10 +22,10 @@
 		     a SustainedLowLatency lease in the process. -->
 		<ServerGarbageCollection>false</ServerGarbageCollection>
 		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
-		<AssemblyVersion>5.0.73.0</AssemblyVersion>
-		<FileVersion>5.0.73.0</FileVersion>
-		<Version>5.0.73</Version>
-		<InformationalVersion>5.0.73</InformationalVersion>
+		<AssemblyVersion>5.0.74.0</AssemblyVersion>
+		<FileVersion>5.0.74.0</FileVersion>
+		<Version>5.0.74</Version>
+		<InformationalVersion>5.0.74</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
@@ -36,7 +36,7 @@
 		<Authors>Pav-Osmolski and DS4Windows contributors</Authors>
 		<Company>Pav-Osmolski</Company>
 		<PackageProjectUrl>https://github.com/Pav-Osmolski/DS4Windows</PackageProjectUrl>
-		<PackageLicenseUrl>https://www.gnu.org/licenses/gpl-3.0.txt</PackageLicenseUrl>
+		<PackageLicenseExpression>GPL-3.0-or-later AND AGPL-3.0-only</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/Pav-Osmolski/DS4Windows</RepositoryUrl>
 	</PropertyGroup>
 
@@ -237,6 +237,31 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
+		<Content Include="..\COPYING">
+			<Link>COPYING</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Include="..\LICENSE.txt">
+			<Link>LICENSE.txt</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Include="..\NOTICE.txt">
+			<Link>NOTICE.txt</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Include="..\AGPL-3.0.txt">
+			<Link>AGPL-3.0.txt</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Include="..\DS5-BRIDGE-NOTICE.txt">
+			<Link>DS5-BRIDGE-NOTICE.txt</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 		<Content Include="Resources\ControllerArtwork.NOTICE.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -404,6 +429,8 @@
 		<Resource Include="Resources\Branding\*.png" />
 		<Resource Include="Resources\About\*.png" />
 		<EmbeddedResource Include="..\COPYING" LogicalName="DS4Windows.License.txt" />
+        <EmbeddedResource Include="..\AGPL-3.0.txt" LogicalName="DS4Windows.AgplLicense.txt" />
+        <EmbeddedResource Include="..\DS5-BRIDGE-NOTICE.txt" LogicalName="DS4Windows.DS5BridgeNotice.txt" />
 		<Resource Include="Resources\DS4 Config_white.png" />
 		<Resource Include="Resources\newprofile_white.png" />
 		<Resource Include="Resources\copy_white.png" />

@@ -435,6 +435,11 @@ jobs:
         $infoDirectory = Join-Path $records 'release-info'
         New-Item -ItemType Directory -Path $infoDirectory | Out-Null
         foreach ($name in $noticeNames) { Copy-Item -LiteralPath (Join-Path $publish "extras\$name") -Destination $infoDirectory }
+        # Application notices live at the package root; extras/LICENSE.txt is
+        # retained as the historical backend license entry.
+        foreach ($name in @('COPYING', 'NOTICE.txt', 'AGPL-3.0.txt', 'DS5-BRIDGE-NOTICE.txt')) {
+          Copy-Item -LiteralPath (Join-Path $publish $name) -Destination $infoDirectory
+        }
         $signing = if ($env:UNSIGNED_RELEASE -ceq 'true') { 'Unsigned release (no Authenticode signature)' } else { 'Required Authenticode signing verified' }
         $sourceUrl = "$env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
         @("DS4Windows release: $env:RELEASE_TAG", "Publisher repository: $env:GITHUB_REPOSITORY",
@@ -622,6 +627,11 @@ jobs:
         $infoDirectory = Join-Path $records 'release-info'
         New-Item -ItemType Directory -Path $infoDirectory | Out-Null
         foreach ($name in $noticeNames) { Copy-Item -LiteralPath (Join-Path $publish "extras\$name") -Destination $infoDirectory }
+        # Application notices live at the package root; extras/LICENSE.txt is
+        # retained as the historical backend license entry.
+        foreach ($name in @('COPYING', 'NOTICE.txt', 'AGPL-3.0.txt', 'DS5-BRIDGE-NOTICE.txt')) {
+          Copy-Item -LiteralPath (Join-Path $publish $name) -Destination $infoDirectory
+        }
         $signing = if ($env:UNSIGNED_RELEASE -ceq 'true') { 'Unsigned release (no Authenticode signature)' } else { 'Required Authenticode signing verified' }
         $sourceUrl = "$env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY"
         @("DS4Windows release: $env:RELEASE_TAG", "Publisher repository: $env:GITHUB_REPOSITORY",
@@ -764,6 +774,12 @@ jobs:
         $noticeNames = @('VIIPER-0.1.17-LICENSES.txt', 'VIIPER-0.1.17-PROVENANCE.txt',
           'VIIPER-0.1.17-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md',
           'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt', 'SOURCE-REVISIONS.txt')
+        # Historical receipts predate the additional application notices.
+        # If any new notice is recorded, require the complete new set.
+        $applicationNotices = @('COPYING', 'NOTICE.txt', 'AGPL-3.0.txt', 'DS5-BRIDGE-NOTICE.txt')
+        if ($null -ne $receipt.releaseInfo -and @($receipt.releaseInfo.files | Where-Object { $_.name -cin $applicationNotices }).Count -gt 0) {
+          $noticeNames += $applicationNotices
+        }
         if ($null -ne $receipt.releaseInfo) {
           $infoName = "DS4Windows-$($env:RELEASE_TAG)-RELEASE-INFO.zip"
           if ($receipt.releaseInfo.name -cne $infoName -or -not $seen.Contains($infoName) -or $seen.Count -ne 6 -or $release.assets.Count -ne 7) {

@@ -1,0 +1,51 @@
+DS5 Bridge attribution and license notice
+========================================
+
+This DS4Windows distribution incorporates modified code derived from
+DS5 Bridge by SundayMoments:
+https://github.com/SundayMoments/DS5_Bridge
+
+Copyright (C) 2026 SundayMoments (DS5 Bridge-derived code).
+Copyright (C) 2026 DS4Windows contributors (DS4Windows modifications).
+
+The DS5 Bridge-derived code is licensed under the GNU Affero General Public
+License version 3 only (AGPL-3.0-only). The full license is in AGPL-3.0.txt.
+It must not be described as GPL-only code. Existing DS4Windows copyright
+notices and the GPL license for its other code remain in effect.
+
+Affected source files:
+- DS4Windows/DS4Control/AudioHapticsProcessor.cs: adapted audio-to-haptics
+  filtering, envelope, gate, ramp, gain, response and soft-clipping logic.
+- DS4Windows/DS4Control/ProfileFeatureSettings.cs: Audio Haptics configuration
+  and Trigger Lab settings, defaults, ranges and presets.
+- DS4Windows/DS4Control/ProcessLoopbackAudioClient.cs: adapted Windows
+  process-loopback activation and COM interop implementation.
+- DS4Windows/DS4Control/TriggerLabEffectEncoder.cs: adapted Trigger Lab
+  percentage-to-strength, position and frequency mapping.
+
+These are modified versions, not unmodified upstream files. They were adapted
+and integrated into DS4Windows by the hbashton fork in July 2026 and further
+modified by DS4Windows contributors. Changes include profile persistence,
+controller transport integration, sample-rate scaling, frequency filters,
+and subsequent fixes. Attribution and license notices restored 2026-11-16.
+The source history records individual modifications and their dates.
+
+DS4Windows combines GPLv3 code with AGPLv3 code under the combination
+provisions of section 13 of both licenses. Each part retains its applicable
+license; the AGPL section 13 network-interaction requirements apply to the
+combination as specified there. This notice does not relicense other authors'
+code or third-party dependencies. See COPYING, LICENSE.txt and NOTICE.txt.
+
+The software is provided WITHOUT ANY WARRANTY, including without the implied
+warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+full license texts for the terms permitting copying, modification and
+redistribution.
+
+Matching DS4Windows source, including modifications and build scripts, is
+provided beside binary releases at:
+https://github.com/Pav-Osmolski/DS4Windows/releases
+Development source:
+https://github.com/Pav-Osmolski/DS4Windows
+
+Provenance and the scope of the review are documented in:
+docs/ds5-bridge-attribution.md

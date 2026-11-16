@@ -4,7 +4,7 @@
                     xmlns:theme="clr-namespace:DS4WinWPF.DS4Forms.Themes">
 
     <!--
-        DS4Windows application shell.
+        DS4Windows application shell, originally inspired by the DS5 Bridge companion app.
 
         This dictionary only owns layout and component geometry. Theme colors live in
         DefaultTheme.xaml and DarkTheme.xaml so the existing runtime theme switch keeps

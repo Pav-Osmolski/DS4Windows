@@ -114,7 +114,14 @@ namespace DS4WinWPF.DS4Forms
 
         internal static string LoadLicenseText()
         {
-            using Stream stream = typeof(About).Assembly.GetManifestResourceStream("DS4Windows.License.txt")
+            return LoadLicenseResource("DS4Windows.DS5BridgeNotice.txt") + "\n\n" +
+                LoadLicenseResource("DS4Windows.License.txt") + "\n\n" +
+                LoadLicenseResource("DS4Windows.AgplLicense.txt");
+        }
+
+        internal static string LoadLicenseResource(string name)
+        {
+            using Stream stream = typeof(About).Assembly.GetManifestResourceStream(name)
                 ?? throw new InvalidOperationException(global::DS4Windows.UiText.Get("The bundled GNU GPL licence is missing."));
             using var reader = new StreamReader(stream);
             return reader.ReadToEnd();

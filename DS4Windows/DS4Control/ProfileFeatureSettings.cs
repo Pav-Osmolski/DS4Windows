@@ -1,11 +1,14 @@
 /*
-DS4Windows
+DS4Windows - modified code derived from DS5 Bridge by SundayMoments
+https://github.com/SundayMoments/DS5_Bridge
+Copyright (C) 2026  SundayMoments (DS5 Bridge-derived code)
 Copyright (C) 2026  DS4Windows contributors
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+DS5 Bridge-derived code: GNU Affero General Public License version 3 only
+SPDX-License-Identifier: GPL-3.0-or-later AND AGPL-3.0-only
+Modified for DS4Windows; attribution and license notice restored 2026-11-16.
+See DS5-BRIDGE-NOTICE.txt for provenance, modifications and the GPLv3/AGPLv3
+combination terms, and AGPL-3.0.txt for the full license and warranty disclaimer.
 */
 
 using System;

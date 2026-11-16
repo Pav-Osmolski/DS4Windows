@@ -3,6 +3,9 @@
 ###############################################################################
 * text=auto
 
+# Preserve the full upstream DS5 Bridge license byte-for-byte.
+AGPL-3.0.txt -text
+
 # Pinned backend documents are hashed as bytes on Windows and Linux runners.
 extras/VIIPER-*-LICENSES.txt -text whitespace=cr-at-eol,-blank-at-eof
 extras/VIIPER-*-BUILD-NOTES.txt -text whitespace=cr-at-eol
