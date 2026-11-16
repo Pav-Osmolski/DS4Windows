@@ -58,6 +58,24 @@ https://gist.github.com/Nielk1/6d54cc2c00d2201ccb8c2720ad7538db
 Source notice: DS4Windows/Resources/DsxTriggerEffects.NOTICE.txt.
 Packaged notice: Resources/DsxTriggerEffects.NOTICE.txt.
 
+Transport research and interface references
+-------------------------------------------
+
+DS5 Bridge by SundayMoments also informed the inherited companion-style
+interface and DualSense direct-PCM speaker signal stages. References are
+retained in BridgeShellStyles.xaml, DualSenseSpeakerFrameResampler.cs and
+our frontend-modernization documentation.
+
+PadForge by hifihedgehog and contributors:
+https://github.com/hifihedgehog/PadForge
+The inherited transport work compared encoder configuration and hardware
+traces against PadForge. DS5Dongle by awalol was also a transport reference:
+https://github.com/awalol/DS5Dongle
+See DualSenseBluetoothSpeakerPassthrough.cs and the provenance review.
+These acknowledgements identify research/configuration references; they do
+not assert that every referenced implementation was copied or assign a
+blanket license to those projects.
+
 Audio and cryptography dependencies
 -----------------------------------
 

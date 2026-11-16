@@ -59,8 +59,14 @@ have been relicensed as AGPL.
   author/license notices remain present; they are not replaced by a blanket
   project license statement.
 - Corrected the root NOTICE's stale VIIPER 0.1.11 paths to the bundled 0.1.17.
-- The inherited cleanup also renamed transport/reference terminology involving
-  other projects. A renamed symbol alone does not establish code derivation.
+- Restored the DS5 Bridge signal-stage comparison in
+  DualSenseSpeakerFrameResampler.cs and the frontend inspiration acknowledgement
+  in BridgeShellStyles.xaml and the frontend-modernization guide.
+- Restored the PadForge encoder-configuration and DS5Dongle L2CAP references
+  in DualSenseBluetoothSpeakerPassthrough.cs, with project links in NOTICE.
+  These are acknowledgements of the recorded comparison/reference work; a
+  matching public protocol or renamed symbol alone does not establish source
+  derivation. They are not used to assign an unverified license to those files.
   This bounded review does not certify every historical transport, codec,
   dependency or asset. Additional specific provenance findings should extend
   this index and their applicable notices.

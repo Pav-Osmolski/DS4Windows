@@ -1,7 +1,9 @@
 # Frontend modernization
 
-The frontend keeps the DS4Windows runtime and WPF binding layer intact while adopting
-clear navigation, consistent spacing, descriptive cards, and progressive disclosure.
+The inherited frontend modernization kept the DS4Windows runtime and WPF binding
+layer intact while taking navigation, spacing, card and progressive-disclosure
+inspiration from the [DS5 Bridge companion app](https://github.com/SundayMoments/DS5_Bridge).
+Subsequent DS4Windows interface changes build on that foundation.
 
 ## Why the frontend remains WPF
 
