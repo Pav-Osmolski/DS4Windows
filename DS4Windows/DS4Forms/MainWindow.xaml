@@ -84,7 +84,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Grid>
+                                    <Grid Margin="0,0,14,0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
@@ -139,8 +139,11 @@
                                     <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
                                     <Border Background="{DynamicResource CardBackgroundColor}"
                                             BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
-                                            CornerRadius="3" Padding="10,5" VerticalAlignment="Top">
-                                        <StackPanel Orientation="Horizontal">
+                                            CornerRadius="3" Padding="10,5" Height="28" VerticalAlignment="Top">
+                                        <Border.RenderTransform>
+                                            <TranslateTransform Y="0.5" />
+                                        </Border.RenderTransform>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <TextBlock Text="{lex:Loc Strings:UI_EA67C2BF0A35BD11}" Foreground="{DynamicResource MutedForegroundColor}" />
                                             <TextBlock Text="{Binding BatteryState, Mode=OneWay}" FontWeight="SemiBold"
                                                        Foreground="{DynamicResource SuccessColor}" />
