@@ -100,12 +100,20 @@
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                             <local:ControllerNameControl />
                                             <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
-                                                <Image x:Name="contStatusImg" Source="{Binding StatusSource}" Stretch="Uniform"
-                                                       Width="18" Height="18" Margin="0,0,6,0"
-                                                       ToolTip="{lex:Loc Strings:UI_3DCBECCC92E1910F}"
-                                                       MouseRightButtonUp="ContStatusImg_MouseRightButtonUp" Tag="{Binding DevIndex}" />
-                                                <Image Source="{Binding ExclusiveSource}" Width="13" Height="13" Margin="0,0,5,0"
-                                                       ToolTip="{Binding IsExclusiveText}" />
+                                                <Border x:Name="contStatusImg" Width="18" Height="18" Margin="0,0,6,0"
+                                                        Background="{DynamicResource MutedForegroundColor}"
+                                                        ToolTip="{lex:Loc Strings:UI_3DCBECCC92E1910F}"
+                                                        MouseRightButtonUp="ContStatusImg_MouseRightButtonUp" Tag="{Binding DevIndex}">
+                                                    <Border.OpacityMask>
+                                                        <ImageBrush ImageSource="{Binding StatusSource}" Stretch="Uniform" />
+                                                    </Border.OpacityMask>
+                                                </Border>
+                                                <Border x:Name="controllerAccessIcon" Width="13" Height="13" Margin="0,0,5,0"
+                                                        Background="{DynamicResource MutedForegroundColor}" ToolTip="{Binding IsExclusiveText}">
+                                                    <Border.OpacityMask>
+                                                        <ImageBrush ImageSource="{Binding ExclusiveSource}" Stretch="Uniform" />
+                                                    </Border.OpacityMask>
+                                                </Border>
                                                 <TextBlock Text="{Binding IsExclusiveText}" FontSize="11"
                                                            Foreground="{DynamicResource MutedForegroundColor}" />
                                             </StackPanel>
