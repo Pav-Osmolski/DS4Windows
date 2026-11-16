@@ -125,7 +125,33 @@ public class FooterAndDisclosureTests
                 Assert.AreEqual(1, hotkeys); Assert.AreEqual(1, about); Assert.AreEqual(1, service);
                 var openLog = ThemeConsistencyValidation.Visuals(footer).OfType<Button>()
                     .First(button => Equals(button.Content, UiText.Get("Open log")));
+                footer.IsActivityExpanded = true; Layout();
+                footer.UpdateActivity("DualSense USB native haptics started for controller 1.", false, DateTime.Now);
+                Layout();
+                void CaptureActivity(string state)
+                {
+                    var image = new RenderTargetBitmap(940, (int)Math.Ceiling(host.ActualHeight), 96, 96, PixelFormats.Pbgra32);
+                    image.Render(host);
+                    var png = new PngBitmapEncoder(); png.Frames.Add(BitmapFrame.Create(image));
+                    string path = Path.Combine(TestContext.TestResultsDirectory, $"footer-open-log-{choice.Value}-{state}.png");
+                    using (var stream = File.Create(path)) png.Save(stream);
+                    TestContext.AddResultFile(path);
+                }
+                var chrome = (Border)openLog.Template.FindName("Chrome", openLog);
+                Assert.AreEqual(((SolidColorBrush)theme["BorderColor"]).Color,
+                    ((SolidColorBrush)chrome.BorderBrush).Color, "Open log must have a visible resting outline.");
+                Assert.AreEqual(((SolidColorBrush)theme["CardBackgroundColor"]).Color,
+                    ((SolidColorBrush)chrome.Background).Color);
+                CaptureActivity("resting");
+                var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static).GetValue(null);
+                openLog.SetValue(hoverKey, true); Layout();
+                Assert.AreEqual(((SolidColorBrush)theme["AccentColor"]).Color,
+                    ((SolidColorBrush)chrome.BorderBrush).Color, "Preserve the existing hover outline.");
+                CaptureActivity("hover");
+                openLog.SetValue(hoverKey, false); Layout();
                 openLog.RaiseEvent(new RoutedEventArgs(Button.ClickEvent)); Assert.AreEqual(1, log);
+                footer.IsActivityExpanded = false; Layout();
                 footer.UpdateActivity("DualSense USB native haptics started for controller 1.", false, DateTime.Now);
                 footer.UpdateService(false); Layout();
                 Assert.AreEqual(UiText.Get("Stopped"), ((TextBlock)footer.FindName("serviceStatus")).Text);

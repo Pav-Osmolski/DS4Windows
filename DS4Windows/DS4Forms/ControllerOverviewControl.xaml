@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:runtime="clr-namespace:DS4Windows"
+             xmlns:theme="clr-namespace:DS4WinWPF.DS4Forms.Themes"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="940"
@@ -16,6 +17,50 @@
              relying on a theme-specific resource made the main window fail
              during first-run XAML construction. -->
         <xctk:InverseBoolConverter x:Key="InverseBoolConverter" />
+
+        <Style x:Key="OverviewStatusBadgeStyle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="{DynamicResource RaisedBackgroundColor}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="9,3" />
+            <!-- At 200% scaling, 26 DIPs leaves 48 physical pixels inside the outline. -->
+            <Setter Property="MinHeight" Value="26" />
+            <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <VisualStateManager.CustomVisualStateManager><theme:DisclosureVisualStateManager /></VisualStateManager.CustomVisualStateManager>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualStateGroup.Transitions><VisualTransition GeneratedDuration="0:0:0.11" /></VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Normal"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="0" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="MouseOver"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="Pressed"><Storyboard><DoubleAnimation Storyboard.TargetName="HoverSurface" Storyboard.TargetProperty="Opacity" To="1" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualStateGroup.Transitions><VisualTransition GeneratedDuration="0:0:0.12" /></VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Unchecked"><Storyboard><DoubleAnimation Storyboard.TargetName="ArrowFrame" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" To="0" Duration="0" /></Storyboard></VisualState>
+                                    <VisualState x:Name="Checked"><Storyboard><DoubleAnimation Storyboard.TargetName="ArrowFrame" Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)" To="180" Duration="0" /></Storyboard></VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="14" />
+                            <Border x:Name="HoverSurface" Background="{DynamicResource NavigationSelectionColor}" BorderBrush="{DynamicResource AccentColor}" BorderThickness="1" CornerRadius="14" Opacity="0" IsHitTestVisible="False" />
+                            <Grid Margin="{TemplateBinding Padding}">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <ContentPresenter VerticalAlignment="Center" />
+                                <Grid x:Name="ArrowFrame" Grid.Column="1" Width="17" Height="17" Margin="4,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                    <Grid.RenderTransform><RotateTransform /></Grid.RenderTransform>
+                                    <Path Data="M 4,6.25 L 8.5,10.75 L 13,6.25" Stroke="{TemplateBinding Foreground}" StrokeThickness="1.5" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <Style x:Key="OverviewCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
@@ -155,18 +200,20 @@
             </Style.Triggers>
         </Style>
         <Style x:Key="OverviewFactStyle" TargetType="StackPanel">
-            <Setter Property="Margin" Value="0,0,24,0" />
+            <Setter Property="Margin" Value="0,1,24,0" />
             <Setter Property="MinWidth" Value="106" />
             <Setter Property="Background" Value="Transparent" />
         </Style>
-        <Style x:Key="OverviewCustomizeStyle" TargetType="ToggleButton">
+        <Style x:Key="OverviewToolbarButtonStyle" TargetType="ButtonBase">
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="MinHeight" Value="32" />
             <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
             <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
             <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
             <Setter Property="FocusVisualStyle" Value="{DynamicResource ThemeFocusVisual}" />
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ToggleButton">
+                    <ControlTemplate TargetType="ButtonBase">
                         <Border x:Name="Chrome" CornerRadius="5" BorderThickness="1"
                                 Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                 Padding="{TemplateBinding Padding}">
@@ -176,14 +223,18 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
                             </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource NavigationSelectionColor}" />
-                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource AccentColor}" />
-                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style x:Key="OverviewCustomizeStyle" TargetType="ToggleButton" BasedOn="{StaticResource OverviewToolbarButtonStyle}">
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource NavigationSelectionColor}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
@@ -222,7 +273,7 @@
         <ScrollViewer x:Name="overviewScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
                       Visibility="{Binding HasSelectedController, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel Margin="0,0,8,2">
-                <Border Style="{StaticResource OverviewCardStyle}" Margin="0,0,0,14">
+                <Border x:Name="overviewControllerCard" Style="{StaticResource OverviewCardStyle}" Margin="0">
                     <StackPanel>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -247,15 +298,22 @@
                                                TextTrimming="CharacterEllipsis" ToolTip="{Binding ProfileGuidance}" />
                                 </DockPanel>
                             </StackPanel>
-                            <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" MaxWidth="185">
-                                <Border Background="{DynamicResource RaisedBackgroundColor}" BorderBrush="{DynamicResource BorderColor}"
-                                        BorderThickness="1" CornerRadius="12" Padding="9,3" HorizontalAlignment="Right"
-                                        ToolTip="{Binding SelectedControllerStartupDetail}">
-                                    <DockPanel>
-                                        <Ellipse DockPanel.Dock="Left" Width="7" Height="7" VerticalAlignment="Center"
+                            <StackPanel x:Name="overviewStatusBatteryRow" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                <!-- While open, clicking the badge dismisses through Popup's outside-click path.
+                                     Suppress pointer hit testing to prevent that same click from reopening it.
+                                     Keyboard focus and toggling remain available. -->
+                                <ToggleButton x:Name="controllerStatusButton" Style="{StaticResource OverviewStatusBadgeStyle}"
+                                              Foreground="{Binding Foreground, ElementName=controllerStartupTitle}" VerticalAlignment="Center"
+                                              AutomationProperties.Name="{Binding SelectedControllerStartupTitle}"
+                                              AutomationProperties.HelpText="{Binding SelectedControllerStartupDetail}"
+                                              IsHitTestVisible="{Binding IsOpen, ElementName=controllerStatusPopup, Converter={StaticResource InverseBoolConverter}}"
+                                              PreviewKeyDown="ControllerStatus_PreviewKeyDown">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Ellipse x:Name="controllerStatusDot" Width="7" Height="7" VerticalAlignment="Center"
                                                  Fill="{Binding Foreground, ElementName=controllerStartupTitle}" />
-                                        <TextBlock x:Name="controllerStartupTitle" Text="{Binding SelectedControllerStartupTitle}"
-                                                   Margin="6,0,0,0" FontSize="13">
+                                        <TextBlock x:Name="controllerStartupTitle" Text="{Binding SelectedControllerStartupTitle, NotifyOnTargetUpdated=True}"
+                                                   Loaded="ControllerStatusTitle_Align" SizeChanged="ControllerStatusTitle_Align" TargetUpdated="ControllerStatusTitle_Align"
+                                                   Margin="6,0,0,0" FontSize="13" VerticalAlignment="Center">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock" BasedOn="{StaticResource OverviewValueStyle}">
                                                     <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
@@ -273,9 +331,25 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                    </DockPanel>
-                                </Border>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0"
+                                    </StackPanel>
+                                </ToggleButton>
+                                <Popup x:Name="controllerStatusPopup" PlacementTarget="{Binding ElementName=controllerStatusButton}" Placement="Custom"
+                                       IsOpen="{Binding IsChecked, ElementName=controllerStatusButton, Mode=TwoWay}" StaysOpen="False"
+                                       AllowsTransparency="True" Opened="ControllerStatusPopup_Opened" Closed="ControllerStatusPopup_Closed">
+                                    <Border x:Name="controllerStatusPopupContent" Width="360" MaxWidth="{Binding ActualWidth, ElementName=overviewScroll}"
+                                            Background="{DynamicResource CardBackgroundColor}" BorderBrush="{DynamicResource BorderColor}"
+                                            BorderThickness="1" CornerRadius="6" Padding="16" PreviewKeyDown="ControllerStatus_PreviewKeyDown">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding SelectedControllerStartupTitle}" FontWeight="SemiBold" Margin="0,0,0,8"
+                                                       Foreground="{Binding Foreground, ElementName=controllerStartupTitle}" />
+                                            <ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                                <TextBlock x:Name="controllerStatusDetail" Text="{Binding SelectedControllerStartupDetail}" TextWrapping="Wrap"
+                                                           Foreground="{DynamicResource ForegroundColor}" />
+                                            </ScrollViewer>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
+                                <StackPanel x:Name="overviewBatteryRow" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0"
                                             Background="Transparent" ToolTip="{lex:Loc Strings:OverviewBatteryHelp}">
                                     <Viewbox Width="20" Height="{Binding FontSize, ElementName=overviewBatteryText}"
                                              Margin="0,0,6,0" VerticalAlignment="Center" FlowDirection="LeftToRight">
@@ -304,25 +378,29 @@
                                                   Data="M 3,1 H 17 Q 19,1 19,3 V 11 Q 19,13 17,13 H 3 Q 1,13 1,11 V 3 Q 1,1 3,1 Z M 22,5 V 9" />
                                         </Grid>
                                     </Viewbox>
-                                    <TextBlock x:Name="overviewBatteryText" Text="{Binding SelectedControllerBattery}"
-                                               FontWeight="SemiBold" VerticalAlignment="Center"
-                                               Foreground="{DynamicResource SuccessColor}" />
+                                    <Grid VerticalAlignment="Center">
+                                        <!-- Reserve the longest percentage without depending on the current value. -->
+                                        <TextBlock Text="100%+" FontWeight="SemiBold" Typography.NumeralAlignment="Tabular"
+                                                   Visibility="Hidden" IsHitTestVisible="False" />
+                                        <TextBlock x:Name="overviewBatteryText" Text="{Binding SelectedControllerBattery}"
+                                                   FontWeight="SemiBold" Typography.NumeralAlignment="Tabular" VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource SuccessColor}" />
+                                    </Grid>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
-                        <TextBlock Text="{Binding SelectedControllerStartupDetail}" TextWrapping="Wrap" Margin="0,8,0,0"
-                                   Foreground="{DynamicResource MutedForegroundColor}"
-                                   Visibility="{Binding SelectedControllerNeedsAttention, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <DockPanel Margin="0,12,0,0">
                             <Button x:Name="overviewControllerInfoButton" DockPanel.Dock="Right" Style="{StaticResource BridgeSecondaryButtonStyle}"
                                     ToolTip="{lex:Loc Strings:ControllerInfoHelp}" Click="ControllerInfoBtn_Click" AutomationProperties.Name="{lex:Loc Strings:UI_55026208AB1964FE}"
-                                    VerticalAlignment="Center" MinHeight="30" Padding="10,4" Margin="6,0,0,0">
+                                    VerticalAlignment="Bottom" MinHeight="30" Padding="10,4" Margin="6,0,0,0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE946;" />
                                     <TextBlock Text="{lex:Loc Strings:UI_55026208AB1964FE}" VerticalAlignment="Center" />
                                 </StackPanel>
                             </Button>
-                            <WrapPanel>
+                            <!-- Each item contributes a 1-DIP row gutter (2 px at 200%).
+                                 Cancel it above the first row so single-line spacing stays unchanged. -->
+                            <WrapPanel x:Name="overviewFactsPanel" Margin="0,-1,0,0">
                                 <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTip="{lex:Loc Strings:OverviewConnectionHelp}">
                                     <DockPanel>
                                         <Path DockPanel.Dock="Left">
@@ -378,20 +456,6 @@
                     </StackPanel>
                 </Border>
 
-                <Grid x:Name="windowsAudioRoute" Margin="0,0,0,16" Visibility="Collapsed">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
-                        <TextBlock x:Name="windowsAudioOutputText" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
-                        <TextBlock x:Name="windowsAudioRouteHelp" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
-                                   Foreground="{DynamicResource WarningColor}" />
-                    </StackPanel>
-                    <Button x:Name="windowsSoundSettingsButton" Grid.Column="1" Style="{DynamicResource BridgeSecondaryButtonStyle}"
-                            VerticalAlignment="Center" Click="WindowsSoundSettings_Click" />
-                </Grid>
-
                 <StackPanel x:Name="profileSelectionNotice" Margin="0,0,0,16"
                             Visibility="{Binding NeedsProfileSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock Text="{lex:Loc Strings:UI_18BCA2DAF670B6A1}" FontSize="18" FontWeight="SemiBold" />
@@ -400,25 +464,40 @@
                     <Button x:Name="selectProfileButton" Content="{lex:Loc Strings:UI_D42C2434603D234A}" HorizontalAlignment="Left"
                             Style="{StaticResource BridgePrimaryButtonStyle}" Click="ControllerDetailsBtn_Click" />
                 </StackPanel>
-                <Grid Margin="0,0,0,12">
+                <Grid x:Name="overviewToolbar">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <StackPanel x:Name="quickProfileHeading" VerticalAlignment="Center">
-                        <TextBlock Text="{lex:Loc Strings:UI_FAFBA7D222C9E997}" FontSize="18" FontWeight="SemiBold" />
-                        <TextBlock Text="{lex:Loc Strings:UI_73633F28FF75F010}" Margin="0,3,0,0" TextWrapping="Wrap"
-                                   Foreground="{DynamicResource MutedForegroundColor}" />
+                    <!-- Keep equal toolbar gutters even when the shared heading is collapsed. -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="16" />
+                        <RowDefinition Height="Auto" MinHeight="32" />
+                        <RowDefinition Height="16" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="windowsAudioRoute" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,12,0" Visibility="Collapsed">
+                        <TextBlock x:Name="windowsAudioOutputText" TextWrapping="Wrap" Foreground="{DynamicResource MutedForegroundColor}" />
+                        <TextBlock x:Name="windowsAudioRouteHelp" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
+                                   Foreground="{DynamicResource WarningColor}" />
                     </StackPanel>
-                    <ToggleButton x:Name="customizeOverviewButton" Grid.Column="1" Margin="12,0,0,0" Padding="10,5" MinHeight="32"
+                    <TextBlock x:Name="quickProfileHeading" Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,12"
+                               VerticalAlignment="Center" HorizontalAlignment="Left" Text="{lex:Loc Strings:UI_FAFBA7D222C9E997}"
+                               FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"
+                               ToolTip="{lex:Loc Strings:UI_73633F28FF75F010}" />
+                    <StackPanel x:Name="overviewToolbarActions" Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                        <Button x:Name="windowsSoundSettingsButton" Style="{StaticResource OverviewToolbarButtonStyle}"
+                                VerticalAlignment="Top" Click="WindowsSoundSettings_Click" />
+                    <ToggleButton x:Name="customizeOverviewButton" Margin="12,0,0,0" Padding="10,5" MinHeight="32"
                                   Style="{StaticResource OverviewCustomizeStyle}"
                                   ToolTip="{lex:Loc Strings:OverviewCustomizeHelp}"
-                                  VerticalAlignment="Center" AutomationProperties.Name="{lex:Loc Strings:OverviewCustomize}">
+                                  VerticalAlignment="Top" AutomationProperties.Name="{lex:Loc Strings:OverviewCustomize}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource OverviewGlyphStyle}" Text="&#xE713;" />
                             <TextBlock Text="{lex:Loc Strings:OverviewCustomize}" VerticalAlignment="Center" />
                         </StackPanel>
                     </ToggleButton>
+                    </StackPanel>
                     <Popup x:Name="overviewCustomization" Grid.Column="1" AllowsTransparency="True" Placement="Custom" StaysOpen="False"
                            PlacementTarget="{Binding ElementName=customizeOverviewButton}" Opened="OverviewCustomization_Opened"
                            IsOpen="{Binding IsChecked, ElementName=customizeOverviewButton, Mode=TwoWay}">

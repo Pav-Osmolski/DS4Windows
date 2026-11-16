@@ -8,8 +8,10 @@ https://github.com/Ryochan7/DS4Windows
 https://github.com/schmaldeo/DS4Windows
 https://github.com/hbashton/DS4Windows
 
-DS4Windows is distributed under the GNU General Public License, version 3;
-see COPYING and LICENSE.txt. Incorporated third-party components retain
+DS4Windows combines GNU GPL version 3 code with DS5 Bridge-derived
+AGPL-3.0-only code under section 13 of both licenses. See COPYING, LICENSE.txt,
+AGPL-3.0.txt and DS5-BRIDGE-NOTICE.txt for the applicable terms.
+Incorporated third-party components retain
 their respective licenses and copyright notices. This index identifies
 sources and component notices; it does not replace their full license texts
 or claim that every dependency is licensed under the GPL.
@@ -19,6 +21,13 @@ specified. Versioned backend notices describe the currently bundled payloads.
 
 Incorporated source code
 ------------------------
+
+DS5 Bridge by SundayMoments (AGPL-3.0-only):
+https://github.com/SundayMoments/DS5_Bridge
+Modified Audio Haptics processing/settings, Trigger Lab settings/percentage
+mapping, and process-loopback activation were inherited through hbashton's
+fork. Full attribution, scope and modification notice: DS5-BRIDGE-NOTICE.txt.
+Full license: AGPL-3.0.txt. Both notices are bundled with the application.
 
 Crc32 - implementation credited to Damien Guard, adapted via Crc32
 (Apache-2.0):
@@ -48,6 +57,24 @@ DualSense adaptive-trigger effect packing by John "Nielk1" Klein (MIT):
 https://gist.github.com/Nielk1/6d54cc2c00d2201ccb8c2720ad7538db
 Source notice: DS4Windows/Resources/DsxTriggerEffects.NOTICE.txt.
 Packaged notice: Resources/DsxTriggerEffects.NOTICE.txt.
+
+Transport research and interface references
+-------------------------------------------
+
+DS5 Bridge by SundayMoments also informed the inherited companion-style
+interface and DualSense direct-PCM speaker signal stages. References are
+retained in BridgeShellStyles.xaml, DualSenseSpeakerFrameResampler.cs and
+our frontend-modernization documentation.
+
+PadForge by hifihedgehog and contributors:
+https://github.com/hifihedgehog/PadForge
+The inherited transport work compared encoder configuration and hardware
+traces against PadForge. DS5Dongle by awalol was also a transport reference:
+https://github.com/awalol/DS5Dongle
+See DualSenseBluetoothSpeakerPassthrough.cs and the provenance review.
+These acknowledgements identify research/configuration references; they do
+not assert that every referenced implementation was copied or assign a
+blanket license to those projects.
 
 Audio and cryptography dependencies
 -----------------------------------
@@ -100,8 +127,8 @@ https://github.com/Alia5/VIIPER
 https://github.com/hbashton/VIIPER
 https://github.com/Pav-Osmolski/VIIPER
 The matching source archive, dependency licenses and binary provenance are
-provided in extras/VIIPER-0.1.11-SOURCE.zip,
-extras/VIIPER-0.1.11-LICENSES.txt and extras/VIIPER-0.1.11-PROVENANCE.txt.
+provided in extras/VIIPER-0.1.17-SOURCE.zip,
+extras/VIIPER-0.1.17-LICENSES.txt and extras/VIIPER-0.1.17-PROVENANCE.txt.
 The vendored Windows systray and WDL resampler have additional notices in
 extras/VIIPER-SYSTRAY-NOTICE.md, extras/VIIPER-SYSTRAY-LICENSE.txt and
 extras/VIIPER-WDL-NOTICE.txt.

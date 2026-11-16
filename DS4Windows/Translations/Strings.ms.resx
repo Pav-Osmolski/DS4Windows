@@ -4497,8 +4497,8 @@ Sokongan : </value>
   <data name="UI_A149CDBAD52D6E61" xml:space="preserve">
     <value>Gunakan Smoothing</value>
   </data>
-  <data name="UI_A14BFFFC24C3A843" xml:space="preserve">
-    <value>lesen awam umum GNU v3</value>
+  <data name="UI_6698CC69CFEA8306" xml:space="preserve">
+    <value>GNU GPL v3 + GNU AGPL v3</value>
   </data>
   <data name="UI_A178F51FB534636D" xml:space="preserve">
     <value> penuh tuduhan</value>
@@ -6910,7 +6910,7 @@ Sokongan : </value>
     <value>Menunjukkan Windows output audio</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Tunjukkan tajuk dan penerangan kawalan pantas profil</value>
+    <value>Tunjukkan pengepala kawalan pantas profil</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Pilih pengawal yang disokong dan pilihan peranti.</value>
@@ -6923,5 +6923,46 @@ Sokongan : </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Buka profil pengawal aktif dalam Editor Profil penuh.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Butang sensitif tekanan</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Julat bersama untuk butang muka, D-pad, L1 dan R1 DualShock 3 yang dipetakan kepada picu analog atau arah kayu. Pemetaan butang digital, papan kekunci dan tetikus tidak berubah. Laraskan L2/R2 fizikal pada tab Picu.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Zon mati (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Tekanan penuh pada (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Tekanan butang pada atau di bawah nilai ini menghasilkan output analog sifar. Nilainya mesti lebih rendah daripada titik tekanan penuh.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Tekanan butang pada atau di atas nilai ini menghasilkan output penuh. Tekanan antara kedua-dua titik diskalakan secara linear.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Contoh: zon mati 10% dan tekanan penuh pada 80% memetakan tekanan fizikal 10–80% kepada output 0–100%. Melepaskan butang sentiasa mengembalikan paksi ke neutral.</value>
+  </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Namakan semula pengawal</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Nama pengawal</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Gunakan sehingga 50 huruf, nombor dan ruang.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>Nama pengawal tidak dapat disimpan. Cuba lagi.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Kosongkan nama untuk memulihkan nama lalai. Enter menyimpan; Escape membatalkan.</value>
+    <comment>Controller custom name editing.</comment>
   </data>
 </root>

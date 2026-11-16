@@ -4503,8 +4503,8 @@ De backup: </value>
   <data name="UI_A149CDBAD52D6E61" xml:space="preserve">
     <value>Gebruik smoothing</value>
   </data>
-  <data name="UI_A14BFFFC24C3A843" xml:space="preserve">
-    <value>GNU Algemene Openbare Licentie v3</value>
+  <data name="UI_6698CC69CFEA8306" xml:space="preserve">
+    <value>GNU GPL v3 + GNU AGPL v3</value>
   </data>
   <data name="UI_A178F51FB534636D" xml:space="preserve">
     <value> Volledig aangeklaagd</value>
@@ -6916,7 +6916,7 @@ De backup: </value>
     <value>Toon Windows audio-uitvoer</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Titel en beschrijving van snelle profielinstellingen tonen</value>
+    <value>Kop van snelle profielinstellingen tonen</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Ondersteunde controllers en apparaatopties kiezen.</value>
@@ -6929,5 +6929,46 @@ De backup: </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Open het actieve controllerprofiel in de volledige profieleditor.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Drukgevoelige knoppen</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Gedeeld bereik voor de actieknoppen, D-pad, L1 en R1 van de DualShock 3 bij toewijzing aan analoge triggers of stickrichtingen. Digitale knop-, toetsenbord- en muistoewijzingen blijven ongewijzigd. Stel fysieke L2/R2 in op het tabblad Triggers.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Dode zone (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Volledige druk bij (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Knopdruk op of onder deze waarde geeft geen analoge uitvoer. De waarde moet lager zijn dan het punt voor volledige druk.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Knopdruk op of boven deze waarde geeft volledige uitvoer. Tussen beide punten wordt de druk lineair geschaald.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Voorbeeld: een dode zone van 10% en volledige druk bij 80% zetten 10–80% fysieke druk om naar 0–100% uitvoer. Loslaten zet de as altijd terug op neutraal.</value>
+  </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Controller hernoemen</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Controllernaam</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Gebruik maximaal 50 letters, cijfers en spaties.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>De controllernaam kon niet worden opgeslagen. Probeer het opnieuw.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Wis de naam om de standaardnaam te herstellen. Enter slaat op; Escape annuleert.</value>
+    <comment>Controller custom name editing.</comment>
   </data>
 </root>

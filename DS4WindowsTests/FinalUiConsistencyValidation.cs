@@ -88,6 +88,14 @@ internal static class FinalUiConsistencyValidation
                     Assert.AreEqual(combo.TranslatePoint(new Point(0, combo.ActualHeight / 2), card).Y,
                         control.TranslatePoint(new Point(0, control.ActualHeight / 2), card).Y, .01);
                 }
+                foreach (string iconName in new[] { "contStatusImg", "controllerAccessIcon" })
+                {
+                    var icon = ThemeConsistencyValidation.Visuals(card).OfType<Border>().Single(b => b.Name == iconName);
+                    Assert.AreEqual(((SolidColorBrush)app.FindResource("MutedForegroundColor")).Color,
+                        ((SolidColorBrush)icon.Background).Color, "Controller icon must follow the palette in " + theme);
+                    Assert.IsInstanceOfType<ImageBrush>(icon.OpacityMask);
+                    Assert.IsNotNull(((ImageBrush)icon.OpacityMask).ImageSource, "Render actual icon silhouettes in " + theme);
+                }
                 var link = ThemeConsistencyValidation.Visuals(card).OfType<CheckBox>().Single();
                 Assert.AreEqual(combo.TranslatePoint(new Point(0, combo.ActualHeight / 2), card).Y,
                     link.TranslatePoint(new Point(0, link.ActualHeight / 2), card).Y, .01, "Link profile checkbox must be centred too.");
@@ -121,6 +129,9 @@ internal static class FinalUiConsistencyValidation
             markup.SetAttributeValue(declaration.Name, declaration.Value.StartsWith("clr-namespace:") && !declaration.Value.Contains("assembly=") ? declaration.Value + ";assembly=DS4Windows" : declaration.Value);
         foreach (var declaration in markup.DescendantsAndSelf().Attributes().Where(a => a.IsNamespaceDeclaration).ToArray())
             if (declaration.Value.StartsWith("clr-namespace:") && !declaration.Value.Contains("assembly=")) declaration.Value += ";assembly=DS4Windows";
+        foreach (var element in markup.DescendantsAndSelf().ToArray())
+            if (element.Name.NamespaceName.StartsWith("clr-namespace:") && !element.Name.NamespaceName.Contains("assembly="))
+                element.Name = XName.Get(element.Name.LocalName, element.Name.NamespaceName + ";assembly=DS4Windows");
         foreach (var attribute in markup.DescendantsAndSelf().Attributes().ToArray())
         {
             if (attribute.Name.NamespaceName.StartsWith("clr-namespace:") && !attribute.Name.NamespaceName.Contains("assembly="))
@@ -140,7 +151,8 @@ internal static class FinalUiConsistencyValidation
         list.ItemTemplate = (DataTemplate)XamlReader.Parse(LocalizedSource.Markup(markup));
         ScrollViewer.SetCanContentScroll(list, true); VirtualizingPanel.SetIsVirtualizing(list, false);
         list.Items.Add(new { PrimaryDevice = true, CanLinkProfile = true, LinkedProfile = false, SelectedIndex = 0,
-            IdText = "DualSense", ProfileListCol = new[] { new { Name = "Windows Control" } }, LightColor = Brushes.Purple,
+            IdText = "DualSense", StatusSource = Global.RESOURCES_PREFIX + "/USB_white.png",
+            ExclusiveSource = Global.RESOURCES_PREFIX + "/key-solid_white.png", ProfileListCol = new[] { new { Name = "Windows Control" } }, LightColor = Brushes.Purple,
             BatteryState = "100%", HasControllerArtwork = false, SupportsSwitch2StandaloneHoldMode = false, SupportsSwitch2Identification = false,
             JoyConLinkAction = new { Visible = false } });
         list.SelectedIndex = 0;

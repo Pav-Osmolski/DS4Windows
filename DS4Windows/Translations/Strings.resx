@@ -5526,8 +5526,8 @@ X axis: {0}, Y axis: {1}</value>
     <value>Use Smoothing</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>
   </data>
-  <data name="UI_A14BFFFC24C3A843" xml:space="preserve">
-    <value>GNU General Public License v3</value>
+  <data name="UI_6698CC69CFEA8306" xml:space="preserve">
+    <value>GNU GPL v3 + GNU AGPL v3</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
   <data name="UI_A178F51FB534636D" xml:space="preserve">
@@ -8592,7 +8592,7 @@ X axis: {0}, Y axis: {1}</value>
   <data name="UI_49D2863948572913" xml:space="preserve"><value>Windows is sending audio to a virtual controller. Choose your usual speakers or headphones in Sound settings, or enable controller audio forwarding for that controller.</value></data>
   <data name="OverviewShowWindowsAudioOutput" xml:space="preserve"><value>Show Windows audio output</value></data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Show quick profile title and description</value>
+    <value>Show quick profile header</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Choose supported controllers and device options.</value>
@@ -8605,5 +8605,46 @@ X axis: {0}, Y axis: {1}</value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Open the active controller profile in the full Profile Editor.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Pressure-sensitive buttons</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Shared range for DualShock 3 face buttons, D-pad, L1 and R1 mapped to analogue triggers or stick directions. Digital button, key and mouse assignments keep their existing behaviour. Use the Triggers tab for the physical L2 and R2 triggers.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Dead zone (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Full pressure at (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Physical button pressure at or below this value produces zero analogue output. Must be lower than the full-pressure point.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Physical button pressure at or above this value produces full analogue output. Pressure between the two points is scaled linearly.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Example: a 10% dead zone and an 80% full-pressure point map 10–80% physical pressure to 0–100% output. Releasing the button always returns the axis to neutral.</value>
+  </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Rename controller</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Controller name</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Use up to 50 letters, numbers and spaces.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>The controller name could not be saved. Please try again.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Clear the name to restore the default. Enter saves; Escape cancels.</value>
+    <comment>Controller custom name editing.</comment>
   </data>
 </root>

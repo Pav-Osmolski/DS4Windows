@@ -4471,8 +4471,8 @@ Il backup: </value>
   <data name="UI_A149CDBAD52D6E61" xml:space="preserve">
     <value>Usare il Smoothing</value>
   </data>
-  <data name="UI_A14BFFFC24C3A843" xml:space="preserve">
-    <value>Licenza Pubblica Generale GNU v3</value>
+  <data name="UI_6698CC69CFEA8306" xml:space="preserve">
+    <value>GNU GPL v3 + GNU AGPL v3</value>
   </data>
   <data name="UI_A178F51FB534636D" xml:space="preserve">
     <value> Completamente accusato</value>
@@ -6884,7 +6884,7 @@ Il backup: </value>
     <value>Mostra Windows uscita audio</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Mostra titolo e descrizione dei controlli rapidi del profilo</value>
+    <value>Mostra intestazione dei controlli rapidi del profilo</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Scegli i controller supportati e le opzioni del dispositivo.</value>
@@ -6897,5 +6897,46 @@ Il backup: </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Apri il profilo attivo del controller nell’editor dei profili completo.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Pulsanti sensibili alla pressione</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Intervallo comune per i pulsanti frontali, la croce direzionale, L1 e R1 del DualShock 3 assegnati a grilletti analogici o direzioni delle levette. Le assegnazioni digitali, della tastiera e del mouse non cambiano. Regola L2/R2 fisici nella scheda Grilletti.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Zona morta (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Pressione massima al (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Una pressione pari o inferiore a questo valore produce un’uscita analogica nulla. Deve essere inferiore al punto di pressione massima.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Una pressione pari o superiore a questo valore produce l’uscita massima. Fra i due punti la pressione viene scalata linearmente.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Esempio: zona morta al 10% e pressione massima all’80% trasformano una pressione fisica del 10–80% in un’uscita dello 0–100%. Rilasciare il pulsante riporta sempre l’asse in posizione neutra.</value>
+  </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Rinomina controller</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Nome del controller</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Usa fino a 50 lettere, numeri e spazi.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>Impossibile salvare il nome del controller. Riprova.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Cancella il nome per ripristinare quello predefinito. Invio salva; Esc annulla.</value>
+    <comment>Controller custom name editing.</comment>
   </data>
 </root>

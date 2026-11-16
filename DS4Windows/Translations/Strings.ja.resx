@@ -4473,8 +4473,8 @@ Backup : </value>
   <data name="UI_A149CDBAD52D6E61" xml:space="preserve">
     <value>Smoothingを使う</value>
   </data>
-  <data name="UI_A14BFFFC24C3A843" xml:space="preserve">
-    <value>GNU 一般公開ライセンス v3</value>
+  <data name="UI_6698CC69CFEA8306" xml:space="preserve">
+    <value>GNU GPL v3 + GNU AGPL v3</value>
   </data>
   <data name="UI_A178F51FB534636D" xml:space="preserve">
     <value> 完全に告発。</value>
@@ -6887,7 +6887,7 @@ Backup : </value>
     <value>オーディオ出力 Windows</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>プロファイルのクイック操作のタイトルと説明を表示</value>
+    <value>プロファイルのクイック操作の見出しを表示</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>対応コントローラーとデバイス設定を選択します。</value>
@@ -6900,5 +6900,46 @@ Backup : </value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>使用中のコントローラープロファイルを完全なプロファイルエディターで開きます。</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>感圧ボタン</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>DualShock 3のフェイスボタン、方向キー、L1、R1をアナログトリガーやスティック方向に割り当てた場合の共通範囲です。デジタルボタン、キー、マウスの割り当ては変わりません。物理L2/R2はトリガータブで調整します。</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>デッドゾーン (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>最大出力になる圧力 (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>この値以下のボタン圧力ではアナログ出力がゼロになります。最大出力の圧力より低く設定してください。</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>この値以上のボタン圧力で最大出力になります。2点間の圧力は線形に変換されます。</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>例：デッドゾーン10%、最大出力の圧力80%の場合、実際の圧力10～80%が出力0～100%に変換されます。ボタンを離すと軸は必ずニュートラルに戻ります。</value>
+  </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>コントローラー名を変更</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>コントローラー名</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>文字、数字、空白を50文字以内で入力してください。</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>コントローラー名を保存できませんでした。もう一度お試しください。</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>名前を消すと既定の名前に戻ります。Enterで保存、Escapeでキャンセルします。</value>
+    <comment>Controller custom name editing.</comment>
   </data>
 </root>

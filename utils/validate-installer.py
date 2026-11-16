@@ -13,6 +13,7 @@ from pathlib import Path, PurePosixPath
 
 
 REQUIRED_PUBLISH_FILES = {
+    "COPYING", "LICENSE.txt", "NOTICE.txt", "AGPL-3.0.txt", "DS5-BRIDGE-NOTICE.txt",
     "DS4Windows.exe",
     "BouncyCastle.Cryptography.dll",
     "Resources/BouncyCastle.NOTICE.txt",

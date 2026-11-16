@@ -4477,6 +4477,9 @@ namespace DS4Windows
             new StickDeadZoneInfo(), new StickDeadZoneInfo(),
             new StickDeadZoneInfo(),
         };
+        public DS3ButtonPressureSettings[] ds3PressureSettings = Enumerable.Range(0, Global.TEST_PROFILE_ITEM_COUNT)
+            .Select(_ => new DS3ButtonPressureSettings()).ToArray();
+
         public TriggerDeadZoneZInfo[] l2ModInfo = new TriggerDeadZoneZInfo[Global.TEST_PROFILE_ITEM_COUNT]
         {
             new TriggerDeadZoneZInfo(), new TriggerDeadZoneZInfo(),
@@ -5894,6 +5897,11 @@ namespace DS4Windows
                 XmlNode xmlTouchpadInvert = m_Xdoc.CreateNode(XmlNodeType.Element, "TouchpadInvert", null); xmlTouchpadInvert.InnerText = touchpadInvert[device].ToString(); rootElement.AppendChild(xmlTouchpadInvert);
                 XmlNode xmlTouchClickPasthru = m_Xdoc.CreateNode(XmlNodeType.Element, "TouchpadClickPassthru", null); xmlTouchClickPasthru.InnerText = touchClickPassthru[device].ToString(); rootElement.AppendChild(xmlTouchClickPasthru);
 
+                XmlNode xmlDS3PressureStart = m_Xdoc.CreateNode(XmlNodeType.Element, "DS3PressureStartPercent", null);
+                xmlDS3PressureStart.InnerText = ds3PressureSettings[device].StartPercent.ToString(CultureInfo.InvariantCulture); rootElement.AppendChild(xmlDS3PressureStart);
+                XmlNode xmlDS3PressureFull = m_Xdoc.CreateNode(XmlNodeType.Element, "DS3PressureFullPercent", null);
+                xmlDS3PressureFull.InnerText = ds3PressureSettings[device].FullPercent.ToString(CultureInfo.InvariantCulture); rootElement.AppendChild(xmlDS3PressureFull);
+
                 XmlNode xmlL2AD = m_Xdoc.CreateNode(XmlNodeType.Element, "L2AntiDeadZone", null); xmlL2AD.InnerText = l2ModInfo[device].antiDeadZone.ToString(); rootElement.AppendChild(xmlL2AD);
                 XmlNode xmlR2AD = m_Xdoc.CreateNode(XmlNodeType.Element, "R2AntiDeadZone", null); xmlR2AD.InnerText = r2ModInfo[device].antiDeadZone.ToString(); rootElement.AppendChild(xmlR2AD);
                 XmlNode xmlL2Maxzone = m_Xdoc.CreateNode(XmlNodeType.Element, "L2MaxZone", null); xmlL2Maxzone.InnerText = l2ModInfo[device].maxZone.ToString(); rootElement.AppendChild(xmlL2Maxzone);
@@ -7184,6 +7192,13 @@ namespace DS4Windows
                 catch { missingSetting = true; }
                 try { Item = m_Xdoc.SelectSingleNode("/" + rootname + "/RightTriggerMiddle"); byte.TryParse(Item.InnerText, out r2ModInfo[device].deadZone); }
                 catch { missingSetting = true; }
+
+                int ds3Start = 0, ds3Full = 100;
+                if (int.TryParse(m_Xdoc.SelectSingleNode("/" + rootname + "/DS3PressureStartPercent")?.InnerText,
+                    NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsedDS3Start)) ds3Start = parsedDS3Start;
+                if (int.TryParse(m_Xdoc.SelectSingleNode("/" + rootname + "/DS3PressureFullPercent")?.InnerText,
+                    NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsedDS3Full)) ds3Full = parsedDS3Full;
+                ds3PressureSettings[device].SetRange(ds3Start, ds3Full);
 
                 try { Item = m_Xdoc.SelectSingleNode("/" + rootname + "/L2AntiDeadZone"); int.TryParse(Item.InnerText, out l2ModInfo[device].antiDeadZone); }
                 catch { l2ModInfo[device].antiDeadZone = 0; missingSetting = true; }
@@ -11454,6 +11469,7 @@ namespace DS4Windows
             //l2ModInfo[device].antiDeadZone = r2ModInfo[device].antiDeadZone = 0;
             //l2ModInfo[device].maxZone = r2ModInfo[device].maxZone = 100;
             //l2ModInfo[device].maxOutput = r2ModInfo[device].maxOutput = 100.0;
+            ds3PressureSettings[device].Reset();
             l2ModInfo[device].Reset();
             r2ModInfo[device].Reset();
 

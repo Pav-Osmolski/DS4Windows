@@ -4499,8 +4499,8 @@ Example: whyme_DS4Windows</value>
   <data name="UI_A149CDBAD52D6E61" xml:space="preserve">
     <value>Χρησιμοποιήστε Smoothing</value>
   </data>
-  <data name="UI_A14BFFFC24C3A843" xml:space="preserve">
-    <value>GNU Γενική Άδεια Δημόσιας Χρήσης v3</value>
+  <data name="UI_6698CC69CFEA8306" xml:space="preserve">
+    <value>GNU GPL v3 + GNU AGPL v3</value>
   </data>
   <data name="UI_A178F51FB534636D" xml:space="preserve">
     <value> Κατηγορείται πλήρως</value>
@@ -6912,7 +6912,7 @@ Example: whyme_DS4Windows</value>
     <value>Εμφάνιση Windows εξόδου ήχου</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Εμφάνιση τίτλου και περιγραφής γρήγορων ρυθμίσεων προφίλ</value>
+    <value>Εμφάνιση κεφαλίδας γρήγορων ρυθμίσεων προφίλ</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Επιλέξτε υποστηριζόμενα χειριστήρια και επιλογές συσκευής.</value>
@@ -6925,5 +6925,46 @@ Example: whyme_DS4Windows</value>
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Ανοίξτε το ενεργό προφίλ χειριστηρίου στον πλήρη επεξεργαστή προφίλ.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Κουμπιά ευαίσθητα στην πίεση</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Κοινό εύρος για τα κύρια κουμπιά, το D-pad, L1 και R1 του DualShock 3 όταν αντιστοιχίζονται σε αναλογικές σκανδάλες ή κατευθύνσεις μοχλού. Οι ψηφιακές αντιστοιχίσεις κουμπιών, πλήκτρων και ποντικιού δεν αλλάζουν. Ρυθμίστε τα φυσικά L2/R2 στην καρτέλα Σκανδάλες.</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Νεκρή ζώνη (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Πλήρης πίεση στο (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Πίεση ίση ή μικρότερη από αυτήν την τιμή δίνει μηδενική αναλογική έξοδο. Πρέπει να είναι μικρότερη από το σημείο πλήρους πίεσης.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Πίεση ίση ή μεγαλύτερη από αυτήν την τιμή δίνει πλήρη έξοδο. Μεταξύ των δύο σημείων η κλιμάκωση είναι γραμμική.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Παράδειγμα: νεκρή ζώνη 10% και πλήρης πίεση στο 80% μετατρέπουν φυσική πίεση 10–80% σε έξοδο 0–100%. Η απελευθέρωση επαναφέρει πάντα τον άξονα στην ουδέτερη θέση.</value>
+  </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Μετονομασία χειριστηρίου</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Όνομα χειριστηρίου</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Χρησιμοποιήστε έως 50 γράμματα, αριθμούς και κενά.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>Δεν ήταν δυνατή η αποθήκευση του ονόματος. Δοκιμάστε ξανά.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Διαγράψτε το όνομα για επαναφορά του προεπιλεγμένου. Enter για αποθήκευση· Escape για ακύρωση.</value>
+    <comment>Controller custom name editing.</comment>
   </data>
 </root>

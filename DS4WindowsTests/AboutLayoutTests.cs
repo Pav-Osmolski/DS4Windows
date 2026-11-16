@@ -206,11 +206,15 @@ public sealed class AboutLayoutTests
     }
 
     [TestMethod]
-    public void FullBundledLicenseMatchesTheCanonicalCopy()
+    [DataRow("COPYING", "DS4Windows.License.txt")]
+    [DataRow("AGPL-3.0.txt", "DS4Windows.AgplLicense.txt")]
+    [DataRow("DS5-BRIDGE-NOTICE.txt", "DS4Windows.DS5BridgeNotice.txt")]
+    public void FullBundledLicensesMatchTheCanonicalCopies(string file, string resource)
     {
-        string canonical = File.ReadAllText(Path.Combine(Path.GetDirectoryName(SourcePath())!, "..", "COPYING"));
-        Assert.AreEqual(canonical.Replace("\r\n", "\n"), About.LoadLicenseText().Replace("\r\n", "\n"));
-        StringAssert.Contains(About.LoadLicenseText(), "END OF TERMS AND CONDITIONS");
+        string canonical = File.ReadAllText(Path.Combine(Path.GetDirectoryName(SourcePath())!, "..", file));
+        string embedded = About.LoadLicenseResource(resource);
+        Assert.AreEqual(canonical.Replace("\r\n", "\n"), embedded.Replace("\r\n", "\n"));
+        StringAssert.Contains(About.LoadLicenseText(), embedded);
     }
 
     [TestMethod]

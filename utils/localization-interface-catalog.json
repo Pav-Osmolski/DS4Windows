@@ -423,8 +423,8 @@
       "DS4Windows/DS4Forms/About.xaml"
     ]
   },
-  "UI_A14BFFFC24C3A843": {
-    "source": "GNU General Public License v3",
+  "UI_6698CC69CFEA8306": {
+    "source": "GNU GPL v3 + GNU AGPL v3",
     "files": [
       "DS4Windows/DS4Forms/About.xaml"
     ]
@@ -11022,6 +11022,37 @@
     "source": "Windows is sending audio to a virtual controller. Choose your usual speakers or headphones in Sound settings, or enable controller audio forwarding for that controller.",
     "files": [
       "DS4Windows/DS4Forms/ControllerOverviewControl.xaml.cs"
+    ]
+  },
+  "UI_0EED7174A1268369": {
+    "source": "Rename controller",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerNameControl.xaml.cs"
+    ]
+  },
+  "UI_A399E8BFE0F9EEBD": {
+    "source": "Controller name",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerNameControl.xaml.cs"
+    ]
+  },
+  "UI_A0E7802C068EFAE4": {
+    "source": "Use up to 50 letters, numbers and spaces.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerNameControl.xaml.cs",
+      "DS4Windows/DS4Forms/ViewModels/ControllerListViewModel.cs"
+    ]
+  },
+  "UI_B45D97659EF1A0B4": {
+    "source": "The controller name could not be saved. Please try again.",
+    "files": [
+      "DS4Windows/DS4Forms/ViewModels/ControllerListViewModel.cs"
+    ]
+  },
+  "UI_481187621459B01C": {
+    "source": "Clear the name to restore the default. Enter saves; Escape cancels.",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerNameControl.xaml.cs"
     ]
   }
 }

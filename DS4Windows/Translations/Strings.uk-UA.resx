@@ -4470,8 +4470,8 @@
   <data name="UI_A149CDBAD52D6E61" xml:space="preserve">
     <value>Використовуйте сміття</value>
   </data>
-  <data name="UI_A14BFFFC24C3A843" xml:space="preserve">
-    <value>Генеральна публічна ліцензія GNU v3</value>
+  <data name="UI_6698CC69CFEA8306" xml:space="preserve">
+    <value>GNU GPL v3 + GNU AGPL v3</value>
   </data>
   <data name="UI_A178F51FB534636D" xml:space="preserve">
     <value> Повністю обвинувачений</value>
@@ -6883,7 +6883,7 @@
     <value>Показати Windows аудіо вихід</value>
   </data>
   <data name="OverviewShowQuickProfileHeading" xml:space="preserve">
-    <value>Показувати заголовок і опис швидких налаштувань профілю</value>
+    <value>Показувати заголовок швидких налаштувань профілю</value>
   </data>
   <data name="OverviewDeviceOptionsHelp" xml:space="preserve">
     <value>Вибір підтримуваних контролерів і параметрів пристрою.</value>
@@ -6896,5 +6896,46 @@
   </data>
   <data name="OverviewEditProfileHelp" xml:space="preserve">
     <value>Відкрити активний профіль контролера в повному редакторі профілів.</value>
+  </data>
+  <data name="DS3PressureButtonsTitle" xml:space="preserve">
+    <value>Кнопки, чутливі до сили натискання</value>
+  </data>
+  <data name="DS3PressureButtonsHelp" xml:space="preserve">
+    <value>Спільний діапазон для лицьових кнопок, хрестовини, L1 і R1 DualShock 3, призначених на аналогові тригери або напрямки стіків. Цифрові призначення кнопок, клавіатури й миші не змінюються. Фізичні L2/R2 налаштовуються на вкладці «Тригери».</value>
+  </data>
+  <data name="DS3PressureStartLabel" xml:space="preserve">
+    <value>Мертва зона (%)</value>
+  </data>
+  <data name="DS3PressureFullLabel" xml:space="preserve">
+    <value>Повне натискання при (%)</value>
+  </data>
+  <data name="DS3PressureStartHelp" xml:space="preserve">
+    <value>Натискання на цьому рівні або нижче дає нульовий аналоговий вихід. Значення має бути нижчим за точку повного натискання.</value>
+  </data>
+  <data name="DS3PressureFullHelp" xml:space="preserve">
+    <value>Натискання на цьому рівні або вище дає повний вихід. Між двома точками тиск масштабується лінійно.</value>
+  </data>
+  <data name="DS3PressureExample" xml:space="preserve">
+    <value>Приклад: мертва зона 10% і повне натискання при 80% перетворюють фізичне натискання 10–80% на вихід 0–100%. Відпускання кнопки завжди повертає вісь у нейтральне положення.</value>
+  </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Перейменувати контролер</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Назва контролера</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Використовуйте до 50 літер, цифр і пробілів.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>Не вдалося зберегти назву контролера. Спробуйте ще раз.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Очистьте назву, щоб відновити стандартну. Enter зберігає; Escape скасовує.</value>
+    <comment>Controller custom name editing.</comment>
   </data>
 </root>

@@ -4,7 +4,7 @@
                     xmlns:theme="clr-namespace:DS4WinWPF.DS4Forms.Themes">
 
     <!--
-        DS4Windows application shell.
+        DS4Windows application shell, originally inspired by the DS5 Bridge companion app.
 
         This dictionary only owns layout and component geometry. Theme colors live in
         DefaultTheme.xaml and DarkTheme.xaml so the existing runtime theme switch keeps
@@ -713,8 +713,12 @@
                                                             <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
                                                                 <TextBlock Text="{Binding BatteryState}" FontSize="10" FontWeight="SemiBold"
                                                                            Foreground="{DynamicResource SuccessColor}" HorizontalAlignment="Right" />
-                                                                <Image Source="{Binding StatusSource}" Width="12" Height="12"
-                                                                       Margin="0,3,0,0" HorizontalAlignment="Right" />
+                                                                <Border Width="12" Height="12" Margin="0,3,0,0" HorizontalAlignment="Right"
+                                                                        Background="{DynamicResource MutedForegroundColor}">
+                                                                    <Border.OpacityMask>
+                                                                        <ImageBrush ImageSource="{Binding StatusSource}" Stretch="Uniform" />
+                                                                    </Border.OpacityMask>
+                                                                </Border>
                                                             </StackPanel>
                                                         </Grid>
                                                     </DataTemplate>

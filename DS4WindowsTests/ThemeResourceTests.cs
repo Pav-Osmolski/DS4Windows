@@ -211,6 +211,7 @@ namespace DS4WindowsTests
                     ThemeConsistencyValidation.Validate(application, resultsDirectory, renderedFiles);
                     AutoProfileLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
                     BatteryAlertsLayoutValidation.Validate(application, resultsDirectory, renderedFiles);
+                    DS3PressureEditorValidation.Validate(resultsDirectory, renderedFiles);
                     ProfileAudioSelectionValidation.Validate();
                     AppThemeValidation.Validate(application, resultsDirectory, renderedFiles);
                     ControllerInfoWindowValidation.Validate(application, resultsDirectory, renderedFiles);
@@ -224,7 +225,7 @@ namespace DS4WindowsTests
                     failure = ex;
                 }
             };
-            // This matrix constructs many editor pages and exports 157 PNGs.
+            // This matrix constructs many editor pages and exports 363 PNGs.
             // Keep a bounded deadline without imposing a single-interaction
             // budget on the entire render/export workload.
             HeadlessWpfDispatcher.Invoke(thread, timeout: TimeSpan.FromSeconds(90));
@@ -234,7 +235,7 @@ namespace DS4WindowsTests
             }
             HeadlessWpfDispatcher.Invoke(ThemeConsistencyValidation.ValidateAudioHapticsTopEdge);
             // Main theme coverage plus one DirectInput view for each of six themes.
-            Assert.AreEqual(163, renderedFiles.Count);
+            Assert.AreEqual(369, renderedFiles.Count);
             foreach (string path in renderedFiles)
             {
                 Assert.IsTrue(System.IO.File.Exists(path), path);

@@ -42,7 +42,7 @@ internal sealed class SettingsStorage
             "DS4Windows", "Settings locations"));
 
     private static readonly string[] RootFiles = { "Profiles.xml", "Auto Profiles.xml", "Actions.xml",
-        "LinkedProfiles.xml", "ControllerConfigs.xml", "OutputSlots.xml" };
+        "LinkedProfiles.xml", "ControllerConfigs.xml", "ControllerNames.json", "OutputSlots.xml" };
     private static readonly string[] DataDirectories = { "Profiles", "Nintendo", "Switch2", "BatteryAlertSounds", "Macros" };
     private const long MaximumBytes = 512L * 1024 * 1024;
     private const int MaximumFiles = 10000;

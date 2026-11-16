@@ -167,3 +167,15 @@ Use this wording in release notes, without duplicating the asset links:
 - **Most users:** download the `Setup_x64.exe` installer.
 - **Portable use:** download the `_x64.zip` package.
 - The remaining files contain source code, licensing information and verification records.
+
+### Application attribution and licenses
+
+Portable and installed packages must include COPYING, LICENSE.txt, NOTICE.txt,
+AGPL-3.0.txt and DS5-BRIDGE-NOTICE.txt at their root. About displays both full
+license texts and the DS5 Bridge modification notice offline. The information
+ZIP additionally includes COPYING, NOTICE.txt, AGPL-3.0.txt and
+DS5-BRIDGE-NOTICE.txt; its historical LICENSE.txt backend entry is retained.
+Both promotion and rebuild copy the application notices from the tested
+publish tree. Publication checks require all four new entries whenever any
+is recorded; historical receipts retain their original notice membership.
+Matching source archives include these notices and build scripts.

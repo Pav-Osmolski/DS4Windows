@@ -146,10 +146,14 @@ public sealed class ControllerOverviewAudioTests
         ValidateImmediateSliderLabels(overview);
         var resources = Application.Current.Resources.MergedDictionaries;
         var originalTheme = resources[0];
-        foreach (string name in new[] { "DefaultTheme", "DarkTheme" })
+        foreach (string name in new[] { "DefaultTheme", "DarkTheme", "Graphite", "Paper", "Midnight", "HighContrast" })
         {
-            resources[0] = new ResourceDictionary { Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{name}.xaml", UriKind.Relative) };
+            string basis = name is "DefaultTheme" or "Paper" ? "DefaultTheme" : "DarkTheme";
+            resources[0] = new ResourceDictionary { Source = new Uri($"/DS4Windows;component/DS4Forms/Themes/{basis}.xaml", UriKind.Relative) };
             var themedOverview = new ControllerOverviewControl();
+            if (name is not "DefaultTheme" and not "DarkTheme")
+                themedOverview.Resources.MergedDictionaries.Add(DS4WinWPF.DS4Forms.Themes.AppThemeCatalog.Create(
+                    Enum.Parse<AppThemeChoice>(name), highContrast: false));
             themedOverview.SetResourceReference(Control.ForegroundProperty, "ForegroundColor");
             themedOverview.SetResourceReference(Control.BackgroundProperty, "SurfaceBackgroundColor");
             var protectedController = new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB, sony: true)
@@ -183,7 +187,7 @@ public sealed class ControllerOverviewAudioTests
             Assert.IsFalse(((FrameworkElement)themedOverview.FindName("quickProfileControls")).IsEnabled);
             Assert.AreEqual(Visibility.Visible, ((FrameworkElement)themedOverview.FindName("profileSelectionNotice")).Visibility);
             Assert.IsTrue(((Button)themedOverview.FindName("selectProfileButton")).IsEnabled);
-            Assert.AreEqual(((SolidColorBrush)Application.Current.FindResource("AccentColor")).Color,
+            Assert.AreEqual(((SolidColorBrush)themedOverview.FindResource("AccentColor")).Color,
                 ((SolidColorBrush)((TextBlock)themedOverview.FindName("controllerStartupTitle")).Foreground).Color,
                 "Profile guidance must retain readable contrast in light and dark themes.");
             var image = new RenderTargetBitmap(1100, 950, 96, 96, PixelFormats.Pbgra32);
@@ -200,6 +204,118 @@ public sealed class ControllerOverviewAudioTests
             Assert.AreEqual(Visibility.Collapsed, ((FrameworkElement)themedOverview.FindName("profileSelectionNotice")).Visibility);
             Assert.AreEqual(DS4WinWPF.Translations.Strings.HidHideAccess,
                 ((TextBlock)themedOverview.FindName("overviewAccessStatus")).Text);
+            ValidateControllerCardWrapping(themedOverview.Resources, protectedController, name, resultsDirectory, renderedFiles);
+            // Status details live outside the card's layout, including long messages.
+            var statusOverview = new ControllerOverviewControl { Resources = themedOverview.Resources, DataContext = Model(protectedController) };
+            ThemeConsistencyValidation.Layout(statusOverview, 1100, 950);
+            var statusButton = (System.Windows.Controls.Primitives.ToggleButton)statusOverview.FindName("controllerStatusButton");
+            var statusPopup = (System.Windows.Controls.Primitives.Popup)statusOverview.FindName("controllerStatusPopup");
+            var summaryCard = (FrameworkElement)statusOverview.FindName("overviewControllerCard");
+            var toolbar = (FrameworkElement)statusOverview.FindName("overviewToolbar");
+            Rect StatusBounds(FrameworkElement element) => new(element.TranslatePoint(new Point(), statusOverview), element.RenderSize);
+            // Popup needs a connected presentation source. Suppress the production
+            // Loaded handler so this UI check cannot start endpoint discovery or save preferences.
+            var loadedHandler = (RoutedEventHandler)Delegate.CreateDelegate(typeof(RoutedEventHandler), statusOverview,
+                typeof(ControllerOverviewControl).GetMethod("ControllerOverviewControl_Loaded", BindingFlags.Instance | BindingFlags.NonPublic)!);
+            statusOverview.RemoveHandler(FrameworkElement.LoadedEvent, loadedHandler);
+            Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            var statusHost = new Window { Content = statusOverview, Width = statusOverview.ActualWidth,
+                Height = statusOverview.ActualHeight, WindowStyle = WindowStyle.None, ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false, ShowActivated = false, Left = -20000, Top = -20000 };
+            try
+            {
+                statusHost.Show();
+                statusHost.UpdateLayout();
+                Rect readyCardBounds = StatusBounds(summaryCard);
+                Rect readyToolbarBounds = StatusBounds(toolbar);
+                ValidateStatusLabelsAndBattery(statusOverview, protectedController, name, resultsDirectory, renderedFiles);
+                var attentionModel = Model(protectedController);
+                string attentionDetail = "Enable this controller's DS4Windows Audio playback device in Windows Sound to restore game haptics. Your headphones can remain the default output. " + new string('x', 1200);
+                typeof(MainWindowsViewModel).GetField("selectedControllerStartupStatus", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .SetValue(attentionModel, new ControllerStartupStatus(ControllerStartupStage.Attention, "Needs attention", attentionDetail));
+                statusOverview.DataContext = attentionModel;
+                statusOverview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+                statusOverview.UpdateLayout();
+                Assert.AreEqual(readyCardBounds, StatusBounds(summaryCard), "An attention message must not grow the controller card.");
+                Assert.AreEqual(readyToolbarBounds, StatusBounds(toolbar), "An attention message must not move the toolbar.");
+                var statusTitle = (TextBlock)statusOverview.FindName("controllerStartupTitle");
+                var statusDot = (FrameworkElement)statusOverview.FindName("controllerStatusDot");
+                var batteryRow = (FrameworkElement)statusOverview.FindName("overviewBatteryRow");
+                var arrowFrame = (FrameworkElement)statusButton.Template.FindName("ArrowFrame", statusButton);
+                double statusCentre = StatusBounds(statusButton).Top + statusButton.ActualHeight / 2;
+                foreach (var part in new FrameworkElement[] { statusDot, batteryRow, arrowFrame })
+                    Assert.AreEqual(statusCentre, StatusBounds(part).Top + part.ActualHeight / 2, 0.1, "Centre the badge text, dot, arrow and battery.");
+                Assert.IsTrue(StatusBounds(batteryRow).Left > StatusBounds(statusButton).Right, "Keep status and battery inline.");
+                Assert.AreEqual(26d, statusButton.ActualHeight, 0.1, "Leave 48 physical pixels inside the border at 200% scaling.");
+                var textColour = ((SolidColorBrush)statusTitle.Foreground).Color;
+                // Exercise the hover states and verify the arrow retains its severity colour.
+                // The shared disclosure tests cover transition timing.
+                var hoverBadge = new System.Windows.Controls.Primitives.ToggleButton
+                    { Style = statusButton.Style, Resources = statusOverview.Resources, Foreground = statusTitle.Foreground, Content = "Needs attention" };
+                ThemeConsistencyValidation.Layout(hoverBadge, 200, 26);
+                var hoverKey = (DependencyPropertyKey)typeof(UIElement).GetField("IsMouseOverPropertyKey", BindingFlags.NonPublic | BindingFlags.Static)!.GetValue(null);
+                hoverBadge.SetValue(hoverKey, true);
+                Assert.IsTrue(VisualStateManager.GoToState(hoverBadge, "MouseOver", false));
+                var hoverArrowFrame = (FrameworkElement)hoverBadge.Template.FindName("ArrowFrame", hoverBadge);
+                var arrow = ThemeConsistencyValidation.Visuals(hoverArrowFrame).OfType<System.Windows.Shapes.Path>().Single();
+                Assert.AreEqual(textColour, ((SolidColorBrush)arrow.Stroke).Color, "Keep the arrow's status colour on hover.");
+                hoverBadge.SetValue(hoverKey, false);
+                Assert.IsTrue(VisualStateManager.GoToState(hoverBadge, "Normal", false));
+                Assert.IsFalse(statusPopup.StaysOpen, "Clicking outside must dismiss the live popover.");
+                statusButton.IsChecked = true;
+                statusPopup.GetBindingExpression(System.Windows.Controls.Primitives.Popup.IsOpenProperty)?.UpdateTarget();
+                DisclosureAnimationTests.Pump(160);
+                statusOverview.UpdateLayout();
+                Assert.IsTrue(statusPopup.IsOpen);
+                Assert.IsFalse(statusButton.IsHitTestVisible, "While open, clicking the badge must dismiss through the outside-click path without toggling it open again.");
+                Assert.IsTrue(statusButton.Focusable, "Keyboard toggling must remain available.");
+                Assert.AreEqual(180d, ((RotateTransform)arrowFrame.RenderTransform).Angle, 0.1);
+                Assert.AreEqual(attentionDetail, ((TextBlock)statusOverview.FindName("controllerStatusDetail")).Text);
+                Assert.AreEqual(readyCardBounds, StatusBounds(summaryCard), "Opening the status popover must not move the card.");
+                var popupContent = (FrameworkElement)statusOverview.FindName("controllerStatusPopupContent");
+                popupContent.UpdateLayout();
+                Assert.IsFalse(ThemeConsistencyValidation.Visuals(popupContent).OfType<Button>().Any(), "Do not duplicate Sound settings in the status popover.");
+                foreach (var capture in new[] { (element: (FrameworkElement)statusOverview, suffix: "card"), (element: popupContent, suffix: "popup") })
+                {
+                    int width = Math.Max(1, (int)Math.Ceiling(capture.element.ActualWidth));
+                    int height = Math.Max(1, (int)Math.Ceiling(capture.element.ActualHeight));
+                    var statusImage = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+                    statusImage.Render(capture.element);
+                    var statusEncoder = new PngBitmapEncoder(); statusEncoder.Frames.Add(BitmapFrame.Create(statusImage));
+                    string statusPath = Path.Combine(resultsDirectory, $"overview-status-{capture.suffix}-{name}.png");
+                    using (var stream = File.Create(statusPath)) statusEncoder.Save(stream);
+                    renderedFiles.Add(statusPath);
+                }
+                var source = PresentationSource.FromVisual(popupContent);
+                var escape = new System.Windows.Input.KeyEventArgs(System.Windows.Input.Keyboard.PrimaryDevice, source, 0, System.Windows.Input.Key.Escape)
+                    { RoutedEvent = System.Windows.Input.Keyboard.PreviewKeyDownEvent };
+                popupContent.RaiseEvent(escape);
+                DisclosureAnimationTests.Pump(160);
+                Assert.IsFalse(statusPopup.IsOpen, "Escape must close status details.");
+                Assert.AreEqual(false, statusButton.IsChecked);
+                Assert.AreEqual(0d, ((RotateTransform)arrowFrame.RenderTransform).Angle, 0.1);
+                statusButton.IsChecked = true;
+                DisclosureAnimationTests.Pump(10);
+                statusPopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
+                Assert.AreEqual(false, statusButton.IsChecked, "Outside dismissal must reset the arrow state.");
+                Assert.IsTrue(statusButton.IsHitTestVisible, "After dismissal the next deliberate click must open normally.");
+                typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(statusButton, null);
+                DisclosureAnimationTests.Pump(10);
+                Assert.IsTrue(statusPopup.IsOpen);
+                typeof(System.Windows.Controls.Primitives.ToggleButton).GetMethod("OnToggle", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(statusButton, null);
+                DisclosureAnimationTests.Pump(10);
+                Assert.IsFalse(statusPopup.IsOpen, "A second keyboard toggle must close instead of reopen.");
+                statusButton.IsChecked = true;
+                statusOverview.DataContext = Model(protectedController);
+                statusOverview.UpdateLayout();
+                Assert.IsFalse(statusPopup.IsOpen, "Changing the controller context must dismiss stale details.");
+            }
+            finally
+            {
+                statusPopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
+                statusHost.Content = null;
+                statusHost.Close();
+            }
             var audioCard = (Border)themedOverview.FindName("managedSpeakerRouteCard");
             var microphoneCard = (Border)themedOverview.FindName("overviewMicrophoneCardBorder");
             double Bottom(Border card) => card.TranslatePoint(new Point(0, card.ActualHeight), themedOverview).Y;
@@ -294,22 +410,69 @@ public sealed class ControllerOverviewAudioTests
             var heading = (FrameworkElement)themedOverview.FindName("quickProfileHeading");
             var headingToggle = (CheckBox)themedOverview.FindName("showQuickProfileHeading");
             themedOverview.UpdateLayout();
-            cardsBefore = Bounds(cards);
-            var headingBefore = Bounds(heading);
-            var headingLocalY = heading.TranslatePoint(new Point(), (FrameworkElement)heading.Parent).Y;
-            headingToggle.IsChecked = false;
+            var soundButton = (Button)themedOverview.FindName("windowsSoundSettingsButton");
+            var customizeButton = (System.Windows.Controls.Primitives.ToggleButton)themedOverview.FindName("customizeOverviewButton");
+            var audioToggle = (CheckBox)themedOverview.FindName("showWindowsAudioOutput");
+            scroll.ScrollToHome();
+            audioToggle.IsChecked = true;
+            themedOverview.ApplyWindowsAudioOutput(new("Desktop headphones", 0, -1));
             themedOverview.UpdateLayout();
-            Assert.AreEqual(Visibility.Hidden, heading.Visibility);
-            Assert.AreEqual(headingBefore, Bounds(heading));
-            Assert.AreEqual(cardsBefore, Bounds(cards), "Hiding the complete heading must preserve the layout.");
-            headingToggle.IsChecked = true;
+            var soundBounds = Bounds(soundButton);
+            var customizeBounds = Bounds(customizeButton);
+            double expandedCardsTop = Bounds(cards).Top;
+            Assert.AreEqual(soundBounds.Top, customizeBounds.Top, 0.1);
+            Assert.AreEqual(soundBounds.Height, customizeBounds.Height, 0.1);
+            double? audioHiddenCardsTop = null;
+            foreach (var state in new[] { (heading: false, audio: true), (heading: true, audio: false), (heading: false, audio: false), (heading: true, audio: true) })
+            {
+                headingToggle.IsChecked = state.heading;
+                audioToggle.IsChecked = state.audio;
+                themedOverview.ApplyWindowsAudioOutput(new("Desktop headphones", 0, -1));
+                scroll.ScrollToHome();
+                themedOverview.UpdateLayout();
+                Assert.AreEqual(soundBounds, Bounds(soundButton), "Sound settings must stay anchored for every label combination.");
+                Assert.AreEqual(customizeBounds, Bounds(customizeButton), "Customize must stay anchored for every label combination.");
+                if (!state.audio)
+                {
+                    if (state.heading)
+                    {
+                        Assert.AreEqual(soundBounds.Top + soundBounds.Height / 2,
+                            Bounds(heading).Top + Bounds(heading).Height / 2, 0.1,
+                            "The quick-profile heading must be vertically centred with the buttons.");
+                        Assert.AreEqual(DS4WinWPF.Translations.Strings.ResourceManager.GetString("UI_73633F28FF75F010"),
+                            heading.ToolTip as string, "Keep the former description available on hover.");
+                        Point emptyHeadingSpace = new(Bounds(heading).Right + 8,
+                            soundBounds.Top + soundBounds.Height / 2);
+                        Assert.IsTrue(emptyHeadingSpace.X < soundBounds.Left,
+                            "The heading must end before the empty space beside it.");
+                        Assert.AreNotSame(heading, themedOverview.InputHitTest(emptyHeadingSpace),
+                            "Empty space beside the header must not trigger its tooltip.");
+                    }
+                    audioHiddenCardsTop ??= Bounds(cards).Top;
+                    Assert.AreEqual(audioHiddenCardsTop.Value, Bounds(cards).Top, 0.1,
+                        "Hiding the heading beside the buttons must not move the cards.");
+                    Assert.AreEqual(16d, Bounds(cards).Top - soundBounds.Bottom, 0.1,
+                        "Keep exactly 16 DIPs below the toolbar buttons.");
+                    var summary = (FrameworkElement)themedOverview.FindName("overviewControllerCard");
+                    Assert.AreEqual(16d, soundBounds.Top - Bounds(summary).Bottom, 0.1,
+                        "Keep exactly 16 DIPs above the toolbar buttons.");
+                    var toolbarImage = new RenderTargetBitmap(1100, 950, 96, 96, PixelFormats.Pbgra32);
+                    toolbarImage.Render(themedOverview);
+                    var toolbarEncoder = new PngBitmapEncoder();
+                    toolbarEncoder.Frames.Add(BitmapFrame.Create(toolbarImage));
+                    string toolbarPath = Path.Combine(resultsDirectory, $"overview-toolbar-heading-{state.heading}-{name}.png");
+                    using (var stream = File.Create(toolbarPath)) toolbarEncoder.Save(stream);
+                    renderedFiles.Add(toolbarPath);
+                }
+                Assert.AreEqual(state.heading ? Visibility.Visible : Visibility.Collapsed, heading.Visibility);
+                Assert.AreEqual(Visibility.Visible, soundButton.Visibility, "Hiding the output text must not hide its shortcut.");
+                if (!state.heading || !state.audio) Assert.IsTrue(Bounds(cards).Top < expandedCardsTop, "Hidden text must reclaim vertical space.");
+            }
             var sections = new[] { "showFeedback", "showAudio", "showLevels", "showMicrophone" }
                 .Select(n => (CheckBox)themedOverview.FindName(n)).ToArray();
             foreach (var section in sections) section.IsChecked = false;
             themedOverview.UpdateLayout();
-            Assert.AreEqual(Visibility.Hidden, heading.Visibility);
-            Assert.AreEqual(headingBefore.Height, heading.ActualHeight, 0.1);
-            Assert.AreEqual(headingLocalY, heading.TranslatePoint(new Point(), (FrameworkElement)heading.Parent).Y, 0.1);
+            Assert.AreEqual(Visibility.Collapsed, heading.Visibility);
             Assert.IsTrue(headingToggle.IsChecked == true, "Automatic hiding must not overwrite the user's choice.");
             sections[0].IsChecked = true;
             themedOverview.UpdateLayout();
@@ -476,6 +639,125 @@ public sealed class ControllerOverviewAudioTests
         throw new FileNotFoundException("Production Overview markup not found.");
     }
 
+    private static void ValidateControllerCardWrapping(ResourceDictionary resources, PhysicalDevice device,
+        string theme, string directory, List<string> renderedFiles)
+    {
+        var overview = new ControllerOverviewControl { Resources = resources, DataContext = Model(device) };
+        var card = (Border)overview.FindName("overviewControllerCard");
+        var facts = (WrapPanel)overview.FindName("overviewFactsPanel");
+        var info = (Button)overview.FindName("overviewControllerInfoButton");
+        var compact = (CheckBox)overview.FindName("compactSpacing");
+        foreach (bool useCompact in new[] { false, true })
+        {
+            compact.IsChecked = useCompact;
+            foreach (int width in new[] { 1100, 760, 660, 540 })
+            {
+                ThemeConsistencyValidation.Layout(overview, width, 950);
+                var buttonBounds = new Rect(info.TranslatePoint(new Point(), card), info.RenderSize);
+                Assert.AreEqual(card.Padding.Bottom + card.BorderThickness.Bottom,
+                    card.ActualHeight - buttonBounds.Bottom, 0.1,
+                    $"Controller info must keep its bottom inset at width {width}, compact={useCompact}, {theme}.");
+                var rows = facts.Children.Cast<FrameworkElement>().Where(e => e.Visibility == Visibility.Visible)
+                    .Select(e => new Rect(e.TranslatePoint(new Point(), facts), e.RenderSize))
+                    .GroupBy(r => Math.Round(r.Top, 2)).OrderBy(g => g.Key).ToArray();
+                if (width == 1100) Assert.HasCount(1, rows, "The wide card should keep its facts on one row.");
+                if (width == 660) Assert.IsGreaterThan(1, rows.Length, "Check a width where facts actually wrap.");
+                for (int i = 1; i < rows.Length; i++)
+                    Assert.AreEqual(1d, rows[i].Key - rows[i - 1].Max(r => r.Bottom), 0.1,
+                        "Keep 2 physical pixels between wrapped fact rows at 200% scaling.");
+                if (width is not (1100 or 660)) continue;
+                var image = new RenderTargetBitmap((int)Math.Ceiling(card.ActualWidth), (int)Math.Ceiling(card.ActualHeight), 96, 96, PixelFormats.Pbgra32);
+                image.Render(card);
+                var png = new PngBitmapEncoder(); png.Frames.Add(BitmapFrame.Create(image));
+                string path = Path.Combine(directory, $"controller-card-wrap-{theme}-{width}-compact-{useCompact}.png");
+                using (var stream = File.Create(path)) png.Save(stream);
+                renderedFiles.Add(path);
+            }
+        }
+    }
+
+    private static void ValidateStatusLabelsAndBattery(ControllerOverviewControl overview, PhysicalDevice device,
+        string theme, string directory, List<string> renderedFiles)
+    {
+        var model = (MainWindowsViewModel)overview.DataContext;
+        var title = (TextBlock)overview.FindName("controllerStartupTitle");
+        var badge = (FrameworkElement)overview.FindName("controllerStatusButton");
+        var card = (FrameworkElement)overview.FindName("overviewControllerCard");
+        var battery = (FrameworkElement)overview.FindName("overviewBatteryRow");
+        var batteryText = (TextBlock)overview.FindName("overviewBatteryText");
+        Rect Bounds(FrameworkElement e) => new(e.TranslatePoint(new Point(), overview), e.RenderSize);
+        void Flush()
+        {
+            overview.Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.DataBind);
+            overview.UpdateLayout();
+        }
+        var statusField = typeof(MainWindowsViewModel).GetField("selectedControllerStartupStatus", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var notifyStatus = typeof(MainWindowsViewModel).GetMethod("RaiseControllerStartupStatusChanged", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        var savedStatus = statusField.GetValue(model);
+        var labels = new[]
+        {
+            (ControllerStartupStage.Ready, "Ready"), (ControllerStartupStage.Attention, "Needs attention"),
+            (ControllerStartupStage.Disconnected, "Disconnected"), (ControllerStartupStage.Connecting, "Connecting"),
+            (ControllerStartupStage.Connected, "Connected"), (ControllerStartupStage.CreatingVirtualController, "Connected"),
+            (ControllerStartupStage.ArmingAdvancedHaptics, "Arming haptics"), (ControllerStartupStage.StartingSpeaker, "Starting speaker"),
+            (ControllerStartupStage.StartingMicrophone, "Starting microphone"), (ControllerStartupStage.StartingAudioHaptics, "Starting Audio Haptics"),
+            (ControllerStartupStage.ProfileRequired, "Select a profile")
+        };
+        Assert.AreEqual(Enum.GetValues<ControllerStartupStage>().Length, labels.Length, "Cover every runtime stage.");
+        double? baseline = null;
+        Rect originalCard = Bounds(card);
+        foreach (var (stage, label) in labels)
+        {
+            statusField.SetValue(model, new ControllerStartupStatus(stage, UiText.Get(label), "Status alignment test"));
+            notifyStatus.Invoke(model, null);
+            Flush();
+            double currentBaseline = title.TranslatePoint(new Point(0, title.BaselineOffset), badge).Y;
+            baseline ??= currentBaseline;
+            Assert.AreEqual(baseline.Value, currentBaseline, 0.05, $"Changing to {label} must preserve the baseline.");
+            Assert.AreEqual(originalCard, Bounds(card), $"Changing to {label} must not grow the card.");
+            var firstLetter = new FormattedText(title.Text[..1], System.Globalization.CultureInfo.CurrentUICulture,
+                title.FlowDirection, new Typeface(title.FontFamily, title.FontStyle, title.FontWeight, title.FontStretch),
+                title.FontSize, title.Foreground, 1);
+            foreach (int scale in new[] { 1, 2 })
+            {
+                int width = (int)Math.Ceiling(badge.ActualWidth * scale), height = (int)Math.Ceiling(badge.ActualHeight * scale);
+                var image = new RenderTargetBitmap(width, height, 96 * scale, 96 * scale, PixelFormats.Pbgra32);
+                image.Render(badge);
+                byte[] pixels = new byte[width * height * 4]; image.CopyPixels(pixels, width * 4, 0);
+                Color colour = ((SolidColorBrush)title.Foreground).Color;
+                int left = (int)Math.Ceiling(title.TranslatePoint(new Point(), badge).X * scale);
+                int right = Math.Min(width, left + (int)Math.Floor(firstLetter.Width * scale));
+                var rows = new List<int>();
+                for (int y = 0; y < height; y++)
+                    for (int x = left; x < right; x++)
+                    {
+                        int i = (y * width + x) * 4;
+                        if (pixels[i + 3] > 240 && Math.Abs(pixels[i] - colour.B) < 16 &&
+                            Math.Abs(pixels[i + 1] - colour.G) < 16 && Math.Abs(pixels[i + 2] - colour.R) < 16) rows.Add(y);
+                    }
+                Assert.IsNotEmpty(rows, label);
+                Assert.AreEqual(height / 2d, (rows.Min() + rows.Max() + 1) / 2d, scale,
+                    $"Centre the capital-letter band for {label}, {theme}, {scale * 100}% without lifting descenders.");
+                string path = Path.Combine(directory, $"status-label-{stage}-{theme}-{scale * 100}.png");
+                var png = new PngBitmapEncoder(); png.Frames.Add(BitmapFrame.Create(image));
+                using (var stream = File.Create(path)) png.Save(stream);
+                renderedFiles.Add(path);
+            }
+        }
+        statusField.SetValue(model, savedStatus); notifyStatus.Invoke(model, null); Flush();
+        Rect badgeBounds = Bounds(badge), batteryBounds = Bounds(battery), textBounds = Bounds(batteryText);
+        var batteryChanged = typeof(MainWindowsViewModel).GetField("SelectedControllerBatteryChanged", BindingFlags.Instance | BindingFlags.NonPublic)!;
+        foreach (var (percent, charging) in new[] { (100, true), (99, true), (9, true), (0, false), (1, false), (10, false), (100, false), (100, true) })
+        {
+            device.SetBattery(percent, charging);
+            ((EventHandler)batteryChanged.GetValue(model))?.Invoke(model, EventArgs.Empty); Flush();
+            Assert.AreEqual($"{percent}%{(charging ? "+" : "")}", batteryText.Text);
+            Assert.AreEqual(badgeBounds, Bounds(badge), "Battery changes must not move the status badge.");
+            Assert.AreEqual(batteryBounds, Bounds(battery), "Battery icon and row must remain anchored.");
+            Assert.AreEqual(textBounds, Bounds(batteryText), "Reserve the same percentage area for every digit count and charging state.");
+        }
+    }
+
     private sealed class PhysicalDevice : DS4Device
     {
         internal PhysicalDevice(InputDeviceType type, ConnectionType connection, bool sony = false)
@@ -489,7 +771,7 @@ public sealed class ControllerOverviewAudioTests
                     { VendorID = 0x054C, ProductID = 0x0CE6 }));
             }
         }
-        internal void SetBattery(int percent) => battery = percent;
+        internal void SetBattery(int percent, bool isCharging = false) { battery = percent; charging = isCharging; }
         public override bool IsAlive() => true;
     }
 

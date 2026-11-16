@@ -66,6 +66,7 @@ if len({entry.as_posix().casefold() for entry in relative_entries}) != len(relat
 # composition if any required runtime or installer payload is absent instead
 # of producing an archive that later needs a network recovery path.
 required_offline_files = (
+    "COPYING", "LICENSE.txt", "NOTICE.txt", "AGPL-3.0.txt", "DS5-BRIDGE-NOTICE.txt",
     "DS4Windows.exe",
     "BouncyCastle.Cryptography.dll",
     "Resources/BouncyCastle.NOTICE.txt",

@@ -1955,7 +1955,7 @@ Suspend support not enabled.", true);
 
         private void ContStatusImg_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Image img = sender as Image;
+            FrameworkElement img = sender as FrameworkElement;
             int tag = Convert.ToInt32(img.Tag);
             conLvViewModel.CurrentIndex = tag;
             CompositeDeviceModel item = conLvViewModel.CurrentItem;

@@ -1,4 +1,4 @@
-﻿/*
+/*
 DS4Windows
 Copyright (C) 2023  Travis Nickles
 
@@ -1077,6 +1077,12 @@ namespace DS4WinWPF.DS4Control.DTOXml
             get => TouchpadClickPassthru.ToString();
             set => TouchpadClickPassthru = XmlDataUtilities.StrToBool(value);
         }
+
+        [XmlElement("DS3PressureStartPercent")]
+        public int DS3PressureStartPercent { get; set; }
+
+        [XmlElement("DS3PressureFullPercent")]
+        public int DS3PressureFullPercent { get; set; } = 100;
 
         [XmlElement("L2AntiDeadZone")]
         public int L2AntiDeadZone
@@ -2503,6 +2509,8 @@ namespace DS4WinWPF.DS4Control.DTOXml
             RightTriggerMiddle = source.r2ModInfo[deviceIndex].deadZone;
             L2AntiDeadZone = source.l2ModInfo[deviceIndex].antiDeadZone;
             R2AntiDeadZone = source.r2ModInfo[deviceIndex].antiDeadZone;
+            DS3PressureStartPercent = source.ds3PressureSettings[deviceIndex].StartPercent;
+            DS3PressureFullPercent = source.ds3PressureSettings[deviceIndex].FullPercent;
             L2MaxZone = source.l2ModInfo[deviceIndex].maxZone;
             R2MaxZone = source.r2ModInfo[deviceIndex].maxZone;
             L2MaxOutput = source.l2ModInfo[deviceIndex].maxOutput;
@@ -3308,6 +3316,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.r2ModInfo[deviceIndex].deadZone = RightTriggerMiddle;
             destination.l2ModInfo[deviceIndex].antiDeadZone = L2AntiDeadZone;
             destination.r2ModInfo[deviceIndex].antiDeadZone = R2AntiDeadZone;
+            destination.ds3PressureSettings[deviceIndex].SetRange(DS3PressureStartPercent, DS3PressureFullPercent);
             destination.l2ModInfo[deviceIndex].maxZone = L2MaxZone;
             destination.r2ModInfo[deviceIndex].maxZone = R2MaxZone;
             destination.l2ModInfo[deviceIndex].maxOutput = L2MaxOutput;

@@ -73,3 +73,6 @@ body:has(.site-home) .md-main__inner{margin-top:0}body:has(.site-home) .md-conte
     mask-image: linear-gradient(180deg, transparent 0%, #000 70%);
   }
 }
+
+/* The tray capture is a 2x desktop screenshot; show it at logical size. */
+.md-typeset img[src$="/systray.webp"]{width:397px;max-width:100%;height:auto}

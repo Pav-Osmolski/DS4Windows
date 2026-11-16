@@ -9,6 +9,8 @@ the Free Software Foundation, either version 3 of the License, or
 */
 
 using System;
+using System.Globalization;
+using System.Windows.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -35,14 +37,18 @@ namespace DS4WinWPF.DS4Forms
         {
             InitializeComponent();
             overviewCustomization.CustomPopupPlacementCallback = PlaceOverviewCustomization;
+            controllerStatusPopup.CustomPopupPlacementCallback = PlaceOverviewCustomization;
             DataContextChanged += ControllerOverviewControl_DataContextChanged;
             Unloaded += ControllerOverviewControl_Unloaded;
             Loaded += ControllerOverviewControl_Loaded;
             SizeChanged += ControllerOverviewControl_SizeChanged;
             IsVisibleChanged += (_, _) =>
             {
-                if (!IsVisible) overviewCustomization.SetCurrentValue(
-                    Popup.IsOpenProperty, false);
+                if (!IsVisible)
+                {
+                    overviewCustomization.SetCurrentValue(Popup.IsOpenProperty, false);
+                    CloseControllerStatus();
+                }
             };
         }
 
@@ -118,11 +124,12 @@ namespace DS4WinWPF.DS4Forms
         {
             if (overviewMicrophoneCard == null) return;
 
-            // Preserve the header's measured space even when all cards are hidden.
+            // Hidden labels reclaim space; the shared toolbar keeps both actions anchored.
             quickProfileHeading.Visibility = showQuickProfileHeading.IsChecked == true &&
                 (showFeedback.IsChecked == true || showAudio.IsChecked == true ||
                  showLevels.IsChecked == true || showMicrophone.IsChecked == true)
-                ? Visibility.Visible : Visibility.Hidden;
+                ? Visibility.Visible : Visibility.Collapsed;
+            ArrangeOverviewToolbar();
             bool hasAudio = managedAudioLevelsPanel.Visibility == Visibility.Visible;
             bool hasLeftCards = showFeedback.IsChecked == true ||
                 (showAudio.IsChecked == true && (hasAudio || nativeUsbHeadsetCard.Visibility == Visibility.Visible));
@@ -138,6 +145,16 @@ namespace DS4WinWPF.DS4Forms
             var audioAlignment = alignAudioCards ? VerticalAlignment.Stretch : VerticalAlignment.Top;
             overviewAudioCard.VerticalAlignment = audioAlignment;
             overviewMicrophoneCard.VerticalAlignment = audioAlignment;
+        }
+
+        private void ArrangeOverviewToolbar()
+        {
+            if (quickProfileHeading == null || windowsAudioRoute == null) return;
+            bool showAudioRoute = windowsAudioRoute.Visibility == Visibility.Visible;
+            Grid.SetRow(quickProfileHeading, showAudioRoute ? 3 : 1);
+            Grid.SetColumnSpan(quickProfileHeading, showAudioRoute ? 2 : 1);
+            quickProfileHeading.Margin = showAudioRoute
+                ? new Thickness(0, 0, 0, 12) : new Thickness(0, 0, 12, 0);
         }
 
         private void OverviewCustomization_Opened(object sender, EventArgs e) => showFeedback.Focus();
@@ -159,6 +176,7 @@ namespace DS4WinWPF.DS4Forms
         private void ControllerOverviewControl_DataContextChanged(object sender,
             DependencyPropertyChangedEventArgs e)
         {
+            CloseControllerStatus();
             HookOutputControllerViewModel(e.OldValue as MainWindowsViewModel,
                 false);
             HookOutputControllerViewModel(e.NewValue as MainWindowsViewModel,
@@ -169,8 +187,52 @@ namespace DS4WinWPF.DS4Forms
         private void ControllerOverviewControl_Unloaded(object sender,
             RoutedEventArgs e)
         {
+            CloseControllerStatus();
             WindowsPlaybackProtection.OutputChanged -= WindowsAudioOutput_Changed;
             HookOutputControllerViewModel(outputControllerViewModel, false);
+        }
+
+        private void ControllerStatusTitle_Align(object sender, RoutedEventArgs e)
+        {
+            if (sender is not TextBlock title || title.ActualHeight <= 0) return;
+            // Use one cap-height reference for every label. Centring each word's
+            // outline lifts labels such as Ready because its y has a descender.
+            // A shared baseline lets descenders extend naturally below the cap band.
+            var text = new FormattedText("H", CultureInfo.CurrentUICulture,
+                title.FlowDirection, new Typeface(title.FontFamily, title.FontStyle, title.FontWeight, title.FontStretch),
+                title.FontSize, title.Foreground, VisualTreeHelper.GetDpi(title).PixelsPerDip);
+            Rect ink = text.BuildGeometry(new Point()).Bounds;
+            title.RenderTransform = new TranslateTransform(0,
+                ink.IsEmpty ? 0 : title.ActualHeight / 2 - (ink.Top + ink.Height / 2));
+        }
+
+        private void CloseControllerStatus() => controllerStatusButton?.SetCurrentValue(ToggleButton.IsCheckedProperty, false);
+
+        private void ControllerStatus_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Escape || controllerStatusButton.IsChecked != true) return;
+            CloseControllerStatus();
+            controllerStatusButton.Focus();
+            e.Handled = true;
+        }
+
+        private void ControllerStatusPopup_Opened(object sender, EventArgs e)
+        {
+            // Focus the content for keyboard scrolling and Escape without changing layout.
+            controllerStatusPopupContent.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+        }
+
+        private void ControllerStatusPopup_Closed(object sender, EventArgs e) => CloseControllerStatus();
+
+        private void ControllerStatus_SelectedControllerChanged(object sender, EventArgs e)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(DispatcherPriority.DataBind, new Action(() => ControllerStatus_SelectedControllerChanged(sender, e)));
+                return;
+            }
+            CloseControllerStatus();
+            RefreshWindowsAudioOutput();
         }
 
         private void WindowsAudioOutput_Changed(object sender, EventArgs e)
@@ -194,6 +256,7 @@ namespace DS4WinWPF.DS4Forms
         {
             windowsAudioRoute.Visibility = showWindowsAudioOutput.IsChecked != true || string.IsNullOrEmpty(output?.Name)
                 ? Visibility.Collapsed : Visibility.Visible;
+            ArrangeOverviewToolbar();
             windowsAudioOutputText.Text = UiText.Format("Windows audio output: {0}", output?.Name ?? "");
             windowsSoundSettingsButton.Content = UiText.Get("Sound settings");
             windowsSoundSettingsButton.ToolTip = UiText.Get("Choose the Windows playback device used by your games and apps.");
@@ -233,14 +296,14 @@ namespace DS4WinWPF.DS4Forms
                 viewModel.SelectedOutputControllerChanged +=
                     ViewModel_SelectedOutputControllerChanged;
                 viewModel.SpeakerOutputEnabledChanged += WindowsAudioOutput_Changed;
-                viewModel.SelectedControllerChanged += WindowsAudioOutput_Changed;
+                viewModel.SelectedControllerChanged += ControllerStatus_SelectedControllerChanged;
             }
             else
             {
                 viewModel.SelectedOutputControllerChanged -=
                     ViewModel_SelectedOutputControllerChanged;
                 viewModel.SpeakerOutputEnabledChanged -= WindowsAudioOutput_Changed;
-                viewModel.SelectedControllerChanged -= WindowsAudioOutput_Changed;
+                viewModel.SelectedControllerChanged -= ControllerStatus_SelectedControllerChanged;
                 if (ReferenceEquals(outputControllerViewModel, viewModel))
                 {
                     outputControllerViewModel = null;

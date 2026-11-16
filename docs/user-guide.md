@@ -10,14 +10,21 @@ selected by your profile. Available settings depend on the controller and connec
 ![Overview dashboard](images/site/overview.webp)
 
 Start here for a summary of your connected controller, active profile and backend status.
-Use **Customize** beside **Quick profile controls** to choose which cards to
+Use **Customize** beside **Sound settings** to choose which cards to
 show, hide the input report rate or the titles beside its summary icons, or use
 compact spacing. Icons and their tooltips remain available when titles are hidden, and the layout
 keeps exactly the same spacing and height.
-Use **Show quick profile title and description** to hide the complete heading
-without moving the controls. The heading also hides automatically when all four
+Hover over **Quick profile controls** to see how changes are saved and applied.
+Use **Show quick profile header** to hide the heading and its tooltip
+when it appears below the toolbar and reclaim that row. **Show Windows audio output** hides the output description;
+**Sound settings** and **Customize** remain available in the same position. When the audio description is hidden, toggling the heading beside these buttons preserves the card positions and the spacing above and below the buttons. The heading also hides automatically when all four
 quick-control sections are unticked; your heading preference is preserved.
 Overview remembers these choices separately from your controller profiles.
+
+The controller status badge and battery sit on the same line. The battery percentage reserves space for `100%+`, so changing digit counts or charging state keeps the badge and battery icon in place. Status labels share one baseline, including labels with descending letters such as Ready. Select the status
+badge to read the full status message in a popover; messages do not increase the
+controller card height. Select it again, press Escape, or click outside to close.
+The badge background highlights on hover; the arrow keeps its status colour and rotates when opened, following Windows’ animation setting.
 
 **Controller info** on the controller summary card opens information for that
 selected controller.
@@ -45,6 +52,19 @@ The Controllers page shows connected devices, battery, connection and selected
 profile. Use the profile selector to choose a saved profile, and Edit to change
 it. Link a profile to the controller ID when you want that device to reuse it.
 Temporary changes and wireless disconnect controls apply to the selected device.
+
+Use the pencil after a controller’s MAC address to give it a custom name. Names
+can contain up to 50 letters, numbers and spaces. Press Enter or click outside
+the name to save immediately; Escape cancels. Clear the name to restore the
+original controller designation. The MAC address stays visible on the card.
+
+Names are remembered for each physical controller independently of profiles,
+and are included in settings backups and location migrations. Overview and the
+sidebar use the custom name; Overview keeps long names on one line with an
+ellipsis. Hover over the name in Controllers or Overview to see the full name
+and MAC address. These labels identify controllers within DS4Windows and do
+not change the controller type presented to games.
+
 
 For Joy-Cons, use Link/Unlink or the automatic pairing option. A pair needs a
 left and right controller of the same generation. Choose upright or sideways
@@ -82,8 +102,15 @@ triggers. Ordinary button, keyboard and macro assignments remain on/off actions.
    an analogue target. For example, map **Cross to R2 / right trigger** for
    acceleration and **Square to L2 / left trigger** for braking. D-pad directions
    can also map to stick directions for pressure-sensitive steering.
-3. Save the profile and test gradual presses in the game or a controller tester.
-   A light press produces a partial value; releasing the button returns it to zero.
+3. Under **Axis Config > Pressure-sensitive buttons**, set **Dead zone (%)** and
+   **Full pressure at (%)** if needed. The shared range applies to face buttons,
+   D-pad, L1 and R1 mapped to analogue axes. For example, **10** and **80** ignore
+   the first 10% of pressure, scale 10–80% to 0–100% output, and keep full output
+   above 80%. The default **0–100%** preserves the original response. The full-pressure
+   point must be above the dead zone. Use **Triggers** for physical L2/R2 settings.
+4. Save the profile and test gradual presses in the game or a controller tester.
+   Releasing the button returns the axis to neutral. Digital button, keyboard,
+   mouse and macro assignments keep their existing behaviour.
 
 Use an emulated controller with analogue triggers, such as Xbox 360, Xbox One,
 DualShock 4 or DualSense, for acceleration/braking. Switch 2 Pro has digital
@@ -671,7 +698,7 @@ Holding PS to switch off a supported PlayStation controller is a hardware
 shortcut; see [PlayStation's controller help](https://controller.dl.playstation.net/controller/lang/gb/index.html).
 
 Credits acknowledges the community and supporting projects. License includes
-the full bundled GNU GPL v3 text, and Extras links to component projects and
+the full bundled GNU GPL v3 and GNU AGPL v3 texts, and Extras links to component projects and
 third-party notices. All pages scroll within the window; press **Escape** or
 choose **Close** to return to DS4Windows.
 
