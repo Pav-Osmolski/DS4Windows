@@ -6951,4 +6951,24 @@ De backup: </value>
   <data name="DS3PressureExample" xml:space="preserve">
     <value>Voorbeeld: een dode zone van 10% en volledige druk bij 80% zetten 10–80% fysieke druk om naar 0–100% uitvoer. Loslaten zet de as altijd terug op neutraal.</value>
   </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Controller hernoemen</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Controllernaam</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Gebruik maximaal 50 letters, cijfers en spaties.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>De controllernaam kon niet worden opgeslagen. Probeer het opnieuw.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Wis de naam om de standaardnaam te herstellen. Enter slaat op; Escape annuleert.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
 </root>

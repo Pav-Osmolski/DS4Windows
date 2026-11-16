@@ -6919,4 +6919,24 @@ Il backup: </value>
   <data name="DS3PressureExample" xml:space="preserve">
     <value>Esempio: zona morta al 10% e pressione massima all’80% trasformano una pressione fisica del 10–80% in un’uscita dello 0–100%. Rilasciare il pulsante riporta sempre l’asse in posizione neutra.</value>
   </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Rinomina controller</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Nome del controller</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Usa fino a 50 lettere, numeri e spazi.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>Impossibile salvare il nome del controller. Riprova.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Cancella il nome per ripristinare quello predefinito. Invio salva; Esc annulla.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
 </root>
