@@ -5,6 +5,7 @@ Copyright (C) 2026  SundayMoments (DS5 Bridge-derived code)
 Copyright (C) 2026  DS4Windows contributors
 
 DS5 Bridge-derived portions: AGPL-3.0-only; modified for DS4Windows.
+SPDX-License-Identifier: GPL-3.0-or-later AND AGPL-3.0-only
 Attribution and license notice restored 2026-11-16.
 See DS5-BRIDGE-NOTICE.txt and AGPL-3.0.txt for terms and provenance.
 */
