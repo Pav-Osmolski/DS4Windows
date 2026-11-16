@@ -13,6 +13,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Add inline custom controller names from the pencil beside the MAC address in Controllers. Save on Enter, an outside click or focus loss; Escape cancels and clearing restores the original designation. Names allow up to 50 letters, numbers and spaces, are stored by MAC independently of profiles, and follow settings backups and migrations. Keep the MAC visible, allow the Controllers heading to wrap, and show the custom name in Overview and the sidebar with the full name/MAC tooltip; Overview retains single-line ellipsis truncation. Thanks to [@Masterload1975](https://github.com/Masterload1975) for [issue #129](https://github.com/Pav-Osmolski/DS4Windows/issues/129).
 
+- Keep controller connection and access icons visible across light and dark themes, including when switching themes with a controller connected. Apply the same palette-aware connection icon to the sidebar.
 - Update the pinned .NET SDK from 10.0.403 to 10.0.404 and refresh SDK-dependent lock files, including the installer trimming tools. Thanks to Dependabot for [PR #133](https://github.com/Pav-Osmolski/DS4Windows/pull/133).
 
 ### [5.0.74](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.74) - 2026-11-16
