@@ -5527,7 +5527,7 @@ X axis: {0}, Y axis: {1}</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>
   </data>
   <data name="UI_A14BFFFC24C3A843" xml:space="preserve">
-    <value>GNU General Public License v3</value>
+    <value>GNU GPL v3 + GNU AGPL v3</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/About.xaml</comment>
   </data>
   <data name="UI_A178F51FB534636D" xml:space="preserve">

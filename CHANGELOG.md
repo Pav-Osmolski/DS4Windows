@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- No unreleased changes.
+- Restore DS5 Bridge attribution for inherited Audio Haptics processing/settings, Trigger Lab settings and percentage mapping, and process-loopback activation. Include the full AGPL v3 text and modification notice in the app and release packages, show both GPL/AGPL licences offline in About, and restore the DS5 Bridge artwork-adaptation credit. Thanks to [@up2urheadlights](https://github.com/up2urheadlights) and [@SundayMoments](https://github.com/SundayMoments) for [discussion #126](https://github.com/Pav-Osmolski/DS4Windows/discussions/126).
 
 ## Released
 

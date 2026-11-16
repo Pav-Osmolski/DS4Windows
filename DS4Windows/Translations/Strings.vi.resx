@@ -4476,7 +4476,7 @@ Backup : </value>
     <value>Sử dụng Smoothing</value>
   </data>
   <data name="UI_A14BFFFC24C3A843" xml:space="preserve">
-    <value>Giấy phép GNU General Public License v3</value>
+    <value>GNU GPL v3 + GNU AGPL v3</value>
   </data>
   <data name="UI_A178F51FB534636D" xml:space="preserve">
     <value> hoàn toàn bị buộc tội.</value>

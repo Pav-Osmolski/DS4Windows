@@ -24,6 +24,9 @@ try {
         'VIIPER-0.1.17-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md',
         'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')
     foreach ($name in $names) { [IO.File]::WriteAllText((Join-Path $publish "extras/$name"), "Fixture $name`r`nUnicode: ©`r`n") }
+    foreach ($name in @('COPYING', 'NOTICE.txt', 'AGPL-3.0.txt', 'DS5-BRIDGE-NOTICE.txt')) {
+        [IO.File]::WriteAllText((Join-Path $publish $name), "Application notice $name`r`n")
+    }
     $env:VERSION = $env:RELEASE_TAG = '5.0.28'
     $env:UNSIGNED_RELEASE = 'true'
     $sourceCommit = 'a' * 40; $brokerCommit = 'b' * 40; $brokerHash = 'C' * 64
@@ -70,6 +73,22 @@ try {
         [void]$seen.Remove('unexpected.txt')
         $release.assets = @(1..7)
     }
+    foreach ($name in @('COPYING', 'NOTICE.txt', 'AGPL-3.0.txt', 'DS5-BRIDGE-NOTICE.txt')) {
+        [IO.File]::WriteAllBytes($infoPath, $baseline)
+        $receipt = @{ releaseInfo = ($releaseInfo | ConvertTo-Json -Depth 5 | ConvertFrom-Json) }
+        $zip = [IO.Compression.ZipFile]::Open($infoPath, [IO.Compression.ZipArchiveMode]::Update)
+        try { $zip.GetEntry($name).Delete() } finally { $zip.Dispose() }
+        $rejected = $false
+        try { . $verification } catch { $rejected = $true }
+        if (-not $rejected) { throw "Publication accepted missing application notice: $name" }
+    }
+    # A historical consolidated receipt without application notices remains valid.
+    [IO.File]::WriteAllBytes($infoPath, $baseline)
+    $zip = [IO.Compression.ZipFile]::Open($infoPath, [IO.Compression.ZipArchiveMode]::Update)
+    try { foreach ($name in $applicationNotices) { $zip.GetEntry($name).Delete() } } finally { $zip.Dispose() }
+    $receipt = @{ releaseInfo = ($releaseInfo | ConvertTo-Json -Depth 5 | ConvertFrom-Json) }
+    $receipt.releaseInfo.files = @($receipt.releaseInfo.files | Where-Object { $_.name -cnotin $applicationNotices })
+    . $verification
     # An old receipt still verifies its original standalone supporting files.
     $receipt = @{}
     foreach ($name in $names + @('SOURCE-REVISIONS.txt')) { [void]$seen.Add($name) }

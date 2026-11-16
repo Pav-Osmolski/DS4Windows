@@ -685,7 +685,7 @@ Holding PS to switch off a supported PlayStation controller is a hardware
 shortcut; see [PlayStation's controller help](https://controller.dl.playstation.net/controller/lang/gb/index.html).
 
 Credits acknowledges the community and supporting projects. License includes
-the full bundled GNU GPL v3 text, and Extras links to component projects and
+the full bundled GNU GPL v3 and GNU AGPL v3 texts, and Extras links to component projects and
 third-party notices. All pages scroll within the window; press **Escape** or
 choose **Close** to return to DS4Windows.
 

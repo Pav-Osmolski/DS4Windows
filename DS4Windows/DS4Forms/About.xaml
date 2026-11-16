@@ -301,6 +301,7 @@
                     <StackPanel>
                         <TextBlock Text="{lex:Loc Strings:UI_769038F7B1E3DB8B}" Style="{StaticResource AboutHeading}"/>
                         <TextBlock Text="{lex:Loc Strings:UI_403B4B477B663608}" Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
+                        <WrapPanel Margin="0,0,0,18"><Button Content="SundayMoments — DS5 Bridge" Tag="https://github.com/SundayMoments/DS5_Bridge" Style="{StaticResource AboutLinkButton}" Click="Link_Click" ToolTip="Audio Haptics · Trigger Lab · Process loopback · AGPL-3.0-only"/></WrapPanel>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
                             <TextBlock Text="{lex:Loc Strings:UI_2E7CC6526B73D32C}" Style="{StaticResource AboutHeading}"/>
                             <TextBlock Text="{lex:Loc Strings:UI_9CBE594820B7A37B}" Style="{StaticResource AboutDescription}"/>
@@ -340,7 +341,7 @@
                              VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
                              Background="{DynamicResource CardBackgroundColor}" Foreground="{DynamicResource ForegroundColor}"
                              BorderBrush="{DynamicResource BorderColor}" FontFamily="Consolas" FontSize="12"
-                             AutomationProperties.Name="GNU General Public License version 3"/>
+                             AutomationProperties.Name="GNU GPL version 3 and GNU AGPL version 3"/>
                 </Grid>
             </TabItem>
             <TabItem Header="{lex:Loc Strings:UI_81D93BEF8740F048}">
@@ -348,6 +349,11 @@
                     <StackPanel>
                         <TextBlock Text="{lex:Loc Strings:UI_BB2DA415C72F2A88}" Style="{StaticResource AboutHeading}"/>
                         <TextBlock Text="{lex:Loc Strings:UI_923E17DDA16AB85B}" Style="{StaticResource AboutDescription}" Margin="0,0,0,18"/>
+                        <Border Style="{StaticResource AboutCard}"><StackPanel>
+                            <TextBlock Text="DS5 Bridge — SundayMoments" Style="{StaticResource AboutHeading}"/>
+                            <TextBlock Text="Audio Haptics · Trigger Lab · Process loopback · AGPL-3.0-only" Style="{StaticResource AboutDescription}"/>
+                            <WrapPanel Margin="0,12,0,0"><Button Content="{lex:Loc Strings:UI_D6E6CDD8433D8A73}" Tag="https://github.com/SundayMoments/DS5_Bridge" Style="{StaticResource AboutLinkButton}" Click="Link_Click" AutomationProperties.Name="DS5 Bridge project page"/></WrapPanel>
+                        </StackPanel></Border>
                         <Border Style="{StaticResource AboutCard}"><StackPanel>
                             <TextBlock Text="VIIPER" Style="{StaticResource AboutHeading}"/>
                             <TextBlock Text="{lex:Loc Strings:UI_6F6EEC24AF256344}" Style="{StaticResource AboutDescription}"/>

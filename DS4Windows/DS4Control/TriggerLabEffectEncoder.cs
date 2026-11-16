@@ -1,3 +1,14 @@
+/*
+Trigger Lab percentage mapping derived from DS5 Bridge by SundayMoments
+https://github.com/SundayMoments/DS5_Bridge
+Copyright (C) 2026  SundayMoments (DS5 Bridge-derived code)
+Copyright (C) 2026  DS4Windows contributors
+
+DS5 Bridge-derived portions: AGPL-3.0-only; modified for DS4Windows.
+Attribution and license notice restored 2026-11-16.
+See DS5-BRIDGE-NOTICE.txt and AGPL-3.0.txt for terms and provenance.
+*/
+
 using System;
 using DS4Windows.InputDevices;
 

@@ -94,4 +94,7 @@ when downloading and installing updates manually.
 Thanks to hbashton, Jays2Kings, Ryochan7, Schmaldeo, the DS4Windows community,
 and the contributors to VIIPER, HidHide, usbip-win2, and controller research.
 
-Licensed under [GPL-3.0](COPYING). See [third-party notices](NOTICE.txt).
+Combines [GPL-3.0](COPYING) code with [AGPL-3.0-only](AGPL-3.0.txt) code
+derived from [DS5 Bridge](https://github.com/SundayMoments/DS5_Bridge).
+See the [DS5 Bridge attribution](DS5-BRIDGE-NOTICE.txt) and
+[third-party notices](NOTICE.txt) for scope and terms.

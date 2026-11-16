@@ -15,6 +15,7 @@ import zipfile
 
 REPOSITORY = Path(__file__).resolve().parent.parent
 REQUIRED = (
+    "COPYING", "LICENSE.txt", "NOTICE.txt", "AGPL-3.0.txt", "DS5-BRIDGE-NOTICE.txt",
     "DS4Windows.exe", "coreclr.dll", "hostfxr.dll",
     "BouncyCastle.Cryptography.dll", "Resources/BouncyCastle.NOTICE.txt",
     "Resources/DsxTriggerEffects.NOTICE.txt",
@@ -44,7 +45,8 @@ VALIDATOR_SPEC.loader.exec_module(VALIDATOR)
 class LocalizationPackageTests(unittest.TestCase):
     def test_missing_cipher_or_required_notice_is_rejected_before_composition(self):
         for missing in ("BouncyCastle.Cryptography.dll", "Resources/BouncyCastle.NOTICE.txt",
-                        "Resources/DsxTriggerEffects.NOTICE.txt", "extras/VIIPER-WDL-NOTICE.txt"):
+                        "Resources/DsxTriggerEffects.NOTICE.txt", "extras/VIIPER-WDL-NOTICE.txt",
+                        "COPYING", "LICENSE.txt", "NOTICE.txt", "AGPL-3.0.txt", "DS5-BRIDGE-NOTICE.txt"):
             with self.subTest(missing=missing), tempfile.TemporaryDirectory(prefix="ds4w-missing-cipher-") as temporary:
                 root = Path(temporary)
                 publish = root / "x64" / "Release" / "output"
@@ -81,6 +83,23 @@ class LocalizationPackageTests(unittest.TestCase):
         self.assertEqual("PreserveNewest", entries[0].findtext("CopyToPublishDirectory"))
         self.assertIn(relative, REQUIRED)
         self.assertIn(relative, VALIDATOR.REQUIRED_PUBLISH_FILES)
+
+    def test_ds5_bridge_and_gpl_notices_are_published_at_package_root(self):
+        project = ET.parse(REPOSITORY / "DS4Windows" / "DS4WinWPF.csproj")
+        for name in ("COPYING", "LICENSE.txt", "NOTICE.txt", "AGPL-3.0.txt", "DS5-BRIDGE-NOTICE.txt"):
+            with self.subTest(name=name):
+                entries = [entry for entry in project.findall(".//Content")
+                           if entry.get("Include", "").replace("\\", "/") == "../" + name]
+                self.assertEqual(1, len(entries))
+                self.assertEqual(name, entries[0].findtext("Link"))
+                self.assertEqual("PreserveNewest", entries[0].findtext("CopyToPublishDirectory"))
+                self.assertIn(name, VALIDATOR.REQUIRED_PUBLISH_FILES)
+        self.assertEqual("0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+                         hashlib.sha256((REPOSITORY / "AGPL-3.0.txt").read_bytes()).hexdigest())
+        notice = (REPOSITORY / "DS5-BRIDGE-NOTICE.txt").read_text(encoding="utf-8")
+        self.assertIn("SundayMoments", notice)
+        self.assertIn("AGPL-3.0-only", notice)
+        self.assertIn("modified versions", notice)
 
     def test_wdl_notice_is_pinned_and_published_without_normalization(self):
         relative = "extras/VIIPER-WDL-NOTICE.txt"
