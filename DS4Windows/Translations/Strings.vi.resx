@@ -6923,4 +6923,24 @@ Backup : </value>
   <data name="DS3PressureExample" xml:space="preserve">
     <value>Ví dụ: vùng chết 10% và điểm tối đa 80% chuyển lực nhấn thực 10–80% thành đầu ra 0–100%. Thả nút luôn đưa trục về vị trí trung tính.</value>
   </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Đổi tên tay cầm</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Tên tay cầm</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Dùng tối đa 50 chữ cái, chữ số và dấu cách.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>Không thể lưu tên tay cầm. Vui lòng thử lại.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Xóa tên để khôi phục tên mặc định. Enter để lưu; Escape để hủy.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
 </root>

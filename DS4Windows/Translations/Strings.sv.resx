@@ -6921,4 +6921,24 @@ och backup: </value>
   <data name="DS3PressureExample" xml:space="preserve">
     <value>Exempel: 10% dödzon och fullt tryck vid 80% omvandlar 10–80% fysiskt tryck till 0–100% utmatning. När knappen släpps återgår axeln alltid till neutralläge.</value>
   </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Byt namn på handkontrollen</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Handkontrollens namn</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Använd högst 50 bokstäver, siffror och blanksteg.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>Det gick inte att spara handkontrollens namn. Försök igen.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Rensa namnet för att återställa standardnamnet. Enter sparar; Escape avbryter.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
 </root>

@@ -6920,4 +6920,24 @@ Das Backup: </value>
   <data name="DS3PressureExample" xml:space="preserve">
     <value>Beispiel: 10% Totzone und voller Druck bei 80% bilden 10–80% physischen Druck auf 0–100% Ausgabe ab. Loslassen bringt die Achse immer in Neutralstellung.</value>
   </data>
+  <data name="UI_0EED7174A1268369" xml:space="preserve">
+    <value>Controller umbenennen</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A399E8BFE0F9EEBD" xml:space="preserve">
+    <value>Controllername</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_A0E7802C068EFAE4" xml:space="preserve">
+    <value>Bis zu 50 Buchstaben, Zahlen und Leerzeichen verwenden.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_B45D97659EF1A0B4" xml:space="preserve">
+    <value>Der Controllername konnte nicht gespeichert werden. Bitte erneut versuchen.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
+  <data name="UI_481187621459B01C" xml:space="preserve">
+    <value>Den Namen löschen, um den Standardnamen wiederherzustellen. Enter speichert; Escape bricht ab.</value>
+    <comment>Controller custom name editing.</comment>
+  </data>
 </root>

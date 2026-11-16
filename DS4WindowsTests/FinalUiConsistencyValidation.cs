@@ -121,6 +121,9 @@ internal static class FinalUiConsistencyValidation
             markup.SetAttributeValue(declaration.Name, declaration.Value.StartsWith("clr-namespace:") && !declaration.Value.Contains("assembly=") ? declaration.Value + ";assembly=DS4Windows" : declaration.Value);
         foreach (var declaration in markup.DescendantsAndSelf().Attributes().Where(a => a.IsNamespaceDeclaration).ToArray())
             if (declaration.Value.StartsWith("clr-namespace:") && !declaration.Value.Contains("assembly=")) declaration.Value += ";assembly=DS4Windows";
+        foreach (var element in markup.DescendantsAndSelf().ToArray())
+            if (element.Name.NamespaceName.StartsWith("clr-namespace:") && !element.Name.NamespaceName.Contains("assembly="))
+                element.Name = XName.Get(element.Name.LocalName, element.Name.NamespaceName + ";assembly=DS4Windows");
         foreach (var attribute in markup.DescendantsAndSelf().Attributes().ToArray())
         {
             if (attribute.Name.NamespaceName.StartsWith("clr-namespace:") && !attribute.Name.NamespaceName.Contains("assembly="))

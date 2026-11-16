@@ -303,7 +303,18 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         }
         public event EventHandler SelectedProfileChanged;
 
-        public string ControllerDisplayName => device is JoyConDevice { ProfileConnection.Group.Joined: true } ?
+        private readonly ControllerNameStore controllerNames;
+        private string customName;
+        public string CustomName => customName ?? string.Empty;
+        public string ControllerIdentityText => $"({device.DisplayIdentity})";
+        public event EventHandler ControllerIdentityTextChanged;
+        public bool CanRenameController => controllerNames.IsAvailable && ControllerNameStore.TryKey(device.MacAddress, out _);
+        public string ControllerDisplayName => string.IsNullOrEmpty(CustomName) ? DefaultControllerName : CustomName;
+        public event EventHandler ControllerDisplayNameChanged;
+        public event EventHandler CustomNameChanged;
+        public event EventHandler CanRenameControllerChanged;
+
+        public string DefaultControllerName => device is JoyConDevice { ProfileConnection.Group.Joined: true } ?
             global::DS4Windows.UiText.Get("Joy-Con Pair") : device.DisplayName;
 
         public string ConnectionText => device.ConnectionType switch
@@ -610,8 +621,13 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event CustomColorHandler RequestColorPicker;
 
         public CompositeDeviceModel(DS4Device device, int devIndex, string profile,
-            ProfileList collection)
+            ProfileList collection) : this(device, devIndex, profile, collection, ControllerNameStore.Current) { }
+
+        internal CompositeDeviceModel(DS4Device device, int devIndex, string profile,
+            ProfileList collection, ControllerNameStore names)
         {
+            controllerNames = names;
+            customName = names.Get(device.MacAddress);
             this.device = device;
             uiCapabilities = ControllerUiCapabilities.ForDevice(device);
             device.BatteryChanged += (sender, e) => BatteryStateChanged?.Invoke(this, e);
@@ -903,8 +919,32 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             TooltipIDTextChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        internal bool TryRenameController(string value, out string error)
+        {
+            error = null;
+            if (!ControllerNameStore.TryNormalize(value, out _))
+            {
+                error = global::DS4Windows.UiText.Get("Use up to 50 letters, numbers and spaces.");
+                return false;
+            }
+            try { controllerNames.Save(device.MacAddress, value); }
+            catch (Exception failure) when (failure is System.IO.IOException or System.IO.InvalidDataException or UnauthorizedAccessException or System.Text.Json.JsonException or ArgumentException or InvalidOperationException)
+            {
+                NLog.LogManager.GetLogger(nameof(CompositeDeviceModel)).Warn(failure, "Could not save controller name.");
+                error = global::DS4Windows.UiText.Get("The controller name could not be saved. Please try again.");
+                return false;
+            }
+            RequestUpdatedIdentity();
+            return true;
+        }
+
         internal void RequestUpdatedIdentity()
         {
+            customName = controllerNames.Get(device.MacAddress);
+            ControllerDisplayNameChanged?.Invoke(this, EventArgs.Empty);
+            CustomNameChanged?.Invoke(this, EventArgs.Empty);
+            CanRenameControllerChanged?.Invoke(this, EventArgs.Empty);
+            ControllerIdentityTextChanged?.Invoke(this, EventArgs.Empty);
             IdTextChanged?.Invoke(this, EventArgs.Empty);
             CanLinkProfileChanged?.Invoke(this, EventArgs.Empty);
             LinkedProfileChanged?.Invoke(this, EventArgs.Empty);

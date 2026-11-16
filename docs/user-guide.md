@@ -53,6 +53,19 @@ profile. Use the profile selector to choose a saved profile, and Edit to change
 it. Link a profile to the controller ID when you want that device to reuse it.
 Temporary changes and wireless disconnect controls apply to the selected device.
 
+Use the pencil after a controller’s MAC address to give it a custom name. Names
+can contain up to 50 letters, numbers and spaces. Press Enter or click outside
+the name to save immediately; Escape cancels. Clear the name to restore the
+original controller designation. The MAC address stays visible on the card.
+
+Names are remembered for each physical controller independently of profiles,
+and are included in settings backups and location migrations. Overview and the
+sidebar use the custom name; Overview keeps long names on one line with an
+ellipsis. Hover over the name in Controllers or Overview to see the full name
+and MAC address. These labels identify controllers within DS4Windows and do
+not change the controller type presented to games.
+
+
 For Joy-Cons, use Link/Unlink or the automatic pairing option. A pair needs a
 left and right controller of the same generation. Choose upright or sideways
 orientation for a single Joy-Con. Switch 2 Bluetooth discovery and association
