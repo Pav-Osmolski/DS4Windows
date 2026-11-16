@@ -121,6 +121,16 @@ public sealed class ControllerOverviewAudioTests
         Assert.IsFalse(native.Descendants(wpf + "Slider").Any());
     }
 
+    private static void WaitForStatusArrow(RotateTransform rotation, double expected)
+    {
+        // Popup dismissal can schedule the return transition after the first
+        // dispatcher turn. Observe completion, with a bounded failure deadline.
+        var deadline = System.Diagnostics.Stopwatch.StartNew();
+        while (Math.Abs(rotation.Angle - expected) > 0.1 && deadline.Elapsed < TimeSpan.FromSeconds(2))
+            DisclosureAnimationTests.Pump(20);
+        Assert.AreEqual(expected, rotation.Angle, 0.1);
+    }
+
     private static MainWindowsViewModel Model(DS4Device device, string profileName = "Test profile")
     {
         var model = new MainWindowsViewModel();
@@ -269,7 +279,7 @@ public sealed class ControllerOverviewAudioTests
                 Assert.IsTrue(statusPopup.IsOpen);
                 Assert.IsFalse(statusButton.IsHitTestVisible, "While open, clicking the badge must dismiss through the outside-click path without toggling it open again.");
                 Assert.IsTrue(statusButton.Focusable, "Keyboard toggling must remain available.");
-                Assert.AreEqual(180d, ((RotateTransform)arrowFrame.RenderTransform).Angle, 0.1);
+                WaitForStatusArrow((RotateTransform)arrowFrame.RenderTransform, 180d);
                 Assert.AreEqual(attentionDetail, ((TextBlock)statusOverview.FindName("controllerStatusDetail")).Text);
                 Assert.AreEqual(readyCardBounds, StatusBounds(summaryCard), "Opening the status popover must not move the card.");
                 var popupContent = (FrameworkElement)statusOverview.FindName("controllerStatusPopupContent");
@@ -293,7 +303,7 @@ public sealed class ControllerOverviewAudioTests
                 DisclosureAnimationTests.Pump(160);
                 Assert.IsFalse(statusPopup.IsOpen, "Escape must close status details.");
                 Assert.AreEqual(false, statusButton.IsChecked);
-                Assert.AreEqual(0d, ((RotateTransform)arrowFrame.RenderTransform).Angle, 0.1);
+                WaitForStatusArrow((RotateTransform)arrowFrame.RenderTransform, 0d);
                 statusButton.IsChecked = true;
                 DisclosureAnimationTests.Pump(10);
                 statusPopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
