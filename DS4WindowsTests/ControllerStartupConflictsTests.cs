@@ -13,6 +13,13 @@ public sealed class ControllerStartupConflictsTests
     };
 
     [TestMethod]
+    public void ProcessOwnershipUsesAnInvocableKeyedWmiInstance()
+    {
+        using var identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+        Assert.AreEqual(identity.User.Value, ControllerStartupConflicts.ReadProcessOwnerSid((uint)Environment.ProcessId));
+    }
+
+    [TestMethod]
     public void BackupPrecedesAllChangesAndStartupsArePausedBeforeProcesses()
     {
         var entries = new List<ControllerStartupConflict> { Entry("Process"), Entry("Task"), Entry("Run"), Entry("Shortcut") };

@@ -119,7 +119,7 @@ internal static class ControllerStartupConflicts
                 bool known = IsControllerBinary(path);
                 string id = Convert.ToString(process["ProcessId"], System.Globalization.CultureInfo.InvariantCulture);
                 bool owned = false;
-                try { using var owner = process.InvokeMethod("GetOwnerSid", null, null); owned = Convert.ToUInt32(owner?["ReturnValue"]) == 0 && Equals(owner?["Sid"], sid); } catch { }
+                try { owned = ReadProcessOwnerSid(Convert.ToUInt32(process["ProcessId"])) == sid; } catch { }
                 entries.Add(new ControllerStartupConflict {
                     Kind = "Process", Id = id, Target = path ?? "<path unavailable>",
                     Snapshot = process["CreationDate"] as string ?? "", BinaryHash = known ? Hash(path) : "",
@@ -269,6 +269,15 @@ internal static class ControllerStartupConflicts
 
     private static bool IsManaged(string path) => SamePath(path, Path.Combine(ManagedRoot, "DS4Windows.exe")) ||
         SamePath(path, Path.Combine(ManagedRoot, "VIIPER", "viiper.exe"));
+    internal static string ReadProcessOwnerSid(uint processId)
+    {
+        // SELECT projections do not retain an invocable WMI instance path.
+        // Bind the numeric key explicitly before invoking this read-only method.
+        using var instance = new ManagementObject("Win32_Process.Handle='" +
+            processId.ToString(System.Globalization.CultureInfo.InvariantCulture) + "'");
+        using var owner = instance.InvokeMethod("GetOwnerSid", null, null);
+        return Convert.ToUInt32(owner?["ReturnValue"]) == 0 ? owner?["Sid"] as string : null;
+    }
     private static bool SamePath(string a, string b) => !string.IsNullOrEmpty(a) && !string.IsNullOrEmpty(b) &&
         string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
     private static bool IsControllerBinary(string path)
