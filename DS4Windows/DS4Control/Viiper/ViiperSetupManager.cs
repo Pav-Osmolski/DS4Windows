@@ -131,6 +131,12 @@ namespace DS4Windows
 
                 if (!UsbipRuntimeReady || UsbipRebootOrRepairRequired)
                 {
+                    if (UsbipProbeMessage?.IndexOf(
+                            "Multiple instances of VHCI device interface found",
+                            StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        return "usbip-win2 has duplicate virtual host controllers; run Install / Repair";
+                    }
                     return "usbip-win2 reboot or repair required";
                 }
 

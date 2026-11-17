@@ -33,13 +33,17 @@ namespace DS4Windows.SetupActions
         [STAThread]
         private static int Main(string[] args)
         {
+            bool conflictRecovery = string.Equals(Path.GetFileName(Environment.ProcessPath),
+                "DS4Windows.ConflictRecovery.exe", StringComparison.OrdinalIgnoreCase);
             CorrelationId = NormalizeCorrelationId(
                 ReadArgument(args, "--correlation-id"));
             WriteFallbackLog("=== DS4Windows setup invocation " +
                 CorrelationId + " started ===");
             try
             {
-                var action = args.FirstOrDefault()?.Trim().ToLowerInvariant() ?? "install";
+                var action = args.FirstOrDefault()?.Trim().ToLowerInvariant() ?? (conflictRecovery ? "restore-conflicts" : "install");
+                if (conflictRecovery && action != "restore-conflicts")
+                    throw new ArgumentException("This saved helper only restores controller startup entries.");
                 var installRoot = ReadArgument(args, "--install-root") ??
                     Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "DS4Windows");
                 var bundleId = ReadArgument(args, "--bundle-id");
@@ -56,7 +60,18 @@ namespace DS4Windows.SetupActions
                         exitCode = PostUninstallCleanup(installRoot);
                         break;
                     case "preflight":
-                        exitCode = Preflight();
+                        exitCode = Preflight(args);
+                        break;
+                    case "restore-conflicts":
+                        using (var identity = WindowsIdentity.GetCurrent())
+                            if (!new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator))
+                                throw new InvalidOperationException("Run this recovery helper as administrator to restore the saved startup entries.");
+                        exitCode = RunWithSetupMutex(() => {
+                            Installation.ControllerStartupConflicts.Restore(Path.GetDirectoryName(Environment.ProcessPath));
+                            return 0;
+                        });
+                        ShowConflictRestoreResult(exitCode == 0 ? "The saved controller startup entries have been restored. No controller applications were started." :
+                            "Another setup operation is running. Wait for it to finish, then retry startup recovery.", exitCode != 0);
                         break;
                     case "install":
                     case "repair":
@@ -78,11 +93,17 @@ namespace DS4Windows.SetupActions
             }
             catch (Exception ex)
             {
+                if (conflictRecovery || args.FirstOrDefault() == "restore-conflicts") ShowConflictRestoreResult(ex.Message + "\nThe backup was retained. Check the installer log for details.", true);
                 WriteFallbackLog("=== DS4Windows setup invocation " +
                     CorrelationId + " failed ===" + Environment.NewLine + ex);
                 return 1;
             }
         }
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, EntryPoint = "MessageBoxW", ExactSpelling = true)]
+        private static extern int MessageBox(IntPtr window, string text, string caption, uint type);
+        private static void ShowConflictRestoreResult(string message, bool failed) =>
+            MessageBox(IntPtr.Zero, message, "DS4Windows startup recovery", failed ? 0x10u : 0x40u);
 
         private static int InstallOrRepair(string installRoot,
             string bundleId, string[] args)
@@ -216,9 +237,27 @@ namespace DS4Windows.SetupActions
             return result;
         }
 
-        private static int Preflight()
+        private static int Preflight(string[] args)
         {
-            return RunWithSetupMutex(PreflightLocked);
+            return RunWithSetupMutex(() => {
+                if (args.Contains("--review-controller-conflicts"))
+                {
+                    string sid = ReadArgument(args, "--target-user-sid");
+                    string consent = ReadArgument(args, "--conflict-consent") ?? "";
+                    var conflicts = Installation.ControllerStartupConflicts.Scan(sid);
+                    if (conflicts.Count > 0)
+                    {
+                        if (!string.Equals(consent,
+                                Installation.ControllerStartupConflicts.Fingerprint(conflicts), StringComparison.Ordinal))
+                            throw new InvalidOperationException("Other controller software is running or starts at sign-in. Reopen setup, review the conflict page, and choose whether to pause it before USB/IP repair.");
+                        string backup = Installation.ControllerStartupConflicts.Pause(sid, consent, WriteFallbackLog);
+                        WriteFallbackLog("Competing controller startup backup and restore instructions: " + backup);
+                    }
+                    if (Installation.ControllerStartupConflicts.Scan(sid).Count > 0)
+                        throw new IOException("Other controller software restarted or a startup entry changed. Reopen setup and review it before USB/IP repair.");
+                }
+                return PreflightLocked();
+            });
         }
 
         private static int PreflightLocked()
@@ -230,6 +269,12 @@ namespace DS4Windows.SetupActions
                     try
                     {
                         if (process.HasExited) continue;
+                        var managedRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "DS4Windows");
+                        string observed = process.MainModule?.FileName;
+                        string managed = processName == "DS4Windows" ? Path.Combine(managedRoot, "DS4Windows.exe") : Path.Combine(managedRoot, "VIIPER", "viiper.exe");
+                        // Foreign copies are handled only by the explicit review
+                        // transaction. Uninstall must never close another copy.
+                        if (!string.Equals(observed, managed, StringComparison.OrdinalIgnoreCase)) continue;
                         if (!IsRecognizedProductProcess(process, processName,
                                 out var executablePath))
                         {

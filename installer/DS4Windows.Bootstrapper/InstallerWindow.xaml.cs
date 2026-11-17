@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
+using System.Threading.Tasks;
+using DS4Windows.Installation;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows;
@@ -17,6 +20,10 @@ namespace DS4Windows.Bootstrapper
         private readonly InstallerApplication application;
         private InstallerMode mode;
         private bool applying;
+        private List<ControllerStartupConflict> controllerConflicts = new();
+        internal string ConflictConsentHash { get; private set; } = "";
+        private Action continueAfterConflictReview;
+        private int conflictReviewGeneration;
         private readonly OptionalDriverSelection optionalDrivers = new OptionalDriverSelection();
 
         internal InstallerWindow(InstallerApplication application)
@@ -27,6 +34,7 @@ namespace DS4Windows.Bootstrapper
             Closing += (_, e) =>
             {
                 if (applying) e.Cancel = true;
+                else conflictReviewGeneration++;
             };
             Closed += (_, __) => application.OnWindowClosed();
         }
@@ -251,12 +259,70 @@ namespace DS4Windows.Bootstrapper
             applying = false;
         }
 
-        private void Action_Click(object sender, RoutedEventArgs e)
+        private async void Action_Click(object sender, RoutedEventArgs e)
         {
             var action = mode == InstallerMode.Uninstall ? LaunchAction.Uninstall :
                          mode == InstallerMode.Repair ? LaunchAction.Repair : LaunchAction.Install;
-            application.Begin(action, DesktopShortcutCheckBox.IsChecked == true,
-                StartMenuShortcutCheckBox.IsChecked == true, HidHideCheckBox.IsChecked == true, FakerInputCheckBox.IsChecked == true);
+            bool desktop = DesktopShortcutCheckBox.IsChecked == true;
+            bool startMenu = StartMenuShortcutCheckBox.IsChecked == true;
+            bool hidHide = HidHideCheckBox.IsChecked == true;
+            bool fakerInput = FakerInputCheckBox.IsChecked == true;
+            continueAfterConflictReview = () => application.Begin(action, desktop, startMenu, hidHide, fakerInput);
+            if (action == LaunchAction.Uninstall) { continueAfterConflictReview(); return; }
+            await ReviewControllerConflicts();
+        }
+
+        private async Task ReviewControllerConflicts()
+        {
+            int generation = ++conflictReviewGeneration;
+            ActionButton.IsEnabled = RescanControllerConflictsButton.IsEnabled = false;
+            ContinueControllerConflictsButton.IsEnabled = false;
+            ConflictConsentHash = "";
+            try
+            {
+                string sid = WindowsIdentity.GetCurrent().User.Value;
+                var detected = await Task.Run(() => ControllerStartupConflicts.Scan(sid));
+                if (generation != conflictReviewGeneration) return;
+                controllerConflicts = detected;
+                if (controllerConflicts.Count == 0) { continueAfterConflictReview(); return; }
+                HidePages(); ControllerConflictsPage.Visibility = Visibility.Visible;
+                ControllerConflictList.ItemsSource = controllerConflicts;
+                bool allVerified = controllerConflicts.All(c => c.CanPause);
+                PauseControllerConflicts.IsChecked = false;
+                PauseControllerConflicts.IsEnabled = allVerified;
+                ControllerConflictExplanation.Text = allVerified
+                    ? "Setup can pause these verified entries after you agree below. This includes other forks using a different VIIPER or USB/IP version."
+                    : "Some entries could not be verified or belong to another account. Close those programs and disable their startup entries manually, then choose Check again. Setup will not change them automatically.";
+            }
+            catch (Exception error)
+            {
+                if (generation != conflictReviewGeneration) return;
+                HidePages(); ControllerConflictsPage.Visibility = Visibility.Visible;
+                controllerConflicts.Clear(); ControllerConflictList.ItemsSource = null;
+                PauseControllerConflicts.IsEnabled = false;
+                ControllerConflictExplanation.Text = "Startup inspection could not finish: " + error.Message + ". Choose Check again after resolving the problem.";
+            }
+            finally { if (generation == conflictReviewGeneration) ActionButton.IsEnabled = RescanControllerConflictsButton.IsEnabled = true; }
+        }
+
+        private void ConflictConsent_Changed(object sender, RoutedEventArgs e)
+        {
+            if (ContinueControllerConflictsButton != null)
+                ContinueControllerConflictsButton.IsEnabled = PauseControllerConflicts.IsChecked == true &&
+                    controllerConflicts.Count > 0 && controllerConflicts.All(c => c.CanPause);
+        }
+        private void ConflictsBack_Click(object sender, RoutedEventArgs e)
+        {
+            conflictReviewGeneration++;
+            ActionButton.IsEnabled = RescanControllerConflictsButton.IsEnabled = true;
+            ConflictConsentHash = ""; HidePages(); ConfirmationPage.Visibility = Visibility.Visible;
+        }
+        private async void RescanControllerConflicts_Click(object sender, RoutedEventArgs e) => await ReviewControllerConflicts();
+        private void ContinueControllerConflicts_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ContinueControllerConflictsButton.IsEnabled) return;
+            ConflictConsentHash = ControllerStartupConflicts.Fingerprint(controllerConflicts);
+            continueAfterConflictReview();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) => application.Close(1223);
@@ -294,6 +360,7 @@ namespace DS4Windows.Bootstrapper
         {
             DetectingPage.Visibility = Visibility.Collapsed;
             ConfirmationPage.Visibility = Visibility.Collapsed;
+            ControllerConflictsPage.Visibility = Visibility.Collapsed;
             ProgressPage.Visibility = Visibility.Collapsed;
             CompletePage.Visibility = Visibility.Collapsed;
             RestartPage.Visibility = Visibility.Collapsed;

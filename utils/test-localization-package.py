@@ -378,7 +378,10 @@ class SetupActionValidationTests(unittest.TestCase):
         for original in (
             'return SetupMutationOwnership.Run(action, WriteFallbackLog);',
             'return RunWithSetupMutex(() => PostUninstallCleanupLocked(installRoot));',
-            'return RunWithSetupMutex(PreflightLocked);',
+            'return PreflightLocked();',
+            'return RunWithSetupMutex(() => {',
+            'ControllerStartupConflicts.Pause(sid, consent, WriteFallbackLog)',
+            'ControllerStartupConflicts.Fingerprint(conflicts)',
         ):
             with self.subTest(contract=original):
                 self.assertIn(original, program)

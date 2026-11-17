@@ -226,7 +226,7 @@ def main() -> None:
     )
     require(
         setup_actions,
-        "return RunWithSetupMutex(PreflightLocked);",
+        "return PreflightLocked();",
         "completed with exit code",
         "AppendLogWithRetry",
         'ReadArgument(args, "--correlation-id")',

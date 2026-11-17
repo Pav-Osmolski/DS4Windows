@@ -5,7 +5,9 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- No unreleased changes.
+- Review competing DS4Windows and VIIPER processes and startup entries before installer repair. Offer explicit approval to pause verified conflicts with protected backups and a restore helper; retain applications and profiles, and require manual review for ambiguous entries.
+
+- Recognize duplicate USB/IP virtual-controller interfaces and add bounded cleanup of verified residual devices and DriverStore packages after official uninstall and restart. Preserve imported devices, signed-package verification, reboot boundaries and failure diagnostics instead of repeating the same repair loop. Thanks to MarioDLH for the diagnostic log and [@rudey123](https://github.com/rudey123) for [issue #20](https://github.com/Pav-Osmolski/DS4Windows/issues/20). See the [repair design and safety boundaries](docs/usbip-clean-repair.md).
 
 ## Released
 

@@ -626,7 +626,8 @@ function Test-UsbipDeviceIsPresent($device) {
 
 function Assert-UsbipPostRebootState {
     $usbipDevices = @(Get-CimInstance Win32_PnPEntity -ErrorAction Stop |
-        Where-Object { $_.Service -eq 'usbip2_ude' })
+        Where-Object { $_.Service -eq 'usbip2_ude' -or
+            @($_.HardwareID) -icontains 'ROOT\USBIP_WIN2\UDE' })
     $activeDevices = @($usbipDevices | Where-Object {
         Test-UsbipDeviceIsPresent $_
     })
@@ -687,6 +688,161 @@ function Assert-UsbipPostRebootState {
     }
 }
 
+# Match usbip-win2's controller HWID and signed package identities, never a
+# display name or the generic ROOT\USB instance prefix used by other devices.
+function Get-UsbipDeviceDescendantIds([string]$instanceId) {
+    if (-not ('DS4Windows.Setup.UsbipDeviceTree' -as [type])) {
+        Add-Type -TypeDefinition @"
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+namespace DS4Windows.Setup {
+    public static class UsbipDeviceTree {
+        [DllImport("cfgmgr32.dll", CharSet=CharSet.Unicode, ExactSpelling=true)]
+        private static extern uint CM_Locate_DevNodeW(out uint node, string id, uint flags);
+        [DllImport("cfgmgr32.dll")]
+        private static extern uint CM_Get_Child(out uint child, uint parent, uint flags);
+        [DllImport("cfgmgr32.dll")]
+        private static extern uint CM_Get_Sibling(out uint sibling, uint node, uint flags);
+        [DllImport("cfgmgr32.dll", CharSet=CharSet.Unicode, ExactSpelling=true)]
+        private static extern uint CM_Get_Device_IDW(uint node, StringBuilder id, uint length, uint flags);
+        public static string[] Descendants(string id) {
+            uint root;
+            uint error = CM_Locate_DevNodeW(out root, id, 0);
+            if (error != 0) throw new InvalidOperationException("Cannot locate USB/IP device: " + error);
+            var pending = new Queue<uint>();
+            var seen = new HashSet<uint>();
+            var result = new List<string>();
+            pending.Enqueue(root);
+            while (pending.Count != 0) {
+                uint parent = pending.Dequeue();
+                if (!seen.Add(parent) || seen.Count > 256)
+                    throw new InvalidOperationException("USB/IP tree is cyclic or exceeds its inspection limit.");
+                uint child;
+                error = CM_Get_Child(out child, parent, 0);
+                if (error == 13) continue; // CR_NO_SUCH_DEVNODE: no child
+                if (error != 0) throw new InvalidOperationException("Cannot enumerate USB/IP children: " + error);
+                while (true) {
+                    var buffer = new StringBuilder(512);
+                    error = CM_Get_Device_IDW(child, buffer, 512, 0);
+                    if (error != 0) throw new InvalidOperationException("Cannot identify USB/IP child: " + error);
+                    result.Add(buffer.ToString());
+                    pending.Enqueue(child);
+                    if (result.Count > 256) throw new InvalidOperationException("USB/IP child inspection limit exceeded.");
+                    uint sibling;
+                    error = CM_Get_Sibling(out sibling, child, 0);
+                    if (error == 13) break;
+                    if (error != 0) throw new InvalidOperationException("Cannot enumerate USB/IP siblings: " + error);
+                    child = sibling;
+                }
+            }
+            return result.ToArray();
+        }
+    }
+}
+"@ -ErrorAction Stop
+    }
+    return [DS4Windows.Setup.UsbipDeviceTree]::Descendants($instanceId)
+}
+
+function Get-UsbipCleanRepairPlan {
+    $devices = @(Get-CimInstance Win32_PnPEntity -ErrorAction Stop)
+    $roots = @($devices | Where-Object {
+        $_.Service -ieq 'usbip2_ude' -or
+            @($_.HardwareID) -icontains 'ROOT\USBIP_WIN2\UDE'
+    })
+    foreach ($root in $roots) {
+        if (@($root.HardwareID) -inotcontains 'ROOT\USBIP_WIN2\UDE' -or
+                $root.PNPDeviceID -notmatch '^ROOT\\[A-Z0-9_&.-]+\\[A-Z0-9_&.-]+$' -or
+                ($root.Service -and $root.Service -ine 'usbip2_ude')) {
+            throw "USB/IP controller identity could not be verified. No automatic cleanup was started."
+        }
+        if (Test-UsbipDeviceIsPresent $root) {
+            foreach ($id in @(Get-UsbipDeviceDescendantIds $root.PNPDeviceID)) {
+                $child = @($devices | Where-Object { $_.PNPDeviceID -ieq $id })
+                if ($child.Count -ne 1 -or
+                        $child[0].Service -inotmatch '^(USBHUB3|USBHUB)$' -or
+                        @($child[0].HardwareID | Where-Object {
+                            $_ -imatch '^USB\\ROOT_HUB(?:20|30)?(?:&[A-Z0-9_&.-]+)?$'
+                        }).Count -eq 0) {
+                    throw "USB/IP controller $($root.PNPDeviceID) has an imported or unclassified child device ($id). Close other USB/IP applications and detach their devices before Repair. No automatic cleanup was started."
+                }
+            }
+        }
+    }
+    # Structured DISM metadata avoids localized pnputil headings and substring
+    # matches. A reference to USB/IP in an unrelated INF is not its identity.
+    $packages = @(Get-WindowsDriver -Online -All -ErrorAction Stop |
+        Where-Object {
+            [IO.Path]::GetFileName([string]$_.OriginalFileName) -imatch '^usbip2_(ude|filter)\.inf$'
+        })
+    foreach ($package in $packages) {
+        if ($package.ProviderName -ine 'USBIP-WIN2' -or
+                $package.Driver -notmatch '^oem[0-9]+\.inf$' -or $package.Inbox) {
+            throw "USB/IP DriverStore package identity could not be verified. No automatic cleanup was started."
+        }
+    }
+    return [pscustomobject]@{ Devices = $roots; Packages = $packages }
+}
+
+function Assert-UsbipControllersEmpty([switch]$RequireController) {
+    $plan = Get-UsbipCleanRepairPlan
+    if ($RequireController -and $plan.Devices.Count -eq 0) {
+        throw "USB/IP reports duplicate interfaces, but no exact controller identity could be inspected. No automatic removal was started."
+    }
+}
+
+function Invoke-UsbipPnPRemoval([string[]]$arguments) {
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $output = @(& $script:PnPUtilPath @arguments 2>&1)
+        $code = $LASTEXITCODE
+    }
+    finally { $ErrorActionPreference = $previous }
+    Write-SetupLog ("USBIP cleanup: pnputil " + ($arguments -join ' ') +
+        " => exit=$code; " + (($output | ForEach-Object { [string]$_ }) -join ' ')) Cyan
+    if ($code -notin @(0, 3010)) {
+        throw "Windows could not remove the identified USB/IP component (exit=$code). No replacement was installed. See the USBIP cleanup log entries; do not force deletion of driver files."
+    }
+}
+
+function Invoke-UsbipResidualCleanup($state) {
+    # Only after the official uninstall and a real reboot. One cleanup attempt
+    # per replacement transaction, including failed/partial native operations.
+    if ($state.PSObject.Properties['CleanupAttempted'] -and $state.CleanupAttempted) {
+        throw "USB/IP components still remain after cleanup and restart. Automatic cleanup will not repeat. See the USBIP post-reboot and cleanup log entries for the remaining devices/packages."
+    }
+    if (-not (Stop-Ds4WindowsProcesses 'USB/IP residual cleanup') -or
+            -not (Stop-ViiperProcesses 'USB/IP residual cleanup')) {
+        throw "Close DS4Windows and VIIPER before USB/IP residual cleanup."
+    }
+    $plan = Get-UsbipCleanRepairPlan
+    if ($plan.Devices.Count -eq 0 -and $plan.Packages.Count -eq 0) {
+        throw "USB/IP removal is incomplete, but no verified device or DriverStore package can be removed automatically. See the remaining driver-service diagnostics."
+    }
+    $state | Add-Member -NotePropertyName CleanupAttempted -NotePropertyValue $true -Force
+    $state.BootSessionId = Get-WindowsBootSessionId
+    $state | ConvertTo-Json | Set-Content -LiteralPath $script:UsbipReplacementStatePath -Encoding UTF8
+    foreach ($root in $plan.Devices) {
+        $current = Get-UsbipCleanRepairPlan
+        if (@($current.Devices | Where-Object { $_.PNPDeviceID -ieq $root.PNPDeviceID }).Count -ne 1) {
+            throw "USB/IP device inventory changed during cleanup. No replacement was installed."
+        }
+        Invoke-UsbipPnPRemoval -arguments @('/remove-device', [string]$root.PNPDeviceID, '/subtree')
+    }
+    foreach ($package in $plan.Packages) {
+        $current = Get-UsbipCleanRepairPlan
+        if (@($current.Packages | Where-Object { $_.Driver -ieq $package.Driver -and $_.OriginalFileName -ieq $package.OriginalFileName }).Count -ne 1) {
+            throw "USB/IP DriverStore inventory changed during cleanup. No replacement was installed."
+        }
+        Invoke-UsbipPnPRemoval -arguments @('/delete-driver', [string]$package.Driver, '/uninstall')
+    }
+    $script:RebootBoundaryPending = $true
+    throw "Identified USB/IP leftovers were removed using Windows device/DriverStore cleanup. Restart Windows, then run Install / Repair to finish installing the verified package."
+}
+
 function Resolve-UsbipReplacementBoundary {
     if (-not (Test-Path -LiteralPath $script:UsbipReplacementStatePath)) {
         return
@@ -719,7 +875,12 @@ function Resolve-UsbipReplacementBoundary {
         Write-SetupLog ("USBIP phase-one uninstall log: " +
             [string]$uninstallLogProperty.Value) Cyan
     }
-    Assert-UsbipPostRebootState
+    try { Assert-UsbipPostRebootState }
+    catch {
+        Write-SetupLog ("USBIP removal verification: " + $_.Exception.Message) Yellow
+        Invoke-UsbipResidualCleanup $state
+        throw "USB/IP cleanup did not establish a safe replacement boundary."
+    }
     Remove-Item -LiteralPath $script:UsbipReplacementStatePath -Force
     Write-SetupLog "USBIP reboot boundary validated; phase 2 may proceed." Green
 }
@@ -1009,7 +1170,7 @@ function Remove-MismatchedUsbipPackage($entry, [Version]$installedVersion,
     $reason = if ($IntentionalRemoval) {
         "usbip-win2 $installedVersion at the user's request"
     } elseif ($ForceUnsafeReplacement) {
-        "unsafe or mixed usbip-win2 $installedVersion driver files"
+        "an unhealthy usbip-win2 $installedVersion installation"
     } else {
         "unsupported usbip-win2 $installedVersion"
     }
@@ -1315,7 +1476,9 @@ function Test-UsbipRuntime([string]$usbipPath) {
         }
 
         if ($probeExitCode -ne 0) {
-            $script:UsbipRuntimeProbeState = "failed"
+            $script:UsbipRuntimeProbeState = if ($probeText -match '(?i)Multiple instances of VHCI device interface found') {
+                'duplicate-controllers'
+            } else { 'failed' }
             $summary = if ($probeText) { $probeText.Trim() }
                 else { "no diagnostic output" }
             Write-SetupLog (
@@ -3477,10 +3640,8 @@ try {
     $usbipDriverFilesSafe = [bool]$usbipDriverIntegrity.Safe
     if (-not $canonicalUsbipPresent -and
             ($usbipDriverPresent -or $usbipVersion)) {
-        throw "USBIP driver or package artifacts exist, but canonical " +
-            "usbip.exe is missing. Refusing to change a driver whose active " +
-            "imports cannot be inspected safely. Repair or remove USBIP " +
-            "manually, reboot, then run setup again."
+        Assert-UsbipControllersEmpty
+        Write-SetupLog "Canonical USB/IP executable is missing; verified empty-controller inspection is required before package removal." Yellow
     }
     if (($canonicalUsbipPresent -or $usbipDriverPresent) -and
             -not $usbipVersion) {
@@ -3501,6 +3662,16 @@ try {
             "usbip-win2 is ready: $usbipVersion with exact signed driver " +
             "files at $script:CanonicalUsbipPath"
         ) Green
+    }
+    elseif ($usbipPackageReady -and $script:UsbipRuntimeProbeState -eq 'duplicate-controllers') {
+        Write-SetupLog "USB/IP has duplicate present host-controller interfaces; beginning verified replacement rather than requesting another unchanged reboot." Yellow
+        if (-not (Stop-Ds4WindowsProcesses 'USB/IP duplicate-controller repair') -or
+                -not (Stop-ViiperProcesses 'USB/IP duplicate-controller repair')) {
+            throw "Close DS4Windows and VIIPER before repairing duplicate USB/IP controllers."
+        }
+        Assert-UsbipControllersEmpty -RequireController
+        $entry = Get-UsbipUninstallEntry $usbipVersion
+        [void](Remove-MismatchedUsbipPackage $entry $usbipVersion $requiredUsbipVersion -ForceUnsafeReplacement)
     }
     elseif ($usbipPackageReady) {
         $script:RebootRecommended = $true
@@ -3557,12 +3728,11 @@ try {
             throw "Unable to quiesce VIIPER before the usbip-win2 driver upgrade. " +
                 "Close viiper.exe manually and run Install / Repair again."
         }
-        if ($canonicalUsbipPresent) {
+        if ($usbipExecutableSafe) {
             Disconnect-UsbipImports $script:CanonicalUsbipPath
         }
-        elseif ($usbipDriverPresent -or $usbipVersion) {
-            throw "Cannot inspect USBIP imports because canonical usbip.exe " +
-                "is missing. No driver transition was started."
+        elseif ($canonicalUsbipPresent -or $usbipDriverPresent -or $usbipVersion) {
+            Assert-UsbipControllersEmpty
         }
         $removedMismatchedPackage = Remove-MismatchedUsbipPackage `
             $uninstallEntry $usbipVersion `
@@ -3804,7 +3974,7 @@ catch {
             try { Save-StartupSetupIntent "RestartRequired" } catch { }
         }
         Write-SetupLog $setupFailure.Exception.Message Yellow
-        Write-SetupLog "Restart required; no install changes were made." Yellow
+        Write-SetupLog "Restart required; the replacement package was not installed in this session." Yellow
         Write-SetupLog "Details were saved to $script:LogPath" Yellow
     }
     else {

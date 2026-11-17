@@ -20,6 +20,7 @@
     <Variable Name="InstallFakerInput" Type="numeric" Value="0" />
     <Variable Name="SetupCorrelationId" Type="string" Value="" Persisted="yes" />
     <Variable Name="TargetUserSid" Type="string" Value="" Persisted="yes" />
+    <Variable Name="ControllerConflictConsent" Type="string" Value="" />
     <Variable Name="TargetUserName" Type="string" Value="" Persisted="yes" />
     <Variable Name="TargetLocalAppData" Type="string" Value="" Persisted="yes" />
     <Variable Name="TargetRoamingAppData" Type="string" Value="" Persisted="yes" />
@@ -97,7 +98,7 @@
           Permanent="yes"
           Vital="yes"
           DetectCondition="0"
-          InstallArguments="preflight --correlation-id &quot;[SetupCorrelationId]&quot;">
+          InstallArguments="preflight --correlation-id &quot;[SetupCorrelationId]&quot; --review-controller-conflicts --target-user-sid &quot;[TargetUserSid]&quot; --conflict-consent &quot;[ControllerConflictConsent]&quot;">
         <ExitCode Value="0" Behavior="success" />
         <ExitCode Behavior="error" />
       </ExePackage>
