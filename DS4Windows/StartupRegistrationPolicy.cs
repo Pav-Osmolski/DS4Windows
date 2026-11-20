@@ -1,11 +1,42 @@
 using System;
 using System.IO;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace DS4WinWPF;
 
 internal static class StartupRegistrationPolicy
 {
     internal const string ManagedTaskDescription = "DS4Windows managed startup task v1";
+
+    internal static string ReadTaskPrincipalUserId(string taskXml)
+    {
+        if (string.IsNullOrWhiteSpace(taskXml)) return null;
+        XNamespace ns = "http://schemas.microsoft.com/windows/2004/02/mit/task";
+        try
+        {
+            using var input = new StringReader(taskXml);
+            using var reader = XmlReader.Create(input, new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Prohibit,
+                XmlResolver = null,
+                MaxCharactersInDocument = 65536,
+            });
+            var task = XDocument.Load(reader).Root;
+            var principals = task?.Element(ns + "Principals");
+            if (principals == null) return null;
+            using var entries = principals.Elements().GetEnumerator();
+            if (!entries.MoveNext()) return null;
+            XElement principal = entries.Current;
+            return principal.Name == ns + "Principal" && !entries.MoveNext()
+                ? principal.Element(ns + "UserId")?.Value
+                : null;
+        }
+        catch (XmlException)
+        {
+            return null;
+        }
+    }
 
     internal static bool ShouldRepairTask(bool exists, bool enabled,
         bool owned, bool matchesCurrentConfiguration, bool requested = true,

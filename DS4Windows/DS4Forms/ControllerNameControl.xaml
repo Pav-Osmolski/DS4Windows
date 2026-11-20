@@ -59,11 +59,16 @@
             </TextBlock.ToolTip>
         </TextBlock>
         <StackPanel x:Name="editorPanel" Visibility="Collapsed">
-            <TextBox x:Name="nameEditor" FontSize="15" Padding="5,3" MinHeight="28"
-                     Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource CardBackgroundColor}"
-                     BorderBrush="{DynamicResource BorderColor}" CaretBrush="{DynamicResource ForegroundColor}"
-                     PreviewTextInput="Editor_PreviewTextInput" PreviewKeyDown="Editor_PreviewKeyDown"
-                     TextChanged="Editor_TextChanged"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MaxWidth="480"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="nameEditor" FontSize="15" Padding="5,3" MinHeight="28"
+                         Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource CardBackgroundColor}"
+                         BorderBrush="{DynamicResource BorderColor}" CaretBrush="{DynamicResource ForegroundColor}"
+                         PreviewTextInput="Editor_PreviewTextInput" PreviewKeyDown="Editor_PreviewKeyDown"
+                         TextChanged="Editor_TextChanged"/>
+            </Grid>
             <TextBlock Text="{Binding ControllerIdentityText}" FontSize="15" FontWeight="SemiBold"
                        Foreground="{DynamicResource ForegroundColor}" TextWrapping="Wrap" Margin="0,2,0,0"
                        ToolTip="{Binding IdText}"/>

@@ -9,6 +9,14 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.77](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.77) - 2026-11-20
+
+- Pass the current Windows account SID directly to Task Scheduler when switching Run at Startup from Program to Task, then verify the stored task identity and log any mismatch. Explain the administrator requirement when hovering over the disabled Task option. Thanks to [@2mg](https://github.com/2mg) for the logs, preview testing, and tooltip suggestion in [issue #140](https://github.com/Pav-Osmolski/DS4Windows/issues/140).
+- Cap the width of the controller name editor on wide windows while letting it shrink to fit narrower cards.
+- Show the Overview controller name and profile tooltips only when hovering over the corresponding text.
+
+Implemented in [PR #143](https://github.com/Pav-Osmolski/DS4Windows/pull/143).
+
 ### [5.0.76](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.76) - 2026-11-20
 
 - Review competing DS4Windows and VIIPER processes and startup entries before installer repair. Offer explicit approval to pause verified conflicts with protected backups and a restore helper; retain applications and profiles, and require manual review for ambiguous entries.
