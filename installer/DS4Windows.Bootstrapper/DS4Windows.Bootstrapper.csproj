@@ -24,5 +24,6 @@
     <Compile Include="..\InstallerStartupTaskPolicy.cs" Link="InstallerStartupTaskPolicy.cs" />
     <Compile Include="..\StartupSetupState.cs" Link="StartupSetupState.cs" />
     <Compile Include="..\UsbipComponentState.cs" Link="UsbipComponentState.cs" />
+    <Compile Include="..\ControllerStartupConflicts.cs" Link="ControllerStartupConflicts.cs" />
   </ItemGroup>
 </Project>

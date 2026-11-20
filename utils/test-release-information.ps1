@@ -12,7 +12,7 @@ function Read-Block([string]$start, [string]$end, [int]$after = 0) {
         ForEach-Object { $_ -replace '^        ', '' }) -join "`n")
 }
 $creation = Read-Block '$noticeNames = @(' '$assets = @('
-$verification = Read-Block '$noticeNames = @(' "Write-Host 'Published release matches" ($workflow.IndexOf('  verify_published_release:'))
+$verification = Read-Block '$brokerNoticePrefix = ' "Write-Host 'Published release matches" ($workflow.IndexOf('  verify_published_release:'))
 $root = Join-Path ([IO.Path]::GetTempPath()) "ds4w-release-info-$([guid]::NewGuid().ToString('N'))"
 $records = Join-Path $root 'records'
 $publish = Join-Path $root 'publish'
@@ -20,8 +20,8 @@ $oldEnvironment = @{}
 foreach ($name in @('VERSION', 'RELEASE_TAG', 'UNSIGNED_RELEASE')) { $oldEnvironment[$name] = [Environment]::GetEnvironmentVariable($name) }
 try {
     New-Item -ItemType Directory -Path $records, (Join-Path $publish 'extras') | Out-Null
-    $names = @('VIIPER-0.1.17-LICENSES.txt', 'VIIPER-0.1.17-PROVENANCE.txt',
-        'VIIPER-0.1.17-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md',
+    $names = @('VIIPER-0.1.18-LICENSES.txt', 'VIIPER-0.1.18-PROVENANCE.txt',
+        'VIIPER-0.1.18-BUILD-NOTES.txt', 'VIIPER-SYSTRAY-LICENSE.txt', 'VIIPER-SYSTRAY-NOTICE.md',
         'VIIPER-WDL-NOTICE.txt', 'LICENSE.txt')
     foreach ($name in $names) { [IO.File]::WriteAllText((Join-Path $publish "extras/$name"), "Fixture $name`r`nUnicode: ©`r`n") }
     foreach ($name in @('COPYING', 'NOTICE.txt', 'AGPL-3.0.txt', 'DS5-BRIDGE-NOTICE.txt')) {
@@ -31,7 +31,7 @@ try {
     $env:UNSIGNED_RELEASE = 'true'
     $sourceCommit = 'a' * 40; $brokerCommit = 'b' * 40; $brokerHash = 'C' * 64
     . $creation
-    $receipt = @{ releaseInfo = $releaseInfo }
+    $receipt = @{ releaseInfo = $releaseInfo; brokerSourceName = 'VIIPER-0.1.18-SOURCE.zip' }
     $seen = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
     foreach ($name in @($infoName, 'installer.exe', 'portable.zip', 'ds4-source.zip', 'viiper-source.zip', 'SHA256SUMS.txt')) { [void]$seen.Add($name) }
     $release = @{ assets = @(1..7) }
@@ -51,7 +51,7 @@ try {
     $baseline = [IO.File]::ReadAllBytes($infoPath)
     foreach ($case in @('missing', 'extra', 'duplicate', 'changed', 'unsafe-name', 'wrong-receipt-hash', 'wrong-asset-count', 'unrecorded-asset')) {
         [IO.File]::WriteAllBytes($infoPath, $baseline)
-        $receipt = @{ releaseInfo = ($releaseInfo | ConvertTo-Json -Depth 5 | ConvertFrom-Json) }
+        $receipt = @{ releaseInfo = ($releaseInfo | ConvertTo-Json -Depth 5 | ConvertFrom-Json); brokerSourceName = 'VIIPER-0.1.18-SOURCE.zip' }
         if ($case -eq 'wrong-receipt-hash') { $receipt.releaseInfo.files[0].sha256 = '0' * 64 }
         elseif ($case -eq 'unrecorded-asset') { $release.assets = @(1..8) }
         elseif ($case -eq 'wrong-asset-count') { [void]$seen.Add('unexpected.txt') }
@@ -75,7 +75,7 @@ try {
     }
     foreach ($name in @('COPYING', 'NOTICE.txt', 'AGPL-3.0.txt', 'DS5-BRIDGE-NOTICE.txt')) {
         [IO.File]::WriteAllBytes($infoPath, $baseline)
-        $receipt = @{ releaseInfo = ($releaseInfo | ConvertTo-Json -Depth 5 | ConvertFrom-Json) }
+        $receipt = @{ releaseInfo = ($releaseInfo | ConvertTo-Json -Depth 5 | ConvertFrom-Json); brokerSourceName = 'VIIPER-0.1.18-SOURCE.zip' }
         $zip = [IO.Compression.ZipFile]::Open($infoPath, [IO.Compression.ZipArchiveMode]::Update)
         try { $zip.GetEntry($name).Delete() } finally { $zip.Dispose() }
         $rejected = $false
@@ -86,11 +86,11 @@ try {
     [IO.File]::WriteAllBytes($infoPath, $baseline)
     $zip = [IO.Compression.ZipFile]::Open($infoPath, [IO.Compression.ZipArchiveMode]::Update)
     try { foreach ($name in $applicationNotices) { $zip.GetEntry($name).Delete() } } finally { $zip.Dispose() }
-    $receipt = @{ releaseInfo = ($releaseInfo | ConvertTo-Json -Depth 5 | ConvertFrom-Json) }
+    $receipt = @{ releaseInfo = ($releaseInfo | ConvertTo-Json -Depth 5 | ConvertFrom-Json); brokerSourceName = 'VIIPER-0.1.18-SOURCE.zip' }
     $receipt.releaseInfo.files = @($receipt.releaseInfo.files | Where-Object { $_.name -cnotin $applicationNotices })
     . $verification
     # An old receipt still verifies its original standalone supporting files.
-    $receipt = @{}
+    $receipt = @{ brokerSourceName = 'VIIPER-0.1.18-SOURCE.zip' }
     foreach ($name in $names + @('SOURCE-REVISIONS.txt')) { [void]$seen.Add($name) }
     . $verification
     [void]$seen.Remove('LICENSE.txt')

@@ -154,6 +154,25 @@ public class StartupRegistrationTests
     }
 
     [TestMethod]
+    [DataRow("RepairRequired", "Ready", null)]
+    [DataRow("AdministratorRequired", "Ready", null)]
+    [DataRow("RestartRequired", "Ready", "RestartRequired")]
+    [DataRow("RepairRequired", "Installing", "RepairRequired")]
+    public void OnlyCompletedInfrastructureClearsTaskSetupDeferral(string reason, string infrastructure, string expected) =>
+        Assert.AreEqual(expected, StartupRegistrationPolicy.ResolveDeferredReason(reason, infrastructure));
+
+    [TestMethod]
+    public void ConflictingTaskDoesNotDisableTheProgramStartupOption()
+    {
+        var access = new FakeStartupAccess { State = new(false, false, true, TaskConflict: true) };
+        SettingsViewModel view = access.CreateView();
+        Assert.IsTrue(view.CanChangeStartupPreference);
+        Assert.IsTrue(view.CanChangeStartupMode);
+        Assert.IsFalse(view.CanWriteTask);
+        StringAssert.Contains(view.StartupStatusText, "Task Scheduler");
+    }
+
+    [TestMethod]
     public void ExplicitDisableCancelsPendingStartupEvenWhenRemovalFails()
     {
         var access = new FakeStartupAccess
@@ -189,7 +208,7 @@ public class StartupRegistrationTests
         Assert.IsTrue(access.State.Enabled);
         StringAssert.Contains(view.StartupStatusText, "choice to turn off automatic startup is saved");
         StringAssert.Contains(view.StartupStatusText, "Windows may still open DS4Windows");
-        StringAssert.Contains(view.StartupStatusText, "Install / Repair VIIPER");
+        StringAssert.Contains(view.StartupStatusText, "Log tab");
         Assert.AreEqual(1, access.Errors.Count);
     }
 
@@ -279,14 +298,17 @@ public class StartupRegistrationTests
     [DataRow("RepairRequired")]
     [DataRow("UnrecognizedSetupState")]
     [DataRow("")]
-    public void PendingStartupNamesTheRepairButtonAndManualFallback(string reason)
+    public void PendingStartupOffersTheActionThatMatchesSetupState(string reason)
     {
         var access = new FakeStartupAccess { State = new(false, false, true, reason) };
         SettingsViewModel view = access.CreateView();
 
         Assert.IsTrue(view.RunAtStartup, "The checkbox must keep the saved choice.");
         StringAssert.Contains(view.StartupStatusText, "saved but not active yet");
-        StringAssert.Contains(view.StartupStatusText, "Install / Repair VIIPER");
+        if (reason.Length == 0)
+            StringAssert.Contains(view.StartupStatusText, "Turn Run at Startup off and back on");
+        else
+            StringAssert.Contains(view.StartupStatusText, "Settings > Components and select Install / Repair VIIPER");
         StringAssert.Contains(view.StartupStatusText, "open DS4Windows manually");
         Assert.IsFalse(view.StartupStatusText.Contains("requested", StringComparison.OrdinalIgnoreCase));
         Assert.AreEqual(0, access.Changes);
@@ -490,7 +512,7 @@ public class StartupRegistrationTests
     {
         // Source-bound wiring check only: do not construct TaskService or
         // inspect/change the machine's startup entries in this test process.
-        string body = ReadViiperStartupMethod(
+        string body = ReadStartupMethod(
             "public static void RefreshSelectedStartupTaskOnLaunch()",
             "public static void RefreshSelectedStartupTaskAfterRunAtStartupChange()");
         Assert.IsFalse(body.Contains("RemoveViiperStartupTask", StringComparison.Ordinal));
@@ -508,7 +530,7 @@ public class StartupRegistrationTests
     [TestMethod]
     public void ExplicitViiperStartupDisableChecksRemovalAndSurfacesFailure()
     {
-        string body = ReadViiperStartupMethod(
+        string body = ReadStartupMethod(
             "public static void RefreshSelectedStartupTaskAfterRunAtStartupChange()",
             "public static bool LaunchInstaller(");
         StringAssert.Matches(body, new Regex(
@@ -518,13 +540,41 @@ public class StartupRegistrationTests
         StringAssert.Contains(body, "RefreshSelectedStartupTaskOnLaunch();");
     }
 
-    private static string ReadViiperStartupMethod(string signature, string nextSignature)
+    [TestMethod]
+    public void SchedulerReadbackUsesTheStoredPrincipalRatherThanTheTriggerUser()
+    {
+        const string xml = """
+            <Task xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+              <Triggers><LogonTrigger><UserId>S-1-5-18</UserId></LogonTrigger></Triggers>
+              <Principals>
+                <Principal id="Author"><UserId>S-1-5-21-100-200-300-1001</UserId></Principal>
+              </Principals>
+            </Task>
+            """;
+        Assert.AreEqual("S-1-5-21-100-200-300-1001", StartupRegistrationPolicy.ReadTaskPrincipalUserId(xml));
+        string ambiguous = xml.Replace("</Principals>", "<Principal><UserId>S-1-5-18</UserId></Principal></Principals>");
+        Assert.IsNull(StartupRegistrationPolicy.ReadTaskPrincipalUserId(ambiguous));
+        Assert.IsNull(StartupRegistrationPolicy.ReadTaskPrincipalUserId("<!DOCTYPE Task [<!ENTITY x 'identity'>]>" + xml));
+    }
+
+    [TestMethod]
+    public void AppStartupRegistrationPassesOriginalSidToScheduler()
+    {
+        string body = ReadStartupMethod("public static void WriteTaskEntry()",
+            "public static void DeleteTaskEntry()", "StartupMethods.cs");
+        StringAssert.Matches(body, new Regex(
+            @"RegisterTaskDefinition\(\s*""RunDS4Windows"",\s*td,\s*" +
+            @"existing == null \? TaskCreation.Create : TaskCreation.Update,\s*" +
+            @"currentUserSid,\s*password: null,\s*logonType: TaskLogonType.InteractiveToken\)"));
+    }
+
+    private static string ReadStartupMethod(string signature, string nextSignature,
+        string relativeSource = "DS4Control/Viiper/ViiperSetupManager.cs")
     {
         for (var directory = new DirectoryInfo(AppContext.BaseDirectory);
              directory != null; directory = directory.Parent)
         {
-            string path = Path.Combine(directory.FullName, "DS4Windows", "DS4Control",
-                "Viiper", "ViiperSetupManager.cs");
+            string path = Path.Combine(directory.FullName, "DS4Windows", relativeSource);
             if (!File.Exists(path)) continue;
             string source = File.ReadAllText(path);
             int start = source.IndexOf(signature, StringComparison.Ordinal);
@@ -534,7 +584,7 @@ public class StartupRegistrationTests
             // Ignore explanatory comments without flattening statements.
             return Regex.Replace(source[start..end], @"//[^\r\n]*", string.Empty);
         }
-        throw new AssertFailedException("The VIIPER startup source was not found.");
+        throw new AssertFailedException($"Startup source was not found: {relativeSource}");
     }
 
     private sealed class FakeStartupAccess

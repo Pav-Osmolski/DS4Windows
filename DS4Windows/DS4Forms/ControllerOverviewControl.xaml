@@ -290,12 +290,14 @@
                             <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0,0,12,0">
                                 <TextBlock Text="{Binding SelectedControllerNumber}" Style="{StaticResource OverviewEyebrowStyle}" />
                                 <TextBlock Text="{Binding SelectedController.ControllerDisplayName}" FontSize="21" FontWeight="SemiBold"
-                                           Margin="0,1,0,2" TextTrimming="CharacterEllipsis" ToolTip="{Binding SelectedController.IdText}" />
+                                           HorizontalAlignment="Left" Margin="0,1,0,2" TextTrimming="CharacterEllipsis"
+                                           ToolTip="{Binding SelectedController.IdText}" />
                                 <DockPanel>
                                     <TextBlock DockPanel.Dock="Left" Text="{lex:Loc Strings:Profile}" Margin="0,0,6,0"
                                                Foreground="{DynamicResource MutedForegroundColor}" />
                                     <TextBlock Text="{Binding CurrentProfileName}" FontWeight="SemiBold"
-                                               TextTrimming="CharacterEllipsis" ToolTip="{Binding ProfileGuidance}" />
+                                               HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding ProfileGuidance}" />
                                 </DockPanel>
                             </StackPanel>
                             <StackPanel x:Name="overviewStatusBatteryRow" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">

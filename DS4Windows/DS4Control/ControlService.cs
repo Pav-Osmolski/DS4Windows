@@ -6162,6 +6162,7 @@ namespace DS4Windows
 
                 // Capture raw calibrated stick intent before any output curves/remapping.
                 touchPad[ind]?.UpdateGyroStickActivation(cState);
+                DS4State physicalActionState = cState;
                 cState = Mapping.SetCurveAndDeadzone(ind, cState, TempState[ind], device);
 
                 bool oscMonitoringPending = false;
@@ -6181,7 +6182,7 @@ namespace DS4Windows
                         oscMonitoringPending = true;
                     }
 
-                    Mapping.MapCustom(ind, cState, tempMapState, ExposedState[ind], touchPad[ind], this);
+                    Mapping.MapCustom(ind, cState, tempMapState, ExposedState[ind], touchPad[ind], this, physicalActionState);
                     deferredDiagnostics.Switch2MouseMapperRan = true;
 
                     // Mapping owns controls; same-report physical metadata,

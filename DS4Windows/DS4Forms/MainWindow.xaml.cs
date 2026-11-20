@@ -2210,7 +2210,6 @@ Suspend support not enabled.", true);
             if (notifyIcon != null)
             {
                 trayIconVM?.Dispose();
-                notifyIcon.Icon = null;
                 notifyIcon.Dispose();
                 notifyIcon = null;
             }
@@ -2218,14 +2217,94 @@ Suspend support not enabled.", true);
             Application.Current.Shutdown();
         }
 
+        private bool trayDisplayRefreshPending;
+
         private void TrayDisplaySettingsChanged(object sender, EventArgs e)
         {
             if (Dispatcher.HasShutdownStarted) return;
-            Dispatcher.BeginInvoke(new Action(() =>
+            Dispatcher.BeginInvoke(new Action(RefreshTrayDisplaySettings));
+        }
+
+        private async void RefreshTrayDisplaySettings()
+        {
+            if (trayDisplayRefreshPending || notifyIcon == null || !notifyIcon.IsCreated ||
+                Volatile.Read(ref shutdownRequested) != 0) return;
+
+            trayDisplayRefreshPending = true;
+            try
             {
-                if (notifyIcon == null || Volatile.Read(ref shutdownRequested) != 0) return;
                 notifyIcon.GetBindingExpression(H.NotifyIcon.TaskbarIcon.IconProperty)?.UpdateTarget();
-            }));
+            }
+            catch (InvalidOperationException error) when (error.Message == "UpdateIcon failed.")
+            {
+                // Explorer can lose its notification registration during resume.
+                // Reapply the current icon even if WPF already cached the new value.
+                foreach (int delay in new[] { 250, 1000, 2000 })
+                {
+                    await Task.Delay(delay);
+                    if (Dispatcher.HasShutdownStarted || notifyIcon == null ||
+                        Volatile.Read(ref shutdownRequested) != 0) return;
+                    try
+                    {
+                        if (notifyIcon.IsCreated)
+                            ReplaceTrayIcon();
+                        notifyIcon.GetBindingExpression(H.NotifyIcon.TaskbarIcon.IconProperty)?.UpdateTarget();
+                        notifyIcon.ForceCreate(enablesEfficiencyMode: false);
+                        return;
+                    }
+                    catch (InvalidOperationException retryError)
+                    {
+                        NLog.LogManager.GetLogger("TrayIcon").Debug(retryError, "Tray icon refresh retry failed");
+                    }
+                }
+                AppLogger.LogToGui("Windows did not restore the notification-area icon after the display changed.", true);
+            }
+            finally
+            {
+                trayDisplayRefreshPending = false;
+            }
+        }
+
+        private void ReplaceTrayIcon()
+        {
+            var oldIcon = notifyIcon;
+            var replacement = new H.NotifyIcon.TaskbarIcon
+            {
+                DataContext = trayIconVM,
+                CustomName = oldIcon.CustomName,
+                ContextMenu = trayIconVM.ContextMenu,
+                MenuActivation = oldIcon.MenuActivation,
+            };
+            replacement.SetBinding(H.NotifyIcon.TaskbarIcon.IconProperty,
+                new Binding(nameof(TrayIconViewModel.IconSource))
+                {
+                    Mode = BindingMode.OneWay,
+                    Converter = (IValueConverter)FindResource("TrayIconConverter"),
+                });
+            replacement.SetBinding(H.NotifyIcon.TaskbarIcon.ToolTipTextProperty,
+                new Binding(nameof(TrayIconViewModel.TooltipText)) { Mode = BindingMode.OneWay });
+            replacement.TrayRightMouseUp += NotifyIcon_TrayRightMouseUp;
+            replacement.TrayMiddleMouseDown += NotifyIcon_TrayMiddleMouseDown;
+            replacement.TrayMouseDoubleClick += NotifyIcon_TrayMouseDoubleClick;
+
+            // Clearing the old bindings can itself notify Explorer while its
+            // registration is missing. Discard those shell errors locally.
+            foreach (var property in new[] { H.NotifyIcon.TaskbarIcon.IconProperty, H.NotifyIcon.TaskbarIcon.ToolTipTextProperty })
+            {
+                try { BindingOperations.ClearBinding(oldIcon, property); }
+                catch (InvalidOperationException error)
+                {
+                    NLog.LogManager.GetLogger("TrayIcon").Debug(error, "Retiring the old tray icon binding");
+                }
+            }
+            if (oldIcon.Parent is Panel parent)
+                parent.Children.Remove(oldIcon);
+            notifyIcon = replacement;
+            try { oldIcon.Dispose(); }
+            catch (InvalidOperationException error)
+            {
+                NLog.LogManager.GetLogger("TrayIcon").Debug(error, "Retiring the old tray icon");
+            }
         }
 
         protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)

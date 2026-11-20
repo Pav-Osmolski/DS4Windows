@@ -16,7 +16,7 @@ public sealed class InstallerMutationOwnershipTests
             "A losing installer must not delete payloads used by the active repair before returning 1618.");
         StringAssert.Contains(entry, "return RunWithSetupMutex(");
         string locked = Section(source, "private static int InstallOrRepairLocked(",
-            "private static int Preflight()");
+            "private static int Preflight(string[] args)");
         StringAssert.Contains(locked, "RemoveObsoleteBundledViiperPayloads(");
         StringAssert.Contains(locked, "preserveCurrent: true");
     }
@@ -45,7 +45,10 @@ public sealed class InstallerMutationOwnershipTests
             "private static InteractiveUser ResolveInteractiveUser(");
         StringAssert.Contains(gate, "SetupMutationOwnership.Run(action, WriteFallbackLog)");
         Assert.AreEqual(@"Global\DS4Windows-VIIPER-Setup", SetupMutationOwnership.MutexName);
-        StringAssert.Contains(source, "return RunWithSetupMutex(PreflightLocked);");
+        string preflight = Section(source, "private static int Preflight(string[] args)", "private static int PreflightLocked()");
+        StringAssert.Contains(preflight, "return RunWithSetupMutex(() => {");
+        StringAssert.Contains(preflight, "ControllerStartupConflicts.Pause(sid, consent, WriteFallbackLog)");
+        StringAssert.Contains(preflight, "return PreflightLocked();");
         StringAssert.Contains(source, "return RunWithSetupMutex(() => UninstallLocked(installRoot));");
     }
 

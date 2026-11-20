@@ -5072,6 +5072,7 @@ namespace DS4Windows.InputDevices
                 double[] latencySamples = new double[20];
                 int latencySampleIndex = 0;
                 int tempLatencyCount = 0;
+                var bluetoothCadence = new BluetoothInputCadence();
                 Latency = 0.0;
                 lastTimeElapsedDouble = 0.0;
                 lastTimeElapsed = 0;
@@ -5275,6 +5276,12 @@ namespace DS4Windows.InputDevices
                     readWaitEv.Wait();
                     readWaitEv.Reset();
 
+                    if (conType == ConnectionType.BT && inputReport[0] != 0x31)
+                        continue;
+
+                    if (!recoveredCurrentState && !inputFallback.AcceptStreamingReport(inputReport))
+                        continue;
+
                     if (oldtime != 0)
                     {
                         testelapsed = physicalReadObservedAt - oldtime;
@@ -5284,31 +5291,28 @@ namespace DS4Windows.InputDevices
                         physicalReportObservationIntervalLatency.Observe(
                             testelapsed);
 
-                        if (tempLatencyCount == latencySamples.Length)
+                        if (conType != ConnectionType.BT)
                         {
-                            latencySum -= latencySamples[latencySampleIndex];
+                            if (tempLatencyCount == latencySamples.Length)
+                                latencySum -= latencySamples[latencySampleIndex];
+                            else
+                                tempLatencyCount++;
+
+                            latencySamples[latencySampleIndex] = lastTimeElapsedDouble;
+                            latencySum += lastTimeElapsedDouble;
+                            latencySampleIndex = (latencySampleIndex + 1) % latencySamples.Length;
+                            Latency = latencySum / tempLatencyCount;
                         }
-                        else
-                        {
-                            tempLatencyCount++;
-                        }
-                        latencySamples[latencySampleIndex] =
-                            lastTimeElapsedDouble;
-                        latencySum += lastTimeElapsedDouble;
-                        latencySampleIndex = (latencySampleIndex + 1) %
-                            latencySamples.Length;
-                        Latency = latencySum / tempLatencyCount;
                     }
                     oldtime = physicalReadObservedAt;
 
-                    if (conType == ConnectionType.BT && inputReport[0] != 0x31)
+                    if (conType == ConnectionType.BT)
                     {
-                        // Received incorrect report, skip it
-                        continue;
+                        if (recoveredCurrentState)
+                            bluetoothCadence.Reset();
+                        else if (bluetoothCadence.Observe(physicalReadObservedAt, Stopwatch.Frequency, out double interval))
+                            Latency = interval;
                     }
-
-                    if (!recoveredCurrentState && !inputFallback.AcceptStreamingReport(inputReport))
-                        continue;
 
                     utcNow = DateTime.UtcNow; // timestamp with UTC in case system time zone changes
 

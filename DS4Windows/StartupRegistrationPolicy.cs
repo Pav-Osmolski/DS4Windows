@@ -1,11 +1,42 @@
 using System;
 using System.IO;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace DS4WinWPF;
 
 internal static class StartupRegistrationPolicy
 {
     internal const string ManagedTaskDescription = "DS4Windows managed startup task v1";
+
+    internal static string ReadTaskPrincipalUserId(string taskXml)
+    {
+        if (string.IsNullOrWhiteSpace(taskXml)) return null;
+        XNamespace ns = "http://schemas.microsoft.com/windows/2004/02/mit/task";
+        try
+        {
+            using var input = new StringReader(taskXml);
+            using var reader = XmlReader.Create(input, new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Prohibit,
+                XmlResolver = null,
+                MaxCharactersInDocument = 65536,
+            });
+            var task = XDocument.Load(reader).Root;
+            var principals = task?.Element(ns + "Principals");
+            if (principals == null) return null;
+            using var entries = principals.Elements().GetEnumerator();
+            if (!entries.MoveNext()) return null;
+            XElement principal = entries.Current;
+            return principal.Name == ns + "Principal" && !entries.MoveNext()
+                ? principal.Element(ns + "UserId")?.Value
+                : null;
+        }
+        catch (XmlException)
+        {
+            return null;
+        }
+    }
 
     internal static bool ShouldRepairTask(bool exists, bool enabled,
         bool owned, bool matchesCurrentConfiguration, bool requested = true,
@@ -25,6 +56,10 @@ internal static class StartupRegistrationPolicy
     internal static StartupRegistrationState ResolveState(bool program, bool task,
         bool? userRequested, bool? setupRequested, string deferredReason) =>
         new(program, task, userRequested ?? setupRequested, deferredReason);
+
+    internal static string ResolveDeferredReason(string reason, string infrastructureState) =>
+        infrastructureState == "Ready" && reason is ("RepairRequired" or "AdministratorRequired")
+            ? null : reason;
 
     internal static bool ResolveRequestedStartup(bool? recordedRequest,
         Func<StartupRegistrationState> readState)
@@ -82,7 +117,8 @@ internal static class StartupRegistrationPolicy
 internal enum StartupRegistrationMode { Disabled, Program, Task }
 
 internal readonly record struct StartupRegistrationState(bool Program, bool Task,
-    bool? Requested = null, string DeferredReason = null, string ReadError = null)
+    bool? Requested = null, string DeferredReason = null, string ReadError = null,
+    bool TaskConflict = false)
 {
     internal bool Enabled => Program || Task;
     internal bool RunAtStartupRequested => Requested ?? Enabled;
@@ -102,13 +138,17 @@ internal readonly record struct StartupRegistrationState(bool Program, bool Task
     internal string StatusText => ReadError != null
         ? "Automatic startup could not be checked. Restart DS4Windows to try again; details are in the Log tab. You can still open DS4Windows manually."
         : !RunAtStartupRequested && Enabled
-        ? "Your choice to turn off automatic startup is saved, but Windows may still open DS4Windows when you sign in. Select Install / Repair VIIPER below to finish turning it off."
+        ? "Your choice to turn off automatic startup is saved, but Windows may still open DS4Windows when you sign in. Check the Log tab for details."
+        : TaskConflict
+        ? "Another or unrecognized RunDS4Windows task exists. DS4Windows leaves it alone. Review it in Windows Task Scheduler if you want to change whether it runs."
         : !RunAtStartupRequested || Enabled ? string.Empty
         : DeferredReason switch
         {
             "RestartRequired" => "Automatic startup is waiting for setup to finish. Save your work, restart Windows, and approve DS4Windows setup if prompted. You can still open DS4Windows manually.",
             "AdministratorRequired" => "Automatic startup could not be enabled because setup used a different administrator account. Ask your administrator to review startup access for this Windows account, or open DS4Windows manually.",
-            _ => "Automatic startup is saved but not active yet. Select Install / Repair VIIPER below to finish setup. You can still open DS4Windows manually.",
+            _ => SetupDeferred
+                ? "Automatic startup is saved but not active yet. Go to Settings > Components and select Install / Repair VIIPER to finish setup. You can still open DS4Windows manually."
+                : "Automatic startup is saved but not active yet. Turn Run at Startup off and back on to register it. You can still open DS4Windows manually.",
         };
 }
 

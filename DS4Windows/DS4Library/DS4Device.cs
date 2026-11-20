@@ -740,7 +740,7 @@ namespace DS4Windows
 
         // Specify the poll rate interval used for the DS4 hardware when
         // connected via Bluetooth
-        protected int btPollRate = 0;
+        protected int btPollRate = BackingStore.DEFAULT_DS4_BT_POLL_RATE;
         public int BTPollRate
         {
             get { return btPollRate; }
@@ -1895,8 +1895,13 @@ namespace DS4Windows
                     hDevice.SafeReadHandle.DangerousGetHandle(), 64);
                 var inputFallback = new BluetoothInputReportFallback(hDevice,
                     conType, BT_INPUT_REPORT_LENGTH, 0x11, GameBarBluetoothInputRecoveryEnabled);
-                Queue<double> latencyQueue = new Queue<double>(21); // Set capacity at max + 1 to avoid any resizing
-                int tempLatencyCount = 0;
+                var inputIntervals = new long[20];
+                int intervalIndex = 0;
+                int intervalCount = 0;
+                long intervalTicks = 0;
+                Latency = 0.0;
+                lastTimeElapsedDouble = 0.0;
+                lastTimeElapsed = 0;
                 long oldtime = 0;
                 string currerror = string.Empty;
                 long curtime = 0;
@@ -1913,7 +1918,6 @@ namespace DS4Windows
                 double elapsedDeltaTime = 0.0;
                 uint tempDelta = 0;
                 byte tempByte = 0;
-                double latencySum = 0.0;
 
                 // Run continuous calibration on Gyro when starting input loop
                 sixAxis.ResetContinuousCalibration();
@@ -1923,21 +1927,6 @@ namespace DS4Windows
                 {
                     oldCharging = charging;
                     currerror = string.Empty;
-
-                    if (tempLatencyCount >= 20)
-                    {
-                        latencySum -= latencyQueue.Dequeue();
-                        tempLatencyCount--;
-                    }
-
-                    // Keep fractional milliseconds so the observed input
-                    // cadence remains accurate above 500 Hz.
-                    latencySum += lastTimeElapsedDouble;
-                    latencyQueue.Enqueue(lastTimeElapsedDouble);
-                    tempLatencyCount++;
-
-                    //Latency = latencyQueue.Average();
-                    Latency = latencySum / (double)tempLatencyCount;
 
                     readWaitEv.Set();
 
@@ -2141,12 +2130,6 @@ namespace DS4Windows
                     readWaitEv.Wait();
                     readWaitEv.Reset();
 
-                    curtime = Stopwatch.GetTimestamp();
-                    testelapsed = curtime - oldtime;
-                    lastTimeElapsedDouble = testelapsed * (1.0 / Stopwatch.Frequency) * 1000.0;
-                    lastTimeElapsed = (long)lastTimeElapsedDouble;
-                    oldtime = curtime;
-
                     // Not going to do featureSet check anymore
                     if (conType == ConnectionType.BT &&
                         !DualShock4BluetoothAudioProtocol.HasHidState(btInputReport) &&
@@ -2155,6 +2138,22 @@ namespace DS4Windows
                         //Received incorrect report, skip it
                         continue;
                     }
+
+                    curtime = Stopwatch.GetTimestamp();
+                    // Only accepted controller states establish cadence. The
+                    // first packet after a connection has no preceding sample.
+                    if (oldtime != 0)
+                    {
+                        testelapsed = curtime - oldtime;
+                        lastTimeElapsedDouble = testelapsed * 1000.0 / Stopwatch.Frequency;
+                        lastTimeElapsed = (long)lastTimeElapsedDouble;
+                        intervalTicks += testelapsed - inputIntervals[intervalIndex];
+                        inputIntervals[intervalIndex] = testelapsed;
+                        intervalIndex = (intervalIndex + 1) % inputIntervals.Length;
+                        intervalCount = Math.Min(intervalCount + 1, inputIntervals.Length);
+                        Latency = intervalTicks * 1000.0 / Stopwatch.Frequency / intervalCount;
+                    }
+                    oldtime = curtime;
 
                     utcNow = DateTime.UtcNow; // timestamp with UTC in case system time zone changes
 

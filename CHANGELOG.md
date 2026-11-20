@@ -9,6 +9,30 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.77](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.77) - 2026-11-20
+
+- Pass the current Windows account SID directly to Task Scheduler when switching Run at Startup from Program to Task, then verify the stored task identity and log any mismatch. Explain the administrator requirement when hovering over the disabled Task option. Thanks to [@2mg](https://github.com/2mg) for the logs, preview testing, and tooltip suggestion in [issue #140](https://github.com/Pav-Osmolski/DS4Windows/issues/140).
+- Cap the width of the controller name editor on wide windows while letting it shrink to fit narrower cards.
+- Show the Overview controller name and profile tooltips only when hovering over the corresponding text.
+
+Implemented in [PR #143](https://github.com/Pav-Osmolski/DS4Windows/pull/143).
+
+### [5.0.76](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.76) - 2026-11-20
+
+- Review competing DS4Windows and VIIPER processes and startup entries before installer repair. Offer explicit approval to pause verified conflicts with protected backups and a restore helper; retain applications and profiles, and require manual review for ambiguous entries.
+
+- Recognize duplicate USB/IP virtual-controller interfaces and add bounded cleanup of verified residual devices and DriverStore packages after official uninstall and restart. Preserve imported devices, signed-package verification, reboot boundaries and failure diagnostics instead of repeating the same repair loop. Thanks to MarioDLH for the diagnostic log and [@rudey123](https://github.com/rudey123) for [issue #20](https://github.com/Pav-Osmolski/DS4Windows/issues/20). See the [repair design and safety boundaries](docs/usbip-clean-repair.md).
+
+- Start DS4 report timing with the first pair of valid input reports and use the default DS4 Bluetooth poll interval for the initial output report. Thanks to [@FeTTo94](https://github.com/FeTTo94) for [issue #142](https://github.com/Pav-Osmolski/DS4Windows/issues/142).
+- Recover the notification-area icon if Explorer rejects an icon refresh during sleep resume or a display change. Thanks to [@RLX2024](https://github.com/RLX2024) for [issue #141](https://github.com/Pav-Osmolski/DS4Windows/issues/141).
+- Keep the Program startup option available when a separate or unrecognized scheduled task occupies the DS4Windows task name, and give the correct location of Install / Repair VIIPER when setup still needs repair. Thanks to [@2mg](https://github.com/2mg) for [issue #140](https://github.com/Pav-Osmolski/DS4Windows/issues/140).
+- Measure DualSense Bluetooth input cadence over a time window so a burst of buffered reports cannot produce a misleading rate spike. Thanks to [@fenglidon](https://github.com/fenglidon) for [issue #139](https://github.com/Pav-Osmolski/DS4Windows/issues/139).
+- Keep a temporary profile active while its L2 or R2 activation chord is physically held, even if the destination profile changes the trigger's curve or output. Thanks to [@VenomCARNAGE122](https://github.com/VenomCARNAGE122) for [issue #138](https://github.com/Pav-Osmolski/DS4Windows/issues/138).
+
+- Bundle VIIPER 0.1.18 so partial DualSense metadata updates preserve the configured shell colour. Thanks to [@Alia5](https://github.com/Alia5) for the upstream fix adapted in [VIIPER PR #13](https://github.com/Pav-Osmolski/VIIPER/pull/13).
+
+Implemented in [PR #137](https://github.com/Pav-Osmolski/DS4Windows/pull/137).
+
 ### [5.0.75](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.75) - 2026-11-16
 
 - Add inline custom controller names from the pencil beside the MAC address in Controllers. Save on Enter, an outside click or focus loss; Escape cancels and clearing restores the original designation. Names allow up to 50 letters, numbers and spaces, are stored by MAC independently of profiles, and follow settings backups and migrations. Keep the MAC visible, allow the Controllers heading to wrap, and show the custom name in Overview and the sidebar with the full name/MAC tooltip; Overview retains single-line ellipsis truncation. Thanks to [@Masterload1975](https://github.com/Masterload1975) for [issue #129](https://github.com/Pav-Osmolski/DS4Windows/issues/129).

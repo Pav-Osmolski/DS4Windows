@@ -143,6 +143,7 @@ namespace DS4Windows.Bootstrapper
             if (!parentOwnedRelatedUninstall && !EnsureBundleMutex()) return;
             StartPlan(action, () =>
             {
+                engine.SetVariableString("ControllerConflictConsent", window.ConflictConsentHash ?? "", false);
                 deferInfrastructureUntilUpgradeCompletes =
                     !infrastructureRecoveryPass &&
                     (action == LaunchAction.Install ||
