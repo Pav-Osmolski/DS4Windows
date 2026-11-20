@@ -154,6 +154,25 @@ public class StartupRegistrationTests
     }
 
     [TestMethod]
+    [DataRow("RepairRequired", "Ready", null)]
+    [DataRow("AdministratorRequired", "Ready", null)]
+    [DataRow("RestartRequired", "Ready", "RestartRequired")]
+    [DataRow("RepairRequired", "Installing", "RepairRequired")]
+    public void OnlyCompletedInfrastructureClearsTaskSetupDeferral(string reason, string infrastructure, string expected) =>
+        Assert.AreEqual(expected, StartupRegistrationPolicy.ResolveDeferredReason(reason, infrastructure));
+
+    [TestMethod]
+    public void ConflictingTaskDoesNotDisableTheProgramStartupOption()
+    {
+        var access = new FakeStartupAccess { State = new(false, false, true, TaskConflict: true) };
+        SettingsViewModel view = access.CreateView();
+        Assert.IsTrue(view.CanChangeStartupPreference);
+        Assert.IsTrue(view.CanChangeStartupMode);
+        Assert.IsFalse(view.CanWriteTask);
+        StringAssert.Contains(view.StartupStatusText, "Task Scheduler");
+    }
+
+    [TestMethod]
     public void ExplicitDisableCancelsPendingStartupEvenWhenRemovalFails()
     {
         var access = new FakeStartupAccess
@@ -189,7 +208,7 @@ public class StartupRegistrationTests
         Assert.IsTrue(access.State.Enabled);
         StringAssert.Contains(view.StartupStatusText, "choice to turn off automatic startup is saved");
         StringAssert.Contains(view.StartupStatusText, "Windows may still open DS4Windows");
-        StringAssert.Contains(view.StartupStatusText, "Install / Repair VIIPER");
+        StringAssert.Contains(view.StartupStatusText, "Log tab");
         Assert.AreEqual(1, access.Errors.Count);
     }
 
@@ -279,14 +298,17 @@ public class StartupRegistrationTests
     [DataRow("RepairRequired")]
     [DataRow("UnrecognizedSetupState")]
     [DataRow("")]
-    public void PendingStartupNamesTheRepairButtonAndManualFallback(string reason)
+    public void PendingStartupOffersTheActionThatMatchesSetupState(string reason)
     {
         var access = new FakeStartupAccess { State = new(false, false, true, reason) };
         SettingsViewModel view = access.CreateView();
 
         Assert.IsTrue(view.RunAtStartup, "The checkbox must keep the saved choice.");
         StringAssert.Contains(view.StartupStatusText, "saved but not active yet");
-        StringAssert.Contains(view.StartupStatusText, "Install / Repair VIIPER");
+        if (reason.Length == 0)
+            StringAssert.Contains(view.StartupStatusText, "Turn Run at Startup off and back on");
+        else
+            StringAssert.Contains(view.StartupStatusText, "Settings > Components and select Install / Repair VIIPER");
         StringAssert.Contains(view.StartupStatusText, "open DS4Windows manually");
         Assert.IsFalse(view.StartupStatusText.Contains("requested", StringComparison.OrdinalIgnoreCase));
         Assert.AreEqual(0, access.Changes);

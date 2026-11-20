@@ -9,6 +9,12 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Recognize duplicate USB/IP virtual-controller interfaces and add bounded cleanup of verified residual devices and DriverStore packages after official uninstall and restart. Preserve imported devices, signed-package verification, reboot boundaries and failure diagnostics instead of repeating the same repair loop. Thanks to MarioDLH for the diagnostic log and [@rudey123](https://github.com/rudey123) for [issue #20](https://github.com/Pav-Osmolski/DS4Windows/issues/20). See the [repair design and safety boundaries](docs/usbip-clean-repair.md).
 
+- Start DS4 report timing with the first pair of valid input reports and use the default DS4 Bluetooth poll interval for the initial output report. Thanks to [@FeTTo94](https://github.com/FeTTo94) for [issue #142](https://github.com/Pav-Osmolski/DS4Windows/issues/142).
+- Recover the notification-area icon if Explorer rejects an icon refresh during sleep resume or a display change. Thanks to [@RLX2024](https://github.com/RLX2024) for [issue #141](https://github.com/Pav-Osmolski/DS4Windows/issues/141).
+- Keep the Program startup option available when a separate or unrecognized scheduled task occupies the DS4Windows task name, and give the correct location of Install / Repair VIIPER when setup still needs repair. Thanks to [@2mg](https://github.com/2mg) for [issue #140](https://github.com/Pav-Osmolski/DS4Windows/issues/140).
+- Measure DualSense Bluetooth input cadence over a time window so a burst of buffered reports cannot produce a misleading rate spike. Thanks to [@fenglidon](https://github.com/fenglidon) for [issue #139](https://github.com/Pav-Osmolski/DS4Windows/issues/139).
+- Keep a temporary profile active while its L2 or R2 activation chord is physically held, even if the destination profile changes the trigger's curve or output. Thanks to [@VenomCARNAGE122](https://github.com/VenomCARNAGE122) for [issue #138](https://github.com/Pav-Osmolski/DS4Windows/issues/138).
+
 ## Released
 
 ### [5.0.75](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.75) - 2026-11-16

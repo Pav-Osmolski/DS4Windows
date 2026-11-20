@@ -126,7 +126,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler RunStartTaskChanged;
 
         private bool canWriteTask;
-        public bool CanWriteTask { get => canWriteTask && SystemIntegrationEnabled; }
+        public bool CanWriteTask => canWriteTask && SystemIntegrationEnabled && !startupRegistration.TaskConflict;
+        public event EventHandler CanWriteTaskChanged;
         public bool SystemIntegrationEnabled => !PortableLabContext.IsActive;
         public bool CanChangeStartupPreference => SystemIntegrationEnabled && startupRegistration.ReadError == null;
         public event EventHandler CanChangeStartupPreferenceChanged;
@@ -811,6 +812,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             RunStartTaskChanged?.Invoke(this, EventArgs.Empty);
             CanChangeStartupPreferenceChanged?.Invoke(this, EventArgs.Empty);
             CanChangeStartupModeChanged?.Invoke(this, EventArgs.Empty);
+            CanWriteTaskChanged?.Invoke(this, EventArgs.Empty);
             StartupStatusTextChanged?.Invoke(this, EventArgs.Empty);
             StartupStatusVisibilityChanged?.Invoke(this, EventArgs.Empty);
         }
