@@ -269,9 +269,17 @@ namespace DS4WinWPF
             td.Settings.Priority = ProcessPriorityClass.High;
             // Replace in place; a failed registration must not first delete
             // the user's previous working startup entry.
-            using Task registered = ts.RootFolder.RegisterTaskDefinition("RunDS4Windows", td);
-            if (registered == null || !TaskTargetsCurrentExecutable(registered))
-                throw new IOException("Windows did not confirm the DS4Windows startup task.");
+            // The short overload reads the principal back through COM, which
+            // can return a normalized account name instead of the SID we set.
+            using Task registered = ts.RootFolder.RegisterTaskDefinition(
+                "RunDS4Windows", td, existing == null ? TaskCreation.Create : TaskCreation.Update,
+                currentUserSid, password: null, logonType: TaskLogonType.InteractiveToken);
+            // Read the persistent task through the same path as the Settings
+            // state rather than relying on the registration response object.
+            using Task saved = ts.GetTask(@"\RunDS4Windows");
+            string mismatch = FindStartupTaskMismatch(saved, currentUserSid, requireEnabled: true);
+            if (mismatch != null)
+                throw new IOException($"Windows did not confirm the DS4Windows startup task ({mismatch}).");
         }
 
         public static void DeleteTaskEntry()
@@ -434,9 +442,9 @@ namespace DS4WinWPF
                 definition.Principal.RunLevel == TaskRunLevel.Highest &&
                 (string.IsNullOrWhiteSpace(trigger.UserId) || AccountMatchesSid(trigger.UserId, sid)) &&
                 string.Equals(action.Arguments?.Trim(), "-m", StringComparison.Ordinal) &&
-                PathsEqual(action.WorkingDirectory, Path.GetDirectoryName(action.Path));
+                DirectoriesEqual(action.WorkingDirectory, Path.GetDirectoryName(action.Path));
             return StartupRegistrationPolicy.OwnsTask(definition.RegistrationInfo.Description,
-                AccountMatchesSid(definition.Principal.UserId, sid), contract,
+                PrincipalMatchesSid(task, sid), contract,
                 IsRecognizedExecutable(action.Path));
         }
 
@@ -551,35 +559,55 @@ namespace DS4WinWPF
 
         private static bool TaskTargetsCurrentExecutable(Task task, bool requireEnabled = true)
         {
-            if (task.Definition.Actions.Count != 1 ||
-                task.Definition.Actions[0] is not ExecAction action ||
-                task.Definition.Triggers.Count != 1 ||
-                task.Definition.Triggers[0] is not LogonTrigger trigger)
+            using WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            return FindStartupTaskMismatch(task, identity.User?.Value, requireEnabled) == null;
+        }
+
+        private static bool DirectoriesEqual(string first, string second) =>
+            PathsEqual(Path.TrimEndingDirectorySeparator(first ?? ""),
+                Path.TrimEndingDirectorySeparator(second ?? ""));
+
+        private static string FindStartupTaskMismatch(Task task, string currentUserSid, bool requireEnabled)
+        {
+            if (task == null) return "task missing after registration";
+            TaskDefinition definition = task.Definition;
+            if (definition.Actions.Count != 1 ||
+                definition.Actions[0] is not ExecAction action ||
+                definition.Triggers.Count != 1 ||
+                definition.Triggers[0] is not LogonTrigger trigger)
             {
-                return false;
+                return "expected one executable action and one logon trigger";
             }
 
-            TaskDefinition definition = task.Definition;
-            string currentUserSid = WindowsIdentity.GetCurrent().User?.Value;
-            return (!requireEnabled || TaskIsEnabled(task)) &&
-                definition.Principal.RunLevel == TaskRunLevel.Highest &&
-                definition.Principal.LogonType ==
-                    TaskLogonType.InteractiveToken &&
-                AccountMatchesSid(definition.Principal.UserId,
-                    currentUserSid) &&
-                (string.IsNullOrWhiteSpace(trigger.UserId) ||
-                 AccountMatchesSid(trigger.UserId, currentUserSid)) &&
-                definition.Settings.ExecutionTimeLimit == TimeSpan.Zero &&
-                definition.Settings.MultipleInstances ==
-                    TaskInstancesPolicy.IgnoreNew &&
-                definition.Settings.Priority == ProcessPriorityClass.High &&
-                !definition.Settings.StopIfGoingOnBatteries &&
-                !definition.Settings.DisallowStartIfOnBatteries &&
-                PathsEqual(action.Path, DS4Windows.Global.exelocation) &&
-                string.Equals(action.Arguments?.Trim(), "-m",
-                    StringComparison.Ordinal) &&
-                PathsEqual(action.WorkingDirectory,
-                    DS4Windows.Global.exedirpath);
+            if (requireEnabled && !TaskIsEnabled(task)) return "task or logon trigger disabled";
+            if (definition.Principal.RunLevel != TaskRunLevel.Highest)
+                return $"unexpected run level: {definition.Principal.RunLevel}";
+            if (definition.Principal.LogonType != TaskLogonType.InteractiveToken)
+                return $"unexpected logon type: {definition.Principal.LogonType}";
+            if (!PrincipalMatchesSid(task, currentUserSid)) return "task account does not match the current account";
+            if (!string.IsNullOrWhiteSpace(trigger.UserId) && !AccountMatchesSid(trigger.UserId, currentUserSid))
+                return "logon trigger account does not match the current account";
+            if (definition.Settings.ExecutionTimeLimit != TimeSpan.Zero)
+                return $"unexpected execution limit: {definition.Settings.ExecutionTimeLimit}";
+            if (definition.Settings.MultipleInstances != TaskInstancesPolicy.IgnoreNew)
+                return $"unexpected multiple-instance policy: {definition.Settings.MultipleInstances}";
+            if (definition.Settings.Priority != ProcessPriorityClass.High)
+                return $"unexpected task priority: {definition.Settings.Priority}";
+            if (definition.Settings.StopIfGoingOnBatteries || definition.Settings.DisallowStartIfOnBatteries)
+                return "unexpected battery restrictions";
+            if (!PathsEqual(action.Path, DS4Windows.Global.exelocation)) return "executable path differs";
+            if (!string.Equals(action.Arguments?.Trim(), "-m", StringComparison.Ordinal)) return "launch arguments differ";
+            if (!DirectoriesEqual(action.WorkingDirectory, DS4Windows.Global.exedirpath)) return "working directory differs";
+            return null;
+        }
+
+        private static bool PrincipalMatchesSid(Task task, string expectedSid)
+        {
+            // XML retains the exact identity even when the COM getter returns
+            // an unqualified account name. Never use that name to override a
+            // different SID recorded in the task.
+            string savedUserId = StartupRegistrationPolicy.ReadTaskPrincipalUserId(task.Xml);
+            return AccountMatchesSid(savedUserId ?? task.Definition.Principal.UserId, expectedSid);
         }
 
         private static bool AccountMatchesSid(string account,

@@ -512,7 +512,7 @@ public class StartupRegistrationTests
     {
         // Source-bound wiring check only: do not construct TaskService or
         // inspect/change the machine's startup entries in this test process.
-        string body = ReadViiperStartupMethod(
+        string body = ReadStartupMethod(
             "public static void RefreshSelectedStartupTaskOnLaunch()",
             "public static void RefreshSelectedStartupTaskAfterRunAtStartupChange()");
         Assert.IsFalse(body.Contains("RemoveViiperStartupTask", StringComparison.Ordinal));
@@ -530,7 +530,7 @@ public class StartupRegistrationTests
     [TestMethod]
     public void ExplicitViiperStartupDisableChecksRemovalAndSurfacesFailure()
     {
-        string body = ReadViiperStartupMethod(
+        string body = ReadStartupMethod(
             "public static void RefreshSelectedStartupTaskAfterRunAtStartupChange()",
             "public static bool LaunchInstaller(");
         StringAssert.Matches(body, new Regex(
@@ -540,13 +540,41 @@ public class StartupRegistrationTests
         StringAssert.Contains(body, "RefreshSelectedStartupTaskOnLaunch();");
     }
 
-    private static string ReadViiperStartupMethod(string signature, string nextSignature)
+    [TestMethod]
+    public void SchedulerReadbackUsesTheStoredPrincipalRatherThanTheTriggerUser()
+    {
+        const string xml = """
+            <Task xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+              <Triggers><LogonTrigger><UserId>S-1-5-18</UserId></LogonTrigger></Triggers>
+              <Principals>
+                <Principal id="Author"><UserId>S-1-5-21-100-200-300-1001</UserId></Principal>
+              </Principals>
+            </Task>
+            """;
+        Assert.AreEqual("S-1-5-21-100-200-300-1001", StartupRegistrationPolicy.ReadTaskPrincipalUserId(xml));
+        string ambiguous = xml.Replace("</Principals>", "<Principal><UserId>S-1-5-18</UserId></Principal></Principals>");
+        Assert.IsNull(StartupRegistrationPolicy.ReadTaskPrincipalUserId(ambiguous));
+        Assert.IsNull(StartupRegistrationPolicy.ReadTaskPrincipalUserId("<!DOCTYPE Task [<!ENTITY x 'identity'>]>" + xml));
+    }
+
+    [TestMethod]
+    public void AppStartupRegistrationPassesOriginalSidToScheduler()
+    {
+        string body = ReadStartupMethod("public static void WriteTaskEntry()",
+            "public static void DeleteTaskEntry()", "StartupMethods.cs");
+        StringAssert.Matches(body, new Regex(
+            @"RegisterTaskDefinition\(\s*""RunDS4Windows"",\s*td,\s*" +
+            @"existing == null \? TaskCreation.Create : TaskCreation.Update,\s*" +
+            @"currentUserSid,\s*password: null,\s*logonType: TaskLogonType.InteractiveToken\)"));
+    }
+
+    private static string ReadStartupMethod(string signature, string nextSignature,
+        string relativeSource = "DS4Control/Viiper/ViiperSetupManager.cs")
     {
         for (var directory = new DirectoryInfo(AppContext.BaseDirectory);
              directory != null; directory = directory.Parent)
         {
-            string path = Path.Combine(directory.FullName, "DS4Windows", "DS4Control",
-                "Viiper", "ViiperSetupManager.cs");
+            string path = Path.Combine(directory.FullName, "DS4Windows", relativeSource);
             if (!File.Exists(path)) continue;
             string source = File.ReadAllText(path);
             int start = source.IndexOf(signature, StringComparison.Ordinal);
@@ -556,7 +584,7 @@ public class StartupRegistrationTests
             // Ignore explanatory comments without flattening statements.
             return Regex.Replace(source[start..end], @"//[^\r\n]*", string.Empty);
         }
-        throw new AssertFailedException("The VIIPER startup source was not found.");
+        throw new AssertFailedException($"Startup source was not found: {relativeSource}");
     }
 
     private sealed class FakeStartupAccess

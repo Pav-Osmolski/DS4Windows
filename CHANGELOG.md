@@ -5,7 +5,10 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- No unreleased changes.
+- Pass the current Windows account SID directly to Task Scheduler when switching Run at Startup from Program to Task, then verify the stored task identity and log any mismatch. Thanks to [@2mg](https://github.com/2mg) for the follow-up in [issue #140](https://github.com/Pav-Osmolski/DS4Windows/issues/140).
+- Explain the administrator requirement when hovering over the disabled Task startup option.
+- Cap the width of the controller name editor on wide windows while letting it shrink to fit narrower cards.
+- Show the Overview controller name and profile tooltips only when hovering over the corresponding text.
 
 ## Released
 

@@ -697,7 +697,10 @@
                                             <WrapPanel Margin="0,8,0,4">
                                                 <StackPanel Orientation="Horizontal">
                                                     <RadioButton Content="{lex:Loc Program}" GroupName="RunAsOpt" Margin="0,0,18,0" IsChecked="{Binding RunStartProg}" />
-                                                    <RadioButton Content="{lex:Loc Task}" GroupName="RunAsOpt" Margin="0,0,18,0" IsChecked="{Binding RunStartTask}" IsEnabled="{Binding CanWriteTask}" />
+                                                    <RadioButton Content="{lex:Loc Task}" GroupName="RunAsOpt" Margin="0,0,18,0"
+                                                                 IsChecked="{Binding RunStartTask}" IsEnabled="{Binding CanWriteTask}"
+                                                                 ToolTip="{lex:Loc Resources:UACTask}" ToolTipService.ShowOnDisabled="True"
+                                                                 ToolTipService.IsEnabled="{Binding IsVisible, ElementName=uacImg}" />
                                                 </StackPanel>
                                                 <Image x:Name="uacImg" Source="{Binding UACSource, Mode=OneTime}" Width="30" Height="30" ToolTip="{lex:Loc Resources:UACTask}" Margin="20,0,0,0" />
                                             </WrapPanel>
