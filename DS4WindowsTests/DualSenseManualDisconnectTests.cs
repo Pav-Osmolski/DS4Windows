@@ -169,7 +169,7 @@ public sealed class DualSenseManualDisconnectTests
             fields.PopulateFieldMapping(state, exposed, null);
             typeof(Mapping).GetMethod("MapCustomAction", BindingFlags.Static | BindingFlags.NonPublic)!
                 .Invoke(null, new object[] { slot, state, new DS4State(), exposed, null,
-                    control, fields, new DS4StateFieldMapping() });
+                    control, fields, new DS4StateFieldMapping(), state });
         }
         finally
         {
