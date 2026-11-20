@@ -1,0 +1,116 @@
+GENERIC DIRECTINPUT JOYSTICK - EXTERNAL TESTER GUIDE
+
+This preview is for testing older games with analog triggers mapped to ordinary
+joystick axes. It includes matching DS4Windows and VIIPER executables. Please
+share the whole ZIP, extract everything, and use START.cmd rather than launching
+DS4Windows.exe directly. Do not replace files in your installed DS4Windows.
+
+BEFORE STARTING
+
+- Use 64-bit Windows. USB/IP 0.9.8.1 must already be installed and working.
+  This ZIP does not install, upgrade or repair drivers. If your version differs
+  or you are unsure about your setup, ask Pawel before changing it for this test.
+  Driver release: https://github.com/vadimgrn/usbip-win2/releases/tag/v.0.9.8.1
+- Extract to a NEW writable local folder, outside Program Files and AppData.
+  Exit all other DS4Windows and VIIPER instances completely, including tray apps.
+  Close other controller mappers such as vJoy feeders or PadForge during this
+  test, so we can identify which virtual device the game is reading.
+- Start with one controller, preferably over USB. Disable Steam Input for the
+  specific game being tested and record that choice. Keep a keyboard available
+  for menus. The preview uses separate lab-data and does not import your normal
+  profiles or automatically change startup, updater or HidHide configuration.
+- START.cmd requests Windows administrator approval for temporary USB/IP attach
+  and cleanup. Leave its console open while testing.
+
+FIRST LAUNCH AND PROFILE
+
+1. On the First Launch screen enable your controller family (for example
+   DualSense Device Support for a DualSense), then click Close.
+2. Create a new profile using a normal gamepad preset, not mouse/keyboard.
+   Name it DirectInput Test. In Advanced choose Generic joystick (preview).
+3. Start with Legacy layout + Centred triggers and leave inversion unchanged.
+   Save and assign the profile to your physical controller. Leave Output Slots
+   on Dynamic. Verify the Overview shows the generic joystick output.
+4. Open Windows joy.cpl. Select VIIPER Experimental Legacy Joystick rather than
+   Wireless Controller/the physical pad. Test sticks, triggers, buttons and POV.
+   Expect six axes, sixteen buttons and a direction hat. Buttons 7/8 are reserved
+   for Buttons trigger mode; PS/Guide defaults to 13 and touchpad click to 14.
+
+LEGACY GAME TEST
+
+Try one game you already own that was awkward with ordinary controller triggers:
+Need for Speed Underground 2, an older Serious Sam or Jedi Knight title, or
+another DirectInput game. These titles are test candidates, not verified claims.
+If practical, first try without controller patches and describe any installed
+patches/mods; no need to uninstall a working game setup just for this test.
+
+- Choose the VIIPER joystick in the game's controller settings if available.
+- Legacy layout: left stick X/Y, right stick Z/Rz, L2 Rx, R2 Ry.
+- Centred triggers rest at centre and travel towards the positive endpoint.
+  Bind each trigger separately and verify the game does not treat it as held
+  while released. Test partial presses, full presses and both triggers together.
+- If the game expects a pedal spanning the full axis, change to Full range
+  before launching it and rebind. Released triggers then rest at the negative
+  endpoint. Endpoint resting position is intentional, not a stuck trigger.
+- Racing layout instead uses right stick Rx/Ry and L2 Z, R2 Rz.
+- Combined mode shares one axis (R2 minus L2); equal presses cancel. Buttons mode
+  uses buttons 7/8 at a configurable threshold and leaves trigger axes centred.
+- Change layout/mode before starting the game; save, then reopen joy.cpl/the game
+  if it retained the old device. Keyboard navigation is fine for old menus.
+- If vJoy/PadForge works better, tell us the axis roles, rest positions and
+  settings that make that setup work. A screenshot of those settings is useful.
+
+PHYSICAL CONTROLLER / HIDHIDE
+
+Built-in automatic HidHide is deliberately bypassed in this isolated preview.
+Games can therefore see both the physical pad and VIIPER. Do not mistake input
+from the physical device for successful virtual joystick input.
+
+If you already use HidHide and the physical pad is hidden, the new preview
+DS4Windows.exe path may need adding to its application allow-list so this copy
+can read it. For game testing, select only VIIPER where possible. If you are
+comfortable with HidHide's configuration tool, you can manually allow-list this
+preview and hide only the physical controller; leave VIIPER visible. Record
+and restore any manual changes afterwards. Ask Pawel if unsure. This package
+does not perform those changes itself. No normal built-in HidHide pass is claimed.
+
+RECONNECT AND SAVED BINDINGS
+
+After a successful game test, save bindings and exit the game and DS4Windows
+fully. Restart START.cmd using the same controller/profile/USB port, reopen the
+game and check bindings without rebinding. Repeat once after unplug/reconnect.
+
+FINISH AND SEND RESULTS
+
+Exit DS4Windows through its tray menu; closing its window may only minimize it.
+Wait for the launcher to finish cleanup. It prints the report ZIP location under
+results. Send Pawel that report plus:
+
+  Windows version; controller model; USB/Bluetooth:
+  Game title/edition/version; controller patches/mods:
+  Steam Input; HidHide/manual hiding state; other mappers closed:
+  Layout; trigger mode; inversion; in-game axis/button bindings:
+  joy.cpl result; released/partial/full/simultaneous trigger results:
+  Gameplay; restart/reconnect binding persistence; errors or duplicate input:
+  If comparing vJoy/PadForge, the working profile/settings there:
+
+Inspect logs before sharing. Reports exclude keys and profile files, but logs
+can contain controller identifiers, local paths and other setup information.
+Do not send the entire lab-data folder, which contains local authentication data.
+If cleanup reports remaining imports, send the report before restarting your
+normal setup; do not detach unrelated devices or change drivers blindly.
+
+LIMITS
+
+This is a feature preview with experimental USB IDs, not a normal release.
+Production identity approval is pending and future builds may require rebinding.
+There is no XInput, force feedback/virtual rumble, audio or sixteen-button mode.
+Two-device synthetic input isolation passed, but removing the first device
+changed the remaining device's DirectInput GUID/slot on the tested machine.
+Stable multi-controller game bindings are not promised. Start with one device.
+
+Current device: fixed sixteen buttons. PS/Guide defaults to 13, touchpad click
+to 14, and 15/16 are unassigned. The numbered-button assignments in Profile
+Editor can reassign or clear any output. Existing twelve-button profiles retain
+their previous mappings with new outputs unassigned. The lab identity changes;
+existing game bindings may need to be recreated. This is still a testing preview.
