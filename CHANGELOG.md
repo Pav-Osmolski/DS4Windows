@@ -5,6 +5,12 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- No unreleased changes.
+
+## Released
+
+### [5.0.76](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.76) - 2026-11-20
+
 - Review competing DS4Windows and VIIPER processes and startup entries before installer repair. Offer explicit approval to pause verified conflicts with protected backups and a restore helper; retain applications and profiles, and require manual review for ambiguous entries.
 
 - Recognize duplicate USB/IP virtual-controller interfaces and add bounded cleanup of verified residual devices and DriverStore packages after official uninstall and restart. Preserve imported devices, signed-package verification, reboot boundaries and failure diagnostics instead of repeating the same repair loop. Thanks to MarioDLH for the diagnostic log and [@rudey123](https://github.com/rudey123) for [issue #20](https://github.com/Pav-Osmolski/DS4Windows/issues/20). See the [repair design and safety boundaries](docs/usbip-clean-repair.md).
@@ -15,7 +21,9 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Measure DualSense Bluetooth input cadence over a time window so a burst of buffered reports cannot produce a misleading rate spike. Thanks to [@fenglidon](https://github.com/fenglidon) for [issue #139](https://github.com/Pav-Osmolski/DS4Windows/issues/139).
 - Keep a temporary profile active while its L2 or R2 activation chord is physically held, even if the destination profile changes the trigger's curve or output. Thanks to [@VenomCARNAGE122](https://github.com/VenomCARNAGE122) for [issue #138](https://github.com/Pav-Osmolski/DS4Windows/issues/138).
 
-## Released
+- Bundle VIIPER 0.1.18 so partial DualSense metadata updates preserve the configured shell colour. Thanks to [@Alia5](https://github.com/Alia5) for the upstream fix adapted in [VIIPER PR #13](https://github.com/Pav-Osmolski/VIIPER/pull/13).
+
+Implemented in [PR #137](https://github.com/Pav-Osmolski/DS4Windows/pull/137).
 
 ### [5.0.75](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.75) - 2026-11-16
 
