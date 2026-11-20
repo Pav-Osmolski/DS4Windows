@@ -304,25 +304,28 @@ namespace DS4WinWPF
                 bool? userRequested = StartupSetupStore.ReadUserPreference(sid);
                 state = state with { Requested = userRequested };
                 StartupSetupState? setup = StartupSetupStore.Read(sid);
+                using var machine = Microsoft.Win32.RegistryKey.OpenBaseKey(
+                    Microsoft.Win32.RegistryHive.LocalMachine, Microsoft.Win32.RegistryView.Registry64);
+                using var infrastructure = machine.OpenSubKey(@"SOFTWARE\DS4Windows");
+                string infrastructureState = infrastructure?.GetValue("InfrastructureState") as string;
                 state = StartupRegistrationPolicy.ResolveState(false, false,
-                    userRequested, setup?.Requested, setup?.DeferredReason);
+                    userRequested, setup?.Requested,
+                    StartupRegistrationPolicy.ResolveDeferredReason(setup?.DeferredReason, infrastructureState));
                 state = state with { Program = HasStartProgEntry() };
                 using TaskService service = new TaskService();
                 using Task task = service.GetTask(@"\RunDS4Windows");
-                state = state with { Task = TaskIsEnabled(task) && IsOwnedTask(task) };
+                bool ownedTask = IsOwnedTask(task);
+                state = state with { Task = TaskIsEnabled(task) && ownedTask, TaskConflict = task != null && !ownedTask };
                 if (!state.Requested.HasValue && !state.Enabled && task != null &&
                     !TaskIsEnabled(task) && IsOwnedTask(task) &&
                     string.Equals(task.Definition.RegistrationInfo.Description,
                         StartupRegistrationPolicy.ManagedTaskDescription, StringComparison.Ordinal) &&
                     TaskTargetsCurrentExecutable(task, requireEnabled: false))
                 {
-                    using var machine = Microsoft.Win32.RegistryKey.OpenBaseKey(
-                        Microsoft.Win32.RegistryHive.LocalMachine, Microsoft.Win32.RegistryView.Registry64);
                     using var setupKey = machine.OpenSubKey(StartupSetupStore.MachinePath + "\\" + sid);
-                    using var infrastructure = machine.OpenSubKey(@"SOFTWARE\DS4Windows");
                     state = StartupRegistrationPolicy.RecoverLegacySetupDeferral(state,
                         hasSetupRecord: setupKey != null, exactOwnedDisabledTask: true,
-                        infrastructure?.GetValue("InfrastructureState") as string);
+                        infrastructureState);
                 }
                 return state;
             }
@@ -358,19 +361,24 @@ namespace DS4WinWPF
             // Check both owners before changing either registration. A name
             // collision is not permission to remove another program's task.
             EnsureShortcutOwnership();
+            bool removeOwnedTask;
             using (TaskService service = new TaskService())
             using (Task task = service.GetTask(@"\RunDS4Windows"))
-                EnsureTaskOwnership(task);
+            {
+                if (mode == StartupRegistrationMode.Task)
+                    EnsureTaskOwnership(task);
+                removeOwnedTask = IsOwnedTask(task);
+            }
 
             switch (mode)
             {
                 case StartupRegistrationMode.Disabled:
-                    DeleteTaskEntry();
+                    if (removeOwnedTask) DeleteTaskEntry();
                     DeleteStartProgEntry();
                     break;
                 case StartupRegistrationMode.Program:
                     WriteStartProgEntry();
-                    DeleteTaskEntry();
+                    if (removeOwnedTask) DeleteTaskEntry();
                     break;
                 case StartupRegistrationMode.Task:
                     WriteTaskEntry();

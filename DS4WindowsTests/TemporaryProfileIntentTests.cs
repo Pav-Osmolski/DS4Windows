@@ -73,6 +73,26 @@ public sealed class TemporaryProfileIntentTests
     }
 
     [TestMethod]
+    [DataRow("L2")]
+    [DataRow("R2")]
+    public void OutputTriggerCurveCannotReleaseAStillHeldProfileChord(string trigger)
+    {
+        using var fixture = new Fixture(chord: trigger + "/Options");
+        fixture.TriggerFrame(180, 180, options: true);
+        fixture.WaitIdle();
+        Assert.IsTrue(Global.useTempProfile[Slot]);
+
+        for (int frame = 0; frame < 64; frame++)
+            fixture.TriggerFrame(180, 0, options: true);
+        fixture.WaitIdle();
+        Assert.IsTrue(Global.useTempProfile[Slot]);
+
+        fixture.TriggerFrame(0, 0, options: true);
+        fixture.WaitIdle();
+        Assert.IsFalse(Global.useTempProfile[Slot]);
+    }
+
+    [TestMethod]
     public void RapidPressReleasePressKeepsOnlyNewestHeldIntent()
     {
         using var fixture = new Fixture();
@@ -374,7 +394,7 @@ public sealed class TemporaryProfileIntentTests
         private readonly Mouse mouse;
         internal object CurrentIntent => Intents.GetValue(Slot);
 
-        internal Fixture(bool automatic = true, bool explicitUnload = false, bool includeActionInCandidate = true)
+        internal Fixture(bool automatic = true, bool explicitUnload = false, bool includeActionInCandidate = true, string chord = "Cross")
         {
             WaitIdle();
             includeAction = includeActionInCandidate;
@@ -403,7 +423,7 @@ public sealed class TemporaryProfileIntentTests
             Global.useDInputOnly[Slot] = true;
             Store.profilePath[Slot] = "Original";
             Store.rumble[Slot] = 77;
-            Action = new SpecialAction("HeldTemp", "Cross", "Profile", "Candidate",
+            Action = new SpecialAction("HeldTemp", chord, "Profile", "Candidate",
                 extras: automatic ? "AutomaticUntrigger" : explicitUnload ? "Circle" : "");
             Store.actions.Clear();
             Store.actions.Add(Action);
@@ -463,6 +483,14 @@ public sealed class TemporaryProfileIntentTests
                         !(bool)request.GetType().GetField("Pending")!.GetValue(request)!;
                 }
             }, 10_000), "The serialized profile worker did not drain.");
+        }
+
+        internal void TriggerFrame(byte physical, byte adjusted, bool options)
+        {
+            var input = new DS4State { L2 = physical, R2 = physical, Options = options, elapsedTime = .004 };
+            var state = new DS4State { L2 = adjusted, R2 = adjusted, Options = options, elapsedTime = .004 };
+            Mapping.MapCustom(Slot, state, new DS4State(), new DS4StateExposed(state), mouse, Service, input);
+            Mapping.Commit(Slot);
         }
 
         public void Dispose()

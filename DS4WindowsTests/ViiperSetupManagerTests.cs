@@ -210,6 +210,11 @@ namespace DS4Windows.Tests
             Assert.AreEqual("usbip-win2 reboot or repair required", status.DisplayText,
                 "A connection diagnostic must not mask an independent prerequisite failure.");
 
+            status.UsbipProbeMessage = "usbip.exe port failed (exit 1): error: Multiple instances of VHCI device interface found.";
+            StringAssert.Contains(status.DisplayText, "duplicate virtual host controllers");
+            Assert.IsFalse(status.Ready);
+            status.UsbipProbeMessage = null;
+
             status.UsbipRuntimeReady = true;
             status.ServerRunning = true;
             Assert.IsTrue(status.Ready);

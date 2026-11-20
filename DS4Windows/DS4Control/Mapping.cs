@@ -2913,15 +2913,15 @@ namespace DS4Windows
         */
 
         public static void MapCustom(int device, DS4State cState, DS4State MappedState, DS4StateExposed eState,
-            Mouse tp, ControlService ctrl)
+            Mouse tp, ControlService ctrl, DS4State physicalActionState = null)
         {
-            MapCustom(device, cState, MappedState, eState, tp, ctrl, Stopwatch.GetTimestamp());
+            MapCustom(device, cState, MappedState, eState, tp, ctrl, Stopwatch.GetTimestamp(), physicalActionState);
         }
 
         // Deterministic clock seam for the same production mapper; tests never
         // need to sleep or inject input into Windows to verify a camera turn.
         internal static void MapCustom(int device, DS4State cState, DS4State MappedState, DS4StateExposed eState,
-            Mouse tp, ControlService ctrl, long calibrationTimestamp)
+            Mouse tp, ControlService ctrl, long calibrationTimestamp, DS4State physicalActionState = null)
         {
             /* TODO: This method is slow sauce. Find ways to speed up action execution */
             double tempMouseDeltaX = 0.0;
@@ -2958,7 +2958,7 @@ namespace DS4Windows
             ReadAxisFlickCalibration(device, cState, MappedState, eState, tp,
                 fieldMapping, outputfieldMapping);
             if (getProfileActionCount(device) > 0 || useTempProfile[device])
-                MapCustomAction(device, cState, MappedState, eState, tp, ctrl, fieldMapping, outputfieldMapping);
+                MapCustomAction(device, cState, MappedState, eState, tp, ctrl, fieldMapping, outputfieldMapping, physicalActionState ?? cState);
             //if (ctrl.DS4Controllers[device] == null) return;
 
             long switch2ProfileRevision =
@@ -4941,7 +4941,8 @@ namespace DS4Windows
         }
 
         private static async void MapCustomAction(int device, DS4State cState, DS4State MappedState,
-            DS4StateExposed eState, Mouse tp, ControlService ctrl, DS4StateFieldMapping fieldMapping, DS4StateFieldMapping outputfieldMapping)
+            DS4StateExposed eState, Mouse tp, ControlService ctrl, DS4StateFieldMapping fieldMapping,
+            DS4StateFieldMapping outputfieldMapping, DS4State physicalActionState)
         {
             /* TODO: This method is slow sauce. Find ways to speed up action execution */
             try
@@ -5021,7 +5022,13 @@ namespace DS4Windows
                     if (!(action.typeID == SpecialAction.ActionTypeId.None || index < 0))
                     {
                         bool triggeractivated = true;
-                        if (action.delayTime > 0.0)
+                        if (action.typeID == SpecialAction.ActionTypeId.Profile && action.automaticUntrigger &&
+                            action.delayTime <= 0.0)
+                        {
+                            triggeractivated = IsHeldProfileChord(action, device, physicalActionState,
+                                cState, eState, tp, fieldMapping);
+                        }
+                        else if (action.delayTime > 0.0)
                         {
                             triggeractivated = false;
                             bool subtriggeractivated = true;
@@ -5029,7 +5036,9 @@ namespace DS4Windows
                             for (int i = 0, arlen = action.trigger.Count; i < arlen; i++)
                             {
                                 DS4Controls dc = action.trigger[i];
-                                if (!getBoolSpecialActionMapping(device, dc, cState, eState, tp, fieldMapping))
+                                if (!(action.typeID == SpecialAction.ActionTypeId.Profile && action.automaticUntrigger
+                                    ? IsHeldProfileControl(dc, device, physicalActionState, cState, eState, tp, fieldMapping)
+                                    : getBoolSpecialActionMapping(device, dc, cState, eState, tp, fieldMapping)))
                                 {
                                     subtriggeractivated = false;
                                     break;
@@ -5694,18 +5703,8 @@ namespace DS4Windows
                 }
                 else
                 {
-                    // Untrigger as soon any of the defined regular trigger keys have been released. 
-                    utriggeractivated = false;
-
-                    for (int i = 0, trigLen = action.trigger.Count; i < trigLen; i++)
-                    {
-                        DS4Controls dc = action.trigger[i];
-                        if (!getBoolSpecialActionMapping(device, dc, cState, eState, tp, fieldMapping))
-                        {
-                            utriggeractivated = true;
-                            break;
-                        }
-                    }
+                    utriggeractivated = !IsHeldProfileChord(action, device, physicalActionState,
+                        cState, eState, tp, fieldMapping);
                 }
 
                 if (utriggeractivated && action.typeID == SpecialAction.ActionTypeId.Profile)
@@ -7136,6 +7135,27 @@ namespace DS4Windows
 
             return result;
         }
+
+        private static bool IsHeldProfileChord(SpecialAction action, int device,
+            DS4State physical, DS4State mapped, DS4StateExposed exposed, Mouse touchpad,
+            DS4StateFieldMapping fields)
+        {
+            foreach (DS4Controls control in action.trigger)
+                if (!IsHeldProfileControl(control, device, physical, mapped, exposed, touchpad, fields))
+                    return false;
+            return action.trigger.Count > 0;
+        }
+
+        // The destination profile can change trigger curves while the physical
+        // chord is still held. Use the same unscaled threshold in both profiles.
+        private static bool IsHeldProfileControl(DS4Controls control, int device,
+            DS4State physical, DS4State mapped, DS4StateExposed exposed, Mouse touchpad,
+            DS4StateFieldMapping fields) => control switch
+        {
+            DS4Controls.L2 => physical.L2 > 100,
+            DS4Controls.R2 => physical.R2 > 100,
+            _ => getBoolSpecialActionMapping(device, control, mapped, exposed, touchpad, fields),
+        };
 
         private static bool getBoolSpecialActionMapping(int device, DS4Controls control,
             DS4State cState, DS4StateExposed eState, Mouse tp, DS4StateFieldMapping fieldMap)

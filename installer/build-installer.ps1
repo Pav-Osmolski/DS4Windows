@@ -309,7 +309,7 @@ Invoke-SignOrVerify (Join-Path $publishPath "DS4Windows.exe")
 # VIIPER is an immutable upstream release payload. Its compiled-in SHA-256
 # and generated package sidecar are validated below; signing it here would
 # mutate the executable after DS4Windows has pinned that identity.
-$bundledViiper = Join-Path $publishPath "extras\VIIPER-0.1.17-x64.exe"
+$bundledViiper = Join-Path $publishPath "extras\VIIPER-0.1.18-x64.exe"
 if (-not (Test-Path -LiteralPath $bundledViiper -PathType Leaf)) {
     throw "Published VIIPER payload is missing: $bundledViiper"
 }
@@ -480,6 +480,12 @@ if ($LASTEXITCODE -ne 0) {
 if ($LASTEXITCODE -ne 0) {
     throw "Installer state-machine simulation failed."
 }
+
+& (Join-Path $env:SystemRoot "System32\WindowsPowerShell\v1.0\powershell.exe") `
+    -NoLogo -NoProfile -ExecutionPolicy Bypass `
+    -File (Join-Path $repoRoot "utils\test-usbip-clean-repair.ps1") `
+    -BackendScript (Join-Path $repoRoot "extras\install-viiper-backend.ps1")
+if ($LASTEXITCODE -ne 0) { throw "USB/IP residual cleanup simulation failed." }
 
 & python (Join-Path $repoRoot "utils\validate-installer.py") `
     --publish-root $publishPath --manifest $manifestPath `

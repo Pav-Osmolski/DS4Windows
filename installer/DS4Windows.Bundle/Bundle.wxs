@@ -20,6 +20,7 @@
     <Variable Name="InstallFakerInput" Type="numeric" Value="0" />
     <Variable Name="SetupCorrelationId" Type="string" Value="" Persisted="yes" />
     <Variable Name="TargetUserSid" Type="string" Value="" Persisted="yes" />
+    <Variable Name="ControllerConflictConsent" Type="string" Value="" />
     <Variable Name="TargetUserName" Type="string" Value="" Persisted="yes" />
     <Variable Name="TargetLocalAppData" Type="string" Value="" Persisted="yes" />
     <Variable Name="TargetRoamingAppData" Type="string" Value="" Persisted="yes" />
@@ -97,7 +98,7 @@
           Permanent="yes"
           Vital="yes"
           DetectCondition="0"
-          InstallArguments="preflight --correlation-id &quot;[SetupCorrelationId]&quot;">
+          InstallArguments="preflight --correlation-id &quot;[SetupCorrelationId]&quot; --review-controller-conflicts --target-user-sid &quot;[TargetUserSid]&quot; --conflict-consent &quot;[ControllerConflictConsent]&quot;">
         <ExitCode Value="0" Behavior="success" />
         <ExitCode Behavior="error" />
       </ExePackage>
@@ -115,7 +116,7 @@
           PerMachine="yes"
           Permanent="yes"
           Vital="yes"
-          DetectCondition="InfrastructureInstalled = &quot;VIIPER-0.1.17+USBIP-0.9.8.1&quot; OR ManagedInstallRegistered OR ManagedViiperPresent"
+          DetectCondition="InfrastructureInstalled = &quot;VIIPER-0.1.18+USBIP-0.9.8.1&quot; OR ManagedInstallRegistered OR ManagedViiperPresent"
           InstallArguments="install --correlation-id &quot;[SetupCorrelationId]&quot; --install-root &quot;[ProgramFiles64Folder]DS4Windows&quot; --bundle-id &quot;[WixBundleProviderKey]&quot; --desktop-shortcut &quot;[CreateDesktopShortcut]&quot; --start-menu-shortcut &quot;[CreateStartMenuShortcut]&quot; --target-user-sid &quot;[TargetUserSid]&quot; --target-user-name &quot;[TargetUserName]&quot; --target-local-appdata &quot;[TargetLocalAppData]&quot; --target-roaming-appdata &quot;[TargetRoamingAppData]&quot;"
           RepairArguments="repair --correlation-id &quot;[SetupCorrelationId]&quot; --install-root &quot;[ProgramFiles64Folder]DS4Windows&quot; --bundle-id &quot;[WixBundleProviderKey]&quot; --desktop-shortcut &quot;[CreateDesktopShortcut]&quot; --start-menu-shortcut &quot;[CreateStartMenuShortcut]&quot; --target-user-sid &quot;[TargetUserSid]&quot; --target-user-name &quot;[TargetUserName]&quot; --target-local-appdata &quot;[TargetLocalAppData]&quot; --target-roaming-appdata &quot;[TargetRoamingAppData]&quot;"
           UninstallArguments="uninstall --correlation-id &quot;[SetupCorrelationId]&quot; --install-root &quot;[ProgramFiles64Folder]DS4Windows&quot;">

@@ -159,6 +159,10 @@ jobs:
         shell: powershell
         run: .\utils\test-viiper-reboot-boundary.ps1 -BackendScript .\extras\install-viiper-backend.ps1
 
+      - name: Test bounded USB/IP residual cleanup without changing host drivers
+        shell: powershell
+        run: .\utils\test-usbip-clean-repair.ps1 -BackendScript .\extras\install-viiper-backend.ps1
+
       - name: Test current setup failure diagnostics
         shell: powershell
         run: .\utils\test-infrastructure-failure-summary.ps1
