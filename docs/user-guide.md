@@ -640,6 +640,14 @@ reopen DS4Windows normally. Use **Capture instructions** for the steps and
 **Open log folder** to find `viiper-debug.log`. Turn it off and restart both
 after testing. See [the VIIPER capture guide](troubleshooting.md#capture-viipers-own-debug-log).
 
+For an input-delay comparison, turn on **Controller timing diagnostics** in
+**Log**, reproduce the problem, then turn it off and choose **Copy timing
+summary**. Keep the controller connected until you have copied the results.
+The summary lists gaps between reports observed by DS4Windows and, when
+available, delays along the virtual output path. Each new capture starts a fresh
+sample. On Overview, hover over **Input rate** to see the longest recent input
+gap without starting a capture.
+
 **Keep stored logs for up to** offers 1, 7, 14, 30 or 90 days; the default is
 **30 days**. The preference persists across restarts. Archives also rotate daily
 or at 10 MB and are capped at 20 files, so busy sessions may retain less history.

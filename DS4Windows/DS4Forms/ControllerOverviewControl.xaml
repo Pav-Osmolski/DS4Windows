@@ -424,8 +424,16 @@
                                     </DockPanel>
                                     <TextBlock Text="{Binding SelectedControllerConnection}" FontWeight="SemiBold" />
                                 </StackPanel>
-                                <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTip="{lex:Loc Strings:UI_9D82CF2BFF83FCF9}"
+                                <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTipOpening="OverviewInputRate_ToolTipOpening"
                                             Visibility="{Binding IsChecked, ElementName=showInputRate, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <StackPanel.ToolTip>
+                                        <ToolTip>
+                                            <StackPanel MaxWidth="300">
+                                                <TextBlock Text="{lex:Loc Strings:UI_9D82CF2BFF83FCF9}" TextWrapping="Wrap" />
+                                                <TextBlock x:Name="overviewRecentInputGap" Margin="0,6,0,0" TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </StackPanel.ToolTip>
                                     <DockPanel>
                                         <Path DockPanel.Dock="Left" Style="{StaticResource OverviewFactIconStyle}"
                                               Data="M 2,12 H 6 L 9,4 L 14,20 L 17,12 H 22" />

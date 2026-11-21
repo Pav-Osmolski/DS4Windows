@@ -3588,6 +3588,7 @@ namespace DS4Windows
 
             StartupDiag($"device.StartUpdate begin index={index}");
             device.GameBarBluetoothInputRecoveryEnabled = gameBarBluetoothInputRecoveryForSession;
+            device.InputTiming.Reset();
             device.StartUpdate();
             if (device is InputDevices.JoyConDevice startedJoyCon)
                 startedJoyCon.TryStartConnectionHaptic();
@@ -6006,6 +6007,9 @@ namespace DS4Windows
         {
             if ((uint)ind < (uint)DS4Controllers.Length)
             {
+                if (device is not InputDevices.DualSenseDevice)
+                    device.InputTiming.Observe(Stopwatch.GetTimestamp());
+
                 RefreshHeadphoneJackRoute(ind, device);
                 OutContType normalizedOutput = activeOutDevType[ind].Normalize();
                 ReportDiagnosticsSnapshot deferredDiagnostics = new()

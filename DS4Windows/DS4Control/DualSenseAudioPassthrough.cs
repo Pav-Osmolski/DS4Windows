@@ -1010,10 +1010,16 @@ namespace DS4Windows
                 interfacePath = interfacePath.Substring(pathStart);
             }
 
-            return !string.IsNullOrEmpty(interfacePath) &&
-                Global.TryResolveUsbIpWin2Device(interfacePath,
-                    out bool usbIpAncestor, out endpointPort) &&
-                usbIpAncestor && endpointPort >= 0;
+            if (string.IsNullOrEmpty(interfacePath) ||
+                !Global.TryResolveUsbIpWin2Device(interfacePath,
+                    out bool usbIpAncestor, out int port) ||
+                !usbIpAncestor || port < 0)
+            {
+                return false;
+            }
+
+            endpointPort = port;
+            return true;
         }
 
         internal static ControllerAudioEndpointKind GetEndpointKind(OutContType outputType)

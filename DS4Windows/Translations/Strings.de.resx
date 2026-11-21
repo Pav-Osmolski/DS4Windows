@@ -6940,4 +6940,22 @@ Das Backup: </value>
     <value>Den Namen löschen, um den Standardnamen wiederherzustellen. Enter speichert; Escape bricht ab.</value>
     <comment>Controller custom name editing.</comment>
   </data>
+  <data name="ControllerTimingDiagnostics" xml:space="preserve">
+    <value>Controller-Zeitdiagnose</value>
+  </data>
+  <data name="ControllerTimingCopySummary" xml:space="preserve">
+    <value>Zeitübersicht kopieren</value>
+  </data>
+  <data name="UI_76972EB04E151F54" xml:space="preserve">
+    <value>Längste aktuelle Eingabelücke: {0:F2} ms</value>
+  </data>
+  <data name="UI_8B1605E166B68A03" xml:space="preserve">
+    <value>Noch keine Messwerte zur Controller-Eingabe vorhanden.</value>
+  </data>
+  <data name="UI_20413FB580C037BC" xml:space="preserve">
+    <value>Controller-Zeitübersicht kopiert.</value>
+  </data>
+  <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
+    <value>Die Zwischenablage ist derzeit nicht verfügbar.</value>
+  </data>
 </root>

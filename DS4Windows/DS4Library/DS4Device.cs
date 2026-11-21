@@ -1835,6 +1835,8 @@ namespace DS4Windows
             }
         }
 
+        internal InputDevices.InputReportTiming InputTiming { get; } = new();
+
         private long latencyBits;
         public double Latency
         {

@@ -1373,6 +1373,9 @@
                                           ToolTip="{lex:Loc Strings:UI_635661E968564E2C}" />
                                 <Button x:Name="viiperDebugHelpBtn" Content="{lex:Loc Strings:UI_0F1E5C07276841E3}" Margin="0,0,0,8"
                                         Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ViiperDebugHelpBtn_Click" />
+                                <CheckBox x:Name="controllerTimingCapture" Content="{lex:Loc Strings:ControllerTimingDiagnostics}"
+                                          Click="ControllerTimingCapture_Click" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"
+                                          MinHeight="34" Margin="12,0,0,8" VerticalAlignment="Center" VerticalContentAlignment="Center" />
                             </WrapPanel>
                             <TextBlock Text="{lex:Loc Strings:UI_F08257E3D9E3D82F}"
                                        Foreground="{DynamicResource MutedForegroundColor}" TextWrapping="Wrap" />
@@ -1394,6 +1397,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
@@ -1401,9 +1405,13 @@
                                 Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="CopyLogBtn_Click"
                                 ToolTip="{lex:Loc Strings:UI_0D2CBDBD13743CD8}" />
                         <Button x:Name="exportLogBtn" Grid.Column="1" Content="{lex:Loc Export}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ExportLogBtn_Click" />
-                        <Button x:Name="clearLogBtn" Grid.Column="3" Content="{lex:Loc Strings:UI_0BBD47CE9863661F}" ToolTip="{lex:Loc Strings:UI_2956DE5E23B557BC}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearLogBtn_Click" />
-                        <TextBlock Grid.Column="2" Text="{lex:Loc Strings:UI_93465F4A50C78225}" VerticalAlignment="Center" Margin="16,0"
+                        <Button x:Name="copyControllerTimingBtn" Grid.Column="2" Content="{lex:Loc Strings:ControllerTimingCopySummary}"
+                                Click="CopyControllerTimingBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}"
+                                Margin="8,0,0,0" IsEnabled="False" />
+                        <Button x:Name="clearLogBtn" Grid.Column="4" Content="{lex:Loc Strings:UI_0BBD47CE9863661F}" ToolTip="{lex:Loc Strings:UI_2956DE5E23B557BC}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearLogBtn_Click" />
+                        <TextBlock Grid.Column="3" Text="{lex:Loc Strings:UI_93465F4A50C78225}" VerticalAlignment="Center" Margin="16,0"
                                    Foreground="{DynamicResource MutedForegroundColor}"
+                                   TextTrimming="CharacterEllipsis"
                                    ToolTip="{lex:Loc Strings:UI_B2384A767464BFDE}" />
                     </Grid>
                     <ListView x:Name="logListView" DockPanel.Dock="Top" ItemsSource="{Binding LogItems}" MouseDoubleClick="LogListView_MouseDoubleClick" Margin="0"

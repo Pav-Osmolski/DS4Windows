@@ -6941,4 +6941,22 @@
     <value>יש למחוק את השם כדי לשחזר את ברירת המחדל. Enter שומר; Escape מבטל.</value>
     <comment>Controller custom name editing.</comment>
   </data>
+  <data name="ControllerTimingDiagnostics" xml:space="preserve">
+    <value>אבחון תזמון הבקר</value>
+  </data>
+  <data name="ControllerTimingCopySummary" xml:space="preserve">
+    <value>העתקת סיכום התזמון</value>
+  </data>
+  <data name="UI_76972EB04E151F54" xml:space="preserve">
+    <value>מרווח הקלט הארוך ביותר לאחרונה: {0:F2} אלפיות השנייה</value>
+  </data>
+  <data name="UI_8B1605E166B68A03" xml:space="preserve">
+    <value>עדיין אין דגימות תזמון לבקר.</value>
+  </data>
+  <data name="UI_20413FB580C037BC" xml:space="preserve">
+    <value>סיכום תזמון הבקר הועתק.</value>
+  </data>
+  <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
+    <value>הלוח אינו זמין כרגע.</value>
+  </data>
 </root>

@@ -9,6 +9,11 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.78](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.78) - 2026-11-21
+
+- Show virtual-controller playback guidance only for a verified USB/IP controller audio endpoint, so Bluetooth headphones that share a port number are classified correctly.
+- Show the longest recent report gap in the Overview input-rate tooltip. Add opt-in controller timing capture and a copyable summary to Log. Thanks to [@fenglidon](https://github.com/fenglidon) for the follow-up and [@Masterload1975](https://github.com/Masterload1975) for the version comparison and logs in [issue #139](https://github.com/Pav-Osmolski/DS4Windows/issues/139).
+
 ### [5.0.77](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.77) - 2026-11-20
 
 - Pass the current Windows account SID directly to Task Scheduler when switching Run at Startup from Program to Task, then verify the stored task identity and log any mismatch. Explain the administrator requirement when hovering over the disabled Task option. Thanks to [@2mg](https://github.com/2mg) for the logs, preview testing, and tooltip suggestion in [issue #140](https://github.com/Pav-Osmolski/DS4Windows/issues/140).

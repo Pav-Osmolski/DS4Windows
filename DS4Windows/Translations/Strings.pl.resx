@@ -6942,4 +6942,22 @@ i backup: </value>
     <value>Wyczyść nazwę, aby przywrócić domyślną. Enter zapisuje; Escape anuluje.</value>
     <comment>Controller custom name editing.</comment>
   </data>
+  <data name="ControllerTimingDiagnostics" xml:space="preserve">
+    <value>Diagnostyka czasowa kontrolera</value>
+  </data>
+  <data name="ControllerTimingCopySummary" xml:space="preserve">
+    <value>Kopiuj podsumowanie pomiarów</value>
+  </data>
+  <data name="UI_76972EB04E151F54" xml:space="preserve">
+    <value>Najdłuższa ostatnia przerwa między raportami: {0:F2} ms</value>
+  </data>
+  <data name="UI_8B1605E166B68A03" xml:space="preserve">
+    <value>Brak próbek pomiarów czasu kontrolera.</value>
+  </data>
+  <data name="UI_20413FB580C037BC" xml:space="preserve">
+    <value>Skopiowano podsumowanie pomiarów kontrolera.</value>
+  </data>
+  <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
+    <value>Schowek jest chwilowo niedostępny.</value>
+  </data>
 </root>

@@ -1,11 +1,13 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Threading;
 
 namespace DS4Windows
 {
     /// <summary>
-    /// Fixed-bucket, allocation-free latency distribution for realtime paths.
+    /// Fixed-bucket latency distribution for realtime paths. Storage is
+    /// allocated once per histogram per enabled capture.
     /// Snapshots and formatting are diagnostic-only cold operations.
     /// </summary>
     internal sealed class ViiperLatencyHistogram
@@ -14,18 +16,56 @@ namespace DS4Windows
             "DS4WINDOWS_VIIPER_LATENCY_DIAGNOSTICS";
 
         private static readonly long[] BucketUpperTicks = BuildBucketTicks();
-        private readonly long[] buckets = new long[BucketUpperTicks.Length];
-        private long count;
-        private long maximumTicks;
-
-        internal static bool Enabled { get; } = ParseEnabled(
-            Environment.GetEnvironmentVariable(EnvironmentVariableName));
-
-        internal void Observe(long elapsedTicks)
+        private sealed class Capture(long startedAt)
         {
-            if (!Enabled || elapsedTicks < 0)
+            internal long StartedAt { get; } = startedAt;
+            internal DateTimeOffset StartedUtc { get; } = DateTimeOffset.UtcNow;
+        }
+
+        private sealed class Samples(Capture capture)
+        {
+            internal Capture Capture { get; } = capture;
+            internal readonly long[] Buckets = new long[BucketUpperTicks.Length];
+            internal long Count;
+            internal long MaximumTicks;
+        }
+
+        private static Capture activeCapture = ParseEnabled(Environment.GetEnvironmentVariable(EnvironmentVariableName))
+            ? new(Stopwatch.GetTimestamp()) : null;
+        private Samples samples;
+
+        internal static bool Enabled => Volatile.Read(ref activeCapture) != null;
+        internal static DateTimeOffset? CaptureStartedUtc => Volatile.Read(ref activeCapture)?.StartedUtc;
+
+        internal static void SetEnabled(bool enabled)
+        {
+            if (enabled != Enabled)
+                Volatile.Write(ref activeCapture, enabled ? new(Stopwatch.GetTimestamp()) : null);
+        }
+
+        internal void Observe(long elapsedTicks, long startedAt = long.MaxValue)
+        {
+            Capture capture = Volatile.Read(ref activeCapture);
+            if (capture == null || elapsedTicks < 0 || startedAt < capture.StartedAt)
             {
                 return;
+            }
+
+            Samples current = Volatile.Read(ref samples);
+            while (current?.Capture != capture)
+            {
+                if (Volatile.Read(ref activeCapture) != capture)
+                    return;
+
+                var replacement = new Samples(capture);
+                Samples existing = Interlocked.CompareExchange(ref samples, replacement, current);
+                if (existing == current)
+                {
+                    current = replacement;
+                    break;
+                }
+
+                current = existing;
             }
 
             int bucket = BucketUpperTicks.Length - 1;
@@ -37,43 +77,47 @@ namespace DS4Windows
                     break;
                 }
             }
-            Interlocked.Increment(ref buckets[bucket]);
-            Interlocked.Increment(ref count);
-            RecordMaximum(ref maximumTicks, elapsedTicks);
+            RecordMaximum(ref current.MaximumTicks, elapsedTicks);
+            Interlocked.Increment(ref current.Buckets[bucket]);
+            Interlocked.Increment(ref current.Count);
         }
 
         internal ViiperLatencySnapshot Snapshot()
         {
-            long sampleCount = Interlocked.Read(ref count);
+            Samples current = Volatile.Read(ref samples);
+            if (current == null || current.Capture != Volatile.Read(ref activeCapture))
+                return default;
+
+            long sampleCount = Interlocked.Read(ref current.Count);
             if (sampleCount == 0)
             {
                 return default;
             }
 
             return new ViiperLatencySnapshot(sampleCount,
-                QuantileTicks(sampleCount, 0.50),
-                QuantileTicks(sampleCount, 0.95),
-                QuantileTicks(sampleCount, 0.99),
-                QuantileTicks(sampleCount, 0.999),
-                Interlocked.Read(ref maximumTicks));
+                QuantileTicks(current, sampleCount, 0.50),
+                QuantileTicks(current, sampleCount, 0.95),
+                QuantileTicks(current, sampleCount, 0.99),
+                QuantileTicks(current, sampleCount, 0.999),
+                Interlocked.Read(ref current.MaximumTicks));
         }
 
-        private long QuantileTicks(long sampleCount, double quantile)
+        private static long QuantileTicks(Samples samples, long sampleCount, double quantile)
         {
             long target = Math.Max(1,
                 (long)Math.Ceiling(sampleCount * quantile));
             long cumulative = 0;
-            for (int index = 0; index < buckets.Length; index++)
+            for (int index = 0; index < samples.Buckets.Length; index++)
             {
-                cumulative += Interlocked.Read(ref buckets[index]);
+                cumulative += Interlocked.Read(ref samples.Buckets[index]);
                 if (cumulative >= target)
                 {
-                    return index == buckets.Length - 1 ?
-                        Interlocked.Read(ref maximumTicks) :
+                    return index == samples.Buckets.Length - 1 ?
+                        Interlocked.Read(ref samples.MaximumTicks) :
                         BucketUpperTicks[index];
                 }
             }
-            return Interlocked.Read(ref maximumTicks);
+            return Interlocked.Read(ref samples.MaximumTicks);
         }
 
         private static long[] BuildBucketTicks()
@@ -143,6 +187,9 @@ namespace DS4Windows
                 $"p99.9={Milliseconds(P999Ticks):F3}ms " +
                 $"max={Milliseconds(MaximumTicks):F3}ms]";
         }
+
+        internal string FormatSummary(string name) => string.Create(CultureInfo.InvariantCulture,
+            $"{name}: {Count} samples, p99 ≤ {Milliseconds(Math.Min(P99Ticks, MaximumTicks)):F2} ms, max {Milliseconds(MaximumTicks):F2} ms");
 
         private static double Milliseconds(long ticks) =>
             ticks * 1000.0 / Stopwatch.Frequency;
