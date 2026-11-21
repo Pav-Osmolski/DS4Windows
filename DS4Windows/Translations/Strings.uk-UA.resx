@@ -6938,4 +6938,22 @@
     <value>Очистьте назву, щоб відновити стандартну. Enter зберігає; Escape скасовує.</value>
     <comment>Controller custom name editing.</comment>
   </data>
+  <data name="ControllerTimingDiagnostics" xml:space="preserve">
+    <value>Діагностика часу надходження даних контролера</value>
+  </data>
+  <data name="ControllerTimingCopySummary" xml:space="preserve">
+    <value>Копіювати підсумок вимірювань</value>
+  </data>
+  <data name="UI_76972EB04E151F54" xml:space="preserve">
+    <value>Найдовший нещодавній інтервал між звітами: {0:F2} мс</value>
+  </data>
+  <data name="UI_8B1605E166B68A03" xml:space="preserve">
+    <value>Даних про час надходження звітів контролера ще немає.</value>
+  </data>
+  <data name="UI_20413FB580C037BC" xml:space="preserve">
+    <value>Підсумок вимірювань контролера скопійовано.</value>
+  </data>
+  <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
+    <value>Буфер обміну наразі недоступний.</value>
+  </data>
 </root>

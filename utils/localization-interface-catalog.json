@@ -11054,5 +11054,29 @@
     "files": [
       "DS4Windows/DS4Forms/ControllerNameControl.xaml.cs"
     ]
+  },
+  "UI_76972EB04E151F54": {
+    "source": "Longest recent input gap: {0:F2} ms",
+    "files": [
+      "DS4Windows/DS4Forms/ControllerOverviewControl.xaml.cs"
+    ]
+  },
+  "UI_8B1605E166B68A03": {
+    "source": "No controller timing samples yet.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.ControllerTiming.cs"
+    ]
+  },
+  "UI_20413FB580C037BC": {
+    "source": "Controller timing summary copied.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.ControllerTiming.cs"
+    ]
+  },
+  "UI_1949DCB98AC4D2FE": {
+    "source": "The clipboard is currently unavailable.",
+    "files": [
+      "DS4Windows/DS4Forms/MainWindow.ControllerTiming.cs"
+    ]
   }
 }

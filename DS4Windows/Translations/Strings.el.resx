@@ -6967,4 +6967,22 @@ Example: whyme_DS4Windows</value>
     <value>Διαγράψτε το όνομα για επαναφορά του προεπιλεγμένου. Enter για αποθήκευση· Escape για ακύρωση.</value>
     <comment>Controller custom name editing.</comment>
   </data>
+  <data name="ControllerTimingDiagnostics" xml:space="preserve">
+    <value>Διαγνωστικά χρονισμού χειριστηρίου</value>
+  </data>
+  <data name="ControllerTimingCopySummary" xml:space="preserve">
+    <value>Αντιγραφή σύνοψης χρονισμού</value>
+  </data>
+  <data name="UI_76972EB04E151F54" xml:space="preserve">
+    <value>Μεγαλύτερο πρόσφατο κενό εισόδου: {0:F2} ms</value>
+  </data>
+  <data name="UI_8B1605E166B68A03" xml:space="preserve">
+    <value>Δεν υπάρχουν ακόμη δείγματα χρονισμού χειριστηρίου.</value>
+  </data>
+  <data name="UI_20413FB580C037BC" xml:space="preserve">
+    <value>Η σύνοψη χρονισμού χειριστηρίου αντιγράφηκε.</value>
+  </data>
+  <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
+    <value>Το πρόχειρο δεν είναι διαθέσιμο αυτήν τη στιγμή.</value>
+  </data>
 </root>

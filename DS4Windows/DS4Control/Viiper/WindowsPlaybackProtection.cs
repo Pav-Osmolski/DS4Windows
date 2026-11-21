@@ -234,8 +234,9 @@ internal static class WindowsPlaybackProtection
     private static void PublishOutput(MMDeviceEnumerator e)
     {
         using var device = GetDefault(e, Role.Multimedia);
-        int port = 0;
-        if (device != null) DualSenseAudioPassthrough.TryGetEndpointUsbipPort(device, out port);
+        int port = device != null &&
+            DualSenseAudioPassthrough.TryGetEndpointUsbipPort(device, out int usbipPort)
+                ? usbipPort : 0;
         int index = leases.FirstOrDefault(l => l.Retired == 0 && l.Port == port && port > 0 && l.IsCurrent())?.ControllerIndex ?? -1;
         var next = new Output(device?.FriendlyName ?? "", port, index);
         if (next == CurrentOutput) return;

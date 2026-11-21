@@ -163,6 +163,8 @@ namespace DS4WinWPF.DS4Forms
             settingsWrapVM = new SettingsViewModel();
             settingsTab.DataContext = settingsWrapVM;
             logToolsPanel.DataContext = settingsWrapVM;
+            controllerTimingCapture.IsChecked = ViiperLatencyHistogram.Enabled;
+            copyControllerTimingBtn.IsEnabled = ViiperLatencyHistogram.Enabled;
             settingsWrapVM.LogRetentionDaysChanged += async (_, _) =>
             {
                 try

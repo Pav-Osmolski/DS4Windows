@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
@@ -136,6 +137,17 @@ public sealed class ControllerOverviewAudioTests
             };
             themedOverview.DataContext = Model(protectedController);
             ThemeConsistencyValidation.Layout(themedOverview, 1100, 950);
+            var inputGap = (TextBlock)themedOverview.FindName("overviewRecentInputGap");
+            var openInputTip = typeof(ControllerOverviewControl).GetMethod("OverviewInputRate_ToolTipOpening",
+                BindingFlags.Instance | BindingFlags.NonPublic)!;
+            openInputTip.Invoke(themedOverview, new object[] { null, null });
+            Assert.AreEqual(Visibility.Collapsed, inputGap.Visibility);
+            long now = Stopwatch.GetTimestamp();
+            protectedController.InputTiming.Observe(now - Stopwatch.Frequency / 10);
+            protectedController.InputTiming.Observe(now);
+            openInputTip.Invoke(themedOverview, new object[] { null, null });
+            Assert.AreEqual(Visibility.Visible, inputGap.Visibility);
+            StringAssert.Contains(inputGap.Text, "100");
             var fill = (Border)themedOverview.FindName("overviewBatteryFill");
             foreach (var (percent, brush) in new[]
             {

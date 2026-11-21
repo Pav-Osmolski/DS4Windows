@@ -1374,6 +1374,14 @@
                                 <Button x:Name="viiperDebugHelpBtn" Content="{lex:Loc Strings:UI_0F1E5C07276841E3}" Margin="0,0,0,8"
                                         Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ViiperDebugHelpBtn_Click" />
                             </WrapPanel>
+                            <WrapPanel Margin="0,4,0,4">
+                                <CheckBox x:Name="controllerTimingCapture" Content="{lex:Loc Strings:ControllerTimingDiagnostics}"
+                                          Click="ControllerTimingCapture_Click" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"
+                                          MinHeight="34" Margin="0,0,12,8" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                                <Button x:Name="copyControllerTimingBtn" Content="{lex:Loc Strings:ControllerTimingCopySummary}"
+                                        Click="CopyControllerTimingBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}"
+                                        Margin="0,0,0,8" IsEnabled="False" />
+                            </WrapPanel>
                             <TextBlock Text="{lex:Loc Strings:UI_F08257E3D9E3D82F}"
                                        Foreground="{DynamicResource MutedForegroundColor}" TextWrapping="Wrap" />
                             <TextBlock x:Name="logActionStatus" TextWrapping="Wrap" Margin="0,6,0,0"

@@ -7109,4 +7109,22 @@
     <value>清空名称可恢复默认名称。按Enter保存，按Escape取消。</value>
     <comment>Controller custom name editing.</comment>
   </data>
+  <data name="ControllerTimingDiagnostics" xml:space="preserve">
+    <value>控制器时序诊断</value>
+  </data>
+  <data name="ControllerTimingCopySummary" xml:space="preserve">
+    <value>复制时序摘要</value>
+  </data>
+  <data name="UI_76972EB04E151F54" xml:space="preserve">
+    <value>近期最长输入间隔：{0:F2} 毫秒</value>
+  </data>
+  <data name="UI_8B1605E166B68A03" xml:space="preserve">
+    <value>暂无控制器时序样本。</value>
+  </data>
+  <data name="UI_20413FB580C037BC" xml:space="preserve">
+    <value>已复制控制器时序摘要。</value>
+  </data>
+  <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
+    <value>当前无法使用剪贴板。</value>
+  </data>
 </root>

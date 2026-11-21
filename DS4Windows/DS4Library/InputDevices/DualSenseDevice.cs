@@ -854,9 +854,6 @@ namespace DS4Windows.InputDevices
             new();
         private readonly ViiperLatencyHistogram physicalReadToReportLatency =
             new();
-        private readonly ViiperLatencyHistogram
-            physicalReportObservationIntervalLatency =
-            new();
         private readonly ViiperLatencyHistogram physicalReadObservationWaitLatency =
             new();
         private readonly ViiperLatencyHistogram physicalReadRearmLatency =
@@ -1004,10 +1001,6 @@ namespace DS4Windows.InputDevices
 
         internal ViiperLatencySnapshot PhysicalReadToReportLatencySnapshot =>
             physicalReadToReportLatency.Snapshot();
-
-        internal ViiperLatencySnapshot
-            PhysicalReportObservationIntervalLatencySnapshot =>
-                physicalReportObservationIntervalLatency.Snapshot();
 
         internal ViiperLatencySnapshot PhysicalReadObservationWaitLatencySnapshot =>
             physicalReadObservationWaitLatency.Snapshot();
@@ -5282,15 +5275,15 @@ namespace DS4Windows.InputDevices
                     if (!recoveredCurrentState && !inputFallback.AcceptStreamingReport(inputReport))
                         continue;
 
+                    if (!recoveredCurrentState)
+                        InputTiming.Observe(physicalReadObservedAt);
+
                     if (oldtime != 0)
                     {
                         testelapsed = physicalReadObservedAt - oldtime;
                         lastTimeElapsedDouble = testelapsed *
                             (1.0 / Stopwatch.Frequency) * 1000.0;
                         lastTimeElapsed = (long)lastTimeElapsedDouble;
-                        physicalReportObservationIntervalLatency.Observe(
-                            testelapsed);
-
                         if (conType != ConnectionType.BT)
                         {
                             if (tempLatencyCount == latencySamples.Length)
