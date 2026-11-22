@@ -6966,4 +6966,6 @@ Backup : </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>جارٍ تجهيز خدمات وحدات التحكم…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>جارٍ تهيئة {0}…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows متوقف</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>حدد {0} في الزاوية السفلية اليمنى لاستخدام وحدات التحكم عبر DS4Windows.</value></data>
 </root>

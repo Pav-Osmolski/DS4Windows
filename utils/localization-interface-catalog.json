@@ -11090,5 +11090,17 @@
     "files": [
       "DS4Windows/DS4Forms/ViewModels/MainWindowsViewModel.cs"
     ]
+  },
+  "UI_4CB49E4CD89811DC": {
+    "source": "DS4Windows is stopped",
+    "files": [
+      "DS4Windows/DS4Forms/ViewModels/MainWindowsViewModel.cs"
+    ]
+  },
+  "UI_3C152BCB8ECD152E": {
+    "source": "Select {0} in the bottom-right corner to use your controllers through DS4Windows.",
+    "files": [
+      "DS4Windows/DS4Forms/ViewModels/MainWindowsViewModel.cs"
+    ]
   }
 }

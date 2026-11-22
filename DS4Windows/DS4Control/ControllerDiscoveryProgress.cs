@@ -2,6 +2,7 @@ namespace DS4Windows;
 
 internal enum ControllerDiscoveryPhase
 {
+    Stopped,
     CheckingComponents,
     Starting,
     Searching,

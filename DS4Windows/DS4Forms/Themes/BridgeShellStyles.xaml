@@ -732,6 +732,9 @@
                                                         <Setter Property="Text" Value="Connect a controller to begin" />
                                                         <Setter Property="Visibility" Value="Collapsed" />
                                                         <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding OverviewConnection.IsStopped}" Value="True">
+                                                                <Setter Property="Text" Value="{Binding OverviewConnection.Title}" />
+                                                            </DataTrigger>
                                                             <DataTrigger Binding="{Binding OverviewConnection.IsBusy}" Value="True">
                                                                 <Setter Property="Text" Value="{Binding OverviewConnection.Title}" />
                                                                 <Setter Property="TextWrapping" Value="NoWrap" />

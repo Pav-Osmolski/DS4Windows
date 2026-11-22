@@ -6960,4 +6960,6 @@ Das Backup: </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Controllerdienste werden vorbereitet…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>{0} wird initialisiert…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows ist angehalten</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Wähle unten rechts „{0}“, um deine Controller über DS4Windows zu verwenden.</value></data>
 </root>

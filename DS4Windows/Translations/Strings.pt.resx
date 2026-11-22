@@ -6962,4 +6962,6 @@ O backup: </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>A preparar os serviços de comandos…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>A inicializar {0}…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>O DS4Windows está parado</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Selecione «{0}» no canto inferior direito para usar os comandos através do DS4Windows.</value></data>
 </root>

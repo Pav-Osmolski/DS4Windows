@@ -6958,4 +6958,6 @@ Zálohování : </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Připravují se služby pro ovladače…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Probíhá inicializace zařízení {0}…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows je zastaven</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Pokud chcete ovladače používat přes DS4Windows, vyberte vpravo dole {0}.</value></data>
 </root>

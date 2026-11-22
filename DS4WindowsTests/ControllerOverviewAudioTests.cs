@@ -569,15 +569,21 @@ public sealed class ControllerOverviewAudioTests
         var detail = (TextBlock)overview.FindName("discoveryDetail");
 
         foreach (ControllerDiscoveryPhase? phase in new ControllerDiscoveryPhase?[]
-                 { null, ControllerDiscoveryPhase.CheckingComponents, ControllerDiscoveryPhase.Starting,
-                   ControllerDiscoveryPhase.Searching, null })
+                 { ControllerDiscoveryPhase.CheckingComponents, ControllerDiscoveryPhase.Starting,
+                   ControllerDiscoveryPhase.Searching, null, ControllerDiscoveryPhase.Stopped,
+                   ControllerDiscoveryPhase.Starting })
         {
             model.SetStartupProgress(phase, null);
             ThemeConsistencyValidation.Layout(overview, 620, 500);
             Assert.AreEqual(model.OverviewConnection.Title, title.Text);
             Assert.AreEqual(model.OverviewConnection.Detail, detail.Text);
-            Assert.AreEqual(phase.HasValue ? Visibility.Visible : Visibility.Collapsed, spinner.Visibility);
-            Assert.AreEqual(phase.HasValue ? Visibility.Collapsed : Visibility.Visible, idleIcon.Visibility);
+            bool isStopped = phase == ControllerDiscoveryPhase.Stopped;
+            bool isBusy = phase.HasValue && !isStopped;
+            Assert.AreEqual(isStopped, model.OverviewConnection.IsStopped);
+            Assert.AreEqual(isBusy ? Visibility.Visible : Visibility.Collapsed, spinner.Visibility);
+            Assert.AreEqual(isBusy ? Visibility.Collapsed : Visibility.Visible, idleIcon.Visibility);
+            if (isStopped)
+                StringAssert.Contains(detail.Text, DS4WinWPF.Translations.Strings.StartText);
         }
 
         overview.DataContext = null;

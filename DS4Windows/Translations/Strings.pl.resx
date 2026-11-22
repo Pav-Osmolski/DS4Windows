@@ -6962,4 +6962,6 @@ i backup: </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Przygotowywanie usług obsługi kontrolerów…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Inicjowanie urządzenia {0}…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>Program DS4Windows jest zatrzymany</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Wybierz „{0}” w prawym dolnym rogu, aby korzystać z kontrolerów za pośrednictwem DS4Windows.</value></data>
 </root>
