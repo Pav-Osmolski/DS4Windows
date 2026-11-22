@@ -6960,4 +6960,6 @@ O backup: </value>
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>A área de transferência está indisponível de momento.</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>A preparar os serviços de comandos…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>A inicializar {0}…</value></data>
 </root>

@@ -695,14 +695,28 @@
                                         <TextBlock Text="{Binding StartupStatusText}" TextWrapping="Wrap" Visibility="{Binding StartupStatusVisibility}" MaxWidth="420" HorizontalAlignment="Left" Margin="{StaticResource spaceMargin}" />
                                         <GroupBox x:Name="runAsGroupBox" Header="{lex:Loc RunAs}" BorderThickness="0" Visibility="{Binding ShowRunStartPanel}" IsEnabled="{Binding CanChangeStartupMode}" Margin="24,0,0,14" Padding="0">
                                             <WrapPanel Margin="0,8,0,4">
+                                                <RadioButton Content="{lex:Loc Program}" GroupName="RunAsOpt" Margin="0,0,18,0"
+                                                             VerticalAlignment="Center" IsChecked="{Binding RunStartProg}" />
                                                 <StackPanel Orientation="Horizontal">
-                                                    <RadioButton Content="{lex:Loc Program}" GroupName="RunAsOpt" Margin="0,0,18,0" IsChecked="{Binding RunStartProg}" />
-                                                    <RadioButton Content="{lex:Loc Task}" GroupName="RunAsOpt" Margin="0,0,18,0"
+                                                    <RadioButton Content="{lex:Loc Task}" GroupName="RunAsOpt" VerticalAlignment="Center"
                                                                  IsChecked="{Binding RunStartTask}" IsEnabled="{Binding CanWriteTask}"
                                                                  ToolTip="{lex:Loc Resources:UACTask}" ToolTipService.ShowOnDisabled="True"
-                                                                 ToolTipService.IsEnabled="{Binding IsVisible, ElementName=uacImg}" />
+                                                                 ToolTipService.IsEnabled="{Binding IsVisible, ElementName=startupTaskShield}" />
+                                                    <Border x:Name="startupTaskShield" Width="22" Height="22" Margin="10,0,0,0"
+                                                            Background="Transparent" ToolTip="{lex:Loc Resources:UACTask}"
+                                                            ToolTipService.ShowOnDisabled="True">
+                                                        <Viewbox>
+                                                            <Canvas Width="24" Height="24">
+                                                                <Path Fill="{DynamicResource StartupTaskShieldBlue}"
+                                                                      Data="M 12,2 L 21,5 V 11 C 21,16.5 17.5,20 12,22 C 6.5,20 3,16.5 3,11 V 5 Z" />
+                                                                <Path Fill="{DynamicResource StartupTaskShieldGold}"
+                                                                      Data="M 12,2 L 21,5 V 11 H 12 Z M 3,11 H 12 V 22 C 6.5,20 3,16.5 3,11 Z" />
+                                                                <Path Stroke="{DynamicResource MutedForegroundColor}" StrokeLineJoin="Round"
+                                                                      Data="M 12,2 L 21,5 V 11 C 21,16.5 17.5,20 12,22 C 6.5,20 3,16.5 3,11 V 5 Z" />
+                                                            </Canvas>
+                                                        </Viewbox>
+                                                    </Border>
                                                 </StackPanel>
-                                                <Image x:Name="uacImg" Source="{Binding UACSource, Mode=OneTime}" Width="30" Height="30" ToolTip="{lex:Loc Resources:UACTask}" Margin="20,0,0,0" />
                                             </WrapPanel>
                                         </GroupBox>
                                         <CheckBox Content="{lex:Loc StartMinimized}" Margin="{StaticResource spaceMargin}" IsChecked="{Binding StartMinimize}" ToolTip="{lex:Loc Strings:UI_739AB0F4F8B8E84E}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}" />

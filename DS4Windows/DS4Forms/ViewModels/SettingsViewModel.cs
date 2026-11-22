@@ -139,8 +139,6 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             ? Visibility.Collapsed : Visibility.Visible;
         public event EventHandler StartupStatusVisibilityChanged;
 
-        public ImageSource uacSource;
-        public ImageSource UACSource { get => uacSource; }
 
         public ImageSource questionMarkSource;
         public ImageSource QuestionMarkSource { get => questionMarkSource; }
@@ -713,18 +711,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 checkEveryUnitIdx = 0;
             }
 
-            Icon img = SystemIcons.Shield;
-            Bitmap bitmap = img.ToBitmap();
-            IntPtr hBitmap = bitmap.GetHbitmap();
-
+            Icon img = SystemIcons.Question;
             ImageSource wpfBitmap =
-                 Imaging.CreateBitmapSourceFromHBitmap(
-                      hBitmap, IntPtr.Zero, Int32Rect.Empty,
-                      BitmapSizeOptions.FromEmptyOptions());
-            uacSource = wpfBitmap;
-
-            img = SystemIcons.Question;
-            wpfBitmap =
                  Imaging.CreateBitmapSourceFromHBitmap(
                       img.ToBitmap().GetHbitmap(), IntPtr.Zero, Int32Rect.Empty,
                       BitmapSizeOptions.FromEmptyOptions());

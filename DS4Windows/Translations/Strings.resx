@@ -8671,4 +8671,6 @@ X axis: {0}, Y axis: {1}</value>
     <value>The clipboard is currently unavailable.</value>
     <comment>Log timing capture feedback</comment>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Preparing controller services…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Initialising {0}…</value></data>
 </root>

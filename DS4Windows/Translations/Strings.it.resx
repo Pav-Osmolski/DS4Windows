@@ -6957,4 +6957,6 @@ Il backup: </value>
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>Gli appunti non sono disponibili al momento.</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Preparazione dei servizi per i controller…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Inizializzazione di {0}…</value></data>
 </root>

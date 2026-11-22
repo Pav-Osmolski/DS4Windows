@@ -11078,5 +11078,17 @@
     "files": [
       "DS4Windows/DS4Forms/MainWindow.ControllerTiming.cs"
     ]
+  },
+  "UI_C90C08CCF9F7EBDE": {
+    "source": "Preparing controller services…",
+    "files": [
+      "DS4Windows/DS4Forms/ViewModels/MainWindowsViewModel.cs"
+    ]
+  },
+  "UI_28921D73B39580D4": {
+    "source": "Initialising {0}…",
+    "files": [
+      "DS4Windows/DS4Forms/ViewModels/MainWindowsViewModel.cs"
+    ]
   }
 }

@@ -6959,4 +6959,6 @@ och backup: </value>
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>Urklipp är inte tillgängligt just nu.</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Förbereder handkontrolltjänster…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Initierar {0}…</value></data>
 </root>

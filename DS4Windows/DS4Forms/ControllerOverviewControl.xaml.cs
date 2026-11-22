@@ -12,6 +12,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -51,6 +52,18 @@ namespace DS4WinWPF.DS4Forms
                     CloseControllerStatus();
                 }
             };
+        }
+
+        private void DiscoverySpinner_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var rotation = (RotateTransform)((UIElement)sender).RenderTransform;
+            DoubleAnimation spin = (bool)e.NewValue && SystemParameters.ClientAreaAnimation
+                ? new DoubleAnimation(0, 360, TimeSpan.FromSeconds(1))
+                {
+                    RepeatBehavior = RepeatBehavior.Forever
+                }
+                : null;
+            rotation.BeginAnimation(RotateTransform.AngleProperty, spin);
         }
 
         private void ControllerOverviewControl_Loaded(object sender, RoutedEventArgs e)
