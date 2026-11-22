@@ -7127,4 +7127,6 @@
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>当前无法使用剪贴板。</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>正在准备控制器服务…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>正在初始化 {0}…</value></data>
 </root>

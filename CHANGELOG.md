@@ -13,6 +13,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 - Refresh the administrator shield next to **Settings > General > Startup > Task**. The shield sits closer to the option, aligns vertically with its label, and adapts to light, dark, and high-contrast themes.
 - Match the spacing between Trigger Lab controls and the scrollbar across themes, including Light and Paper.
+- Centre the sidebar prompt when no controller is connected. Show a spinner and the current startup, discovery, or controller initialisation phase in Overview until the controller card is ready.
 
 ### [5.0.78](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.78) - 2026-11-21
 

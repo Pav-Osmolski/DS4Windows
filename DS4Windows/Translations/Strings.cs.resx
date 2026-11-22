@@ -6956,4 +6956,6 @@ Zálohování : </value>
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>Schránka momentálně není dostupná.</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Připravují se služby pro ovladače…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Probíhá inicializace zařízení {0}…</value></data>
 </root>

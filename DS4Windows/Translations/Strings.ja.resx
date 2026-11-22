@@ -6960,4 +6960,6 @@ Backup : </value>
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>現在クリップボードを使用できません。</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>コントローラーサービスを準備しています…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>{0} を初期化しています…</value></data>
 </root>

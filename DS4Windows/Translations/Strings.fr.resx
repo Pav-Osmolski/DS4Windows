@@ -6983,4 +6983,6 @@ Le backup : </value>
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>Le presse-papiers est actuellement indisponible.</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Préparation des services de manette…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Initialisation de {0}…</value></data>
 </root>

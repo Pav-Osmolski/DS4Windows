@@ -6964,4 +6964,6 @@ Backup : </value>
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>الحافظة غير متاحة حاليًا.</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>جارٍ تجهيز خدمات وحدات التحكم…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>جارٍ تهيئة {0}…</value></data>
 </root>

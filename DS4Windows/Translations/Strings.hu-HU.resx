@@ -6957,4 +6957,6 @@ A háttérben: </value>
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>A vágólap jelenleg nem érhető el.</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>A vezérlőszolgáltatások előkészítése…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>A(z) {0} inicializálása…</value></data>
 </root>

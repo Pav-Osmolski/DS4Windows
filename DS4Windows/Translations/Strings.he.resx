@@ -6959,4 +6959,6 @@
   <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
     <value>הלוח אינו זמין כרגע.</value>
   </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>מכין את שירותי הבקרים…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>מאתחל את {0}…</value></data>
 </root>

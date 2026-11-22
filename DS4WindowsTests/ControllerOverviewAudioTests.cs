@@ -72,6 +72,21 @@ public sealed class ControllerOverviewAudioTests
     }
 
     [TestMethod]
+    public void OverviewDiscoveryTextDistinguishesSearchFromDetectedDeviceSetup()
+    {
+        var searching = OverviewConnectionStatus.FromProgress(
+            new(ControllerDiscoveryPhase.Searching));
+        var preparing = OverviewConnectionStatus.FromProgress(
+            new(ControllerDiscoveryPhase.Initialising, "DualSense"));
+
+        Assert.IsTrue(searching.IsBusy);
+        Assert.IsTrue(preparing.IsBusy);
+        Assert.AreNotEqual(searching.Detail, preparing.Detail);
+        StringAssert.Contains(preparing.Title, "DualSense");
+        Assert.IsFalse(OverviewConnectionStatus.FromProgress(null).IsBusy);
+    }
+
+    [TestMethod]
     public void EveryOverviewAudioControlHasThePhysicalCapabilityGuard()
     {
         var xml = LoadOverview();
@@ -118,6 +133,7 @@ public sealed class ControllerOverviewAudioTests
     internal static void ValidateRenderedOverview(ControllerOverviewControl overview,
         string resultsDirectory, List<string> renderedFiles)
     {
+        ValidateDiscoveryCard(overview);
         ValidateImmediateSliderLabels(overview);
         var resources = Application.Current.Resources.MergedDictionaries;
         var originalTheme = resources[0];
@@ -540,6 +556,30 @@ public sealed class ControllerOverviewAudioTests
         Assert.AreEqual(Visibility.Collapsed, native.Visibility);
         Assert.AreEqual(Visibility.Collapsed, managed.Visibility);
         Assert.AreEqual(Visibility.Collapsed, speaker.Visibility);
+        overview.DataContext = null;
+    }
+
+    private static void ValidateDiscoveryCard(ControllerOverviewControl overview)
+    {
+        var model = new MainWindowsViewModel();
+        overview.DataContext = model;
+        var idleIcon = (TextBlock)overview.FindName("discoveryIdleIcon");
+        var spinner = (Grid)overview.FindName("discoverySpinner");
+        var title = (TextBlock)overview.FindName("discoveryTitle");
+        var detail = (TextBlock)overview.FindName("discoveryDetail");
+
+        foreach (ControllerDiscoveryPhase? phase in new ControllerDiscoveryPhase?[]
+                 { null, ControllerDiscoveryPhase.CheckingComponents, ControllerDiscoveryPhase.Starting,
+                   ControllerDiscoveryPhase.Searching, null })
+        {
+            model.SetStartupProgress(phase, null);
+            ThemeConsistencyValidation.Layout(overview, 620, 500);
+            Assert.AreEqual(model.OverviewConnection.Title, title.Text);
+            Assert.AreEqual(model.OverviewConnection.Detail, detail.Text);
+            Assert.AreEqual(phase.HasValue ? Visibility.Visible : Visibility.Collapsed, spinner.Visibility);
+            Assert.AreEqual(phase.HasValue ? Visibility.Collapsed : Visibility.Visible, idleIcon.Visibility);
+        }
+
         overview.DataContext = null;
     }
 
