@@ -6985,4 +6985,6 @@ Sokongan : </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Menyediakan perkhidmatan pengawal…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Memulakan {0}…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows dihentikan</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Pilih {0} di penjuru kanan bawah untuk menggunakan pengawal melalui DS4Windows.</value></data>
 </root>

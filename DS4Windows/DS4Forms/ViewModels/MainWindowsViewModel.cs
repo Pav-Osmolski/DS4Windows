@@ -32,11 +32,16 @@ using DS4Windows.InputDevices;
 
 namespace DS4WinWPF.DS4Forms.ViewModels
 {
-    public sealed record OverviewConnectionStatus(string Title, string Detail, bool IsBusy)
+    public sealed record OverviewConnectionStatus(string Title, string Detail, bool IsBusy, bool IsStopped = false)
     {
         internal static OverviewConnectionStatus FromProgress(ControllerDiscoveryProgress progress) =>
             progress?.Phase switch
             {
+                ControllerDiscoveryPhase.Stopped => new(
+                    UiText.Get("DS4Windows is stopped"),
+                    UiText.Format("Select {0} in the bottom-right corner to use your controllers through DS4Windows.",
+                        DS4WinWPF.Translations.Strings.StartText),
+                    false, IsStopped: true),
                 ControllerDiscoveryPhase.CheckingComponents => new(
                     Resources.Starting, UiText.Get("Checking component status…"), true),
                 ControllerDiscoveryPhase.Starting => new(
@@ -100,6 +105,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
     public class MainWindowsViewModel
     {
+        private static readonly ControllerDiscoveryProgress stoppedProgress = new(ControllerDiscoveryPhase.Stopped);
         private static readonly int[] dualSenseHapticPercentages =
             { 100, 87, 75, 62, 50, 37, 25, 12 };
 
@@ -221,10 +227,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             RefreshOverviewConnection(controlService);
         }
 
-        private void RefreshOverviewConnection(ControlService controlService)
+        internal void RefreshOverviewConnection(ControlService controlService)
         {
             ControllerDiscoveryProgress progress = controlService?.ControllerDiscovery ??
-                pendingStartupProgress;
+                pendingStartupProgress ?? (controlService?.running == false ? stoppedProgress : null);
             if (overviewDiscoveryProgress == progress) return;
 
             overviewDiscoveryProgress = progress;

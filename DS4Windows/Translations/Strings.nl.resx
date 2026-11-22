@@ -6991,4 +6991,6 @@ De backup: </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Controllerservices worden voorbereid…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>{0} wordt geïnitialiseerd…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows is gestopt</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Kies rechtsonder ‘{0}’ om je controllers via DS4Windows te gebruiken.</value></data>
 </root>

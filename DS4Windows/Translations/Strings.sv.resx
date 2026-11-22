@@ -6961,4 +6961,6 @@ och backup: </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Förbereder handkontrolltjänster…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Initierar {0}…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows har stoppats</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Välj {0} längst ned till höger för att använda handkontroller via DS4Windows.</value></data>
 </root>

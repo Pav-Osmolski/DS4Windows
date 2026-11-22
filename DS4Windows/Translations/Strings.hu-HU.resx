@@ -6959,4 +6959,6 @@ A háttérben: </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>A vezérlőszolgáltatások előkészítése…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>A(z) {0} inicializálása…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>A DS4Windows le van állítva</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>A vezérlők DS4Windows-on keresztüli használatához válaszd a jobb alsó sarokban a(z) {0} gombot.</value></data>
 </root>

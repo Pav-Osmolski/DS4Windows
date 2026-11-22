@@ -6985,4 +6985,6 @@ backup için: </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Oyun kumandası hizmetleri hazırlanıyor…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>{0} başlatılıyor…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows durduruldu</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Oyun kumandalarınızı DS4Windows üzerinden kullanmak için sağ alt köşedeki {0} düğmesini seçin.</value></data>
 </root>

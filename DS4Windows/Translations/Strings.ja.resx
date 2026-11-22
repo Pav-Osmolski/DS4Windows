@@ -6962,4 +6962,6 @@ Backup : </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>コントローラーサービスを準備しています…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>{0} を初期化しています…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows は停止しています</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>DS4Windows でコントローラーを使うには、右下の「{0}」を選択してください。</value></data>
 </root>

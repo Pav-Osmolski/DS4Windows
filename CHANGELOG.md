@@ -9,6 +9,11 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.80](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.80) - 2026-11-22
+
+- Show stopped-service guidance in Overview and the sidebar, and direct users to **Start** to use controllers through DS4Windows. Show startup progress immediately on normal launch.
+- Align **Controller timing diagnostics** with the other Log controls when the checkbox wraps onto a new line.
+
 ### [5.0.79](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.79) - 2026-11-22
 
 - Refresh the administrator shield next to **Settings > General > Startup > Task**. The shield sits closer to the option, aligns vertically with its label, and adapts to light, dark, and high-contrast themes.
