@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 using DS4Windows;
 using DS4WinWPF.ApiDTO;
+using DS4WinWPF.Properties;
 using HttpProgress;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,25 @@ using DS4Windows.InputDevices;
 
 namespace DS4WinWPF.DS4Forms.ViewModels
 {
+    public sealed record OverviewConnectionStatus(string Title, string Detail, bool IsBusy)
+    {
+        internal static OverviewConnectionStatus FromProgress(ControllerDiscoveryProgress progress) =>
+            progress?.Phase switch
+            {
+                ControllerDiscoveryPhase.CheckingComponents => new(
+                    Resources.Starting, UiText.Get("Checking component status…"), true),
+                ControllerDiscoveryPhase.Starting => new(
+                    Resources.Starting, UiText.Get("Preparing controller services…"), true),
+                ControllerDiscoveryPhase.Searching => new(
+                    Resources.Starting, Resources.SearchingController, true),
+                ControllerDiscoveryPhase.Initialising => new(
+                    UiText.Format("Initialising {0}…", progress.DeviceName),
+                    UiText.Get("Applying the profile and preparing its controls..."), true),
+                _ => new(UiText.Get("No controller selected"),
+                    UiText.Get("Connect a controller, then choose it from the device cards in the upper-left corner."), false)
+            };
+    }
+
     public readonly record struct OverviewBatteryIndicator(int Percent)
     {
         public double Fill => Math.Clamp(Percent, 0, 100) / 100d;
@@ -116,6 +136,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             };
 
         private CompositeDeviceModel selectedController;
+        private ControllerDiscoveryProgress overviewDiscoveryProgress;
+        private ControllerDiscoveryProgress pendingStartupProgress;
         private OverviewRuntimeSnapshot lastRuntimeSnapshot;
         private bool hasRuntimeSnapshot;
         private ControllerStartupStatus selectedControllerStartupStatus =
@@ -189,6 +211,27 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public event EventHandler<QuickProfileSettingChangedEventArgs> QuickProfileSettingChanged;
 
         public bool HasSelectedController => selectedController != null;
+        public OverviewConnectionStatus OverviewConnection { get; private set; } =
+            OverviewConnectionStatus.FromProgress(null);
+        public event EventHandler OverviewConnectionChanged;
+
+        internal void SetStartupProgress(ControllerDiscoveryPhase? phase, ControlService controlService)
+        {
+            pendingStartupProgress = phase is { } value ? new(value) : null;
+            RefreshOverviewConnection(controlService);
+        }
+
+        private void RefreshOverviewConnection(ControlService controlService)
+        {
+            ControllerDiscoveryProgress progress = controlService?.ControllerDiscovery ??
+                pendingStartupProgress;
+            if (overviewDiscoveryProgress == progress) return;
+
+            overviewDiscoveryProgress = progress;
+            OverviewConnection = OverviewConnectionStatus.FromProgress(progress);
+            OverviewConnectionChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public string SelectedControllerNumber => selectedController == null
             ? string.Empty : UiText.Format("Controller {0}", selectedController.DisplayDevIndex);
         public bool HasSelectedProfile => HasValidSelectedDevice &&
@@ -702,6 +745,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public void RefreshRuntimeState(ControlService controlService)
         {
+            RefreshOverviewConnection(controlService);
+
             // Controller discovery can add/remove an item while this UI timer
             // is firing. ObservableCollection's enumerator is fail-fast, so
             // an otherwise harmless startup overlap used to terminate the

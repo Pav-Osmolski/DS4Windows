@@ -2988,6 +2988,9 @@ namespace DS4Windows
 
         public override string GetDeviceType() => outputType.ToString();
 
+        internal (ViiperLatencySnapshot QueueWait, ViiperLatencySnapshot SocketWrite) CaptureOutputTiming() =>
+            (publishToWriterClaimLatency.Snapshot(), socketWriteLatency.Snapshot());
+
         public override void RemoveFeedbacks()
         {
         }
@@ -6028,15 +6031,16 @@ namespace DS4Windows
                 }
 
                 int deviceIndex = Volatile.Read(ref lastInputDeviceIndex);
-                if (Program.rootHub != null && deviceIndex >= 0 &&
-                    deviceIndex < Program.rootHub.DS4Controllers.Length &&
-                    Program.rootHub.DS4Controllers[deviceIndex] is
-                        DualSenseDevice physical)
+                DS4Device[] controllers = Program.rootHub?.DS4Controllers;
+                DS4Device input = controllers != null && (uint)deviceIndex < (uint)controllers.Length
+                    ? Volatile.Read(ref controllers[deviceIndex]) : null;
+                if (input != null)
+                {
+                    latencyDistributions += " " + input.InputTiming.Snapshot().Format("physicalReportObservationInterval");
+                }
+                if (input is DualSenseDevice physical)
                 {
                     latencyDistributions += " " +
-                        physical.
-                            PhysicalReportObservationIntervalLatencySnapshot.
-                            Format("physicalReportObservationInterval") + " " +
                         physical.PhysicalReadObservationWaitLatencySnapshot.
                             Format("readCall->completionObservation") + " " +
                         physical.PhysicalReadRearmLatencySnapshot.Format(

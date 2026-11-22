@@ -6971,4 +6971,24 @@ De backup: </value>
     <value>Wis de naam om de standaardnaam te herstellen. Enter slaat op; Escape annuleert.</value>
     <comment>Controller custom name editing.</comment>
   </data>
+  <data name="ControllerTimingDiagnostics" xml:space="preserve">
+    <value>Timingdiagnose van controller</value>
+  </data>
+  <data name="ControllerTimingCopySummary" xml:space="preserve">
+    <value>Timingoverzicht kopiëren</value>
+  </data>
+  <data name="UI_76972EB04E151F54" xml:space="preserve">
+    <value>Langste recente invoerinterval: {0:F2} ms</value>
+  </data>
+  <data name="UI_8B1605E166B68A03" xml:space="preserve">
+    <value>Er zijn nog geen timingmetingen voor de controller.</value>
+  </data>
+  <data name="UI_20413FB580C037BC" xml:space="preserve">
+    <value>Timingoverzicht van de controller gekopieerd.</value>
+  </data>
+  <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
+    <value>Het klembord is momenteel niet beschikbaar.</value>
+  </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Controllerservices worden voorbereid…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>{0} wordt geïnitialiseerd…</value></data>
 </root>

@@ -724,12 +724,20 @@
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
                                             </ListBox>
-                                            <TextBlock Text="Connect a controller to begin" TextWrapping="Wrap"
+                                            <TextBlock TextAlignment="Center" TextWrapping="Wrap"
+                                                       VerticalAlignment="Center"
                                                        Foreground="{DynamicResource MutedForegroundColor}" FontSize="11">
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="Connect a controller to begin" />
                                                         <Setter Property="Visibility" Value="Collapsed" />
                                                         <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding OverviewConnection.IsBusy}" Value="True">
+                                                                <Setter Property="Text" Value="{Binding OverviewConnection.Title}" />
+                                                                <Setter Property="TextWrapping" Value="NoWrap" />
+                                                                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                                                <Setter Property="ToolTip" Value="{Binding OverviewConnection.Detail}" />
+                                                            </DataTrigger>
                                                             <DataTrigger Binding="{Binding ElementName=SidebarControllerList, Path=HasItems}" Value="False">
                                                                 <Setter Property="Visibility" Value="Visible" />
                                                             </DataTrigger>

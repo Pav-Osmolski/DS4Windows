@@ -163,6 +163,8 @@ namespace DS4WinWPF.DS4Forms
             settingsWrapVM = new SettingsViewModel();
             settingsTab.DataContext = settingsWrapVM;
             logToolsPanel.DataContext = settingsWrapVM;
+            controllerTimingCapture.IsChecked = ViiperLatencyHistogram.Enabled;
+            copyControllerTimingBtn.IsEnabled = ViiperLatencyHistogram.Enabled;
             settingsWrapVM.LogRetentionDaysChanged += async (_, _) =>
             {
                 try
@@ -245,7 +247,7 @@ namespace DS4WinWPF.DS4Forms
             bool isElevated = Global.IsAdministrator();
             if (isElevated)
             {
-                uacImg.Visibility = Visibility.Collapsed;
+                startupTaskShield.Visibility = Visibility.Collapsed;
             }
 
             noContLb.Content = string.Format(Strings.NoControllersConnected,
@@ -286,40 +288,7 @@ namespace DS4WinWPF.DS4Forms
         public void LateChecks(ArgumentParser parser)
         {
             ControlService.StartupDiag($"MainWindow.LateChecks scheduled stopArg={parser.Stop}");
-            Task tempTask = Task.Run(() =>
-            {
-                ControlService.StartupDiag("MainWindow.LateChecks task begin");
-                ControlService.StartupDiag("MainWindow.CheckDrivers begin");
-                bool driversReady = mainWinVM.CheckDrivers();
-                ControlService.StartupDiag("MainWindow.CheckDrivers end");
-                if (!driversReady)
-                {
-                    // Prerequisite state changed after the startup gate. The
-                    // repair UI belongs to the STA dispatcher, and controller
-                    // services must not start until a fresh probe is ready.
-                    bool repaired = Dispatcher.Invoke(() =>
-                        ViiperSetupManager.EnsureReadyWithPrompt(this));
-                    if (!repaired)
-                    {
-                        ControlService.StartupDiag(
-                            "MainWindow.CheckDrivers blocked service startup");
-                        return;
-                    }
-                }
-                if (!parser.Stop)
-                {
-                    Dispatcher.BeginInvoke((Action)(() =>
-                    {
-                        StartStopBtn.IsEnabled = false;
-                    }));
-                    Thread.Sleep(1000);
-                    ControlService.StartupDiag("rootHub.Start begin from LateChecks");
-                    App.rootHub.Start();
-                    ControlService.StartupDiag("rootHub.Start end from LateChecks");
-                    //root.rootHubtest.Start();
-                }
-                ControlService.StartupDiag("MainWindow.LateChecks task end");
-            });
+            Task tempTask = RunLateControllerChecksAsync(parser.Stop);
 
             // Log exceptions that might occur
             Util.LogAssistBackgroundTask(tempTask);
@@ -355,6 +324,56 @@ namespace DS4WinWPF.DS4Forms
             });
 #endif
             Util.LogAssistBackgroundTask(tempTask);
+        }
+
+        private async Task RunLateControllerChecksAsync(bool startStopped)
+        {
+            ControlService service = App.rootHub;
+            if (!startStopped)
+            {
+                StartStopBtn.IsEnabled = false;
+                mainWinVM.SetStartupProgress(ControllerDiscoveryPhase.CheckingComponents, service);
+            }
+
+            try
+            {
+                ControlService.StartupDiag("MainWindow.LateChecks task begin");
+                bool driversReady = await Task.Run(() =>
+                {
+                    ControlService.StartupDiag("MainWindow.CheckDrivers begin");
+                    bool ready = mainWinVM.CheckDrivers();
+                    ControlService.StartupDiag("MainWindow.CheckDrivers end");
+                    return ready;
+                });
+
+                // The repair prompt belongs to the UI thread. Start the service
+                // only when the recheck or repair has completed successfully.
+                if (!driversReady && !ViiperSetupManager.EnsureReadyWithPrompt(this))
+                {
+                    ControlService.StartupDiag("MainWindow.CheckDrivers blocked service startup");
+                    return;
+                }
+
+                if (startStopped) return;
+
+                mainWinVM.SetStartupProgress(ControllerDiscoveryPhase.Starting, service);
+                await Task.Delay(1000);
+                await Task.Run(() =>
+                {
+                    ControlService.StartupDiag("rootHub.Start begin from LateChecks");
+                    service.Start();
+                    ControlService.StartupDiag("rootHub.Start end from LateChecks");
+                });
+            }
+            finally
+            {
+                if (!startStopped)
+                {
+                    mainWinVM.SetStartupProgress(null, service);
+                    StartStopBtn.IsEnabled = true;
+                }
+                ControlService.StartupDiag("MainWindow.LateChecks task end");
+            }
         }
 
         private void DisplayUpdaterWindow(string version)

@@ -6965,4 +6965,24 @@ Le backup : </value>
     <value>Effacez le nom pour rétablir le nom par défaut. Entrée enregistre ; Échap annule.</value>
     <comment>Controller custom name editing.</comment>
   </data>
+  <data name="ControllerTimingDiagnostics" xml:space="preserve">
+    <value>Diagnostic de la cadence de la manette</value>
+  </data>
+  <data name="ControllerTimingCopySummary" xml:space="preserve">
+    <value>Copier le résumé de cadence</value>
+  </data>
+  <data name="UI_76972EB04E151F54" xml:space="preserve">
+    <value>Plus long intervalle récent entre rapports : {0:F2} ms</value>
+  </data>
+  <data name="UI_8B1605E166B68A03" xml:space="preserve">
+    <value>Aucune mesure de cadence de la manette pour le moment.</value>
+  </data>
+  <data name="UI_20413FB580C037BC" xml:space="preserve">
+    <value>Résumé de cadence de la manette copié.</value>
+  </data>
+  <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
+    <value>Le presse-papiers est actuellement indisponible.</value>
+  </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Préparation des services de manette…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Initialisation de {0}…</value></data>
 </root>

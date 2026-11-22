@@ -4,6 +4,8 @@
 
 Before preparing, editing or publishing a release, read and follow
 [the release process](docs/release-process.md).
+When DS4Windows ships a new VIIPER build, publish the matching release in
+Pav-Osmolski/VIIPER before publishing DS4Windows.
 
 Verify issue authors and relevant follow-up commenters. Thank the requester or
 reporter beside each related change in both the release notes and changelog.

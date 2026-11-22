@@ -172,6 +172,13 @@ namespace DS4Windows
         public event HotplugControllerHandler HotplugController;
         public event HotplugControllerHandler RemovedController;
 
+        // Legacy discovery and native Switch 2 preparation run under separate
+        // lifecycle gates. Either can report a detected controller to Overview.
+        private volatile ControllerDiscoveryProgress controllerDiscoveryProgress;
+        private volatile ControllerDiscoveryProgress switch2PreparationProgress;
+        internal ControllerDiscoveryProgress ControllerDiscovery =>
+            switch2PreparationProgress ?? controllerDiscoveryProgress;
+
         private byte[][] udpOutBuffers = new byte[UdpServer.NUMBER_SLOTS][]
         {
             new byte[UdpServer.DATA_RSP_PACKET_LEN], new byte[UdpServer.DATA_RSP_PACKET_LEN],
@@ -2509,7 +2516,15 @@ namespace DS4Windows
                     return false;
                 }
 
-                return StartCore(showlog);
+                controllerDiscoveryProgress = new(ControllerDiscoveryPhase.Starting);
+                try
+                {
+                    return StartCore(showlog);
+                }
+                finally
+                {
+                    controllerDiscoveryProgress = null;
+                }
             }
         }
 
@@ -2822,6 +2837,7 @@ namespace DS4Windows
                     // remain enumerable for one final discovery pass.
                     Thread.Sleep(250);
 
+                    controllerDiscoveryProgress = new(ControllerDiscoveryPhase.Searching);
                     StartupDiag("DS4Devices.findControllers dispatch begin");
                     eventDispatcher.Invoke(() =>
                     {
@@ -2842,6 +2858,8 @@ namespace DS4Windows
                         while (i < CURRENT_DS4_CONTROLLER_LIMIT &&
                             !inputSlotAdmission.TryClaimLegacySlot(i, device)) i++;
                         if (i >= CURRENT_DS4_CONTROLLER_LIMIT) break;
+                        controllerDiscoveryProgress = new(
+                            ControllerDiscoveryPhase.Initialising, device.DisplayName);
                         StartupDiag($"Prepare controller loop index={i} type={device.DeviceType} display={device.DisplayName} mac={device.MacAddress} conn={device.ConnectionType} synced={device.isSynced()} primary={device.PrimaryDevice}");
 
                         StartupDiag($"BeginPrepareConnectedInputController begin index={i}");
@@ -3416,7 +3434,14 @@ namespace DS4Windows
             lock (serviceLifecycleLock)
             {
                 if (backendMaintenance?.RejectControllerStart == true) return false;
-                return HotPlugCore();
+                try
+                {
+                    return HotPlugCore();
+                }
+                finally
+                {
+                    controllerDiscoveryProgress = null;
+                }
             }
         }
 
@@ -3468,6 +3493,8 @@ namespace DS4Windows
                     {
                         if (inputSlotAdmission.TryClaimLegacySlot(Index, device))
                         {
+                            controllerDiscoveryProgress = new(
+                                ControllerDiscoveryPhase.Initialising, device.DisplayName);
                             BeginPrepareConnectedInputController(device);
 
                             PrepareConnectedInputControllerAtSlot(
@@ -3588,6 +3615,7 @@ namespace DS4Windows
 
             StartupDiag($"device.StartUpdate begin index={index}");
             device.GameBarBluetoothInputRecoveryEnabled = gameBarBluetoothInputRecoveryForSession;
+            device.InputTiming.Reset();
             device.StartUpdate();
             if (device is InputDevices.JoyConDevice startedJoyCon)
                 startedJoyCon.TryStartConnectionHaptic();
@@ -6006,6 +6034,9 @@ namespace DS4Windows
         {
             if ((uint)ind < (uint)DS4Controllers.Length)
             {
+                if (device is not InputDevices.DualSenseDevice)
+                    device.InputTiming.Observe(Stopwatch.GetTimestamp());
+
                 RefreshHeadphoneJackRoute(ind, device);
                 OutContType normalizedOutput = activeOutDevType[ind].Normalize();
                 ReportDiagnosticsSnapshot deferredDiagnostics = new()
@@ -6906,6 +6937,8 @@ namespace DS4Windows
                     service, request, request.Device.LightBarColor,
                     useDInputOnly[slot], activeOutDevType[slot]);
                 inverse = retained;
+                service.switch2PreparationProgress = new(
+                    ControllerDiscoveryPhase.Initialising, request.Device.DisplayName);
                 try
                 {
                     DS4Device device = request.Device;
@@ -7016,6 +7049,10 @@ namespace DS4Windows
                     return Switch2ControlServiceReversibleStageResult.Uncertain(
                         Switch2ControlServiceReversibleStageFailureKind.
                             DependencyThrew);
+                }
+                finally
+                {
+                    service.switch2PreparationProgress = null;
                 }
             }
 

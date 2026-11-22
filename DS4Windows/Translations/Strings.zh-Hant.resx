@@ -6948,4 +6948,24 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
     <value>清空名稱可還原預設名稱。按Enter儲存，按Escape取消。</value>
     <comment>Controller custom name editing.</comment>
   </data>
+  <data name="ControllerTimingDiagnostics" xml:space="preserve">
+    <value>控制器時序診斷</value>
+  </data>
+  <data name="ControllerTimingCopySummary" xml:space="preserve">
+    <value>複製時序摘要</value>
+  </data>
+  <data name="UI_76972EB04E151F54" xml:space="preserve">
+    <value>近期最長輸入間隔：{0:F2} 毫秒</value>
+  </data>
+  <data name="UI_8B1605E166B68A03" xml:space="preserve">
+    <value>目前沒有控制器時序樣本。</value>
+  </data>
+  <data name="UI_20413FB580C037BC" xml:space="preserve">
+    <value>已複製控制器時序摘要。</value>
+  </data>
+  <data name="UI_1949DCB98AC4D2FE" xml:space="preserve">
+    <value>目前無法使用剪貼簿。</value>
+  </data>
+  <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>正在準備控制器服務…</value></data>
+  <data name="UI_28921D73B39580D4" xml:space="preserve"><value>正在初始化 {0}…</value></data>
 </root>

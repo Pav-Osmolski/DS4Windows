@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
@@ -97,6 +98,21 @@ public sealed class ControllerOverviewAudioTests
     }
 
     [TestMethod]
+    public void OverviewDiscoveryTextDistinguishesSearchFromDetectedDeviceSetup()
+    {
+        var searching = OverviewConnectionStatus.FromProgress(
+            new(ControllerDiscoveryPhase.Searching));
+        var preparing = OverviewConnectionStatus.FromProgress(
+            new(ControllerDiscoveryPhase.Initialising, "DualSense"));
+
+        Assert.IsTrue(searching.IsBusy);
+        Assert.IsTrue(preparing.IsBusy);
+        Assert.AreNotEqual(searching.Detail, preparing.Detail);
+        StringAssert.Contains(preparing.Title, "DualSense");
+        Assert.IsFalse(OverviewConnectionStatus.FromProgress(null).IsBusy);
+    }
+
+    [TestMethod]
     public void EveryOverviewAudioControlHasThePhysicalCapabilityGuard()
     {
         var xml = LoadOverview();
@@ -153,6 +169,7 @@ public sealed class ControllerOverviewAudioTests
     internal static void ValidateRenderedOverview(ControllerOverviewControl overview,
         string resultsDirectory, List<string> renderedFiles)
     {
+        ValidateDiscoveryCard(overview);
         ValidateImmediateSliderLabels(overview);
         var resources = Application.Current.Resources.MergedDictionaries;
         var originalTheme = resources[0];
@@ -172,6 +189,17 @@ public sealed class ControllerOverviewAudioTests
             };
             themedOverview.DataContext = Model(protectedController);
             ThemeConsistencyValidation.Layout(themedOverview, 1100, 950);
+            var inputGap = (TextBlock)themedOverview.FindName("overviewRecentInputGap");
+            var openInputTip = typeof(ControllerOverviewControl).GetMethod("OverviewInputRate_ToolTipOpening",
+                BindingFlags.Instance | BindingFlags.NonPublic)!;
+            openInputTip.Invoke(themedOverview, new object[] { null, null });
+            Assert.AreEqual(Visibility.Collapsed, inputGap.Visibility);
+            long now = Stopwatch.GetTimestamp();
+            protectedController.InputTiming.Observe(now - Stopwatch.Frequency / 10);
+            protectedController.InputTiming.Observe(now);
+            openInputTip.Invoke(themedOverview, new object[] { null, null });
+            Assert.AreEqual(Visibility.Visible, inputGap.Visibility);
+            StringAssert.Contains(inputGap.Text, "100");
             var fill = (Border)themedOverview.FindName("overviewBatteryFill");
             foreach (var (percent, brush) in new[]
             {
@@ -585,6 +613,30 @@ public sealed class ControllerOverviewAudioTests
             Assert.AreEqual(selected.IsEnabled, actualItem.IsEnabled);
         }
         finally { Global.OutContType[0] = previousOutput; }
+        overview.DataContext = null;
+    }
+
+    private static void ValidateDiscoveryCard(ControllerOverviewControl overview)
+    {
+        var model = new MainWindowsViewModel();
+        overview.DataContext = model;
+        var idleIcon = (TextBlock)overview.FindName("discoveryIdleIcon");
+        var spinner = (Grid)overview.FindName("discoverySpinner");
+        var title = (TextBlock)overview.FindName("discoveryTitle");
+        var detail = (TextBlock)overview.FindName("discoveryDetail");
+
+        foreach (ControllerDiscoveryPhase? phase in new ControllerDiscoveryPhase?[]
+                 { null, ControllerDiscoveryPhase.CheckingComponents, ControllerDiscoveryPhase.Starting,
+                   ControllerDiscoveryPhase.Searching, null })
+        {
+            model.SetStartupProgress(phase, null);
+            ThemeConsistencyValidation.Layout(overview, 620, 500);
+            Assert.AreEqual(model.OverviewConnection.Title, title.Text);
+            Assert.AreEqual(model.OverviewConnection.Detail, detail.Text);
+            Assert.AreEqual(phase.HasValue ? Visibility.Visible : Visibility.Collapsed, spinner.Visibility);
+            Assert.AreEqual(phase.HasValue ? Visibility.Collapsed : Visibility.Visible, idleIcon.Visibility);
+        }
+
         overview.DataContext = null;
     }
 

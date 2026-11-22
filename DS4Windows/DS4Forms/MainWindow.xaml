@@ -695,14 +695,28 @@
                                         <TextBlock Text="{Binding StartupStatusText}" TextWrapping="Wrap" Visibility="{Binding StartupStatusVisibility}" MaxWidth="420" HorizontalAlignment="Left" Margin="{StaticResource spaceMargin}" />
                                         <GroupBox x:Name="runAsGroupBox" Header="{lex:Loc RunAs}" BorderThickness="0" Visibility="{Binding ShowRunStartPanel}" IsEnabled="{Binding CanChangeStartupMode}" Margin="24,0,0,14" Padding="0">
                                             <WrapPanel Margin="0,8,0,4">
+                                                <RadioButton Content="{lex:Loc Program}" GroupName="RunAsOpt" Margin="0,0,18,0"
+                                                             VerticalAlignment="Center" IsChecked="{Binding RunStartProg}" />
                                                 <StackPanel Orientation="Horizontal">
-                                                    <RadioButton Content="{lex:Loc Program}" GroupName="RunAsOpt" Margin="0,0,18,0" IsChecked="{Binding RunStartProg}" />
-                                                    <RadioButton Content="{lex:Loc Task}" GroupName="RunAsOpt" Margin="0,0,18,0"
+                                                    <RadioButton Content="{lex:Loc Task}" GroupName="RunAsOpt" VerticalAlignment="Center"
                                                                  IsChecked="{Binding RunStartTask}" IsEnabled="{Binding CanWriteTask}"
                                                                  ToolTip="{lex:Loc Resources:UACTask}" ToolTipService.ShowOnDisabled="True"
-                                                                 ToolTipService.IsEnabled="{Binding IsVisible, ElementName=uacImg}" />
+                                                                 ToolTipService.IsEnabled="{Binding IsVisible, ElementName=startupTaskShield}" />
+                                                    <Border x:Name="startupTaskShield" Width="22" Height="22" Margin="10,0,0,0"
+                                                            Background="Transparent" ToolTip="{lex:Loc Resources:UACTask}"
+                                                            ToolTipService.ShowOnDisabled="True">
+                                                        <Viewbox>
+                                                            <Canvas Width="24" Height="24">
+                                                                <Path Fill="{DynamicResource StartupTaskShieldBlue}"
+                                                                      Data="M 12,2 L 21,5 V 11 C 21,16.5 17.5,20 12,22 C 6.5,20 3,16.5 3,11 V 5 Z" />
+                                                                <Path Fill="{DynamicResource StartupTaskShieldGold}"
+                                                                      Data="M 12,2 L 21,5 V 11 H 12 Z M 3,11 H 12 V 22 C 6.5,20 3,16.5 3,11 Z" />
+                                                                <Path Stroke="{DynamicResource MutedForegroundColor}" StrokeLineJoin="Round"
+                                                                      Data="M 12,2 L 21,5 V 11 C 21,16.5 17.5,20 12,22 C 6.5,20 3,16.5 3,11 V 5 Z" />
+                                                            </Canvas>
+                                                        </Viewbox>
+                                                    </Border>
                                                 </StackPanel>
-                                                <Image x:Name="uacImg" Source="{Binding UACSource, Mode=OneTime}" Width="30" Height="30" ToolTip="{lex:Loc Resources:UACTask}" Margin="20,0,0,0" />
                                             </WrapPanel>
                                         </GroupBox>
                                         <CheckBox Content="{lex:Loc StartMinimized}" Margin="{StaticResource spaceMargin}" IsChecked="{Binding StartMinimize}" ToolTip="{lex:Loc Strings:UI_739AB0F4F8B8E84E}" Style="{DynamicResource BridgeSettingsCheckBoxStyle}" />
@@ -1373,6 +1387,9 @@
                                           ToolTip="{lex:Loc Strings:UI_635661E968564E2C}" />
                                 <Button x:Name="viiperDebugHelpBtn" Content="{lex:Loc Strings:UI_0F1E5C07276841E3}" Margin="0,0,0,8"
                                         Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ViiperDebugHelpBtn_Click" />
+                                <CheckBox x:Name="controllerTimingCapture" Content="{lex:Loc Strings:ControllerTimingDiagnostics}"
+                                          Click="ControllerTimingCapture_Click" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"
+                                          MinHeight="34" Margin="12,0,0,8" VerticalAlignment="Center" VerticalContentAlignment="Center" />
                             </WrapPanel>
                             <TextBlock Text="{lex:Loc Strings:UI_F08257E3D9E3D82F}"
                                        Foreground="{DynamicResource MutedForegroundColor}" TextWrapping="Wrap" />
@@ -1394,6 +1411,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
@@ -1401,9 +1419,13 @@
                                 Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="CopyLogBtn_Click"
                                 ToolTip="{lex:Loc Strings:UI_0D2CBDBD13743CD8}" />
                         <Button x:Name="exportLogBtn" Grid.Column="1" Content="{lex:Loc Export}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ExportLogBtn_Click" />
-                        <Button x:Name="clearLogBtn" Grid.Column="3" Content="{lex:Loc Strings:UI_0BBD47CE9863661F}" ToolTip="{lex:Loc Strings:UI_2956DE5E23B557BC}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearLogBtn_Click" />
-                        <TextBlock Grid.Column="2" Text="{lex:Loc Strings:UI_93465F4A50C78225}" VerticalAlignment="Center" Margin="16,0"
+                        <Button x:Name="copyControllerTimingBtn" Grid.Column="2" Content="{lex:Loc Strings:ControllerTimingCopySummary}"
+                                Click="CopyControllerTimingBtn_Click" Style="{DynamicResource BridgeSecondaryButtonStyle}"
+                                Margin="8,0,0,0" IsEnabled="False" />
+                        <Button x:Name="clearLogBtn" Grid.Column="4" Content="{lex:Loc Strings:UI_0BBD47CE9863661F}" ToolTip="{lex:Loc Strings:UI_2956DE5E23B557BC}" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearLogBtn_Click" />
+                        <TextBlock Grid.Column="3" Text="{lex:Loc Strings:UI_93465F4A50C78225}" VerticalAlignment="Center" Margin="16,0"
                                    Foreground="{DynamicResource MutedForegroundColor}"
+                                   TextTrimming="CharacterEllipsis"
                                    ToolTip="{lex:Loc Strings:UI_B2384A767464BFDE}" />
                     </Grid>
                     <ListView x:Name="logListView" DockPanel.Dock="Top" ItemsSource="{Binding LogItems}" MouseDoubleClick="LogListView_MouseDoubleClick" Margin="0"

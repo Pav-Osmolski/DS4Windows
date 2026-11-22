@@ -66,9 +66,16 @@ For dependency or SDK changes, follow [dependency maintenance](dependency-mainte
    matching source archives, release-information ZIP, checksums and
    `RELEASE-BUILD.json` into the draft. Branch and PR artifacts are never eligible.
 4. Test those downloads. Existing release assets are never overwritten.
-5. Publish the tested draft with **Latest** selected. The publication workflow
-   verifies the successful draft run, source identity and every recorded asset
-   hash without rebuilding, then explicitly selects that release as Latest.
+5. Before publishing DS4Windows, confirm its bundled VIIPER version has a
+   public release in [Pav-Osmolski/VIIPER](https://github.com/Pav-Osmolski/VIIPER/releases).
+   Verify the tag commit and the SHA-256 hashes of the Windows x64 executable
+   and corresponding-source ZIP against the bundled artifacts. When bundling
+   a new VIIPER build, publish its tested VIIPER draft first and link that
+   release from the DS4Windows release notes. Reuse the existing VIIPER release
+   when the verified backend is already public.
+6. Publish the tested DS4Windows draft with **Latest** selected. The publication
+   workflow verifies the successful draft run, source identity and every recorded
+   asset hash without rebuilding, then explicitly selects that release as Latest.
 
 These numeric releases are currently **unsigned**. Latest describes the
 GitHub release channel; it does not claim an Authenticode signature. The
@@ -143,8 +150,9 @@ builds can move from the RC channel to a newer normal release.
 
 The matching VIIPER corresponding-source ZIP is bundled offline and copied
 byte-for-byte into release records. The workflow checks its pinned hash and
-the public VIIPER tag commit; the backend draft can remain unpublished during
-combined hardware testing. See the [USB/IP upgrade guide](usbip-upgrade.md).
+the public VIIPER tag commit. The backend release may stay in draft during
+combined hardware testing. Publish it before the paired DS4Windows release.
+See the [USB/IP upgrade guide](usbip-upgrade.md).
 
 ## Download files
 

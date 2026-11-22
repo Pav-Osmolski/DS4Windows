@@ -243,7 +243,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Border HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="470" Padding="30">
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Center" MaxWidth="470" Padding="30">
             <Border.Style>
                 <Style TargetType="Border" BasedOn="{StaticResource OverviewCardStyle}">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -254,19 +254,45 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-            <StackPanel HorizontalAlignment="Center">
+            <StackPanel>
                 <Border Width="54" Height="54" CornerRadius="27"
                         Background="{DynamicResource RaisedBackgroundColor}"
                         BorderBrush="{DynamicResource BorderColor}" BorderThickness="1">
-                    <TextBlock Text="&#xE7FC;" FontFamily="Segoe MDL2 Assets" FontSize="24"
-                               Foreground="{DynamicResource AccentColor}"
-                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Grid>
+                        <TextBlock x:Name="discoveryIdleIcon" Text="&#xE7FC;" FontFamily="Segoe MDL2 Assets" FontSize="24"
+                                   Foreground="{DynamicResource AccentColor}"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding OverviewConnection.IsBusy}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <Grid x:Name="discoverySpinner" Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center"
+                              Visibility="{Binding OverviewConnection.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              IsVisibleChanged="DiscoverySpinner_IsVisibleChanged" RenderTransformOrigin="0.5,0.5">
+                            <Grid.RenderTransform>
+                                <RotateTransform />
+                            </Grid.RenderTransform>
+                            <Ellipse Margin="2" Stroke="{DynamicResource BorderColor}" StrokeThickness="2.5" />
+                            <Path Data="M 12,3.25 A 8.75,8.75 0 0 1 20.75,12"
+                                  Stroke="{DynamicResource AccentColor}" StrokeThickness="2.5"
+                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+                        </Grid>
+                    </Grid>
                 </Border>
-                <TextBlock Text="{lex:Loc Strings:UI_DBA25ECB1CC7E4FE}" Margin="0,16,0,5"
-                           FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center" />
-                <TextBlock Text="{lex:Loc Strings:UI_843B77026782E787}"
-                           Foreground="{DynamicResource MutedForegroundColor}" TextAlignment="Center"
-                           TextWrapping="Wrap" />
+                <TextBlock x:Name="discoveryTitle" Text="{Binding OverviewConnection.Title}" Margin="0,16,0,5"
+                           FontSize="20" FontWeight="SemiBold" TextAlignment="Center" TextWrapping="Wrap"
+                           AutomationProperties.LiveSetting="Polite" />
+                <Grid MinHeight="32">
+                    <TextBlock x:Name="discoveryDetail" Text="{Binding OverviewConnection.Detail}"
+                               Foreground="{DynamicResource MutedForegroundColor}" TextAlignment="Center"
+                               TextWrapping="Wrap" VerticalAlignment="Center" />
+                </Grid>
             </StackPanel>
         </Border>
 
@@ -424,8 +450,16 @@
                                     </DockPanel>
                                     <TextBlock Text="{Binding SelectedControllerConnection}" FontWeight="SemiBold" />
                                 </StackPanel>
-                                <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTip="{lex:Loc Strings:UI_9D82CF2BFF83FCF9}"
+                                <StackPanel Style="{StaticResource OverviewFactStyle}" ToolTipOpening="OverviewInputRate_ToolTipOpening"
                                             Visibility="{Binding IsChecked, ElementName=showInputRate, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <StackPanel.ToolTip>
+                                        <ToolTip>
+                                            <StackPanel MaxWidth="300">
+                                                <TextBlock Text="{lex:Loc Strings:UI_9D82CF2BFF83FCF9}" TextWrapping="Wrap" />
+                                                <TextBlock x:Name="overviewRecentInputGap" Margin="0,6,0,0" TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </StackPanel.ToolTip>
                                     <DockPanel>
                                         <Path DockPanel.Dock="Left" Style="{StaticResource OverviewFactIconStyle}"
                                               Data="M 2,12 H 6 L 9,4 L 14,20 L 17,12 H 22" />
