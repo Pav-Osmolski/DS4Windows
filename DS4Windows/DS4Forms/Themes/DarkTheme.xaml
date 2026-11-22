@@ -20,6 +20,11 @@
 
     <SolidColorBrush x:Key="MenuSeparatorColor" Color="#FF153B6E" />
 
+    <SolidColorBrush x:Key="StartupTaskShieldBlue" Color="#FF53A7F4" />
+    <SolidColorBrush x:Key="StartupTaskShieldGold" Color="#FFFFD36A" />
+    <!-- ScrollViewerStyle already provides an 8-DIP right gutter. -->
+    <Thickness x:Key="TriggerLabScrollContentMargin">0,0,0,12</Thickness>
+
     <Style x:Key="ThemeFocusVisual" TargetType="Control">
         <Setter Property="Template"><Setter.Value><ControlTemplate><Rectangle Margin="2" Stroke="{DynamicResource AccentColor}" StrokeThickness="2" StrokeDashArray="2,1" SnapsToDevicePixels="True"/></ControlTemplate></Setter.Value></Setter>
     </Style>

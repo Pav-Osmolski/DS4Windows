@@ -9,6 +9,11 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.79](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.79) - 2026-11-22
+
+- Refresh the administrator shield next to **Settings > General > Startup > Task**. The shield sits closer to the option, aligns vertically with its label, and adapts to light, dark, and high-contrast themes.
+- Match the spacing between Trigger Lab controls and the scrollbar across themes, including Light and Paper.
+
 ### [5.0.78](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.78) - 2026-11-21
 
 - Show virtual-controller playback guidance only for a verified USB/IP controller audio endpoint, so Bluetooth headphones that share a port number are classified correctly.

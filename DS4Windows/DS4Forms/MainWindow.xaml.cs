@@ -247,7 +247,7 @@ namespace DS4WinWPF.DS4Forms
             bool isElevated = Global.IsAdministrator();
             if (isElevated)
             {
-                uacImg.Visibility = Visibility.Collapsed;
+                startupTaskShield.Visibility = Visibility.Collapsed;
             }
 
             noContLb.Content = string.Format(Strings.NoControllersConnected,

@@ -24,6 +24,11 @@
 
     <SolidColorBrush x:Key="MenuSeparatorColor" Color="#FFC8C8C8" />
 
+    <SolidColorBrush x:Key="StartupTaskShieldBlue" Color="#FF1774CB" />
+    <SolidColorBrush x:Key="StartupTaskShieldGold" Color="#FFFFCB42" />
+    <!-- The native light scroll viewer has no built-in right gutter. -->
+    <Thickness x:Key="TriggerLabScrollContentMargin">0,0,8,12</Thickness>
+
     <Style x:Key="ThemeFocusVisual" TargetType="Control">
         <Setter Property="Template"><Setter.Value><ControlTemplate><Rectangle Margin="2" Stroke="{DynamicResource AccentColor}" StrokeThickness="2" StrokeDashArray="2,1" SnapsToDevicePixels="True"/></ControlTemplate></Setter.Value></Setter>
     </Style>
