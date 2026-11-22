@@ -6963,4 +6963,6 @@ Backup : </value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Đang chuẩn bị các dịch vụ tay cầm…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Đang khởi tạo {0}…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows đã dừng</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Chọn {0} ở góc dưới bên phải để sử dụng tay cầm qua DS4Windows.</value></data>
 </root>

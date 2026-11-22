@@ -71,6 +71,29 @@ public sealed class LogPageLayoutTests
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
     }
 
+    [TestMethod]
+    [DataRow("DarkTheme")]
+    [DataRow("DefaultTheme")]
+    public void TimingCheckboxStartsAtTheLeftWhenItWraps(string theme)
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            DockPanel root = Load(theme);
+            var verbose = (CheckBox)root.FindName("logVerboseCk");
+            var timing = (CheckBox)root.FindName("controllerTimingCapture");
+            var options = (WrapPanel)timing.Parent;
+            options.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            double width = options.DesiredSize.Width - timing.DesiredSize.Width;
+            options.Measure(new Size(width, double.PositiveInfinity));
+            options.Arrange(new Rect(0, 0, width, options.DesiredSize.Height));
+
+            Point first = verbose.TranslatePoint(new Point(), options);
+            Point wrapped = timing.TranslatePoint(new Point(), options);
+            Assert.IsGreaterThan(first.Y + verbose.ActualHeight, wrapped.Y, "The timing checkbox should wrap.");
+            Assert.AreEqual(first.X, wrapped.X, 0.1, "The wrapped checkbox should align with the first row.");
+        });
+    }
+
     private static DockPanel Load(string theme, [CallerFilePath] string source = "")
     {
         string forms = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(source)!, "..", "DS4Windows", "DS4Forms"));

@@ -136,6 +136,7 @@ namespace DS4WinWPF.DS4Forms
             profileEditorReturnTabIndex = mainTabCon.Items.IndexOf(profilesTab);
 
             mainWinVM = new MainWindowsViewModel();
+            mainWinVM.SetStartupProgress(parser.Stop ? null : ControllerDiscoveryPhase.CheckingComponents, App.rootHub);
             DataContext = mainWinVM;
             mainWinVM.ProfileEditorNavigationIndexChanged += MainWinVM_ProfileEditorNavigationIndexChanged;
             mainWinVM.QuickProfileSettingChanged += MainWinVM_QuickProfileSettingChanged;
@@ -330,10 +331,7 @@ namespace DS4WinWPF.DS4Forms
         {
             ControlService service = App.rootHub;
             if (!startStopped)
-            {
                 StartStopBtn.IsEnabled = false;
-                mainWinVM.SetStartupProgress(ControllerDiscoveryPhase.CheckingComponents, service);
-            }
 
             try
             {
@@ -1384,6 +1382,7 @@ Suspend support not enabled.", true);
             Dispatcher.BeginInvoke((Action)(() =>
             {
                 footerControl.UpdateService(service.running);
+                mainWinVM.RefreshOverviewConnection(service);
 
                 StartStopBtn.IsEnabled = true;
                 slotManControl.IsEnabled = service.running;
@@ -1408,6 +1407,8 @@ Suspend support not enabled.", true);
             App root = Application.Current as App;
             //Tester service = root.rootHubtest;
             ControlService service = App.rootHub;
+            if (!service.running)
+                mainWinVM.SetStartupProgress(ControllerDiscoveryPhase.Starting, service);
             Task serviceTask = Task.Run(() =>
             {
                 if (service.running)
@@ -1434,6 +1435,7 @@ Suspend support not enabled.", true);
                 footerControl.UpdateService(service.running);
                 StartStopBtn.IsEnabled = true;
                 slotManControl.IsEnabled = service.running;
+                mainWinVM.SetStartupProgress(null, service);
                 mainWinVM.RefreshRuntimeState(service);
             }
         }

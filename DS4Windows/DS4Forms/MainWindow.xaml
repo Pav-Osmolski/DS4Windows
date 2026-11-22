@@ -1385,11 +1385,11 @@
                                           Style="{DynamicResource BridgeLabeledCheckBoxStyle}" MinHeight="34" Margin="0,0,12,8"
                                           VerticalAlignment="Center" VerticalContentAlignment="Center"
                                           ToolTip="{lex:Loc Strings:UI_635661E968564E2C}" />
-                                <Button x:Name="viiperDebugHelpBtn" Content="{lex:Loc Strings:UI_0F1E5C07276841E3}" Margin="0,0,0,8"
+                                <Button x:Name="viiperDebugHelpBtn" Content="{lex:Loc Strings:UI_0F1E5C07276841E3}" Margin="0,0,12,8"
                                         Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ViiperDebugHelpBtn_Click" />
                                 <CheckBox x:Name="controllerTimingCapture" Content="{lex:Loc Strings:ControllerTimingDiagnostics}"
                                           Click="ControllerTimingCapture_Click" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"
-                                          MinHeight="34" Margin="12,0,0,8" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                                          MinHeight="34" Margin="0,0,0,8" VerticalAlignment="Center" VerticalContentAlignment="Center" />
                             </WrapPanel>
                             <TextBlock Text="{lex:Loc Strings:UI_F08257E3D9E3D82F}"
                                        Foreground="{DynamicResource MutedForegroundColor}" TextWrapping="Wrap" />

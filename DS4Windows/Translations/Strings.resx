@@ -8673,4 +8673,6 @@ X axis: {0}, Y axis: {1}</value>
   </data>
   <data name="UI_C90C08CCF9F7EBDE" xml:space="preserve"><value>Preparing controller services…</value></data>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Initialising {0}…</value></data>
+  <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows is stopped</value></data>
+  <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Select {0} in the bottom-right corner to use your controllers through DS4Windows.</value></data>
 </root>
