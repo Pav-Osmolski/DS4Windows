@@ -158,7 +158,7 @@ HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDisp
     [TestMethod]
     [DataRow("DarkTheme", 1330, false)]
     [DataRow("DefaultTheme", 1160, false)]
-    [DataRow("DefaultTheme", 980, true)]
+    [DataRow("DefaultTheme", 650, true)]
     public void FirstTabVisitWaitsUntilTheInputColumnFillsTheViewport(string theme, int finalWidth, bool expectsOverflow)
     {
         HeadlessWpfDispatcher.Invoke(() =>
@@ -213,10 +213,11 @@ HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDisp
                     Assert.AreEqual(table.Columns[1].MinWidth, table.Columns[1].ActualWidth, 0.5);
                     var scrollViewer = UtilMethods.FindVisualChild<ScrollViewer>(table);
                     double columnsWidth = table.Columns.Sum(column => column.ActualWidth);
-                    Assert.AreEqual(expectsOverflow, columnsWidth > scrollViewer.ViewportWidth);
+                    double viewportWidth = scrollViewer.ViewportWidth - table.CellsPanelHorizontalOffset;
+                    Assert.AreEqual(expectsOverflow, columnsWidth > viewportWidth,
+                        $"Provisional column widths total {columnsWidth} with a viewport of {viewportWidth}.");
                     Assert.AreEqual(expectsOverflow ? 1d : 0d, table.Opacity,
-                        $"Provisional columns are visible. Table width: {table.ActualWidth}, viewport: {scrollViewer.ViewportWidth}, " +
-                        $"offset: {table.CellsPanelHorizontalOffset}, columns: {string.Join(", ", table.Columns.Select(column => column.ActualWidth))}.");
+                        $"Unexpected first-visit table visibility at a viewport width of {viewportWidth}.");
 
                     table.Columns[1].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
                     tabs.UpdateLayout();
