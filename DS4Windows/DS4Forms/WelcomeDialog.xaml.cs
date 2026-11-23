@@ -14,6 +14,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
+using DS4Windows;
 
 namespace DS4WinWPF.DS4Forms
 {
@@ -104,7 +105,7 @@ namespace DS4WinWPF.DS4Forms
             string component = hidHide ? "HidHide" : "FakerInput";
             string name = hidHide ? HidHideInstallerFileName : x64 ? FakerInputX64FileName : FakerInputX86FileName;
             string digest = hidHide ? HidHideInstallerSha256 : x64 ? FakerInputX64Sha256 : FakerInputX86Sha256;
-            string target = Path.Combine(AppContext.BaseDirectory, "extras", name);
+            string target = Path.Combine(ApplicationPaths.PackageRoot, "extras", name);
             if (DS4Windows.PortableLabContext.IsActive)
                 throw new InvalidOperationException("Optional driver setup is unavailable in the portable lab.");
             if (hidHide ? DS4Windows.Global.IsHidHideInstalled() : DS4Windows.Global.IsFakerInputInstalled())

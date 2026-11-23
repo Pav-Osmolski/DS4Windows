@@ -83,7 +83,7 @@ public static partial class ViiperSetupManager
 
             if (args[1] == "Restore")
             {
-                string source = Path.Combine(AppContext.BaseDirectory, "extras", BundledUsbipName);
+                string source = Path.Combine(ApplicationPaths.PackageRoot, "extras", BundledUsbipName);
                 EnsurePathDoesNotTraverseReparsePoints(source, requireExisting: true);
                 File.Copy(source, Path.Combine(directory, BundledUsbipName));
             }

@@ -44,6 +44,11 @@ public sealed class LogPageLayoutTests
                 root.UpdateLayout();
                 Assert.IsTrue(list.ActualHeight >= 200, $"{theme}/{width}: only {list.ActualHeight} pixels remain for log entries.");
                 Assert.IsTrue(VirtualizingPanel.GetIsVirtualizing(list));
+                var clearLogs = (Button)root.FindName("clearStoredLogsBtn");
+                var captureHelp = (Button)root.FindName("viiperDebugHelpBtn");
+                var actions = (WrapPanel)clearLogs.Parent;
+                Assert.AreSame(actions, captureHelp.Parent);
+                Assert.AreEqual(actions.Children.IndexOf(clearLogs) + 1, actions.Children.IndexOf(captureHelp));
                 foreach (string name in new[] { "openLogFolderBtn", "reportIssueBtn", "clearStoredLogsBtn", "copyLogBtn", "exportLogBtn", "clearLogBtn", "logVerboseCk", "logRetentionCombo", "viiperDebugLoggingCk", "viiperDebugHelpBtn", "controllerTimingCapture", "copyControllerTimingBtn" })
                 {
                     var element = (FrameworkElement)root.FindName(name);

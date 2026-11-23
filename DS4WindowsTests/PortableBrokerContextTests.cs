@@ -129,10 +129,25 @@ public class PortableBrokerContextTests
             if (!string.IsNullOrEmpty(path) && Directory.Exists(path))
                 Assert.AreEqual(Path.TrimEndingDirectorySeparator(Path.GetFullPath(path)), PortableBrokerContext.ValidateRoot(path));
         }
-        foreach (string path in new[] { ".", @"C:relative", @"\\server\share\portable", Path.GetPathRoot(root),
-                     Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                     Environment.GetFolderPath(Environment.SpecialFolder.Windows) })
+        foreach (string path in new[] { ".", @"C:relative", @"\\server\share\portable", Path.GetPathRoot(root) })
             Assert.ThrowsExactly<ArgumentException>(() => PortableBrokerContext.ValidateRoot(path));
+    }
+
+    [TestMethod]
+    [DataRow(Environment.SpecialFolder.ProgramFiles)]
+    [DataRow(Environment.SpecialFolder.ProgramFilesX86)]
+    [DataRow(Environment.SpecialFolder.Windows)]
+    public void ProtectedFolderRejectionExplainsTheLocationAndHowToLaunch(Environment.SpecialFolder folder)
+    {
+        string systemPath = Environment.GetFolderPath(folder);
+        if (string.IsNullOrEmpty(systemPath)) return;
+        var error = Assert.ThrowsExactly<PortableBrokerStartupException>(() =>
+            PortableBrokerContext.ValidateRoot(Path.Combine(systemPath, "DS4Windows")));
+        string[] paragraphs = error.Message.Split("\n\n", StringSplitOptions.None);
+        Assert.HasCount(2, paragraphs);
+        StringAssert.Contains(paragraphs[0], "cannot run from Program Files");
+        StringAssert.Contains(paragraphs[1], "Copy the entire portable folder");
+        StringAssert.Contains(paragraphs[1], "DS4Windows installer");
     }
 
     [TestMethod]

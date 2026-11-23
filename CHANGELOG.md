@@ -5,9 +5,16 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- No unreleased changes.
-
 ## Released
+
+### [5.0.81](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.81) - 2026-11-23
+
+- Keep the Start button label readable on hover in light themes.
+- Move **Capture instructions** beside **Clear stored logs** and keep the log list usable at narrow window widths.
+- Move the bundled .NET runtime and application dependencies into `Runtime` and keep the executable at the top level. DS4Updater 2.0.10 moves package-owned files during portable updates. The portable app removes verified duplicates and known versioned .NET debugging libraries left over from manual extraction.
+- Show the Output Slots table with its fitted or saved column widths on the first frame.
+- Explain why a portable copy cannot run from Program Files or the Windows folder and show the next step once.
+- Fix the rounded corners on the VIIPER setup and progress windows, centre the setup close icon, and use the bundled component versions in the setup instructions.
 
 ### [5.0.80](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.80) - 2026-11-22
 

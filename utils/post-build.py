@@ -8,6 +8,8 @@ import stat
 import tempfile
 import zipfile
 
+from runtime_layout import RUNTIME_FILES, validate_runtime_layout
+
 
 def is_reparse_point(path: Path) -> bool:
     attributes = getattr(path.lstat(), "st_file_attributes", 0)
@@ -63,13 +65,11 @@ if len({entry.as_posix().casefold() for entry in relative_entries}) != len(relat
 required_offline_files = (
     "COPYING", "LICENSE.txt", "NOTICE.txt", "AGPL-3.0.txt", "DS5-BRIDGE-NOTICE.txt",
     "DS4Windows.exe",
-    "BouncyCastle.Cryptography.dll",
+    *sorted(RUNTIME_FILES),
     "Resources/BouncyCastle.NOTICE.txt",
     "Resources/DsxTriggerEffects.NOTICE.txt",
     "xbox-one-authorized-persona.json",
     "extras/XBOX-ONE-PERSONA-NOTICE.md",
-    "coreclr.dll",
-    "hostfxr.dll",
     "extras/install-viiper-backend.ps1",
     "extras/VIIPER-0.1.18-x64.exe",
     "extras/VIIPER-0.1.18-LICENSES.txt",
@@ -95,6 +95,7 @@ if missing_offline_files:
         f"Cannot compose the offline DS4Windows package; missing: {missing}"
     )
 
+validate_runtime_layout(target_dir)
 
 # Bind setup to the exact VIIPER executable copied by this publish. This
 # sidecar is regenerated for every artifact, so no hand-maintained hash can
@@ -113,7 +114,7 @@ viiper_hash_path.write_text(
 )
 
 # Keep culture names and satellite identities intact beneath Lang. The managed
-# resolver uses AppContext.BaseDirectory, never the current working directory.
+# resolver uses the package root, never the current working directory.
 # Move complete satellite directories so dependency translations travel too.
 satellite_directories = sorted({path.parent for path in target_dir.glob("*/*.resources.dll")})
 for directory in satellite_directories:

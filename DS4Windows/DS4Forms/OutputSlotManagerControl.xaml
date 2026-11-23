@@ -48,7 +48,7 @@
                 </WrapPanel>
             </StackPanel>
         </Border>
-        <DataGrid x:Name="currentOutDevLV" Grid.Row="1" ItemsSource="{Binding SlotDeviceEntries}" SelectedIndex="{Binding SelectedIndex,Mode=OneWayToSource}"
+        <DataGrid x:Name="currentOutDevLV" Grid.Row="1" Opacity="0" ItemsSource="{Binding SlotDeviceEntries}" SelectedIndex="{Binding SelectedIndex,Mode=OneWayToSource}"
                   AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False"
                   SelectionMode="Single" SelectionUnit="FullRow" HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="{DynamicResource BorderColor}"
                   ColumnHeaderStyle="{StaticResource SlotHeaderStyle}" CellStyle="{StaticResource SlotCellStyle}" RowBackground="{DynamicResource CardBackgroundColor}" AlternatingRowBackground="{DynamicResource SurfaceBackgroundColor}"

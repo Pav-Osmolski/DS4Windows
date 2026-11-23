@@ -6,9 +6,10 @@
         SizeToContent="Height"
         ResizeMode="NoResize"
         WindowStyle="None"
+        AllowsTransparency="True"
         ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource SurfaceBackgroundColor}"
+        Background="Transparent"
         Foreground="{DynamicResource ForegroundColor}"
         xmlns:lex="http://wpflocalizeextension.codeplex.com"
         lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows">
@@ -85,11 +86,11 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel>
                                 <TextBlock Text="{lex:Loc Strings:UI_D830878A0322AC71}" />
-                                <TextBlock Text="{lex:Loc Strings:UI_9F9F267572D7B610}"
+                                <TextBlock x:Name="viiperStepText"
                                            Margin="0,5,0,0" />
                             </StackPanel>
                             <StackPanel Grid.Column="1">
-                                <TextBlock Text="{lex:Loc Strings:UI_87F6844D3C0F7B66}" />
+                                <TextBlock x:Name="usbipStepText" />
                                 <TextBlock Text="{lex:Loc Strings:UI_ED04F8FEB1014EFA}"
                                            Margin="0,5,0,0" />
                             </StackPanel>

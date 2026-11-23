@@ -640,7 +640,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 {
                     try
                     {
-                        if (!ExecutableAliasFiles.RemoveOwned(DS4Windows.Global.exelocation, temp))
+                        if (!ExecutableAliasFiles.RemoveOwned(DS4Windows.Global.exelocation, temp, ApplicationPaths.UsesPackagedRuntime))
                             AppLogger.LogToGui("Previous executable alias was left in place because it is in use or no longer matches this build.", false);
                     }
                     catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
@@ -836,7 +836,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public void CreateFakeExe(string filename)
         {
             if (PortableLabContext.IsActive) return;
-            ExecutableAliasFiles.Create(DS4Windows.Global.exelocation, filename);
+            ExecutableAliasFiles.Create(DS4Windows.Global.exelocation, filename, ApplicationPaths.UsesPackagedRuntime);
         }
 
         public void DriverCheckRefresh()

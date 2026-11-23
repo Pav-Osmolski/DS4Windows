@@ -35,6 +35,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 using WPFLocalizeExtension.Engine;
 
 namespace DS4WinWPF
@@ -250,17 +251,25 @@ namespace DS4WinWPF
             // can be changed; development lab mode remains externally owned.
             if (!DS4Windows.PortableLabContext.IsActive)
             {
+                string executableDirectory = Path.GetDirectoryName(DS4Windows.Global.exelocation);
+                string portableRoot;
+                try
+                {
+                    portableRoot = DS4Windows.PortableBrokerRepair.TryGetPortableRoot(executableDirectory);
+                }
+                catch (DS4Windows.PortableBrokerStartupException failure)
+                {
+                    CancelPortableStartup(failure.Message);
+                    return;
+                }
+                if (portableRoot != null && !AcquirePortableRepairStartupGate()) return;
+
                 bool startupMaintenanceAttempted = true;
                 try
                 {
-                    string portableRoot = DS4Windows.PortableBrokerRepair.TryGetPortableRoot(
-                        Path.GetDirectoryName(DS4Windows.Global.exelocation));
-                    if (portableRoot != null && !AcquirePortableRepairStartupGate()) return;
-                    startupMaintenanceAttempted = DS4Windows.PortableBrokerMaintenance.EnsureStartupPayload(
-                        Path.GetDirectoryName(DS4Windows.Global.exelocation));
+                    startupMaintenanceAttempted = DS4Windows.PortableBrokerMaintenance.EnsureStartupPayload(executableDirectory);
                     if (startupMaintenanceAttempted) DS4Windows.ViiperRecovery.TryBeginAutomaticRecovery();
-                    DS4Windows.PortableBrokerContext.Initialize(
-                        Path.GetDirectoryName(DS4Windows.Global.exelocation));
+                    DS4Windows.PortableBrokerContext.Initialize(executableDirectory);
                 }
                 catch (Exception exception)
                 {
@@ -268,12 +277,11 @@ namespace DS4WinWPF
                     // fails. Settings must remain available; never fall back
                     // to an installed broker or migrate this user's package.
                     if (!DS4Windows.PortableBrokerContext.TryInitializeUnavailable(
-                            Path.GetDirectoryName(DS4Windows.Global.exelocation), out string identityFailure))
+                            executableDirectory, out string identityFailure))
                     {
                         // An unverified folder cannot safely become a portable
                         // repair target or fall back to the installed broker.
-                        CancelPortableStartup(exception.Message + "\n\n" + identityFailure +
-                            "\n\nExtract a complete portable package into a writable local folder, then reopen DS4Windows. No installed broker was selected.");
+                        CancelPortableStartup(identityFailure);
                         return;
                     }
                     if (startupMaintenanceAttempted) DS4Windows.ViiperRecovery.TryBeginAutomaticRecovery();
@@ -581,6 +589,26 @@ namespace DS4WinWPF
             StartupDiag(logger, "MainWindow.LateChecks begin");
             window.LateChecks(parser);
             StartupDiag(logger, "MainWindow.LateChecks returned");
+
+            if (DS4Windows.PortableBrokerContext.IsActive)
+            {
+                Dispatcher.InvokeAsync(() =>
+                {
+                    _ = Task.Run(() =>
+                    {
+                        try
+                        {
+                            int removed = DS4Windows.PortableRuntimeCleanup.RemoveLeftovers(
+                                DS4Windows.ApplicationPaths.PackageRoot, AppContext.BaseDirectory);
+                            if (removed > 0) logger.Info($"Removed {removed} leftover portable runtime files from the program folder.");
+                        }
+                        catch (Exception error) when (error is IOException or UnauthorizedAccessException)
+                        {
+                            logger.Debug(error, "Portable runtime cleanup could not read the package.");
+                        }
+                    });
+                }, DispatcherPriority.ApplicationIdle);
+            }
         }
 
         private bool AcquirePortableRepairStartupGate()

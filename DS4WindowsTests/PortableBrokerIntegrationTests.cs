@@ -111,12 +111,13 @@ public class PortableBrokerIntegrationTests
     [TestMethod]
     public void InvalidPortableFallbackClosesBeforeInstalledMaintenanceOrControllerStartup()
     {
-        string selection = Section(Read("App.xaml.cs"), "bool startupMaintenanceAttempted = true;",
+        string selection = Section(Read("App.xaml.cs"), "string portableRoot;",
             "// Preserve legacy startup retargeting");
+        StringAssert.Contains(selection, "catch (DS4Windows.PortableBrokerStartupException failure)");
+        Before(selection, "CancelPortableStartup(failure.Message);", "PortableBrokerMaintenance.EnsureStartupPayload(");
         StringAssert.Contains(selection, "if (!DS4Windows.PortableBrokerContext.TryInitializeUnavailable(");
         StringAssert.Contains(selection, "out string identityFailure)");
-        StringAssert.Contains(selection, "CancelPortableStartup(exception.Message");
-        Before(selection, "CancelPortableStartup(exception.Message", "return;\n                    }");
+        Before(selection, "CancelPortableStartup(identityFailure);", "return;\n                    }");
         Assert.IsFalse(selection.Contains("PortableBrokerContext.InitializeUnavailable(", StringComparison.Ordinal),
             "The fallback must not throw through the original startup failure handler.");
     }

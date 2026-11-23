@@ -137,7 +137,7 @@ namespace DS4Windows
                 Environment.GetEnvironmentVariable(
                     "NVIDIA_MAXINE_AFX_SDK_DIR"),
                 Environment.GetEnvironmentVariable("NVAFX_SDK_DIR"),
-                Path.Combine(AppContext.BaseDirectory, "NVIDIA Audio Effects"),
+                Path.Combine(ApplicationPaths.PackageRoot, "NVIDIA Audio Effects"),
                 Path.Combine(Environment.GetFolderPath(
                     Environment.SpecialFolder.ProgramFiles),
                     "NVIDIA Corporation", "NVIDIA Audio Effects SDK"),

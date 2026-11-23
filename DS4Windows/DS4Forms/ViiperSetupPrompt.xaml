@@ -7,9 +7,10 @@
         MaxHeight="720"
         ResizeMode="NoResize"
         WindowStyle="None"
+        AllowsTransparency="True"
         ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource SurfaceBackgroundColor}"
+        Background="Transparent"
         Foreground="{DynamicResource ForegroundColor}"
         xmlns:lex="http://wpflocalizeextension.codeplex.com"
         lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows">
@@ -29,23 +30,41 @@
                     BorderThickness="0,0,0,1"
                     CornerRadius="8,8,0,0"
                     Padding="18,12"
-                    PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                    MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
                     <TextBlock Text="{lex:Loc Strings:UI_1880BBFDBDB83E5E}"
                                FontSize="14"
                                FontWeight="SemiBold"
+                               Margin="0,0,12,0"
+                               TextWrapping="Wrap"
                                VerticalAlignment="Center" />
                     <Button x:Name="closeButton"
+                            Grid.Column="1"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
                             Width="30"
                             Height="30"
+                            MinHeight="0"
                             Padding="0"
-                            Content="×"
-                            FontSize="18"
                             Style="{StaticResource BridgeSecondaryButtonStyle}"
                             Click="CloseButton_Click"
-                            ToolTip="{lex:Loc Strings:UI_7D9EB7ACB13E2462}" />
+                            AutomationProperties.Name="{lex:Loc Strings:UI_7D9EB7ACB13E2462}"
+                            ToolTip="{lex:Loc Strings:UI_7D9EB7ACB13E2462}">
+                        <Path x:Name="closeGlyph"
+                              Width="9" Height="9"
+                              Stretch="Uniform"
+                              Data="M 0,0 L 8,8 M 8,0 L 0,8"
+                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                              StrokeThickness="1.5"
+                              StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round" />
+                    </Button>
                 </Grid>
             </Border>
 
