@@ -1,3 +1,4 @@
+using DS4Windows;
 using System.Windows;
 using System.Windows.Input;
 
@@ -66,9 +67,10 @@ namespace DS4WinWPF.DS4Forms
                     : global::DS4Windows.UiText.Get("The installed VIIPER does not match this DS4Windows package.");
                 requirementsHeadingText.Text = global::DS4Windows.UiText.Get("Verified update required");
                 requirementsText.Text = usbipReplacementRequired
-                    ? global::DS4Windows.UiText.Get("• Install and verify bundled VIIPER 0.1.10\n") +
-                      global::DS4Windows.UiText.Get("• Safely remove the unsupported USB-IP package\n") +
-                      global::DS4Windows.UiText.Get("• Restart, then finish installing USB-IP 0.9.8.1")
+                    ? string.Join("\n",
+                        LocalizeSetupStep("• Install and verify bundled VIIPER 0.1.10\n"),
+                        UiText.Get("• Safely remove the unsupported USB-IP package\n").TrimEnd(),
+                        LocalizeSetupStep("• Restart, then finish installing USB-IP 0.9.8.1"))
                     : global::DS4Windows.UiText.Get("• Install the exact bundled VIIPER build\n") +
                       global::DS4Windows.UiText.Get("• Keep your existing installation location\n") +
                       global::DS4Windows.UiText.Get("• The unverified backend will not be started");
@@ -86,11 +88,10 @@ namespace DS4WinWPF.DS4Forms
             {
                 headingText.Text = global::DS4Windows.UiText.Get("VIIPER setup required");
                 summaryText.Text = currentStatus;
-                requirementsHeadingText.Text = global::DS4Windows.UiText.Get("Required before DS4Windows can run");
-                requirementsText.Text =
-                    global::DS4Windows.UiText.Get("• Install the bundled VIIPER 0.1.10 build\n") +
-                    global::DS4Windows.UiText.Get("• Install and verify USB-IP 0.9.8.1\n") +
-                    global::DS4Windows.UiText.Get("• Start DS4Windows only after the runtime probe passes");
+                requirementsHeadingText.Text = UiText.Get("Virtual controller output");
+                requirementsText.Text = string.Join("\n",
+                    LocalizeSetupStep("• Install the bundled VIIPER 0.1.10 build\n"),
+                    LocalizeSetupStep("• Install and verify USB-IP 0.9.8.1\n"));
                 installButton.Content = "Install / Repair";
                 installPortableButton.Content = "Keep DS4Windows portable";
                 suppressPromptCheck.Visibility = Visibility.Collapsed;
@@ -98,6 +99,12 @@ namespace DS4WinWPF.DS4Forms
                 closeButton.ToolTip = global::DS4Windows.UiText.Get("Continue without virtual output");
             }
         }
+
+        // The shipped translations use literal version tokens. Keep their
+        // resource identities and display the versions this build requires.
+        internal static string LocalizeSetupStep(string source) => UiText.Get(source).TrimEnd()
+            .Replace("0.1.10", ViiperSetupManager.SupportedViiperReleaseTag.TrimStart('v'))
+            .Replace("0.9.8.1", ViiperSetupManager.RequiredUsbipVersion.ToString());
 
         private void TitleBar_MouseLeftButtonDown(object sender,
             MouseButtonEventArgs e)

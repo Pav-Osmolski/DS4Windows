@@ -92,6 +92,24 @@ public class RenamedExecutableSetupTests
     }
 
     [TestMethod]
+    public void RuntimeLayoutCreatesAndRemovesTheAliasWithSharedSidecars()
+    {
+        string executable = Path.Combine(package, "DS4Windows.exe");
+        File.WriteAllText(executable, "apphost");
+        File.Delete(Path.Combine(package, "DS4Windows.runtimeconfig.json"));
+        File.Delete(Path.Combine(package, "DS4Windows.deps.json"));
+        string aliasConfig = Path.Combine(package, "Alias.deps.json");
+        File.WriteAllText(aliasConfig, "unowned sidecar");
+
+        ExecutableAliasFiles.Create(executable, "Alias", sharesRuntime: true);
+        Assert.AreEqual("apphost", File.ReadAllText(Path.Combine(package, "Alias.exe")));
+        Assert.IsFalse(File.Exists(Path.Combine(package, "Alias.runtimeconfig.json")));
+        Assert.IsTrue(ExecutableAliasFiles.RemoveOwned(executable, "Alias", sharesRuntime: true));
+        Assert.IsFalse(File.Exists(Path.Combine(package, "Alias.exe")));
+        Assert.AreEqual("unowned sidecar", File.ReadAllText(aliasConfig));
+    }
+
+    [TestMethod]
     public void MissingSidecarDoesNotLeaveAPartialAlias()
     {
         string executable = Path.Combine(package, "DS4Windows.exe");

@@ -10,4 +10,10 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.WindowsDesktop.App.WPF" />
   </ItemGroup>
+  <Target Name="BuildSplitLayoutProbeHost" AfterTargets="Build">
+    <CreateAppHost AppHostSourcePath="$(AppHostSourcePath)"
+      AppHostDestinationPath="$(TargetDir)SplitSatelliteResourceProbe.exe"
+      AppBinaryName="Runtime\$(TargetFileName)"
+      IntermediateAssembly="@(IntermediateAssembly->'%(FullPath)')" />
+  </Target>
 </Project>

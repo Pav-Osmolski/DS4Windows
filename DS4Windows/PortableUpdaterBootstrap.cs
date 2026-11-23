@@ -22,9 +22,8 @@ internal sealed record PortableUpdaterTicket(string Root, string FilePath,
 /// </summary>
 internal static class PortableUpdaterBootstrap
 {
-    // 2.0.9 targets this fork and preserves the existing safe update protocols.
-    // Earlier workers still resolve DS4Windows packages from upstream.
-    internal static readonly Version MinimumVersion = new(2, 0, 9, 0);
+    // Earlier workers expect the application DLL and sidecars at the package root.
+    internal static readonly Version MinimumVersion = new(2, 0, 10, 0);
     internal const long MaximumUpdaterBytes = 128L * 1024 * 1024;
     internal const string ReleaseApi = "https://api.github.com/repos/Pav-Osmolski/DS4Updater/releases/latest";
 

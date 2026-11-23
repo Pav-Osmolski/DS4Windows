@@ -5,6 +5,8 @@ using System;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace DS4WindowsTests
 {
@@ -13,6 +15,62 @@ namespace DS4WindowsTests
     public class ThemeResourceTests
     {
         public TestContext TestContext { get; set; }
+
+        private static void ValidateViiperSetupWindows(Application application, ViiperSetupPrompt repair,
+            ViiperSetupPrompt missing, ViiperSetupProgress progress)
+        {
+            string bundledVersion = DS4Windows.ViiperSetupManager.SupportedViiperReleaseTag.TrimStart('v');
+            StringAssert.Contains(((TextBlock)repair.FindName("requirementsText")).Text, bundledVersion);
+            StringAssert.Contains(((TextBlock)missing.FindName("requirementsText")).Text, bundledVersion);
+            Assert.AreEqual("Virtual controller output",
+                ((TextBlock)missing.FindName("requirementsHeadingText")).Text);
+            StringAssert.Contains(((TextBlock)progress.FindName("viiperStepText")).Text, bundledVersion);
+
+            var palettes = application.Resources.MergedDictionaries;
+            ResourceDictionary light = palettes[0];
+            try
+            {
+                foreach (ResourceDictionary theme in new[]
+                {
+                    light, new ResourceDictionary { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/DarkTheme.xaml", UriKind.Relative) }
+                })
+                {
+                    palettes[0] = theme;
+                    AssertTransparentCorners(missing);
+                    AssertTransparentCorners(progress);
+                    var close = (Button)missing.FindName("closeButton");
+                    var glyph = (System.Windows.Shapes.Path)missing.FindName("closeGlyph");
+                    Assert.AreEqual(30d, close.ActualHeight);
+                    Assert.AreEqual(close.ActualHeight, close.ActualWidth);
+                    Rect bounds = glyph.RenderedGeometry.Bounds;
+                    Point centre = glyph.TranslatePoint(new Point(bounds.Left + bounds.Width / 2,
+                        bounds.Top + bounds.Height / 2), close);
+                    Assert.AreEqual(close.ActualWidth / 2, centre.X, 0.5);
+                    Assert.AreEqual(close.ActualHeight / 2, centre.Y, 0.5);
+                }
+            }
+            finally { palettes[0] = light; }
+        }
+
+        private static void AssertTransparentCorners(Window window)
+        {
+            Assert.IsTrue(window.AllowsTransparency);
+            Assert.AreEqual(0, ((SolidColorBrush)window.Background).Color.A);
+            var frame = (FrameworkElement)window.Content;
+            int width = (int)window.Width;
+            frame.Measure(new Size(width, 720));
+            int height = (int)Math.Ceiling(frame.DesiredSize.Height);
+            frame.Arrange(new Rect(0, 0, width, height));
+            frame.UpdateLayout();
+            var bitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+            bitmap.Render(frame);
+            var pixel = new byte[4];
+            foreach (var (x, y) in new[] { (0, 0), (width - 1, 0), (0, height - 1), (width - 1, height - 1) })
+            {
+                bitmap.CopyPixels(new Int32Rect(x, y, 1, 1), pixel, 4, 0);
+                Assert.AreEqual(0, pixel[3], $"{window.GetType().Name} corner ({x}, {y})");
+            }
+        }
 
         private static void ValidateProfileEditorLightbarLifecycle(Application application)
         {
@@ -201,6 +259,7 @@ namespace DS4WindowsTests
                     Assert.AreEqual("Preparing verified package...",
                         ((TextBlock)setupProgress.FindName(
                             "phaseText")).Text);
+                    ValidateViiperSetupWindows(application, repairPrompt, missingPrompt, setupProgress);
                     ValidateProfileEditorLightbarLifecycle(application);
                     ValidateControllerSettingsDialogs(application);
                     Switch2StickCalibrationEditorTests.ValidateStickCalibrationWindow(application);

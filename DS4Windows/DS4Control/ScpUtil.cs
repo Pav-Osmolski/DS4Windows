@@ -31,7 +31,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Json;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
@@ -4401,7 +4400,7 @@ namespace DS4Windows
         public const string DEFAULT_SA_OUTPUT_CURVE = "linear";
         public const int DEFAULT_SA_OUTPUT_CURVE_ID = 0;
 
-        public String m_Profile = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName + "\\Profiles.xml";
+        public String m_Profile = Path.Combine(ApplicationPaths.PackageRoot, "Profiles.xml");
         public String m_Actions = Global.appdatapath + "\\Actions.xml";
         public string m_linkedProfiles = Global.appdatapath + "\\LinkedProfiles.xml";
         public string m_controllerConfigs = Global.appdatapath + "\\ControllerConfigs.xml";

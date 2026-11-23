@@ -102,7 +102,13 @@ the full test/build/package path again, including installer layout, install,
 repair, uninstall and both upgrade baselines. It is an explicit recovery path,
 not the default. Existing assets are never overwritten in either mode.
 
-The schema-1 release receipt remains compatible with DS4Updater 2.0.9.
+Publish DS4Updater 2.0.10 as the latest stable updater before publishing the
+first DS4Windows release that puts the application DLL and both .NET sidecars
+under `Runtime`. Older DS4Windows releases fetch the latest updater before
+starting an update. That updater accepts both package layouts and removes
+obsolete files recorded in the previous portable ownership manifest.
+
+The schema-1 release receipt format remains compatible with DS4Updater 2.0.9.
 Promoted releases additionally record the candidate CI run, attempt and artifact
 ID. The receipt's `runId` identifies the successful release-preparation run;
 `candidateRunId` identifies the original binary-producing main CI run.

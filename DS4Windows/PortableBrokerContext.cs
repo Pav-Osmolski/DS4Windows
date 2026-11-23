@@ -99,13 +99,18 @@ internal sealed class PortableBrokerContext : IDisposable
             failure = null;
             return true;
         }
-        catch (Exception error)
+        catch (PortableBrokerStartupException error)
         {
             // A malformed marker, unavailable registry identity, or changed
             // folder can also reject the fallback. Never fall through to the
             // installed backend, replace an existing owner, or throw from the
             // startup failure handler itself.
             failure = error.Message;
+            return false;
+        }
+        catch
+        {
+            failure = UnverifiedFolderMessage();
             return false;
         }
     }
@@ -207,7 +212,7 @@ internal sealed class PortableBrokerContext : IDisposable
         catch (PortableBrokerStartupException) { throw; }
         catch
         {
-            throw new PortableBrokerStartupException("The portable package could not be verified. Extract it into a writable local folder outside Program Files, without links, and reopen DS4Windows.");
+            throw new PortableBrokerStartupException(UnverifiedFolderMessage());
         }
     }
 
@@ -232,20 +237,23 @@ internal sealed class PortableBrokerContext : IDisposable
                 if (!string.IsNullOrWhiteSpace(managed) && AtOrBelow(root, NormalizeManagedRoot(managed)))
                     return null;
             Action<string> inspect = inspectPath ?? PortableLabContext.ValidateNoReparsePoints;
+            ValidateRoot(directory);
             inspect(marker);
             if ((markerAttributes & (FileAttributes.Directory | FileAttributes.ReparsePoint)) != 0 ||
                 new FileInfo(marker).Length > 128 ||
                 File.ReadAllText(marker).TrimEnd('\r', '\n') != MarkerText)
-                throw new PortableBrokerStartupException("This portable package marker is invalid. Extract a fresh, complete DS4Windows portable package.");
-            ValidateRoot(directory);
+                throw new PortableBrokerStartupException(UiText.Get("This portable package marker is invalid. Extract a fresh copy of the portable ZIP to a writable local folder, then open DS4Windows from there."));
             return root;
         }
         catch (PortableBrokerStartupException) { throw; }
         catch
         {
-            throw new PortableBrokerStartupException("The portable package could not be verified. Extract it into a writable local folder outside Program Files, without links, and reopen DS4Windows.");
+            throw new PortableBrokerStartupException(UnverifiedFolderMessage());
         }
     }
+
+    private static string UnverifiedFolderMessage() =>
+        UiText.Get("DS4Windows could not verify this portable folder. Extract a fresh copy of the portable ZIP to a writable local folder outside Program Files and the Windows folder, then open DS4Windows from there.");
 
     private PortableBrokerContext(string root, string expectedDigest,
         IPortableBrokerProcessHost processHost, Action<string> inspect, bool pinBackend = true)
@@ -307,7 +315,9 @@ internal sealed class PortableBrokerContext : IDisposable
         {
             string protectedRoot = Environment.GetFolderPath(folder);
             if (!string.IsNullOrEmpty(protectedRoot) && AtOrBelow(root, protectedRoot))
-                throw new ArgumentException("Portable packages cannot use Windows or Program Files storage.");
+                throw new PortableBrokerStartupException(
+                    UiText.Get("DS4Windows Portable cannot run from Program Files or the Windows folder.") + "\n\n" +
+                    UiText.Get("Copy the entire portable folder to a writable local folder you own, then open DS4Windows from there. To use Program Files, run the DS4Windows installer instead."));
         }
         PortableLabContext.ValidateNoReparsePoints(root);
         if (!Directory.Exists(root)) throw new DirectoryNotFoundException(root);

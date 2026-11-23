@@ -354,7 +354,7 @@ jobs:
         shell: pwsh
         run: |
           $publish = (Resolve-Path '.\bin\x64\Release\DS4Windows').Path
-          foreach ($name in @('DS4Windows.exe','DS4Windows.dll')) {
+          foreach ($name in @('DS4Windows.exe','Runtime/DS4Windows.dll')) {
             $identity = [Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $publish $name))
             if ($identity.FileVersion -cne $env:PRODUCT_VERSION -or $identity.ProductVersion -cne $env:VERSION) {
               throw "Candidate binary version mismatch: $name"

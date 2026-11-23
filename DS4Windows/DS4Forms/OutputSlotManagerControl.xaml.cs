@@ -30,6 +30,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using DS4WinWPF.DS4Forms.ViewModels;
 
 namespace DS4WinWPF.DS4Forms
@@ -41,22 +42,56 @@ namespace DS4WinWPF.DS4Forms
     {
         private bool applyingColumnLayout;
         private bool layoutReady;
-        private readonly System.Windows.Threading.DispatcherTimer layoutSaveTimer = new()
+        private bool waitingForInitialLayout;
+        private DispatcherOperation initialTableReveal;
+        private readonly DispatcherTimer layoutSaveTimer = new()
         { Interval = TimeSpan.FromMilliseconds(400) };
 
         private void Layout_Loaded(object sender, RoutedEventArgs e)
         {
-            if (layoutReady) return;
-            double[] widths = OutputSlotsColumnLayout.Normalize(DS4Windows.Global.OutputSlotsColumnWidths);
-            bool automatic = DS4Windows.Global.OutputSlotsAutoFit || widths.Length == 0;
-            DS4Windows.Global.OutputSlotsAutoFit = automatic;
-            DS4Windows.Global.OutputSlotsColumnWidths = widths;
-            applyingColumnLayout = true;
-            autoFitCheck.IsChecked = automatic;
-            ApplyColumnWidths(automatic, widths);
-            applyingColumnLayout = false;
-            layoutSaveTimer.Tick += LayoutSaveTimer_Tick;
-            layoutReady = true;
+            if (!layoutReady)
+            {
+                double[] widths = OutputSlotsColumnLayout.Normalize(DS4Windows.Global.OutputSlotsColumnWidths);
+                bool automatic = DS4Windows.Global.OutputSlotsAutoFit || widths.Length == 0;
+                DS4Windows.Global.OutputSlotsAutoFit = automatic;
+                DS4Windows.Global.OutputSlotsColumnWidths = widths;
+                applyingColumnLayout = true;
+                autoFitCheck.IsChecked = automatic;
+                ApplyColumnWidths(automatic, widths);
+                applyingColumnLayout = false;
+                layoutReady = true;
+            }
+
+            waitingForInitialLayout = currentOutDevLV.Opacity == 0;
+            ScheduleInitialTableReveal();
+        }
+
+        private void ScheduleInitialTableReveal()
+        {
+            if (waitingForInitialLayout && initialTableReveal == null)
+                initialTableReveal = Dispatcher.InvokeAsync(RevealInitialTable, DispatcherPriority.ContextIdle);
+        }
+
+        private void RevealInitialTable()
+        {
+            initialTableReveal = null;
+            if (autoFitCheck.IsChecked == true)
+            {
+                // A layout pass can finish with the input column still at its minimum.
+                // Wait for it to fill the viewport, or reach its minimum in a narrow window.
+                var scrollViewer = UtilMethods.FindVisualChild<ScrollViewer>(currentOutDevLV);
+                if (scrollViewer == null) return;
+                double viewportWidth = scrollViewer.ViewportWidth - currentOutDevLV.CellsPanelHorizontalOffset;
+                if (viewportWidth <= 0) return;
+
+                var inputColumn = currentOutDevLV.Columns[1];
+                double otherColumnsWidth = currentOutDevLV.Columns.Sum(column => column.ActualWidth) - inputColumn.ActualWidth;
+                double fittedWidth = Math.Clamp(viewportWidth - otherColumnsWidth, inputColumn.MinWidth, inputColumn.MaxWidth);
+                if (Math.Abs(inputColumn.ActualWidth - fittedWidth) > 1) return;
+            }
+
+            waitingForInitialLayout = false;
+            currentOutDevLV.Opacity = 1;
         }
 
         private void ApplyColumnWidths(bool automatic, double[] widths)
@@ -150,10 +185,10 @@ namespace DS4WinWPF.DS4Forms
 
         private void Layout_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (!layoutReady) return;
+            waitingForInitialLayout = false;
+            initialTableReveal?.Abort();
+            initialTableReveal = null;
             if (layoutSaveTimer.IsEnabled) LayoutSaveTimer_Tick(this, EventArgs.Empty);
-            layoutSaveTimer.Tick -= LayoutSaveTimer_Tick;
-            layoutReady = false;
         }
 
         private DS4Windows.ControlService controlService;
@@ -163,8 +198,13 @@ namespace DS4WinWPF.DS4Forms
         public OutputSlotManagerControl()
         {
             InitializeComponent();
+            layoutSaveTimer.Tick += LayoutSaveTimer_Tick;
             currentOutDevLV.SizeChanged += (_, _) => UpdateHorizontalScrolling();
-            currentOutDevLV.LayoutUpdated += (_, _) => UpdateHorizontalScrolling();
+            currentOutDevLV.LayoutUpdated += (_, _) =>
+            {
+                UpdateHorizontalScrolling();
+                ScheduleInitialTableReveal();
+            };
             currentOutDevLV.AddHandler(System.Windows.Controls.Primitives.Thumb.DragCompletedEvent,
                 new System.Windows.Controls.Primitives.DragCompletedEventHandler(ColumnResize_Completed), true);
         }

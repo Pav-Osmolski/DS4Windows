@@ -2,6 +2,7 @@ using System.Runtime.ExceptionServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -152,6 +153,152 @@ HeadlessWpfDispatcher.Invoke(thread);         if (failure != null) ExceptionDisp
             }
         });
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
+    }
+
+    [TestMethod]
+    [DataRow("DarkTheme", 1330, false)]
+    [DataRow("DefaultTheme", 1160, false)]
+    [DataRow("DefaultTheme", 980, true)]
+    public void FirstTabVisitWaitsUntilTheInputColumnFillsTheViewport(string theme, int finalWidth, bool expectsOverflow)
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            bool previousAutomatic = Global.OutputSlotsAutoFit;
+            double[] previousWidths = Global.OutputSlotsColumnWidths;
+            Global.OutputSlotsAutoFit = true;
+            Global.OutputSlotsColumnWidths = [];
+            try
+            {
+                var control = new OutputSlotManagerControl();
+                var tabs = new TabControl { Width = 1100 };
+                var shell = new ResourceDictionary
+                    { Source = new Uri("/DS4Windows;component/DS4Forms/Themes/BridgeShellStyles.xaml", UriKind.Relative) };
+                tabs.Resources.MergedDictionaries.Add(ProfileAdvancedLayoutTests.Load(theme, "OutputSlots").Resources);
+                tabs.Style = (Style)shell["BridgeMainTabControlStyle"];
+                tabs.Items.Add(new TabItem { Header = "Overview", Content = new Grid() });
+                tabs.Items.Add(new TabItem { Header = "Output Slots", Content = control });
+                tabs.SelectedIndex = 0;
+                using var source = new HwndSource(new HwndSourceParameters("Output Slots first visit")
+                    { Width = 1400, Height = 800, WindowStyle = unchecked((int)0x80000000) });
+                source.RootVisual = tabs;
+                tabs.UpdateLayout();
+
+                var table = (DataGrid)control.FindName("currentOutDevLV");
+                table.ItemsSource = Enumerable.Range(1, 8).Select(i => new
+                {
+                    SlotNumber = i, InputSlotDisplayString = "",
+                    CurrentType = "Empty", DesiredType = "Dynamic", BoundInput = false,
+                }).ToArray();
+                // The themed ContentPresenter attaches the page first. Exercise
+                // a further viewport layout queued at WPF's own viewport priority.
+                table.Loaded += (_, _) => tabs.Dispatcher.InvokeAsync(() =>
+                {
+                    // Hold the input column at its provisional startup width for one dispatcher cycle.
+                    table.Columns[1].Width = new DataGridLength(table.Columns[1].MinWidth);
+                    tabs.Width = finalWidth;
+                    tabs.UpdateLayout();
+                }, DispatcherPriority.Loaded);
+
+                var opacity = System.ComponentModel.DependencyPropertyDescriptor.FromProperty(UIElement.OpacityProperty, table.GetType());
+                double[] firstVisibleWidths = null;
+                EventHandler capture = (_, _) =>
+                {
+                    if (table.Opacity == 1) firstVisibleWidths ??= table.Columns.Select(column => column.ActualWidth).ToArray();
+                };
+                opacity.AddValueChanged(table, capture);
+                try
+                {
+                    tabs.SelectedIndex = 1;
+                    Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                    Assert.AreEqual(table.Columns[1].MinWidth, table.Columns[1].ActualWidth, 0.5);
+                    var scrollViewer = UtilMethods.FindVisualChild<ScrollViewer>(table);
+                    double columnsWidth = table.Columns.Sum(column => column.ActualWidth);
+                    Assert.AreEqual(expectsOverflow, columnsWidth > scrollViewer.ViewportWidth);
+                    Assert.AreEqual(expectsOverflow ? 1d : 0d, table.Opacity,
+                        $"Provisional columns are visible. Table width: {table.ActualWidth}, viewport: {scrollViewer.ViewportWidth}, " +
+                        $"offset: {table.CellsPanelHorizontalOffset}, columns: {string.Join(", ", table.Columns.Select(column => column.ActualWidth))}.");
+
+                    table.Columns[1].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                    tabs.UpdateLayout();
+                    Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ApplicationIdle);
+                    Assert.IsNotNull(firstVisibleWidths);
+                    Assert.AreEqual(expectsOverflow, firstVisibleWidths[1] <= table.Columns[1].MinWidth + 0.5);
+                    for (int i = 0; i < firstVisibleWidths.Length; i++)
+                        Assert.AreEqual(table.Columns[i].ActualWidth, firstVisibleWidths[i], 0.5,
+                            $"Column {i} changed after the table first became visible.");
+                }
+                finally { opacity.RemoveValueChanged(table, capture); }
+            }
+            finally
+            {
+                Global.OutputSlotsAutoFit = previousAutomatic;
+                Global.OutputSlotsColumnWidths = previousWidths;
+            }
+        });
+    }
+
+    [TestMethod]
+    [DataRow("DarkTheme", true)]
+    [DataRow("DefaultTheme", true)]
+    [DataRow("DefaultTheme", false)]
+    public void TableFirstBecomesVisibleWithSettledColumnWidths(string theme, bool automatic)
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            bool previousAutomatic = Global.OutputSlotsAutoFit;
+            double[] previousWidths = Global.OutputSlotsColumnWidths;
+            try
+            {
+                Global.OutputSlotsAutoFit = automatic;
+                Global.OutputSlotsColumnWidths = [70, 300, 160, 170, 120];
+                var control = new OutputSlotManagerControl();
+                control.Resources.MergedDictionaries.Add(ProfileAdvancedLayoutTests.Load(theme, "OutputSlots").Resources);
+                var root = (Grid)control.Content;
+                var table = (DataGrid)control.FindName("currentOutDevLV");
+                table.ItemsSource = new[] { new { SlotNumber = 1, InputSlotDisplayString = "1 (DualSense)",
+                    CurrentType = "DualSense", DesiredType = "Dynamic", BoundInput = true } };
+                root.RaiseEvent(new RoutedEventArgs(FrameworkElement.LoadedEvent));
+                control.Measure(new Size(1100, 740));
+                control.Arrange(new Rect(0, 0, 1100, 740));
+                control.UpdateLayout();
+                Assert.AreEqual(0d, table.Opacity, "The first layout pass must keep provisional column widths out of view.");
+                root.RaiseEvent(new RoutedEventArgs(FrameworkElement.UnloadedEvent));
+                Dispatcher.CurrentDispatcher.Invoke(() => { }, DispatcherPriority.ContextIdle);
+                Assert.AreEqual(0d, table.Opacity, "Leaving the page cancels its pending reveal.");
+
+                var opacity = System.ComponentModel.DependencyPropertyDescriptor.FromProperty(UIElement.OpacityProperty, table.GetType());
+                double firstVisibleWidth = 0;
+                EventHandler capture = (_, _) => firstVisibleWidth = table.Columns[1].ActualWidth;
+                opacity.AddValueChanged(table, capture);
+                try
+                {
+                    root.RaiseEvent(new RoutedEventArgs(FrameworkElement.LoadedEvent));
+                    Layout(control, 1100);
+                    Assert.AreEqual(1d, table.Opacity);
+                    Assert.AreEqual(table.Columns[1].ActualWidth, firstVisibleWidth, 0.5);
+                    if (automatic)
+                    {
+                        Assert.IsTrue(firstVisibleWidth > 400);
+                        Assert.AreEqual(ScrollBarVisibility.Disabled, table.HorizontalScrollBarVisibility);
+                    }
+                    else Assert.AreEqual(300d, firstVisibleWidth, 0.5);
+
+                    root.RaiseEvent(new RoutedEventArgs(FrameworkElement.UnloadedEvent));
+                    root.RaiseEvent(new RoutedEventArgs(FrameworkElement.LoadedEvent));
+                    Assert.AreEqual(1d, table.Opacity, "Revisiting the settled table should not hide it again.");
+                }
+                finally
+                {
+                    opacity.RemoveValueChanged(table, capture);
+                    root.RaiseEvent(new RoutedEventArgs(FrameworkElement.UnloadedEvent));
+                }
+            }
+            finally
+            {
+                Global.OutputSlotsAutoFit = previousAutomatic;
+                Global.OutputSlotsColumnWidths = previousWidths;
+            }
+        });
     }
 
     [TestMethod]

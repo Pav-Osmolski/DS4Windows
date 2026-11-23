@@ -77,7 +77,7 @@ namespace DS4Windows
             string configuredPath = Environment.GetEnvironmentVariable(
                 PathEnvironmentVariable)?.Trim();
             string path = string.IsNullOrEmpty(configuredPath) ?
-                Path.Combine(AppContext.BaseDirectory, PortableFileName) :
+                Path.Combine(ApplicationPaths.PackageRoot, PortableFileName) :
                 Path.GetFullPath(configuredPath);
             if (!File.Exists(path))
             {

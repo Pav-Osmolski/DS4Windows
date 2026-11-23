@@ -22,10 +22,10 @@
 		     a SustainedLowLatency lease in the process. -->
 		<ServerGarbageCollection>false</ServerGarbageCollection>
 		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
-		<AssemblyVersion>5.0.80.0</AssemblyVersion>
-		<FileVersion>5.0.80.0</FileVersion>
-		<Version>5.0.80</Version>
-		<InformationalVersion>5.0.80</InformationalVersion>
+		<AssemblyVersion>5.0.81.0</AssemblyVersion>
+		<FileVersion>5.0.81.0</FileVersion>
+		<Version>5.0.81</Version>
+		<InformationalVersion>5.0.81</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
@@ -76,6 +76,40 @@
 		<None Remove="libs\x64\**" Condition="'$(Platform)' != 'x64'" />
 		<None Remove="libs\x86\**" Condition="'$(Platform)' != 'x86'" />
 	</ItemGroup>
+
+	<!-- Bind the normal Windows apphost to the self-contained runtime directory. -->
+	<Target Name="OrganizeSelfContainedPublish" AfterTargets="ComputeFilesToPublish"
+		Condition="'$(SelfContained)' == 'true' and '$(RuntimeIdentifier)' != '' and '$(UseAppHost)' == 'true' and '$(PublishSingleFile)' != 'true'">
+		<PropertyGroup>
+			<_PackagedAppHost>$(IntermediateOutputPath)package-apphost\$(AssemblyName).exe</_PackagedAppHost>
+		</PropertyGroup>
+		<MakeDir Directories="$(IntermediateOutputPath)package-apphost" />
+		<CreateAppHost AppHostSourcePath="$(AppHostSourcePath)"
+			AppHostDestinationPath="$(_PackagedAppHost)"
+			AppBinaryName="Runtime\$(AssemblyName)$(TargetExt)"
+			IntermediateAssembly="@(IntermediateAssembly->'%(FullPath)')"
+			WindowsGraphicalUserInterface="$(_UseWindowsGraphicalUserInterface)"
+			Retries="$(CopyRetryCount)"
+			RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)"
+			DisableCetCompat="$(_DisableCetCompat)" />
+		<ItemGroup>
+			<_PackageRuntimeFile Include="@(ResolvedFileToPublish)"
+				Condition="$([System.IO.Path]::GetFileName('%(ResolvedFileToPublish.RelativePath)')) == '%(ResolvedFileToPublish.RelativePath)' and
+					('%(ResolvedFileToPublish.Extension)' == '.dll' or '%(ResolvedFileToPublish.RelativePath)' == 'createdump.exe' or
+					'%(ResolvedFileToPublish.RelativePath)' == 'DS4Windows.deps.json' or '%(ResolvedFileToPublish.RelativePath)' == 'DS4Windows.runtimeconfig.json')" />
+			<ResolvedFileToPublish Remove="@(_PackageRuntimeFile)" />
+			<_PackageRuntimeFile Update="@(_PackageRuntimeFile)">
+				<RelativePath>Runtime\%(_PackageRuntimeFile.RelativePath)</RelativePath>
+			</_PackageRuntimeFile>
+			<ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
+				Condition="'%(ResolvedFileToPublish.RelativePath)' == 'DS4Windows.exe'" />
+			<ResolvedFileToPublish Include="@(_PackageRuntimeFile)" />
+			<ResolvedFileToPublish Include="$(_PackagedAppHost)">
+				<RelativePath>DS4Windows.exe</RelativePath>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			</ResolvedFileToPublish>
+		</ItemGroup>
+	</Target>
 
 	<!-- A raw `dotnet publish` must be a complete installable package too.
 	     The release post-build script rewrites this after reorganizing language

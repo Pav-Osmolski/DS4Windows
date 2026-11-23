@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using Microsoft.Win32.SafeHandles;
 
 namespace DS4Windows;
 
@@ -137,14 +135,10 @@ internal sealed class UpdateStorage
                 PortableLabContext.ValidateNoReparsePoints(file.Path);
                 // Exclusive access skips downloads/in-use packages. Delete the exact
                 // opened file by handle, so a path replacement cannot change the target.
-                using var handle = CreateFile(file.Path, 0x00010000 | 0x00000080, 0, IntPtr.Zero, 3, 0x00200000, IntPtr.Zero);
-                if (handle.IsInvalid || !GetFileInformationByHandle(handle, out var info)) { skipped++; continue; }
-                long size = ((long)info.SizeHigh << 32) | info.SizeLow;
-                long written = ((long)info.WriteHigh << 32) | info.WriteLow;
-                if ((info.Attributes & (uint)FileAttributes.ReparsePoint) != 0 || size != file.Bytes ||
+                using var handle = VerifiedFileDeletion.OpenExclusive(file.Path);
+                if (!VerifiedFileDeletion.TryGetInfo(handle, out long size, out long written) || size != file.Bytes ||
                     DateTime.FromFileTimeUtc(written).Ticks != file.LastWriteTicks) { skipped++; continue; }
-                var disposition = new Disposition { Delete = true };
-                if (!SetFileInformationByHandle(handle, 4, ref disposition, 1)) { skipped++; continue; }
+                if (!VerifiedFileDeletion.MarkForDeletion(handle)) { skipped++; continue; }
                 deleted++; bytes += size;
             }
             catch (Exception error) when (error is IOException or UnauthorizedAccessException)
@@ -165,16 +159,4 @@ internal sealed class UpdateStorage
     }
 
     private static Version Normalize(Version value) => new(value.Major, value.Minor, Math.Max(0, value.Build), Math.Max(0, value.Revision));
-    [StructLayout(LayoutKind.Sequential)] private struct Disposition { [MarshalAs(UnmanagedType.U1)] public bool Delete; }
-    [StructLayout(LayoutKind.Sequential)] private struct FileInformation
-    {
-        public uint Attributes, CreationLow, CreationHigh, AccessLow, AccessHigh, WriteLow, WriteHigh,
-            VolumeSerial, SizeHigh, SizeLow, Links, IndexHigh, IndexLow;
-    }
-    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-    private static extern SafeFileHandle CreateFile(string path, uint access, uint share, IntPtr security, uint disposition, uint flags, IntPtr template);
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern bool GetFileInformationByHandle(SafeFileHandle handle, out FileInformation information);
-    [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern bool SetFileInformationByHandle(SafeFileHandle handle, int kind, ref Disposition information, uint size);
 }

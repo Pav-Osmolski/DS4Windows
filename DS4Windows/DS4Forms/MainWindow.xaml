@@ -1362,13 +1362,15 @@
                         <StackPanel>
                             <WrapPanel>
                                 <Button x:Name="openLogFolderBtn" Content="{lex:Loc Strings:UI_4862DA00CC97746F}" Margin="0,0,8,8"
-                                        Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="OpenLogFolderBtn_Click" />
+                                        Padding="10,7" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="OpenLogFolderBtn_Click" />
                                 <Button x:Name="reportIssueBtn" Content="{lex:Loc Strings:UI_635AE219AD13DC71}" Margin="0,0,8,8"
-                                        Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ReportIssueBtn_Click"
+                                        Padding="10,7" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ReportIssueBtn_Click"
                                         ToolTip="{lex:Loc Strings:UI_413840C9DDF77019}" />
-                                <Button x:Name="clearStoredLogsBtn" Content="{lex:Loc Strings:UI_FF2E191E58860B73}" Margin="0,0,0,8"
-                                        Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearStoredLogsBtn_Click"
+                                <Button x:Name="clearStoredLogsBtn" Content="{lex:Loc Strings:UI_FF2E191E58860B73}" Margin="0,0,8,8"
+                                        Padding="10,7" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ClearStoredLogsBtn_Click"
                                         ToolTip="{lex:Loc Strings:UI_9E5957BB481FC103}" />
+                                <Button x:Name="viiperDebugHelpBtn" Content="{lex:Loc Strings:UI_0F1E5C07276841E3}" Margin="0,0,0,8"
+                                        Padding="10,7" Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ViiperDebugHelpBtn_Click" />
                             </WrapPanel>
                             <WrapPanel Margin="0,4,0,4">
                                 <CheckBox x:Name="logVerboseCk" Content="{lex:Loc Strings:UI_982BB6C1FEFEFB62}" IsChecked="{Binding VerboseStartupLogging}"
@@ -1385,8 +1387,6 @@
                                           Style="{DynamicResource BridgeLabeledCheckBoxStyle}" MinHeight="34" Margin="0,0,12,8"
                                           VerticalAlignment="Center" VerticalContentAlignment="Center"
                                           ToolTip="{lex:Loc Strings:UI_635661E968564E2C}" />
-                                <Button x:Name="viiperDebugHelpBtn" Content="{lex:Loc Strings:UI_0F1E5C07276841E3}" Margin="0,0,12,8"
-                                        Style="{DynamicResource BridgeSecondaryButtonStyle}" Click="ViiperDebugHelpBtn_Click" />
                                 <CheckBox x:Name="controllerTimingCapture" Content="{lex:Loc Strings:ControllerTimingDiagnostics}"
                                           Click="ControllerTimingCapture_Click" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"
                                           MinHeight="34" Margin="0,0,0,8" VerticalAlignment="Center" VerticalContentAlignment="Center" />
