@@ -103,6 +103,8 @@ namespace DS4WinWPF.DS4Forms
             get => keepsize;
         }
 
+        internal int ProfileAssignmentDevice { get; set; } = -1;
+
         public int DeviceNum
         {
             get => deviceNum;
@@ -2050,7 +2052,8 @@ namespace DS4WinWPF.DS4Forms
 
             Global.outDevTypeTemp[deviceNum] = OutContType.ViiperX360;
             profileTriggerLabControl?.RestorePhysicalProfileEffects();
-            Mapping.RequestRegularProfileReload(deviceNum, false, App.rootHub);
+            if (deviceNum != Global.TEST_PROFILE_INDEX)
+                Mapping.RequestRegularProfileReload(deviceNum, false, App.rootHub);
             Mark("effects restored; profile reload queued");
 
             Closed?.Invoke(this, EventArgs.Empty);
@@ -2244,11 +2247,6 @@ namespace DS4WinWPF.DS4Forms
         {
             bool result = false;
             ClearRumblePreview();
-
-            if (profileSettingsVM.HasDebouncingMsChanged)
-            {
-                Global.DebouncingMsHasChanged();
-            }
 
             string temp = profileNameTxt.Text;
             if (!string.IsNullOrWhiteSpace(temp) &&

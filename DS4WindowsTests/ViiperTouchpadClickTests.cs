@@ -178,24 +178,19 @@ public sealed class ViiperTouchpadClickTests
     public void ControllerMacroClickSurvivesMappingAndSerialization()
     {
         var flags = BindingFlags.Static | BindingFlags.NonPublic;
-        FieldInfo countField = typeof(Mapping).GetField("macroCount", flags)!;
         FieldInfo controlsField = typeof(Mapping).GetField("macroControl", flags)!;
-        object previousCount = countField.GetValue(null);
-        object previousControls = controlsField.GetValue(null);
+        bool[] controls = ((bool[][])controlsField.GetValue(null)!)[Slot];
+        bool previous = controls[25];
         try
         {
-            var controls = new bool[26];
             controls[25] = true; // The existing controller macro touch-click output.
-            controlsField.SetValue(null, controls);
-            countField.SetValue(null, 1u);
             AssertWireClick(Map(new DS4State()), true);
             controls[25] = false;
             AssertWireClick(Map(new DS4State()), false);
         }
         finally
         {
-            countField.SetValue(null, previousCount);
-            controlsField.SetValue(null, previousControls);
+            controls[25] = previous;
         }
     }
 

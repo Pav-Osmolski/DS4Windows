@@ -125,6 +125,16 @@ namespace DS4Windows
             }
         }
 
+        internal void WaitForMilliseconds(int milliseconds)
+        {
+            if (milliseconds <= 0) return;
+            long dueTime = -10_000L * milliseconds;
+            if (timer == IntPtr.Zero ||
+                !SetWaitableTimer(timer, ref dueTime, 0, IntPtr.Zero, IntPtr.Zero, false) ||
+                WaitForSingleObject(timer, Infinite) != WaitObject0)
+                Thread.Sleep(milliseconds);
+        }
+
         public void Dispose()
         {
             IntPtr handle = Interlocked.Exchange(ref timer, IntPtr.Zero);
@@ -152,6 +162,9 @@ namespace DS4Windows
             [In] IntPtr[] handles,
             [MarshalAs(UnmanagedType.Bool)] bool waitAll,
             uint milliseconds);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern uint WaitForSingleObject(IntPtr handle, uint milliseconds);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]

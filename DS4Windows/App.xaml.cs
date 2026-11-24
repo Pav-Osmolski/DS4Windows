@@ -649,22 +649,8 @@ namespace DS4WinWPF
             if (!portable.IsVerifiedBackend(portable.ViiperPath)) return true;
             try
             {
-                portable.Start();
-                bool Probe(int timeoutMilliseconds, out string lastProbeFailure)
-                {
-                    if (!portable.InspectOwnedProcess(out bool running, out string failure) || !running)
-                        throw new DS4Windows.PortableBrokerStartupException(failure ??
-                            "The portable VIIPER process stopped before it was ready. Check that USB/IP 0.9.8.1 is installed and available, then restart DS4Windows.");
-
-                    return DS4Windows.ViiperSetupManager.ProbeServer(
-                            DS4Windows.ViiperSetupManager.ApiHost,
-                            DS4Windows.ViiperSetupManager.ApiPort, authenticated: true,
-                            out lastProbeFailure, totalTimeoutMilliseconds: timeoutMilliseconds) &&
-                        portable.InspectOwnedProcess(out running, out _) && running;
-                }
-                if (DS4Windows.ViiperStartupReadiness.Wait(Probe, out string lastProbeFailure)) return true;
-                throw new DS4Windows.PortableBrokerStartupException(
-                    DS4Windows.PortableBrokerContext.DescribeReadinessFailure(lastProbeFailure));
+                portable.StartAndWaitUntilReady();
+                return true;
             }
             catch (DS4Windows.PortableBrokerStartupException exception)
             {

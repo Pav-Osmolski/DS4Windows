@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DS4Windows;
 
 namespace DS4WinWPF.DS4Control;
@@ -14,31 +15,37 @@ public sealed class Debouncer
     private readonly List<Entry> entries = new(24);
     private readonly DS4State scratchState = new();
     private TimeSpan duration;
+    private IReadOnlyDictionary<DS4Controls, int> buttonOverrides;
+    private bool enabled;
 
     public Debouncer(TimeSpan duration)
     {
         this.duration = duration;
+        enabled = duration > TimeSpan.Zero;
     }
 
     public void AddDebouncer(string name)
     {
         Field field = ParseField(name);
+        var effective = buttonOverrides != null && buttonOverrides.TryGetValue(PhysicalControl(field), out int value)
+            ? TimeSpan.FromMilliseconds(value) : duration;
+        enabled |= effective > TimeSpan.Zero;
         for (int index = 0; index < entries.Count; index++)
         {
             if (entries[index].Field == field)
             {
                 entries[index] = new Entry(field,
-                    new DebouncerInstance(duration));
+                    new DebouncerInstance(effective));
                 return;
             }
         }
-        entries.Add(new Entry(field, new DebouncerInstance(duration)));
+        entries.Add(new Entry(field, new DebouncerInstance(effective)));
     }
 
     public DS4State ProcessInput(DS4State currentState)
     {
         ArgumentNullException.ThrowIfNull(currentState);
-        if (duration == TimeSpan.Zero)
+        if (!enabled)
         {
             return currentState;
         }
@@ -57,12 +64,47 @@ public sealed class Debouncer
 
     public void SetDuration(TimeSpan newDuration)
     {
+        ApplyDurations(newDuration, null);
+    }
+
+    internal void ApplyProfile(int milliseconds, IReadOnlyDictionary<DS4Controls, int> overrides)
+    {
+        TimeSpan defaultDuration = TimeSpan.FromMilliseconds(Math.Clamp(milliseconds, 0, 1000));
+        if (defaultDuration != duration || !ReferenceEquals(buttonOverrides, overrides))
+            ApplyDurations(defaultDuration, overrides);
+    }
+
+    private void ApplyDurations(TimeSpan newDuration, IReadOnlyDictionary<DS4Controls, int> overrides)
+    {
         duration = newDuration;
+        buttonOverrides = overrides;
+        enabled = false;
         for (int index = 0; index < entries.Count; index++)
         {
-            entries[index].Instance.Duration = newDuration;
+            Entry entry = entries[index];
+            var effective = overrides != null && overrides.TryGetValue(PhysicalControl(entry.Field), out int value)
+                ? TimeSpan.FromMilliseconds(value) : newDuration;
+            entry.Instance.SetDuration(effective);
+            enabled |= effective > TimeSpan.Zero;
         }
     }
+
+    internal static bool SupportsOverride(DS4Controls button) => button != DS4Controls.None &&
+        Enum.GetValues<Field>().Any(field => PhysicalControl(field) == button);
+
+    private static DS4Controls PhysicalControl(Field field) => field switch
+    {
+        Field.Cross => DS4Controls.Cross, Field.Triangle => DS4Controls.Triangle,
+        Field.Circle => DS4Controls.Circle, Field.Square => DS4Controls.Square,
+        Field.L3 => DS4Controls.L3, Field.R3 => DS4Controls.R3,
+        Field.Share => DS4Controls.Share, Field.Options => DS4Controls.Options,
+        Field.L1 => DS4Controls.L1, Field.R1 => DS4Controls.R1,
+        Field.PS => DS4Controls.PS, Field.Capture => DS4Controls.Capture,
+        Field.SideL => DS4Controls.SideL, Field.SideR => DS4Controls.SideR,
+        Field.DpadUp => DS4Controls.DpadUp, Field.DpadDown => DS4Controls.DpadDown,
+        Field.DpadLeft => DS4Controls.DpadLeft, Field.DpadRight => DS4Controls.DpadRight,
+        _ => DS4Controls.None, // Trigger axes and touch regions are separate mappings.
+    };
 
     private static Field ParseField(string name) => name switch
     {
@@ -175,10 +217,19 @@ public sealed class Debouncer
             Duration = duration;
         }
 
-        internal TimeSpan Duration { get; set; }
+        private TimeSpan Duration { get; set; }
+
+        internal void SetDuration(TimeSpan duration)
+        {
+            if (Duration == duration) return;
+            Duration = duration;
+            previousState = false;
+            currentlyDebouncing = false;
+        }
 
         internal bool ProcessInput(bool input, DateTime timestamp)
         {
+            if (Duration <= TimeSpan.Zero) return input;
             if (currentlyDebouncing)
             {
                 return Debounce(input, timestamp);

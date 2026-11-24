@@ -66,13 +66,11 @@ public class PortableBrokerIntegrationTests
     {
         string start = Section(Read("App.xaml.cs"),
             "private bool StartPortableBroker()", "private static void ShowStartupDialog(");
-        Before(start, "portable.Start();", "ViiperSetupManager.ProbeServer(");
-        StringAssert.Contains(start, "authenticated: true,");
-        StringAssert.Contains(start, "totalTimeoutMilliseconds:");
-        StringAssert.Contains(start,
-            "portable.InspectOwnedProcess(out running, out _) && running;");
-        Before(start, "ViiperSetupManager.ProbeServer(",
-            "portable.InspectOwnedProcess(out running, out _)");
+        StringAssert.Contains(start, "portable.StartAndWaitUntilReady();");
+        string context = Read("PortableBrokerContext.cs");
+        string readiness = Section(context, "internal void StartAndWaitUntilReady(", "internal void Start(");
+        StringAssert.Contains(readiness, "authenticated: true, out failure, totalTimeoutMilliseconds: timeout");
+        StringAssert.Contains(readiness, "EnsureRunning();\n                if (!probe(Ports.Api, timeout, out failure)) return false;\n                EnsureRunning();");
         Assert.IsFalse(start.Contains("TryStartServer(", StringComparison.Ordinal));
     }
 
@@ -81,8 +79,8 @@ public class PortableBrokerIntegrationTests
     {
         string start = Section(Read("App.xaml.cs"),
             "private bool StartPortableBroker()", "private static void ShowStartupDialog(");
-        StringAssert.Contains(start, "out lastProbeFailure, totalTimeoutMilliseconds:");
-        StringAssert.Contains(start, "DescribeReadinessFailure(lastProbeFailure)");
+        string context = Read("PortableBrokerContext.cs");
+        StringAssert.Contains(context, "DescribeReadinessFailure(failure)");
         Before(start, "portable.Dispose();", "MessageBox.Show(message");
         StringAssert.Contains(start, "catch (DS4Windows.PortableBrokerStartupException retirementFailure)");
         Assert.IsFalse(start.Contains("CancelPortableStartup(", StringComparison.Ordinal));

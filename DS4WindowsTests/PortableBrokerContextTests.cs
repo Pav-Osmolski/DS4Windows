@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using DS4Windows;
 
@@ -347,6 +349,143 @@ public class PortableBrokerContextTests
     }
 
     [TestMethod]
+    public void PortSelectionFallsBackWhenOneOfThePreferredPortsCannotBind()
+    {
+        using var occupied = new TcpListener(IPAddress.Loopback, 0) { ExclusiveAddressUse = true };
+        occupied.Start();
+        int occupiedPort = ((IPEndPoint)occupied.LocalEndpoint).Port;
+        var preferred = new PortableBrokerPorts(occupiedPort, 3242);
+        PortableBrokerPorts selected = PortableBrokerPorts.Select(useFallback: false, preferred);
+        Assert.AreNotEqual(occupiedPort, selected.Usb);
+        Assert.AreNotEqual(occupiedPort, selected.Api);
+        Assert.AreNotEqual(selected.Usb, selected.Api);
+        using var usb = new TcpListener(IPAddress.Loopback, selected.Usb) { ExclusiveAddressUse = true };
+        using var api = new TcpListener(IPAddress.Loopback, selected.Api) { ExclusiveAddressUse = true };
+        usb.Start();
+        api.Start();
+    }
+
+    [TestMethod]
+    [DataRow(75, false)]
+    [DataRow(76, true)]
+    public void ListenerFailureRetriesOnceAndAuthenticatesOnTheNewApiPort(int exitCode, bool duringProbe)
+    {
+        var alternate = new PortableBrokerPorts(55001, 55002);
+        host.FallbackPorts = alternate;
+        Open();
+        if (!duringProbe) host.AfterStart = () =>
+        {
+            if (host.Starts == 1) ExitChild();
+        };
+        context.StartAndWaitUntilReady(probe: Probe);
+
+        Assert.AreEqual(2, host.Starts);
+        Assert.AreEqual(alternate, context.Ports);
+        CollectionAssert.Contains(host.StartInfo.ArgumentList.ToArray(), "--usb.addr=127.0.0.1:55001");
+        Assert.AreEqual(1, host.Child.DisposeCalls, "The exited child must be retired before retrying.");
+        Assert.AreEqual(0, host.Child.StopCalls);
+
+        bool Probe(int port, int timeout, out string failure)
+        {
+            failure = null;
+            if (duringProbe && host.Starts == 1)
+            {
+                Assert.AreEqual(ViiperSetupManager.ApiPort, port);
+                ExitChild();
+                return false;
+            }
+            Assert.AreEqual(alternate.Api, port);
+            return true;
+        }
+
+        void ExitChild()
+        {
+            host.Child.Running = false;
+            host.Child.StartupExitCode = exitCode;
+            host.Peers.Clear();
+        }
+    }
+
+    [TestMethod]
+    [DataRow(74, 1)]
+    [DataRow(75, 2)]
+    public void StartupDoesNotRetryKeyFailuresOrKeepRetryingUnavailableListeners(int exitCode, int attempts)
+    {
+        Open();
+        host.AfterStart = () =>
+        {
+            host.Child.Running = false;
+            host.Child.StartupExitCode = exitCode;
+            host.Peers.Clear();
+        };
+        Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.StartAndWaitUntilReady());
+        Assert.AreEqual(attempts, host.Starts);
+    }
+
+    [TestMethod]
+    public void OptInPortableBrokerAndControllerWorkWithBothDefaultPortsBlocked()
+    {
+        string image = Environment.GetEnvironmentVariable("DS4W_PORTABLE_VIIPER_PORT_SMOKE");
+        if (string.IsNullOrEmpty(image))
+            Assert.Inconclusive("Set DS4W_PORTABLE_VIIPER_PORT_SMOKE to the bundled VIIPER executable on a test host with USB/IP installed.");
+        if (Process.GetProcessesByName("viiper").Length != 0 || Process.GetProcessesByName("DS4Windows").Length != 0)
+            Assert.Inconclusive("Close DS4Windows and VIIPER before running the isolated portable smoke test.");
+
+        File.Copy(image, host.ImagePath, overwrite: true);
+        using var blockedUsb = BlockIfAvailable(PortableBrokerPorts.DefaultUsbPort);
+        using var blockedApi = BlockIfAvailable(ViiperSetupManager.ApiPort);
+        bool tray = Global.ShowViiperTrayIcon;
+        bool debug = Global.ViiperDebugLogging;
+        try
+        {
+            Global.ShowViiperTrayIcon = false;
+            Global.ViiperDebugLogging = false;
+            PortableBrokerContext.Initialize(root);
+            PortableBrokerContext.Current.StartAndWaitUntilReady();
+            PortableBrokerPorts selected = PortableBrokerPorts.Current;
+            Assert.AreNotEqual(PortableBrokerPorts.DefaultUsbPort, selected.Usb);
+            Assert.AreNotEqual(ViiperSetupManager.ApiPort, selected.Api);
+            Assert.IsTrue(ViiperSetupManager.GetFreshDependencyStatus().Ready);
+            using (var device = new ViiperClient(ViiperSetupManager.ApiHost, selected.Api)
+                .CreateDeviceAndOpenStream(ViiperVirtualDeviceType.Xbox360))
+            {
+                Assert.IsTrue(device.UsbipPort > 0);
+                Assert.IsFalse(ViiperUsbipPortManager.CanUseUsbipPortAsInput(device.UsbipPort));
+            }
+
+            PortableBrokerContext.RetireCurrentForRepair();
+            PortableBrokerContext.Initialize(root);
+            PortableBrokerContext.Current.StartAndWaitUntilReady(selected);
+            Assert.AreEqual(selected, PortableBrokerPorts.Current);
+            Assert.IsTrue(ViiperSetupManager.GetFreshDependencyStatus().Ready);
+        }
+        finally
+        {
+            try { PortableBrokerContext.RetireCurrentForRepair(); }
+            finally
+            {
+                Global.ShowViiperTrayIcon = tray;
+                Global.ViiperDebugLogging = debug;
+            }
+        }
+
+        static TcpListener BlockIfAvailable(int port)
+        {
+            var listener = new TcpListener(IPAddress.Loopback, port) { ExclusiveAddressUse = true };
+            try
+            {
+                listener.Start();
+                return listener;
+            }
+            catch (SocketException error) when (error.SocketErrorCode is SocketError.AccessDenied or SocketError.AddressAlreadyInUse)
+            {
+                listener.Dispose();
+                return null;
+            }
+        }
+    }
+
+    [TestMethod]
     public void SlowReadinessPreservesOwnedProcessAndTimedOutAttemptCanBeRecreated()
     {
         Open().Start();
@@ -485,11 +624,35 @@ public class PortableBrokerContextTests
     }
 
     [TestMethod]
+    public void BorrowedPortableLaunchKeepsItsVerifiedAlternatePorts()
+    {
+        PrepareBorrowed();
+        host.Arguments = host.Arguments.Select(value => value switch
+        {
+            "--usb.addr=127.0.0.1:3241" => "--usb.addr=127.0.0.1:55001",
+            "--api.addr=127.0.0.1:3242" => "--api.addr=127.0.0.1:55002",
+            _ => value,
+        }).ToArray();
+        context.StartAndWaitUntilReady(probe: Probe);
+        Assert.AreEqual(new PortableBrokerPorts(55001, 55002), context.Ports);
+        Assert.AreEqual(0, host.Starts);
+
+        static bool Probe(int port, int timeout, out string failure)
+        {
+            Assert.AreEqual(55002, port);
+            failure = null;
+            return true;
+        }
+    }
+
+    [TestMethod]
     [DataRow("key")]
     [DataRow("config-only")]
     [DataRow("authority")]
     [DataRow("unreadable")]
     [DataRow("pid-reused")]
+    [DataRow("non-loopback")]
+    [DataRow("same-port")]
     public void SameImageDoesNotAuthorizeUnknownOrChangedExistingLaunch(string change)
     {
         PrepareBorrowed();
@@ -498,6 +661,10 @@ public class PortableBrokerContextTests
         if (change == "authority") host.Arguments = host.Arguments.Where(value => !value.StartsWith("--usb.retained-import-authority-id=")).ToArray();
         if (change == "unreadable") host.ArgumentFailure = true;
         if (change == "pid-reused") host.AfterReadArguments = () => host.Peers[0] = host.Peers[0] with { StartTimeUtcTicks = 999 };
+        if (change == "non-loopback") host.Arguments = host.Arguments.Select(value =>
+            value == "--api.addr=127.0.0.1:3242" ? "--api.addr=0.0.0.0:3242" : value).ToArray();
+        if (change == "same-port") host.Arguments = host.Arguments.Select(value =>
+            value == "--api.addr=127.0.0.1:3242" ? "--api.addr=127.0.0.1:3241" : value).ToArray();
         Assert.ThrowsExactly<PortableBrokerStartupException>(() => context.Start());
         Assert.AreEqual(0, host.Starts);
         Assert.AreEqual(0, host.Child.StopCalls);
@@ -514,6 +681,7 @@ public class PortableBrokerContextTests
         internal Action AfterStart, AfterReadArguments;
         internal ProcessStartInfo StartInfo;
         internal string[] Arguments;
+        internal PortableBrokerPorts FallbackPorts = new(55001, 55002);
         internal FakeHost(string path) { ImagePath = path; Child = new FakeProcess(this); }
         public IReadOnlyList<PortableBrokerProcessIdentity> Snapshot()
         {
@@ -538,6 +706,8 @@ public class PortableBrokerContextTests
             AfterStart?.Invoke();
             return Child;
         }
+        public PortableBrokerPorts SelectPorts(bool useFallback, PortableBrokerPorts preferred) =>
+            useFallback ? FallbackPorts : preferred ?? PortableBrokerPorts.Default;
     }
 
     private sealed class FakeProcess : IPortableBrokerProcess

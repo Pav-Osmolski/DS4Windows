@@ -23,7 +23,6 @@ public sealed class ConcurrentMouseMappingTests
     private DS4StateFieldMapping[] previousFields = null!, previousOutputFields = null!;
     private Mapping.TwoStageTriggerMappingData[] previousLeftStages = null!, previousRightStages = null!;
     private bool[] previousPressedOnce = null!;
-    private double previousHorizontalRemainder, previousVerticalRemainder;
     private RecordingHandler handler = null!;
     private ControlService service = null!;
     private Mouse mouse = null!, otherMouse = null!;
@@ -41,8 +40,6 @@ public sealed class ConcurrentMouseMappingTests
         previousLeftStages = Mapping.l2TwoStageMappingData;
         previousRightStages = Mapping.r2TwoStageMappingData;
         previousPressedOnce = Mapping.pressedonce;
-        previousHorizontalRemainder = ReadRemainder("horizontalRemainder");
-        previousVerticalRemainder = ReadRemainder("verticalRemainder");
 
         StoreField.SetValue(null, new BackingStore());
         handler = new RecordingHandler();
@@ -63,8 +60,6 @@ public sealed class ConcurrentMouseMappingTests
             .Select(_ => new Mapping.TwoStageTriggerMappingData()).ToArray();
         Mapping.r2TwoStageMappingData = Enumerable.Range(0, Global.MAX_DS4_CONTROLLER_COUNT)
             .Select(_ => new Mapping.TwoStageTriggerMappingData()).ToArray();
-        WriteRemainder("horizontalRemainder", 0);
-        WriteRemainder("verticalRemainder", 0);
 
         var device = new NoHidDevice { lastTimeElapsedDouble = 4 };
         mouse = new Mouse(Slot, device);
@@ -98,8 +93,6 @@ public sealed class ConcurrentMouseMappingTests
         Mapping.l2TwoStageMappingData = previousLeftStages;
         Mapping.r2TwoStageMappingData = previousRightStages;
         Mapping.pressedonce = previousPressedOnce;
-        WriteRemainder("horizontalRemainder", previousHorizontalRemainder);
-        WriteRemainder("verticalRemainder", previousVerticalRemainder);
     }
 
     // Pattern 0 keeps gamepad movement/jump/crouch; 1 maps them to keyboard;
@@ -467,21 +460,27 @@ public sealed class ConcurrentMouseMappingTests
         if (output is int key) setting.action.actionAlias = (uint)key;
     }
 
-    private DS4State Frame(DS4State source, int slot = Slot)
+    [TestMethod]
+    public void ReleasedPhysicalStickStopsCursorEvenWithFilteredMotionRemaining()
+    {
+        Bind(DS4Controls.RXPos, X360Controls.MouseRight);
+        Frame(new DS4State { RX = 255 });
+        Assert.IsTrue(handler.Moves.Any(move => move.X > 0));
+        int moves = handler.Moves.Count;
+        Frame(new DS4State { RX = 245 }, physical: new DS4State());
+        Assert.AreEqual(moves, handler.Moves.Count);
+    }
+
+    private DS4State Frame(DS4State source, int slot = Slot, DS4State physical = null)
     {
         source.elapsedTime = .004;
         var mapped = new DS4State();
         source.CopyExtrasTo(mapped);
         Mapping.MapCustom(slot, source, mapped, new DS4StateExposed(source),
-            slot == Slot ? mouse : otherMouse, service);
+            slot == Slot ? mouse : otherMouse, service, physical);
         Mapping.Commit(slot);
         return mapped;
     }
-
-    private static double ReadRemainder(string name) => (double)typeof(Mapping)
-        .GetField(name, BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!;
-    private static void WriteRemainder(string name, double value) => typeof(Mapping)
-        .GetField(name, BindingFlags.Static | BindingFlags.NonPublic)!.SetValue(null, value);
 
     private sealed class NoHidDevice : DS4Device
     {
