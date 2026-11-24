@@ -3927,25 +3927,26 @@ Suspend support not enabled.", true);
                 LogOpenPhase("loading view layout and render queue drained");
 
                 bool profileAlreadyLoaded = false;
+                // Edit a detached profile copy even from the Controllers page.
+                // Special Actions can replace the runtime slot while the editor is open.
+                int editSlot = Global.TEST_PROFILE_INDEX;
                 if (entity != null)
                 {
-                    if (device == Global.TEST_PROFILE_INDEX)
-                    {
-                        Global.ProfilePath[Global.TEST_PROFILE_INDEX] = entity.Name;
-                    }
-
-                    await Task.Run(() => Global.LoadProfile(device, false, App.rootHub, false));
-                    profileAlreadyLoaded = true;
+                    Global.ProfilePath[editSlot] = entity.Name;
+                    profileAlreadyLoaded = await Task.Run(() => Global.LoadProfile(editSlot, false, App.rootHub, false));
+                    if (!profileAlreadyLoaded)
+                        throw new IOException(UiText.Format("Could not open the profile {0} for editing.", entity.Name));
                 }
                 LogOpenPhase("profile loaded");
 
-                editor = new ProfileEditor(device, controllerContextDevice,
+                editor = new ProfileEditor(editSlot, controllerContextDevice,
                     Global.ProfileEditorTimingLogging ? LogOpenPhase : null);
+                editor.ProfileAssignmentDevice = device < Global.TEST_PROFILE_INDEX ? device : -1;
                 LogOpenPhase("editor shell constructed");
                 editor.CreatedProfile += Editor_CreatedProfile;
                 editor.Closed += ProfileEditor_Closed;
                 editor.ProfileNameChanged += Editor_ProfileNameChanged;
-                editor.Reload(device, entity, profileAlreadyLoaded);
+                editor.Reload(editSlot, entity, profileAlreadyLoaded);
                 LogOpenPhase("editor bindings refreshed");
 
                 profileEditorLoadingPanel.Visibility = Visibility.Collapsed;
@@ -4004,11 +4005,10 @@ Suspend support not enabled.", true);
         private void Editor_CreatedProfile(ProfileEditor sender, string profile)
         {
             profileListHolder.AddProfileSort(profile);
-            int devnum = sender.DeviceNum;
-            if (devnum >= 0 && devnum+1 <= conLvViewModel.ControllerCol.Count)
+            CompositeDeviceModel item = conLvViewModel.ControllerCol.FirstOrDefault(controller =>
+                controller.DevIndex == sender.ProfileAssignmentDevice);
+            if (item != null)
             {
-                CompositeDeviceModel item =
-                    conLvViewModel.ControllerCol[devnum];
                 ApplyProfileSelection(item,
                     () => item.ChangeSelectedProfile(profile));
             }

@@ -321,7 +321,7 @@
                                 <DockPanel>
                                     <TextBlock DockPanel.Dock="Left" Text="{lex:Loc Strings:Profile}" Margin="0,0,6,0"
                                                Foreground="{DynamicResource MutedForegroundColor}" />
-                                    <TextBlock Text="{Binding CurrentProfileName}" FontWeight="SemiBold"
+                                    <TextBlock Text="{Binding CurrentProfileDisplayName}" FontWeight="SemiBold"
                                                HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"
                                                ToolTip="{Binding ProfileGuidance}" />
                                 </DockPanel>

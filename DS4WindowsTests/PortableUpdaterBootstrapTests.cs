@@ -19,6 +19,7 @@ public sealed class PortableUpdaterBootstrapTests
     [DataRow("v2.0.6")]
     [DataRow("v2.0.7")]
     [DataRow("v2.0.8")]
+    [DataRow("v2.0.9")]
     public void OldUnsafeUpdaterIsNeverAccepted(string tag)
     {
         using var json = Release(tag);
@@ -36,7 +37,7 @@ public sealed class PortableUpdaterBootstrapTests
     }
 
     [TestMethod]
-    [DataRow("v2.0.10")]
+    [DataRow("v2.0.11")]
     [DataRow("v2.1.0")]
     [DataRow("v3.0.0")]
     public void FutureVerifiedUpdaterVersionsRemainEligible(string tag)
@@ -236,7 +237,7 @@ public sealed class PortableUpdaterBootstrapTests
         }
     }
 
-    private static JsonDocument Release(string tag = "v2.0.9", string fault = null)
+    private static JsonDocument Release(string tag = "v2.0.10", string fault = null)
     {
         var asset = new
         {

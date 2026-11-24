@@ -7,10 +7,10 @@ namespace DS4Windows;
 
 internal static class ExecutableAliasFiles
 {
-    internal static void Create(string executablePath, string name)
+    internal static void Create(string executablePath, string name, bool sharesRuntime = false)
     {
-        string[] targets = GetAliasPaths(executablePath, name);
-        string[] sources = GetSourcePaths(executablePath);
+        string[] targets = GetAliasPaths(executablePath, name, sharesRuntime);
+        string[] sources = GetSourcePaths(executablePath, sharesRuntime);
         var readers = new List<FileStream>();
         var writers = new List<FileStream>();
         var created = new List<string>();
@@ -56,13 +56,13 @@ internal static class ExecutableAliasFiles
         }
     }
 
-    internal static bool RemoveOwned(string executablePath, string name)
+    internal static bool RemoveOwned(string executablePath, string name, bool sharesRuntime = false)
     {
         if (string.IsNullOrEmpty(name)) return true;
         string[] targets;
-        try { targets = GetAliasPaths(executablePath, name); }
+        try { targets = GetAliasPaths(executablePath, name, sharesRuntime); }
         catch (ArgumentException) { return false; }
-        string[] sources = GetSourcePaths(executablePath);
+        string[] sources = GetSourcePaths(executablePath, sharesRuntime);
         // The previous alias can be the currently running executable. Do not
         // remove its sidecars or any file which no longer matches our copy.
         for (int i = 0; i < targets.Length; i++)
@@ -81,12 +81,12 @@ internal static class ExecutableAliasFiles
         return true;
     }
 
-    private static string[] GetSourcePaths(string executablePath) => new[]
-    {
+    private static string[] GetSourcePaths(string executablePath, bool sharesRuntime) => sharesRuntime ? [executablePath] :
+    [
         GetSidecarPath(executablePath, ".runtimeconfig.json"),
         GetSidecarPath(executablePath, ".deps.json"),
         executablePath,
-    };
+    ];
 
     private static string GetSidecarPath(string executablePath, string suffix)
     {
@@ -97,7 +97,7 @@ internal static class ExecutableAliasFiles
             Path.Combine(Path.GetDirectoryName(executablePath), "DS4Windows" + suffix);
     }
 
-    private static string[] GetAliasPaths(string executablePath, string name)
+    private static string[] GetAliasPaths(string executablePath, string name, bool sharesRuntime)
     {
         string root = Path.GetDirectoryName(Path.GetFullPath(executablePath));
         string stem = name?.Split('.')[0];
@@ -114,12 +114,14 @@ internal static class ExecutableAliasFiles
                 (stem.StartsWith("COM", StringComparison.OrdinalIgnoreCase) ||
                  stem.StartsWith("LPT", StringComparison.OrdinalIgnoreCase))))
             throw new ArgumentException("Choose a different executable name without a folder path or reserved Windows name.", nameof(name));
-        return new[]
-        {
+        string alias = Path.Combine(root, name + ".exe");
+        if (sharesRuntime) return [alias];
+        return
+        [
             Path.Combine(root, name + ".runtimeconfig.json"),
             Path.Combine(root, name + ".deps.json"),
-            Path.Combine(root, name + ".exe"),
-        };
+            alias,
+        ];
     }
 
     private static FileStream OpenRead(string path)

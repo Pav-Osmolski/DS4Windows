@@ -23,6 +23,8 @@ namespace DS4WinWPF.DS4Forms
         {
             this.logPath = logPath;
             InitializeComponent();
+            viiperStepText.Text = ViiperSetupPrompt.LocalizeSetupStep("• Install VIIPER 0.1.10");
+            usbipStepText.Text = ViiperSetupPrompt.LocalizeSetupStep("• Verify USB-IP 0.9.8.1");
             logOffset = GetLogLength();
             logTimer = new DispatcherTimer(
                 TimeSpan.FromMilliseconds(250),

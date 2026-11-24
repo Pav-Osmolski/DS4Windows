@@ -34,6 +34,7 @@ internal static class ViiperRecovery
                 throw new IOException("This portable folder's identity changed. Restore its portable marker before repairing; no installed copy was changed.");
             string destination = portableRoot == null ? ViiperSetupManager.GetCanonicalViiperExePath() :
                 Path.Combine(portableRoot, "viiper.exe");
+            PortableBrokerPorts preferredPorts = PortableBrokerContext.Current?.Ports;
             PortableRepairProgress.Run<object>(owner,
                 "Checking VIIPER and restoring the matching version if needed. DS4Windows will stay open; controller output may pause briefly.",
                 async token =>
@@ -60,7 +61,7 @@ internal static class ViiperRecovery
                                     PortableBrokerRepair.RepairAsync(portableRoot, ViiperSetupManager.SupportedViiperSha256,
                                         _ => Task.FromResult(new ViiperPayloadLease(payload.Path))).GetAwaiter().GetResult();
                                 PortableBrokerContext.Initialize(portableRoot);
-                                PortableBrokerContext.Current.Start();
+                                PortableBrokerContext.Current.StartAndWaitUntilReady(preferredPorts);
                             }
                             catch
                             {
@@ -115,13 +116,9 @@ internal static class ViiperRecovery
             {
                 if (!PortableBrokerContext.Current.InspectOwnedProcess(out bool running, out failure) || !running)
                     throw new IOException(failure ?? "VIIPER stopped before it was ready.");
-                if (ViiperSetupManager.ProbeServer(ViiperSetupManager.ApiHost, ViiperSetupManager.ApiPort,
-                        authenticated: true, out failure, totalTimeoutMilliseconds: timeoutMilliseconds))
-                {
-                    ViiperPrerequisiteStatus status = ViiperSetupManager.GetFreshDependencyStatus();
-                    if (status.Ready && ViiperSetupManager.HasSafeRuntimePrerequisites(status)) return true;
-                    failure = status.DisplayText;
-                }
+                ViiperPrerequisiteStatus status = ViiperSetupManager.GetFreshDependencyStatus();
+                if (status.Ready && ViiperSetupManager.HasSafeRuntimePrerequisites(status)) return true;
+                failure = status.DisplayText;
             }
             else
             {

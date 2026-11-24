@@ -658,14 +658,11 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         public event EventHandler RightStickDriftYAxisChanged;
 
-        public bool HasDebouncingMsChanged { get; private set; }
-
         public int DebouncingMs
         {
             get => Global.DebouncingMs[device];
             set
             {
-                HasDebouncingMsChanged = Global.DebouncingMs[device] != value;
                 Global.DebouncingMs[device] = value;
                 DebouncingMsChanged?.Invoke(this, EventArgs.Empty);
             }

@@ -384,6 +384,47 @@ public sealed class ProfileEditorSaveTests
         CollectionAssert.AreEqual(new[] { "Renamed action" }, ReloadActions("Updated"));
     }
 
+    [TestMethod]
+    public void SaveUsesTheEditorSlotWhileTheControllerHasATemporaryProfile()
+    {
+        int editorSlot = Global.TEST_PROFILE_INDEX;
+        string oldEditorProfile = Global.ProfilePath[editorSlot];
+        string oldEditorOlder = Global.OlderProfilePath[editorSlot];
+        byte oldEditorRumble = Global.store.rumble[editorSlot];
+        var oldEditorActions = Global.ProfileActions[editorSlot];
+        bool wasTemporary = Global.useTempProfile[0];
+        string oldTemporary = Global.tempprofilename[0];
+        const string targetXml = "<DS4Windows><RumbleBoost>19</RumbleBoost></DS4Windows>";
+        try
+        {
+            WriteProfile("Original", Original);
+            string targetPath = WriteProfile("Temporary", targetXml);
+            Global.store.rumble[editorSlot] = 91;
+            Global.ProfileActions[editorSlot] = new();
+            var editor = CreateEditor(new ProfileEntity { Name = "Original" }, editorSlot);
+
+            Global.useTempProfile[0] = true;
+            Global.tempprofilename[0] = "Temporary";
+            Global.store.rumble[0] = 19;
+
+            Assert.IsTrue(editor.SaveProfileChanges("Original"));
+            Assert.AreEqual("91", XDocument.Load(ProfilePath("Original")).Root.Element("RumbleBoost").Value);
+            Assert.AreEqual(targetXml, File.ReadAllText(targetPath));
+            Assert.AreEqual((byte)19, Global.store.rumble[0]);
+            Assert.AreEqual("Temporary", Global.tempprofilename[0]);
+        }
+        finally
+        {
+            Global.ProfilePath[editorSlot] = oldEditorProfile;
+            Global.OlderProfilePath[editorSlot] = oldEditorOlder;
+            Global.store.rumble[editorSlot] = oldEditorRumble;
+            Global.ProfileActions[editorSlot] = oldEditorActions;
+            Global.CacheExtraProfileInfo(editorSlot);
+            Global.useTempProfile[0] = wasTemporary;
+            Global.tempprofilename[0] = oldTemporary;
+        }
+    }
+
     private List<string> ReloadActions(string profileName)
     {
         using var reader = File.OpenText(ProfilePath(profileName));
@@ -415,14 +456,16 @@ public sealed class ProfileEditorSaveTests
     private static void AssertSavedXml(string path) =>
         Assert.AreEqual("88", XDocument.Load(path).Root.Element("RumbleBoost").Value);
 
-    private static ProfileEditor CreateEditor(ProfileEntity entity)
+    private static ProfileEditor CreateEditor(ProfileEntity entity, int device = 0)
     {
         // Exercise the editor's real persistence/event path without its UI
         // constructor, controller service, device discovery or preview output.
         var editor = (ProfileEditor)RuntimeHelpers.GetUninitializedObject(typeof(ProfileEditor));
         typeof(ProfileEditor).GetField("currentProfile", BindingFlags.Instance | BindingFlags.NonPublic)!
             .SetValue(editor, entity);
-        var actions = new SpecialActionsListViewModel(0);
+        typeof(ProfileEditor).GetField("deviceNum", BindingFlags.Instance | BindingFlags.NonPublic)!
+            .SetValue(editor, device);
+        var actions = new SpecialActionsListViewModel(device);
         actions.LoadActions();
         typeof(ProfileEditor).GetField("specialActionsVM", BindingFlags.Instance | BindingFlags.NonPublic)!
             .SetValue(editor, actions);

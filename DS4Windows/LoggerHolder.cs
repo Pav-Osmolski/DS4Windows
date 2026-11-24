@@ -41,8 +41,10 @@ namespace DS4WinWPF
             LogDirectory = logDirectory;
             Directory.CreateDirectory(logDirectory);
 
-            LoggingConfiguration configuration =
-                LogManager.Configuration ?? new LoggingConfiguration();
+            string packageConfig = Path.Combine(ApplicationPaths.PackageRoot, "NLog.config");
+            LoggingConfiguration configuration = File.Exists(packageConfig)
+                ? new XmlLoggingConfiguration(packageConfig)
+                : LogManager.Configuration ?? new LoggingConfiguration();
             FileTarget fileTarget = FindFileTarget(configuration);
             if (fileTarget == null)
             {

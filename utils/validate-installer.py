@@ -11,11 +11,13 @@ import zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path, PurePosixPath
 
+from runtime_layout import RUNTIME_FILES, validate_runtime_layout
+
 
 REQUIRED_PUBLISH_FILES = {
     "COPYING", "LICENSE.txt", "NOTICE.txt", "AGPL-3.0.txt", "DS5-BRIDGE-NOTICE.txt",
     "DS4Windows.exe",
-    "BouncyCastle.Cryptography.dll",
+    *RUNTIME_FILES,
     "Resources/BouncyCastle.NOTICE.txt",
     "Resources/DsxTriggerEffects.NOTICE.txt",
     "xbox-one-authorized-persona.json",
@@ -968,20 +970,22 @@ def main() -> int:
             raise SystemExit(
                 "Portable package ownership contract missing: " + contract
             )
+    validate_runtime_layout(args.publish_root)
     validate_localization_package(args.publish_root)
     return 0
 
 
 def validate_localization_package(publish_root: Path) -> None:
     """Keep application and dependency satellites together under Lang."""
+    runtime_root = publish_root / "Runtime"
     runtime = json.loads(
-        (publish_root / "DS4Windows.runtimeconfig.json").read_text(encoding="utf-8-sig")
+        (runtime_root / "DS4Windows.runtimeconfig.json").read_text(encoding="utf-8-sig")
     )
     if runtime.get("runtimeOptions", {}).get("additionalProbingPaths"):
         raise SystemExit("Published localization must not depend on additional probing paths.")
 
     deps = json.loads(
-        (publish_root / "DS4Windows.deps.json").read_text(encoding="utf-8-sig")
+        (runtime_root / "DS4Windows.deps.json").read_text(encoding="utf-8-sig")
     )
     validated: set[str] = set()
     for target in deps.get("targets", {}).values():

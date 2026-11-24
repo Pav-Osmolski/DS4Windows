@@ -22,9 +22,12 @@ def prepare(root: Path) -> None:
         destination = root / "Lang" / culture.name
         destination.parent.mkdir(exist_ok=True)
         culture.rename(destination)
-    spec = importlib.util.spec_from_file_location("package_validator", Path(__file__).resolve().parents[1] / "validate-installer.py")
+    utils_dir = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(utils_dir))
+    spec = importlib.util.spec_from_file_location("package_validator", utils_dir / "validate-installer.py")
     validator = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(validator)
+    validator.validate_runtime_layout(root)
     validator.validate_localization_package(root)
     # The final preview manifest is generated after localization and launchers.
     print("Preview Lang layout passed the release localization validator.")

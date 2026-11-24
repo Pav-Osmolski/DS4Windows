@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DS4Windows;
@@ -155,6 +156,18 @@ public class FooterAndDisclosureTests
                 footer.UpdateActivity("DualSense USB native haptics started for controller 1.", false, DateTime.Now);
                 footer.UpdateService(false); Layout();
                 Assert.AreEqual(UiText.Get("Stopped"), ((TextBlock)footer.FindName("serviceStatus")).Text);
+                var start = footer.ServiceButton;
+                var startContent = (ContentPresenter)start.Template.FindName("ButtonContent", start);
+                var startChrome = (Border)start.Template.FindName("Chrome", start);
+                Color restingText = ((SolidColorBrush)TextElement.GetForeground(startContent)).Color;
+                Assert.AreEqual(((SolidColorBrush)theme["AccentForegroundColor"]).Color, restingText);
+                start.SetValue(hoverKey, true); Layout();
+                Color hoverText = ((SolidColorBrush)TextElement.GetForeground(startContent)).Color;
+                Color hoverSurface = ((SolidColorBrush)startChrome.Background).Color;
+                Assert.IsTrue(AppThemeCatalog.Contrast(hoverText, hoverSurface) >= 4.5,
+                    $"Start text must remain legible on hover in {choice.SourceName}.");
+                start.SetValue(hoverKey, false); Layout();
+                Assert.AreEqual(restingText, ((SolidColorBrush)TextElement.GetForeground(startContent)).Color);
                 footer.UpdateService(true);
                 host.FlowDirection = FlowDirection.RightToLeft; Layout();
                 Assert.AreEqual(38d, footer.ActualHeight);

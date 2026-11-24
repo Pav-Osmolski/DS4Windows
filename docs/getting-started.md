@@ -238,7 +238,7 @@ Follow the release's update instructions when a matching backend update is
 required.
 
 Current fork builds check this repository and use the matching fork DS4Updater
-(2.0.9 or newer) for supported installed/portable updates. Configure checks under
+(2.0.10 or newer) for supported installed/portable updates. Configure checks under
 **Settings → Updates & tools**, or install manually from
 [Pav-Osmolski/DS4Windows Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
 

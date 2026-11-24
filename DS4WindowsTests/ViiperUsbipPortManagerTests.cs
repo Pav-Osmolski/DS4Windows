@@ -53,6 +53,30 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [DataRow("127.0.0.1:55001/17-4", "", false, false, true)]
+        [DataRow("127.0.0.1:55001/17-4", "DS4W0123456789A", false, true, true)]
+        [DataRow("127.0.0.1:55001/17-4", "foreign", false, false, false)]
+        [DataRow("127.0.0.1:55001/x1-protected", "DS4W0123456789A", false, false, false)]
+        [DataRow("127.0.0.1:55002/17-4", "foreign", true, false, false)]
+        [DataRow("remote.example:55001/17-4", "DS4W0123456789A", true, false, false)]
+        public void AlternateBrokerPortExcludesOutputsAndRequiresEvidenceBeforeDetach(
+            string location, string serial, bool input, bool staleOwned, bool registeredOwned)
+        {
+            string listing = $"Port 63: device in use\n -> usbip://{location}\n -> serial: {serial}\n";
+            var port = ViiperUsbipPortManager.ParseImportedPorts(listing).Single();
+            Assert.AreEqual(staleOwned, ViiperUsbipPortManager.IsDs4WindowsOwnedLocalPort(port, null, 55001));
+            Assert.AreEqual(registeredOwned, ViiperUsbipPortManager.IsDs4WindowsOwnedLocalPort(port, "17-4", 55001));
+            Assert.AreEqual(input, ViiperUsbipPortManager.CanUseUsbipPortAsInput(63, Query, 55001));
+
+            bool Query(string[] arguments, out string output, out string error)
+            {
+                output = listing;
+                error = null;
+                return true;
+            }
+        }
+
+        [TestMethod]
         [DataRow("")]
         [DataRow("Port 62: device in use\n -> usbip://remote.example:3241/1-1")]
         [DataRow("Port 63: device in use\n -> usbip://not a valid location")]

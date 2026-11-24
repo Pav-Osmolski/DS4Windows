@@ -35,6 +35,15 @@ using Switch2CemuhookYawPolicy =
 
 namespace DS4WinWPF.DS4Control.DTOXml
 {
+    public sealed class ButtonDebounceDTO
+    {
+        [XmlAttribute("Button")]
+        public string Button { get; set; }
+
+        [XmlAttribute("Milliseconds")]
+        public int Milliseconds { get; set; }
+    }
+
     public sealed class Switch2IrGyroTuningDTO
     {
         [XmlElement("DeadzoneButtons")]
@@ -482,6 +491,12 @@ namespace DS4WinWPF.DS4Control.DTOXml
         {
             get; set;
         }
+
+        [XmlArray("ButtonDebounceOverrides")]
+        [XmlArrayItem("Override")]
+        public List<ButtonDebounceDTO> ButtonDebounceOverrides { get; set; }
+
+        public bool ShouldSerializeButtonDebounceOverrides() => ButtonDebounceOverrides?.Count > 0;
 
         [XmlElement("InverseRumbleMotors")]
         public bool InverseRumbleMotors
@@ -2370,6 +2385,10 @@ namespace DS4WinWPF.DS4Control.DTOXml
             RightStickDriftXAxis = source.rightStickDriftXAxis[deviceIndex];
             RightStickDriftYAxis = source.rightStickDriftYAxis[deviceIndex];
             DebouncingMs = source.debouncingMs[deviceIndex];
+            ButtonDebounceOverrides = source.buttonDebounceOverrides[deviceIndex]?
+                .OrderBy(entry => entry.Key)
+                .Select(entry => new ButtonDebounceDTO { Button = entry.Key.ToString(), Milliseconds = entry.Value })
+                .ToList();
             InverseRumbleMotors = source.inverseRumbleMotors[deviceIndex];
             Switch2MapXboxImpulseTriggersToHdRumble =
                 source.switch2MapXboxImpulseTriggersToHdRumble[deviceIndex];
@@ -3096,6 +3115,14 @@ namespace DS4WinWPF.DS4Control.DTOXml
 
             destination.useDs3PitchRollSim = UseDs3PitchRollSim;
             destination.debouncingMs[deviceIndex] = DebouncingMs;
+            var debounceOverrides = new Dictionary<DS4Controls, int>();
+            foreach (ButtonDebounceDTO entry in ButtonDebounceOverrides ?? [])
+            {
+                if (entry != null && Enum.TryParse(entry.Button, out DS4Controls button) &&
+                    Debouncer.SupportsOverride(button) && entry.Milliseconds is >= 0 and <= 1000)
+                    debounceOverrides[button] = entry.Milliseconds;
+            }
+            destination.buttonDebounceOverrides[deviceIndex] = debounceOverrides.Count == 0 ? null : debounceOverrides;
             destination.inverseRumbleMotors[deviceIndex] = InverseRumbleMotors;
             destination.switch2MapXboxImpulseTriggersToHdRumble[deviceIndex] =
                 Switch2MapXboxImpulseTriggersToHdRumble;

@@ -12,12 +12,13 @@ import unittest
 import xml.etree.ElementTree as ET
 import zipfile
 
+from runtime_layout import APPLICATION_FILES, RUNTIME_FILES
+
 
 REPOSITORY = Path(__file__).resolve().parent.parent
 REQUIRED = (
     "COPYING", "LICENSE.txt", "NOTICE.txt", "AGPL-3.0.txt", "DS5-BRIDGE-NOTICE.txt",
-    "DS4Windows.exe", "coreclr.dll", "hostfxr.dll",
-    "BouncyCastle.Cryptography.dll", "Resources/BouncyCastle.NOTICE.txt",
+    "DS4Windows.exe", *sorted(RUNTIME_FILES), "Resources/BouncyCastle.NOTICE.txt",
     "Resources/DsxTriggerEffects.NOTICE.txt",
     "xbox-one-authorized-persona.json", "extras/XBOX-ONE-PERSONA-NOTICE.md",
     "extras/install-viiper-backend.ps1", "extras/VIIPER-0.1.18-x64.exe",
@@ -51,14 +52,17 @@ class LocalizationPackageTests(unittest.TestCase):
                 path = root / relative
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(("fixture:" + relative).encode())
-            (root / "DS4Windows.runtimeconfig.json").write_text(json.dumps({"runtimeOptions": {}}))
-            (root / "DS4Windows.deps.json").write_text(json.dumps({"targets": {"test": {
+            runtime = root / "Runtime"
+            runtime.mkdir()
+            (runtime / "DS4Windows.runtimeconfig.json").write_text(json.dumps({"runtimeOptions": {}}))
+            (runtime / "DS4Windows.deps.json").write_text(json.dumps({"targets": {"test": {
                 "DS4Windows/1": {"resources": {name: {"locale": name.split("/")[0]}
                     for name in SATELLITES if name.endswith("/DS4Windows.resources.dll")}},
                 "TaskScheduler/1": {"resources": {"de/Microsoft.Win32.TaskScheduler.resources.dll": {"locale": "de"}}}
             }}}))
             command = [sys.executable, str(REPOSITORY / "utils/GenericJoystickPreview/Prepare-Localization.py"), str(root)]
-            subprocess.run(command, check=True, capture_output=True)
+            result = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
             VALIDATOR.validate_localization_package(root)
             for relative in SATELLITES:
                 self.assertEqual(("fixture:" + relative).encode(), (root / "Lang" / relative).read_bytes())
@@ -69,7 +73,7 @@ class LocalizationPackageTests(unittest.TestCase):
             self.assertNotEqual(0, subprocess.run(command, capture_output=True).returncode)
 
     def test_missing_cipher_or_required_notice_is_rejected_before_composition(self):
-        for missing in ("BouncyCastle.Cryptography.dll", "Resources/BouncyCastle.NOTICE.txt",
+        for missing in ("Runtime/BouncyCastle.Cryptography.dll", "Resources/BouncyCastle.NOTICE.txt",
                         "Resources/DsxTriggerEffects.NOTICE.txt", "extras/VIIPER-WDL-NOTICE.txt",
                         "COPYING", "LICENSE.txt", "NOTICE.txt", "AGPL-3.0.txt", "DS5-BRIDGE-NOTICE.txt"):
             with self.subTest(missing=missing), tempfile.TemporaryDirectory(prefix="ds4w-missing-cipher-") as temporary:
@@ -208,10 +212,10 @@ class LocalizationPackageTests(unittest.TestCase):
                 }},
                 "libraries": {"DS4Windows/1.0.0": {"type": "project"}},
             })
-            (publish / "DS4Windows.deps.json").write_text(deps_text, encoding="utf-8")
-            (publish / "DS4Windows.runtimeconfig.json").write_text(
-                json.dumps({"runtimeOptions": {}}), encoding="utf-8"
-            )
+            contents["Runtime/DS4Windows.deps.json"] = deps_text.encode("utf-8")
+            contents["Runtime/DS4Windows.runtimeconfig.json"] = json.dumps({"runtimeOptions": {}}).encode("utf-8")
+            for path in ("Runtime/DS4Windows.deps.json", "Runtime/DS4Windows.runtimeconfig.json"):
+                (publish / path).write_bytes(contents[path])
             subprocess.run([
                 sys.executable, str(REPOSITORY / "utils" / "post-build.py"),
                 str(publish), str(REPOSITORY), "issue60-regression",
@@ -220,7 +224,8 @@ class LocalizationPackageTests(unittest.TestCase):
             self.assertTrue((package / "Lang").is_dir())
             self.assertFalse((package / "de").exists())
             self.assertFalse((package / "pt-BR").exists())
-            self.assertEqual(deps_text, (package / "DS4Windows.deps.json").read_text(encoding="utf-8"))
+            self.assertEqual([], list(package.glob("*.dll")))
+            self.assertEqual(deps_text, (package / "Runtime" / "DS4Windows.deps.json").read_text(encoding="utf-8"))
             VALIDATOR.validate_localization_package(package)
             owned = set((package / ".ds4windows-managed-files.txt").read_text(encoding="utf-8").splitlines())
             for relative in fixture_paths:
@@ -351,19 +356,37 @@ class LocalizationPackageTests(unittest.TestCase):
         configuration = json.loads((REPOSITORY / "DS4Windows" / "runtimeconfig.template.json").read_text(encoding="utf-8"))
         self.assertFalse(configuration.get("additionalProbingPaths"))
 
+    def test_runtime_validator_rejects_root_dlls_and_sidecars(self):
+        with tempfile.TemporaryDirectory(prefix="ds4w-runtime-validator-") as temporary:
+            package = Path(temporary)
+            runtime = package / "Runtime"
+            runtime.mkdir()
+            for name in APPLICATION_FILES:
+                (runtime / name).write_text(name, encoding="utf-8")
+            VALIDATOR.validate_runtime_layout(package)
+
+            for name in (*APPLICATION_FILES, "hostfxr.dll"):
+                leftover = package / name.upper()
+                leftover.touch()
+                with self.assertRaisesRegex(SystemExit, "Unexpected top-level runtime files"):
+                    VALIDATOR.validate_runtime_layout(package)
+                leftover.unlink()
+
     def test_validator_rejects_working_directory_probing_before_loading_metadata(self):
         with tempfile.TemporaryDirectory(prefix="ds4w-localization-validator-") as temporary:
-            package = Path(temporary)
+            package = Path(temporary) / "Runtime"
+            package.mkdir()
             (package / "DS4Windows.runtimeconfig.json").write_text(
                 json.dumps({"runtimeOptions": {"additionalProbingPaths": ["./Lang/"]}}),
                 encoding="utf-8",
             )
             with self.assertRaisesRegex(SystemExit, "must not depend on additional probing"):
-                VALIDATOR.validate_localization_package(package)
+                VALIDATOR.validate_localization_package(package.parent)
 
     def test_validator_rejects_missing_resource_metadata(self):
         with tempfile.TemporaryDirectory(prefix="ds4w-localization-validator-") as temporary:
-            package = Path(temporary)
+            package = Path(temporary) / "Runtime"
+            package.mkdir()
             (package / "DS4Windows.runtimeconfig.json").write_text(
                 json.dumps({"runtimeOptions": {}}), encoding="utf-8"
             )
@@ -371,7 +394,7 @@ class LocalizationPackageTests(unittest.TestCase):
                 json.dumps({"targets": {}}), encoding="utf-8"
             )
             with self.assertRaisesRegex(SystemExit, "omits application or TaskScheduler"):
-                VALIDATOR.validate_localization_package(package)
+                VALIDATOR.validate_localization_package(package.parent)
 
 
 class SetupActionValidationTests(unittest.TestCase):

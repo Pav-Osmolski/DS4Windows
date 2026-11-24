@@ -31,7 +31,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Json;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
@@ -2502,12 +2501,17 @@ namespace DS4Windows
 
         public static int[] DebouncingMs => m_Config.debouncingMs;
 
-        public static void DebouncingMsHasChanged()
-        {
-            DebouncingMsChanged.Invoke(typeof(Global), EventArgs.Empty);
-        }
+        internal static IReadOnlyDictionary<DS4Controls, int>[] ButtonDebounceOverrides => m_Config.buttonDebounceOverrides;
 
-        public static event EventHandler DebouncingMsChanged;
+        internal static void SetButtonDebounceOverride(int device, DS4Controls button, int? milliseconds)
+        {
+            var existing = ButtonDebounceOverrides[device];
+            var updated = existing == null ? new Dictionary<DS4Controls, int>() : new Dictionary<DS4Controls, int>(existing);
+            if (milliseconds is int value && DS4WinWPF.DS4Control.Debouncer.SupportsOverride(button))
+                updated[button] = Math.Clamp(value, 0, 1000);
+            else updated.Remove(button);
+            ButtonDebounceOverrides[device] = updated.Count == 0 ? null : updated;
+        }
 
         public static bool UseDs3PitchRollSim
         {
@@ -4408,7 +4412,7 @@ namespace DS4Windows
         public const string DEFAULT_SA_OUTPUT_CURVE = "linear";
         public const int DEFAULT_SA_OUTPUT_CURVE_ID = 0;
 
-        public String m_Profile = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName + "\\Profiles.xml";
+        public String m_Profile = Path.Combine(ApplicationPaths.PackageRoot, "Profiles.xml");
         public String m_Actions = Global.appdatapath + "\\Actions.xml";
         public string m_linkedProfiles = Global.appdatapath + "\\LinkedProfiles.xml";
         public string m_controllerConfigs = Global.appdatapath + "\\ControllerConfigs.xml";
@@ -11408,9 +11412,14 @@ namespace DS4Windows
             }
         }
 
+        internal readonly IReadOnlyDictionary<DS4Controls, int>[] buttonDebounceOverrides =
+            new IReadOnlyDictionary<DS4Controls, int>[Global.TEST_PROFILE_ITEM_COUNT];
+
         private void ResetProfile(int device)
         {
             genericJoystickSettings[device] = new GenericJoystickProfileSettings();
+            debouncingMs[device] = 0;
+            buttonDebounceOverrides[device] = null;
             buttonMouseInfos[device].Reset();
             buttonAbsMouseInfos[device].Reset();
             gyroControlsInf[device].Reset();

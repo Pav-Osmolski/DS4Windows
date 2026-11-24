@@ -21,7 +21,7 @@ internal static class SatelliteResourceLoader
 
     private static Assembly Resolve(AssemblyLoadContext context, AssemblyName requested)
     {
-        string path = GetSatellitePath(AppContext.BaseDirectory, requested);
+        string path = GetSatellitePath(ApplicationPaths.PackageRoot, AppContext.BaseDirectory, requested);
         if (path == null || !File.Exists(path)) return null;
         try
         {
@@ -38,7 +38,7 @@ internal static class SatelliteResourceLoader
         catch (UnauthorizedAccessException) { return null; }
     }
 
-    internal static string GetSatellitePath(string applicationDirectory, AssemblyName requested)
+    internal static string GetSatellitePath(string packageRoot, string assemblyDirectory, AssemblyName requested)
     {
         const string suffix = ".resources";
         string name = requested.Name;
@@ -51,7 +51,7 @@ internal static class SatelliteResourceLoader
         if (culture.Length == 0) return null;
         string parent = name.Substring(0, name.Length - suffix.Length);
         // Only resolve satellites for assemblies belonging to this application.
-        if (!File.Exists(Path.Combine(applicationDirectory, parent + ".dll"))) return null;
-        return Path.GetFullPath(Path.Combine(applicationDirectory, "Lang", culture, name + ".dll"));
+        if (!File.Exists(Path.Combine(assemblyDirectory, parent + ".dll"))) return null;
+        return Path.GetFullPath(Path.Combine(packageRoot, "Lang", culture, name + ".dll"));
     }
 }

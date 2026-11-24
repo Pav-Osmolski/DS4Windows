@@ -13,8 +13,8 @@ internal static class PortableBrokerStartupDiagnostics
             72 => "The USB/IP startup check timed out before VIIPER could open its connection.",
             73 => "The USB/IP driver did not pass its compatibility check.",
             74 => "VIIPER could not open or create its local connection key.",
-            75 => "VIIPER could not start its USB/IP listener. Check for another program using its port.",
-            76 => "VIIPER could not start its API listener. Check for another program using its port.",
+            75 => "VIIPER could not open its local USB/IP listener. Windows may have reserved the port, or another program may be using it.",
+            76 => "VIIPER could not open its local API listener. Windows may have reserved the port, or another program may be using it.",
             _ => "VIIPER exited before it was ready" + (code.HasValue
                 ? " (exit code " + code.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) + ")."
                 : "."),

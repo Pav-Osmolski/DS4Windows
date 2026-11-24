@@ -252,6 +252,10 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 ? "No profile selected"
                 : selectedController.SelectedProfile;
 
+        public string CurrentProfileDisplayName => HasSelectedProfile
+            ? selectedController.ProfileDisplayName : CurrentProfileName;
+        public event EventHandler CurrentProfileDisplayNameChanged;
+
         public string SelectedControllerConnection => selectedController?.ConnectionText ?? "Not connected";
 
         public string SelectedControllerLatency => selectedController?.LatencyText ?? "--";
@@ -714,6 +718,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             SelectedControllerNumberChanged?.Invoke(this, EventArgs.Empty);
             HasSelectedControllerChanged?.Invoke(this, EventArgs.Empty);
             CurrentProfileNameChanged?.Invoke(this, EventArgs.Empty);
+            CurrentProfileDisplayNameChanged?.Invoke(this, EventArgs.Empty);
             HasSelectedProfileChanged?.Invoke(this, EventArgs.Empty);
             NeedsProfileSelectionChanged?.Invoke(this, EventArgs.Empty);
             ProfileGuidanceChanged?.Invoke(this, EventArgs.Empty);
@@ -797,6 +802,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             if (previous.ProfileName != snapshot.ProfileName)
             {
                 CurrentProfileNameChanged?.Invoke(this, EventArgs.Empty);
+                CurrentProfileDisplayNameChanged?.Invoke(this, EventArgs.Empty);
                 HasSelectedProfileChanged?.Invoke(this, EventArgs.Empty);
                 NeedsProfileSelectionChanged?.Invoke(this, EventArgs.Empty);
                 ProfileGuidanceChanged?.Invoke(this, EventArgs.Empty);

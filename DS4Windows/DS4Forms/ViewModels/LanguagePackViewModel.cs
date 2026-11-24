@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -100,7 +99,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         private void CreateLanguageAssembliesBindingSource()
         {
             // Find the location where application installed.
-            string exeLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string exeLocation = ApplicationPaths.PackageRoot;
             List<string> lookupPaths = Global.PROBING_PATH.Split(';')
                 .Select(path => Path.Combine(exeLocation, path))
                 .Where(path => path != exeLocation)
