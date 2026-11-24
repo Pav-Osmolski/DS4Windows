@@ -74,6 +74,19 @@ namespace DS4WinWPF.DS4Forms
 
             this.expose = expose;
             bindingVM = new BindingWindowViewModel(deviceNum, settings);
+            if (expose == ExposeMode.Full && DS4WinWPF.DS4Control.Debouncer.SupportsOverride(settings.control))
+            {
+                var overrides = DS4Windows.Global.ButtonDebounceOverrides[deviceNum];
+                int value = DS4Windows.Global.DebouncingMs[deviceNum];
+                bool hasOverride = overrides?.ContainsKey(settings.control) == true;
+                if (hasOverride) value = overrides[settings.control];
+                buttonDebouncePanel.Visibility = Visibility.Visible;
+                buttonDebounceOverride.Content = UiText.Get("Override debounce");
+                buttonDebounceOverride.ToolTip = UiText.Get("Use a separate debounce duration for this button. Clear the checkbox to use the profile setting.");
+                buttonDebounceMilliseconds.ToolTip = UiText.Get("Button debounce in milliseconds");
+                buttonDebounceMilliseconds.Value = Math.Clamp(value, 0, 1000);
+                buttonDebounceOverride.IsChecked = hasOverride;
+            }
 
             if (settings.control != DS4Windows.DS4Controls.None)
             {
@@ -1736,6 +1749,9 @@ namespace DS4WinWPF.DS4Forms
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             bindingVM.WriteBinds();
+            if (buttonDebouncePanel.Visibility == Visibility.Visible)
+                DS4Windows.Global.SetButtonDebounceOverride(bindingVM.DeviceNum, bindingVM.Settings.control,
+                    buttonDebounceOverride.IsChecked == true ? buttonDebounceMilliseconds.Value ?? 0 : null);
 
             UnregisterDataContext();
         }

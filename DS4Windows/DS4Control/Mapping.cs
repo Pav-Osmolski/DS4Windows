@@ -92,6 +92,8 @@ namespace DS4Windows
             private Mouse mouseMappingTouch;
             private DS4StateFieldMapping mouseMappingFields;
             private bool mouseMappingFrame;
+            internal MouseStickIntent PhysicalMouseSticks { get; set; }
+            internal double MouseHorizontalRemainder, MouseVerticalRemainder;
 
             internal void SetMouseMappingContext(DS4State state,
                 DS4StateExposed exposed, Mouse touch, DS4StateFieldMapping fields)
@@ -1151,9 +1153,15 @@ namespace DS4Windows
         private static bool stickHorizontalWheelLeftDir = false;
 
         //mapcustom
-        public static bool[] pressedonce = new bool[2400], macrodone = new bool[DS4_CONTROL_MACRO_ARRAY_LEN];
-        static bool[] macroControl = new bool[26];
-        static uint macroCount = 0;
+        public static bool[] pressedonce = new bool[2400];
+        private static readonly bool[][] macroDone = Enumerable.Range(0, Global.MAX_DS4_CONTROLLER_COUNT)
+            .Select(_ => new bool[DS4_CONTROL_MACRO_ARRAY_LEN]).ToArray();
+        private static readonly bool[][] macroControl = Enumerable.Range(0, Global.MAX_DS4_CONTROLLER_COUNT)
+            .Select(_ => new bool[26]).ToArray();
+        private static readonly MacroControllerReportProgress[] macroReportProgress = macroControl
+            .Select(_ => new MacroControllerReportProgress()).ToArray();
+        internal static bool HasPendingControllerMacro(int device) => macroReportProgress[device].HasPending;
+        internal static void PublishControllerMacroReport(int device) => macroReportProgress[device].Publish();
         static Dictionary<string, Task>[] macroTaskQueue = new Dictionary<string, Task>[Global.MAX_DS4_CONTROLLER_COUNT] { new Dictionary<string, Task>(), new Dictionary<string, Task>(), new Dictionary<string, Task>(), new Dictionary<string, Task>(), new Dictionary<string, Task>(), new Dictionary<string, Task>(), new Dictionary<string, Task>(), new Dictionary<string, Task>() };
 
         //actions
@@ -1286,7 +1294,6 @@ namespace DS4Windows
         public static int mcounter = 34;
         public static int mouseaccel = 0;
         public static int prevmouseaccel = 0;
-        private static double horizontalRemainder = 0.0, verticalRemainder = 0.0;
         public const int MOUSESPEEDFACTOR = 48;
         private const double MOUSESTICKANTIOFFSET = 0.0128;
         private const double MOUSESTICKMINVELOCITY = 67.5;
@@ -2918,10 +2925,15 @@ namespace DS4Windows
             MapCustom(device, cState, MappedState, eState, tp, ctrl, Stopwatch.GetTimestamp(), physicalActionState);
         }
 
+        internal static void MapCustom(int device, DS4State cState, DS4State mappedState, DS4StateExposed exposed,
+            Mouse touch, ControlService service, DS4State physicalActionState, MouseStickIntent intent) =>
+            MapCustom(device, cState, mappedState, exposed, touch, service, Stopwatch.GetTimestamp(), physicalActionState, intent);
+
         // Deterministic clock seam for the same production mapper; tests never
         // need to sleep or inject input into Windows to verify a camera turn.
         internal static void MapCustom(int device, DS4State cState, DS4State MappedState, DS4StateExposed eState,
-            Mouse tp, ControlService ctrl, long calibrationTimestamp, DS4State physicalActionState = null)
+            Mouse tp, ControlService ctrl, long calibrationTimestamp, DS4State physicalActionState = null,
+            MouseStickIntent? mouseIntent = null)
         {
             /* TODO: This method is slow sauce. Find ways to speed up action execution */
             double tempMouseDeltaX = 0.0;
@@ -2952,6 +2964,7 @@ namespace DS4Windows
 
             SyntheticState deviceState = Mapping.deviceState[device];
             deviceState.SetMouseMappingContext(cState, eState, tp, fieldMapping);
+            deviceState.PhysicalMouseSticks = mouseIntent ?? ReadMouseStickIntent(physicalActionState ?? cState);
             // Calibration is an Axis Config command, not a button remap or
             // Special Action. Reserve its normal output before either runs;
             // only field maps change, never the physical report snapshot.
@@ -3376,34 +3389,36 @@ namespace DS4Windows
 
             outputfieldMapping.PopulateState(MappedState);
 
-            if (macroCount > 0)
+            macroReportProgress[device].Capture();
+            bool[] macroButtons = macroControl[device];
+            if (Array.IndexOf(macroButtons, true) >= 0)
             {
-                if (macroControl[00]) MappedState.Cross = true;
-                if (macroControl[01]) MappedState.Circle = true;
-                if (macroControl[02]) MappedState.Square = true;
-                if (macroControl[03]) MappedState.Triangle = true;
-                if (macroControl[04]) MappedState.Options = true;
-                if (macroControl[05]) MappedState.Share = true;
-                if (macroControl[06]) MappedState.DpadUp = true;
-                if (macroControl[07]) MappedState.DpadDown = true;
-                if (macroControl[08]) MappedState.DpadLeft = true;
-                if (macroControl[09]) MappedState.DpadRight = true;
-                if (macroControl[10]) MappedState.PS = true;
-                if (macroControl[11]) MappedState.L1 = true;
-                if (macroControl[12]) MappedState.R1 = true;
-                if (macroControl[13]) MappedState.L2 = 255;
-                if (macroControl[14]) MappedState.R2 = 255;
-                if (macroControl[15]) MappedState.L3 = true;
-                if (macroControl[16]) MappedState.R3 = true;
-                if (macroControl[17]) MappedState.LX = 255;
-                if (macroControl[18]) MappedState.LX = 0;
-                if (macroControl[19]) MappedState.LY = 255;
-                if (macroControl[20]) MappedState.LY = 0;
-                if (macroControl[21]) MappedState.RX = 255;
-                if (macroControl[22]) MappedState.RX = 0;
-                if (macroControl[23]) MappedState.RY = 255;
-                if (macroControl[24]) MappedState.RY = 0;
-                if (macroControl[25]) MappedState.OutputTouchButton = true;
+                if (macroButtons[00]) MappedState.Cross = true;
+                if (macroButtons[01]) MappedState.Circle = true;
+                if (macroButtons[02]) MappedState.Square = true;
+                if (macroButtons[03]) MappedState.Triangle = true;
+                if (macroButtons[04]) MappedState.Options = true;
+                if (macroButtons[05]) MappedState.Share = true;
+                if (macroButtons[06]) MappedState.DpadUp = true;
+                if (macroButtons[07]) MappedState.DpadDown = true;
+                if (macroButtons[08]) MappedState.DpadLeft = true;
+                if (macroButtons[09]) MappedState.DpadRight = true;
+                if (macroButtons[10]) MappedState.PS = true;
+                if (macroButtons[11]) MappedState.L1 = true;
+                if (macroButtons[12]) MappedState.R1 = true;
+                if (macroButtons[13]) MappedState.L2 = 255;
+                if (macroButtons[14]) MappedState.R2 = 255;
+                if (macroButtons[15]) MappedState.L3 = true;
+                if (macroButtons[16]) MappedState.R3 = true;
+                if (macroButtons[17]) MappedState.LX = 255;
+                if (macroButtons[18]) MappedState.LX = 0;
+                if (macroButtons[19]) MappedState.LY = 255;
+                if (macroButtons[20]) MappedState.LY = 0;
+                if (macroButtons[21]) MappedState.RX = 255;
+                if (macroButtons[22]) MappedState.RX = 0;
+                if (macroButtons[23]) MappedState.RY = 255;
+                if (macroButtons[24]) MappedState.RY = 0;
+                if (macroButtons[25]) MappedState.OutputTouchButton = true;
             }
 
             if (GetSASteeringWheelEmulationAxis(device) != SASteeringWheelEmulationAxisType.None)
@@ -3635,7 +3650,7 @@ namespace DS4Windows
                 mappingMouseBatchAdmitted, ref tempMouseDeltaX,
                 ref tempMouseDeltaY);
 
-            calculateFinalMouseMovement(ref tempMouseDeltaX, ref tempMouseDeltaY,
+            calculateFinalMouseMovement(device, ref tempMouseDeltaX, ref tempMouseDeltaY,
                 out mouseDeltaX, out mouseDeltaY);
             int calibrationDelta = AdvanceFlickStickCalibration(device, tp,
                 ctrl.DS4Controllers[device], calibrationTimestamp);
@@ -4471,11 +4486,11 @@ namespace DS4Windows
                         switch2DirectionTapEligible);
                     if (active)
                     {
-                        PlayMacro(device, macroControl, string.Empty, null, action.actionMacro, dcs.control, keyType);
+                        PlayMacro(device, macroControl[device], string.Empty, null, action.actionMacro, dcs.control, keyType);
                     }
                     else
                     {
-                        EndMacro(device, macroControl, action.actionMacro, dcs.control);
+                        EndMacro(device, macroControl[device], action.actionMacro, dcs.control);
                     }
 
                     // erase default mappings for things that are remapped
@@ -5010,7 +5025,7 @@ namespace DS4Windows
                         int gesture = gestureState.Update(active,
                             gestureTime, options, Global.DebouncingMs[device], tripleGroups.Contains(options.GroupKey));
                         if (gesture >= 0 && options.IsEnabled(gesture))
-                            PlayMacro(device, macroControl, options.Macros[gesture], null, null, DS4Controls.None, DS4KeyType.None);
+                            PlayMacro(device, macroControl[device], options.Macros[gesture], null, null, DS4Controls.None, DS4KeyType.None);
                         continue;
                     }
 
@@ -5297,12 +5312,12 @@ namespace DS4Windows
                                         }
                                         */
 
-                                        PlayMacro(device, macroControl, String.Empty, action.macro, null, DS4Controls.None, keyType, action, actionDone[index]);
+                                        PlayMacro(device, macroControl[device], String.Empty, action.macro, null, DS4Controls.None, keyType, action, actionDone[index]);
                                     }
                                     else
                                     {
                                         if (!action.keyType.HasFlag(DS4KeyType.RepeatMacro))
-                                            EndMacro(device, macroControl, action.macro, DS4Controls.None);
+                                            EndMacro(device, macroControl[device], action.macro, DS4Controls.None);
                                     }
                                 }
                                 else
@@ -5322,7 +5337,7 @@ namespace DS4Windows
                                             }
                                             */
 
-                                            PlayMacro(device, macroControl, String.Empty, action.macro, null, DS4Controls.None, keyType, action, null);
+                                            PlayMacro(device, macroControl[device], String.Empty, action.macro, null, DS4Controls.None, keyType, action, null);
                                         }
                                     }
                                     else
@@ -5613,7 +5628,7 @@ namespace DS4Windows
                                     if ((DateTime.UtcNow - action.TimeofEnd) > TimeSpan.FromMilliseconds(150) + TimeSpan.FromMilliseconds(Global.DebouncingMs[device]))
                                     {
                                         if (macro != "")
-                                            PlayMacro(device, macroControl, macro, null, null, DS4Controls.None, DS4KeyType.None);
+                                            PlayMacro(device, macroControl[device], macro, null, null, DS4Controls.None, DS4KeyType.None);
 
                                         tappedOnce = false;
                                         action.tappedOnce = false;
@@ -5639,7 +5654,7 @@ namespace DS4Windows
                                     }
 
                                     if (macro != "")
-                                        PlayMacro(device, macroControl, macro, null, null, DS4Controls.None, DS4KeyType.None);
+                                        PlayMacro(device, macroControl[device], macro, null, null, DS4Controls.None, DS4KeyType.None);
 
                                     firstTouch = false;
                                     action.firstTouch = false;
@@ -5663,7 +5678,7 @@ namespace DS4Windows
                                     }
 
                                     if (macro != "")
-                                        PlayMacro(device, macroControl, macro, null, null, DS4Controls.None, DS4KeyType.None);
+                                        PlayMacro(device, macroControl[device], macro, null, null, DS4Controls.None, DS4KeyType.None);
 
                                     secondtouchbegin = false;
                                     action.secondtouchbegin = false;
@@ -5800,14 +5815,14 @@ namespace DS4Windows
             {
                 // Run special action macros in synchronized order (ie. FirstIn-FirstOut). The trigger control name string is the execution queue identifier (ie. each unique trigger combination has an own synchronization queue).
                 if (!macroTaskQueue[device].TryGetValue(action.controls, out Task prevTask))
-                    macroTaskQueue[device].Add(action.controls, (Task.Factory.StartNew(() => PlayMacroTaskInEpoch(device, macroControl, macroStr, macroLst, macroArr, control, keyType, action, actionDoneState, mouseEpoch))));
+                    macroTaskQueue[device].Add(action.controls, (Task.Factory.StartNew(() => PlayMacroTaskInEpoch(device, macroControl[device], macroStr, macroLst, macroArr, control, keyType, action, actionDoneState, mouseEpoch))));
                 else
-                    macroTaskQueue[device][action.controls] = prevTask.ContinueWith((x) => PlayMacroTaskInEpoch(device, macroControl, macroStr, macroLst, macroArr, control, keyType, action, actionDoneState, mouseEpoch));
+                    macroTaskQueue[device][action.controls] = prevTask.ContinueWith((x) => PlayMacroTaskInEpoch(device, macroControl[device], macroStr, macroLst, macroArr, control, keyType, action, actionDoneState, mouseEpoch));
             }
             else
                 // Run macro as "fire and forget" background task. No need to wait for completion of any of the other macros. 
                 // If the same trigger macro is re-launched while previous macro is still running then the order of parallel macros is not guaranteed.
-                Task.Factory.StartNew(() => PlayMacroTaskInEpoch(device, macroControl, macroStr, macroLst, macroArr, control, keyType, action, actionDoneState, mouseEpoch));
+                Task.Factory.StartNew(() => PlayMacroTaskInEpoch(device, macroControl[device], macroStr, macroLst, macroArr, control, keyType, action, actionDoneState, mouseEpoch));
         }
 
         // Play through a macro. The macro steps are defined either as string, List or Array object (always only one of those parameters is set to a valid value)
@@ -5844,37 +5859,35 @@ namespace DS4Windows
 
                 AltTabSwapping(wait, device);
                 if (control != DS4Controls.None)
-                    macrodone[DS4ControltoInt(control)] = true;
+                    macroDone[device][DS4ControltoInt(control)] = true;
             }
-            else if (control == DS4Controls.None || !macrodone[DS4ControltoInt(control)])
+            else if (control == DS4Controls.None || !macroDone[device][DS4ControltoInt(control)])
             {
                 int macroCodeValue;
                 bool[] keydown = new bool[512];
                 RegisterMacroMouseOwnerInEpoch(device, keydown, mouseEpoch);
 
                 if (control != DS4Controls.None)
-                    macrodone[DS4ControltoInt(control)] = true;
+                    macroDone[device][DS4ControltoInt(control)] = true;
 
-                // Play macro codes and simulate key down/up events (note! The same key may go through several up and down events during the same macro).
-                // If the return value is TRUE then this method should do a asynchronized delay (the usual Thread.Sleep doesnt work here because it would block the main gamepad reading thread).
-                if (macroLst != null)
+                ViiperHighResolutionWaiter timer = null;
+                try
                 {
-                    for (int i = 0; i < macroLst.Count; i++)
+                    IReadOnlyList<int> steps = (IReadOnlyList<int>)macroLst ?? macroArr;
+                    for (int i = 0; i < steps.Count; i++)
                     {
-                        macroCodeValue = macroLst[i];
+                        macroCodeValue = steps[i];
                         if (PlayMacroCodeValue(device, macrocontrol, keyType, macroCodeValue, keydown))
-                            Task.Delay(macroCodeValue - 300).Wait();
+                        {
+                            if (macroCodeValue > 300)
+                                (timer ??= new ViiperHighResolutionWaiter()).WaitForMilliseconds(macroCodeValue - 300);
+                        }
+                        else if (macroCodeValue is >= 261 and <= DS4ControlSettings.MAX_MACRO_VALUE &&
+                                 Program.rootHub?.DS4Controllers?[device] != null && !useDInputOnly[device])
+                            macroReportProgress[device].WaitForReport();
                     }
                 }
-                else
-                {
-                    for (int i = 0; i < macroArr.Length; i++)
-                    {
-                        macroCodeValue = macroArr[i];
-                        if (PlayMacroCodeValue(device, macrocontrol, keyType, macroCodeValue, keydown))
-                            Task.Delay(macroCodeValue - 300).Wait();
-                    }
-                }
+                finally { timer?.Dispose(); }
 
                 // The macro is finished. If any of the keys is still in down state then release a key state (ie. simulate key up event) unless special action specified to keep the last state as it is left in a macro
                 if (action == null || !action.keepKeyState)
@@ -5902,7 +5915,7 @@ namespace DS4Windows
                 {
                     Task.Delay(50).Wait();
                     if (control != DS4Controls.None)
-                        macrodone[DS4ControltoInt(control)] = false;
+                        macroDone[device][DS4ControltoInt(control)] = false;
                 }
             }
 
@@ -5916,17 +5929,10 @@ namespace DS4Windows
             bool doDelayOnCaller = false;
             if (macroCodeValue >= 261 && macroCodeValue <= DS4ControlSettings.MAX_MACRO_VALUE)
             {
-                // Gamepad button up or down macro event. macroCodeValue index value is the button identifier (codeValue-261 = idx in 0..24 range)
-                if (!keydown[macroCodeValue])
-                {
-                    macroControl[macroCodeValue - 261] = keydown[macroCodeValue] = true;
-                    macroCount++;
-                }
-                else
-                {
-                    macroControl[macroCodeValue - 261] = keydown[macroCodeValue] = false;
-                    if (macroCount > 0) macroCount--;
-                }
+                int button = macroCodeValue - 261;
+                if (button >= macrocontrol.Length) return false;
+                macrocontrol[button] = keydown[macroCodeValue] = !keydown[macroCodeValue];
+                macroReportProgress[device].Request();
             }
             else if (macroCodeValue >= 256 && macroCodeValue <= 260)
             {
@@ -5965,6 +5971,9 @@ namespace DS4Windows
                     }
                     keydown[macroCodeValue] = false;
                 }
+                // A buffered keyboard backend must submit this edge before a
+                // following gamepad step or a second edge can replace it.
+                outputKBMHandler.Sync();
             }
             else if (macroCodeValue >= 1000000000)
             {
@@ -6012,7 +6021,7 @@ namespace DS4Windows
                 AltTabSwappingRelease();
 
             if (control != DS4Controls.None)
-                macrodone[DS4ControltoInt(control)] = false;
+                macroDone[device][DS4ControltoInt(control)] = false;
         }
 
         private static void EndMacro(int device, bool[] macrocontrol, List<int> macro, DS4Controls control)
@@ -6021,7 +6030,7 @@ namespace DS4Windows
                 AltTabSwappingRelease();
 
             if (control != DS4Controls.None)
-                macrodone[DS4ControltoInt(control)] = false;
+                macroDone[device][DS4ControltoInt(control)] = false;
         }
 
         private static void EndMacro(int device, bool[] macrocontrol, int[] macro, DS4Controls control)
@@ -6030,7 +6039,7 @@ namespace DS4Windows
                 AltTabSwappingRelease();
 
             if (control != DS4Controls.None)
-                macrodone[DS4ControltoInt(control)] = false;
+                macroDone[device][DS4ControltoInt(control)] = false;
         }
 
         private static void AltTabSwapping(int wait, int device)
@@ -6471,6 +6480,18 @@ namespace DS4Windows
             return result;
         }
 
+        internal readonly record struct MouseStickIntent(bool LeftCentered, bool RightCentered);
+
+        internal static MouseStickIntent ReadMouseStickIntent(DS4State physical)
+        {
+            // Use the current calibrated input before the profile's smoothing
+            // can carry a previous stick displacement into this report.
+            return new(Centered(physical.LXAxis.ProfileCoordinate, physical.LYAxis.ProfileCoordinate),
+                Centered(physical.RXAxis.ProfileCoordinate, physical.RYAxis.ProfileCoordinate));
+
+            static bool Centered(double x, double y) => Math.Abs(x - 128) <= 3 && Math.Abs(y - 128) <= 3;
+        }
+
         private static double getMouseMapping(int device, DS4Controls control, DS4State cState, DS4StateExposed eState,
             DS4StateFieldMapping fieldMapping, int mnum, ControlService ctrl)
         {
@@ -6512,6 +6533,9 @@ namespace DS4Windows
             }
             else if (controlType == DS4StateFieldMapping.ControlType.AxisDir)
             {
+                MouseStickIntent intent = deviceState[device].PhysicalMouseSticks;
+                bool left = control is >= DS4Controls.LXNeg and <= DS4Controls.LYPos;
+                if (left ? intent.LeftCentered : intent.RightCentered) return 0;
                 double timeDelta = timeElapsed * 0.001;
                 int mouseVelocity = speed * MOUSESPEEDFACTOR;
                 double mouseOffset = buttonMouseInfo.mouseVelocityOffset * mouseVelocity;
@@ -6798,9 +6822,11 @@ namespace DS4Windows
             return value;
         }
 
-        private static void calculateFinalMouseMovement(ref double rawMouseX, ref double rawMouseY,
+        private static void calculateFinalMouseMovement(int device, ref double rawMouseX, ref double rawMouseY,
             out int mouseX, out int mouseY)
         {
+            ref double horizontalRemainder = ref deviceState[device].MouseHorizontalRemainder;
+            ref double verticalRemainder = ref deviceState[device].MouseVerticalRemainder;
             if ((rawMouseX > 0.0 && horizontalRemainder > 0.0) || (rawMouseX < 0.0 && horizontalRemainder < 0.0))
             {
                 rawMouseX += horizontalRemainder;

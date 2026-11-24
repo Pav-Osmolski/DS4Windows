@@ -150,8 +150,6 @@ namespace DS4Windows
             ConfirmedExited,
         }
 
-        private const string DefaultHost = "127.0.0.1";
-        private const int DefaultPort = 3242;
         private const int DualSenseBaseFeedbackLength = 6;
         private const int DualSenseTriggerFeedbackOffset = 6;
         // VIIPER sends compact feedback, not a full native HID output report:
@@ -645,7 +643,7 @@ namespace DS4Windows
                 GetFeedbackSpeakerMaximumAgeMilliseconds(viiperType),
                 IsDualSenseVirtualType(viiperType) ?
                     FeedbackOrderedControlMaximumAgeMilliseconds : 0);
-            client = new ViiperClient(DefaultHost, DefaultPort);
+            client = new ViiperClient(ViiperSetupManager.ApiHost, PortableBrokerPorts.Current.Api);
             if (viiperType == ViiperVirtualDeviceType.Xbox360)
             {
                 string configuredAge = Environment.GetEnvironmentVariable(
@@ -11590,7 +11588,6 @@ namespace DS4Windows
     {
         private const string OwnershipSerialPrefix = "DS4W";
         private const int OwnershipSerialLength = 15;
-        private const int ViiperUsbipServerPort = 3241;
         private static readonly object ActivePortsLock = new object();
         private static readonly ViiperNativeMutationGate NativePortMutationGate = new();
         private static readonly Dictionary<int, string> ActivePorts =
@@ -11830,7 +11827,7 @@ namespace DS4Windows
             CanUseUsbipPortAsInput(port, TryRunUsbip);
 
         internal static bool CanUseUsbipPortAsInput(int port,
-            UsbipCommandRunner query)
+            UsbipCommandRunner query, int? portableUsbPort = null)
         {
             if (port < 0 || IsActivePort(port) ||
                 !TryGetImportedPorts(query, out var ports, out _))
@@ -11844,7 +11841,10 @@ namespace DS4Windows
                 matches++;
                 externalSource = TryParseRemoteLocation(candidate.Block,
                     out string host, out int serverPort, out _) &&
-                    !(IsLocalHost(host) && serverPort == ViiperUsbipServerPort);
+                    !(IsLocalHost(host) &&
+                        (serverPort == PortableBrokerPorts.DefaultUsbPort ||
+                         serverPort == (portableUsbPort ?? PortableBrokerPorts.Current.Usb) ||
+                         (TryParseSerial(candidate.Block, out string serial) && IsDs4WindowsOwnershipSerial(serial))));
             }
             return matches == 1 && externalSource;
         }
@@ -11985,11 +11985,13 @@ namespace DS4Windows
         }
 
         internal static bool IsDs4WindowsOwnedLocalPort(
-            UsbipPortBlock port, string remoteBusId)
+            UsbipPortBlock port, string remoteBusId, int? portableUsbPort = null)
         {
             if (!TryParseRemoteLocation(port.Block, out string host,
                 out int serverPort, out string parsedBusId) ||
-                !IsLocalHost(host) || serverPort != ViiperUsbipServerPort)
+                !IsLocalHost(host) ||
+                (serverPort != PortableBrokerPorts.DefaultUsbPort &&
+                 serverPort != (portableUsbPort ?? PortableBrokerPorts.Current.Usb)))
             {
                 return false;
             }
@@ -12007,12 +12009,13 @@ namespace DS4Windows
                 return false;
             }
 
-            // The published usbip-win2 0.9.8.1 serial override is broken. Our
-            // safe ownership identity is the exact VIIPER-only localhost
-            // server port plus the remote bus/device tuple. If a newer port
-            // listing does expose a serial, reject every foreign token.
-            return !TryParseSerial(port.Block, out string serial) ||
-                IsDs4WindowsOwnershipSerial(serial);
+            if (TryParseSerial(port.Block, out string serial))
+                return IsDs4WindowsOwnershipSerial(serial);
+
+            // Windows may previously have assigned an alternate listen port
+            // to someone else. Without a serial, require the exact bus/device
+            // tuple registered by this broker before detaching such an import.
+            return serverPort == PortableBrokerPorts.DefaultUsbPort || !string.IsNullOrEmpty(remoteBusId);
         }
 
         internal static bool IsDs4WindowsOwnershipSerial(string serial)

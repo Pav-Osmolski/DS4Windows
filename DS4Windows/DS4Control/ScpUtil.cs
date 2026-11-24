@@ -2495,12 +2495,17 @@ namespace DS4Windows
 
         public static int[] DebouncingMs => m_Config.debouncingMs;
 
-        public static void DebouncingMsHasChanged()
-        {
-            DebouncingMsChanged.Invoke(typeof(Global), EventArgs.Empty);
-        }
+        internal static IReadOnlyDictionary<DS4Controls, int>[] ButtonDebounceOverrides => m_Config.buttonDebounceOverrides;
 
-        public static event EventHandler DebouncingMsChanged;
+        internal static void SetButtonDebounceOverride(int device, DS4Controls button, int? milliseconds)
+        {
+            var existing = ButtonDebounceOverrides[device];
+            var updated = existing == null ? new Dictionary<DS4Controls, int>() : new Dictionary<DS4Controls, int>(existing);
+            if (milliseconds is int value && DS4WinWPF.DS4Control.Debouncer.SupportsOverride(button))
+                updated[button] = Math.Clamp(value, 0, 1000);
+            else updated.Remove(button);
+            ButtonDebounceOverrides[device] = updated.Count == 0 ? null : updated;
+        }
 
         public static bool UseDs3PitchRollSim
         {
@@ -11390,8 +11395,13 @@ namespace DS4Windows
             }
         }
 
+        internal readonly IReadOnlyDictionary<DS4Controls, int>[] buttonDebounceOverrides =
+            new IReadOnlyDictionary<DS4Controls, int>[Global.TEST_PROFILE_ITEM_COUNT];
+
         private void ResetProfile(int device)
         {
+            debouncingMs[device] = 0;
+            buttonDebounceOverrides[device] = null;
             buttonMouseInfos[device].Reset();
             buttonAbsMouseInfos[device].Reset();
             gyroControlsInf[device].Reset();

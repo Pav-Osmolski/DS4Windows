@@ -16,6 +16,7 @@ internal sealed class PortableBrokerStartupException : Exception
 {
     internal PortableBrokerStartupException(string message) : base(message) { }
     internal PortableBrokerStartupException(string message, Exception innerException) : base(message, innerException) { }
+    internal bool ListenerFailed { get; init; }
 }
 
 // Owns only the broker started by this normal portable package. It does not
@@ -34,6 +35,7 @@ internal sealed class PortableBrokerContext : IDisposable
     private FileStream keyPin;
     private IPortableBrokerProcess owned;
     private PortableBrokerProcessIdentity? borrowed;
+    private PortableBrokerPorts ports = PortableBrokerPorts.Default;
     private bool disposed, startFailed;
     private static PortableBrokerContext current;
 
@@ -43,6 +45,7 @@ internal sealed class PortableBrokerContext : IDisposable
     internal string KeyPath { get; }
     internal string DataPath { get; }
     internal string ConfigPath { get; }
+    internal PortableBrokerPorts Ports => System.Threading.Volatile.Read(ref ports);
 
     internal static string DescribeReadinessFailure(string probeFailure)
     {
@@ -354,13 +357,14 @@ internal sealed class PortableBrokerContext : IDisposable
 
     internal bool InspectOwnedProcess(out bool running, out string failure)
     {
-        lock (gate) return InspectOwnedProcessCore(out running, out failure);
+        lock (gate) return InspectOwnedProcessCore(out running, out failure, out _);
     }
 
-    private bool InspectOwnedProcessCore(out bool running, out string failure)
+    private bool InspectOwnedProcessCore(out bool running, out string failure, out bool listenerFailed)
     {
         running = false;
         failure = null;
+        listenerFailed = false;
         if (disposed || startFailed || backendPin == null) { failure = StartFailure; return false; }
         try
         {
@@ -380,8 +384,13 @@ internal sealed class PortableBrokerContext : IDisposable
             if (peers.Any(peer => !IsOwned(peer))) { failure = CloseOtherBroker; return false; }
             if (peers.Count != 1 || !owned.IsRunning || !owned.IdentityMatches)
             {
-                failure = !owned.IsRunning
-                    ? PortableBrokerStartupDiagnostics.DescribeExit(owned.ExitCode) : StartFailure;
+                if (!owned.IsRunning)
+                {
+                    int? exitCode = owned.ExitCode;
+                    listenerFailed = exitCode is 75 or 76;
+                    failure = PortableBrokerStartupDiagnostics.DescribeExit(exitCode);
+                }
+                else failure = StartFailure;
                 return false;
             }
             running = true;
@@ -394,7 +403,54 @@ internal sealed class PortableBrokerContext : IDisposable
         peer.ProcessId == owned.ProcessId && peer.StartTimeUtcTicks == owned.StartTimeUtcTicks &&
         string.Equals(peer.ExecutablePath, ViiperPath, StringComparison.OrdinalIgnoreCase);
 
-    internal void Start()
+    internal delegate bool ReadinessProbe(int apiPort, int timeoutMilliseconds, out string failure);
+
+    internal void StartAndWaitUntilReady(PortableBrokerPorts preferredPorts = null, ReadinessProbe probe = null)
+    {
+        probe ??= (int apiPort, int timeout, out string failure) => ViiperSetupManager.ProbeServer(
+            ViiperSetupManager.ApiHost, apiPort, authenticated: true, out failure, totalTimeoutMilliseconds: timeout);
+        // A listener can become unavailable between the preflight bind and
+        // VIIPER's own bind. Retry once, and only for our exact child exiting
+        // with one of the documented listener failure codes.
+        try { StartAndProbe(useFallback: false); }
+        catch (PortableBrokerStartupException error) when (error.ListenerFailed)
+        {
+            lock (gate)
+            {
+                StopOwnedProcess();
+                configurationPin?.Dispose();
+                configurationPin = null;
+                startFailed = false;
+            }
+            StartAndProbe(useFallback: true);
+        }
+
+        void StartAndProbe(bool useFallback)
+        {
+            Start(useFallback, preferredPorts);
+            if (!ViiperStartupReadiness.Wait(Check, out string failure))
+                throw new PortableBrokerStartupException(DescribeReadinessFailure(failure));
+        }
+
+        bool Check(int timeout, out string failure)
+        {
+            lock (gate)
+            {
+                EnsureRunning();
+                if (!probe(Ports.Api, timeout, out failure)) return false;
+                EnsureRunning();
+                return true;
+            }
+        }
+
+        void EnsureRunning()
+        {
+            if (!InspectOwnedProcessCore(out bool running, out string failure, out bool listenerFailed) || !running)
+                throw new PortableBrokerStartupException(failure ?? StartFailure) { ListenerFailed = listenerFailed };
+        }
+    }
+
+    internal void Start(bool useFallback = false, PortableBrokerPorts preferredPorts = null)
     {
         lock (gate)
         {
@@ -403,7 +459,7 @@ internal sealed class PortableBrokerContext : IDisposable
                 throw new PortableBrokerStartupException("Portable VIIPER is unavailable. Use Install/Repair VIIPER in Settings to restore the matching broker in this portable folder.");
             if (owned != null || borrowed != null)
             {
-                if (InspectOwnedProcessCore(out bool running, out string failure) && running) return;
+                if (InspectOwnedProcessCore(out bool running, out string failure, out _) && running) return;
                 throw new PortableBrokerStartupException(failure ?? StartFailure);
             }
             try
@@ -452,13 +508,17 @@ internal sealed class PortableBrokerContext : IDisposable
                         if (string.IsNullOrWhiteSpace(reader.ReadToEnd()))
                             throw new PortableBrokerStartupException(CloseOtherBroker);
                     IReadOnlyList<string> arguments = host.ReadArguments(existing);
-                    if (!arguments.SequenceEqual(BuildStartInfo().ArgumentList, StringComparer.Ordinal) ||
+                    PortableBrokerPorts existingPorts = PortableBrokerPorts.FromArguments(arguments);
+                    if (useFallback || existingPorts == null ||
+                        !arguments.SequenceEqual(BuildStartInfo(existingPorts).ArgumentList, StringComparer.Ordinal) ||
                         FindCompatibleCandidate() != existing)
                         throw new PortableBrokerStartupException(CloseOtherBroker);
+                    System.Threading.Volatile.Write(ref ports, existingPorts);
                     borrowed = existing; // Readiness still requires the caller's authenticated ping.
                     return;
                 }
-                ProcessStartInfo start = BuildStartInfo();
+                PortableBrokerPorts selected = host.SelectPorts(useFallback, preferredPorts);
+                ProcessStartInfo start = BuildStartInfo(selected);
                 if (Global.ViiperDebugLogging)
                 {
                     ViiperDiagnostics.PrepareLogFile(ViiperDiagnostics.LogPath);
@@ -466,8 +526,12 @@ internal sealed class PortableBrokerContext : IDisposable
                 }
                 owned = host.Start(start);
                 if (owned == null) throw new PortableBrokerStartupException(StartFailure);
-                if (!InspectOwnedProcessCore(out bool running, out string failure) || !running)
-                    throw new PortableBrokerStartupException(failure ?? StartFailure);
+                if (!InspectOwnedProcessCore(out bool running, out string failure, out bool listenerFailed) || !running)
+                    throw new PortableBrokerStartupException(failure ?? StartFailure) { ListenerFailed = listenerFailed };
+                System.Threading.Volatile.Write(ref ports, selected);
+                if (selected != PortableBrokerPorts.Default)
+                    NLog.LogManager.GetCurrentClassLogger().Info(
+                        "Portable VIIPER is using alternate loopback ports (USB/IP {0}, API {1}).", selected.Usb, selected.Api);
             }
             catch (Exception error)
             {
@@ -485,7 +549,7 @@ internal sealed class PortableBrokerContext : IDisposable
         }
     }
 
-    private ProcessStartInfo BuildStartInfo()
+    private ProcessStartInfo BuildStartInfo(PortableBrokerPorts launchPorts)
     {
         var start = new ProcessStartInfo(ViiperPath)
         {
@@ -500,7 +564,7 @@ internal sealed class PortableBrokerContext : IDisposable
         {
             "--config-only", "--config", ConfigPath, "--update-notify=none",
             "server",
-            "--key-file", KeyPath, "--usb.addr=127.0.0.1:3241", "--api.addr=127.0.0.1:3242",
+            "--key-file", KeyPath, launchPorts.UsbAddressArgument, launchPorts.ApiAddressArgument,
             "--api.require-local-host-auth=true", "--api.auto-attach-local-client=true",
             "--api.auto-attach-windows-native=true", "--usb.retained-import-authority-id=" +
                 ViiperSetupManager.ViiperRetainedImportAuthorityId.ToString(System.Globalization.CultureInfo.InvariantCulture),
@@ -560,6 +624,8 @@ internal interface IPortableBrokerProcessHost
 {
     IReadOnlyList<PortableBrokerProcessIdentity> Snapshot();
     IReadOnlyList<string> ReadArguments(PortableBrokerProcessIdentity identity);
+    PortableBrokerPorts SelectPorts(bool useFallback, PortableBrokerPorts preferred) =>
+        PortableBrokerPorts.Select(useFallback, preferred);
     IPortableBrokerProcess Start(ProcessStartInfo startInfo);
     void StopForRepair(PortableBrokerProcessIdentity identity, int timeoutMilliseconds) =>
         throw new NotSupportedException("This process host does not authorize explicit repair termination.");

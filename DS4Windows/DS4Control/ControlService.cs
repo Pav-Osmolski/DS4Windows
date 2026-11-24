@@ -6188,19 +6188,21 @@ namespace DS4Windows
                     CheckForTouchToggle(ind, cState, pState);
                 }
 
+                device.Debouncer.ApplyProfile(Global.DebouncingMs[ind], Global.ButtonDebounceOverrides[ind]);
                 cState = device.Debouncer.ProcessInput(cState);
 
 
                 // Capture raw calibrated stick intent before any output curves/remapping.
                 touchPad[ind]?.UpdateGyroStickActivation(cState);
                 DS4State physicalActionState = cState;
+                Mapping.MouseStickIntent mouseStickIntent = Mapping.ReadMouseStickIntent(cState);
                 cState = Mapping.SetCurveAndDeadzone(ind, cState, TempState[ind], device);
 
                 bool oscMonitoringPending = false;
 
                 if (!recordingMacro && (useTempProfile[ind] ||
                     containsCustomAction(ind) || containsCustomExtras(ind) ||
-                    getProfileActionCount(ind) > 0))
+                    getProfileActionCount(ind) > 0 || Mapping.HasPendingControllerMacro(ind)))
                 {
                     DS4State tempMapState = MappedState[ind];
                     DS4State oscMapState = oscState[ind];
@@ -6213,7 +6215,7 @@ namespace DS4Windows
                         oscMonitoringPending = true;
                     }
 
-                    Mapping.MapCustom(ind, cState, tempMapState, ExposedState[ind], touchPad[ind], this, physicalActionState);
+                    Mapping.MapCustom(ind, cState, tempMapState, ExposedState[ind], touchPad[ind], this, physicalActionState, mouseStickIntent);
                     deferredDiagnostics.Switch2MouseMapperRan = true;
 
                     // Mapping owns controls; same-report physical metadata,
@@ -6259,7 +6261,11 @@ namespace DS4Windows
                     }
 
                     OutputDevice reportOutput = GetReportOutputDevice(ind);
-                    reportOutput?.ConvertandSendReport(cState, ind);
+                    if (reportOutput != null)
+                    {
+                        reportOutput.ConvertandSendReport(cState, ind);
+                        Mapping.PublishControllerMacroReport(ind);
+                    }
                     //testNewReport(ref x360reports[ind], cState, ind);
                     //x360controls[ind]?.SendReport(x360reports[ind]);
 

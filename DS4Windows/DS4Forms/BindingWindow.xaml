@@ -199,6 +199,11 @@
 
                     <Button x:Name="defaultBtn" Content="{Binding DefaultBtnString,FallbackValue={lex:Loc Default}}" Tag="{Binding IsDefault}" Style="{StaticResource BindingChoiceButtonStyle}" Margin="0,24,0,0" Click="DefaultBtn_Click" />
                     <Button x:Name="unboundBtn" Content="{lex:Loc Unbound}" Tag="{Binding IsUnbound}" Style="{StaticResource BindingChoiceButtonStyle}" Margin="0,8,0,0" Click="UnboundBtn_Click" />
+                    <StackPanel x:Name="buttonDebouncePanel" Margin="0,12,0,0" Visibility="Collapsed">
+                        <CheckBox x:Name="buttonDebounceOverride" Margin="0,0,0,4" />
+                        <xctk:IntegerUpDown x:Name="buttonDebounceMilliseconds" Minimum="0" Maximum="1000"
+                                            MinHeight="30" IsEnabled="{Binding IsChecked, ElementName=buttonDebounceOverride}" />
+                    </StackPanel>
                 </StackPanel>
 
                 <StackPanel x:Name="outConPanel" Width="630" Orientation="Vertical" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="0">

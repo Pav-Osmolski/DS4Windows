@@ -7,6 +7,14 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.82](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.82) - 2026-11-24
+
+- Start portable VIIPER on available loopback ports when Windows reserves its default ports, and use the selected endpoints for readiness checks, repair and controller output.
+- Apply the current profile's debounce duration when a Special Action switches profiles, and optionally override it for individual digital buttons in the mapping dialog. Thanks to [@helloeaw](https://github.com/helloeaw) for [#150](https://github.com/Pav-Osmolski/DS4Windows/issues/150) and [#149](https://github.com/Pav-Osmolski/DS4Windows/issues/149).
+- Keep the profile editor separate from the live profile slot, show the parent and temporary profile together during a held Special Action switch, and stop stick-to-mouse output when the physical stick recentres. Use higher-resolution macro waits and submit mixed keyboard and controller steps in order within DS4Windows. Thanks to [@helloeaw](https://github.com/helloeaw) for [#152](https://github.com/Pav-Osmolski/DS4Windows/issues/152).
+
+Implemented in [PR #153](https://github.com/Pav-Osmolski/DS4Windows/pull/153).
+
 ### [5.0.81](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.81) - 2026-11-23
 
 - Keep the Start button label readable on hover in light themes.

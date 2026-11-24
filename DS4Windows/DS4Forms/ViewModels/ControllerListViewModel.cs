@@ -299,9 +299,25 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 if (selectedProfile == value) return;
                 selectedProfile = value;
                 SelectedProfileChanged?.Invoke(this, EventArgs.Empty);
+                ProfileDisplayNameChanged?.Invoke(this, EventArgs.Empty);
             }
         }
         public event EventHandler SelectedProfileChanged;
+        public event EventHandler ProfileDisplayNameChanged;
+
+        public string ProfileDisplayName
+        {
+            get
+            {
+                var action = Mapping.untriggeraction[devIndex];
+                if (!Global.useTempProfile[devIndex] || action?.typeID != SpecialAction.ActionTypeId.Profile ||
+                    !string.Equals(SelectedProfile, Global.tempprofilename[devIndex], StringComparison.Ordinal))
+                    return SelectedProfile;
+                string parent = string.IsNullOrWhiteSpace(action.prevProfileName) ? Global.ProfilePath[devIndex] : action.prevProfileName;
+                return string.IsNullOrWhiteSpace(parent) || parent == SelectedProfile ? SelectedProfile :
+                    UiText.Format("{0} (temporary: {1})", parent, SelectedProfile);
+            }
+        }
 
         private readonly ControllerNameStore controllerNames;
         private string customName;
@@ -871,10 +887,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
 
         private void SelectedEntity_ProfileSaved(object sender, EventArgs e)
         {
-            if (selectedEntity != null)
-            {
-                SelectedProfile = selectedEntity.Name;
-            }
+            if (selectedEntity == null || Global.useTempProfile[devIndex]) return;
+            SelectedProfile = selectedEntity.Name;
 
             Mapping.RequestRegularProfileReload(devIndex, false, App.rootHub,
                 loaded => CompleteProfileReload(loaded, SelectedProfile,

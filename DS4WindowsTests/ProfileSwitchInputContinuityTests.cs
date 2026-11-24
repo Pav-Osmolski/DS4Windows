@@ -146,8 +146,6 @@ public sealed class ProfileSwitchInputContinuityTests
             ReplaceMappingField("actionDone", new List<Mapping.ActionState> { new() });
             ReplaceMappingField("untriggeraction", new SpecialAction[Global.MAX_DS4_CONTROLLER_COUNT]);
             ReplaceMappingField("untriggerindex", Enumerable.Repeat(-1, Global.MAX_DS4_CONTROLLER_COUNT).ToArray());
-            ReplaceMappingField("horizontalRemainder", 0d);
-            ReplaceMappingField("verticalRemainder", 0d);
 
             var hid = (HidDevice)RuntimeHelpers.GetUninitializedObject(typeof(HidDevice));
             source = new DS4Device(hid, "Profile continuity test");

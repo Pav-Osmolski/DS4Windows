@@ -363,7 +363,7 @@ namespace DS4Windows
 
             string serverProbeFailure = null;
             bool viiperServerRunning = viiperProcessOwnershipReady &&
-                canonicalViiperRunning && ProbeServer(ApiHost, ApiPort,
+                canonicalViiperRunning && ProbeServer(ApiHost, portable?.Ports.Api ?? ApiPort,
                     authenticated: lab != null || portable != null, out serverProbeFailure);
 
             ViiperPrerequisiteStatus status = new ViiperPrerequisiteStatus

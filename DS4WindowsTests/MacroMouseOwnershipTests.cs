@@ -50,6 +50,20 @@ public class MacroMouseOwnershipTests
     }
 
     [TestMethod]
+    public void ControllerMacroWaitsForTheReportThatActuallyIncludedItsEdge()
+    {
+        var progress = new MacroControllerReportProgress();
+        progress.Capture();
+        progress.Request();
+        progress.Publish();
+        Assert.IsTrue(progress.HasPending, "Publishing the preceding report cannot acknowledge a new macro edge.");
+        progress.Capture();
+        progress.Publish();
+        Assert.IsFalse(progress.HasPending);
+        progress.WaitForReport();
+    }
+
+    [TestMethod]
     [DynamicData(nameof(ButtonCases))]
     public void MappedHoldSurvivesMacroPressAndRelease(bool faker, int button)
     {
