@@ -1,4 +1,6 @@
 using DS4Windows.Installation;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace DS4WindowsTests;
 
@@ -77,6 +79,70 @@ public sealed class ControllerStartupConflictsTests
     }
 
     [TestMethod]
+    [DataRow("Pav-Osmolski", "Reported fork: Pav-Osmolski")]
+    [DataRow(" hbashton ", "Reported fork: hbashton")]
+    [DataRow("schmaldeo", "Reported fork: schmaldeo")]
+    [DataRow("Ryochan7", "Reported fork: Ryochan7")]
+    [DataRow("EmuCores", "Reported fork: EmuCores (Nexus)")]
+    [DataRow("", "Fork unknown")]
+    [DataRow("unrelated hbashton fork", "Fork unknown")]
+    public void IdentifiesOnlyExactReportedForkNames(string company, string expected) =>
+        Assert.AreEqual(expected, ControllerStartupConflicts.DescribeFork(company, "unknown hash"));
+
+    [TestMethod]
+    public void PublishedExecutableMatchesOverrideInheritedOrMissingMetadata()
+    {
+        Assert.AreEqual("Jays2Kings (release match)", ControllerStartupConflicts.DescribeFork("",
+            "EB34F8552E8685BD013933BA6F5D8E7BF2B77B1E8EA43BC2287A0532B55C02E9"));
+        Assert.AreEqual("ds4windowsapp (release match)", ControllerStartupConflicts.DescribeFork("schmaldeo",
+            "6267CBA17B87ADA8F13EC6E187B309E3C76AA087ACF2C255AB19DC2DB6799A34"));
+    }
+
+    [TestMethod]
+    public void OrphanedStartupLinkCanBePausedOnlyForItsUserWhileItsTargetIsMissing()
+    {
+        var temp = Directory.CreateTempSubdirectory("ds4-startup-conflict-");
+        string target = Path.Combine(temp.FullName, "DS4Windows.exe");
+        string shortcutPath = Path.Combine(temp.FullName, "DS4Windows.lnk");
+        object shell = null;
+        try
+        {
+            shell = Activator.CreateInstance(Type.GetTypeFromProgID("WScript.Shell"));
+            object shortcut = ((dynamic)shell).CreateShortcut(shortcutPath);
+            try
+            {
+                ((dynamic)shortcut).TargetPath = target;
+                ((dynamic)shortcut).Arguments = "-m";
+                ((dynamic)shortcut).Save();
+            }
+            finally { Marshal.FinalReleaseComObject(shortcut); }
+
+            var entry = ControllerStartupConflicts.ReadStartupShortcut(shell, shortcutPath, Sid, allowOrphanPause: true);
+            Assert.IsNotNull(entry);
+            Assert.AreEqual(target, entry.Target);
+            Assert.IsTrue(entry.TargetMissing);
+            Assert.IsTrue(entry.CanPause);
+            Assert.IsTrue(ControllerStartupConflicts.TargetStillMatches(entry, Sid));
+            Assert.IsFalse(ControllerStartupConflicts.TargetStillMatches(entry, "S-1-5-18"));
+            CollectionAssert.AreEqual(File.ReadAllBytes(shortcutPath), Convert.FromBase64String(entry.Payload));
+            Assert.IsFalse(ControllerStartupConflicts.ReadStartupShortcut(shell, shortcutPath, "Machine", allowOrphanPause: false).CanPause);
+
+            File.WriteAllText(target, "different file appeared");
+            Assert.IsFalse(ControllerStartupConflicts.TargetStillMatches(entry, Sid));
+            var changed = ControllerStartupConflicts.ReadStartupShortcut(shell, shortcutPath, Sid, allowOrphanPause: true);
+            Assert.IsFalse(changed.TargetMissing);
+            Assert.IsFalse(changed.CanPause);
+        }
+        finally
+        {
+            if (shell != null) Marshal.FinalReleaseComObject(shell);
+            File.Delete(shortcutPath);
+            File.Delete(target);
+            temp.Delete();
+        }
+    }
+
+    [TestMethod]
     [DataRow("\"C:\\Other Folder\\DS4Windows.exe\" -m", "C:\\Other Folder\\DS4Windows.exe")]
     [DataRow("C:\\Other\\viiper.exe server", "C:\\Other\\viiper.exe")]
     [DataRow("DS4Windows.exe", null)]
@@ -85,7 +151,7 @@ public sealed class ControllerStartupConflictsTests
     [DataRow("powershell.exe -File DS4Windows.ps1", null)]
     [DataRow("\"C:\\Other\\viiper.exe", null)]
     public void OnlyDirectLocalExecutablesAreResolved(string command, string expected) =>
-        Assert.AreEqual(expected, ControllerStartupConflicts.DirectExecutable(command, Sid));
+        Assert.AreEqual(expected, ControllerStartupConflicts.DirectExecutable(command));
 
     [TestMethod]
     [DataRow("InteractiveToken", true)]

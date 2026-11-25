@@ -7,6 +7,11 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.83](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.83) - 2026-11-25
+
+- Show the reported DS4Windows version and fork on Setup's startup-conflict page. Setup recognises Pav-Osmolski, hbashton, schmaldeo, Ryochan7, Jays2Kings, EmuCores (Nexus), and ds4windowsapp when the file provides enough evidence.
+- Let **Continue** back up and pause a shortcut in the user's Startup folder when its DS4Windows target is confirmed missing. Setup checks again automatically and shows the file location when a shortcut needs manual review. Thanks to [@AlvinKirath](https://github.com/AlvinKirath) for the screenshots in [#155](https://github.com/Pav-Osmolski/DS4Windows/issues/155).
+
 ### [5.0.82](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.82) - 2026-11-24
 
 - Start portable VIIPER on available loopback ports when Windows reserves its default ports, and use the selected endpoints for readiness checks, repair and controller output.
