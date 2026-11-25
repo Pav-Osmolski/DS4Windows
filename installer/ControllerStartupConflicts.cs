@@ -28,7 +28,10 @@ internal sealed class ControllerStartupConflict
     public string ValueName { get; set; }
     public int ValueKind { get; set; }
     public bool CanPause { get; set; }
+    public bool TargetMissing { get; set; }
     public string Payload { get; set; }
+    public string Identity { get; set; }
+    public string ReviewReason { get; set; }
 }
 
 internal sealed class ControllerConflictBackup
@@ -43,6 +46,7 @@ internal sealed class ControllerConflictBackup
 internal static class ControllerStartupConflicts
 {
     private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
+    private static readonly Guid ShellLinkClassId = new("00021401-0000-0000-C000-000000000046");
     private static readonly string ManagedRoot = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "DS4Windows");
 
@@ -79,7 +83,7 @@ internal static class ControllerStartupConflicts
                 {
                     if (key.GetValue(name, null, RegistryValueOptions.DoNotExpandEnvironmentNames) is not string command) continue;
                     if (IsStartupDisabled(scope, view, name, false)) continue;
-                    var entry = FromCommand("Run", scope + "|" + view + "|" + name, command, sid);
+                    var entry = FromCommand("Run", scope + "|" + view + "|" + name, command);
                     if (entry == null) continue;
                     entry.RegistryScope = scope; entry.RegistryView = (int)view;
                     entry.ValueName = name; entry.ValueKind = (int)key.GetValueKind(name);
@@ -116,26 +120,38 @@ internal static class ControllerStartupConflicts
                     !name.Equals("viiper.exe", StringComparison.OrdinalIgnoreCase) &&
                     !entries.Any(e => SamePath(e.Target, path))) continue;
                 if (IsManaged(path)) continue;
-                bool known = IsControllerBinary(path);
+                var version = ReadControllerVersion(path);
+                string binaryHash = version == null ? "" : Hash(path);
                 string id = Convert.ToString(process["ProcessId"], System.Globalization.CultureInfo.InvariantCulture);
                 bool owned = false;
                 try { owned = ReadProcessOwnerSid(Convert.ToUInt32(process["ProcessId"])) == sid; } catch { }
                 entries.Add(new ControllerStartupConflict {
                     Kind = "Process", Id = id, Target = path ?? "<path unavailable>",
-                    Snapshot = process["CreationDate"] as string ?? "", BinaryHash = known ? Hash(path) : "",
+                    Snapshot = process["CreationDate"] as string ?? "", BinaryHash = binaryHash,
                     Description = "Running: " + name + " (PID " + id + ") — " + (path ?? "path unavailable"),
-                    CanPause = known && owned && !string.IsNullOrEmpty(process["CreationDate"] as string)
+                    Identity = DescribeControllerBinary(version, binaryHash),
+                    ReviewReason = version == null ? "Executable could not be verified" : "Process owner or start time could not be verified",
+                    CanPause = version != null && owned && !string.IsNullOrEmpty(process["CreationDate"] as string)
                 });
             }
         }
         catch (Exception error) { entries.Add(InspectionFailure("Running applications", error)); }
         if (entries.Count > 512) throw new IOException("Startup inspection limit exceeded.");
-        foreach (var entry in entries.Where(e => !e.CanPause))
-            entry.Description = "Manual review — " + entry.Description;
+        foreach (var entry in entries)
+        {
+            if (entry.TargetMissing) entry.Description += " · Target file missing";
+            if (entry.Identity != null) entry.Description += " · " + entry.Identity;
+            if (!entry.CanPause)
+            {
+                entry.Description = "Manual review — " + entry.Description;
+                if (entry.ReviewReason != null) entry.Description += " · " + entry.ReviewReason;
+                if (entry.Kind == "Shortcut") entry.Description += "\nStartup shortcut: " + entry.Id;
+            }
+        }
         return entries.OrderBy(e => e.Kind).ThenBy(e => e.Id).ToList();
     }
 
-    private static IEnumerable<(string Path, string Scope)> StartupFolders(string sid)
+    private static IEnumerable<(string Path, string Scope, bool AllowOrphanPause)> StartupFolders(string sid)
     {
         using var profiles = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\" + sid);
         string profile = profiles?.GetValue("ProfileImagePath") as string;
@@ -152,8 +168,10 @@ internal static class ControllerStartupConflicts
             .Replace("%APPDATA%", roaming, StringComparison.OrdinalIgnoreCase);
         if (startup.Contains('%') || !Path.IsPathFullyQualified(startup) || startup.StartsWith(@"\\", StringComparison.Ordinal))
             throw new IOException("The original user's startup folder needs manual inspection.");
-        yield return (Path.GetFullPath(startup), sid);
-        yield return (Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup), "Machine");
+        string startupPath = Path.GetFullPath(startup);
+        string profilePrefix = Path.GetFullPath(profile).TrimEnd('\\') + '\\';
+        yield return (startupPath, sid, startupPath.StartsWith(profilePrefix, StringComparison.OrdinalIgnoreCase));
+        yield return (Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup), "Machine", false);
     }
 
     private static void ReadStartupFolders(string sid, List<ControllerStartupConflict> entries)
@@ -171,21 +189,8 @@ internal static class ControllerStartupConflicts
                     if (IsStartupDisabled(folder.Scope, RegistryView.Registry64, Path.GetFileName(path), true)) continue;
                     if (Path.GetExtension(path).Equals(".lnk", StringComparison.OrdinalIgnoreCase))
                     {
-                        StartupSetupRecovery.RequirePlainPath(path);
-                        if (new FileInfo(path).Length > 64 * 1024) throw new IOException("A startup shortcut exceeds its size limit.");
-                        object shortcut = null;
-                        try
-                        {
-                            shortcut = ((dynamic)shell).CreateShortcut(path);
-                            string command = '"' + (string)((dynamic)shortcut).TargetPath + "\" " + (string)((dynamic)shortcut).Arguments;
-                            var entry = FromCommand("Shortcut", path, command, sid);
-                            if (entry == null) continue;
-                            entry.Payload = Convert.ToBase64String(File.ReadAllBytes(path));
-                            entry.RegistryScope = folder.Scope;
-                            entry.Description = (folder.Scope == "Machine" ? "All users' startup folder: " : "Your startup folder: ") + Path.GetFileName(path) + " — " + entry.Target;
-                            entries.Add(entry);
-                        }
-                        finally { Release(shortcut); }
+                        var entry = ReadStartupShortcut(shell, path, folder.Scope, folder.AllowOrphanPause);
+                        if (entry != null) entries.Add(entry);
                     }
                     else if (Path.GetFileName(path).Contains("DS4Windows", StringComparison.OrdinalIgnoreCase) ||
                              Path.GetFileName(path).Contains("VIIPER", StringComparison.OrdinalIgnoreCase))
@@ -195,6 +200,42 @@ internal static class ControllerStartupConflicts
         }
         catch (Exception error) { entries.Add(InspectionFailure("Startup folders", error)); }
         finally { Release(shell); }
+    }
+
+    internal static ControllerStartupConflict ReadStartupShortcut(object shell, string path, string scope, bool allowOrphanPause)
+    {
+        StartupSetupRecovery.RequirePlainPath(path);
+        if (new FileInfo(path).Length > 64 * 1024) throw new IOException("A startup shortcut exceeds its size limit.");
+        byte[] original = File.ReadAllBytes(path);
+        object shortcut = null;
+        try
+        {
+            shortcut = ((dynamic)shell).CreateShortcut(path);
+            string targetPath = ((dynamic)shortcut).TargetPath;
+            string command = '"' + targetPath + "\" " + (string)((dynamic)shortcut).Arguments;
+            var entry = FromCommand("Shortcut", path, command);
+            if (entry == null && string.IsNullOrWhiteSpace(targetPath) &&
+                Path.GetFileName(path).Equals("DS4Windows.lnk", StringComparison.OrdinalIgnoreCase))
+                entry = new ControllerStartupConflict { Kind = "Shortcut", Id = path, Target = "Target path unavailable",
+                    Snapshot = command, ReviewReason = "Shortcut target could not be read" };
+            if (entry == null) return null;
+            if (!File.ReadAllBytes(path).SequenceEqual(original))
+                throw new IOException("A startup shortcut changed during inspection.");
+
+            entry.Payload = Convert.ToBase64String(original);
+            entry.RegistryScope = scope;
+            entry.Description = (scope == "Machine" ? "All users' startup folder: " : "Your startup folder: ") + Path.GetFileName(path) + " — " + entry.Target;
+            if (entry.Identity == null && SamePath(entry.Target, targetPath) && original.Length >= 76 &&
+                System.Buffers.Binary.BinaryPrimitives.ReadUInt32LittleEndian(original) == 76 &&
+                new Guid(original.AsSpan(4, 16)) == ShellLinkClassId && IsMissingDs4WindowsTarget(entry.Target))
+            {
+                entry.TargetMissing = true;
+                entry.CanPause = allowOrphanPause;
+                entry.ReviewReason = entry.CanPause ? null : "Startup folder is outside your Windows profile";
+            }
+            return entry;
+        }
+        finally { Release(shortcut); }
     }
 
     private static void ReadTasks(object folder, string sid, List<ControllerStartupConflict> entries, int depth)
@@ -217,12 +258,12 @@ internal static class ControllerStartupConflicts
                     string command = exec.Element(ns + "Command")?.Value ?? "";
                     string args = exec.Element(ns + "Arguments")?.Value ?? "";
                     string action = command.TrimStart().StartsWith('"') ? command : '"' + command + '"';
-                    var entry = FromCommand("Task", (string)((dynamic)task).Path, action + " " + args, sid);
+                    var entry = FromCommand("Task", (string)((dynamic)task).Path, action + " " + args);
                     if (entry == null) continue;
                     entry.CanPause &= CanPauseTask(xml, sid);
                     entry.Snapshot = xml;
                     entry.Description = "Scheduled task: " + entry.Id + " — " + entry.Target;
-                    if (!entry.CanPause) entry.Description += " (manual review: task actions or owner)";
+                    if (!entry.CanPause) entry.ReviewReason ??= "Task actions or owner could not be verified";
                     entries.Add(entry);
                     break;
                 }
@@ -236,19 +277,21 @@ internal static class ControllerStartupConflicts
         finally { Release(tasks); Release(children); }
     }
 
-    private static ControllerStartupConflict FromCommand(string kind, string id, string command, string sid)
+    private static ControllerStartupConflict FromCommand(string kind, string id, string command)
     {
-        string target = DirectExecutable(command, sid);
+        string target = DirectExecutable(command);
         if (IsManaged(target)) return null;
-        bool known = IsControllerBinary(target);
-        if (!known && command.IndexOf("DS4Windows", StringComparison.OrdinalIgnoreCase) < 0 &&
+        var version = ReadControllerVersion(target);
+        if (version == null && command.IndexOf("DS4Windows", StringComparison.OrdinalIgnoreCase) < 0 &&
                 command.IndexOf("VIIPER", StringComparison.OrdinalIgnoreCase) < 0) return null;
+        string binaryHash = version == null ? "" : Hash(target);
         return new ControllerStartupConflict { Kind = kind, Id = id, Target = target ?? command,
-            Snapshot = command, BinaryHash = known ? Hash(target) : "", CanPause = known,
-            Description = command + (known ? "" : " (manual review: executable could not be verified)") };
+            Snapshot = command, BinaryHash = binaryHash, CanPause = version != null,
+            Identity = DescribeControllerBinary(version, binaryHash),
+            ReviewReason = version == null ? "Executable could not be verified" : null };
     }
 
-    internal static string DirectExecutable(string command, string sid)
+    internal static string DirectExecutable(string command)
     {
         if (string.IsNullOrWhiteSpace(command)) return null;
         string input = command.Trim();
@@ -280,19 +323,93 @@ internal static class ControllerStartupConflicts
     }
     private static bool SamePath(string a, string b) => !string.IsNullOrEmpty(a) && !string.IsNullOrEmpty(b) &&
         string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
-    private static bool IsControllerBinary(string path)
+    private static FileVersionInfo ReadControllerVersion(string path)
     {
         try
         {
-            if (path == null || !File.Exists(path)) return false;
+            if (path == null || !File.Exists(path)) return null;
             StartupSetupRecovery.RequirePlainPath(path);
             var version = FileVersionInfo.GetVersionInfo(path);
             return string.Equals(version.ProductName, "DS4Windows", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(version.ProductName, "VIIPER", StringComparison.OrdinalIgnoreCase) ||
                 (version.ProductName?.Contains("DS4Windows", StringComparison.OrdinalIgnoreCase) ?? false) ||
-                (version.FileDescription?.StartsWith("VIIPER", StringComparison.OrdinalIgnoreCase) ?? false);
+                (version.FileDescription?.StartsWith("VIIPER", StringComparison.OrdinalIgnoreCase) ?? false) ? version : null;
         }
-        catch { return false; }
+        catch { return null; }
+    }
+
+    private static string DescribeControllerBinary(FileVersionInfo version, string binaryHash)
+    {
+        if (version == null) return null;
+        string reportedVersion = version.ProductVersion?.Split('+', 2)[0].Trim();
+        if (string.IsNullOrEmpty(reportedVersion) || reportedVersion.Length > 40 ||
+            !reportedVersion.All(c => char.IsAsciiLetterOrDigit(c) || c is '.' or '-' or ' '))
+            reportedVersion = version.FileMajorPart > 0 ? $"{version.FileMajorPart}.{version.FileMinorPart}.{version.FileBuildPart}.{version.FilePrivatePart}" : "version unknown";
+        if (string.Equals(version.ProductName, "VIIPER", StringComparison.OrdinalIgnoreCase) ||
+            (version.FileDescription?.StartsWith("VIIPER", StringComparison.OrdinalIgnoreCase) ?? false))
+            return "VIIPER " + reportedVersion;
+        return $"DS4Windows {reportedVersion} · {DescribeFork(version.CompanyName, binaryHash)}";
+    }
+
+    internal static string DescribeFork(string company, string binaryHash)
+    {
+        // These archives ship with empty or inherited CompanyName fields.
+        // Match the published EXE bytes, not a version range or copyright credit.
+        switch (binaryHash)
+        {
+            // Jays2Kings/DS4Windows releases v1.4.52, v1.4.5, v1.4.401, v1.4.4 and v1.4.321.
+            case "EB34F8552E8685BD013933BA6F5D8E7BF2B77B1E8EA43BC2287A0532B55C02E9":
+            case "2C827980645361E6F5819BAA5718D5A57B2241231011F5A1C17701966FC17602":
+            case "42E28B7FCA7CE1F537B34F4B1C4D0516637D8FB46C04D894E430035BF973B606":
+            case "1BEFF78BDF00A7F3EE556A3D519AD90A4CF012D012469D758E78663E3EB2B2A2":
+            case "3DCD7F9EE9373525287606A67408DA6FA27583A67C5A61D295C73EE066090169":
+                return "Jays2Kings (release match)";
+            // ds4windowsapp/DS4Windows release Official, both published 3.5 ZIPs.
+            case "6267CBA17B87ADA8F13EC6E187B309E3C76AA087ACF2C255AB19DC2DB6799A34":
+            case "AFD11142CF19FBD0727537B95A0DA49F0895B840C659FCF29252912772B74CCB":
+                return "ds4windowsapp (release match)";
+        }
+        string fork = company?.Trim().ToUpperInvariant() switch
+        {
+            "PAV-OSMOLSKI" => "Pav-Osmolski",
+            "HBASHTON" => "hbashton",
+            "SCHMALDEO" => "schmaldeo",
+            "RYOCHAN7" => "Ryochan7",
+            "JAYS2KINGS" => "Jays2Kings",
+            "EMUCORES" => "EmuCores (Nexus)",
+            "DS4WINDOWSAPP" => "ds4windowsapp",
+            _ => null
+        };
+        return fork == null ? "Fork unknown" : "Reported fork: " + fork;
+    }
+
+    internal static bool IsMissingDs4WindowsTarget(string target)
+    {
+        // A missing or inaccessible target must never grant permission to act on a running process or task.
+        if (!string.Equals(Path.GetFileName(target), "DS4Windows.exe", StringComparison.OrdinalIgnoreCase)) return false;
+        try
+        {
+            string root = Path.GetPathRoot(target);
+            if (root == null || root.Length != 3 || root[1] != ':' || root[2] != '\\' ||
+                target.AsSpan(root.Length).Contains(':') || new DriveInfo(root).DriveType != DriveType.Fixed ||
+                ReadPathAttributes(target) != null) return false;
+            for (string parent = Path.GetDirectoryName(target); parent != null; parent = Path.GetDirectoryName(parent))
+            {
+                var attributes = ReadPathAttributes(parent);
+                if (attributes.HasValue && (attributes.Value & (FileAttributes.Directory | FileAttributes.ReparsePoint)) != FileAttributes.Directory)
+                    return false;
+                if (SamePath(root, parent)) return attributes.HasValue;
+            }
+        }
+        catch (Exception error) when (error is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException) { }
+        return false;
+    }
+
+    private static FileAttributes? ReadPathAttributes(string path)
+    {
+        try { return File.GetAttributes(path); }
+        catch (FileNotFoundException) { return null; }
+        catch (DirectoryNotFoundException) { return null; }
     }
     private static string Hash(string path) => Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path)));
     private static string ResolveSid(string name)
@@ -362,13 +479,13 @@ internal static class ControllerStartupConflicts
             File.WriteAllText(Path.Combine(backupDirectory, "RESTORE.txt"),
                 "To restore these startup entries, close DS4Windows and VIIPER, open Command Prompt as administrator, and run:\r\n\"" + helper + "\" restore-conflicts\r\nExisting or changed entries are never overwritten. This does not launch either application.\r\nIf a newer DS4Windows installation now owns RunDS4Windows or RunVIIPER, uninstall it before restoring a previous task with that same name.\r\n");
             log?.Invoke("Competing controller startup backup and restore instructions: " + backupDirectory);
-        }, PauseEntry);
+        }, entry => PauseEntry(entry, sid));
         return backupDirectory;
     }
 
-    private static void PauseEntry(ControllerStartupConflict entry)
+    private static void PauseEntry(ControllerStartupConflict entry, string sid)
     {
-        if (!entry.CanPause || !IsControllerBinary(entry.Target) || Hash(entry.Target) != entry.BinaryHash)
+        if (!entry.CanPause || !TargetStillMatches(entry, sid))
             throw new IOException("A competing executable changed after review. Startup backup was retained; reopen setup.");
         if (entry.Kind == "Run")
         {
@@ -387,6 +504,9 @@ internal static class ControllerStartupConflicts
         });
         else if (entry.Kind == "Shortcut")
         {
+            if (entry.TargetMissing && !StartupFolders(sid).Any(folder => folder.AllowOrphanPause &&
+                folder.Scope == entry.RegistryScope && SamePath(folder.Path, Path.GetDirectoryName(entry.Id))))
+                throw new IOException("The user Startup folder changed after review.");
             StartupSetupRecovery.RequirePlainPath(entry.Id);
             if (!File.ReadAllBytes(entry.Id).SequenceEqual(Convert.FromBase64String(entry.Payload)))
                 throw new IOException("A startup shortcut changed after review.");
@@ -405,6 +525,10 @@ internal static class ControllerStartupConflicts
         }
         else throw new IOException("This startup entry requires manual review.");
     }
+
+    internal static bool TargetStillMatches(ControllerStartupConflict entry, string sid) => entry.TargetMissing
+        ? entry.Kind == "Shortcut" && entry.RegistryScope == sid && IsMissingDs4WindowsTarget(entry.Target)
+        : ReadControllerVersion(entry.Target) != null && Hash(entry.Target) == entry.BinaryHash;
 
     private static bool IsReserved(string path) => path.Equals(@"\RunVIIPER", StringComparison.OrdinalIgnoreCase) || path.Equals(@"\RunDS4Windows", StringComparison.OrdinalIgnoreCase);
     private static void WithTask(string path, Action<object, string, object> action)

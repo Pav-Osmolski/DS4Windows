@@ -287,12 +287,20 @@ namespace DS4Windows.Bootstrapper
                 if (controllerConflicts.Count == 0) { continueAfterConflictReview(); return; }
                 HidePages(); ControllerConflictsPage.Visibility = Visibility.Visible;
                 ControllerConflictList.ItemsSource = controllerConflicts;
-                bool allVerified = controllerConflicts.All(c => c.CanPause);
+                bool canPauseAll = controllerConflicts.All(c => c.CanPause);
                 PauseControllerConflicts.IsChecked = false;
-                PauseControllerConflicts.IsEnabled = allVerified;
-                ControllerConflictExplanation.Text = allVerified
-                    ? "Setup can pause these verified entries after you agree below. This includes other forks using a different VIIPER or USB/IP version."
-                    : "Some entries could not be verified or belong to another account. Close those programs and disable their startup entries manually, then choose Check again. Setup will not change them automatically.";
+                PauseControllerConflicts.IsEnabled = canPauseAll;
+                bool hasProcesses = controllerConflicts.Any(c => c.Kind == "Process");
+                bool hasStartups = controllerConflicts.Any(c => c.Kind is "Run" or "Task" or "Shortcut");
+                PauseControllerConflicts.Content = (hasStartups, hasProcesses) switch
+                {
+                    (true, false) => "Back up and pause the listed startup entries",
+                    (false, true) => "Close the listed running apps",
+                    _ => "Pause the listed startups and close the listed running apps"
+                };
+                ControllerConflictExplanation.Text = canPauseAll
+                    ? "Select the checkbox and click Continue. Setup will apply the listed changes and check again automatically."
+                    : "Resolve the entries marked Manual review, then choose Check again. For a Startup shortcut, move the listed .lnk file out of the Startup folder.";
             }
             catch (Exception error)
             {

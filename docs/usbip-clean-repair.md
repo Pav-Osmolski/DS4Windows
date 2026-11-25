@@ -10,11 +10,18 @@ The theme-aware installer page lists running DS4Windows/VIIPER processes,
 enabled scheduled tasks, machine and original-user Run entries, and Startup
 folder shortcuts. Executable paths and product metadata establish candidates;
 paths, executable hashes, task definitions, registry value types, shortcut
-bytes and process creation times form the exact review fingerprint.
+bytes and process creation times form the exact review fingerprint. Setup shows
+the reported version and fork when the EXE carries recognisable metadata. For
+some older or repackaged builds it can match the EXE from a published archive.
+Generic metadata is shown as **Fork unknown**.
 
 The user can explicitly approve pausing verified entries and closing verified
-processes owned by their account. Unknown paths, wrappers, inaccessible
-processes, another user's tasks, password/service-account tasks and multi-action
+processes owned by their account. When a shortcut in the Startup folder under
+their Windows user profile points directly to a confirmed missing DS4Windows
+EXE on a local drive, Setup can back up and pause that shortcut too.
+**Continue** applies the approved changes and checks for remaining conflicts
+automatically. Unknown paths, wrappers, inaccessible processes, another user's
+tasks, password/service-account tasks and multi-action
 tasks require manual review. The page offers Check again after the user resolves
 them. It does not attribute a problem to hbashton or Nexus merely because one is
 installed. It also does not inspect every other Windows user's private startup
