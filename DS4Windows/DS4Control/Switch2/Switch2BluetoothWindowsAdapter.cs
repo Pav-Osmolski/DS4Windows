@@ -2165,6 +2165,19 @@ internal sealed class Switch2BluetoothWindowsInputLease :
                 Switch2BluetoothCalibrationReadFailure.
                     SnapshotRejected);
         }
+        if (model == Switch2ControllerModel.GameCube)
+        {
+            Switch2BluetoothMemoryReadChannelResult read = await
+                playerLedChannel.ReadMemoryAsync(2, 0x13140, cancellationToken).
+                    ConfigureAwait(false);
+            if (!read.Succeeded || read.Value.Length < 2)
+            {
+                return Switch2BluetoothCalibrationReadResult.Failed(
+                    Switch2BluetoothCalibrationReadFailure.CommandRejected, read.Failure);
+            }
+            calibration = calibration.WithGameCubeTriggerZero(read.Value.Span[0], read.Value.Span[1]);
+        }
+
         return Switch2BluetoothCalibrationReadResult.Success(calibration,
             optionalUserFailure);
     }

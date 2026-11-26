@@ -111,8 +111,7 @@ internal sealed class Switch2ProUsbOwnedHdRumbleTransportBridge :
     ISwitch2ProUsbHdRumbleTransportLease,
     ISwitch2ProUsbHdRumblePendingReportFence
 {
-    private const Switch2ControllerModel Model =
-        Switch2ControllerModel.ProController2;
+    private readonly Switch2ControllerModel Model;
 
     private readonly object bridgeFence = new();
     private readonly ISwitch2ProUsbOwnedFeedbackOutputLease lease;
@@ -173,8 +172,10 @@ internal sealed class Switch2ProUsbOwnedHdRumbleTransportBridge :
 
     internal Switch2ProUsbOwnedHdRumbleTransportBridge(
         ISwitch2ProUsbOwnedFeedbackOutputLease lease, ulong deviceGeneration,
-        ulong transportGeneration, int operationWaitMilliseconds)
+        ulong transportGeneration, int operationWaitMilliseconds,
+        Switch2ControllerModel model = Switch2ControllerModel.ProController2)
     {
+        Model = model;
         this.lease = lease ?? throw new ArgumentNullException(nameof(lease));
         if (deviceGeneration == 0)
         {
@@ -316,8 +317,7 @@ internal sealed class Switch2ProUsbOwnedHdRumbleTransportBridge :
             return Reject(
                 Switch2ProUsbHdRumbleTransportWriteFailure.StaleLifetime);
         }
-        if (!Switch2UsbHdRumbleCodec.TryDecodeProController(report,
-                out _, out _, out _, out _))
+        if (!Switch2GameCubeRumble.IsValidUsbReport(Model, report))
         {
             return Reject(
                 Switch2ProUsbHdRumbleTransportWriteFailure.InvalidReport);

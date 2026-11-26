@@ -5,6 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Add USB and Bluetooth input for Nintendo's official wireless GameCube Controller for Switch 2 and a **GameCube Controller** virtual output. The protocol carries independent analog L/R travel and full-press clicks, both sticks, the controller buttons and single-motor rumble. Thanks to [@Julinkk](https://github.com/Julinkk) for requesting support and sharing the [pairing project](https://github.com/RyanCopley/NSO-GameCube-Controller-Pairing-App), and to the [SDL](https://github.com/libsdl-org/SDL/blob/main/src/joystick/hidapi/SDL_hidapi_switch2.c) and [Switch 2 protocol research](https://github.com/ndeadly/switch2_controller_research) contributors. [Issue #154](https://github.com/Pav-Osmolski/DS4Windows/issues/154)
+
 ## Released
 
 ### [5.0.84](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.84) - 2026-11-26

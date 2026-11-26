@@ -51,8 +51,6 @@ internal sealed class Switch2ProUsbWindowsOwnedCompositeAdapter :
         lease = null;
         if (!registration.IsValid || !lifetime.IsValid ||
             !lifetime.Registration.Equals(registration) ||
-            registration.ProtocolIdentity.Model !=
-                Switch2ControllerModel.ProController2 ||
             registration.ProtocolIdentity.Transport != Switch2Transport.Usb)
         {
             return false;
@@ -539,8 +537,7 @@ internal sealed class Switch2ProUsbWindowsCompositeTerminalFence
 /// </summary>
 internal sealed class Switch2ProUsbWindowsOwnedOutputLane
 {
-    private const Switch2ControllerModel Model =
-        Switch2ControllerModel.ProController2;
+    private readonly Switch2ControllerModel Model;
 
     private readonly object gate = new();
     private readonly object leaseFence = new();
@@ -578,8 +575,10 @@ internal sealed class Switch2ProUsbWindowsOwnedOutputLane
         ISwitch2ProUsbWindowsOwnedHidHandle hid,
         ulong deviceGeneration, ulong transportGeneration,
         int maximumOperationMilliseconds,
-        Switch2ProUsbWindowsCompositeTerminalFence terminalFence)
+        Switch2ProUsbWindowsCompositeTerminalFence terminalFence,
+        Switch2ControllerModel model = Switch2ControllerModel.ProController2)
     {
+        Model = model;
         this.hid = hid ?? throw new ArgumentNullException(nameof(hid));
         if (deviceGeneration == 0)
         {
@@ -760,8 +759,7 @@ internal sealed class Switch2ProUsbWindowsOwnedOutputLane
         }
         if (timeoutMilliseconds <= 0 ||
             timeoutMilliseconds > maximumOperationMilliseconds ||
-            !Switch2UsbHdRumbleCodec.TryDecodeProController(report,
-                out _, out _, out _, out _))
+            !Switch2GameCubeRumble.IsValidUsbReport(Model, report))
         {
             return TerminalReject(
                 Switch2ProUsbHdRumbleTransportWriteFailure.InvalidReport);
@@ -1393,7 +1391,7 @@ internal sealed class Switch2ProUsbWindowsOwnedCompositeLease :
         outputLane = new Switch2ProUsbWindowsOwnedOutputLane(hid,
             lifetime.SessionDescriptor.DeviceGeneration,
             lifetime.SessionDescriptor.TransportGeneration,
-            maximumOperationMilliseconds, terminalFence);
+            maximumOperationMilliseconds, terminalFence, registration.Model);
         reservation?.AdoptTerminalLifetime(this);
     }
 
@@ -1405,7 +1403,7 @@ internal sealed class Switch2ProUsbWindowsOwnedCompositeLease :
 
     public bool AuthenticatesComposite(Switch2ControllerModel model,
         ulong deviceGeneration, ulong transportGeneration) =>
-        model == Switch2ControllerModel.ProController2 &&
+        model == Registration.Model &&
         deviceGeneration == Lifetime.SessionDescriptor.DeviceGeneration &&
         transportGeneration ==
             Lifetime.SessionDescriptor.TransportGeneration;
@@ -2184,6 +2182,9 @@ internal sealed class Switch2ProUsbWindowsOwnedCompositeLease :
             Switch2ProUsbStartupStep.ReadUserPrimaryCalibration =>
                 Switch2UsbCommandCodec.TryValidateCalibrationReadRequest(
                     request, Switch2UsbCalibrationRead.UserPrimary, out _),
+            Switch2ProUsbStartupStep.ReadGameCubeTriggerZero =>
+                Switch2UsbCommandCodec.TryValidateCalibrationReadRequest(
+                    request, Switch2UsbCalibrationRead.GameCubeTriggerZero, out _),
             Switch2ProUsbStartupStep.ReadUserSecondaryCalibration =>
                 Switch2UsbCommandCodec.TryValidateCalibrationReadRequest(
                     request, Switch2UsbCalibrationRead.UserSecondary, out _),
@@ -2218,6 +2219,8 @@ internal sealed class Switch2ProUsbWindowsOwnedCompositeLease :
             Switch2ProUsbStartupStep.ReadUserPrimaryCalibration =>
                 GetCalibrationResponseLength(
                     Switch2UsbCalibrationRead.UserPrimary),
+            Switch2ProUsbStartupStep.ReadGameCubeTriggerZero =>
+                GetCalibrationResponseLength(Switch2UsbCalibrationRead.GameCubeTriggerZero),
             Switch2ProUsbStartupStep.ReadUserSecondaryCalibration =>
                 GetCalibrationResponseLength(
                     Switch2UsbCalibrationRead.UserSecondary),
@@ -2267,6 +2270,9 @@ internal sealed class Switch2ProUsbWindowsOwnedCompositeLease :
                 return TryCopyCalibrationResponse(response,
                     Switch2UsbCalibrationRead.UserPrimary, out proof,
                     out payload);
+            case Switch2ProUsbStartupStep.ReadGameCubeTriggerZero:
+                return TryCopyCalibrationResponse(response,
+                    Switch2UsbCalibrationRead.GameCubeTriggerZero, out proof, out payload);
             case Switch2ProUsbStartupStep.ReadUserSecondaryCalibration:
                 return TryCopyCalibrationResponse(response,
                     Switch2UsbCalibrationRead.UserSecondary, out proof,

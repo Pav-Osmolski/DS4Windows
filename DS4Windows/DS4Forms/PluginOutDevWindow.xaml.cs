@@ -75,6 +75,9 @@ namespace DS4WinWPF.DS4Forms
                 case 5:
                     contType = OutContType.ViiperXboxOne;
                     break;
+                case 6:
+                    contType = OutContType.ViiperGameCube;
+                    break;
                 default:
                     break;
             }

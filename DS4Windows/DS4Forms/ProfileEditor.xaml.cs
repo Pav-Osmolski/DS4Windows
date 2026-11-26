@@ -60,6 +60,7 @@ namespace DS4WinWPF.DS4Forms
             JoyConRight,
             JoyConSidewaysLeft,
             JoyConSidewaysRight,
+            GameCube,
         }
 
         private ControllerDiagramKind controllerDiagramKind;
@@ -148,6 +149,7 @@ namespace DS4WinWPF.DS4Forms
                 : physicalController?.DeviceType switch
                 {
                     InputDeviceType.DualSense => ControllerDiagramKind.DualSense,
+                    InputDeviceType.Switch2GameCube => ControllerDiagramKind.GameCube,
                     InputDeviceType.SwitchPro or
                     InputDeviceType.Switch2Pro => ControllerDiagramKind.Switch2Pro,
                     InputDeviceType.JoyConL or
@@ -170,7 +172,6 @@ namespace DS4WinWPF.DS4Forms
             specialActionsVM = new SpecialActionsListViewModel(device);
 
 
-            RemoveHoverBtnText();
             PopulateHoverImages();
             PopulateHoverLocations();
             PopulateHoverIndexes();
@@ -200,6 +201,7 @@ namespace DS4WinWPF.DS4Forms
                 conCanvas.Children.Remove(button);
             joyConDiagramButtons.Clear();
             controllerDiagramControlNames.Clear();
+            RemoveHoverBtnText();
             foreach (Button button in ControllerDiagramButtons())
                 button.Visibility = Visibility.Visible;
 
@@ -235,6 +237,9 @@ namespace DS4WinWPF.DS4Forms
                     break;
                 case ControllerDiagramKind.DualSenseEdge:
                     ConfigureDualSenseEdgeDiagram();
+                    break;
+                case ControllerDiagramKind.GameCube:
+                    ConfigureGameCubeDiagram();
                     break;
                 case ControllerDiagramKind.Switch2Pro:
                     ConfigureSwitch2ProDiagram();
@@ -454,6 +459,75 @@ namespace DS4WinWPF.DS4Forms
                 includeEdgeControls: true, includeCapture: false);
             PopulateControllerStickAtlas("DualSenseEdge-Stick_Highlights.png");
             ApplyControllerButtonClips();
+        }
+
+        private void ConfigureGameCubeDiagram()
+        {
+            ConfigureControllerRaster(GameCubeArtwork.ResourceName, "GameCube Controller layout",
+                GameCubeArtwork.Width, GameCubeArtwork.Height);
+
+            foreach (Button button in ControllerDiagramButtons())
+                button.Visibility = Visibility.Collapsed;
+            ds4LightbarColorBtn.Visibility = Visibility.Collapsed;
+
+            Place(crossConBtn, GameCubeArtwork.A, true);
+            Place(circleConBtn, GameCubeArtwork.B, true);
+            Place(squareConBtn, GameCubeArtwork.X, true);
+            Place(triangleConBtn, GameCubeArtwork.Y, true);
+            Place(l2ConBtn, GameCubeArtwork.L);
+            Place(r2ConBtn, GameCubeArtwork.R);
+            Place(l1ConBtn, GameCubeArtwork.ZL);
+            Place(r1ConBtn, GameCubeArtwork.Z);
+            Place(optionsConBtn, GameCubeArtwork.Start, true);
+            Place(lsuConBtn, GameCubeArtwork.StickUp);
+            Place(lsrConBtn, GameCubeArtwork.StickRight);
+            Place(lsdConBtn, GameCubeArtwork.StickDown);
+            Place(lslConBtn, GameCubeArtwork.StickLeft);
+            Place(rsuConBtn, GameCubeArtwork.CStickUp);
+            Place(rsrConBtn, GameCubeArtwork.CStickRight);
+            Place(rsdConBtn, GameCubeArtwork.CStickDown);
+            Place(rslConBtn, GameCubeArtwork.CStickLeft);
+            Place(upConBtn, GameCubeArtwork.DpadUp);
+            Place(rightConBtn, GameCubeArtwork.DpadRight);
+            Place(downConBtn, GameCubeArtwork.DpadDown);
+            Place(leftConBtn, GameCubeArtwork.DpadLeft);
+
+            PlaceRearControl(captureConBtn, "Capture", 120);
+            PlaceRearControl(guideConBtn, "Home", 194);
+            PlaceRearControl(switch2CConBtn, "C", 246);
+            controllerDiagramControlNames[DS4Controls.Cross] = "A";
+            controllerDiagramControlNames[DS4Controls.Circle] = "B";
+            controllerDiagramControlNames[DS4Controls.Square] = "X";
+            controllerDiagramControlNames[DS4Controls.Triangle] = "Y";
+            controllerDiagramControlNames[DS4Controls.L1] = "ZL";
+            controllerDiagramControlNames[DS4Controls.R1] = "Z";
+            controllerDiagramControlNames[DS4Controls.L2] = "L";
+            controllerDiagramControlNames[DS4Controls.R2] = "R";
+            controllerDiagramControlNames[DS4Controls.Options] = "Start / Pause";
+            controllerDiagramControlNames[DS4Controls.Switch2C] = "C";
+            ApplyControllerButtonClips();
+
+            void Place(Button button, Rect rect, bool ellipse = false)
+            {
+                const double scale = 440 / GameCubeArtwork.Width;
+                PlaceAt(button, new Rect(rect.X * scale, rect.Y * scale,
+                    rect.Width * scale, rect.Height * scale), ellipse);
+            }
+
+            void PlaceRearControl(Button button, string label, double left)
+            {
+                PlaceAt(button, new Rect(left, 294, label == "Capture" ? 66 : 44, 27), false);
+                button.Content = label;
+            }
+
+            void PlaceAt(Button button, Rect rect, bool ellipse)
+            {
+                SetCanvasButtonBounds(button, rect.X, rect.Y, rect.Width, rect.Height);
+                button.Visibility = Visibility.Visible;
+                vectorHoverGeometries[button] = ellipse ?
+                    EllipseHighlight(rect.X, rect.Y, rect.Width, rect.Height) :
+                    RoundedHighlight(rect.X, rect.Y, rect.Width, rect.Height);
+            }
         }
 
         private void ConfigureSwitch2ProDiagram()
@@ -2729,6 +2803,7 @@ namespace DS4WinWPF.DS4Forms
             outputControllerHintText.Text = type switch
             {
                 OutContType.ViiperGenericJoystick => "Input-only joystick for DirectInput and WinMM games. Supports six axes, sixteen buttons, and one POV hat.",
+                OutContType.ViiperGameCube => "Nintendo’s wireless GameCube Controller for Switch 2, with analog L/R and full-press clicks.",
                 OutContType.ViiperSwitch2Pro =>
                     global::DS4Windows.UiText.Get("Switch 2 layout: Cross -> B, Circle -> A, Square -> Y, Triangle -> X, Share -> Minus, Options -> Plus, PS -> Home, Capture -> Capture."),
                 OutContType.ViiperDualSense =>

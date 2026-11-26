@@ -76,7 +76,7 @@ internal readonly struct Switch2ProUsbHdRumbleTransportWriteResult
     internal bool HasValidInvariants()
     {
         if (Model is < Switch2ControllerModel.JoyCon2Right or >
-                Switch2ControllerModel.ProController2 ||
+                Switch2ControllerModel.GameCube ||
             DeviceGeneration == 0 || TransportGeneration == 0)
         {
             return false;
@@ -161,8 +161,7 @@ internal interface ISwitch2ProUsbHdRumbleTransportLease
 internal sealed class Switch2ProUsbHdRumblePhysicalWriter :
     ISwitch2HdRumblePhysicalWriter
 {
-    private const Switch2ControllerModel Model =
-        Switch2ControllerModel.ProController2;
+    private readonly Switch2ControllerModel Model;
 
     private readonly ISwitch2ProUsbHdRumbleTransportLease lease;
     private readonly ulong deviceGeneration;
@@ -178,8 +177,9 @@ internal sealed class Switch2ProUsbHdRumblePhysicalWriter :
     internal Switch2ProUsbHdRumblePhysicalWriter(
         ISwitch2ProUsbHdRumbleTransportLease lease,
         ulong deviceGeneration, ulong transportGeneration,
-        byte initialCounter = 0)
+        byte initialCounter = 0, Switch2ControllerModel model = Switch2ControllerModel.ProController2)
     {
+        Model = model;
         this.lease = lease ?? throw new ArgumentNullException(nameof(lease));
         if (deviceGeneration == 0)
         {
@@ -271,7 +271,11 @@ internal sealed class Switch2ProUsbHdRumblePhysicalWriter :
                 Span<byte> encoded = stackalloc byte[
                     Switch2UsbHdRumbleCodec.ReportLength];
                 byte counter = nextCounter;
-                if (!Switch2UsbHdRumbleCodec.TryEncodeProController(counter,
+                if (Model == Switch2ControllerModel.GameCube)
+                {
+                    Switch2GameCubeRumble.WriteUsb(counter, submission.IsStop, encoded);
+                }
+                else if (!Switch2UsbHdRumbleCodec.TryEncodeProController(counter,
                         submission.Left, submission.Right, encoded))
                 {
                     return Switch2HdRumblePhysicalWriteResult.Reject(
@@ -330,7 +334,7 @@ internal sealed class Switch2ProUsbHdRumblePhysicalWriter :
         }
     }
 
-    private static bool TryAuthenticate(
+    private bool TryAuthenticate(
         ISwitch2ProUsbHdRumbleTransportLease candidate,
         ulong deviceGeneration, ulong transportGeneration,
         out bool dependencyThrew)

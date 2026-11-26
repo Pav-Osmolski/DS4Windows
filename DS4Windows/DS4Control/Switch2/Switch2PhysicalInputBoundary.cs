@@ -329,16 +329,10 @@ public readonly struct Switch2PhysicalInputRegistration :
 
     public bool IsValid => Version == CurrentVersion &&
         ContainerIdentity.IsValid && ProtocolIdentity.IsValid &&
-        Model == Switch2ControllerModel.ProController2 &&
-        Transport == Switch2Transport.Usb &&
-        ProtocolIdentity.ProtocolRevision ==
-            Switch2InputProtocolRevision.ProUsbCommon05Bcd0201 &&
-        ProtocolIdentity.VendorId ==
-            Switch2InputProtocolIdentity.NintendoUsbVendorId &&
-        ProtocolIdentity.ProductId ==
-            Switch2InputProtocolIdentity.ProController2UsbProductId &&
-        ProtocolIdentity.BcdDevice ==
-            Switch2InputProtocolIdentity.AuditedProController2UsbBcdDevice &&
+        Switch2InputProtocolIdentity.TryCreateFullControllerUsb(
+            ProtocolIdentity.VendorId, ProtocolIdentity.ProductId,
+            ProtocolIdentity.BcdDevice, out var expectedIdentity) &&
+        ProtocolIdentity.Equals(expectedIdentity) &&
         InputInterfaceNumber == ProUsbInputInterfaceNumber &&
         CommandInterfaceNumber == ProUsbCommandInterfaceNumber &&
         InputReportByteLength == ProUsbReportByteLength;
@@ -378,7 +372,7 @@ public static class Switch2PhysicalDeviceFactory
         out Switch2PhysicalInputRegistration registration,
         out Switch2PhysicalAdmissionFailure failure)
     {
-        if (!Switch2InputProtocolIdentity.TryCreateProController2Usb(
+        if (!Switch2InputProtocolIdentity.TryCreateFullControllerUsb(
                 observation.VendorId, observation.ProductId,
                 observation.BcdDevice,
                 out Switch2InputProtocolIdentity protocolIdentity))

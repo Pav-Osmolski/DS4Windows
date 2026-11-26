@@ -81,6 +81,7 @@ namespace DS4Windows
                     // discrete boundaries and coalesces continuous state;
                     // the other legacy paths retain latest-state behavior.
                     return DefaultControllerRateHz;
+                case ViiperVirtualDeviceType.GameCube:
                 case ViiperVirtualDeviceType.GenericJoystick:
                     return 250;
                 case ViiperVirtualDeviceType.DualSense:
@@ -143,6 +144,7 @@ namespace DS4Windows
         Switch2Pro,
         XboxOne,
         GenericJoystick,
+        GameCube,
     }
 
     public sealed partial class ViiperOutDevice : OutputDevice
@@ -682,7 +684,7 @@ namespace DS4Windows
                     XboxOnePresentationPolicy.ToStopwatchTicks(
                         xboxOneMaximumOrderedAgeMilliseconds));
             }
-            else if (viiperType == ViiperVirtualDeviceType.Switch2Pro)
+            else if (viiperType is ViiperVirtualDeviceType.Switch2Pro or ViiperVirtualDeviceType.GameCube)
             {
                 string configuredAge = Environment.GetEnvironmentVariable(
                     Switch2PresentationPolicy.
@@ -2849,7 +2851,7 @@ namespace DS4Windows
                 else if (usesSwitch2EgressScheduler)
                 {
                     Switch2EgressState projected = ViiperStatePacketBuilder.
-                        BuildSwitch2State(state, device);
+                        BuildSwitch2State(state, device, viiperType == ViiperVirtualDeviceType.GameCube);
                     long projectedAt = Stopwatch.GetTimestamp();
                     if (PublishSwitch2State(orderedLease, projected,
                             projectedAt))
@@ -3004,7 +3006,8 @@ namespace DS4Windows
                 type == OutContType.ViiperDualSense ||
                 type == OutContType.ViiperDualSenseEdge ||
                 type == OutContType.ViiperSwitch2Pro ||
-                type == OutContType.ViiperGenericJoystick;
+                type == OutContType.ViiperGenericJoystick ||
+                type == OutContType.ViiperGameCube;
         }
 
         public static bool SupportsVirtualMicrophone(OutContType type)
@@ -3050,7 +3053,7 @@ namespace DS4Windows
             xboxOneEgressScheduler != null;
 
         private bool UsesSwitch2EgressScheduler() =>
-            viiperType == ViiperVirtualDeviceType.Switch2Pro &&
+            viiperType is ViiperVirtualDeviceType.Switch2Pro or ViiperVirtualDeviceType.GameCube &&
             switch2EgressScheduler != null;
 
         private bool UsesOrderedEgressScheduler() =>
@@ -7052,6 +7055,13 @@ namespace DS4Windows
                         ApplyDualSenseTriggerFeedback(device, deviceIndex, feedback, feedbackLength);
                         ApplyGameRumbleTriggerVibration(device, deviceIndex,
                             lightFast, heavySlow);
+                    }
+                    break;
+
+                case ViiperVirtualDeviceType.GameCube:
+                    if (feedbackLength == 34 && feedback[32] == 0x04)
+                    {
+                        Program.rootHub.SetDevRumble(device, feedback[0], 0, deviceIndex);
                     }
                     break;
 
@@ -13350,6 +13360,7 @@ namespace DS4Windows
                 ViiperVirtualDeviceType.DualSenseEdge =>
                     "dualsenseedgecombinedaudioduplexv5",
                 ViiperVirtualDeviceType.Switch2Pro => "ns2pro",
+                ViiperVirtualDeviceType.GameCube => "ns2gamecube",
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
         }
@@ -13365,7 +13376,7 @@ namespace DS4Windows
                 ViiperVirtualDeviceType.DualShock4 => 7,
                 ViiperVirtualDeviceType.DualSense => DualSenseFeedbackPacketSize,
                 ViiperVirtualDeviceType.DualSenseEdge => DualSenseFeedbackPacketSize,
-                ViiperVirtualDeviceType.Switch2Pro => 34,
+                ViiperVirtualDeviceType.Switch2Pro or ViiperVirtualDeviceType.GameCube => 34,
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
         }
@@ -13380,7 +13391,7 @@ namespace DS4Windows
                 ViiperVirtualDeviceType.DualShock4 => DS4PacketSize,
                 ViiperVirtualDeviceType.DualSense => DualSensePacketSize,
                 ViiperVirtualDeviceType.DualSenseEdge => DualSensePacketSize,
-                ViiperVirtualDeviceType.Switch2Pro => Switch2PacketSize,
+                ViiperVirtualDeviceType.Switch2Pro or ViiperVirtualDeviceType.GameCube => Switch2PacketSize,
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
         }
@@ -13397,7 +13408,8 @@ namespace DS4Windows
                 ViiperVirtualDeviceType.XboxOne => BuildXboxOne(state, device),
                 ViiperVirtualDeviceType.DualShock4 => BuildDualShock4(state, device),
                 ViiperVirtualDeviceType.DualSense or ViiperVirtualDeviceType.DualSenseEdge => BuildDualSense(state, device, type),
-                ViiperVirtualDeviceType.Switch2Pro => BuildSwitch2Pro(state, device),
+                ViiperVirtualDeviceType.Switch2Pro or ViiperVirtualDeviceType.GameCube =>
+                    BuildSwitch2Packet(state, device, type == ViiperVirtualDeviceType.GameCube),
                 ViiperVirtualDeviceType.GenericJoystick => BuildGenericJoystick(state, device),
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
@@ -13690,21 +13702,33 @@ namespace DS4Windows
                 (byte)(touch.TrackingId | 0x80);
         }
 
-        private static byte[] BuildSwitch2Pro(DS4State state, int device)
+        private static byte[] BuildSwitch2Packet(DS4State state, int device, bool gameCube)
         {
             byte[] packet = new byte[Switch2PacketSize];
-            BuildSwitch2State(state, device).BuildInto(packet);
+            BuildSwitch2State(state, device, gameCube).BuildInto(packet);
             return packet;
         }
 
         internal static Switch2EgressState BuildSwitch2State(DS4State state,
-            int device)
+            int device, bool gameCube = false)
         {
             ushort lx = ScaleMappedSwitchAxis(state.LXAxis);
             ushort ly = ScaleMappedSwitchAxis(state.LYAxis);
             ushort rx = ScaleMappedSwitchAxis(state.RXAxis);
             ushort ry = ScaleMappedSwitchAxis(state.RYAxis);
             ApplySteeringWheelSwitchAxes(state, device, ref lx, ref ly, ref rx, ref ry);
+
+            if (gameCube)
+            {
+                uint buttons = BuildGameCubeButtons(state);
+                // The GameCube stream uses the first two motion bytes for L/R
+                // travel and reserves the other ten bytes. Clicks are separate.
+                int leftTravel = (state.L2 * 232 + 127) / 255;
+                int rightTravel = (state.R2 * 232 + 127) / 255;
+                short triggerTravel = unchecked((short)(leftTravel | (rightTravel << 8)));
+                return new Switch2EgressState(buttons, lx, FlipSwitchAxis(ly),
+                    rx, FlipSwitchAxis(ry), triggerTravel, 0, 0, 0, 0, 0);
+            }
 
             return new Switch2EgressState(BuildSwitch2Buttons(state),
                 lx, ly, rx, ry,
@@ -13760,6 +13784,33 @@ namespace DS4Windows
             if (state.FnR) buttons |= 0x00200000;
             if (state.BLP) buttons |= 0x00400000;
             if (state.BRP) buttons |= 0x00800000;
+            return buttons;
+        }
+
+        private static ushort FlipSwitchAxis(ushort axis) => axis <= 2048 ?
+            (ushort)(2048 + ((2048 - axis) * 2047 + 1024) / 2048) :
+            (ushort)(((4095 - axis) * 2048 + 1023) / 2047);
+
+        private static uint BuildGameCubeButtons(DS4State state)
+        {
+            uint buttons = 0;
+            if (state.Cross) buttons |= 1u << 1; // A
+            if (state.Circle) buttons |= 1u << 0; // B
+            if (state.Square) buttons |= 1u << 3; // X
+            if (state.Triangle) buttons |= 1u << 2; // Y
+            if (state.R1) buttons |= 1u << 4; // Z
+            if (state.Switch2RawInputStatus.IsGameCube ? state.R2Btn : state.R2 == byte.MaxValue) buttons |= 1u << 5;
+            if (state.Options) buttons |= 1u << 6;
+            if (state.DpadDown) buttons |= 1u << 8;
+            if (state.DpadRight) buttons |= 1u << 9;
+            if (state.DpadLeft) buttons |= 1u << 10;
+            if (state.DpadUp) buttons |= 1u << 11;
+            if (state.L1) buttons |= 1u << 12;
+            if (state.Switch2RawInputStatus.IsGameCube ? state.L2Btn : state.L2 == byte.MaxValue) buttons |= 1u << 13;
+            if (state.PS) buttons |= 1u << 16;
+            if (state.Share || state.Capture) buttons |= 1u << 17;
+            if (state.OutputTouchButton || state.Mute || state.Switch2RawInputStatus.IsGameCube && state.Switch2RawInputStatus.CButton)
+                buttons |= 1u << 20; // C
             return buttons;
         }
 

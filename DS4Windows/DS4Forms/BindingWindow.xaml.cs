@@ -1127,6 +1127,9 @@ namespace DS4WinWPF.DS4Forms
         private void ConfigureOutputControllerCanvas(OutContType outputType)
         {
             touchpadClickBtn.Visibility = Visibility.Collapsed;
+            lsbBtn.Visibility = rsbBtn.Visibility = Visibility.Visible;
+            backBtn.Content = guideBtn.Content = touchpadClickBtn.Content = null;
+            outputControllerCanvas.Height = 247;
             foreach (Button button in outputButtonHitGeometries.Keys)
             {
                 button.Clip = null;
@@ -1150,6 +1153,9 @@ namespace DS4WinWPF.DS4Forms
                 case OutContType.ViiperDualSenseEdge:
                     ConfigureDualSenseEdgeOutputCanvas();
                     break;
+                case OutContType.ViiperGameCube:
+                    ConfigureGameCubeOutputCanvas();
+                    return;
                 case OutContType.ViiperSwitch2Pro:
                     ConfigureSwitch2ProOutputCanvas();
                     break;
@@ -1533,6 +1539,51 @@ namespace DS4WinWPF.DS4Forms
             SetOutputButtonBounds(dpadLBtn, 186, 78, 26, 24);
             SetOutputButtonBounds(touchpadClickBtn, 246, 38, 138, 66);
             touchpadClickBtn.Visibility = Visibility.Visible;
+        }
+
+        private void ConfigureGameCubeOutputCanvas()
+        {
+            conImageBrush.ImageSource = LoadControllerImage(GameCubeArtwork.ResourceName);
+            // Position in the renderer's centred 1.5:1 art box.
+            const double scale = 247 / GameCubeArtwork.Height;
+            const double offsetX = (630 - GameCubeArtwork.Width * scale) / 2;
+            Place(aBtn, GameCubeArtwork.A);
+            Place(bBtn, GameCubeArtwork.B);
+            Place(xBtn, GameCubeArtwork.X);
+            Place(yBtn, GameCubeArtwork.Y);
+            Place(ltBtn, GameCubeArtwork.L);
+            Place(rtBtn, GameCubeArtwork.R);
+            Place(lbBtn, GameCubeArtwork.ZL);
+            Place(rbBtn, GameCubeArtwork.Z);
+            Place(startBtn, GameCubeArtwork.Start);
+            Place(lsuBtn, GameCubeArtwork.StickUp);
+            Place(lsrBtn, GameCubeArtwork.StickRight);
+            Place(lsdBtn, GameCubeArtwork.StickDown);
+            Place(lslBtn, GameCubeArtwork.StickLeft);
+            Place(rsuBtn, GameCubeArtwork.CStickUp);
+            Place(rsrBtn, GameCubeArtwork.CStickRight);
+            Place(rsdBtn, GameCubeArtwork.CStickDown);
+            Place(rslBtn, GameCubeArtwork.CStickLeft);
+            Place(dpadUBtn, GameCubeArtwork.DpadUp);
+            Place(dpadRBtn, GameCubeArtwork.DpadRight);
+            Place(dpadDBtn, GameCubeArtwork.DpadDown);
+            Place(dpadLBtn, GameCubeArtwork.DpadLeft);
+
+            lsbBtn.Visibility = rsbBtn.Visibility = Visibility.Collapsed;
+            touchpadClickBtn.Visibility = Visibility.Visible;
+            Rear(backBtn, "Capture", 266, 52);
+            Rear(guideBtn, "Home", 321, 42);
+            Rear(touchpadClickBtn, "C", 367, 26);
+
+            void Place(Button button, Rect rect) =>
+                SetOutputButtonBounds(button, offsetX + rect.X * scale,
+                    rect.Y * scale, rect.Width * scale, rect.Height * scale);
+
+            void Rear(Button button, string label, double left, double width)
+            {
+                SetOutputButtonBounds(button, left, 217, width, 25);
+                button.Content = label;
+            }
         }
 
         private void ConfigureSwitch2ProOutputCanvas()

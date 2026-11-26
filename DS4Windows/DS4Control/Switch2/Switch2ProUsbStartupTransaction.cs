@@ -31,6 +31,7 @@ public enum Switch2ProUsbStartupStep : byte
     ReadFactorySecondaryCalibration,
     ReadUserPrimaryCalibration,
     ReadUserSecondaryCalibration,
+    ReadGameCubeTriggerZero,
 }
 
 /// <summary>
@@ -225,7 +226,7 @@ public readonly struct Switch2ProUsbStartupCommandClaim :
 
     private static bool IsSupportedStep(Switch2ProUsbStartupStep step) =>
         step is >= Switch2ProUsbStartupStep.EnableUsbHidReports and
-            <= Switch2ProUsbStartupStep.ReadUserSecondaryCalibration;
+            <= Switch2ProUsbStartupStep.ReadGameCubeTriggerZero;
 }
 
 /// <summary>

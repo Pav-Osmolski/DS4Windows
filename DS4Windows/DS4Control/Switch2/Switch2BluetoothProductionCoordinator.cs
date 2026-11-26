@@ -1080,22 +1080,22 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
             Switch2InputFailureDiagnostics.Observe(owner, ReportDiagnostic);
             if (lease.PersistentPeerId.IsValid &&
                 !owner.RuntimeDevice.TryBindProfileIdentity(lease.PersistentPeerId))
-                diagnostic?.Invoke("Switch 2 Pro local profile ID could not bind; profile linking is unavailable for this connection.");
-            if (magnetometerCalibrationStore != null &&
+                diagnostic?.Invoke($"Switch 2 {observation.Model} local profile ID could not bind; profile linking is unavailable for this connection.");
+            if (observation.Model != Switch2ControllerModel.GameCube && magnetometerCalibrationStore != null &&
                 lease.PersistentPeerId.IsValid &&
                 !owner.RuntimeDevice.TryBindMagnetometerCalibrationPersistence(
                     magnetometerCalibrationStore, lease.PersistentPeerId))
             {
                 diagnostic?.Invoke($"Switch 2 {observation.Model} magnetometer calibration persistence could not bind; this connection will continue without persisted magnetic correction.");
             }
-            if (gyroCalibrationStore != null &&
+            if (observation.Model != Switch2ControllerModel.GameCube && gyroCalibrationStore != null &&
                 lease.PersistentPeerId.IsValid &&
                 !owner.RuntimeDevice.TryBindGyroCalibrationPersistence(
                     gyroCalibrationStore, lease.PersistentPeerId))
             {
                 diagnostic?.Invoke($"Switch 2 {observation.Model} gyro calibration persistence could not bind; this connection will recalibrate in memory.");
             }
-            if (rawStickCalibrationStore != null && lease.PersistentPeerId.IsValid &&
+            if (observation.Model != Switch2ControllerModel.GameCube && rawStickCalibrationStore != null && lease.PersistentPeerId.IsValid &&
                 !owner.RuntimeDevice.TryBindRawStickCalibrationPersistence(rawStickCalibrationStore, lease.PersistentPeerId))
             {
                 diagnostic?.Invoke("Switch 2 Pro local stick calibration could not bind; source calibration remains active.");

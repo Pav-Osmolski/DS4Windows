@@ -53,6 +53,7 @@ public static class Switch2AdvertisementCodec
     public const ushort JoyCon2RightProductId = 0x2066;
     public const ushort JoyCon2LeftProductId = 0x2067;
     public const ushort ProController2ProductId = 0x2069;
+    public const ushort GameCubeProductId = 0x2073;
 
     /// <summary>
     /// The selected host address is in canonical order; the advertisement
@@ -109,6 +110,7 @@ public static class Switch2AdvertisementCodec
             JoyCon2RightProductId => Switch2ControllerModel.JoyCon2Right,
             JoyCon2LeftProductId => Switch2ControllerModel.JoyCon2Left,
             ProController2ProductId => Switch2ControllerModel.ProController2,
+            GameCubeProductId => Switch2ControllerModel.GameCube,
             _ => Switch2ControllerModel.Unknown,
         };
         return model != Switch2ControllerModel.Unknown;

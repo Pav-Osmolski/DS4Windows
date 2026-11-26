@@ -13,6 +13,7 @@ public enum Switch2ControllerModel : byte
     JoyCon2Right = 1,
     JoyCon2Left = 2,
     ProController2 = 3,
+    GameCube = 4,
 }
 
 public enum Switch2Transport : byte
@@ -324,10 +325,10 @@ public readonly struct Switch2DecodedInputReport
     /// Joy-Con 2 is not a supported control and may contain garbage.
     /// </summary>
     public bool HasLeftStick => Model is Switch2ControllerModel.JoyCon2Left or
-        Switch2ControllerModel.ProController2;
+        Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube;
 
     public bool HasRightStick => Model is Switch2ControllerModel.JoyCon2Right or
-        Switch2ControllerModel.ProController2;
+        Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube;
 
     /// <summary>
     /// Report 0x05 mouse fields are applicable only to Joy-Con 2 models.

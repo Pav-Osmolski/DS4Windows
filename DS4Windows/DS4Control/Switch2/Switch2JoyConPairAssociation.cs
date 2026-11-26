@@ -153,6 +153,8 @@ internal readonly struct Switch2PersistentPeerId :
                 Switch2AdvertisementCodec.JoyCon2RightProductId) => true,
             (Switch2ControllerModel.ProController2,
                 Switch2AdvertisementCodec.ProController2ProductId) => true,
+            (Switch2ControllerModel.GameCube,
+                Switch2AdvertisementCodec.GameCubeProductId) => true,
             _ => false,
         };
 

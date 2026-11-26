@@ -791,6 +791,8 @@ public sealed class Switch2BluetoothCandidateRegistry
                 Switch2AdvertisementCodec.JoyCon2LeftProductId) => true,
             (Switch2ControllerModel.ProController2,
                 Switch2AdvertisementCodec.ProController2ProductId) => true,
+            (Switch2ControllerModel.GameCube,
+                Switch2AdvertisementCodec.GameCubeProductId) => true,
             _ => false,
         };
 

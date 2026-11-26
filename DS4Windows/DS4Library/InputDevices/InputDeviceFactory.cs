@@ -40,6 +40,7 @@ namespace DS4Windows.InputDevices
         Switch2JoyConLeft,
         Switch2JoyConRight,
         Switch2JoyConJoined,
+        Switch2GameCube,
     }
 
     public abstract class InputDeviceFactory
@@ -69,6 +70,7 @@ namespace DS4Windows.InputDevices
                     temp = new DS3Device(hidDevice, disName, featureSet);
                     break;
                 case InputDeviceType.Switch2Pro:
+                case InputDeviceType.Switch2GameCube:
                 case InputDeviceType.Switch2JoyConLeft:
                 case InputDeviceType.Switch2JoyConRight:
                 case InputDeviceType.Switch2JoyConJoined:

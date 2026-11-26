@@ -858,8 +858,9 @@ public sealed class Switch2ProUsbRuntimeOwner :
                 Switch2ProUsbRuntimeCreateFailureKind.InvalidGeneration);
             return false;
         }
-        if (!calibration.IsValid || calibration.Model !=
-                Switch2ControllerModel.ProController2 ||
+        Switch2ControllerModel model = admittedOwnedLifetime?.Registration.Model ??
+            Switch2ControllerModel.ProController2;
+        if (!calibration.IsValid || calibration.Model != model ||
             calibration.DeviceGeneration != deviceGeneration)
         {
             failure = CreateFailure(
@@ -875,7 +876,7 @@ public sealed class Switch2ProUsbRuntimeOwner :
             return false;
         }
 
-        if (!Switch2RuntimeInputDevice.TryCreatePro(deviceGeneration,
+        if (!Switch2RuntimeInputDevice.TryCreateFullController(model, deviceGeneration,
                 transportGeneration, Switch2Transport.Usb,
                 out Switch2RuntimeInputDevice runtimeDevice,
                 out Switch2RuntimeInputDeviceCreateFailure runtimeFailure))
@@ -1648,7 +1649,7 @@ public sealed class Switch2ProUsbRuntimeOwner :
                     StaleTransportGeneration;
                 RejectInputNoLock(immediateFailure);
             }
-            else if (frame.Model != Switch2ControllerModel.ProController2)
+            else if (frame.Model != RuntimeInputDevice.FullControllerModel)
             {
                 immediateFailure = Switch2ProUsbRuntimeInputFailure.
                     ModelMismatch;

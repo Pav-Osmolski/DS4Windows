@@ -79,6 +79,7 @@ namespace DS4Windows
         ViiperSwitch2Pro,
         ViiperXboxOne,
         ViiperGenericJoystick,
+        ViiperGameCube,
     }
 
     public static class OutContTypeCompatibility
@@ -104,6 +105,7 @@ namespace DS4Windows
                 OutContType.ViiperSwitch2Pro => "Switch 2 Pro",
                 OutContType.ViiperXboxOne => "Xbox One / Series",
                 OutContType.ViiperGenericJoystick => "Generic Joystick",
+                OutContType.ViiperGameCube => "GameCube Controller",
                 _ => "None",
             };
         }
@@ -1030,6 +1032,26 @@ namespace DS4Windows
         {
             conType = conType.Normalize();
             string result = string.Empty;
+            if (conType == DS4Windows.OutContType.ViiperGameCube)
+            {
+                return key switch
+                {
+                    X360Controls.A => "A",
+                    X360Controls.B => "B",
+                    X360Controls.X => "X",
+                    X360Controls.Y => "Y",
+                    X360Controls.LB => "ZL",
+                    X360Controls.RB => "Z",
+                    X360Controls.LT => "L",
+                    X360Controls.RT => "R",
+                    X360Controls.Start => "Start / Pause",
+                    X360Controls.Guide => "Home",
+                    X360Controls.Back => "Capture",
+                    X360Controls.TouchpadClick => "C",
+                    _ => xboxDefaultNames.GetValueOrDefault(key),
+                };
+            }
+
             if (conType == DS4Windows.OutContType.ViiperGenericJoystick)
             {
                 return GenericJoystickOutputLabels.Get(key);
@@ -5623,6 +5645,7 @@ namespace DS4Windows
                 case OutContType.ViiperSwitch2Pro: result = "ViiperSwitch2Pro"; break;
                 case OutContType.ViiperXboxOne: result = "ViiperXboxOne"; break;
                 case OutContType.ViiperGenericJoystick: result = "ViiperGenericJoystick"; break;
+                case OutContType.ViiperGameCube: result = "ViiperGameCube"; break;
                 default: break;
             }
 
@@ -5647,6 +5670,7 @@ namespace DS4Windows
                 case "Xbox One":
                 case "ViiperXboxOne": id = OutContType.ViiperXboxOne; break;
                 case "ViiperGenericJoystick": id = OutContType.ViiperGenericJoystick; break;
+                case "ViiperGameCube": id = OutContType.ViiperGameCube; break;
                 default: break;
             }
 

@@ -153,11 +153,15 @@ internal sealed class Switch2ProUsbCalibrationTransaction
         byte[] rightFactory = null;
         byte[] leftUser = null;
         byte[] rightUser = null;
+        byte[] triggerZero = null;
+        var model = lifetime.Registration.Model;
         long deadline = StartDeadline(timeoutMilliseconds);
         Span<byte> request = stackalloc byte[
             Switch2UsbCommandCodec.CalibrationReadRequestLength];
 
-        for (int index = 0; index < RequiredReadCount; index++)
+        int readCount = model == Switch2ControllerModel.GameCube ?
+            RequiredReadCount + 1 : RequiredReadCount;
+        for (int index = 0; index < readCount; index++)
         {
             Switch2UsbCalibrationRead read = (Switch2UsbCalibrationRead)
                 (index + (int)Switch2UsbCalibrationRead.FactoryPrimary);
@@ -230,22 +234,30 @@ internal sealed class Switch2ProUsbCalibrationTransaction
                 case Switch2UsbCalibrationRead.UserPrimary:
                     leftUser = payload;
                     break;
+                case Switch2UsbCalibrationRead.GameCubeTriggerZero:
+                    triggerZero = payload;
+                    break;
                 case Switch2UsbCalibrationRead.UserSecondary:
                     rightUser = payload;
                     break;
             }
         }
 
-        if (!Switch2InputCalibrationSnapshot.TryCreateProUsb(
-                lifetime.SessionDescriptor.DeviceGeneration,
-                leftFactory, rightFactory, leftUser, rightUser,
-                out Switch2InputCalibrationSnapshot calibration))
+        ulong generation = lifetime.SessionDescriptor.DeviceGeneration;
+        bool calibrated = model == Switch2ControllerModel.GameCube ?
+            Switch2InputCalibrationSnapshot.TryCreate(model, generation,
+                leftFactory, rightFactory, leftUser, rightUser, out var calibration) :
+            Switch2InputCalibrationSnapshot.TryCreateProUsb(generation,
+                leftFactory, rightFactory, leftUser, rightUser, out calibration);
+        if (!calibrated)
         {
             result = Failed(
                 Switch2ProUsbCalibrationReadFailure.SnapshotRejected);
             return false;
         }
 
+        if (triggerZero != null)
+            calibration = calibration.WithGameCubeTriggerZero(triggerZero[0], triggerZero[1]);
         result = new Switch2ProUsbCalibrationReadResult(
             Switch2ProUsbCalibrationReadFailure.None,
             Switch2ProUsbStartupRetirementFailure.None, calibration);
@@ -281,11 +293,13 @@ internal sealed class Switch2ProUsbCalibrationTransaction
                     return Switch2ProUsbCalibrationReadFailure.
                         WrongResponseProof;
                 }
-                int expectedLength = read is
+                int expectedLength = read switch
+                {
                     Switch2UsbCalibrationRead.FactoryPrimary or
-                    Switch2UsbCalibrationRead.FactorySecondary ?
-                    Switch2CalibrationCodec.StickCalibrationLength :
-                    Switch2CalibrationCodec.UserStickCalibrationLength;
+                    Switch2UsbCalibrationRead.FactorySecondary => Switch2CalibrationCodec.StickCalibrationLength,
+                    Switch2UsbCalibrationRead.GameCubeTriggerZero => 2,
+                    _ => Switch2CalibrationCodec.UserStickCalibrationLength,
+                };
                 return completion.ResponsePayload.Length == expectedLength ?
                     Switch2ProUsbCalibrationReadFailure.None :
                     Switch2ProUsbCalibrationReadFailure.MalformedCompletion;
@@ -365,6 +379,8 @@ internal sealed class Switch2ProUsbCalibrationTransaction
                 Switch2ProUsbStartupStep.ReadFactorySecondaryCalibration,
             Switch2UsbCalibrationRead.UserPrimary =>
                 Switch2ProUsbStartupStep.ReadUserPrimaryCalibration,
+            Switch2UsbCalibrationRead.GameCubeTriggerZero =>
+                Switch2ProUsbStartupStep.ReadGameCubeTriggerZero,
             Switch2UsbCalibrationRead.UserSecondary =>
                 Switch2ProUsbStartupStep.ReadUserSecondaryCalibration,
             _ => Switch2ProUsbStartupStep.Invalid,

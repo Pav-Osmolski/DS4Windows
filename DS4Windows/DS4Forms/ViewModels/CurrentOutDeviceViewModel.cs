@@ -381,6 +381,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 case OutContType.ViiperXboxOne:
                     result = 6;
                     break;
+                case OutContType.ViiperGameCube:
+                    result = 7;
+                    break;
                 default:
                     break;
             }
@@ -430,6 +433,9 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     break;
                 case 6:
                     result = OutContType.ViiperXboxOne;
+                    break;
+                case 7:
+                    result = OutContType.ViiperGameCube;
                     break;
                 default:
                     break;

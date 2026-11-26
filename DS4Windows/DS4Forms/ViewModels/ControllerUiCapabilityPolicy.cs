@@ -239,6 +239,16 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 return true;
             }
 
+            if (DeviceType == InputDeviceType.Switch2GameCube)
+            {
+                return control is DS4Controls.Cross or DS4Controls.Circle or DS4Controls.Square or DS4Controls.Triangle or
+                    DS4Controls.L1 or DS4Controls.R1 or DS4Controls.L2 or DS4Controls.R2 or DS4Controls.Options or
+                    DS4Controls.PS or DS4Controls.Capture or DS4Controls.DpadUp or DS4Controls.DpadRight or
+                    DS4Controls.DpadDown or DS4Controls.DpadLeft or DS4Controls.LXNeg or DS4Controls.LXPos or
+                    DS4Controls.LYNeg or DS4Controls.LYPos or DS4Controls.RXNeg or DS4Controls.RXPos or
+                    DS4Controls.RYNeg or DS4Controls.RYPos or DS4Controls.LSOuter or DS4Controls.RSOuter;
+            }
+
             if (IsDualShock4)
             {
                 return control != DS4Controls.Mute &&
@@ -310,7 +320,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             return control switch
             {
                 DS4Controls.Switch2C => DeviceType is
-                    InputDeviceType.Switch2Pro or
+                    InputDeviceType.Switch2Pro or InputDeviceType.Switch2GameCube or
                     InputDeviceType.Switch2JoyConRight or
                     InputDeviceType.Switch2JoyConJoined,
                 DS4Controls.Switch2JoyConLeftPaddle1 or
@@ -397,6 +407,16 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                     deviceType,
                     productId == 0x2069 ? "Switch 2 Pro" : "Switch Pro",
                     "Switch 2 Pro Controller.png",
+                    isPlayStationController: false,
+                    showControllerAudioSettings: false,
+                    showDualSenseHardwareControls: false,
+                    feedbackLabel: "Rumble strength",
+                    audioHeader: "Controller audio",
+                    audioDescription: "Controller audio is not available on this device.",
+                    microphoneToggleLabel: "Enable controller microphone input",
+                    microphoneDescription: "Controller microphone input is not available on this device."),
+                InputDeviceType.Switch2GameCube => new ControllerUiCapabilities(
+                    deviceType, "Nintendo GameCube Controller", GameCubeArtwork.ResourceName,
                     isPlayStationController: false,
                     showControllerAudioSettings: false,
                     showDualSenseHardwareControls: false,

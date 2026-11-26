@@ -23,7 +23,7 @@ namespace DS4Windows
         IOrderedEgressState<Switch2EgressState>
     {
         internal const int WireSize = 24;
-        internal const uint ValidButtonsMask = 0x002FFFFF;
+        internal const uint ValidButtonsMask = 0x003FFFFF;
         internal const ushort NeutralAxis = 0x0800;
 
         internal Switch2EgressState(uint buttons, ushort leftStickX,

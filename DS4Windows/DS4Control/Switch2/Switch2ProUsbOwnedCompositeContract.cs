@@ -379,9 +379,6 @@ internal readonly struct Switch2ProUsbOwnedCompositeAuthority :
 /// </summary>
 internal sealed class Switch2ProUsbOwnedCompositeLeaseBundle
 {
-    private const Switch2ControllerModel RequiredModel =
-        Switch2ControllerModel.ProController2;
-
     private readonly ISwitch2ProUsbOwnedCompositeLease lease;
     private readonly Switch2PhysicalInputLifetime lifetime;
     private int authorityTaken;
@@ -415,8 +412,8 @@ internal sealed class Switch2ProUsbOwnedCompositeLeaseBundle
                 Switch2ProUsbOwnedCompositeAdmissionFailure.InvalidLifetime;
             return false;
         }
-        if (expectedLifetime.Registration.ProtocolIdentity.Model !=
-                RequiredModel ||
+        var model = expectedLifetime.Registration.ProtocolIdentity.Model;
+        if (model is not (Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube) ||
             expectedLifetime.Registration.ProtocolIdentity.Transport !=
                 Switch2Transport.Usb)
         {
@@ -435,7 +432,7 @@ internal sealed class Switch2ProUsbOwnedCompositeLeaseBundle
             leaseLifetime = lease.Lifetime;
             maximumOutputOperationMilliseconds =
                 lease.MaximumOutputOperationMilliseconds;
-            authenticates = lease.AuthenticatesComposite(RequiredModel,
+            authenticates = lease.AuthenticatesComposite(model,
                 expectedLifetime.SessionDescriptor.DeviceGeneration,
                 expectedLifetime.SessionDescriptor.TransportGeneration);
         }
@@ -571,7 +568,7 @@ internal sealed class Switch2ProUsbOwnedCompositeLeaseBundle
             Switch2PhysicalInputRegistration registration = lease.Registration;
             Switch2PhysicalInputLifetime currentLifetime = lease.Lifetime;
             int outputBound = lease.MaximumOutputOperationMilliseconds;
-            bool authenticates = lease.AuthenticatesComposite(RequiredModel,
+            bool authenticates = lease.AuthenticatesComposite(lifetime.Registration.Model,
                 lifetime.SessionDescriptor.DeviceGeneration,
                 lifetime.SessionDescriptor.TransportGeneration);
             return registration.Equals(lifetime.Registration) &&

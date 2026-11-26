@@ -1308,6 +1308,9 @@ namespace DS4Windows
                 case InputDevices.InputDeviceType.SwitchPro:
                     result.AddRange(new DS4Controls[] { DS4Controls.Capture });
                     break;
+                case InputDevices.InputDeviceType.Switch2GameCube:
+                    result.Add(DS4Controls.Capture);
+                    break;
                 case InputDevices.InputDeviceType.Switch2Pro:
                     // GL/GR use the canonical paddle sources. Decoding them
                     // is not enough: these controls are deliberately outside

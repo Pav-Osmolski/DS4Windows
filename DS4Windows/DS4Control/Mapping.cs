@@ -7902,7 +7902,7 @@ namespace DS4Windows
                     outputAxisMin = 0;
                     outputAxisZero = 128;
                 }
-                else if (Global.OutContType[device] == OutContType.ViiperSwitch2Pro)
+                else if (Global.OutContType[device] is OutContType.ViiperSwitch2Pro or OutContType.ViiperGameCube)
                 {
                     outputAxisMax = 4095;
                     outputAxisMin = 0;

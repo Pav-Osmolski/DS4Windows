@@ -77,6 +77,7 @@ public readonly struct Switch2ProProfileInputFrame
         in Switch2ProfileAxis rightX, in Switch2ProfileAxis rightY)
     {
         Version = CurrentVersion;
+        Model = canonical.Model;
         Transport = canonical.Transport;
         ProtocolRevision = canonical.ProtocolRevision;
         DeviceGeneration = canonical.DeviceGeneration;
@@ -94,8 +95,8 @@ public readonly struct Switch2ProProfileInputFrame
         LeftY = leftY;
         RightX = rightX;
         RightY = rightY;
-        HasCommonMotion = canonical.Report.IsCommon;
-        if (HasCommonMotion)
+        HasCommonMotion = canonical.Report.IsCommon && Model != Switch2ControllerModel.GameCube;
+        if (canonical.Report.IsCommon)
         {
             Switch2CommonInputReport common = canonical.Report.Common;
             MotionTimestamp = common.MotionTimestamp;
@@ -105,6 +106,13 @@ public readonly struct Switch2ProProfileInputFrame
             HasBatteryStatus = Switch2BatteryStatus.TryCreate(common,
                 out Switch2BatteryStatus batteryStatus);
             BatteryStatus = batteryStatus;
+            if (Model == Switch2ControllerModel.GameCube)
+            {
+                LeftAnalogTrigger = ScaleTrigger((byte)common.Opaque3CTo3ERaw,
+                    canonical.Calibration.LeftTriggerZero);
+                RightAnalogTrigger = ScaleTrigger((byte)(common.Opaque3CTo3ERaw >> 8),
+                    canonical.Calibration.RightTriggerZero);
+            }
         }
         LeftCalibrationStatus = canonical.Calibration.Left.Status;
         LeftCalibrationFailure = canonical.Calibration.Left.Failure;
@@ -116,6 +124,9 @@ public readonly struct Switch2ProProfileInputFrame
     }
 
     public ushort Version { get; }
+    internal Switch2ControllerModel Model { get; }
+    internal byte LeftAnalogTrigger { get; }
+    internal byte RightAnalogTrigger { get; }
     public Switch2Transport Transport { get; }
     public Switch2InputProtocolRevision ProtocolRevision { get; }
     public ulong DeviceGeneration { get; }
@@ -148,8 +159,9 @@ public readonly struct Switch2ProProfileInputFrame
     public bool HasLocalRightCalibration { get; private init; }
     internal Switch2RawStickObservation RawStickObservation { get; }
     internal bool HasValidRawStickObservation => RawStickObservation.Matches(
-        Switch2ControllerModel.ProController2, Transport, DeviceGeneration,
-        TransportGeneration, CompletionTimestampQpc, QpcFrequency, HasCommonMotion) &&
+        Model, Transport, DeviceGeneration,
+        TransportGeneration, CompletionTimestampQpc, QpcFrequency,
+        HasCommonMotion || Model == Switch2ControllerModel.GameCube) &&
         RawStickObservation.HasLeft && RawStickObservation.HasRight;
 
     internal Switch2ProProfileInputFrame WithLocalStickCalibration(
@@ -221,6 +233,11 @@ public readonly struct Switch2ProProfileInputFrame
         destination.R2Btn = rightTrigger;
         destination.R2 = destination.R2Raw = rightTrigger ? byte.MaxValue :
             (byte)0;
+        if (Model == Switch2ControllerModel.GameCube)
+        {
+            destination.L2 = destination.L2Raw = LeftAnalogTrigger;
+            destination.R2 = destination.R2Raw = RightAnalogTrigger;
+        }
 
         destination.Share = Has(buttons, Switch2ProButton.Back);
         destination.Options = Has(buttons, Switch2ProButton.Start);
@@ -281,7 +298,12 @@ public readonly struct Switch2ProProfileInputFrame
         RightStickX = RightX.SignedValue,
         RightStickY = RightY.SignedValue,
         CButton = CButton,
+        IsGameCube = Model == Switch2ControllerModel.GameCube,
     };
+
+    private static byte ScaleTrigger(byte value, byte zero) =>
+        value <= zero || zero >= 232 ? (byte)0 :
+            (byte)((Math.Min(value, (byte)232) - zero) * 255 / (232 - zero));
 
     private static bool Has(Switch2ProButton buttons,
         Switch2ProButton control) => (buttons & control) != 0;
@@ -357,6 +379,15 @@ public static class Switch2ProProfileInputMapper
 
         var buttons = (Switch2ProButton)(canonical.RawButtonBits &
             Switch2ProUsbInputProjection.KnownButtonMask);
+        if (canonical.Model == Switch2ControllerModel.GameCube)
+        {
+            // Common05 places GameCube's analog-trigger clicks in the Pro
+            // shoulder bits and the top shoulders in the Pro trigger bits.
+            const uint shoulderMask = 0x00C000C0;
+            uint raw = canonical.RawButtonBits & Switch2CanonicalInputFrame.GameCubeKnownCommonButtonMask;
+            buttons = (Switch2ProButton)((raw & ~shoulderMask) |
+                ((raw & 0x00400040) << 1) | ((raw & 0x00800080) >> 1));
+        }
         frame = new Switch2ProProfileInputFrame(canonical, buttons, leftX,
             leftY, rightX, rightY);
         failure = Switch2ProProfileInputFailure.None;
@@ -366,22 +397,16 @@ public static class Switch2ProProfileInputMapper
     private static bool IsSupportedProIdentity(
         in Switch2InputProtocolIdentity identity)
     {
-        if (identity.Model != Switch2ControllerModel.ProController2)
+        if (identity.Model is not (Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube))
         {
             return false;
         }
 
         if (identity.Transport == Switch2Transport.Usb)
         {
-            return identity.ProtocolRevision ==
-                    Switch2InputProtocolRevision.ProUsbCommon05Bcd0201 &&
-                identity.VendorId ==
-                    Switch2InputProtocolIdentity.NintendoUsbVendorId &&
-                identity.ProductId ==
-                    Switch2InputProtocolIdentity.ProController2UsbProductId &&
-                identity.BcdDevice ==
-                    Switch2InputProtocolIdentity.
-                        AuditedProController2UsbBcdDevice;
+            return Switch2InputProtocolIdentity.TryCreateFullControllerUsb(
+                identity.VendorId, identity.ProductId, identity.BcdDevice, out var expected) &&
+                identity.Equals(expected);
         }
 
         if (identity.Transport != Switch2Transport.BluetoothLe ||

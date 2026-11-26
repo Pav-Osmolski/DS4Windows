@@ -2534,6 +2534,8 @@ Suspend support not enabled.", true);
                                             Program.rootHub.AttachUnboundOutDev(slotDevice, OutContType.ViiperDualSenseEdge);
                                         else if (strData[2] == "plugviiperswitch2pro")
                                             Program.rootHub.AttachUnboundOutDev(slotDevice, OutContType.ViiperSwitch2Pro);
+                                        else if (strData[2] == "plugviipergamecube")
+                                            Program.rootHub.AttachUnboundOutDev(slotDevice, OutContType.ViiperGameCube);
                                         else if (strData[2] == "plugviiperxboxone")
                                             Program.rootHub.AttachUnboundOutDev(slotDevice, OutContType.ViiperXboxOne);
                                     }

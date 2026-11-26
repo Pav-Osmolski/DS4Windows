@@ -127,8 +127,8 @@ https://github.com/Alia5/VIIPER
 https://github.com/hbashton/VIIPER
 https://github.com/Pav-Osmolski/VIIPER
 The matching source archive, dependency licenses and binary provenance are
-provided in extras/VIIPER-0.1.19-SOURCE.zip,
-extras/VIIPER-0.1.19-LICENSES.txt and extras/VIIPER-0.1.19-PROVENANCE.txt.
+provided in extras/VIIPER-0.1.20-SOURCE.zip,
+extras/VIIPER-0.1.20-LICENSES.txt and extras/VIIPER-0.1.20-PROVENANCE.txt.
 The vendored Windows systray and WDL resampler have additional notices in
 extras/VIIPER-SYSTRAY-NOTICE.md, extras/VIIPER-SYSTRAY-LICENSE.txt and
 extras/VIIPER-WDL-NOTICE.txt.

@@ -10,7 +10,7 @@ add an optical sensor, motion sensor or headset port to a different physical pad
 
 ## Connect and pair
 
-For Switch 2 Pro, use USB or **Settings → Controllers** Bluetooth discovery and
+For Switch 2 Pro and the official wireless GameCube Controller for Switch 2, use USB or **Settings → Controllers** Bluetooth discovery and
 association. Joy-Con 2 uses that Bluetooth setup. Hold the controller's sync
 button until its lights flash, refresh discovery, select it and choose
 **Associate selected**. Previously associated controllers can reconnect when
@@ -21,6 +21,20 @@ automatic pairing in Settings → Controllers. A pair requires a left and right
 controller of the same generation. A single Joy-Con can work on its own.
 Choose upright/sideways holding style on Controllers; that device choice takes
 priority over the profile's starting holding style.
+
+## GameCube Controller
+
+Choose **GameCube Controller** in the Overview or Profile Editor output
+selector to present Nintendo's wireless Switch 2 controller to Windows.
+On controllers such as DualSense, full L2/R2 travel produces the GameCube
+trigger's digital click. Partial travel stays analog. A physical GameCube
+controller sends travel and clicks separately. The GameCube implementation
+currently supports buttons, sticks, triggers and rumble. Motion is unverified.
+
+In Eden, choose **GameCube Controller** as the emulated console controller,
+then bind the DS4Windows virtual controller to it. Start DS4Windows and select
+the output before opening Eden's controller settings. The Nintendo four-port
+USB adapter uses a separate device mode.
 
 ## Mouse on a desk
 

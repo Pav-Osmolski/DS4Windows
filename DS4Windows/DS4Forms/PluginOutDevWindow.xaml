@@ -25,6 +25,7 @@
             <ComboBoxItem Tag="3" Content="DualSense Edge" />
             <ComboBoxItem Tag="4" Content="Switch 2 Pro" />
             <ComboBoxItem Tag="5" Content="Xbox One / Series" />
+            <ComboBoxItem Tag="6" Content="GameCube Controller" />
         </ComboBox>
 
         <ComboBox x:Name="reserveTypeCombo" SelectedIndex="0" DockPanel.Dock="Top">

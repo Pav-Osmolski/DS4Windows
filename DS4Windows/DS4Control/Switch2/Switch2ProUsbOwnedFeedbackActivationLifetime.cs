@@ -214,7 +214,7 @@ internal sealed partial class Switch2ProUsbOwnedFeedbackActivationLifetime :
                 composite.MaximumOutputOperationMilliseconds <
                     operationWaitMilliseconds ||
                 !composite.AuthenticatesComposite(
-                    Switch2ControllerModel.ProController2,
+                    lifetime.Registration.Model,
                     authority.DeviceGeneration,
                     authority.TransportGeneration))
             {
@@ -274,9 +274,9 @@ internal sealed partial class Switch2ProUsbOwnedFeedbackActivationLifetime :
         {
             var bridge = new Switch2ProUsbOwnedHdRumbleTransportBridge(output,
                 authority.DeviceGeneration, authority.TransportGeneration,
-                operationWaitMilliseconds);
+                operationWaitMilliseconds, lifetime.Registration.Model);
             var writer = new Switch2ProUsbHdRumblePhysicalWriter(bridge,
-                authority.DeviceGeneration, authority.TransportGeneration);
+                authority.DeviceGeneration, authority.TransportGeneration, model: lifetime.Registration.Model);
             var sink = new Switch2HdRumbleDeliverySink(writer,
                 authority.DeviceGeneration, authority.TransportGeneration,
                 policy, minimumMaintenanceIntervalMicroseconds: 12000, hostWriteStartClock: hostWriteStartClock);

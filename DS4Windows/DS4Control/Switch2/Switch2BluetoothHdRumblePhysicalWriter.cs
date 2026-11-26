@@ -289,7 +289,12 @@ internal sealed class Switch2BluetoothHdRumblePhysicalWriter :
                 byte counter = nextCounter;
                 bool encodedOk;
                 int length = PayloadLengthFor(model);
-                if (model == Switch2ControllerModel.ProController2)
+                if (model == Switch2ControllerModel.GameCube)
+                {
+                    Switch2GameCubeRumble.WriteBluetooth(counter, submission.IsStop, encoded[..length]);
+                    encodedOk = true;
+                }
+                else if (model == Switch2ControllerModel.ProController2)
                 {
                     encodedOk = Switch2BluetoothHdRumbleCodec.
                         TryEncodeProController(counter, submission.Left,
@@ -362,6 +367,7 @@ internal sealed class Switch2BluetoothHdRumblePhysicalWriter :
     internal static int PayloadLengthFor(Switch2ControllerModel model) =>
         model switch
         {
+            Switch2ControllerModel.GameCube => Switch2GameCubeRumble.BluetoothCommandLength,
             Switch2ControllerModel.ProController2 =>
                 Switch2BluetoothHdRumbleCodec.ProControllerPayloadLength,
             Switch2ControllerModel.JoyCon2Left or
@@ -373,6 +379,7 @@ internal sealed class Switch2BluetoothHdRumblePhysicalWriter :
     internal static Guid CharacteristicUuidFor(
         Switch2ControllerModel model) => model switch
         {
+            Switch2ControllerModel.GameCube => new Guid("af95885e-44b3-4a24-9cf0-483cc129469a"),
             Switch2ControllerModel.ProController2 =>
                 ProController2CharacteristicUuid,
             Switch2ControllerModel.JoyCon2Left =>

@@ -122,6 +122,9 @@ namespace DS4WinWPF.DS4Control.DTOXml
                 case "Switch2Pro":
                 case "ViiperSwitch2Pro":
                     return OutContType.ViiperSwitch2Pro;
+                case "GameCube Controller":
+                case "ViiperGameCube":
+                    return OutContType.ViiperGameCube;
                 case "Xbox One (VIIPER)":
                 case "Xbox One / Series":
                 case "XboxOne":
@@ -152,6 +155,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
                 OutContType.ViiperSwitch2Pro => "ViiperSwitch2Pro",
                 OutContType.ViiperXboxOne => "ViiperXboxOne",
                 OutContType.ViiperGenericJoystick => "ViiperGenericJoystick",
+                OutContType.ViiperGameCube => "ViiperGameCube",
                 _ => "ViiperX360",
             };
         }
