@@ -8,6 +8,7 @@ import stat
 import tempfile
 import zipfile
 
+from normal_package import reject_lab_payloads
 from runtime_layout import RUNTIME_FILES, validate_runtime_layout
 
 
@@ -31,6 +32,9 @@ if not re.fullmatch(r"[0-9A-Za-z][0-9A-Za-z._-]{0,79}", version):
     )
 if not target_dir.is_dir() or is_reparse_point(target_dir):
     raise SystemExit(f"Publish directory is missing or unsafe: {target_dir}")
+
+# Refuse preview launchers/data before writing or replacing any output.
+reject_lab_payloads(target_dir)
 
 # These belong to the portable archive only. The unchanged publish tree is
 # also recursively harvested into the MSI, which uses its managed backend.
@@ -71,11 +75,11 @@ required_offline_files = (
     "xbox-one-authorized-persona.json",
     "extras/XBOX-ONE-PERSONA-NOTICE.md",
     "extras/install-viiper-backend.ps1",
-    "extras/VIIPER-0.1.18-x64.exe",
-    "extras/VIIPER-0.1.18-LICENSES.txt",
-    "extras/VIIPER-0.1.18-PROVENANCE.txt",
-    "extras/VIIPER-0.1.18-BUILD-NOTES.txt",
-    "extras/VIIPER-0.1.18-SOURCE.zip",
+    "extras/VIIPER-0.1.19-x64.exe",
+    "extras/VIIPER-0.1.19-LICENSES.txt",
+    "extras/VIIPER-0.1.19-PROVENANCE.txt",
+    "extras/VIIPER-0.1.19-BUILD-NOTES.txt",
+    "extras/VIIPER-0.1.19-SOURCE.zip",
     "extras/LICENSE.txt",
     "extras/VIIPER-SYSTRAY-NOTICE.md",
     "extras/VIIPER-SYSTRAY-LICENSE.txt",
@@ -100,7 +104,7 @@ validate_runtime_layout(target_dir)
 # Bind setup to the exact VIIPER executable copied by this publish. This
 # sidecar is regenerated for every artifact, so no hand-maintained hash can
 # drift when the bundled executable changes.
-viiper_name = "VIIPER-0.1.18-x64.exe"
+viiper_name = "VIIPER-0.1.19-x64.exe"
 viiper_path = target_dir / "extras" / viiper_name
 viiper_hasher = hashlib.sha256()
 with viiper_path.open("rb") as viiper_stream:

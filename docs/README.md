@@ -12,7 +12,7 @@ are examples, not recommended settings for every controller.
 | Choose a physical controller and virtual output | [Compatibility and feature limits](controller-compatibility.md) |
 | Fix detection, double input, missing feedback or updates | [Troubleshooting](troubleshooting.md) |
 | Collect information for an issue | [Log and diagnostics](user-guide.md#log-and-diagnostics), including the [XInput controller test](user-guide.md#xinput-controller-test) |
-| Upgrade the bundled backend | [USB/IP upgrade](usbip-upgrade.md): matching usbip-win2 0.9.8.1 / VIIPER 0.1.12 and restart requirements |
+| Upgrade the bundled backend | [USB/IP upgrade](usbip-upgrade.md): matching USB/IP driver and restart requirements |
 
 ## Explore the app
 
@@ -32,6 +32,7 @@ and [Log](user-guide.md#log-and-diagnostics).
 
 | Guide | What it covers |
 | --- | --- |
+| [Generic Joystick](directinput-preview-guide.md) | DirectInput and WinMM output, axis layouts, trigger modes and game bindings |
 | [Profile Editor](profile-editor.md) | Saving, button mapping, special actions, live readings, axis response, lightbar, touchpad, gyro and Advanced categories |
 | [Controller audio and game feedback](controller-audio.md) | Native haptics, speakers, headsets, microphones, mute controls and feedback priorities |
 | [Audio Haptics](user-guide.md#audio-haptics) | System/app capture, automatic game following, Mix/Replace and response tuning |

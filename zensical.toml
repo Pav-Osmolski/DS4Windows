@@ -14,6 +14,7 @@ nav = [
   { "Get started" = [
     { "Installation & first connection" = "docs/getting-started.md" },
     { "Controllers & compatibility" = "docs/controller-compatibility.md" },
+    { "Generic Joystick" = "docs/directinput-preview-guide.md" },
     { "Tour the app" = "docs/user-guide.md" },
     { "Screenshots" = "docs/screenshots.md" },
   ] },

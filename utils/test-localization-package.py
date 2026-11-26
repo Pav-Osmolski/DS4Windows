@@ -21,10 +21,10 @@ REQUIRED = (
     "DS4Windows.exe", *sorted(RUNTIME_FILES), "Resources/BouncyCastle.NOTICE.txt",
     "Resources/DsxTriggerEffects.NOTICE.txt",
     "xbox-one-authorized-persona.json", "extras/XBOX-ONE-PERSONA-NOTICE.md",
-    "extras/install-viiper-backend.ps1", "extras/VIIPER-0.1.18-x64.exe",
-    "extras/VIIPER-0.1.18-LICENSES.txt", "extras/VIIPER-0.1.18-PROVENANCE.txt",
-    "extras/VIIPER-0.1.18-BUILD-NOTES.txt",
-    "extras/VIIPER-0.1.18-SOURCE.zip", "extras/LICENSE.txt",
+    "extras/install-viiper-backend.ps1", "extras/VIIPER-0.1.19-x64.exe",
+    "extras/VIIPER-0.1.19-LICENSES.txt", "extras/VIIPER-0.1.19-PROVENANCE.txt",
+    "extras/VIIPER-0.1.19-BUILD-NOTES.txt",
+    "extras/VIIPER-0.1.19-SOURCE.zip", "extras/LICENSE.txt",
     "extras/VIIPER-SYSTRAY-NOTICE.md", "extras/VIIPER-SYSTRAY-LICENSE.txt",
     "extras/VIIPER-WDL-NOTICE.txt",
     "extras/USBip-0.9.8.1-x64.exe", "extras/HidHide_1.5.230_x64.exe",
@@ -44,6 +44,34 @@ VALIDATOR_SPEC.loader.exec_module(VALIDATOR)
 
 
 class LocalizationPackageTests(unittest.TestCase):
+    def test_directinput_preview_uses_release_lang_layout_and_preserves_matched_backend(self):
+        with tempfile.TemporaryDirectory(prefix="ds4w-preview-localization-") as temporary:
+            root = Path(temporary)
+            files = SATELLITES + ("viiper.exe", "README.txt")
+            for relative in files:
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(("fixture:" + relative).encode())
+            runtime = root / "Runtime"
+            runtime.mkdir()
+            (runtime / "DS4Windows.runtimeconfig.json").write_text(json.dumps({"runtimeOptions": {}}))
+            (runtime / "DS4Windows.deps.json").write_text(json.dumps({"targets": {"test": {
+                "DS4Windows/1": {"resources": {name: {"locale": name.split("/")[0]}
+                    for name in SATELLITES if name.endswith("/DS4Windows.resources.dll")}},
+                "TaskScheduler/1": {"resources": {"de/Microsoft.Win32.TaskScheduler.resources.dll": {"locale": "de"}}}
+            }}}))
+            command = [sys.executable, str(REPOSITORY / "utils/GenericJoystickPreview/Prepare-Localization.py"), str(root)]
+            result = subprocess.run(command, capture_output=True, text=True)
+            self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+            VALIDATOR.validate_localization_package(root)
+            for relative in SATELLITES:
+                self.assertEqual(("fixture:" + relative).encode(), (root / "Lang" / relative).read_bytes())
+                self.assertFalse((root / relative).exists())
+            self.assertEqual(b"fixture:viiper.exe", (root / "viiper.exe").read_bytes())
+            self.assertFalse((root / "DS4Windows.portable").exists())
+            (root / "Lang" / SATELLITES[0]).unlink()
+            self.assertNotEqual(0, subprocess.run(command, capture_output=True).returncode)
+
     def test_missing_cipher_or_required_notice_is_rejected_before_composition(self):
         for missing in ("Runtime/BouncyCastle.Cryptography.dll", "Resources/BouncyCastle.NOTICE.txt",
                         "Resources/DsxTriggerEffects.NOTICE.txt", "extras/VIIPER-WDL-NOTICE.txt",
@@ -160,9 +188,9 @@ class LocalizationPackageTests(unittest.TestCase):
                 relative: ("fixture:" + relative).encode("utf-8")
                 for relative in fixture_paths
             }
-            broker_name = "VIIPER-0.1.18-x64.exe"
+            broker_name = "VIIPER-0.1.19-x64.exe"
             expected_hash = hashlib.sha256(contents["extras/" + broker_name]).hexdigest()
-            provenance_name = "extras/VIIPER-0.1.18-PROVENANCE.txt"
+            provenance_name = "extras/VIIPER-0.1.19-PROVENANCE.txt"
             contents[provenance_name] = (
                 f"Binary: {broker_name}\nBinary SHA-256: {expected_hash.upper()}\n"
                 "Source commit: 0123456789abcdef0123456789abcdef01234567\n"
@@ -211,7 +239,7 @@ class LocalizationPackageTests(unittest.TestCase):
                     packaged_relative = "Lang/" + relative if relative in SATELLITES else relative
                     self.assertIn("DS4Windows/" + packaged_relative, packaged.namelist())
                     self.assertEqual(contents[relative], packaged.read("DS4Windows/" + packaged_relative))
-                broker = packaged.read("DS4Windows/extras/VIIPER-0.1.18-x64.exe")
+                broker = packaged.read("DS4Windows/extras/VIIPER-0.1.19-x64.exe")
                 self.assertEqual(broker, packaged.read("DS4Windows/viiper.exe"))
                 broker_hash = hashlib.sha256(broker).hexdigest()
                 self.assertEqual(expected_hash, broker_hash)
@@ -225,8 +253,8 @@ class LocalizationPackageTests(unittest.TestCase):
                     packaged.read("DS4Windows/viiper.exe.sha256"),
                 )
                 self.assertEqual(
-                    f"{broker_hash} *VIIPER-0.1.18-x64.exe\n".encode("ascii"),
-                    packaged.read("DS4Windows/extras/VIIPER-0.1.18-x64.exe.sha256"),
+                    f"{broker_hash} *VIIPER-0.1.19-x64.exe\n".encode("ascii"),
+                    packaged.read("DS4Windows/extras/VIIPER-0.1.19-x64.exe.sha256"),
                 )
                 self.assertEqual(PORTABLE_MARKER, packaged.read("DS4Windows/DS4Windows.portable"))
                 zip_owned = set(packaged.read("DS4Windows/.ds4windows-managed-files.txt").decode("utf-8").splitlines())

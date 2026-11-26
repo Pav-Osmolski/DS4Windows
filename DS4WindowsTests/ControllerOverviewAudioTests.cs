@@ -17,6 +17,39 @@ namespace DS4WindowsTests;
 [DoNotParallelize]
 public sealed class ControllerOverviewAudioTests
 {
+    internal static MainWindowsViewModel JoystickOverviewModel() =>
+        Model(new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB));
+
+    [TestMethod]
+    public void JoystickOverviewEnablesNormalOutputAndRequestsProfileReload()
+    {
+        var previous = Global.OutContType[0];
+        var previousTemp = Global.outDevTypeTemp[0];
+        try
+        {
+            Assert.IsFalse(PortableLabContext.IsActive);
+            var model = JoystickOverviewModel();
+            var choice = model.OutputControllerChoices.Single(c => c.Type == OutContType.ViiperGenericJoystick);
+            Assert.IsTrue(choice.IsEnabled);
+            Assert.AreEqual("Generic Joystick", choice.Name);
+            Assert.AreEqual(choice.Name, OutContType.ViiperGenericJoystick.ToDisplayName());
+            Global.OutContType[0] = OutContType.ViiperGenericJoystick;
+            Assert.AreEqual(choice.Name, model.SelectedOutputControllerName);
+            Global.OutContType[0] = OutContType.ViiperX360;
+            int changes = 0;
+            model.QuickProfileSettingChanged += (_, e) =>
+            {
+                changes++;
+                Assert.IsTrue(e.RequiresProfileReload);
+                Assert.AreEqual(OutContType.ViiperGenericJoystick, e.RequestedOutputController);
+            };
+            model.SelectedOutputController = OutContType.ViiperGenericJoystick;
+            Assert.AreEqual(OutContType.ViiperGenericJoystick, model.SelectedOutputController);
+            Assert.AreEqual(1, changes);
+        }
+        finally { Global.OutContType[0] = previous; Global.outDevTypeTemp[0] = previousTemp; }
+    }
+
     [TestMethod]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.USB, true)]
     [DataRow(InputDeviceType.Switch2Pro, ConnectionType.BT, true)]
@@ -109,6 +142,16 @@ public sealed class ControllerOverviewAudioTests
         StringAssert.Contains((string)native.Attribute("Visibility"), "SelectedControllerShowsUsbHeadsetHelp");
         Assert.AreEqual("OpenWindowsSoundSettings_Click", (string)native.Descendants(wpf + "Button").Single().Attribute("Click"));
         Assert.IsFalse(native.Descendants(wpf + "Slider").Any());
+    }
+
+    private static void WaitForStatusArrow(RotateTransform rotation, double expected)
+    {
+        // Popup dismissal can schedule the return transition after the first
+        // dispatcher turn. Observe completion, with a bounded failure deadline.
+        var deadline = System.Diagnostics.Stopwatch.StartNew();
+        while (Math.Abs(rotation.Angle - expected) > 0.1 && deadline.Elapsed < TimeSpan.FromSeconds(2))
+            DisclosureAnimationTests.Pump(20);
+        Assert.AreEqual(expected, rotation.Angle, 0.1);
     }
 
     private static MainWindowsViewModel Model(DS4Device device, string profileName = "Test profile")
@@ -271,7 +314,7 @@ public sealed class ControllerOverviewAudioTests
                 Assert.IsTrue(statusPopup.IsOpen);
                 Assert.IsFalse(statusButton.IsHitTestVisible, "While open, clicking the badge must dismiss through the outside-click path without toggling it open again.");
                 Assert.IsTrue(statusButton.Focusable, "Keyboard toggling must remain available.");
-                Assert.AreEqual(180d, ((RotateTransform)arrowFrame.RenderTransform).Angle, 0.1);
+                WaitForStatusArrow((RotateTransform)arrowFrame.RenderTransform, 180d);
                 Assert.AreEqual(attentionDetail, ((TextBlock)statusOverview.FindName("controllerStatusDetail")).Text);
                 Assert.AreEqual(readyCardBounds, StatusBounds(summaryCard), "Opening the status popover must not move the card.");
                 var popupContent = (FrameworkElement)statusOverview.FindName("controllerStatusPopupContent");
@@ -295,7 +338,7 @@ public sealed class ControllerOverviewAudioTests
                 DisclosureAnimationTests.Pump(160);
                 Assert.IsFalse(statusPopup.IsOpen, "Escape must close status details.");
                 Assert.AreEqual(false, statusButton.IsChecked);
-                Assert.AreEqual(0d, ((RotateTransform)arrowFrame.RenderTransform).Angle, 0.1);
+                WaitForStatusArrow((RotateTransform)arrowFrame.RenderTransform, 0d);
                 statusButton.IsChecked = true;
                 DisclosureAnimationTests.Pump(10);
                 statusPopup.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
@@ -556,6 +599,27 @@ public sealed class ControllerOverviewAudioTests
         Assert.AreEqual(Visibility.Collapsed, native.Visibility);
         Assert.AreEqual(Visibility.Collapsed, managed.Visibility);
         Assert.AreEqual(Visibility.Collapsed, speaker.Visibility);
+        var previousOutput = Global.OutContType[0];
+        try
+        {
+            Global.OutContType[0] = OutContType.ViiperGenericJoystick;
+            var joystickModel = JoystickOverviewModel();
+            overview.DataContext = joystickModel;
+            overview.UpdateLayout();
+            var selector = (ComboBox)overview.FindName("outputControllerCombo");
+            var selected = selector.SelectedItem as OverviewOutputControllerChoice;
+            Assert.IsNotNull(selected, "The joystick profile must not leave the Overview selector blank.");
+            Assert.AreEqual(OutContType.ViiperGenericJoystick, selected.Type);
+            Assert.AreEqual(selected.Name, joystickModel.SelectedOutputControllerName);
+            var originalItemStyle = (Style)overview.FindResource("BridgeDropDownItemStyle");
+            var expectedItem = new ComboBoxItem { Style = originalItemStyle };
+            var actualItem = new ComboBoxItem { DataContext = selected, Style = selector.ItemContainerStyle };
+            Assert.AreEqual(expectedItem.Padding, actualItem.Padding, "Keep the current Overview item spacing.");
+            Assert.AreEqual(expectedItem.Margin, actualItem.Margin);
+            Assert.AreSame(expectedItem.Template, actualItem.Template, "Keep the current Overview highlight and disabled visuals.");
+            Assert.AreEqual(selected.IsEnabled, actualItem.IsEnabled);
+        }
+        finally { Global.OutContType[0] = previousOutput; }
         overview.DataContext = null;
     }
 

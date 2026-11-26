@@ -208,7 +208,9 @@ is active. Restart a game after changing emulation if it does not detect the
 new controller.
 
 See [Compatibility](controller-compatibility.md) to choose an output and check
-hardware/connection limits. [Profile Editor](profile-editor.md) explains its
+hardware/connection limits. For older games that accept DirectInput or WinMM,
+use the [Generic Joystick setup guide](directinput-preview-guide.md).
+[Profile Editor](profile-editor.md) explains its
 controls, and [Controller audio](controller-audio.md) covers speakers and microphones.
 
 For native DualSense advanced haptics, select **DualSense** output and enable

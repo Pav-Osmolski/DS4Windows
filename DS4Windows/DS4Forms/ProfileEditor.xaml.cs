@@ -2724,8 +2724,11 @@ namespace DS4WinWPF.DS4Forms
                 return;
             }
 
+            if (genericJoystickPanel != null) genericJoystickPanel.Visibility = type == OutContType.ViiperGenericJoystick ? Visibility.Visible : Visibility.Collapsed;
+
             outputControllerHintText.Text = type switch
             {
+                OutContType.ViiperGenericJoystick => "Input-only joystick for DirectInput and WinMM games. Supports six axes, sixteen buttons, and one POV hat.",
                 OutContType.ViiperSwitch2Pro =>
                     global::DS4Windows.UiText.Get("Switch 2 layout: Cross -> B, Circle -> A, Square -> Y, Triangle -> X, Share -> Minus, Options -> Plus, PS -> Home, Capture -> Capture."),
                 OutContType.ViiperDualSense =>

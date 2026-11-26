@@ -305,11 +305,15 @@ if (-not $SkipApplicationPublish) {
 if (-not (Test-Path -LiteralPath (Join-Path $publishPath "DS4Windows.exe") -PathType Leaf)) {
     throw "DS4Windows publish output is incomplete: $publishPath"
 }
+# Fail before signing/building installer helpers if the normal package contains
+# preview files, portable aliases or a backend different from the compiled pin.
+& python (Join-Path $repoRoot "utils/normal_package.py") --publish-root $publishPath
+if ($LASTEXITCODE -ne 0) { throw "Normal package preflight failed." }
 Invoke-SignOrVerify (Join-Path $publishPath "DS4Windows.exe")
 # VIIPER is an immutable upstream release payload. Its compiled-in SHA-256
 # and generated package sidecar are validated below; signing it here would
 # mutate the executable after DS4Windows has pinned that identity.
-$bundledViiper = Join-Path $publishPath "extras\VIIPER-0.1.18-x64.exe"
+$bundledViiper = Join-Path $publishPath "extras\VIIPER-0.1.19-x64.exe"
 if (-not (Test-Path -LiteralPath $bundledViiper -PathType Leaf)) {
     throw "Published VIIPER payload is missing: $bundledViiper"
 }

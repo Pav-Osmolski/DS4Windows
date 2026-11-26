@@ -75,6 +75,7 @@ Open **Profile Editor → Advanced → Output** and choose **Emulated Controller
 | DualShock 4 | Games expecting a DS4, including compatible touchpad/lightbar/audio behaviour | Does not make a physical controller into a DualSense |
 | DualSense / DualSense Edge | Games supporting PlayStation output and native DualSense features | Advanced haptics require a compatible audio path; adaptive resistance needs physical DualSense/Edge triggers |
 | Switch 2 Pro | Software expecting the supported Nintendo output | Nintendo rumble translation does not reproduce adaptive-trigger resistance |
+| [Generic Joystick](directinput-preview-guide.md) | Games accepting DirectInput or WinMM joystick input | Input only with six axes, sixteen buttons and a POV hat. Games may require manual bindings |
 | Virtual controller disabled | Keyboard/mouse-only mappings or other deliberate configurations | Games receive no virtual gamepad from this profile |
 
 Restart a game after changing output if it keeps using the old device. Configure

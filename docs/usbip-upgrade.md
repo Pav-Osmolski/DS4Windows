@@ -1,8 +1,8 @@
 # usbip-win2 0.9.8.1 upgrade
 
-DS4Windows 5.0.15 pairs VIIPER 0.1.10 with the official Windows x64
-usbip-win2 **0.9.8.1** package. Older driver versions are not compatible with
-this pairing. Use the matching bundled components together.
+DS4Windows requires the official Windows x64 usbip-win2 **0.9.8.1** package.
+Use the VIIPER version bundled with your DS4Windows release. DS4Windows 5.0.84
+pairs this driver with VIIPER 0.1.19.
 
 ## Upgrade and restart
 
