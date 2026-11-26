@@ -322,8 +322,10 @@ namespace DS4WinWPF.DS4Forms
             }
             else
             {
-                outputControllerHighlight.Data = CreateOutputHighlightGeometry(
-                    button, left, top);
+                Geometry highlight = CreateOutputHighlightGeometry(button, left, top);
+                outputControllerHighlight.Data = highlight;
+                outputControllerHighlight.Clip = configuredOutputType == OutContType.ViiperGameCube
+                    ? highlight : null;
                 outputControllerHighlight.Visibility = Visibility.Visible;
                 outputControllerRasterHighlight.Visibility = Visibility.Collapsed;
             }
@@ -1550,7 +1552,7 @@ namespace DS4WinWPF.DS4Forms
             const double scale = 247 / GameCubeArtwork.Height;
             const double offsetX = (630 - GameCubeArtwork.Width * scale) / 2;
             Place(aBtn, GameCubeArtwork.A);
-            Place(bBtn, GameCubeArtwork.B);
+            PlaceOutline(bBtn, GameCubeArtwork.B);
             PlaceOutline(xBtn, GameCubeArtwork.X);
             PlaceOutline(yBtn, GameCubeArtwork.Y);
             PlaceOutline(ltBtn, GameCubeArtwork.L);

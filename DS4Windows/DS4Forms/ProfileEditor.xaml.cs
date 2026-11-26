@@ -471,7 +471,7 @@ namespace DS4WinWPF.DS4Forms
             ds4LightbarColorBtn.Visibility = Visibility.Collapsed;
 
             Place(crossConBtn, GameCubeArtwork.A, true);
-            Place(circleConBtn, GameCubeArtwork.B, true);
+            PlaceOutline(circleConBtn, GameCubeArtwork.B);
             PlaceOutline(squareConBtn, GameCubeArtwork.X);
             PlaceOutline(triangleConBtn, GameCubeArtwork.Y);
             PlaceOutline(l2ConBtn, GameCubeArtwork.L);
@@ -2172,7 +2172,11 @@ namespace DS4WinWPF.DS4Forms
             }
             else if (vectorHoverGeometries.TryGetValue(control, out Geometry geometry))
             {
-                controllerVectorHighlight.Data = TransformControllerGeometry(geometry);
+                Geometry highlight = TransformControllerGeometry(geometry);
+                controllerVectorHighlight.Data = highlight;
+                // Keep the accent stroke within the traced GameCube button face.
+                controllerVectorHighlight.Clip = controllerDiagramKind == ControllerDiagramKind.GameCube
+                    ? highlight : null;
                 controllerVectorHighlight.Visibility = Visibility.Visible;
             }
             else

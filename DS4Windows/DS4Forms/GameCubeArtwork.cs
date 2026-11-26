@@ -12,7 +12,8 @@ internal static class GameCubeArtwork
     // Source-image coordinates. Both mapping screens transform the same
     // positions into their own canvas so the diagram and targets stay aligned.
     internal static readonly Rect A = new(1100, 313, 170, 170);
-    internal static readonly Rect B = new(981, 416, 107, 107);
+    internal static readonly Geometry B = Outline(
+        "M1033.5,419 A50.5,50.75 0 1 1 1033.5,520.5 A50.5,50.75 0 1 1 1033.5,419 Z");
     internal static readonly Geometry X = Outline(
         "M1318,290 C1346,289 1370,324 1377,365 C1383,405 1368,434 1340,434 " +
         "C1315,435 1304,419 1305,397 C1307,366 1300,352 1291,337 C1276,314 1293,291 1318,290 Z");
@@ -27,8 +28,8 @@ internal static class GameCubeArtwork
         "M253,159 C251,154 253,148 258,145 C277,135 298,125 314,121 " +
         "C319,120 321,123 322,126 C300,135 275,146 253,159 Z");
     internal static readonly Geometry R = Outline(
-        "M1143,101 C1189,48 1245,43 1290,76 C1321,99 1339,128 1350,154 " +
-        "C1294,125 1237,105 1165,93 C1155,91 1149,95 1143,101 Z");
+        "M1145,99 C1189,48 1245,43 1290,76 C1321,99 1339,128 1350,154 " +
+        "C1294,125 1237,105 1165,93 C1155,91 1149,95 1145,99 Z");
     internal static readonly Geometry Z = Outline(
         "M1143,101 C1149,95 1155,91 1165,93 C1237,105 1294,125 1350,154 " +
         "C1361,160 1372,171 1367,185 L1359,208 C1296,170 1231,139 1176,116 C1163,111 1151,106 1143,101 Z");
