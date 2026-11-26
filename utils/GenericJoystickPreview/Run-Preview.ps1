@@ -79,7 +79,7 @@ try {
         if ($backend.HasExited -or [DateTime]::UtcNow -ge $deadline) { throw 'Backend startup failed; inspect the results logs.' }
         Start-Sleep -Milliseconds 200
     }
-    Write-Host 'Create a fresh gamepad profile, then Advanced > Generic joystick.'
+    Write-Host 'Create a fresh gamepad profile, then Advanced > Generic Joystick.'
     Write-Host 'When finished, EXIT DS4Windows from its tray menu to collect the report.'
     $app = Start-LabProcess "$root/DS4Windows.exe" @('--portable-lab', [string]$backendEntries[0].sha256) $root
     $appOut = $app.StandardOutput.ReadToEndAsync(); $appErr = $app.StandardError.ReadToEndAsync()

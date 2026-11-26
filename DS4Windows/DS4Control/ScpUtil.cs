@@ -103,7 +103,7 @@ namespace DS4Windows
                 OutContType.ViiperDualSenseEdge => "DualSense Edge",
                 OutContType.ViiperSwitch2Pro => "Switch 2 Pro",
                 OutContType.ViiperXboxOne => "Xbox One / Series",
-                OutContType.ViiperGenericJoystick => "Generic joystick",
+                OutContType.ViiperGenericJoystick => "Generic Joystick",
                 _ => "None",
             };
         }

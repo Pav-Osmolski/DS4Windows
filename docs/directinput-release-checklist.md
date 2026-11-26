@@ -1,4 +1,4 @@
-# Generic joystick release preparation
+# Generic Joystick release preparation
 
 ## Current design
 
@@ -19,6 +19,12 @@ The [final preview review](directinput-final-review.md) records the reviewed
 branch revisions, CI evidence, package-validator correction and release gates.
 
 ## Evidence already collected
+
+- Standard portable 5.0.84 with VIIPER 0.1.19: the owner reported normal operation
+  on Windows 11 with a USB DualSense. The log confirms verified USB/IP and
+  VIIPER startup, a HidHide rule applied to the physical controller, and a live
+  switch from emulated DualSense to Generic Joystick in output slot 1. Game
+  input and bindings after restart still need checking with this build.
 
 - Native synthetic input: all 156 observations and 312 x86/x64 DirectInput/WinMM
   comparisons passed across two layouts and four trigger modes.
@@ -59,12 +65,12 @@ automated checks and the distinction between logs and user observations.
 
 ## 2. Integrate normal operation
 
-The Profile Editor and Overview both enable Generic joystick in standard builds.
+The Profile Editor and Overview both enable Generic Joystick in standard builds.
 Backend creation verifies the versioned contract, registered USB identity,
 sixteen buttons, requested resting axes and accepted native USB configuration.
 
 - [x] Use the normal bundled-backend verification and reject a missing or
-  mismatched Generic joystick contract, including a lab USB identity.
+  mismatched Generic Joystick contract, including a lab USB identity.
 - [x] Enable the choice consistently in Profile Editor and Overview, retaining
   shared styles and existing output numeric identities.
 - [ ] Verify Overview, Controllers, Output Slots and diagnostics describe the
@@ -94,8 +100,9 @@ activation is available, check:
 
 ## 3. Build a matched release candidate
 
-- [ ] Package the pinned backend through the normal installer and portable paths;
-  preserve hash/ownership verification, localization and update/repair behaviour.
+- [x] Build the normal installer and portable ZIP with the pinned backend.
+  Offline checks passed for package integrity, installed payload, portable file
+  ownership and localization. Live install, upgrade and repair checks follow below.
 - [ ] Run both repositories' required CI and relevant profile, output lifetime,
   HidHide and packaging regression checks on the candidate revisions.
 - [ ] Test a clean install, upgrade, repair and portable extraction, without
@@ -103,7 +110,7 @@ activation is available, check:
 - [ ] Publish setup guidance, axis-layout tables and tested game configurations.
   State input-only support, no force feedback/audio, sixteen buttons and limits of
   evidence. NFS Underground 2, Serious Sam and Jedi Knight remain unverified.
-- [ ] Supply the matched candidate for owner testing before merge/release approval.
+- [x] Supply the matched local build for owner testing before merge/release approval.
 
 This checklist does not authorize merging, publishing a release, installing a
 driver or submitting an external identity request.
@@ -121,8 +128,7 @@ failure; no registry or transport workaround has been applied.
 - [ ] Test saved-game bindings for that chosen scope; synthetic inputs alone do
   not establish how each game handles a reassigned identifier.
 
-The existing production-identity, normal-packaging and HidHide checks remain
-open. Repeating the same diagnostic package is not a substitute for these items.
+Native production-identity, game-binding and installed HidHide checks remain open.
 
 
 ## Upstream USB/IP serial-completion retest
@@ -145,6 +151,6 @@ native Windows acceptance testing.
 See [normal packaging preparation](directinput-normal-packaging.md) for the
 implemented backend-pin, preview-isolation and upgrade-ownership checks, and the
 coordinated promotion steps. The 5.0.84 local builds use VIIPER 0.1.19 with
-normal Generic joystick activation. The older packaging rehearsal used VIIPER
+normal Generic Joystick activation. The older packaging rehearsal used VIIPER
 0.1.11. Automated HidHide policy and lifecycle checks leave the
 normal-installation hardware test open.

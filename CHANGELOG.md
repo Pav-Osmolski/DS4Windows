@@ -5,7 +5,7 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- Add **Generic joystick** output for DirectInput and WinMM games through the normal DS4Windows launch path. The registered USB device exposes six axes, sixteen buttons and one POV hat. Profiles can configure axis roles, trigger behaviour and numbered button assignments. The standard installer and portable ZIP bundle the matching VIIPER 0.1.19 backend.
+- Add **Generic Joystick** output for DirectInput and WinMM games through the normal DS4Windows launch path. The registered USB device exposes six axes, sixteen buttons and one POV hat. Profiles can configure axis roles, trigger behaviour and numbered button assignments. The standard installer and portable ZIP bundle the matching VIIPER 0.1.19 backend.
 
 ## Released
 

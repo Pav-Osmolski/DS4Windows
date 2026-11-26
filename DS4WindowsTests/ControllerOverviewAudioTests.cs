@@ -31,6 +31,8 @@ public sealed class ControllerOverviewAudioTests
             var model = JoystickOverviewModel();
             var choice = model.OutputControllerChoices.Single(c => c.Type == OutContType.ViiperGenericJoystick);
             Assert.IsTrue(choice.IsEnabled);
+            Assert.AreEqual("Generic Joystick", choice.Name);
+            Assert.AreEqual(choice.Name, OutContType.ViiperGenericJoystick.ToDisplayName());
             Global.OutContType[0] = OutContType.ViiperGenericJoystick;
             Assert.AreEqual(choice.Name, model.SelectedOutputControllerName);
             Global.OutContType[0] = OutContType.ViiperX360;

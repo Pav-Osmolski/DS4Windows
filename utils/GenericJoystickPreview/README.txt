@@ -14,7 +14,7 @@ folder layout. The lab deliberately disables automatic HidHide configuration.
 
 1. Connect your physical controller. Create a NEW profile with a normal gamepad
    preset (not a mouse/keyboard preset). Name it DirectInput Test.
-2. In Advanced, choose Generic joystick. Start with Legacy games and
+2. In Advanced, choose Generic Joystick. Start with Legacy games and
    Centred triggers. Save and assign this profile to the controller. Keep Output
    Slots on Dynamic for these tests.
 3. Open Windows joy.cpl and select the VIIPER generic joystick, not the physical
@@ -22,7 +22,7 @@ folder layout. The lab deliberately disables automatic HidHide configuration.
    Repeat with Racing layout and Full range / Combined / Buttons triggers.
    Apply/save recreates the joystick. Reopen joy.cpl after changing modes.
 4. Check that saving/reopening the profile preserves your choices. Test physical
-   unplug/reconnect, changing back to Xbox 360, and returning to Generic joystick.
+   unplug/reconnect, changing back to Xbox 360, and returning to Generic Joystick.
    Existing output modes should still work. Note any duplicate/stuck devices.
 5. EXIT DS4Windows via the tray menu when finished (closing may only minimize).
    The launcher cleans up its imports, stops its backend and prints a report ZIP

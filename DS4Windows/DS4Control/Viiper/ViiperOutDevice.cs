@@ -11063,7 +11063,7 @@ namespace DS4Windows
                 if (genericJoystick && usbipPort > 0)
                 {
                     try { ViiperUsbipPortManager.DetachRegisteredPort(usbipPort, "failed generic joystick creation"); }
-                    catch (Exception cleanupError) { AppLogger.LogToGui($"Generic joystick cleanup: {cleanupError.Message}", true); }
+                    catch (Exception cleanupError) { AppLogger.LogToGui($"Generic Joystick cleanup: {cleanupError.Message}", true); }
                 }
                 ViiperUsbipPortManager.UnregisterActivePort(usbipPort);
 

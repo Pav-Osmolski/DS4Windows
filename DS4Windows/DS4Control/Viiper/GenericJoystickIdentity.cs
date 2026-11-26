@@ -28,10 +28,10 @@ internal static class GenericJoystickIdentity
         if (controllers == null || (uint)index >= controllers.Length || controllers[index] == null) return null;
         string Identity(DS4Device device) => device == null ? null : Create(device.ProfileLinkId, device.HidDevice?.DevicePath);
         string result = Identity(controllers[index]);
-        if (result == null) throw new InvalidOperationException("Generic joystick output requires a controller identity or HID device path.");
+        if (result == null) throw new InvalidOperationException("Generic Joystick output requires a controller identity or HID device path.");
         for (int other = 0; other < controllers.Length; other++)
             if (other != index && controllers[other] != null && result == Identity(controllers[other]))
-                throw new InvalidOperationException("Two controllers report the same identity. Generic joystick output cannot safely distinguish them.");
+                throw new InvalidOperationException("Two controllers report the same identity. Generic Joystick output cannot safely distinguish them.");
         return result;
     }
 }

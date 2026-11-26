@@ -1,4 +1,4 @@
-# Generic joystick setup and game testing
+# Generic Joystick setup and game testing
 
 ## Current design
 
@@ -7,7 +7,7 @@ assignments. See [the current design and migration rules](directinput-developmen
 Earlier dated evidence retains its original scope; native/game acceptance of the
 sixteen-button candidate is still required before release.
 
-The **Generic joystick** output presents an input-only USB HID joystick to games
+The **Generic Joystick** output presents an input-only USB HID joystick to games
 using DirectInput or WinMM. It is available in standard installed and portable
 builds that bundle the matching VIIPER 0.1.19 backend.
 Windows sees **VIIPER Generic Joystick** using registered USB VID:PID
@@ -19,7 +19,7 @@ emulation, game force feedback or audio interfaces.
 
 Start DS4Windows from the Start menu for an installed copy or run
 `DS4Windows.exe` for a portable copy. Create a gamepad profile and select
-**Generic joystick** under **Emulated controller**. In the Profile Editor,
+**Generic Joystick** under **Emulated controller**. In the Profile Editor,
 choose the layout and trigger mode, save, and assign the profile. Keep Output
 Slots **Dynamic**. Use **Overview > Control Panel** to check the joystick
 before binding it in a game.

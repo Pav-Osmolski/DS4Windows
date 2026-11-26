@@ -1,4 +1,4 @@
-# Generic joystick: remaining acceptance tests
+# Generic Joystick: remaining acceptance tests
 
 ## Current design
 
@@ -7,10 +7,9 @@ assignments. See [the current design and migration rules](directinput-developmen
 Earlier dated evidence retains its original scope; native/game acceptance of the
 sixteen-button candidate is still required before release.
 
-Use this checklist once a matched normal candidate has the approved sixteen-button
-USB identity and verified backend pins. The current portable preview bypasses
-automatic HidHide and cannot validate these installation tests. Do not replace
-the released backend by hand to create a candidate.
+Use both standard 5.0.84 packages with the matched VIIPER 0.1.19 backend.
+The normal portable package exercises built-in HidHide. Setup, upgrade and
+repair require the installer. Earlier lab builds bypassed built-in hiding.
 
 ## Before testing
 
@@ -52,7 +51,7 @@ multi-controller binding stability.
 4. If Bluetooth is available, repeat connection/cleanup checks over Bluetooth.
    Record unavailable combinations as untested rather than passed.
 
-## Saved game bindings: can be checked with the existing preview
+## Saved game bindings
 
 In the already-tested BeamNG.drive or FlatOut 2 configuration, save bindings,
 exit the game and DS4Windows, then restart DS4Windows with the same controller,

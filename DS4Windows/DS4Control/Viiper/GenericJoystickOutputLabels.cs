@@ -4,7 +4,7 @@ namespace DS4Windows;
 // mapping targets must not promise a particular Z/Rx/Ry role.
 internal static class GenericJoystickOutputLabels
 {
-    internal const string DiagramHint = "Generic joystick: the diagram shows mapping targets. The diagram labels show default output assignments; the selected joystick layout and trigger mode determine stick axes and L2/R2 output. The fixed device has sixteen output buttons. The assignments below are the default; the profileâ€™s numbered button assignments can override them.";
+    internal const string DiagramHint = "Generic Joystick: the diagram shows mapping targets. The diagram labels show default output assignments; the selected joystick layout and trigger mode determine stick axes and L2/R2 output. The fixed device has sixteen output buttons. The assignments below are the default; the profileâ€™s numbered button assignments can override them.";
 
     internal static string Get(X360Controls control) => control switch
     {
