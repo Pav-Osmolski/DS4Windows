@@ -644,6 +644,9 @@ Disabled:
   <data name="ControllerSupportJoyCon" xml:space="preserve">
     <value>JoyCon Controller Support</value>
   </data>
+  <data name="ControllerSupportGameCube" xml:space="preserve">
+    <value>GameCube Controller Support</value>
+  </data>
   <data name="ControllerSupportSwitchPro" xml:space="preserve">
     <value>Switch Pro Controller Support</value>
   </data>

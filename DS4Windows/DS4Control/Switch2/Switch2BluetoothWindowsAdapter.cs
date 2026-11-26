@@ -2182,6 +2182,16 @@ internal sealed class Switch2BluetoothWindowsInputLease :
             optionalUserFailure);
     }
 
+    internal async ValueTask<Switch2BluetoothSensorInitializationFailure>
+        EnableGameCubeMotionAsync(CancellationToken cancellationToken)
+    {
+        if (Admission.Model != Switch2ControllerModel.GameCube || playerLedChannel == null)
+            return Switch2BluetoothSensorInitializationFailure.NotPrepared;
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeout.CancelAfter(PlayerLedCommandTimeoutMilliseconds);
+        return await playerLedChannel.InitializeGameCubeFeaturesAsync(timeout.Token).ConfigureAwait(false);
+    }
+
     public bool TryBindHdRumbleLifetime(Switch2ControllerModel model,
         ulong deviceGeneration, ulong candidateTransportGeneration)
     {

@@ -4777,9 +4777,9 @@ namespace DS4Windows
                             }
                             else if (switch2Claim)
                             {
-                                switch2InputClaim.BuildInto(
-                                    stateWriterPacket.AsSpan(0,
-                                        Switch2EgressState.WireSize));
+                                int packetSize = viiperType == ViiperVirtualDeviceType.GameCube ?
+                                    Switch2EgressState.GameCubeWireSize : Switch2EgressState.WireSize;
+                                switch2InputClaim.BuildInto(stateWriterPacket.AsSpan(0, packetSize));
                                 long admittedAt = Stopwatch.GetTimestamp();
                                 if (!orderedEgressWriterAdmissionGate.TryAdmit(
                                         switch2WriterAdmissionLease,
@@ -4794,7 +4794,7 @@ namespace DS4Windows
                                 }
                                 writeTiming = WriteState(writeStream,
                                     stateWriterPacket,
-                                    Switch2EgressState.WireSize);
+                                    packetSize);
                             }
                             else
                             {
@@ -13340,7 +13340,6 @@ namespace DS4Windows
         private const int DualSenseRawInputStatusOffset = 38;
         private const byte DualSenseRawInputStatusValidFlag = 0x01;
         private const byte DualSenseRawInputStatusEdgeLayoutFlag = 0x02;
-        private const int Switch2PacketSize = 24;
         private const int DualSenseFeedbackPacketSize = 76;
         private const int DualSenseAccelRestZ = -8192;
         private const float X360RecipInputPosResolution = 1 / 127f;
@@ -13391,7 +13390,8 @@ namespace DS4Windows
                 ViiperVirtualDeviceType.DualShock4 => DS4PacketSize,
                 ViiperVirtualDeviceType.DualSense => DualSensePacketSize,
                 ViiperVirtualDeviceType.DualSenseEdge => DualSensePacketSize,
-                ViiperVirtualDeviceType.Switch2Pro or ViiperVirtualDeviceType.GameCube => Switch2PacketSize,
+                ViiperVirtualDeviceType.Switch2Pro => Switch2EgressState.WireSize,
+                ViiperVirtualDeviceType.GameCube => Switch2EgressState.GameCubeWireSize,
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
         }
@@ -13704,7 +13704,8 @@ namespace DS4Windows
 
         private static byte[] BuildSwitch2Packet(DS4State state, int device, bool gameCube)
         {
-            byte[] packet = new byte[Switch2PacketSize];
+            byte[] packet = new byte[gameCube ?
+                Switch2EgressState.GameCubeWireSize : Switch2EgressState.WireSize];
             BuildSwitch2State(state, device, gameCube).BuildInto(packet);
             return packet;
         }
@@ -13721,13 +13722,23 @@ namespace DS4Windows
             if (gameCube)
             {
                 uint buttons = BuildGameCubeButtons(state);
-                // The GameCube stream uses the first two motion bytes for L/R
-                // travel and reserves the other ten bytes. Clicks are separate.
-                int leftTravel = (state.L2 * 232 + 127) / 255;
-                int rightTravel = (state.R2 * 232 + 127) / 255;
-                short triggerTravel = unchecked((short)(leftTravel | (rightTravel << 8)));
+                byte leftTravel = (byte)((state.L2 * 232 + 127) / 255);
+                byte rightTravel = (byte)((state.R2 * 232 + 127) / 255);
+                SixAxis motion = state.Motion;
+                SixAxis gyro = state.GyroStickGateOpen ? motion : null;
+                const float gyroScale = Switch2ProMotionProjection.GameCubeGyroLsbPerDegreeSecond /
+                    SixAxis.F_GYRO_RES_IN_DEG_SEC;
+                // Invert the shared Nintendo-to-SixAxis projection before
+                // writing GameCube sensor XYZ in the controller's own units.
                 return new Switch2EgressState(buttons, lx, FlipSwitchAxis(ly),
-                    rx, FlipSwitchAxis(ry), triggerTravel, 0, 0, 0, 0, 0);
+                    rx, FlipSwitchAxis(ry),
+                    ClampShort(-(motion?.accelXFull ?? 0) / 2),
+                    ClampShort(-(motion?.accelZFull ?? 0) / 2),
+                    ClampShort(-(motion?.accelYFull ?? 0) / 2),
+                    ClampShort((int)Math.Round((gyro?.gyroPitchFull ?? 0) * gyroScale)),
+                    ClampShort((int)Math.Round((gyro?.gyroRollFull ?? 0) * gyroScale)),
+                    ClampShort((int)Math.Round(-(gyro?.gyroYawFull ?? 0) * gyroScale)),
+                    leftTravel, rightTravel);
             }
 
             return new Switch2EgressState(BuildSwitch2Buttons(state),

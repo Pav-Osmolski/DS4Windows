@@ -17,7 +17,7 @@ adaptive triggers to your physical controller.
 | Switch Pro | USB or Bluetooth | Mapping, motion and Nintendo feedback/settings |
 | Original Joy-Con | Bluetooth; standalone or a same-generation left/right pair | Holding styles, motion and Nintendo feedback; no Joy-Con 2 optical mouse sensor |
 | Switch 2 Pro | USB or DS4Windows Bluetooth discovery/association | Nintendo motion/feedback; headset support over USB |
-| GameCube Controller for Switch 2 | USB or DS4Windows Bluetooth discovery/association | Analog L/R travel and independent clicks, C stick, button mapping and single-motor rumble |
+| GameCube Controller for Switch 2 | USB or DS4Windows Bluetooth discovery/association | Analog L/R travel and independent clicks, C stick, button mapping and single-motor rumble. Gyroscope and accelerometer over Bluetooth. |
 | Joy-Con 2 | DS4Windows Bluetooth discovery/association; standalone or a same-generation pair | Optical mouse, motion, dual Joy-Con aiming and Nintendo feedback |
 | Supported Moonlight/Sunshine virtual input | Enable admission on the Sunshine host | Mapping of supported virtual HID identities; not arbitrary virtual devices |
 
@@ -76,7 +76,7 @@ Open **Profile Editor → Advanced → Output** and choose **Emulated Controller
 | DualShock 4 | Games expecting a DS4, including compatible touchpad/lightbar/audio behaviour | Does not make a physical controller into a DualSense |
 | DualSense / DualSense Edge | Games supporting PlayStation output and native DualSense features | Advanced haptics require a compatible audio path; adaptive resistance needs physical DualSense/Edge triggers |
 | Switch 2 Pro | Software expecting the supported Nintendo output | Nintendo rumble translation does not reproduce adaptive-trigger resistance |
-| GameCube Controller | Games or emulators that can use Nintendo's Switch 2 wireless GameCube controller identity | Software must support the controller or bind its controls through a compatible input backend |
+| GameCube Controller | Games or emulators that can use Nintendo's Switch 2 wireless GameCube controller identity | Software must support the controller or bind its controls through a compatible input backend. Motion requires a motion-capable source and host support for the emulated IMU. |
 | [Generic Joystick](directinput-preview-guide.md) | Games accepting DirectInput or WinMM joystick input | Input only with six axes, sixteen buttons and a POV hat. Games may require manual bindings |
 | Virtual controller disabled | Keyboard/mouse-only mappings or other deliberate configurations | Games receive no virtual gamepad from this profile |
 

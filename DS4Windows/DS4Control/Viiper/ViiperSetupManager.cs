@@ -180,7 +180,7 @@ namespace DS4Windows
         private const string BundledViiperHashName =
             BundledViiperName + ".sha256";
         internal const string SupportedViiperSha256 =
-            "A7FFB0C20ADB0AA51517C7286F6FFBDCF675C3C9B9C4F6868D61F891A1CEFFBF";
+            "9AC0BEE956E5E74EA6501E9E588FB3CB18A904F204CE9434F2009B15A16EF51E";
         private const string BundledUsbipName = "USBip-0.9.8.1-x64.exe";
         private const string BundledHidHideName =
             "HidHide_1.5.230_x64.exe";

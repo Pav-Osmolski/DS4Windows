@@ -28,8 +28,17 @@ Choose **GameCube Controller** in the Overview or Profile Editor output
 selector to present Nintendo's wireless Switch 2 controller to Windows.
 On controllers such as DualSense, full L2/R2 travel produces the GameCube
 trigger's digital click. Partial travel stays analog. A physical GameCube
-controller sends travel and clicks separately. The GameCube implementation
-currently supports buttons, sticks, triggers and rumble. Motion is unverified.
+controller sends travel and clicks separately. Open **Device Options** and
+enable **GameCube Controller Support** to allow new physical USB and Bluetooth
+connections. This setting is enabled by default. The virtual output remains
+available independently.
+
+Physical GameCube input can use the gyroscope and accelerometer over Bluetooth.
+Physical USB input supports the controls and rumble. GameCube emulation can
+forward motion from a controller such as DualSense when the host enables the
+virtual controller's IMU. Both virtual report formats have synthetic coverage.
+Physical GameCube motion on Windows and motion in Eden still need hands-on
+validation.
 
 In Eden, choose **GameCube Controller** as the emulated console controller,
 then bind the DS4Windows virtual controller to it. Start DS4Windows and select

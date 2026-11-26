@@ -305,8 +305,14 @@ internal sealed class Switch2BluetoothPlayerLedCommandChannel
         InitializeProFeaturesAsync(CancellationToken cancellationToken) =>
         InitializeFeaturesAsync(proFeatures: true, cancellationToken);
 
+    internal ValueTask<Switch2BluetoothSensorInitializationFailure>
+        InitializeGameCubeFeaturesAsync(CancellationToken cancellationToken) =>
+        InitializeFeaturesAsync(proFeatures: true, cancellationToken,
+            Switch2BluetoothProFeatureCodec.GameCubeMotionMask);
+
     private async ValueTask<Switch2BluetoothSensorInitializationFailure>
-        InitializeFeaturesAsync(bool proFeatures, CancellationToken cancellationToken)
+        InitializeFeaturesAsync(bool proFeatures, CancellationToken cancellationToken,
+            byte featureMask = Switch2BluetoothProFeatureCodec.FeatureMask)
     {
         TaskCompletionSource<byte[]> completion;
         lock (sync)
@@ -348,7 +354,7 @@ internal sealed class Switch2BluetoothPlayerLedCommandChannel
                         pendingProFeatureSubcommand = proFeatures ? (byte)0x04 : (byte)0;
                     }
                 }
-                byte[] request = proFeatures ? Switch2BluetoothProFeatureCodec.CreateRequest(enable: step == 1) :
+                byte[] request = proFeatures ? Switch2BluetoothProFeatureCodec.CreateRequest(enable: step == 1, featureMask) :
                     Switch2BluetoothSensorCodec.CreateRequest(enable: step == 1);
                 bool written;
                 if (proFeatures)

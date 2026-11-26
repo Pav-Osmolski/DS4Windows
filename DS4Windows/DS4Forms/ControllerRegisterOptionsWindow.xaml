@@ -9,7 +9,7 @@
         lex:ResxLocalizationProvider.DefaultAssembly="DS4Windows"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         mc:Ignorable="d"
-        Title="{lex:Loc ControllerRegOptWin.WinTitle}" Height="514" Width="760" MinHeight="390" MinWidth="560"
+        Title="{lex:Loc ControllerRegOptWin.WinTitle}" Height="538" Width="760" MinHeight="414" MinWidth="560"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Style="{DynamicResource WindowStyle}" Closed="Window_Closed">
     <Window.Resources>
@@ -42,6 +42,7 @@
                                 <CheckBox Content="{lex:Loc ControllerSupportDS4}" IsChecked="{Binding DS4DeviceOpts.Enabled}" />
                                 <CheckBox Content="{lex:Loc ControllerSupportDualSense}" IsChecked="{Binding DSDeviceOpts.Enabled}" />
                                 <CheckBox Content="{lex:Loc ControllerSupportSwitchPro}" IsChecked="{Binding SwitchProDeviceOpts.Enabled}" />
+                                <CheckBox Content="{lex:Loc ControllerSupportGameCube}" IsChecked="{Binding GameCubeDeviceOpts.Enabled}" />
                                 <CheckBox Content="{lex:Loc ControllerSupportJoyCon}" IsChecked="{Binding JoyConDeviceOpts.Enabled}" />
                                 <CheckBox Content="{lex:Loc ControllerSupportDS3}" IsChecked="{Binding DS3DeviceOpts.Enabled}" />
                                 <CheckBox Content="{lex:Loc Strings:UI_8DD8CBAABF98A695}"

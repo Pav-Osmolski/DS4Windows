@@ -1265,11 +1265,11 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                         type = 4;
                         break;
 
-                    case OutContType.ViiperGenericJoystick:
+                    case OutContType.ViiperGameCube:
                         type = 6;
                         break;
 
-                    case OutContType.ViiperGameCube:
+                    case OutContType.ViiperGenericJoystick:
                         type = 7;
                         break;
 
@@ -1324,8 +1324,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 3 => OutContType.ViiperDualSenseEdge,
                 4 => OutContType.ViiperSwitch2Pro,
                 5 => OutContType.ViiperXboxOne,
-                6 => OutContType.ViiperGenericJoystick,
-                7 => OutContType.ViiperGameCube,
+                6 => OutContType.ViiperGameCube,
+                7 => OutContType.ViiperGenericJoystick,
                 _ => OutContType.ViiperX360,
             };
         }

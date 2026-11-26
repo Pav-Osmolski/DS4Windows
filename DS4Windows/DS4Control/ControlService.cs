@@ -345,7 +345,7 @@ namespace DS4Windows
                     switch2MagnetometerCalibrationStore,
                     switch2JoyConHoldModeStore,
                     switch2GyroCalibrationStore, switch2RawStickCalibrationStore,
-                    BeginJoyConOutputHandoff);
+                    BeginJoyConOutputHandoff, () => Global.DeviceOptions.GameCubeDeviceOpts.Enabled);
             switch2ProUsbProductionCoordinator =
                 new Switch2ProUsbProductionCoordinator(
                     switch2RuntimeRegistrationService,
@@ -354,7 +354,8 @@ namespace DS4Windows
                     message => LogDebug(message),
                     switch2PersistentPeerIdentityDeriver,
                     switch2MagnetometerCalibrationStore,
-                    switch2GyroCalibrationStore, switch2RawStickCalibrationStore);
+                    switch2GyroCalibrationStore, switch2RawStickCalibrationStore,
+                    () => Global.DeviceOptions.GameCubeDeviceOpts.Enabled);
 
             Crc32Algorithm.InitializeTable(DS4Device.DefaultPolynomial);
 

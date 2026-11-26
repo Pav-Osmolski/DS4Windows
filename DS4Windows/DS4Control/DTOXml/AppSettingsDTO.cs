@@ -1072,6 +1072,10 @@ namespace DS4WinWPF.DS4Control.DTOXml
                 {
                     Enabled = source.deviceOptions.DualSenseOpts.Enabled,
                 },
+                GameCubeSupportSettings = new GameCubeSupportSettings()
+                {
+                    Enabled = source.deviceOptions.GameCubeDeviceOpts.Enabled,
+                },
                 SwitchProSupportSettings = new SwitchProSupportSettings()
                 {
                     Enabled = source.deviceOptions.SwitchProDeviceOpts.Enabled,
@@ -1208,6 +1212,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             destination.deviceOptions.DS4DeviceOpts.Enabled = DeviceOptions.DS4SupportSettings.Enabled;
             destination.deviceOptions.DualSenseOpts.Enabled = DeviceOptions.DualSenseSupportSettings.Enabled;
             destination.deviceOptions.SwitchProDeviceOpts.Enabled = DeviceOptions.SwitchProSupportSettings.Enabled;
+            destination.deviceOptions.GameCubeDeviceOpts.Enabled = DeviceOptions.GameCubeSupportSettings.Enabled;
             destination.deviceOptions.JoyConDeviceOpts.Enabled = DeviceOptions.JoyConSupportSettings.Enabled;
             destination.deviceOptions.JoyConDeviceOpts.AutomaticPairing =
                 DeviceOptions.JoyConSupportSettings.AutomaticPairing;
@@ -1278,6 +1283,8 @@ namespace DS4WinWPF.DS4Control.DTOXml
             get; set;
         } = new SwitchProSupportSettings();
 
+        public GameCubeSupportSettings GameCubeSupportSettings { get; set; } = new();
+
         public JoyConSupportSettings JoyConSupportSettings
         {
             get; set;
@@ -1333,6 +1340,11 @@ namespace DS4WinWPF.DS4Control.DTOXml
         {
             Enabled = DualSenseDeviceOptions.DEFAULT_ENABLE;
         }
+    }
+
+    public sealed class GameCubeSupportSettings : BaseInputDeviceSettingsGroup
+    {
+        public GameCubeSupportSettings() => Enabled = GameCubeDeviceOptions.DefaultEnable;
     }
 
     public class SwitchProSupportSettings : BaseInputDeviceSettingsGroup

@@ -5,6 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Forward gyroscope and accelerometer readings from a physical GameCube Controller over Bluetooth, and through the virtual GameCube output when its IMU is enabled. Thanks to [@chyyran](https://github.com/chyyran) and [@trevlars](https://github.com/trevlars) for the motion protocol research and testing references.
+- Add **GameCube Controller Support** to Device Options and list **GameCube Controller** before **Generic Joystick** in the output selectors.
 - Add USB and Bluetooth input for Nintendo's official wireless GameCube Controller for Switch 2 and a **GameCube Controller** virtual output. The protocol carries independent analog L/R travel and full-press clicks, both sticks, the controller buttons and single-motor rumble. Thanks to [@Julinkk](https://github.com/Julinkk) for requesting support and sharing the [pairing project](https://github.com/RyanCopley/NSO-GameCube-Controller-Pairing-App), and to the [SDL](https://github.com/libsdl-org/SDL/blob/main/src/joystick/hidapi/SDL_hidapi_switch2.c) and [Switch 2 protocol research](https://github.com/ndeadly/switch2_controller_research) contributors. [Issue #154](https://github.com/Pav-Osmolski/DS4Windows/issues/154)
 
 ## Released

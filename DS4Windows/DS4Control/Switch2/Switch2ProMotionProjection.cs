@@ -28,6 +28,8 @@ internal sealed class Switch2ProMotionProjection
 {
     // ST +/-2000 dps scale used by Switch 2 Pro: 70 mdps/LSB.
     internal const float NativeGyroLsbPerDegreeSecond = 14.285714f;
+    // The GameCube IMU has a different scale from the Switch 2 Pro.
+    internal const float GameCubeGyroLsbPerDegreeSecond = 16.4f;
     private const float Ds4WindowsGyroLsbPerDegreeSecond = 16.0f;
     private const float NativeAccelerometerLsbPerG = 4096.0f;
     private const float Ds4WindowsAccelerometerLsbPerG = 8192.0f;
@@ -81,13 +83,14 @@ internal sealed class Switch2ProMotionProjection
             return false;
         }
 
+        float nativeGyroScale = frame.Model == Switch2ControllerModel.GameCube ?
+            GameCubeGyroLsbPerDegreeSecond : NativeGyroLsbPerDegreeSecond;
         Vector3 rawGyroscope = new(frame.Gyroscope.X, frame.Gyroscope.Y,
             frame.Gyroscope.Z);
         Vector3 rawAccelerometer = new(frame.Accelerometer.X,
             frame.Accelerometer.Y, frame.Accelerometer.Z);
         if (!gyroCalibration.TryObserve(rawGyroscope, rawAccelerometer,
-                NativeGyroLsbPerDegreeSecond,
-                NativeAccelerometerLsbPerG,
+                nativeGyroScale, NativeAccelerometerLsbPerG,
                 frame.CompletionTimestampQpc, frame.QpcFrequency,
                 out Vector3 calibratedGyroscope))
         {
@@ -112,7 +115,7 @@ internal sealed class Switch2ProMotionProjection
             magnetometerCalibrationEpoch * 16777619UL);
         if (!magnetometerYawAssist.TryApply(rawGyroscope,
                 rawAccelerometer, magnetometer,
-                NativeGyroLsbPerDegreeSecond, elapsed,
+                nativeGyroScale, elapsed,
                 magnetometerYawAssistEnabled, motionEpoch,
                 magnetometerFresh,
                 out Switch2MagnetometerYawAssistResult assisted))
@@ -121,8 +124,7 @@ internal sealed class Switch2ProMotionProjection
         }
         rawGyroscope = assisted.Gyroscope;
         if (!horizonStabilizer.TryApply(rawGyroscope, rawAccelerometer,
-                NativeGyroLsbPerDegreeSecond,
-                NativeAccelerometerLsbPerG, elapsed,
+                nativeGyroScale, NativeAccelerometerLsbPerG, elapsed,
                 horizonStabilizationEnabled, motionEpoch,
                 horizontal: false,
                 out Switch2HorizonProjectionResult horizon))
@@ -137,8 +139,7 @@ internal sealed class Switch2ProMotionProjection
         // Native DS report XYZ = (x,z,-y) for BOTH sensors. SixAxis.populate
         // applies the canonical yaw/roll and acceleration signs below; using
         // the donor's already-semantic Cemuhook tuple here inverted them twice.
-        const float gyroScale = Ds4WindowsGyroLsbPerDegreeSecond /
-            NativeGyroLsbPerDegreeSecond;
+        float gyroScale = Ds4WindowsGyroLsbPerDegreeSecond / nativeGyroScale;
         const float accelerometerScale =
             Ds4WindowsAccelerometerLsbPerG / NativeAccelerometerLsbPerG;
         int gyroX = ClampRound(rawGyroscope.X * gyroScale);

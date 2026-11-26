@@ -48,6 +48,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
         public DS3DeviceOptions DS3DeviceOpts { get => serviceDeviceOpts.DS3DeviceOpts; }
         public DualSenseDeviceOptions DSDeviceOpts { get => serviceDeviceOpts.DualSenseOpts; }
         public SwitchProDeviceOptions SwitchProDeviceOpts { get => serviceDeviceOpts.SwitchProDeviceOpts; }
+        public GameCubeDeviceOptions GameCubeDeviceOpts => serviceDeviceOpts.GameCubeDeviceOpts;
         public JoyConDeviceOptions JoyConDeviceOpts { get => serviceDeviceOpts.JoyConDeviceOpts; }
 
         public bool UseMoonlightChanged

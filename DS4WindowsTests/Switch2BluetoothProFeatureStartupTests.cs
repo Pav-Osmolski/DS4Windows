@@ -71,6 +71,29 @@ public sealed partial class Switch2BluetoothPlayerLedCommandChannelTests
     }
 
     [TestMethod]
+    public async Task GameCubeUsesTheButtonStickAndMotionMaskOnTheSharedCommandChannel()
+    {
+        var command = FakeCharacteristic.Command();
+        var response = FakeCharacteristic.Response();
+        var writes = new List<string>();
+        command.WriteOverride = (request, _, _) =>
+        {
+            writes.Add(Convert.ToHexString(request.Span));
+            response.Emit(request.Span[0] == 0x0C ? ProFeatureReply(request.Span[3] == 0x04) :
+                Convert.FromHexString("0901000000000000"));
+            return ValueTask.FromResult(true);
+        };
+        var channel = new Switch2BluetoothPlayerLedCommandChannel(command, response);
+        Assert.IsTrue(await channel.PrepareAsync(CancellationToken.None));
+        Assert.AreEqual(Switch2BluetoothSensorInitializationFailure.None,
+            await channel.InitializeGameCubeFeaturesAsync(CancellationToken.None));
+        Assert.IsTrue((await channel.SetPlayerAsync(1, CancellationToken.None)).Succeeded);
+        CollectionAssert.AreEqual(new[] { "0C9101020004000007000000", "0C9101040004000007000000",
+            "099101070004000001000000" }, writes);
+        Assert.IsTrue(await channel.RetireAsync(CancellationToken.None));
+    }
+
+    [TestMethod]
     [DataRow("0C0401021078000000000000")]
     [DataRow("0C9101021078000000000000")]
     [DataRow("0C0100021078000000000000")]

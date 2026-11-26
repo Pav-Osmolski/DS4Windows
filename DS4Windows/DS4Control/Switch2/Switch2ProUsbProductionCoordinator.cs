@@ -52,6 +52,7 @@ internal sealed class Switch2ProUsbProductionCoordinator
     private Task worker;
     private ulong serviceGeneration;
     private long generationCounter = DateTime.UtcNow.Ticks;
+    private readonly Func<bool> gameCubeEnabled;
 
     internal Switch2ProUsbProductionCoordinator(
         Switch2RuntimeRegistrationService registrations,
@@ -72,12 +73,13 @@ internal sealed class Switch2ProUsbProductionCoordinator
         Switch2PersistentPeerIdentityDeriver identityDeriver,
         ISwitch2MagnetometerCalibrationStore magnetometerCalibrationStore,
         ISwitch2GyroCalibrationStore gyroCalibrationStore = null,
-        ISwitch2RawStickCalibrationStore rawStickCalibrationStore = null) :
+        ISwitch2RawStickCalibrationStore rawStickCalibrationStore = null,
+        Func<bool> gameCubeEnabled = null) :
         this(new Switch2ProUsbWindowsNativePlatform(),
             new Switch2ProUsbWindowsOwnedCompositeAdapter(), registrations,
             host, attached, diagnostic, ScanIntervalMilliseconds,
             identityDeriver, magnetometerCalibrationStore,
-            gyroCalibrationStore, rawStickCalibrationStore)
+            gyroCalibrationStore, rawStickCalibrationStore, gameCubeEnabled)
     {
     }
 
@@ -93,7 +95,8 @@ internal sealed class Switch2ProUsbProductionCoordinator
         ISwitch2MagnetometerCalibrationStore
             magnetometerCalibrationStore = null,
         ISwitch2GyroCalibrationStore gyroCalibrationStore = null,
-        ISwitch2RawStickCalibrationStore rawStickCalibrationStore = null)
+        ISwitch2RawStickCalibrationStore rawStickCalibrationStore = null,
+        Func<bool> gameCubeEnabled = null)
     {
         this.discovery = discovery ?? throw new ArgumentNullException(
             nameof(discovery));
@@ -107,6 +110,7 @@ internal sealed class Switch2ProUsbProductionCoordinator
         this.magnetometerCalibrationStore = magnetometerCalibrationStore;
         this.gyroCalibrationStore = gyroCalibrationStore;
         this.rawStickCalibrationStore = rawStickCalibrationStore;
+        this.gameCubeEnabled = gameCubeEnabled;
         if (scanIntervalMilliseconds <= 0)
         {
             throw new ArgumentOutOfRangeException(
@@ -345,7 +349,8 @@ internal sealed class Switch2ProUsbProductionCoordinator
     private void TryAttach(Switch2ProUsbWindowsCandidate candidate)
     {
         if (candidate == null || !candidate.TryGetAdmittedRegistration(
-                out Switch2PhysicalInputRegistration registration))
+                out Switch2PhysicalInputRegistration registration) ||
+            registration.Model == Switch2ControllerModel.GameCube && gameCubeEnabled?.Invoke() == false)
         {
             return;
         }

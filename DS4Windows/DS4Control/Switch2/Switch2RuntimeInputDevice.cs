@@ -250,7 +250,8 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
         // SixAxis shape. Keep the ordinary gyro mapping seam enabled so the
         // existing mouse, mouse-joystick, controls, and steering modes consume
         // that state rather than requiring a Switch 2-specific mapper.
-        OutputMapGyro = inputDeviceType != InputDeviceType.Switch2GameCube;
+        OutputMapGyro = inputDeviceType != InputDeviceType.Switch2GameCube ||
+            transport == Switch2Transport.BluetoothLe;
         // Switch 2 owns family-specific, QPC-driven per-IMU calibration in
         // its serialized projection. The legacy wall-clock sampler is unused.
         sixAxis.StopContinuousCalibration();

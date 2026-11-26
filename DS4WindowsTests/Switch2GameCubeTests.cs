@@ -57,8 +57,8 @@ public class Switch2GameCubeTests
         Assert.IsFalse(profile.HasCommonMotion);
         byte[] output = ViiperStatePacketBuilder.Build(ViiperVirtualDeviceType.GameCube, state, -1);
         Assert.AreEqual(0x00132872u, BinaryPrimitives.ReadUInt32LittleEndian(output));
-        Assert.AreEqual((byte)103, output[12]);
-        Assert.AreEqual((byte)0, output[13]);
+        Assert.AreEqual((byte)103, output[24]);
+        Assert.AreEqual((byte)0, output[25]);
     }
 
     [TestMethod]
@@ -74,9 +74,56 @@ public class Switch2GameCubeTests
         Assert.AreEqual(0x2Fu, BinaryPrimitives.ReadUInt32LittleEndian(report));
         Assert.AreEqual((ushort)4095, BinaryPrimitives.ReadUInt16LittleEndian(report.AsSpan(6)));
         Assert.AreEqual((ushort)0, BinaryPrimitives.ReadUInt16LittleEndian(report.AsSpan(10)));
-        Assert.AreEqual((byte)116, report[12]);
-        Assert.AreEqual((byte)232, report[13]);
-        Assert.IsTrue(report.AsSpan(14).IndexOfAnyExcept((byte)0) < 0);
+        Assert.AreEqual(26, report.Length);
+        Assert.AreEqual((byte)116, report[24]);
+        Assert.AreEqual((byte)232, report[25]);
+        Assert.IsTrue(report.AsSpan(12, 12).IndexOfAnyExcept((byte)0) < 0);
+    }
+
+    [TestMethod]
+    public void BluetoothMotionProjectsToSixAxisAndRoundTripsToGameCubeOutput()
+    {
+        Assert.IsTrue(Switch2InputProtocolIdentity.TryCreateBluetoothLe(
+            Switch2InputCodec.ServiceUuid, Switch2InputCodec.Common05CharacteristicUuid,
+            Switch2GattProperty.Notify | Switch2GattProperty.Read,
+            Switch2ControllerModel.GameCube, out var identity));
+        Assert.IsTrue(Switch2InputSessionDescriptor.TryCreate(identity, 7, 8, 1_000_000, out var descriptor));
+        Assert.IsTrue(Switch2InputCalibrationSnapshot.TryCreateFallback(
+            Switch2ControllerModel.GameCube, 7, out var calibration));
+        var session = new Switch2InputSession(descriptor, calibration);
+        byte[] report = new byte[64];
+        report[0] = 5;
+        report[1] = 1;
+        report[43] = 24;
+        short[] native = [256, -512, 4096, 1640, -820, 410];
+        for (int i = 0; i < native.Length; i++)
+            BinaryPrimitives.WriteInt16LittleEndian(report.AsSpan(49 + 2 * i), native[i]);
+        Assert.IsTrue(session.TryProcess(descriptor, report.AsSpan(1), 50_000, out var input,
+            out var error), error.ToString());
+        Assert.IsTrue(Switch2ProProfileInputMapper.TryMap(input, out var profile, out var mapping),
+            mapping.ToString());
+        Assert.IsTrue(profile.HasCommonMotion);
+        var state = new DS4State();
+        var projection = new Switch2ProMotionProjection();
+        Assert.IsTrue(projection.TryApply(profile, state, magnetometerYawAssistEnabled: false,
+            virtualGyroSoftDeadzone: 0, horizonStabilizationEnabled: false));
+        Assert.AreEqual(100d, state.Motion.angVelPitch, 0.0001);
+        Assert.AreEqual(-50d, state.Motion.angVelRoll, 0.0001);
+        Assert.AreEqual(-25d, state.Motion.angVelYaw, 0.0001);
+        Assert.AreEqual(-1d, state.Motion.accelYG, 0.0001);
+
+        state.L2 = 255;
+        byte[] wire = ViiperStatePacketBuilder.Build(ViiperVirtualDeviceType.GameCube, state, -1);
+        for (int i = 0; i < native.Length; i++)
+            Assert.AreEqual(native[i], BinaryPrimitives.ReadInt16LittleEndian(wire.AsSpan(12 + i * 2)));
+        Assert.AreEqual((byte)232, wire[24]);
+        Assert.AreEqual((byte)0, wire[25]);
+
+        state.GyroStickGateOpen = false;
+        wire = ViiperStatePacketBuilder.Build(ViiperVirtualDeviceType.GameCube, state, -1);
+        Assert.AreEqual((short)4096, BinaryPrimitives.ReadInt16LittleEndian(wire.AsSpan(16)));
+        Assert.IsTrue(wire.AsSpan(18, 6).IndexOfAnyExcept((byte)0) < 0);
+        Assert.AreEqual((byte)232, wire[24]);
     }
 
     [TestMethod]

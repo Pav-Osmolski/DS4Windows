@@ -10003,6 +10003,12 @@ namespace DS4Windows
                             catch { }
                         }
 
+                        if (bool.TryParse(xmlDeviceOptions.SelectSingleNode("GameCubeSupportSettings/Enabled")?.InnerText,
+                                out bool gameCubeEnabled))
+                        {
+                            deviceOptions.GameCubeDeviceOpts.Enabled = gameCubeEnabled;
+                        }
+
                         XmlNode xmlJoyConSupport = xmlDeviceOptions.SelectSingleNode("JoyConSupportSettings");
                         if (xmlJoyConSupport != null)
                         {
@@ -10276,6 +10282,12 @@ namespace DS4Windows
             xmlSwitchProSupport.AppendChild(xmlSwitchProEnabled);
 
             xmlDeviceOptions.AppendChild(xmlSwitchProSupport);
+
+            XmlElement xmlGameCubeSupport = m_Xdoc.CreateElement("GameCubeSupportSettings");
+            XmlElement xmlGameCubeEnabled = m_Xdoc.CreateElement("Enabled");
+            xmlGameCubeEnabled.InnerText = deviceOptions.GameCubeDeviceOpts.Enabled.ToString();
+            xmlGameCubeSupport.AppendChild(xmlGameCubeEnabled);
+            xmlDeviceOptions.AppendChild(xmlGameCubeSupport);
 
             XmlElement xmlJoyConSupport = m_Xdoc.CreateElement("JoyConSupportSettings", null);
             XmlElement xmlJoyconEnabled = m_Xdoc.CreateElement("Enabled", null);

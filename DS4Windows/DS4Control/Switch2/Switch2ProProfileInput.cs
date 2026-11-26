@@ -95,14 +95,17 @@ public readonly struct Switch2ProProfileInputFrame
         LeftY = leftY;
         RightX = rightX;
         RightY = rightY;
-        HasCommonMotion = canonical.Report.IsCommon && Model != Switch2ControllerModel.GameCube;
         if (canonical.Report.IsCommon)
         {
             Switch2CommonInputReport common = canonical.Report.Common;
             MotionTimestamp = common.MotionTimestamp;
             Accelerometer = common.Accelerometer;
             Gyroscope = common.Gyroscope;
-            Magnetometer = common.Magnetometer;
+            HasCommonMotion = Model != Switch2ControllerModel.GameCube ||
+                Transport == Switch2Transport.BluetoothLe &&
+                (Accelerometer.X != 0 || Accelerometer.Y != 0 || Accelerometer.Z != 0 ||
+                    Gyroscope.X != 0 || Gyroscope.Y != 0 || Gyroscope.Z != 0);
+            Magnetometer = Model == Switch2ControllerModel.GameCube ? default : common.Magnetometer;
             HasBatteryStatus = Switch2BatteryStatus.TryCreate(common,
                 out Switch2BatteryStatus batteryStatus);
             BatteryStatus = batteryStatus;

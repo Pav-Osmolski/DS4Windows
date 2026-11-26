@@ -1,21 +1,21 @@
 {
   "SchemaVersion": 1,
-  "SourceCommit": "e4c200c37bc6eccd0ca84dfe5a1ec3c16bd5b4e6",
+  "SourceCommit": "af71142c8957d05b81f1a624bd91257df18851d4",
   "Version": "v0.1.20",
   "ProductVersion": "0.1.20",
   "FileVersion": "0.1.20.0",
-  "BuildDate": "2026-11-26T16:15:15Z",
+  "BuildDate": "2026-11-26T19:50:34Z",
   "Binary": {
     "Name": "viiper.exe",
-    "Size": 9619456,
-    "Sha256": "A7FFB0C20ADB0AA51517C7286F6FFBDCF675C3C9B9C4F6868D61F891A1CEFFBF"
+    "Size": 9631744,
+    "Sha256": "9AC0BEE956E5E74EA6501E9E588FB3CB18A904F204CE9434F2009B15A16EF51E"
   },
   "GoBuildInfo": {
     "GoVersion": "go1.27.2",
     "Path": "github.com/Alia5/VIIPER/cmd/viiper",
     "Main": {
       "Path": "github.com/Alia5/VIIPER",
-      "Version": "v0.7.1-0.20261126161515-e4c200c37bc6"
+      "Version": "v0.7.1-0.20261126195034-af71142c8957"
     },
     "Deps": [
       {
@@ -103,11 +103,11 @@
       },
       {
         "Key": "vcs.revision",
-        "Value": "e4c200c37bc6eccd0ca84dfe5a1ec3c16bd5b4e6"
+        "Value": "af71142c8957d05b81f1a624bd91257df18851d4"
       },
       {
         "Key": "vcs.time",
-        "Value": "2026-11-26T16:15:15Z"
+        "Value": "2026-11-26T19:50:34Z"
       },
       {
         "Key": "vcs.modified",
@@ -120,8 +120,8 @@
     "",
     "Virtual Input over IP EmulatoR",
     "",
-    "    Version: v0.1.20 (e4c200c37bc6eccd0ca84dfe5a1ec3c16bd5b4e6)",
-    "             2026-11-26T16:15:15Z",
+    "    Version: v0.1.20 (af71142c8957d05b81f1a624bd91257df18851d4)",
+    "             2026-11-26T19:50:34Z",
     "    Source:  https://github.com/hbashton/VIIPER",
     "    License: GPLv3",
     "",

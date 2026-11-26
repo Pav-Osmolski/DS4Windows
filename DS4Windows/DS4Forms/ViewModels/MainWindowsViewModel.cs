@@ -138,8 +138,8 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 new("DualSense", OutContType.ViiperDualSense),
                 new("DualSense Edge", OutContType.ViiperDualSenseEdge),
                 new("Switch 2 Pro", OutContType.ViiperSwitch2Pro),
-                new("Generic Joystick", OutContType.ViiperGenericJoystick),
                 new("GameCube Controller", OutContType.ViiperGameCube),
+                new("Generic Joystick", OutContType.ViiperGenericJoystick),
             };
 
         private CompositeDeviceModel selectedController;
