@@ -15,7 +15,7 @@ extern "C" {
 
 // Read-only consumer. Never installs, attaches, hides or removes any device.
 static bool experimental(WORD vid, WORD pid) {
-    return vid == 0xFFFF && (pid == 0xD10C || pid == 0xD110);
+    return (vid == 0x1209 && pid == 0xD10C) || (vid == 0xFFFF && (pid == 0xD10C || pid == 0xD110));
 }
 static IDirectInput8W* input = nullptr;
 static int duration = 0;

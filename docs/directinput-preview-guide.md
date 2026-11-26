@@ -10,7 +10,9 @@ sixteen-button candidate is still required before release.
 This experimental output presents an input-only USB HID joystick to games using
 DirectInput or WinMM. It is available only in the matched portable preview on
 `feature/directinput-output`; it is not yet a normal-installation feature.
-It provides six axes, sixteen buttons and a POV hat. It provides no XInput
+Windows sees **VIIPER Generic Joystick** using registered USB VID:PID
+[1209:D10C](https://pid.codes/1209/D10C/). It provides six axes, sixteen buttons
+and a POV hat. It provides no XInput
 emulation, game force feedback or audio interfaces.
 
 ## Start with a separate profile

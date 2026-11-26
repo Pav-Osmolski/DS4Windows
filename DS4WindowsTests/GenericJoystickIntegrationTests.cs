@@ -13,13 +13,15 @@ public class GenericJoystickIntegrationTests
     [TestMethod]
     public void BackendContractRejectsWrongRestAndMalformedReadiness()
     {
-        const string response = "{\"contract\":\"genericjoystick-v1\",\"version\":1,\"experimental\":true,\"buttonCount\":16,\"neutralAxes\":[0,0,0,-32767,-32767,0],\"inputConfigured\":true}";
+        const string response = "{\"contract\":\"genericjoystick-v1\",\"version\":1,\"experimental\":true,\"buttonCount\":16,\"vendorId\":4617,\"productId\":53516,\"neutralAxes\":[0,0,0,-32767,-32767,0],\"inputConfigured\":true}";
         using var valid = System.Text.Json.JsonDocument.Parse(response);
         Assert.IsTrue(GenericJoystickContract.ReadConfigured(valid.RootElement, new short[] { 0, 0, 0, -32767, -32767, 0 }));
         Assert.ThrowsExactly<IOException>(() => GenericJoystickContract.ReadConfigured(valid.RootElement, new short[6]));
         foreach (string malformed in new[] { response.Replace("\"version\":1", "\"version\":\"1\""),
             response.Replace("\"inputConfigured\":true", "\"inputConfigured\":\"true\""),
-            response.Replace("\"buttonCount\":16", "\"buttonCount\":12"), response.Replace("-32767", "-32768") })
+            response.Replace("\"buttonCount\":16", "\"buttonCount\":12"), response.Replace("-32767", "-32768"),
+            response.Replace("\"vendorId\":4617,\"productId\":53516,", ""),
+            response.Replace("\"vendorId\":4617", "\"vendorId\":65535").Replace("\"productId\":53516", "\"productId\":53520") })
         {
             using var doc = System.Text.Json.JsonDocument.Parse(malformed);
             Assert.ThrowsExactly<IOException>(() => GenericJoystickContract.ReadConfigured(doc.RootElement));

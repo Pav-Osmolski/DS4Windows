@@ -45,9 +45,10 @@ automated checks and the distinction between logs and user observations.
 
 - [x] Submit the prepared pid.codes request with the maintainer's authorization:
   [pid.codes PR #1317](https://github.com/pidcodes/pidcodes.github.com/pull/1317),
-  submitted on 2026-10-15. Allocation remains pending.
-- [ ] Confirm acceptance and record the registry entry/request URL. The proposed
-  `1209:D10C` is **not assigned**. Existing `FFFF:D10C`/`FFFF:D110` remain lab IDs.
+  submitted on 2026-10-15.
+- [x] Confirm acceptance and adopt [1209:D10C](https://pid.codes/1209/D10C/) in
+  the matched sixteen-button preview. Allocation was approved on 2026-11-25.
+  Existing `FFFF:D10C`/`FFFF:D110` remain lab IDs.
 - [ ] Freeze the approved sixteen-button descriptor and validate its native
   enumeration and game bindings before enabling normal activation.
 - [ ] Freeze the production descriptor, strings and versioning policy; document
@@ -136,9 +137,9 @@ open. Repeating the same diagnostic package is not a substitute for these items.
 - [ ] Keep the known GUID reassignment and saved-binding limits visible until
   new evidence establishes the result. Continue other preview preparation.
 
-Checked on 2026-10-15: pid.codes PR #1317 remains open with no review; USB/IP's
-latest published release remains v.0.9.8.1. Both feature branches contain their
-current main branches. These checks do not approve normal activation or release.
+On 2026-11-25, pid.codes merged PR #1317. The registered preview is ready for
+native Windows and game testing with the pinned USB/IP v.0.9.8.1 driver. The
+multi-controller GUID, normal packaging and installed HidHide checks remain open.
 
 ## Standard package preparation
 

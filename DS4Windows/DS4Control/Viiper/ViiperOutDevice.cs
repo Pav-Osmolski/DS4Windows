@@ -1459,7 +1459,7 @@ namespace DS4Windows
                 activeFeedbackLength = 0;
                 return client.CreateDeviceAndOpenStream("genericjoystick", deviceSpecific: new
                 {
-                    version = 1, experimental = true, buttonCount = 16, instanceId = genericJoystickInstanceId,
+                    version = 1, experimental = true, registered = true, buttonCount = 16, instanceId = genericJoystickInstanceId,
                     neutralAxes = GenericJoystickMapping.Neutral(genericJoystickOptions).AxisValues
                 });
             }

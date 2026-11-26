@@ -28,11 +28,12 @@ folder layout. The lab deliberately disables automatic HidHide configuration.
    The launcher cleans up its imports, stops its backend and prints a report ZIP
    under results. Inspect logs before sharing; keys/profiles are excluded.
 
-Expected first-stage output: six axes, sixteen buttons, one direction hat.
+Windows shows VIIPER Generic Joystick (USB VID:PID 1209:D10C). Expect six axes,
+sixteen buttons and one direction hat.
 No force feedback, virtual rumble, audio or XInput. Only this matched portable
-preview enables the option. USB DualSense Windows tests and initial gameplay
-in BeamNG.drive and current Steam FlatOut 2 passed; other configurations still
-need testing. HidHide is intentionally not
+preview enables the option. Earlier lab builds passed USB DualSense tests and initial gameplay in
+BeamNG.drive and Steam FlatOut 2. This build needs a Windows and game retest
+with the registered identity. HidHide is intentionally not
 configured here: the physical controller remains visible. Start with joy.cpl;
 game device selection/hiding will be tested separately.
 
@@ -42,7 +43,7 @@ the generated report if useful. This is a feature preview, not a release.
 
 This matched preview includes distinct,
 stable USB serials derived from controller identity. Existing preview game
-bindings may need to be selected/bound once after the serial change.
+bindings may need to be selected/bound once after the change from the lab USB identity.
 Built-in HidHide remains bypassed here.
 The synthetic two-device test found DirectInput GUID reassignment when the first
 output is removed, despite stable serials/paths and correct input isolation.

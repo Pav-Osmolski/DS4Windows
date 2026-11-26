@@ -31,7 +31,7 @@ FIRST LAUNCH AND PROFILE
 3. Start with Legacy layout + Centred triggers and leave inversion unchanged.
    Save and assign the profile to your physical controller. Leave Output Slots
    on Dynamic. Verify the Overview shows the generic joystick output.
-4. Open Windows joy.cpl. Select VIIPER Experimental Legacy Joystick rather than
+4. Open Windows joy.cpl. Select VIIPER Generic Joystick (1209:D10C) rather than
    Wireless Controller/the physical pad. Test sticks, triggers, buttons and POV.
    Expect six axes, sixteen buttons and a direction hat. Buttons 7/8 are reserved
    for Buttons trigger mode; PS/Guide defaults to 13 and touchpad click to 14.
