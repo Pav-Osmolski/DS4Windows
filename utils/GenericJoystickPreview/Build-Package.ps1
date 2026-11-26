@@ -10,16 +10,25 @@ $repo = (Resolve-Path "$PSScriptRoot/../..").Path
 $viiper = (Resolve-Path $ViiperRepository).Path
 $output = [IO.Path]::GetFullPath($OutputDirectory)
 if (Test-Path -LiteralPath $output) { throw 'Use a fresh output directory.' }
-$null = New-Item -ItemType Directory -Path $output
 function Check-Exit([string]$What) { if ($LASTEXITCODE -ne 0) { throw "$What failed ($LASTEXITCODE)." } }
+$project = Join-Path $repo "DS4Windows/DS4WinWPF.csproj"
+Push-Location $repo
+try {
+    & $DotNet restore $project -p:Platform=x64 -p:SelfContained=true --locked-mode
+    Check-Exit 'Locked runtime restore'
+} finally { Pop-Location }
+$null = New-Item -ItemType Directory -Path $output
 Push-Location $viiper
 try {
     & $Go build -o "$output/viiper.exe" ./cmd/viiper; Check-Exit 'Backend build'
     $viiperRevision = & git rev-parse HEAD; Check-Exit 'Backend revision'
     $viiperDirty = (@(& git status --porcelain).Count -gt 0)
 } finally { Pop-Location }
-& $DotNet publish "$repo/DS4Windows/DS4WinWPF.csproj" -c Release -p:Platform=x64 -r win-x64 --self-contained true -o $output
-Check-Exit 'Portable application build'
+Push-Location $repo
+try {
+    & $DotNet publish $project -c Release -p:Platform=x64 -r win-x64 --self-contained true --no-restore -o $output
+    Check-Exit 'Portable application build'
+} finally { Pop-Location }
 & $Python "$PSScriptRoot/Prepare-Localization.py" $output
 Check-Exit 'Preview localization composition'
 foreach ($name in @('START.cmd', 'Run-Preview.ps1', 'README.txt', 'TESTER-GUIDE.txt')) {
