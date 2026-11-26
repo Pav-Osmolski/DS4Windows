@@ -1,21 +1,19 @@
 {
   "SchemaVersion": 1,
-  "SourceCommit": "d669cd7692b78d18038da00d2c060a4e0afb4c4e",
-  "Version": "v0.1.18",
-  "ProductVersion": "0.1.18",
-  "FileVersion": "0.1.18.0",
-  "BuildDate": "2026-11-20T12:20:05Z",
-  "GitHubRunId": "44734561316",
-  "GitHubRunAttempt": "1",
+  "SourceCommit": "76405f8a2a5987a94c32cf340aba13098d861f90",
+  "Version": "v0.1.19",
+  "ProductVersion": "0.1.19",
+  "FileVersion": "0.1.19.0",
+  "BuildDate": "2026-11-26T09:56:38Z",
   "Binary": {
     "Name": "viiper.exe",
-    "Size": 9502720,
-    "Sha256": "B9A882B86EB8B3DE1C7E2EE98D3714122FF2DD1154382722CEC3AAFBB5660515"
+    "Size": 9602048,
+    "Sha256": "7153D6D95494B68821FF90796D1F55957E087E1EF315D958D678CAC61FC14115"
   },
   "LicenseFiles": [
     {
       "Name": "licenses.txt",
-      "Sha256": "A8C17EC3B8088F462F2DE336BE8A441138D4319C058A12B379D46EA24CDA79C5"
+      "Sha256": "B12BEFB94A195F752E307BABDAF94F8D7D695FA513D7E489EE3CB21165B6B20D"
     },
     {
       "Name": "LICENSE.txt",
@@ -39,7 +37,7 @@
     "Path": "github.com/Alia5/VIIPER/cmd/viiper",
     "Main": {
       "Path": "github.com/Alia5/VIIPER",
-      "Version": "v0.1.18"
+      "Version": "v0.7.1-0.20261126095507-76405f8a2a59"
     },
     "Deps": [
       {
@@ -127,11 +125,11 @@
       },
       {
         "Key": "vcs.revision",
-        "Value": "d669cd7692b78d18038da00d2c060a4e0afb4c4e"
+        "Value": "76405f8a2a5987a94c32cf340aba13098d861f90"
       },
       {
         "Key": "vcs.time",
-        "Value": "2026-11-17T11:54:00Z"
+        "Value": "2026-11-26T09:55:07Z"
       },
       {
         "Key": "vcs.modified",
@@ -144,8 +142,8 @@
     "",
     "Virtual Input over IP EmulatoR",
     "",
-    "    Version: v0.1.18 (d669cd7)",
-    "             2026-11-20T12:20:05Z",
+    "    Version: v0.1.19 (76405f8a2a5987a94c32cf340aba13098d861f90)",
+    "             2026-11-26T09:56:38Z",
     "    Source:  https://github.com/hbashton/VIIPER",
     "    License: GPLv3",
     "",

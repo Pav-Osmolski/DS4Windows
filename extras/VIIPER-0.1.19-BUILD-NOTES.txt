@@ -1,0 +1,29 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.19
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: 76405f8a2a5987a94c32cf340aba13098d861f90
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: 76405f8a2a5987a94c32cf340aba13098d861f90
+Embedded build date: 2026-11-26T09:56:38Z
+Embedded VCS revision: 76405f8a2a5987a94c32cf340aba13098d861f90
+Embedded VCS time: 2026-11-26T09:55:07Z
+Embedded VCS modified: false
+PE file version: 0.1.19.0
+PE product version: 0.1.19
+Binary: VIIPER-0.1.19-x64.exe
+Binary SHA-256: 7153D6D95494B68821FF90796D1F55957E087E1EF315D958D678CAC61FC14115
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.19-LICENSES.txt
+License notice SHA-256: B12BEFB94A195F752E307BABDAF94F8D7D695FA513D7E489EE3CB21165B6B20D
+
+VIIPER 0.1.19 corresponding-source and build record
+
+Build origin: local Windows amd64 build from feature/directinput-output
+Source archive: VIIPER-0.1.19-SOURCE.zip
+Source archive SHA-256: 9D48B41D506CE1920196FDA8F0B7B92218996AB924C3AE4ED901EDDB0770952C
+
+The registered VIIPER Generic Joystick exposes six axes, sixteen buttons and
+a POV hat at USB ID 1209:D10C. This backend was built from the exact archived
+commit with Go 1.27.2, CGO disabled, -tags release and -trimpath.

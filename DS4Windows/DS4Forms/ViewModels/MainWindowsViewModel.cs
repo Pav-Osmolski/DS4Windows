@@ -138,7 +138,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
                 new("DualSense", OutContType.ViiperDualSense),
                 new("DualSense Edge", OutContType.ViiperDualSenseEdge),
                 new("Switch 2 Pro", OutContType.ViiperSwitch2Pro),
-                new("Generic joystick (preview)", OutContType.ViiperGenericJoystick, PortableLabContext.IsActive),
+                new("Generic joystick", OutContType.ViiperGenericJoystick),
             };
 
         private CompositeDeviceModel selectedController;
@@ -351,7 +351,6 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             {
                 value = value.Normalize();
                 if (!HasSelectedProfile || value == OutContType.None ||
-                    value == OutContType.ViiperGenericJoystick && !PortableLabContext.IsActive ||
                     Global.OutContType[selectedController.DevIndex].Normalize() == value)
                 {
                     return;

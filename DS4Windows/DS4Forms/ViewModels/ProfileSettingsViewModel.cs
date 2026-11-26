@@ -1325,7 +1325,6 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             };
         }
 
-        public bool ExperimentalJoystickAvailable => PortableLabContext.IsActive;
         private System.Collections.Generic.IReadOnlyList<JoystickButtonAssignment> joystickButtonAssignments;
         public System.Collections.Generic.IReadOnlyList<JoystickButtonAssignment> JoystickButtonAssignments =>
             joystickButtonAssignments ??= Enumerable.Range(0, 16).Select(index =>

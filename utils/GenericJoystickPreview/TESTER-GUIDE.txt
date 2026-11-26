@@ -27,7 +27,7 @@ FIRST LAUNCH AND PROFILE
 1. On the First Launch screen enable your controller family (for example
    DualSense Device Support for a DualSense), then click Close.
 2. Create a new profile using a normal gamepad preset, not mouse/keyboard.
-   Name it DirectInput Test. In Advanced choose Generic joystick (preview).
+   Name it DirectInput Test. In Advanced choose Generic joystick.
 3. Start with Legacy layout + Centred triggers and leave inversion unchanged.
    Save and assign the profile to your physical controller. Leave Output Slots
    on Dynamic. Verify the Overview shows the generic joystick output.

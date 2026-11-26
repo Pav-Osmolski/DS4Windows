@@ -1,4 +1,4 @@
-# Generic joystick preview guide
+# Generic joystick setup and game testing
 
 ## Current design
 
@@ -7,9 +7,9 @@ assignments. See [the current design and migration rules](directinput-developmen
 Earlier dated evidence retains its original scope; native/game acceptance of the
 sixteen-button candidate is still required before release.
 
-This experimental output presents an input-only USB HID joystick to games using
-DirectInput or WinMM. It is available only in the matched portable preview on
-`feature/directinput-output`; it is not yet a normal-installation feature.
+The **Generic joystick** output presents an input-only USB HID joystick to games
+using DirectInput or WinMM. It is available in standard installed and portable
+builds that bundle the matching VIIPER 0.1.19 backend.
 Windows sees **VIIPER Generic Joystick** using registered USB VID:PID
 [1209:D10C](https://pid.codes/1209/D10C/). It provides six axes, sixteen buttons
 and a POV hat. It provides no XInput
@@ -17,15 +17,16 @@ emulation, game force feedback or audio interfaces.
 
 ## Start with a separate profile
 
-Use the preview package's `START.cmd` and follow its included `README.txt`.
-Create a new gamepad profile, select **Generic joystick (preview)** in the
-Profile Editor's emulated-controller selection, choose the layout and trigger
-mode, save, and assign the profile to your physical controller. Keep Output
-Slots **Dynamic**. Use `joy.cpl` to confirm the joystick responds before binding
-it in a game. Fully exit through the tray menu to collect the preview report.
+Start DS4Windows from the Start menu for an installed copy or run
+`DS4Windows.exe` for a portable copy. Create a gamepad profile and select
+**Generic joystick** under **Emulated controller**. In the Profile Editor,
+choose the layout and trigger mode, save, and assign the profile. Keep Output
+Slots **Dynamic**. Use **Overview > Control Panel** to check the joystick
+before binding it in a game.
 
-The launcher isolates app data and verifies the matching backend. Do not copy its
-backend into an installed release or substitute a different VIIPER executable.
+The normal DS4Windows startup flow verifies and starts the bundled VIIPER
+backend. Built-in HidHide uses the same physical-controller hiding policy as
+other VIIPER outputs when enabled.
 Changing layout or trigger settings recreates the virtual device; do this before
 starting a game that might retain its old device connection.
 

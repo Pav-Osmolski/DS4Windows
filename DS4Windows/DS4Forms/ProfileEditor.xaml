@@ -3326,7 +3326,7 @@
                                                     <ComboBoxItem Content="DualSense Edge"/>
                                                     <ComboBoxItem Content="Switch 2 Pro"/>
                                                     <ComboBoxItem Content="Xbox One / Series"/>
-                                                    <ComboBoxItem Content="Generic joystick (preview)" IsEnabled="{Binding ExperimentalJoystickAvailable}" ToolTip="Available in the matched portable DirectInput preview."/>
+                                                    <ComboBoxItem Content="Generic joystick" ToolTip="Input-only DirectInput and WinMM joystick."/>
                                                 </ComboBox>
                                             </StackPanel>
                                             <TextBlock x:Name="outputControllerHintText" TextWrapping="Wrap" MaxWidth="430" Margin="6,0,0,8" Opacity="0.78" HorizontalAlignment="Left"/>

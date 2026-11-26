@@ -7,12 +7,12 @@ assignments. See [the current design and migration rules](directinput-developmen
 Earlier dated evidence retains its original scope; native/game acceptance of the
 sixteen-button candidate is still required before release.
 
-Status: **fixed sixteen-button feature; native acceptance pending; not ready for a normal release**.
-The paired `feature/directinput-output` branches remain the development path.
-Do not remove the portable-lab gate or replace the released backend independently.
+Status: **registered sixteen-button output integrated into standard local packages**.
+Both builds use the coordinated VIIPER pin and normal startup flow. Installed
+HidHide and game acceptance still need hardware testing.
 
 See the [integration audit](directinput-integration-audit.md) for source-review
-findings and the [preview guide](directinput-preview-guide.md) for tester setup.
+findings and the [setup guide](directinput-preview-guide.md) for configuring the output.
 The [installed acceptance checklist](directinput-installed-acceptance.md) covers
 remaining normal setup, upgrade, built-in HidHide and saved-game binding checks.
 The [final preview review](directinput-final-review.md) records the reviewed
@@ -59,16 +59,14 @@ automated checks and the distinction between logs and user observations.
 
 ## 2. Integrate normal operation
 
-The allocation, saved-profile and mapped-input paths already support the preview.
-The Profile Editor and Overview show it, but deliberately prevent normal-mode
-activation. Backend creation verifies the versioned joystick contract, sixteen
-buttons, requested resting axes and accepted native USB configuration.
+The Profile Editor and Overview both enable Generic joystick in standard builds.
+Backend creation verifies the versioned contract, registered USB identity,
+sixteen buttons, requested resting axes and accepted native USB configuration.
 
-- [ ] Admit normal activation only with the approved identity and the matched,
-  verified backend package. Confirm a stale backend fails clearly without
-  leaving imports or silently falling back to another output.
-- [ ] Enable the choice consistently in Profile Editor and Overview after that
-  prerequisite, retaining shared styles and existing output numeric identities.
+- [x] Use the normal bundled-backend verification and reject a missing or
+  mismatched Generic joystick contract, including a lab USB identity.
+- [x] Enable the choice consistently in Profile Editor and Overview, retaining
+  shared styles and existing output numeric identities.
 - [ ] Verify Overview, Controllers, Output Slots and diagnostics describe the
   actual joystick output. Output Slots already uses the common display-name
   mapping; retain Dynamic slots until reservation semantics for profile-specific
@@ -135,17 +133,18 @@ open. Repeating the same diagnostic package is not a substitute for these items.
   in the [identity audit](directinput-identity-audit.md#pending-usbip-serial-fix-controlled-retest-required).
   Later successful serial reads do not establish correct initial PnP handling.
 - [ ] Keep the known GUID reassignment and saved-binding limits visible until
-  new evidence establishes the result. Continue other preview preparation.
+  new evidence establishes the result.
 
-On 2026-11-25, pid.codes merged PR #1317. The registered preview is ready for
-native Windows and game testing with the pinned USB/IP v.0.9.8.1 driver. The
-multi-controller GUID, normal packaging and installed HidHide checks remain open.
+On 2026-11-25, pid.codes merged PR #1317. The standard local build uses that
+registered identity with the pinned USB/IP 0.9.8.1 driver. Multi-controller GUID
+persistence with the registered identity and installed HidHide still need
+native Windows acceptance testing.
 
 ## Standard package preparation
 
 See [normal packaging preparation](directinput-normal-packaging.md) for the
 implemented backend-pin, preview-isolation and upgrade-ownership checks, and the
-coordinated promotion steps. Standard-format packaging proofs retain released
-VIIPER 0.1.11 and the generic-output activation gate; they are not matched
-feature release candidates. Automated HidHide policy/lifecycle checks do not
-replace the outstanding normal-installation hardware test.
+coordinated promotion steps. The 5.0.84 local builds use VIIPER 0.1.19 with
+normal Generic joystick activation. The older packaging rehearsal used VIIPER
+0.1.11. Automated HidHide policy and lifecycle checks leave the
+normal-installation hardware test open.

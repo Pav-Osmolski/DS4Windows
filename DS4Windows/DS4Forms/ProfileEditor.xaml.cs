@@ -2728,7 +2728,7 @@ namespace DS4WinWPF.DS4Forms
 
             outputControllerHintText.Text = type switch
             {
-                OutContType.ViiperGenericJoystick => "Experimental DirectInput joystick for older games. Requires the matched portable preview; no XInput emulation or force feedback.",
+                OutContType.ViiperGenericJoystick => "Input-only joystick for DirectInput and WinMM games. Supports six axes, sixteen buttons, and one POV hat.",
                 OutContType.ViiperSwitch2Pro =>
                     global::DS4Windows.UiText.Get("Switch 2 layout: Cross -> B, Circle -> A, Square -> Y, Triangle -> X, Share -> Minus, Options -> Plus, PS -> Home, Capture -> Capture."),
                 OutContType.ViiperDualSense =>

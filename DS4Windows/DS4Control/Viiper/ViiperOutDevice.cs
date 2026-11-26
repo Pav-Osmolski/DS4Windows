@@ -1055,7 +1055,7 @@ namespace DS4Windows
                 var settings = Global.GenericJoystickSettings[deviceIndex];
                 string instanceId = GenericJoystickIdentity.ForController(deviceIndex);
                 if (!settings.Valid || settings.Options.ButtonCount != 16)
-                    throw new InvalidOperationException("The experimental joystick requires valid sixteen-button profile settings.");
+                    throw new InvalidOperationException("The generic joystick requires valid sixteen-button profile settings.");
                 settings.Options.Validate();
                 if (connected && (genericJoystickOptions != settings.Options || genericJoystickInstanceId != instanceId))
                     throw new InvalidOperationException("Joystick layout changes require a new output device.");
@@ -1164,8 +1164,8 @@ namespace DS4Windows
             int preparedPhysicalControllerIndex = Volatile.Read(
                 ref lastInputDeviceIndex);
             Disconnect();
-            if (viiperType == ViiperVirtualDeviceType.GenericJoystick && !PortableLabContext.IsActive)
-                throw new InvalidOperationException("Generic joystick output requires the matched portable DirectInput preview.");
+            if (viiperType == ViiperVirtualDeviceType.GenericJoystick && string.IsNullOrEmpty(genericJoystickInstanceId))
+                throw new InvalidOperationException("Bind a physical controller before creating its generic joystick.");
             streamRecoveryGate.Reset();
             lock (joyConFeedbackHandoffGate)
             {
@@ -1454,12 +1454,10 @@ namespace DS4Windows
             if (viiperType == ViiperVirtualDeviceType.GenericJoystick)
             {
                 genericJoystickOptions.Validate();
-                if (string.IsNullOrEmpty(genericJoystickInstanceId))
-                    throw new InvalidOperationException("Bind a physical controller with a distinct identity before creating its generic joystick.");
                 activeFeedbackLength = 0;
                 return client.CreateDeviceAndOpenStream("genericjoystick", deviceSpecific: new
                 {
-                    version = 1, experimental = true, registered = true, buttonCount = 16, instanceId = genericJoystickInstanceId,
+                    version = 1, registered = true, buttonCount = 16, instanceId = genericJoystickInstanceId,
                     neutralAxes = GenericJoystickMapping.Neutral(genericJoystickOptions).AxisValues
                 });
             }
@@ -11064,8 +11062,8 @@ namespace DS4Windows
             {
                 if (genericJoystick && usbipPort > 0)
                 {
-                    try { ViiperUsbipPortManager.DetachRegisteredPort(usbipPort, "failed experimental joystick creation"); }
-                    catch (Exception cleanupError) { AppLogger.LogToGui($"Experimental joystick cleanup: {cleanupError.Message}", true); }
+                    try { ViiperUsbipPortManager.DetachRegisteredPort(usbipPort, "failed generic joystick creation"); }
+                    catch (Exception cleanupError) { AppLogger.LogToGui($"Generic joystick cleanup: {cleanupError.Message}", true); }
                 }
                 ViiperUsbipPortManager.UnregisterActivePort(usbipPort);
 
@@ -11090,7 +11088,7 @@ namespace DS4Windows
                 if (GenericJoystickContract.ReadConfigured(args, expectedNeutral, expectedInstanceId)) return;
                 Thread.Sleep(25);
             } while (deadline.ElapsedMilliseconds < 5000);
-            throw new IOException("Windows did not configure the experimental joystick before the input deadline.");
+            throw new IOException("Windows did not configure the generic joystick before the input deadline.");
         }
 
         public bool GetMicrophoneInterfaceActive(uint busId, string devId)

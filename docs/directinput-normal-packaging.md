@@ -7,11 +7,10 @@ assignments. See [the current design and migration rules](directinput-developmen
 Earlier dated evidence retains its original scope; native/game acceptance of the
 sixteen-button candidate is still required before release.
 
-This work prepares and checks the standard package paths while keeping generic
-joystick activation restricted to the matched preview. The generated normal
-artifacts are **packaging proofs**, not a generic-joystick release candidate.
-They retain the compiled released VIIPER 0.1.11 pin; they must not be offered as
-a replacement for the feature backend used by the working r8 preview.
+Current standard local builds use the registered joystick with a matched,
+hash-pinned VIIPER 0.1.19 backend. The portable app starts via
+`DS4Windows.exe` and the installer uses the regular managed backend setup.
+The packaging proof below records the earlier VIIPER 0.1.11 test.
 
 ## Implemented checks
 
@@ -27,9 +26,8 @@ a replacement for the feature backend used by the working r8 preview.
 - CI runs synthetic package regressions and checks its actual portable ZIP and
   MSI input tree. Existing complete installer provenance, source/license,
   localization and Burn validation remains in place.
-- A regression exercises the real normal-launch `Connect` path: preview output
-  is refused, remains disconnected and preserves saved joystick choices. It
-  does not launch a backend or create an output device.
+- A regression exercises the normal-launch `Connect` path. A joystick without
+  a bound controller fails before starting the backend and preserves saved choices.
 
 ## Automated evidence and its limits
 

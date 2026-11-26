@@ -36,7 +36,7 @@ public class GenericJoystickOutputIntegrationAuditTests
         {
             using var document = JsonDocument.Parse(json);
             var error = Assert.ThrowsExactly<IOException>(() => GenericJoystickContract.ReadConfigured(document.RootElement, new short[6]));
-            StringAssert.Contains(error.Message, "matched DirectInput preview package");
+            StringAssert.Contains(error.Message, "bundled VIIPER backend");
         }
     }
 

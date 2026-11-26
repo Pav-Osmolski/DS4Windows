@@ -36,7 +36,7 @@ namespace DS4Windows
             if (!Enum.IsDefined(Layout) || !Enum.IsDefined(TriggerMode) ||
                 ButtonCount != 16 ||
                 ButtonThreshold < 1 || ButtonThreshold > 255)
-                throw new ArgumentException("Invalid experimental joystick configuration.");
+                throw new ArgumentException("Invalid generic joystick configuration.");
             for (int output = 0; output < 16; output++)
                 if (SourceFor(output) > 14) throw new ArgumentException("Unknown joystick button source.");
             if (TriggerMode == GenericJoystickTriggerMode.Combined &&

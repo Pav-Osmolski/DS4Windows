@@ -21,7 +21,7 @@ public sealed class ControllerOverviewAudioTests
         Model(new PhysicalDevice(InputDeviceType.DualSense, ConnectionType.USB));
 
     [TestMethod]
-    public void JoystickOverviewNamesSavedOutputButRefusesActivationOutsidePreview()
+    public void JoystickOverviewEnablesNormalOutputAndRequestsProfileReload()
     {
         var previous = Global.OutContType[0];
         var previousTemp = Global.outDevTypeTemp[0];
@@ -30,15 +30,20 @@ public sealed class ControllerOverviewAudioTests
             Assert.IsFalse(PortableLabContext.IsActive);
             var model = JoystickOverviewModel();
             var choice = model.OutputControllerChoices.Single(c => c.Type == OutContType.ViiperGenericJoystick);
-            Assert.IsFalse(choice.IsEnabled);
+            Assert.IsTrue(choice.IsEnabled);
             Global.OutContType[0] = OutContType.ViiperGenericJoystick;
             Assert.AreEqual(choice.Name, model.SelectedOutputControllerName);
             Global.OutContType[0] = OutContType.ViiperX360;
             int changes = 0;
-            model.QuickProfileSettingChanged += (_, _) => changes++;
+            model.QuickProfileSettingChanged += (_, e) =>
+            {
+                changes++;
+                Assert.IsTrue(e.RequiresProfileReload);
+                Assert.AreEqual(OutContType.ViiperGenericJoystick, e.RequestedOutputController);
+            };
             model.SelectedOutputController = OutContType.ViiperGenericJoystick;
-            Assert.AreEqual(OutContType.ViiperX360, model.SelectedOutputController);
-            Assert.AreEqual(0, changes);
+            Assert.AreEqual(OutContType.ViiperGenericJoystick, model.SelectedOutputController);
+            Assert.AreEqual(1, changes);
         }
         finally { Global.OutContType[0] = previous; Global.outDevTypeTemp[0] = previousTemp; }
     }

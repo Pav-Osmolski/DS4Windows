@@ -14,7 +14,7 @@ folder layout. The lab deliberately disables automatic HidHide configuration.
 
 1. Connect your physical controller. Create a NEW profile with a normal gamepad
    preset (not a mouse/keyboard preset). Name it DirectInput Test.
-2. In Advanced, choose Generic joystick (preview). Start with Legacy games and
+2. In Advanced, choose Generic joystick. Start with Legacy games and
    Centred triggers. Save and assign this profile to the controller. Keep Output
    Slots on Dynamic for these tests.
 3. Open Windows joy.cpl and select the VIIPER generic joystick, not the physical
