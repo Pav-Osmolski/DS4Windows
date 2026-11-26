@@ -2,18 +2,18 @@ VIIPER bundled artifact provenance
 
 Version: v0.1.19
 Source: https://github.com/Pav-Osmolski/VIIPER
-Source commit: 76405f8a2a5987a94c32cf340aba13098d861f90
+Source commit: 4c3d5661f53b82490d7a2ed45ce6dbd878e4d8e3
 Toolchain: Go 1.27.2 windows/amd64
 Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
-Embedded commit: 76405f8a2a5987a94c32cf340aba13098d861f90
-Embedded build date: 2026-11-26T09:56:38Z
-Embedded VCS revision: 76405f8a2a5987a94c32cf340aba13098d861f90
-Embedded VCS time: 2026-11-26T09:55:07Z
+Embedded commit: 4c3d5661f53b82490d7a2ed45ce6dbd878e4d8e3
+Embedded build date: 2026-11-26T14:34:02Z
+Embedded VCS revision: 4c3d5661f53b82490d7a2ed45ce6dbd878e4d8e3
+Embedded VCS time: 2026-11-26T14:30:32Z
 Embedded VCS modified: false
 PE file version: 0.1.19.0
 PE product version: 0.1.19
 Binary: VIIPER-0.1.19-x64.exe
-Binary SHA-256: 7153D6D95494B68821FF90796D1F55957E087E1EF315D958D678CAC61FC14115
+Binary SHA-256: 66B8378917C31436DFA76866E0079EEB98BE974646D2F01EC62871227AD20886
 Authenticode status at packaging: NotSigned
 License notice: VIIPER-0.1.19-LICENSES.txt
-License notice SHA-256: B12BEFB94A195F752E307BABDAF94F8D7D695FA513D7E489EE3CB21165B6B20D
+License notice SHA-256: 029ED367BDD17BEDF22570C92E240C3AEA98566109697EB0131813BB9D315464

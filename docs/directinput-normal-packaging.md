@@ -51,7 +51,7 @@ that integration and cannot substitute for this acceptance test.
 
 ## Coordinated backend promotion
 
-Before generic joystick can be enabled in normal packages:
+Before publishing the matched releases:
 
 1. Adopt the approved production USB identity and decide the multi-controller
    compatibility scope recorded in the identity audit.
@@ -65,13 +65,12 @@ Before generic joystick can be enabled in normal packages:
    Preserve existing hash, ownership, signing and recovery requirements.
 4. Build and validate both standard formats. Then validate clean installation,
    upgrade/repair, actual built-in HidHide, output switching and exit cleanup on
-   the matched candidate before approving normal activation or publication.
+   the matched candidate before publishing VIIPER first and DS4Windows second.
 
 The USB/IP serial-completion fix remains a separate controlled retest when a
 packaged fixed driver is available. See the [identity audit](directinput-identity-audit.md)
-and [release checklist](directinput-release-checklist.md). No normal activation,
-backend promotion, driver installation, merge or release occurs as part of this
-packaging preparation.
+and [release checklist](directinput-release-checklist.md). The matched 5.0.84
+and 0.1.19 packages have been built and checked locally.
 
 ### Read-only promotion rehearsal
 

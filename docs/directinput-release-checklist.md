@@ -26,6 +26,12 @@ branch revisions, CI evidence, package-validator correction and release gates.
   switch from emulated DualSense to Generic Joystick in output slot 1. Game
   input and bindings after restart still need checking with this build.
 
+- Current synthetic checks on 2026-11-26: 252 DS4Windows tests passed, including
+  profile reload, output mapping and HidHide ownership. The installer upgrade
+  and repair simulation and the offline package validator passed. VIIPER
+  passed five repeated runs with two registered devices over localhost USB/IP,
+  preserving distinct serials, independent reports and the recreated device's
+  serial. Windows GUID assignment and game-visible hiding still need native checks.
 - Native synthetic input: all 156 observations and 312 x86/x64 DirectInput/WinMM
   comparisons passed across two layouts and four trigger modes.
 - USB DualSense: the owner confirmed the complete layout/trigger matrix, profile
@@ -53,12 +59,11 @@ automated checks and the distinction between logs and user observations.
   [pid.codes PR #1317](https://github.com/pidcodes/pidcodes.github.com/pull/1317),
   submitted on 2026-10-15.
 - [x] Confirm acceptance and adopt [1209:D10C](https://pid.codes/1209/D10C/) in
-  the matched sixteen-button preview. Allocation was approved on 2026-11-25.
+  the standard sixteen-button build. Allocation was approved on 2026-11-25.
   Existing `FFFF:D10C`/`FFFF:D110` remain lab IDs.
-- [ ] Freeze the approved sixteen-button descriptor and validate its native
-  enumeration and game bindings before enabling normal activation.
-- [ ] Freeze the production descriptor, strings and versioning policy; document
-  that old preview game bindings may need to be recreated for the new identity.
+- [x] Keep the fixed sixteen-button descriptor and document the
+  [USB identity compatibility policy](https://github.com/Pav-Osmolski/VIIPER/blob/main/docs/devices/genericjoystick.md#usb-identity-compatibility).
+  The setup guide explains when old lab bindings may need to be recreated.
 - [ ] Repeat native enumeration, resting-axis checks and binding persistence
   using the actual production identity. Test two simultaneous controllers and
   reconnect ordering before claiming stable multi-controller bindings.
@@ -119,7 +124,8 @@ driver or submitting an external identity request.
 
 The [identity investigation](directinput-identity-audit.md) records the completed
 synthetic test and read-only Windows/transport research. Input isolation passed,
-but removing A reassigns B's DirectInput GUID along with its joystick slot.
+but removing A reassigned B's DirectInput GUID along with its joystick slot
+under the lab identity.
 Distinct USB serials and HID paths persisted. This is still an identity-test
 failure; no registry or transport workaround has been applied.
 

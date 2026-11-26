@@ -1,11 +1,13 @@
-# Generic joystick development
+# Generic Joystick development
 
 ## Fixed sixteen-button design (2026-10-26)
 
 The current DS4Windows feature uses one fixed shape: six axes, sixteen buttons
-and one POV hat. Earlier dated results below describe their original test builds;
-they do not establish native Windows or game acceptance of the sixteen-button
-candidate. Repeat those checks with the current matched preview before release.
+and one POV hat. Standard 5.0.84 packages pair with VIIPER 0.1.19 and use
+[1209:D10C](https://pid.codes/1209/D10C/). See the
+[release checklist](directinput-release-checklist.md) for the current evidence
+and pending Windows and game checks. Dated results below describe their
+original test builds.
 
 New profiles retain buttons 1–12 in their existing order, with PS/Guide on 13,
 touchpad click on 14 and 15–16 unassigned. The numbered-button editor can assign
@@ -19,21 +21,11 @@ separate work; this change does not yet add its axis arrangement or preset.
 Profile schema 2 stores all sixteen assignments. Schema-1 twelve-button profiles
 upgrade to sixteen with outputs 13–16 unassigned, retaining their old behaviour.
 Unknown versions, invalid sources and mismatched backend counts fail closed.
-The existing sixteen-button backend uses lab PID `FFFF:D110`; the requested
-production identity `1209:D10C` remains pending and must not be used yet. The
-PID request now describes the fixed sixteen-button production descriptor.
-Changing from the earlier lab device can require rebinding games.
-
-Normal activation stays gated to the matched portable preview. Supporting every
-currently supported physical controller means using the shared mapped-input
-path, not requiring sixteen physical buttons. Synthetic checks cannot certify
-every model/transport or every game; native and physical acceptance remain release
-gates, along with normal installation, HidHide and multi-controller identity work.
-
-
-Status: experimental foundation on `feature/directinput-output` in both
-DS4Windows and VIIPER. This is **not yet a selectable Profile Editor output**
-and is not included in the current release.
+Historical lab descriptors retain their separate IDs. Moving from a lab
+device to the registered joystick may require rebinding games. The current
+output is available in Overview and the Profile Editor in standard packages.
+It uses the shared mapped-input path, including for controllers with fewer
+than sixteen physical buttons.
 
 ### Validation of this change
 
@@ -340,8 +332,9 @@ The next stage is tracked in the [release checklist](directinput-release-checkli
 The tested twelve-button prototype is the first release target. A concrete
 pid.codes request was submitted with owner authorization as
 [PR #1317](https://github.com/pidcodes/pidcodes.github.com/pull/1317) on 2026-10-15.
-It remains pending approval; its proposed identity must not be used yet. The optional
-sixteen-button descriptor remains lab-only and requires a separate identity.
+At that point the request covered twelve buttons, with sixteen buttons available
+only in the lab. The submitted request was later amended to sixteen buttons and
+approved on 2026-11-25.
 
 Normal automatic HidHide already recognizes the joystick through the common
 VIIPER output path. Its behaviour remains untested for this output because the
@@ -354,7 +347,7 @@ It found and fixed missing generic-joystick mapping labels and added an
 explanation of the binding diagram's canonical targets. No descriptor, mapper,
 protocol or release-gate change is part of that audit.
 
-The [preview guide](directinput-preview-guide.md) describes the axis layouts,
+The [setup guide](directinput-preview-guide.md) describes the axis layouts,
 trigger modes, button numbers, tested game configurations and device-visibility
 limits for testers using the matched package.
 

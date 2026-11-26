@@ -1,19 +1,14 @@
 # Generic Joystick setup and game testing
 
-## Current design
-
-The current feature uses a fixed sixteen-button device with per-profile numbered
-assignments. See [the current design and migration rules](directinput-development.md#fixed-sixteen-button-design-2026-10-26).
-Earlier dated evidence retains its original scope; native/game acceptance of the
-sixteen-button candidate is still required before release.
-
 The **Generic Joystick** output presents an input-only USB HID joystick to games
-using DirectInput or WinMM. It is available in standard installed and portable
-builds that bundle the matching VIIPER 0.1.19 backend.
-Windows sees **VIIPER Generic Joystick** using registered USB VID:PID
-[1209:D10C](https://pid.codes/1209/D10C/). It provides six axes, sixteen buttons
-and a POV hat. It provides no XInput
-emulation, game force feedback or audio interfaces.
+using DirectInput or WinMM. It is available in the standard installer and
+portable ZIP from DS4Windows 5.0.84 with its bundled VIIPER 0.1.19 backend.
+Windows sees **VIIPER Generic Joystick** with USB VID:PID
+[1209:D10C](https://pid.codes/1209/D10C/). The device provides six absolute
+axes, sixteen buttons and one eight-direction POV hat. It is input-only and
+has no XInput, force feedback or audio interfaces. The USB identity applies
+to this fixed device and compatible revisions. Profile settings leave the
+advertised layout intact.
 
 ## Start with a separate profile
 
@@ -85,22 +80,20 @@ Steam Input state and whether the physical controller is also visible.
 
 ## Physical-device visibility and remaining limits
 
-The app normally has built-in HidHide integration. The isolated preview
-deliberately bypasses it, so its tests do not prove automatic physical-device
-hiding. A game may see both the real controller and the virtual joystick;
-confirm which one it is using when reporting results. No separate hiding
-configuration is automatically applied by this launcher.
+Use DS4Windows' built-in HidHide controls to hide the physical controller
+from games that would otherwise see both devices. Before launching a game,
+check which controller is visible in **Overview > Control Panel**. If you
+tested an earlier lab build, Windows may see the registered device as new
+and the game may need new bindings.
 
-The USB identity is still experimental. The requested production identity is
-[pending allocation](https://github.com/pidcodes/pidcodes.github.com/pull/1317).
-When it changes, Windows and games can see a new device and require new bindings.
-Force feedback and arbitrary HID descriptors are outside this
-preview. See the [release checklist](directinput-release-checklist.md) for the
-remaining normal-installation validation.
+The 5.0.84 portable test confirmed that DS4Windows applied its HidHide rule
+to a USB DualSense and switched to Generic Joystick. Verification from a game
+and installed upgrade and repair checks are tracked in the
+[release checklist](directinput-release-checklist.md).
 
 ## Multiple joysticks and saved bindings
 
-The synthetic two-device test passed distinct input, buttons/hat isolation,
+The earlier native Windows lab passed distinct input, buttons/hat isolation,
 producer reconnect, device recreation and reversed creation order in x86/x64
 DirectInput and WinMM. USB serials and HID paths remained distinct and stable
 through that run. However, removing the first joystick caused the remaining
@@ -115,6 +108,11 @@ checked after output devices are added or removed. Configure the intended
 outputs before launching a game. No saved game-binding test has yet established
 whether a particular title is affected. See the
 [development evidence](directinput-development.md#completed-opened-device-comparison-r4).
+
+A follow-up with two registered devices over localhost USB/IP confirmed
+distinct USB serials and independent input during removal and recreation.
+That test used a userspace USB/IP client, so Windows DirectInput GUID retention
+with the registered identity remains unverified.
 
 The refreshed r8 matched app preview was also checked by the owner after the
 per-controller USB serial change. The owner reported it observably worked fine

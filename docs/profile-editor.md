@@ -272,6 +272,10 @@ you use it.
 | Input | Mouse mapping sensitivity/acceleration, touchpad toggle, debouncing, absolute mouse options and live readout selection |
 | Connection | Idle Bluetooth disconnect, DS4 Bluetooth polling preference and launching a program with the profile |
 
+Choose **Generic Joystick** under **Emulated controller** to configure axis
+layout, trigger behaviour and numbered button assignments. See the
+[Generic Joystick setup guide](directinput-preview-guide.md).
+
 Hardware-specific controls follow the physical controller. **Send game feedback
 to physical controller** enables the return path for supported game effects;
 turning it off can remove rumble, haptics, triggers and game lighting. Reconnect

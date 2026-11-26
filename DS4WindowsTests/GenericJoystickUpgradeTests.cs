@@ -86,6 +86,41 @@ public class GenericJoystickUpgradeTests
         finally { Global.appdatapath = previousRoot; Directory.Delete(directory, true); }
     }
 
+    [TestMethod]
+    public void SavedProfileKeepsTheSameGameFacingControlsAfterReload()
+    {
+        var original = new BackingStore();
+        original.outputDevType[0] = OutContType.ViiperGenericJoystick;
+        original.genericJoystickSettings[0].Options = (GenericJoystickOptions.Default with
+        {
+            Layout = GenericJoystickLayout.Racing,
+            TriggerMode = GenericJoystickTriggerMode.FullRange,
+            InvertLeftTrigger = true,
+            ButtonMap = 0
+        }).WithButtonSource(15, 1);
+
+        var reopened = SaveAndReload(original);
+        Assert.AreEqual(OutContType.ViiperGenericJoystick, reopened.outputDevType[0]);
+        var pressed = new DS4State
+        {
+            LX = 255, LY = 128, RX = 0, RY = 128, L2 = 255,
+            Cross = true, DpadUp = true, DpadRight = true
+        };
+        var released = new DS4State { LX = 128, LY = 128, RX = 128, RY = 128 };
+        foreach (var store in new[] { original, reopened })
+        {
+            var options = store.genericJoystickSettings[0].Options;
+            Assert.AreEqual(new GenericJoystickFrame(32767, 0, -32767, -32767, 0, -32767, 0x8000, 1),
+                Project(pressed, options));
+            Assert.AreEqual(new GenericJoystickFrame(0, 0, 32767, 0, 0, -32767, 0, 8),
+                Project(released, options));
+        }
+
+        static GenericJoystickFrame Project(DS4State state, GenericJoystickOptions options) =>
+            GenericJoystickMappedBridge.Build(
+                ViiperStatePacketBuilder.BuildMappedState(state, -1, followDigitalTriggers: false), options);
+    }
+
     private static BackingStore SaveAndReload(BackingStore source)
     {
         string previousRoot = Global.appdatapath;

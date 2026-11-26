@@ -21,80 +21,53 @@ Controller remapping, advanced feedback, and per-game profiles for Windows.
 
 ## Why this fork exists
 
-This fork continues DS4Windows development with a focus on usability, reliability and ongoing maintenance. The aim is to make its extensive controller features easier to configure and troubleshoot, while keeping the application, VIIPER backend and updater working together.
+I’m building this fork as the actively maintained successor to earlier DS4Windows versions. The work focuses on fixing long-standing controller, profile and connection bugs and adding features users have asked for. DS4Windows, its VIIPER backend and DS4Updater are maintained together so setup, controller emulation and updates work as a matched package.
 
-Major improvements include:
+### Major improvements
 
-- **A clearer, consistent interface:** Searchable Settings with remembered navigation, a reorganized Profile Editor, clearer Controller Readings and live readings alongside Axis Config. Improved spacing, scrolling and Dark/Light theme consistency across the app.
-- **More useful Output Slots:** Clear slot numbers and controller information, wrapping text, automatic column fitting and remembered manual widths, with smoother resizing.
-- **Safer profile handling:** Preserve existing profiles when saves fail, explain save and rename errors, and offer retry/discard controls for unsaved Overview changes. Reliably save enabled Special Actions and reduce profile-switching overhead.
-- **More reliable controller cleanup:** Improve Bluetooth and DualShock 3 disconnect/reconnect handling. Retain failed virtual-controller removals for retry, protect replacement bindings, and continue shutdown when another controller or notification handler fails.
-- **More predictable controller feedback:** Respect profile lightbar settings during native DualSense feedback while preserving haptics and adaptive triggers. Add per-profile player/microphone indicators with application pass-through and explicit reapply controls. Correct touchpad-click remapping and passthrough, preserve partial virtual DS4 feedback, and improve virtual keyboard/mouse state handling.
-- **Updated USB/IP and VIIPER integration:** Support the latest usbip-win2 release with a matching, verified VIIPER backend, reviewed upstream improvements, stronger startup checks and controller-import safeguards. Add a saved option to hide VIIPER’s tray icon.
-- **Better diagnostics:** Report USB/IP and HidHide versions, driver states, backend readiness and installed/portable mode. Provide copyable logs, a built-in four-slot XInput controller test, clearer disconnect and repair diagnostics, and optional Profile Editor timing information.
-- **Maintained updates, releases and documentation:** Integrate this fork’s DS4Updater for installed and portable updates. Provide illustrated guides, matching source archives, dependency notices, checksums and build records, backed by reviewed dependency updates, extensive automated tests and installer upgrade checks.
+- **A clearer, more consistent interface.** Search Settings and return to the last page you used. The reorganised Profile Editor puts live readings alongside Axis Config, with more consistent spacing, scrolling and light and dark themes across the app.
+- **More readable Output Slots.** See which physical controller feeds each numbered slot. Long names wrap, and fitted or saved column widths appear on the first frame.
+- **Safer profile editing.** A failed save or rename preserves the original profile. Retry or discard unsaved Overview changes. Enabled Special Actions save reliably, and reusing the profile serializer cuts overhead when switching profiles.
+- **Broader controller compatibility.** Adds USB and Bluetooth input for Switch 2 Pro and Bluetooth support for standalone and paired Joy-Con 2. DualShock 3 mappings can retain pressure sensitivity when mapped to analogue triggers or stick axes. [Controller compatibility](docs/controller-compatibility.md)
+- **More reliable reconnects and shutdown.** Bluetooth and DualShock 3 reconnects recover more reliably after a disconnect. Failed virtual-controller removals can be retried, replacement bindings are protected, and shutdown can continue if one device fails to clean up.
+- **More predictable feedback and passthrough.** Native DualSense haptics and adaptive triggers can run alongside profile lightbar settings and configurable player and mute indicators. Fixes cover touchpad-click remapping and passthrough, partial DualShock 4 feedback packets, and virtual keyboard and mouse state. [Controller audio and feedback](docs/controller-audio.md)
+- **Safer VIIPER and USB/IP setup.** Setup verifies the bundled backend and driver, detects competing startup entries, and can repair known USB/IP leftovers. The app checks backend readiness before presenting virtual controllers and lets you hide the VIIPER tray icon. [Setup and migration](docs/getting-started.md)
+- **Diagnostics you can act on.** See driver versions, backend readiness and whether the app is installed or portable. Copy diagnostic details, test four XInput slots, and capture controller timing or measure Profile Editor loading when investigating a problem. [Log and diagnostics](docs/user-guide.md#log-and-diagnostics)
+- **Coordinated updates and documented releases.** DS4Updater supports both installed and portable copies. Releases include matching source archives, checksums, build records and dependency notices, with illustrated guides and automated installer and upgrade checks. [Release history](CHANGELOG.md)
 
-The fork builds on the work of [hbashton's DS4Windows](https://github.com/hbashton/DS4Windows) and the wider DS4Windows community. Upstream fixes retain their attribution, and improvements suitable for upstream contribution are prepared separately for review.
+The project builds on [hbashton's DS4Windows](https://github.com/hbashton/DS4Windows) and the wider DS4Windows community. See the [changelog](CHANGELOG.md) for fixes, new features and contributor credits.
 
-See the [Changelog](CHANGELOG.md) for release-by-release details and [Documentation](docs/README.md) for setup and usage.
+## What you can do
 
-## Features
+- **Choose the output your game expects.** Use Xbox 360, Xbox One / Series, DualShock 4, DualSense / Edge, or Switch 2 Pro output. **Generic Joystick** supports games that accept DirectInput or WinMM and gives you six axes, sixteen assignable buttons and a POV hat. [Choose an output](docs/controller-compatibility.md#choose-the-controller-the-game-should-see)
+- **Build profiles around how you play.** Remap buttons, sticks, gyro and touchpad to controller, keyboard or mouse inputs. Configure macros, Special Actions and stick response, then use Auto Profiles to switch by game or window title. [Profile Editor guide](docs/profile-editor.md)
+- **Tune controller feedback.** Preview lightbar changes and adaptive-trigger effects, configure Audio Haptics, and forward supported native DualSense feedback. Support depends on the controller, connection and game. [Controller audio and feedback](docs/controller-audio.md)
+- **Manage and troubleshoot your setup.** Name individual controllers, check input and battery status, manage VIIPER, USB/IP and HidHide, and capture diagnostics from the Log page. [App guide](docs/user-guide.md)
 
-- Remap buttons, sticks, touchpad, keyboard, mouse, macros, and special actions.
-- Save per-game profiles and switch them automatically by application or window title.
-- Configure gyro aiming, including stick-based activation/pause, lighting, rumble, audio haptics, and adaptive triggers.
-- Receive native DualSense advanced haptics and adaptive-trigger feedback in supported games, over USB and Bluetooth. USB waveform forwarding remains independent of speaker streaming and Audio Haptics.
-
-Supported inputs include DualShock 3/4, DualSense/Edge, Switch Pro, Joy-Con,
-Switch 2 Pro, and Joy-Con 2. Outputs include Xbox 360, Xbox One/Series,
-DualShock 4, DualSense/Edge, and Switch 2 Pro. Features depend on the
-controller, connection, and game.
+Physical inputs include DualShock 3 and 4, DualSense and DualSense Edge, Switch Pro and Switch 2 Pro, and Joy-Con and Joy-Con 2. See the [controller and connection guide](docs/controller-compatibility.md) for model-specific support.
 
 ## Get started
 
-**Moving from another DS4Windows distribution, including forks by schmaldeo or hbashton?** Back up your
-profiles and settings, disable the old copy's startup entry, and uninstall the
-old installed app or retire its portable folder before using this fork.
+1. Download the **x64 Setup EXE** and follow the prompts. Setup includes the matching VIIPER backend and USB/IP driver. Enable HidHide to help prevent double input, and restart Windows when prompted. [Downloads](https://github.com/Pav-Osmolski/DS4Windows/releases)
+2. Connect your controller, choose a profile, and select the emulated controller your game supports. Xbox 360 is a useful first choice for XInput games. [Getting started](docs/getting-started.md)
+3. For a DirectInput or WinMM game, choose **Generic Joystick** and set the axis layout and trigger mode in the Profile Editor before binding controls in the game. [Generic Joystick guide](docs/directinput-preview-guide.md)
 
-Setup handles replacement of an incompatible USB/IP package and may require a
-Windows restart before continuing. Follow the
-[clean migration steps](docs/getting-started.md#moving-from-another-fork).
+**Requirements** are Windows 10 or 11 x64 and the [Visual C++ x64 runtime](https://aka.ms/vs/17/release/vc_redist.x64.exe). The .NET runtime is bundled.
 
-Routine updates of this fork do not require uninstalling it first.
+**Portable** users can extract the complete x64 ZIP to a writable local folder outside Program Files and open `DS4Windows.exe`. Keep the bundled folders together and use the matching USB/IP driver. [Portable setup](docs/getting-started.md#portable-zip)
 
-1. Download the **x64 Setup EXE** from [Releases](https://github.com/Pav-Osmolski/DS4Windows/releases).
-2. Follow setup to install the bundled VIIPER backend and USB/IP driver. HidHide helps prevent double input; restart if prompted.
-3. Connect your controller and choose a profile and emulated controller. Avoid overlapping Steam Input remapping for the same game.
+**Moving from another DS4Windows fork?** Back up your settings and profiles, then use the migration steps to retire the previous copy and its startup entries. Setup can identify competing startups and help resolve incompatible USB/IP installs. Routine updates within this fork can be applied in place. [Migration guide](docs/getting-started.md#moving-from-another-fork)
 
-**Requirements:** Windows 10 or 11 x64 and the [Visual C++ x64 runtime](https://aka.ms/vs/17/release/vc_redist.x64.exe). The .NET runtime is included.
+## Get help and contribute
 
-For portable use, extract the entire `DS4Windows_<version>_x64.zip`, keeping the
-`Lang` folder with the app. See [Documentation](docs/README.md) for
-setup, update instructions, and troubleshooting. Read the release notes for
-signing status and known limitations.
+- [Troubleshooting](docs/troubleshooting.md) and [illustrated documentation](docs/README.md)
+- [Report a bug](https://github.com/Pav-Osmolski/DS4Windows/issues) or [ask a question](https://github.com/Pav-Osmolski/DS4Windows/discussions)
+- [Contribute](contributing.md) · [Contributors](contributors.md) · [VIIPER backend](https://github.com/Pav-Osmolski/VIIPER) · [DS4Updater](https://github.com/Pav-Osmolski/DS4Updater)
 
-## Support development
+## Credits and licensing
 
-If this fork is useful to you, you can [support Pawel's ongoing work on Ko-fi](https://ko-fi.com/devilhood42). Contributions help support maintenance, bug fixes, controller testing and continued development of this independent fork. Support is entirely optional; DS4Windows remains free and open source.
+Thanks to hbashton, Jays2Kings, Ryochan7, Schmaldeo, and contributors to DS4Windows, VIIPER, USB/IP and controller research. Special thanks to [Nefarius](https://github.com/nefarius) for ViGEm, which powered earlier DS4Windows versions, and HidHide, which helps prevent double input in this fork. [Support Nefarius's projects](https://docs.nefarius.at/Donations/)
 
-Special thanks to [Nefarius](https://github.com/nefarius) for his foundational
-contributions to Windows controller software, including ViGEm, which powered
-earlier DS4Windows versions, and HidHide, which helps prevent double input in
-this fork. This fork now uses VIIPER for virtual-controller output, while
-continuing to benefit from the wider ecosystem he helped build. If his work
-has helped you, please consider [supporting his projects](https://docs.nefarius.at/Donations/).
+DS4Windows combines [GPL-3.0](COPYING) code with [AGPL-3.0-only](AGPL-3.0.txt) code derived from [DS5 Bridge](https://github.com/SundayMoments/DS5_Bridge). See the [DS5 Bridge attribution](DS5-BRIDGE-NOTICE.txt) and [third-party notices](NOTICE.txt) for scope and terms. The [pid.codes allocation](https://pid.codes/1209/D10C/) identifies the VIIPER Generic Joystick.
 
-## Project links
-
-[Report a bug](https://github.com/Pav-Osmolski/DS4Windows/issues) · [Contribute](contributing.md) · [Contributors](contributors.md) · [VIIPER backend](https://github.com/Pav-Osmolski/VIIPER) · [DS4Updater](https://github.com/Pav-Osmolski/DS4Updater)
-
-Use the matching backend bundled with DS4Windows. The updater is optional
-when downloading and installing updates manually.
-
-Thanks to hbashton, Jays2Kings, Ryochan7, Schmaldeo, the DS4Windows community,
-and the contributors to VIIPER, HidHide, usbip-win2, and controller research.
-
-Combines [GPL-3.0](COPYING) code with [AGPL-3.0-only](AGPL-3.0.txt) code
-derived from [DS5 Bridge](https://github.com/SundayMoments/DS5_Bridge).
-See the [DS5 Bridge attribution](DS5-BRIDGE-NOTICE.txt) and
-[third-party notices](NOTICE.txt) for scope and terms.
+DS4Windows is free and open source. If you would like to support my work on maintenance, controller testing and new features, you can [support me on Ko-fi](https://ko-fi.com/devilhood42).

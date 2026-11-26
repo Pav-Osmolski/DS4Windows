@@ -80,7 +80,9 @@ physical and emulated device details. See the [Controller info guide](controller
 
 Create a profile from a preset, then choose the output device the game expects.
 Xbox 360 is a useful starting point for XInput games. Choose DualShock 4 or
-DualSense when the game supports that controller's features. Restart the game
+DualSense when the game supports that controller's features. Choose
+[Generic Joystick](directinput-preview-guide.md) for games that accept
+DirectInput or WinMM joystick input. Restart the game
 after changing output type if it does not detect the new virtual controller.
 
 You can rename, duplicate, import and export profiles from the Profiles page.

@@ -5,9 +5,18 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
-- Add **Generic Joystick** output for DirectInput and WinMM games through the normal DS4Windows launch path. The registered USB device exposes six axes, sixteen buttons and one POV hat. Profiles can configure axis roles, trigger behaviour and numbered button assignments. The standard installer and portable ZIP bundle the matching VIIPER 0.1.19 backend.
-
 ## Released
+
+### [5.0.84](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.84) - 2026-11-26
+
+#### Generic Joystick is here
+
+- After a long wait for the USB Product ID, **Generic Joystick** is now a standard output in DS4Windows. [pid.codes assigned 1209:D10C](https://pid.codes/1209/D10C/) to the VIIPER Generic Joystick. It gives DirectInput and WinMM games six axes, sixteen assignable buttons and a POV hat. Choose Legacy or Racing axis layouts and configure how triggers rest and respond in each profile.
+- A big thank you to [@eVenent](https://github.com/eVenent) for testing an earlier build on DualSense and sharing [Panther XL mappings and dead-zone guidance](https://github.com/Pav-Osmolski/DS4Windows/discussions/64#discussioncomment-19154905). That feedback helped shape the sixteen-button design and gave us useful reference settings for older games.
+- Bundle [VIIPER 0.1.19](https://github.com/Pav-Osmolski/VIIPER/releases/tag/v0.1.19) in the standard installer and portable ZIP. The joystick is input-only. Earlier lab users may need to bind controls again under the registered identity.
+- Refresh the README and setup guides with the current outputs, compatibility limits and testing evidence. Share game results, improvement ideas and exported presets in the [Generic Joystick discussion](https://github.com/Pav-Osmolski/DS4Windows/discussions/64).
+
+Implemented in [DS4Windows PR #24](https://github.com/Pav-Osmolski/DS4Windows/pull/24) and [VIIPER PR #4](https://github.com/Pav-Osmolski/VIIPER/pull/4).
 
 ### [5.0.83](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.83) - 2026-11-25
 

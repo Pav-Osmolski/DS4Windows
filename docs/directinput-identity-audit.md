@@ -9,7 +9,10 @@ sixteen-button candidate is still required before release.
 
 Date: 2026-10-15. Scope: the paired generic-joystick feature branches, USB/IP
 0.9.8.1, and the owner's Windows build 26300. Status: input isolation validated;
-DirectInput GUID persistence during output removal remains unresolved.
+DirectInput GUID persistence during output removal remains unresolved. The
+2026-11-26 localhost USB/IP retest used the registered identity and confirmed
+independent input and stable USB serials after recreation. It used no Windows
+driver and did not measure DirectInput GUIDs.
 
 ## Evidence
 
