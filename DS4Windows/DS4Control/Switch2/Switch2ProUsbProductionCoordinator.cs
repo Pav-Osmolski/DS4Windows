@@ -350,7 +350,8 @@ internal sealed class Switch2ProUsbProductionCoordinator
     {
         if (candidate == null || !candidate.TryGetAdmittedRegistration(
                 out Switch2PhysicalInputRegistration registration) ||
-            registration.Model == Switch2ControllerModel.GameCube && gameCubeEnabled?.Invoke() == false)
+            registration.Model == Switch2ControllerModel.GameCube &&
+                !(gameCubeEnabled?.Invoke() ?? GameCubeDeviceOptions.DefaultEnable))
         {
             return;
         }

@@ -81,8 +81,7 @@ namespace DS4Windows
 
     public sealed class GameCubeDeviceOptions
     {
-        // Preserve discovery when loading settings from before this option.
-        public const bool DefaultEnable = true;
+        public const bool DefaultEnable = false;
         private volatile bool enabled = DefaultEnable;
         public bool Enabled { get => enabled; set => enabled = value; }
     }

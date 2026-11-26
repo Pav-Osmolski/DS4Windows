@@ -30,8 +30,8 @@ On controllers such as DualSense, full L2/R2 travel produces the GameCube
 trigger's digital click. Partial travel stays analog. A physical GameCube
 controller sends travel and clicks separately. Open **Device Options** and
 enable **GameCube Controller Support** to allow new physical USB and Bluetooth
-connections. This setting is enabled by default. The virtual output remains
-available independently.
+connections. Physical GameCube support is off by default. The virtual output
+remains available independently.
 
 Physical GameCube input can use the gyroscope and accelerometer over Bluetooth.
 Physical USB input supports the controls and rumble. GameCube emulation can

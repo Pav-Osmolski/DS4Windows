@@ -865,7 +865,8 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
     }
 
     private bool CanUseModel(Switch2ControllerModel model) =>
-        model != Switch2ControllerModel.GameCube || gameCubeEnabled?.Invoke() != false;
+        model != Switch2ControllerModel.GameCube ||
+        (gameCubeEnabled?.Invoke() ?? GameCubeDeviceOptions.DefaultEnable);
 
     private void OnCandidate(Switch2BluetoothCandidateObservation observation)
     {

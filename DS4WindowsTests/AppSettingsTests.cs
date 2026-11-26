@@ -191,16 +191,19 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        public void GameCubeSupportDefaultsToEnabledAndRetainsAnExplicitDisable()
+        [DataRow(false)]
+        [DataRow(true)]
+        public void GameCubeSupportDefaultsToDisabledAndRetainsSavedPreferences(bool enabled)
         {
             var serializer = new XmlSerializer(typeof(AppSettingsDTO));
             using var legacyReader = new StringReader(appSettingsXml);
             var legacy = (AppSettingsDTO)serializer.Deserialize(legacyReader);
             var store = new BackingStore();
+            Assert.IsFalse(store.deviceOptions.GameCubeDeviceOpts.Enabled);
             legacy.MapTo(store);
-            Assert.IsTrue(store.deviceOptions.GameCubeDeviceOpts.Enabled);
+            Assert.IsFalse(store.deviceOptions.GameCubeDeviceOpts.Enabled);
 
-            store.deviceOptions.GameCubeDeviceOpts.Enabled = false;
+            store.deviceOptions.GameCubeDeviceOpts.Enabled = enabled;
             var saved = new AppSettingsDTO();
             saved.MapFrom(store);
             using var writer = new StringWriter();
@@ -209,7 +212,7 @@ namespace DS4WindowsTests
             var roundTrip = (AppSettingsDTO)serializer.Deserialize(reader);
             var restored = new BackingStore();
             roundTrip.MapTo(restored);
-            Assert.IsFalse(restored.deviceOptions.GameCubeDeviceOpts.Enabled);
+            Assert.AreEqual(enabled, restored.deviceOptions.GameCubeDeviceOpts.Enabled);
         }
 
         [TestMethod]
