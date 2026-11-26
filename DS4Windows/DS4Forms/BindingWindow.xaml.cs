@@ -989,9 +989,11 @@ namespace DS4WinWPF.DS4Forms
                     button.Width, button.Height);
             }
 
-            Geometry highlightGeometry = localGeometry.Clone();
-            highlightGeometry.Transform = new TranslateTransform(left, top);
-            return highlightGeometry;
+            return new GeometryGroup
+            {
+                Children = { localGeometry },
+                Transform = new TranslateTransform(left, top)
+            };
         }
 
         private void SetOutputButtonBounds(Button button, double left,
@@ -1549,12 +1551,12 @@ namespace DS4WinWPF.DS4Forms
             const double offsetX = (630 - GameCubeArtwork.Width * scale) / 2;
             Place(aBtn, GameCubeArtwork.A);
             Place(bBtn, GameCubeArtwork.B);
-            Place(xBtn, GameCubeArtwork.X);
-            Place(yBtn, GameCubeArtwork.Y);
-            Place(ltBtn, GameCubeArtwork.L);
-            Place(rtBtn, GameCubeArtwork.R);
-            Place(lbBtn, GameCubeArtwork.ZL);
-            Place(rbBtn, GameCubeArtwork.Z);
+            PlaceOutline(xBtn, GameCubeArtwork.X);
+            PlaceOutline(yBtn, GameCubeArtwork.Y);
+            PlaceOutline(ltBtn, GameCubeArtwork.L);
+            PlaceOutline(rtBtn, GameCubeArtwork.R);
+            PlaceOutline(lbBtn, GameCubeArtwork.ZL);
+            PlaceOutline(rbBtn, GameCubeArtwork.Z);
             Place(startBtn, GameCubeArtwork.Start);
             Place(lsuBtn, GameCubeArtwork.StickUp);
             Place(lsrBtn, GameCubeArtwork.StickRight);
@@ -1574,6 +1576,9 @@ namespace DS4WinWPF.DS4Forms
             Rear(backBtn, "Capture", 266, 52);
             Rear(guideBtn, "Home", 321, 42);
             Rear(touchpadClickBtn, "C", 367, 26);
+
+            void PlaceOutline(Button button, Geometry outline) =>
+                AssignOutputCanvasGeometry(button, GameCubeArtwork.ScaleOutline(outline, scale, offsetX));
 
             void Place(Button button, Rect rect) =>
                 SetOutputButtonBounds(button, offsetX + rect.X * scale,

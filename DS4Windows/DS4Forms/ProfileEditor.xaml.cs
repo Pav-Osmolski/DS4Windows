@@ -472,12 +472,12 @@ namespace DS4WinWPF.DS4Forms
 
             Place(crossConBtn, GameCubeArtwork.A, true);
             Place(circleConBtn, GameCubeArtwork.B, true);
-            Place(squareConBtn, GameCubeArtwork.X, true);
-            Place(triangleConBtn, GameCubeArtwork.Y, true);
-            Place(l2ConBtn, GameCubeArtwork.L);
-            Place(r2ConBtn, GameCubeArtwork.R);
-            Place(l1ConBtn, GameCubeArtwork.ZL);
-            Place(r1ConBtn, GameCubeArtwork.Z);
+            PlaceOutline(squareConBtn, GameCubeArtwork.X);
+            PlaceOutline(triangleConBtn, GameCubeArtwork.Y);
+            PlaceOutline(l2ConBtn, GameCubeArtwork.L);
+            PlaceOutline(r2ConBtn, GameCubeArtwork.R);
+            PlaceOutline(l1ConBtn, GameCubeArtwork.ZL);
+            PlaceOutline(r1ConBtn, GameCubeArtwork.Z);
             Place(optionsConBtn, GameCubeArtwork.Start, true);
             Place(lsuConBtn, GameCubeArtwork.StickUp);
             Place(lsrConBtn, GameCubeArtwork.StickRight);
@@ -492,9 +492,10 @@ namespace DS4WinWPF.DS4Forms
             Place(downConBtn, GameCubeArtwork.DpadDown);
             Place(leftConBtn, GameCubeArtwork.DpadLeft);
 
-            PlaceRearControl(captureConBtn, "Capture", 120);
-            PlaceRearControl(guideConBtn, "Home", 194);
-            PlaceRearControl(switch2CConBtn, "C", 246);
+            // The top buttons remain available in the mapping list.
+            highlightControlDisplayLb.Content = string.Empty;
+            controllerDiagramControlNames[DS4Controls.Capture] = "Capture";
+            controllerDiagramControlNames[DS4Controls.PS] = "Home";
             controllerDiagramControlNames[DS4Controls.Cross] = "A";
             controllerDiagramControlNames[DS4Controls.Circle] = "B";
             controllerDiagramControlNames[DS4Controls.Square] = "X";
@@ -510,23 +511,21 @@ namespace DS4WinWPF.DS4Forms
             void Place(Button button, Rect rect, bool ellipse = false)
             {
                 const double scale = 440 / GameCubeArtwork.Width;
-                PlaceAt(button, new Rect(rect.X * scale, rect.Y * scale,
-                    rect.Width * scale, rect.Height * scale), ellipse);
+                Rect scaled = new(rect.X * scale, rect.Y * scale,
+                    rect.Width * scale, rect.Height * scale);
+                PlaceShape(button, ellipse ?
+                    new EllipseGeometry(scaled) : new RectangleGeometry(scaled, 4, 4));
             }
 
-            void PlaceRearControl(Button button, string label, double left)
-            {
-                PlaceAt(button, new Rect(left, 294, label == "Capture" ? 66 : 44, 27), false);
-                button.Content = label;
-            }
+            void PlaceOutline(Button button, Geometry outline) =>
+                PlaceShape(button, GameCubeArtwork.ScaleOutline(outline, 440 / GameCubeArtwork.Width));
 
-            void PlaceAt(Button button, Rect rect, bool ellipse)
+            void PlaceShape(Button button, Geometry geometry)
             {
-                SetCanvasButtonBounds(button, rect.X, rect.Y, rect.Width, rect.Height);
+                Rect bounds = geometry.Bounds;
+                SetCanvasButtonBounds(button, bounds.X, bounds.Y, bounds.Width, bounds.Height);
                 button.Visibility = Visibility.Visible;
-                vectorHoverGeometries[button] = ellipse ?
-                    EllipseHighlight(rect.X, rect.Y, rect.Width, rect.Height) :
-                    RoundedHighlight(rect.X, rect.Y, rect.Width, rect.Height);
+                vectorHoverGeometries[button] = geometry;
             }
         }
 
@@ -1473,6 +1472,8 @@ namespace DS4WinWPF.DS4Forms
                 else
                 {
                     HideControllerHover();
+                    if (controllerDiagramKind == ControllerDiagramKind.GameCube)
+                        UpdateHighlightLabel(mappingListVM.Mappings[mappingListVM.SelectedIndex]);
                 }
             }
 
