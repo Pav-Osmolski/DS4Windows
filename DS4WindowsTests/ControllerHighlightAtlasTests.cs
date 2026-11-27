@@ -231,8 +231,10 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        public void EveryNonDualSenseHighlightStaysOnControllerArtwork()
+        public void ConfigHighlightsStayOnControllerArtwork()
         {
+            AssertAtlasStaysOnArtwork("DualSense Config.png", 880, 440,
+                "DualSense-Config_Highlights.png", 440, 220);
             AssertAtlasStaysOnArtwork("DualShock 4 Controller.png", 384, 247,
                 "DualShock4-Config_Highlights.png", 440, 220);
             AssertAtlasStaysOnArtwork("DualSense Edge Controller.png", 1558,
@@ -411,6 +413,14 @@ namespace DS4WindowsTests
             int frameWidth, int frameHeight)
         {
             BitmapSource artwork = LoadResource(artworkName);
+            if (artwork.PixelWidth != artworkWidth || artwork.PixelHeight != artworkHeight)
+            {
+                // Compare at the logical dimensions used by the hotspot layout.
+                artwork = new TransformedBitmap(artwork, new ScaleTransform(
+                    (double)artworkWidth / artwork.PixelWidth,
+                    (double)artworkHeight / artwork.PixelHeight));
+            }
+
             byte[] artworkAlpha = AlphaPixels(artwork);
             BitmapSource atlas = LoadResource(atlasName);
             int frameCount = atlas.PixelHeight / frameHeight;

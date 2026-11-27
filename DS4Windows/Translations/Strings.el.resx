@@ -1355,7 +1355,7 @@ Example: whyme_DS4Windows</value>
     <value>Προηγμένη υποστήριξη</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[ΕΠΙΠΕΙΡΗ] Χρησιμοποιήστε την προσομοίωση gyro DS3</value>
+    <value>Εκτίμηση πρόνευσης και διατοιχισμού</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Χρησιμοποιήστε τη βαθμονόμηση</value>
@@ -4113,8 +4113,8 @@ Example: whyme_DS4Windows</value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Καθορίστε πρώτα τις ενέργειες κυλίνδρου στο κουμπί Χαρτογράφησης. πατήστε κυλίνδρους μία φορά.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Πειραματική συμβατότητα</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Κίνηση DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Εικονική έξοδο, πρόσβαση φυσικού ελέγχου και προτιμήσεις σύνδεσης.</value>
@@ -6320,8 +6320,8 @@ Example: whyme_DS4Windows</value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Νεκρή Ζώνη X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Εκτιμά το pitch και τον κύλινδρο του DS3 από την είσοδο του επιταχυνόμετρου ενώ ο χειρισμός gyro είναι ενεργός.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Χρησιμοποιεί το επιταχυνσιόμετρο του DualShock 3 για να εκτιμήσει την πρόνευση και τον διατοιχισμό. Οι γρήγορες κινήσεις του χεριού μπορούν να επηρεάσουν την εκτίμηση.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Νεκρή ζώνη και</value>

@@ -1,8 +1,10 @@
 Controller artwork attribution
 ==============================
 
-The controller thumbnails and DualSense remapping artwork in this directory
-are adapted from Gamepad Asset Pack by AL2009man / Al. Lopez:
+The controller thumbnails and remapping artwork in this directory are adapted
+from Gamepad Asset Pack by AL2009man / Al. Lopez. The higher-resolution
+DualSense and DualShock 4 images and DualShock 4 lightbar mask use the
+original White-Black and Glacier White artwork and rear lightbar asset:
 
 https://github.com/AL2009man/Gamepad-Asset-Pack
 

@@ -2387,9 +2387,9 @@
                         </TabControl>
                         <Border Style="{DynamicResource BridgeCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{lex:Loc Strings:UI_8F25B8C73C45F09E}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
+                                <TextBlock Text="{lex:Loc Strings:UI_C3F69237BF80E047}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                                    <CheckBox Content="{lex:Loc UseDs3PitchRollSim}" IsChecked="{Binding UseDs3PitchRollSim}" ToolTip="{lex:Loc Strings:UI_170E14D35022EECE}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
+                                    <CheckBox Content="{lex:Loc UseDs3PitchRollSim}" IsChecked="{Binding UseDs3PitchRollSim}" ToolTip="{lex:Loc Strings:UI_B019C0B703C7AF13}" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>

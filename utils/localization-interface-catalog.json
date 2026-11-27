@@ -4580,8 +4580,8 @@
       "DS4Windows/DS4Forms/ProfileEditor.xaml"
     ]
   },
-  "UI_8F25B8C73C45F09E": {
-    "source": "Experimental compatibility",
+  "UI_C3F69237BF80E047": {
+    "source": "DualShock 3 motion",
     "files": [
       "DS4Windows/DS4Forms/ProfileEditor.xaml"
     ]
@@ -9919,8 +9919,8 @@
       "DS4Windows/DS4Forms/ProfileEditor.xaml"
     ]
   },
-  "UI_170E14D35022EECE": {
-    "source": "Estimates DS3 pitch and roll from accelerometer input while gyro control is active. Experimental.",
+  "UI_B019C0B703C7AF13": {
+    "source": "Uses the DualShock 3 accelerometer to estimate pitch and roll. Quick hand movements can affect the estimate.",
     "files": [
       "DS4Windows/DS4Forms/ProfileEditor.xaml"
     ]

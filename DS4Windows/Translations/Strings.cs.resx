@@ -1326,7 +1326,7 @@
     <value>Pokročilá podpora</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[EXPERIMENTÁLNÍ] Použití DS3 gyro simulace</value>
+    <value>Odhad náklonu a klopení</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Vyzkoušejte kalibraci</value>
@@ -4084,8 +4084,8 @@ Zálohování : </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Nejprve přiřaďte kroky posouvání v tlačítku Mapování.Klepněte na posouvání jednou; Držte pokračuje v posouvání.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Experimentální kompatibilita</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Pohyb ovladače DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Virtuální výstup, přístup fyzického ovladače a preference připojení.</value>
@@ -6291,8 +6291,8 @@ Zálohování : </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Mrtvá zóna X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Odhaduje DS3 pitch a roll z akcelerometru vstupu, zatímco gyro ovládání je aktivní.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>K odhadu náklonu a klopení používá akcelerometr ovladače DualShock 3. Rychlé pohyby rukou mohou odhad ovlivnit.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Mrtvá zóna a</value>

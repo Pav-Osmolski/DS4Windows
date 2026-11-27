@@ -1335,7 +1335,7 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
     <value>先進支援</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>使用 DS3 Gyro 模擬</value>
+    <value>估算俯仰和側傾</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>點選校準</value>
@@ -4093,8 +4093,8 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>在按鈕地圖中先分配滾動操作. 點選滾動一次; 保持繼續滾動。</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>實驗性相容性</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>DualShock 3 動態感應</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>虛擬輸出、物理控制器訪問和連線偏好。</value>
@@ -6301,8 +6301,8 @@ Maps the controller output to mixed XInput gamepad + RS mouse.</value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>死區X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>透過加速計輸入估計DS3的點和滾動,而生動控制是活躍的。</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>使用 DualShock 3 的加速度計估算俯仰和側傾。快速移動手部可能影響估算結果。</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>死區和</value>

@@ -1329,7 +1329,7 @@
     <value>תמיכה מתקדמת</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>תגיות: DS3 gyro simulation</value>
+    <value>הערכת עלרוד וגלגול</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>תגית: calibration</value>
@@ -4087,8 +4087,8 @@
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>להקצות פעולות סריקה ב- Button Mapping קודם.Tap scrolls once; Hold keeps scrolling.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>תאימות ניסוי</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>תנועה ב-DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>יציאה וירטואלית, גישה פיזית-מעבד והעדפות חיבור.</value>
@@ -6294,8 +6294,8 @@
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>אזור המוות X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>מעריך את קפיצה וגלול DS3 מהכניסה של המאיץ בעוד הגירו הוא פעיל.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>משתמש במד התאוצה של DualShock 3 כדי להעריך עלרוד וגלגול. תנועות יד מהירות עלולות להשפיע על ההערכה.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>אזור המוות ו</value>

@@ -378,7 +378,8 @@ namespace DS4WinWPF.DS4Forms
             SetCanvasButtonBounds(downConBtn, 72, 150, 32, 35);
             SetCanvasButtonBounds(leftConBtn, 49, 128, 35, 34);
 
-            SetControllerElementBounds(ds4LightbarColorBtn, 149, 53, 143, 16);
+            // Register the rear lightbar mask to the bar painted on the controller.
+            SetControllerElementBounds(ds4LightbarColorBtn, 146, 54, 147, 16.5);
 
             PopulateDualShock4VectorHighlights();
             PopulateControllerHoverAtlas("DualShock4-Config_Highlights.png",
@@ -2317,28 +2318,6 @@ namespace DS4WinWPF.DS4Forms
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (profileSettingsVM.UseDs3PitchRollSim)
-            {
-                // change controller type to DS4 if the DS3 pitch and roll sim is on
-                profileSettingsVM.TempControllerIndex = 1;
-            }
-
-            if (profileSettingsVM.HasUseDs3PitchRollSimChanged)
-            {
-                var mainWindow = (MainWindow)Application.Current.MainWindow;
-                if (mainWindow is not null)
-                {
-                    var changeServiceTask = Task.Run(() => Dispatcher.InvokeAsync(mainWindow.ChangeService));
-                    changeServiceTask.ContinueWith(_ => Dispatcher.InvokeAsync(() => mainWindow.ChangeService()));
-
-                }
-                else
-                {
-                    MessageBox.Show(global::DS4Windows.UiText.Get("The app has to be restarted for DS3 gyro simulation to work."),
-                        "DS4Windows", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-
             bool saved = ApplyProfileStep(false);
             if (saved)
             {

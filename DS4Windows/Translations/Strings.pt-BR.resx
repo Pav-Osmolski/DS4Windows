@@ -1329,7 +1329,7 @@
     <value>Apoio Avançado</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[EXPERIMENTAL] Usando a simulação de gyro DS3</value>
+    <value>Estimar inclinação e rolagem</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Calibração</value>
@@ -4087,8 +4087,8 @@ O backup: </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Assigne ações de rolagem no Botão Mapeamento primeiro.Tap rolamentos uma vez; Manter continua a rolar.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Compatibilidade Experimental</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Movimento do DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Saída virtual, acesso físico-controlador e preferências de conexão.</value>
@@ -6294,8 +6294,8 @@ O backup: </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Área Morta X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Estima o pitch e o rolamento do DS3 a partir da entrada do acelerômetro enquanto o controle de giroscópio está ativo.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Usa o acelerômetro do DualShock 3 para estimar a inclinação e a rolagem. Movimentos rápidos da mão podem afetar a estimativa.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Área morta e</value>
