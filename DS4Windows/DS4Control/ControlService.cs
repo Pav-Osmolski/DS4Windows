@@ -345,7 +345,7 @@ namespace DS4Windows
                     switch2MagnetometerCalibrationStore,
                     switch2JoyConHoldModeStore,
                     switch2GyroCalibrationStore, switch2RawStickCalibrationStore,
-                    BeginJoyConOutputHandoff);
+                    BeginJoyConOutputHandoff, () => Global.DeviceOptions.GameCubeDeviceOpts.Enabled);
             switch2ProUsbProductionCoordinator =
                 new Switch2ProUsbProductionCoordinator(
                     switch2RuntimeRegistrationService,
@@ -354,7 +354,8 @@ namespace DS4Windows
                     message => LogDebug(message),
                     switch2PersistentPeerIdentityDeriver,
                     switch2MagnetometerCalibrationStore,
-                    switch2GyroCalibrationStore, switch2RawStickCalibrationStore);
+                    switch2GyroCalibrationStore, switch2RawStickCalibrationStore,
+                    () => Global.DeviceOptions.GameCubeDeviceOpts.Enabled);
 
             Crc32Algorithm.InitializeTable(DS4Device.DefaultPolynomial);
 
@@ -1307,6 +1308,9 @@ namespace DS4Windows
                     break;
                 case InputDevices.InputDeviceType.SwitchPro:
                     result.AddRange(new DS4Controls[] { DS4Controls.Capture });
+                    break;
+                case InputDevices.InputDeviceType.Switch2GameCube:
+                    result.Add(DS4Controls.Capture);
                     break;
                 case InputDevices.InputDeviceType.Switch2Pro:
                     // GL/GR use the canonical paddle sources. Decoding them

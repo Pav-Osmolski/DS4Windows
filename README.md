@@ -28,7 +28,7 @@ I’m building this fork as the actively maintained successor to earlier DS4Wind
 - **A clearer, more consistent interface.** Search Settings and return to the last page you used. The reorganised Profile Editor puts live readings alongside Axis Config, with more consistent spacing, scrolling and light and dark themes across the app.
 - **More readable Output Slots.** See which physical controller feeds each numbered slot. Long names wrap, and fitted or saved column widths appear on the first frame.
 - **Safer profile editing.** A failed save or rename preserves the original profile. Retry or discard unsaved Overview changes. Enabled Special Actions save reliably, and reusing the profile serializer cuts overhead when switching profiles.
-- **Broader controller compatibility.** Adds USB and Bluetooth input for Switch 2 Pro and Bluetooth support for standalone and paired Joy-Con 2. DualShock 3 mappings can retain pressure sensitivity when mapped to analogue triggers or stick axes. [Controller compatibility](docs/controller-compatibility.md)
+- **Broader controller compatibility.** Adds USB and Bluetooth input for Switch 2 Pro and the official wireless GameCube Controller for Switch 2, plus Bluetooth support for standalone and paired Joy-Con 2. DualShock 3 mappings can retain pressure sensitivity when mapped to analogue triggers or stick axes. [Controller compatibility](docs/controller-compatibility.md)
 - **More reliable reconnects and shutdown.** Bluetooth and DualShock 3 reconnects recover more reliably after a disconnect. Failed virtual-controller removals can be retried, replacement bindings are protected, and shutdown can continue if one device fails to clean up.
 - **More predictable feedback and passthrough.** Native DualSense haptics and adaptive triggers can run alongside profile lightbar settings and configurable player and mute indicators. Fixes cover touchpad-click remapping and passthrough, partial DualShock 4 feedback packets, and virtual keyboard and mouse state. [Controller audio and feedback](docs/controller-audio.md)
 - **Safer VIIPER and USB/IP setup.** Setup verifies the bundled backend and driver, detects competing startup entries, and can repair known USB/IP leftovers. The app checks backend readiness before presenting virtual controllers and lets you hide the VIIPER tray icon. [Setup and migration](docs/getting-started.md)
@@ -39,12 +39,12 @@ The project builds on [hbashton's DS4Windows](https://github.com/hbashton/DS4Win
 
 ## What you can do
 
-- **Choose the output your game expects.** Use Xbox 360, Xbox One / Series, DualShock 4, DualSense / Edge, or Switch 2 Pro output. **Generic Joystick** supports games that accept DirectInput or WinMM and gives you six axes, sixteen assignable buttons and a POV hat. [Choose an output](docs/controller-compatibility.md#choose-the-controller-the-game-should-see)
+- **Choose the output your game expects.** Use Xbox 360, Xbox One / Series, DualShock 4, DualSense / Edge, Switch 2 Pro, or GameCube Controller output. **Generic Joystick** supports games that accept DirectInput or WinMM and gives you six axes, sixteen assignable buttons and a POV hat. [Choose an output](docs/controller-compatibility.md#choose-the-controller-the-game-should-see)
 - **Build profiles around how you play.** Remap buttons, sticks, gyro and touchpad to controller, keyboard or mouse inputs. Configure macros, Special Actions and stick response, then use Auto Profiles to switch by game or window title. [Profile Editor guide](docs/profile-editor.md)
 - **Tune controller feedback.** Preview lightbar changes and adaptive-trigger effects, configure Audio Haptics, and forward supported native DualSense feedback. Support depends on the controller, connection and game. [Controller audio and feedback](docs/controller-audio.md)
 - **Manage and troubleshoot your setup.** Name individual controllers, check input and battery status, manage VIIPER, USB/IP and HidHide, and capture diagnostics from the Log page. [App guide](docs/user-guide.md)
 
-Physical inputs include DualShock 3 and 4, DualSense and DualSense Edge, Switch Pro and Switch 2 Pro, and Joy-Con and Joy-Con 2. See the [controller and connection guide](docs/controller-compatibility.md) for model-specific support.
+Physical inputs include DualShock 3 and 4, DualSense and DualSense Edge, Switch Pro and Switch 2 Pro, Joy-Con and Joy-Con 2, and the official wireless GameCube Controller for Switch 2. See the [controller and connection guide](docs/controller-compatibility.md) for model-specific support.
 
 ## Get started
 

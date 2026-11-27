@@ -658,12 +658,8 @@ internal sealed class Switch2ProUsbWindowsNativePlatform :
                             NativeConstants.HidService,
                             StringComparison.OrdinalIgnoreCase) &&
                         parentContainerId == containerId &&
-                        vendorId == Switch2InputProtocolIdentity.
-                            NintendoUsbVendorId &&
-                        productId == Switch2InputProtocolIdentity.
-                            ProController2UsbProductId &&
-                        versionNumber == Switch2InputProtocolIdentity.
-                            AuditedProController2UsbBcdDevice &&
+                        Switch2InputProtocolIdentity.TryCreateFullControllerUsb(
+                            vendorId, productId, versionNumber, out _) &&
                         IsExactHidCaps(caps);
                     if (!admittedShape)
                     {
@@ -1590,8 +1586,8 @@ internal sealed class Switch2ProUsbWindowsNativePlatform :
                 StringSplitOptions.RemoveEmptyEntries);
             if (components.Contains("VID_057E",
                     StringComparer.OrdinalIgnoreCase) &&
-                components.Contains("PID_2069",
-                    StringComparer.OrdinalIgnoreCase) &&
+                (components.Contains("PID_2069", StringComparer.OrdinalIgnoreCase) ||
+                 components.Contains("PID_2073", StringComparer.OrdinalIgnoreCase)) &&
                 components.Contains(marker,
                     StringComparer.OrdinalIgnoreCase))
             {

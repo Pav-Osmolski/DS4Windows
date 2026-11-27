@@ -7,6 +7,23 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.85](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.85) - 2026-11-27
+
+#### Nintendo’s wireless GameCube Controller for Switch 2 is here 🎮
+
+- Use Nintendo’s official wireless GameCube Controller for Switch 2 over USB or Bluetooth, or choose **GameCube Controller** under **Emulated controller** to play with another pad such as DualSense. Support includes the C stick, independent analog L/R travel and digital clicks, single-motor rumble, and gyroscope and accelerometer input. Motion works through the virtual controller when the host enables its IMU.
+- To connect a physical pad, first turn on **GameCube Controller Support** in **Device Options**. The emulated output is available independently. Automated tests cover input and emulation. Physical controller and emulator motion testing are still welcome. [Setup and pairing guide](https://github.com/Pav-Osmolski/DS4Windows/blob/5.0.85/docs/nintendo-options.md#gamecube-controller)
+- Thanks to [@Julinkk](https://github.com/Julinkk) for requesting support, pointing us to the pairing project and offering to test, and to [@chyyran](https://github.com/chyyran), [@trevlars](https://github.com/trevlars), the [SDL](https://github.com/libsdl-org/SDL/blob/main/src/joystick/hidapi/SDL_hidapi_switch2.c) contributors and the [Switch 2 protocol research](https://github.com/ndeadly/switch2_controller_research) contributors for the protocol and motion references. [Issue #154](https://github.com/Pav-Osmolski/DS4Windows/issues/154)
+- Bundle [VIIPER 0.1.20](https://github.com/Pav-Osmolski/VIIPER/releases/tag/v0.1.20) in the installer and portable ZIP. [VIIPER PR #14](https://github.com/Pav-Osmolski/VIIPER/pull/14)
+
+#### Controller fixes
+
+- Match VIIPER’s handling of UTF-8 key files. For Xbox One / Series output, the log now distinguishes a rejected authentication key from a controller creation conflict and gives repair guidance when the backend confirms it was started without Xbox One / Series support. Thanks to [@Deepfake66](https://github.com/Deepfake66) for the logs in [#157](https://github.com/Pav-Osmolski/DS4Windows/issues/157).
+- Show the DualSense Edge rear paddles on the Profile Editor map, identify controls edited from the mapping list and allow other inputs to target the paddles and Fn buttons on virtual DualSense Edge output. Thanks to [@gubbywumpus](https://github.com/gubbywumpus) for [#159](https://github.com/Pav-Osmolski/DS4Windows/issues/159).
+- Continue legacy Joy-Con startup when the controller returns missing or invalid calibration data. DS4Windows uses factory data when available or falls back to nominal calibration and explains the fallback in the log. Thanks to [@aidenbaek579-png](https://github.com/aidenbaek579-png) for the MOBAPAD M12-HD traces in [#161](https://github.com/Pav-Osmolski/DS4Windows/issues/161).
+
+Implemented in [DS4Windows PR #162](https://github.com/Pav-Osmolski/DS4Windows/pull/162).
+
 ### [5.0.84](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.84) - 2026-11-26
 
 #### Generic Joystick is here

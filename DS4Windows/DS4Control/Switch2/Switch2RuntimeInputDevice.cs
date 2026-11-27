@@ -260,6 +260,13 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
         charging = false;
     }
 
+    internal Switch2ControllerModel FullControllerModel => DeviceType switch
+    {
+        InputDeviceType.Switch2Pro => Switch2ControllerModel.ProController2,
+        InputDeviceType.Switch2GameCube => Switch2ControllerModel.GameCube,
+        _ => Switch2ControllerModel.Unknown,
+    };
+
     public ulong RuntimeGeneration { get; }
 
     public override bool IsAlive()
@@ -982,6 +989,7 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
                         {
                             InputDeviceType.Switch2Pro =>
                                 Switch2ControllerModel.ProController2,
+                            InputDeviceType.Switch2GameCube => Switch2ControllerModel.GameCube,
                             InputDeviceType.Switch2JoyConLeft =>
                                 Switch2ControllerModel.JoyCon2Left,
                             InputDeviceType.Switch2JoyConRight =>
@@ -1085,8 +1093,8 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
 
         return model switch
         {
-            Switch2ControllerModel.ProController2 =>
-                DeviceType == InputDeviceType.Switch2Pro &&
+            Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube =>
+                FullControllerModel == model &&
                 joyConBindingMode == Switch2JoyConRuntimeBindingMode.Invalid &&
                 RuntimeGeneration == deviceGeneration &&
                 leftDeviceGeneration == deviceGeneration &&
@@ -1115,7 +1123,7 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
     internal bool HasExactProUsbBinding(ulong deviceGeneration,
         ulong transportGeneration) =>
         transport == Switch2Transport.Usb && pairEpoch == 0 &&
-        DeviceType == InputDeviceType.Switch2Pro &&
+        FullControllerModel != Switch2ControllerModel.Unknown &&
         joyConBindingMode == Switch2JoyConRuntimeBindingMode.Invalid &&
         deviceGeneration != 0 && transportGeneration != 0 &&
         RuntimeGeneration == deviceGeneration &&
@@ -1190,6 +1198,13 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
     public static bool TryCreatePro(ulong deviceGeneration,
         ulong transportGeneration, Switch2Transport transport,
         out Switch2RuntimeInputDevice device,
+        out Switch2RuntimeInputDeviceCreateFailure failure) =>
+        TryCreateFullController(Switch2ControllerModel.ProController2, deviceGeneration,
+            transportGeneration, transport, out device, out failure);
+
+    internal static bool TryCreateFullController(Switch2ControllerModel model,
+        ulong deviceGeneration, ulong transportGeneration, Switch2Transport transport,
+        out Switch2RuntimeInputDevice device,
         out Switch2RuntimeInputDeviceCreateFailure failure)
     {
         if (deviceGeneration == 0 || transportGeneration == 0)
@@ -1204,8 +1219,13 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
                 InvalidTransport, out device, out failure);
         }
 
-        device = new Switch2RuntimeInputDevice("Switch 2 Pro",
-            InputDeviceType.Switch2Pro, ConnectionFor(transport), transport,
+        if (model is not (Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube))
+            return Fail(Switch2RuntimeInputDeviceCreateFailure.InvalidModel, out device, out failure);
+
+        bool gameCube = model == Switch2ControllerModel.GameCube;
+        device = new Switch2RuntimeInputDevice(gameCube ? "Nintendo GameCube Controller" : "Switch 2 Pro",
+            gameCube ? InputDeviceType.Switch2GameCube : InputDeviceType.Switch2Pro,
+            ConnectionFor(transport), transport,
             deviceGeneration, Switch2JoyConRuntimeBindingMode.Invalid, 0,
             deviceGeneration, transportGeneration, 0, 0);
         failure = Switch2RuntimeInputDeviceCreateFailure.None;
@@ -1314,7 +1334,8 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
                 return Switch2RuntimePublicationResult.PublicationBusy;
             }
             var calibratedFrame = rawStickCalibration?.ApplyPro(frame) ?? frame;
-            if (DeviceType != InputDeviceType.Switch2Pro ||
+            if (FullControllerModel == Switch2ControllerModel.Unknown ||
+                frame.Model != FullControllerModel ||
                 frame.Version != Switch2ProProfileInputFrame.CurrentVersion ||
                 !frame.HasValidRawStickObservation ||
                 frame.DeviceGeneration != leftDeviceGeneration ||
@@ -3513,8 +3534,9 @@ public sealed partial class Switch2RuntimeInputDevice : DS4Device
     private static bool IsExpectedProRevision(Switch2Transport transport,
         Switch2InputProtocolRevision revision) => transport switch
     {
-        Switch2Transport.Usb => revision ==
-            Switch2InputProtocolRevision.ProUsbCommon05Bcd0201,
+        Switch2Transport.Usb => revision is
+            Switch2InputProtocolRevision.ProUsbCommon05Bcd0201 or
+            Switch2InputProtocolRevision.GameCubeUsbCommon05Bcd0101,
         Switch2Transport.BluetoothLe => revision ==
             Switch2InputProtocolRevision.BluetoothLeCommon05V1,
         _ => false,

@@ -141,6 +141,7 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
     private readonly ISwitch2JoyConPairCatalog pairCatalog;
     private readonly Switch2JoyConPairAssociationService pairAssociation;
     private readonly Func<bool> automaticPairingEnabled;
+    private readonly Func<bool> gameCubeEnabled;
     private readonly Func<InputControllerSlotToken, ISwitch2JoyConOutputHandoff> beginOutputHandoff;
     private readonly ISwitch2MagnetometerCalibrationStore
         magnetometerCalibrationStore;
@@ -221,7 +222,8 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
         ISwitch2JoyConHoldModeStore joyConHoldModeStore = null,
         ISwitch2GyroCalibrationStore gyroCalibrationStore = null,
         ISwitch2RawStickCalibrationStore rawStickCalibrationStore = null,
-        Func<InputControllerSlotToken, ISwitch2JoyConOutputHandoff> beginOutputHandoff = null)
+        Func<InputControllerSlotToken, ISwitch2JoyConOutputHandoff> beginOutputHandoff = null,
+        Func<bool> gameCubeEnabled = null)
     {
         this.adapter = adapter ?? throw new ArgumentNullException(
             nameof(adapter));
@@ -233,6 +235,7 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
         this.diagnostic = diagnostic;
         this.pairCatalog = pairCatalog;
         this.automaticPairingEnabled = automaticPairingEnabled;
+        this.gameCubeEnabled = gameCubeEnabled;
         this.magnetometerCalibrationStore = magnetometerCalibrationStore;
         this.joyConHoldModeStore = joyConHoldModeStore;
         this.gyroCalibrationStore = gyroCalibrationStore;
@@ -378,10 +381,13 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
             foreach (KeyValuePair<int, Switch2BluetoothCandidateObservation>
                          item in associationCandidates)
             {
+                if (!CanUseModel(item.Value.Model))
+                    continue;
                 result[index++] = new Switch2BluetoothAssociationCandidate(
                     item.Key, item.Value.Model, item.Value.Disposition ==
                         Switch2BluetoothObservationDisposition.RememberedThisHost);
             }
+            if (index != result.Length) Array.Resize(ref result, index);
             return result;
         }
     }
@@ -663,7 +669,8 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
         lock (sync)
         {
             if (!running || lifetimeCancellation == null ||
-                !associationCandidates.Remove(candidateId, out var observation))
+                !associationCandidates.Remove(candidateId, out var observation) ||
+                !CanUseModel(observation.Model))
             {
                 task = Task.FromResult(Switch2BluetoothWindowsAssociationResult.Failed(
                     Switch2BluetoothWindowsAssociationFailure.
@@ -857,8 +864,14 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
         }
     }
 
+    private bool CanUseModel(Switch2ControllerModel model) =>
+        model != Switch2ControllerModel.GameCube ||
+        (gameCubeEnabled?.Invoke() ?? GameCubeDeviceOptions.DefaultEnable);
+
     private void OnCandidate(Switch2BluetoothCandidateObservation observation)
     {
+        if (!CanUseModel(observation.Model))
+            return;
         if (observation.Disposition ==
             Switch2BluetoothObservationDisposition.RequiresExplicitAssociation)
         {
@@ -922,6 +935,9 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
             await connectionGate.WaitAsync(cancellationToken).
                 ConfigureAwait(false);
             gateEntered = true;
+            if (!CanUseModel(observation.Model))
+                return Switch2BluetoothWindowsAssociationResult.Failed(
+                    Switch2BluetoothWindowsAssociationFailure.InvalidObservation);
             lock (sync)
             {
                 if (!running || observation.ScanGeneration != scanGeneration)
@@ -988,6 +1004,14 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
             {
                 diagnostic?.Invoke(
                     $"Switch 2 {observation.Model} optional user calibration read was unavailable ({calibrationRead.OptionalUserCommandFailure}); validated factory calibration remains active.");
+            }
+            if (observation.Model == Switch2ControllerModel.GameCube)
+            {
+                var motion = await lease.EnableGameCubeMotionAsync(cancellationToken).ConfigureAwait(false);
+                cancellationToken.ThrowIfCancellationRequested();
+                ReportDiagnostic(motion == Switch2BluetoothSensorInitializationFailure.None ?
+                    "GameCube Controller Bluetooth motion feature startup acknowledged." :
+                    $"GameCube Controller Bluetooth motion startup was not acknowledged ({motion}); continuing with controller input.");
             }
             Switch2InputCalibrationSnapshot calibration = calibrationRead.
                 Calibration;
@@ -1080,22 +1104,22 @@ internal sealed partial class Switch2BluetoothProductionCoordinator
             Switch2InputFailureDiagnostics.Observe(owner, ReportDiagnostic);
             if (lease.PersistentPeerId.IsValid &&
                 !owner.RuntimeDevice.TryBindProfileIdentity(lease.PersistentPeerId))
-                diagnostic?.Invoke("Switch 2 Pro local profile ID could not bind; profile linking is unavailable for this connection.");
-            if (magnetometerCalibrationStore != null &&
+                diagnostic?.Invoke($"Switch 2 {observation.Model} local profile ID could not bind; profile linking is unavailable for this connection.");
+            if (observation.Model != Switch2ControllerModel.GameCube && magnetometerCalibrationStore != null &&
                 lease.PersistentPeerId.IsValid &&
                 !owner.RuntimeDevice.TryBindMagnetometerCalibrationPersistence(
                     magnetometerCalibrationStore, lease.PersistentPeerId))
             {
                 diagnostic?.Invoke($"Switch 2 {observation.Model} magnetometer calibration persistence could not bind; this connection will continue without persisted magnetic correction.");
             }
-            if (gyroCalibrationStore != null &&
+            if (observation.Model != Switch2ControllerModel.GameCube && gyroCalibrationStore != null &&
                 lease.PersistentPeerId.IsValid &&
                 !owner.RuntimeDevice.TryBindGyroCalibrationPersistence(
                     gyroCalibrationStore, lease.PersistentPeerId))
             {
                 diagnostic?.Invoke($"Switch 2 {observation.Model} gyro calibration persistence could not bind; this connection will recalibrate in memory.");
             }
-            if (rawStickCalibrationStore != null && lease.PersistentPeerId.IsValid &&
+            if (observation.Model != Switch2ControllerModel.GameCube && rawStickCalibrationStore != null && lease.PersistentPeerId.IsValid &&
                 !owner.RuntimeDevice.TryBindRawStickCalibrationPersistence(rawStickCalibrationStore, lease.PersistentPeerId))
             {
                 diagnostic?.Invoke("Switch 2 Pro local stick calibration could not bind; source calibration remains active.");

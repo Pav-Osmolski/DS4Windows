@@ -685,9 +685,8 @@ internal sealed class Switch2BluetoothRuntimeOwner :
             return false;
         }
 
-        bool runtimeCreated = admission.Model ==
-                Switch2ControllerModel.ProController2 ?
-            Switch2RuntimeInputDevice.TryCreatePro(deviceGeneration,
+        bool runtimeCreated = admission.Model is Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube ?
+            Switch2RuntimeInputDevice.TryCreateFullController(admission.Model, deviceGeneration,
                 transportGeneration, Switch2Transport.BluetoothLe,
                 out Switch2RuntimeInputDevice runtime,
                 out Switch2RuntimeInputDeviceCreateFailure runtimeFailure) :

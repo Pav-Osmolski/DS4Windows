@@ -396,6 +396,7 @@ namespace DS4Windows
         public short RightStickX;
         public short RightStickY;
         public bool CButton;
+        public bool IsGameCube;
 
         public readonly bool Equals(Switch2RawInputStatus other) =>
             IsValid == other.IsValid &&
@@ -417,7 +418,7 @@ namespace DS4Windows
             LeftStickY == other.LeftStickY &&
             RightStickX == other.RightStickX &&
             RightStickY == other.RightStickY &&
-            CButton == other.CButton;
+            CButton == other.CButton && IsGameCube == other.IsGameCube;
 
         public override readonly bool Equals(object obj) =>
             obj is Switch2RawInputStatus other && Equals(other);

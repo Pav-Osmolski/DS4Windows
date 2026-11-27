@@ -16,20 +16,23 @@ namespace DS4Windows
     /// <summary>
     /// Immutable, value-owned Switch 2 Pro state at the DS4Windows/VIIPER
     /// boundary. VIIPER owns the HID report counter and motion timestamp at
-    /// actual endpoint presentation; neither is frozen in this 24-byte state.
+    /// actual endpoint presentation. GameCube appends its two analog triggers
+    /// to the shared state, keeping motion independent of trigger travel.
     /// </summary>
     internal readonly struct Switch2EgressState :
         IEquatable<Switch2EgressState>,
         IOrderedEgressState<Switch2EgressState>
     {
         internal const int WireSize = 24;
-        internal const uint ValidButtonsMask = 0x002FFFFF;
+        internal const int GameCubeWireSize = WireSize + 2;
+        internal const uint ValidButtonsMask = 0x003FFFFF;
         internal const ushort NeutralAxis = 0x0800;
 
         internal Switch2EgressState(uint buttons, ushort leftStickX,
             ushort leftStickY, ushort rightStickX, ushort rightStickY,
             short accelerationX, short accelerationY, short accelerationZ,
-            short gyroYaw, short gyroPitch, short gyroRoll)
+            short gyroYaw, short gyroPitch, short gyroRoll,
+            byte leftTrigger = 0, byte rightTrigger = 0)
         {
             if ((buttons & ~ValidButtonsMask) != 0)
             {
@@ -52,6 +55,8 @@ namespace DS4Windows
             GyroYaw = gyroYaw;
             GyroPitch = gyroPitch;
             GyroRoll = gyroRoll;
+            LeftTrigger = leftTrigger;
+            RightTrigger = rightTrigger;
         }
 
         internal uint Buttons { get; }
@@ -65,6 +70,8 @@ namespace DS4Windows
         internal short GyroYaw { get; }
         internal short GyroPitch { get; }
         internal short GyroRoll { get; }
+        internal byte LeftTrigger { get; }
+        internal byte RightTrigger { get; }
 
         internal static Switch2EgressState Neutral => new(0,
             NeutralAxis, NeutralAxis, NeutralAxis, NeutralAxis,
@@ -75,10 +82,10 @@ namespace DS4Windows
 
         public void BuildInto(Span<byte> destination)
         {
-            if (destination.Length != WireSize)
+            if (destination.Length != WireSize && destination.Length != GameCubeWireSize)
             {
                 throw new ArgumentException(
-                    $"A Switch 2 egress payload is exactly {WireSize} bytes.",
+                    $"Switch 2 Pro requires {WireSize} bytes and GameCube requires {GameCubeWireSize} bytes.",
                     nameof(destination));
             }
 
@@ -103,6 +110,11 @@ namespace DS4Windows
                 GyroPitch);
             BinaryPrimitives.WriteInt16LittleEndian(destination.Slice(22, 2),
                 GyroRoll);
+            if (destination.Length == GameCubeWireSize)
+            {
+                destination[WireSize] = LeftTrigger;
+                destination[WireSize + 1] = RightTrigger;
+            }
         }
 
         public bool Equals(Switch2EgressState other) =>
@@ -116,7 +128,9 @@ namespace DS4Windows
             AccelerationZ == other.AccelerationZ &&
             GyroYaw == other.GyroYaw &&
             GyroPitch == other.GyroPitch &&
-            GyroRoll == other.GyroRoll;
+            GyroRoll == other.GyroRoll &&
+            LeftTrigger == other.LeftTrigger &&
+            RightTrigger == other.RightTrigger;
 
         public override bool Equals(object obj) =>
             obj is Switch2EgressState other && Equals(other);
@@ -124,7 +138,7 @@ namespace DS4Windows
         public override int GetHashCode() => HashCode.Combine(
             HashCode.Combine(Buttons, LeftStickX, LeftStickY, RightStickX,
                 RightStickY, AccelerationX, AccelerationY, AccelerationZ),
-            GyroYaw, GyroPitch, GyroRoll);
+            GyroYaw, GyroPitch, GyroRoll, LeftTrigger, RightTrigger);
 
         private static void ValidateAxis(ushort axis, string parameterName)
         {

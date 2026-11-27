@@ -79,6 +79,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             InputDeviceType? physicalControllerType = null,
             bool physicalControllerIsDualSenseEdge = false)
         {
+            bool gameCube = physicalControllerType == InputDeviceType.Switch2GameCube;
             mappings.Add(new MappedControl(devIndex, DS4Controls.Cross, "Cross", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.Circle, "Circle", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.Square, "Square", devType));
@@ -89,7 +90,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             mappings.Add(new MappedControl(devIndex, DS4Controls.DpadDown, "Down", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.DpadLeft, "Left", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.DpadRight, "Right", devType));
-            mappings.Add(new MappedControl(devIndex, DS4Controls.PS, "PS", devType));
+            mappings.Add(new MappedControl(devIndex, DS4Controls.PS, gameCube ? "Home" : "PS", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.Mute, "Mute", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.L1, "L1", devType));
             mappings.Add(new MappedControl(devIndex, DS4Controls.R1, "R1", devType));
@@ -140,7 +141,7 @@ namespace DS4WinWPF.DS4Forms.ViewModels
             // supplies diagram targets when its current view represents them;
             // all remain part of the ordinary mapping list.
             mappings.Add(new MappedControl(devIndex, DS4Controls.Switch2C,
-                "Switch 2 C", devType));
+                gameCube ? "C" : "Switch 2 C", devType));
             mappings.Add(new MappedControl(devIndex,
                 DS4Controls.Switch2JoyConLeftPaddle1,
                 "Switch 2 Joy-Con Left Paddle 1", devType));

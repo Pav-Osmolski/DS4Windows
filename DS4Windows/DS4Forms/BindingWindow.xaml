@@ -274,6 +274,20 @@
                         <Button x:Name="dpadLBtn" Width="16" Height="30" Tag="Dpad Left" Style="{StaticResource NoBGHoverBtn}" Canvas.Left="214" Canvas.Top="148" MouseEnter="OutConBtn_MouseEnter" MouseLeave="OutConBtn_MouseLeave" />
                         <Button x:Name="touchpadClickBtn" Visibility="Collapsed" Width="126" Height="72" Tag="Touchpad Click" Style="{StaticResource NoBGHoverBtn}" Canvas.Left="256" Canvas.Top="57" MouseEnter="OutConBtn_MouseEnter" MouseLeave="OutConBtn_MouseLeave" />
                     </Canvas>
+                    <WrapPanel x:Name="edgeOutputButtons" HorizontalAlignment="Center"
+                               Margin="0,4,0,0" Visibility="Collapsed">
+                        <WrapPanel.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource BridgeSecondaryButtonStyle}">
+                                <Setter Property="Padding" Value="10,4" />
+                                <Setter Property="Margin" Value="3,0" />
+                                <EventSetter Event="Click" Handler="OutputButtonBtn_Click" />
+                            </Style>
+                        </WrapPanel.Resources>
+                        <Button x:Name="edgeFnLeftBtn" />
+                        <Button x:Name="edgeFnRightBtn" />
+                        <Button x:Name="edgeLeftPaddleBtn" />
+                        <Button x:Name="edgeRightPaddleBtn" />
+                    </WrapPanel>
                 </StackPanel>
 
             </DockPanel>

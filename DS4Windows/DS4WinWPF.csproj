@@ -22,10 +22,10 @@
 		     a SustainedLowLatency lease in the process. -->
 		<ServerGarbageCollection>false</ServerGarbageCollection>
 		<ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
-		<AssemblyVersion>5.0.84.0</AssemblyVersion>
-		<FileVersion>5.0.84.0</FileVersion>
-		<Version>5.0.84</Version>
-		<InformationalVersion>5.0.84</InformationalVersion>
+		<AssemblyVersion>5.0.85.0</AssemblyVersion>
+		<FileVersion>5.0.85.0</FileVersion>
+		<Version>5.0.85</Version>
+		<InformationalVersion>5.0.85</InformationalVersion>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
 		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
@@ -129,7 +129,7 @@
 		AfterTargets="Publish"
 		BeforeTargets="GenerateManagedFileManifest">
 		<PropertyGroup>
-			<_BundledViiperName>VIIPER-0.1.19-x64.exe</_BundledViiperName>
+			<_BundledViiperName>VIIPER-0.1.20-x64.exe</_BundledViiperName>
 			<_BundledViiperPath>$(PublishDir)extras\$(_BundledViiperName)</_BundledViiperPath>
 			<_BundledViiperHashPath>$(_BundledViiperPath).sha256</_BundledViiperHashPath>
 		</PropertyGroup>
@@ -174,8 +174,8 @@
 		<EmbeddedResource Include="..\extras\install-viiper-backend.ps1">
 			<LogicalName>DS4Windows.install-viiper-backend.ps1</LogicalName>
 		</EmbeddedResource>
-		<Content Include="..\extras\VIIPER-0.1.19-x64.exe">
-			<Link>extras\VIIPER-0.1.19-x64.exe</Link>
+		<Content Include="..\extras\VIIPER-0.1.20-x64.exe">
+			<Link>extras\VIIPER-0.1.20-x64.exe</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
@@ -191,28 +191,28 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.19-LICENSES.txt">
-			<Link>extras\VIIPER-0.1.19-LICENSES.txt</Link>
+		<Content Include="..\extras\VIIPER-0.1.20-LICENSES.txt">
+			<Link>extras\VIIPER-0.1.20-LICENSES.txt</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.19-BUILD-INFO.json">
-			<Link>extras\VIIPER-0.1.19-BUILD-INFO.json</Link>
+		<Content Include="..\extras\VIIPER-0.1.20-BUILD-INFO.json">
+			<Link>extras\VIIPER-0.1.20-BUILD-INFO.json</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.19-PROVENANCE.txt">
-			<Link>extras\VIIPER-0.1.19-PROVENANCE.txt</Link>
+		<Content Include="..\extras\VIIPER-0.1.20-PROVENANCE.txt">
+			<Link>extras\VIIPER-0.1.20-PROVENANCE.txt</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.19-SOURCE.zip">
-			<Link>extras\VIIPER-0.1.19-SOURCE.zip</Link>
+		<Content Include="..\extras\VIIPER-0.1.20-SOURCE.zip">
+			<Link>extras\VIIPER-0.1.20-SOURCE.zip</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
-		<Content Include="..\extras\VIIPER-0.1.19-BUILD-NOTES.txt">
-			<Link>extras\VIIPER-0.1.19-BUILD-NOTES.txt</Link>
+		<Content Include="..\extras\VIIPER-0.1.20-BUILD-NOTES.txt">
+			<Link>extras\VIIPER-0.1.20-BUILD-NOTES.txt</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
@@ -522,6 +522,7 @@
 		<Resource Include="Resources\DualSense Controller.png" />
 		<Resource Include="Resources\DualSense Edge Controller.png" />
 		<Resource Include="Resources\Switch 2 Pro Controller.png" />
+		<Resource Include="Resources\Switch 2 GameCube Controller.png" />
 		<Resource Include="Resources\DualShock 4 Controller.png" />
 		<Resource Include="Resources\DualSense Config.png" />
 		<Resource Include="Resources\DualSense lightbar.png" />

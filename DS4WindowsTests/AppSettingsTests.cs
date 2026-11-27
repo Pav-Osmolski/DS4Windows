@@ -191,6 +191,31 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [DataRow(false)]
+        [DataRow(true)]
+        public void GameCubeSupportDefaultsToDisabledAndRetainsSavedPreferences(bool enabled)
+        {
+            var serializer = new XmlSerializer(typeof(AppSettingsDTO));
+            using var legacyReader = new StringReader(appSettingsXml);
+            var legacy = (AppSettingsDTO)serializer.Deserialize(legacyReader);
+            var store = new BackingStore();
+            Assert.IsFalse(store.deviceOptions.GameCubeDeviceOpts.Enabled);
+            legacy.MapTo(store);
+            Assert.IsFalse(store.deviceOptions.GameCubeDeviceOpts.Enabled);
+
+            store.deviceOptions.GameCubeDeviceOpts.Enabled = enabled;
+            var saved = new AppSettingsDTO();
+            saved.MapFrom(store);
+            using var writer = new StringWriter();
+            serializer.Serialize(writer, saved);
+            using var reader = new StringReader(writer.ToString());
+            var roundTrip = (AppSettingsDTO)serializer.Deserialize(reader);
+            var restored = new BackingStore();
+            roundTrip.MapTo(restored);
+            Assert.AreEqual(enabled, restored.deviceOptions.GameCubeDeviceOpts.Enabled);
+        }
+
+        [TestMethod]
         public void CheckSettingsSave()
         {
             // Read the settings into BackingStore

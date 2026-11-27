@@ -11,6 +11,69 @@ namespace DS4WindowsTests;
 public class Switch2JoyConProfileInputTests
 {
     [TestMethod]
+    [DoNotParallelize]
+    public void LeftRailCanDriveEachSavedDualSenseEdgeOutput()
+    {
+        const int slot = 7;
+        var storeField = typeof(Global).GetField("m_Config", BindingFlags.Static | BindingFlags.NonPublic);
+        var previousStore = Global.store;
+        var previousHandler = Global.outputKBMHandler;
+        var previousFields = Mapping.fieldMappings[slot];
+        var previousOutputFields = Mapping.outputFieldMappings[slot];
+        var previousDeviceState = Mapping.deviceState[slot];
+        try
+        {
+            storeField.SetValue(null, new BackingStore());
+            Global.outputKBMHandler = new NoSystemInputHandler();
+            Mapping.fieldMappings[slot] = new();
+            Mapping.outputFieldMappings[slot] = new();
+            Mapping.deviceState[slot] = new();
+            Assert.IsTrue(Switch2RuntimeInputDevice.TryCreatePro(1, 1, Switch2Transport.Usb, out var runtime, out _));
+            var mouse = new Mouse(slot, runtime);
+            var service = (ControlService)RuntimeHelpers.GetUninitializedObject(typeof(ControlService));
+            service.DS4Controllers = new DS4Device[Global.MAX_DS4_CONTROLLER_COUNT];
+
+            var targets = new (X360Controls Control, uint Mask)[] {
+                (X360Controls.DualSenseEdgeFnL, 0x00100000),
+                (X360Controls.DualSenseEdgeFnR, 0x00200000),
+                (X360Controls.DualSenseEdgePaddleL, 0x00400000),
+                (X360Controls.DualSenseEdgePaddleR, 0x00800000),
+            };
+            foreach (var (target, mask) in targets)
+            {
+                string saved = Global.getX360ControlString(target);
+                var loaded = Global.getX360ControlsByName(saved);
+                Assert.AreEqual(target, loaded);
+                Global.store.GetDS4CSetting(slot, DS4Controls.Switch2JoyConLeftSR)
+                    .UpdateSettings(false, loaded, string.Empty, DS4KeyType.None);
+
+                foreach (bool edge in new[] { true, false })
+                foreach (bool pressed in new[] { true, false })
+                {
+                    Global.OutContType[slot] = edge ? OutContType.ViiperDualSenseEdge : OutContType.ViiperSwitch2Pro;
+                    var source = new DS4State();
+                    Assert.IsTrue(MapJoined(pressed ? 1u << 20 : 0, 0).TryWriteLegacyState(source));
+                    var output = new DS4State();
+                    source.CopyExtrasTo(output);
+                    Mapping.MapCustom(slot, source, output, new DS4StateExposed(source), mouse, service);
+                    byte[] report = ViiperStatePacketBuilder.Build(ViiperVirtualDeviceType.DualSenseEdge, output, -1);
+                    uint buttons = BinaryPrimitives.ReadUInt32LittleEndian(report.AsSpan(4));
+                    Assert.AreEqual(edge && pressed ? mask : 0u, buttons & 0x00F00000u);
+                }
+            }
+        }
+        finally
+        {
+            Mapping.DiscardPostMapStickData(slot);
+            storeField.SetValue(null, previousStore);
+            Global.outputKBMHandler = previousHandler;
+            Mapping.fieldMappings[slot] = previousFields;
+            Mapping.outputFieldMappings[slot] = previousOutputFields;
+            Mapping.deviceState[slot] = previousDeviceState;
+        }
+    }
+
+    [TestMethod]
     public void JoinedAxesRetainEveryRawPositionInMappedCoordinates()
     {
         short previousX = short.MinValue;

@@ -75,11 +75,11 @@ required_offline_files = (
     "xbox-one-authorized-persona.json",
     "extras/XBOX-ONE-PERSONA-NOTICE.md",
     "extras/install-viiper-backend.ps1",
-    "extras/VIIPER-0.1.19-x64.exe",
-    "extras/VIIPER-0.1.19-LICENSES.txt",
-    "extras/VIIPER-0.1.19-PROVENANCE.txt",
-    "extras/VIIPER-0.1.19-BUILD-NOTES.txt",
-    "extras/VIIPER-0.1.19-SOURCE.zip",
+    "extras/VIIPER-0.1.20-x64.exe",
+    "extras/VIIPER-0.1.20-LICENSES.txt",
+    "extras/VIIPER-0.1.20-PROVENANCE.txt",
+    "extras/VIIPER-0.1.20-BUILD-NOTES.txt",
+    "extras/VIIPER-0.1.20-SOURCE.zip",
     "extras/LICENSE.txt",
     "extras/VIIPER-SYSTRAY-NOTICE.md",
     "extras/VIIPER-SYSTRAY-LICENSE.txt",
@@ -104,7 +104,7 @@ validate_runtime_layout(target_dir)
 # Bind setup to the exact VIIPER executable copied by this publish. This
 # sidecar is regenerated for every artifact, so no hand-maintained hash can
 # drift when the bundled executable changes.
-viiper_name = "VIIPER-0.1.19-x64.exe"
+viiper_name = "VIIPER-0.1.20-x64.exe"
 viiper_path = target_dir / "extras" / viiper_name
 viiper_hasher = hashlib.sha256()
 with viiper_path.open("rb") as viiper_stream:

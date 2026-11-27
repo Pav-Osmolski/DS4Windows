@@ -74,6 +74,7 @@ public enum Switch2UsbCalibrationRead : byte
     FactorySecondary,
     UserPrimary,
     UserSecondary,
+    GameCubeTriggerZero,
 }
 
 /// <summary>
@@ -854,6 +855,10 @@ public static class Switch2UsbCommandCodec
             case Switch2UsbCalibrationRead.UserPrimary:
                 address = Switch2CalibrationCodec.PrimaryUserStickAddress;
                 length = Switch2CalibrationCodec.UserStickCalibrationLength;
+                return true;
+            case Switch2UsbCalibrationRead.GameCubeTriggerZero:
+                address = 0x13140;
+                length = 2;
                 return true;
             case Switch2UsbCalibrationRead.UserSecondary:
                 address = Switch2CalibrationCodec.SecondaryUserStickAddress;

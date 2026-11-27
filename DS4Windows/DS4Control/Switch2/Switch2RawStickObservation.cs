@@ -59,6 +59,7 @@ internal readonly struct Switch2RawStickObservation
     private bool HasExpectedFraming => Descriptor.Identity.ProtocolRevision switch
     {
         Switch2InputProtocolRevision.ProUsbCommon05Bcd0201 or
+        Switch2InputProtocolRevision.GameCubeUsbCommon05Bcd0101 or
         Switch2InputProtocolRevision.BluetoothLeCommon05V1 =>
             ReportKind == Switch2InputReportKind.Common05,
         Switch2InputProtocolRevision.BluetoothLeJoyCon2Left07V1 =>

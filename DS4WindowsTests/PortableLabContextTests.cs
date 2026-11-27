@@ -323,6 +323,43 @@ public class PortableLabContextTests
             CollectionAssert.AreEqual(new byte[wire.ResponseBuffer.Length], wire.ResponseBuffer);
     }
 
+    [TestMethod]
+    [DataRow("")]
+    [DataRow("\uFEFF")]
+    public void AuthenticationUsesTheSameKeyFileBytesAsViiper(string preamble)
+    {
+        Open(activate: true);
+        Directory.CreateDirectory(context.DataPath);
+        const string password = "integration-key-£";
+        File.WriteAllBytes(context.KeyPath, Encoding.UTF8.GetBytes(
+            preamble + (preamble.Length == 0 ? "\r\n\u00A0" : "") + password + "\r\n\u3000"));
+
+        using HandshakeWire wire = new();
+        using Stream authenticated = ViiperAuthentication.Authenticate(wire);
+        authenticated.Write("ping"u8);
+        wire.AssertAuthenticatedPayload(preamble + password, "ping"u8.ToArray());
+    }
+
+    [TestMethod]
+    [DataRow("{\"status\":401,\"title\":\"Unauthorized\",\"detail\":\"secret-key-material\"}\n", true)]
+    [DataRow("{\"status\":401,\"status\":401}\n", false)]
+    [DataRow("{\"status\":403,\"detail\":\"secret-key-material\"}\n", false)]
+    [DataRow("{\"status\":401,\"detail\":\"secret-key-material\"}", false)]
+    public void OnlyACompleteUnauthorizedHandshakeReportsKeyRejection(string reply, bool unauthorized)
+    {
+        Open(activate: true);
+        Directory.CreateDirectory(context.DataPath);
+        File.WriteAllText(context.KeyPath, "unauthorized-test-key");
+        using HandshakeWire wire = new(reply: Encoding.UTF8.GetBytes(reply));
+
+        IOException error = unauthorized
+            ? Assert.ThrowsExactly<ViiperAuthenticationRejectedException>(() => ViiperAuthentication.Authenticate(wire))
+            : Assert.ThrowsExactly<IOException>(() => ViiperAuthentication.Authenticate(wire));
+        Assert.IsFalse(error.Message.Contains("secret-key-material"));
+        Assert.IsNull(error.InnerException);
+        if (unauthorized) StringAssert.Contains(error.Message, "401");
+    }
+
     private sealed class HandshakeWire : Stream
     {
         private readonly MemoryStream response;
@@ -334,9 +371,9 @@ public class PortableLabContextTests
         internal byte[] HandshakeBuffer { get; private set; }
         internal byte[] ResponseBuffer { get; private set; }
 
-        internal HandshakeWire(bool accepted = true, bool truncated = false)
+        internal HandshakeWire(bool accepted = true, bool truncated = false, byte[] reply = null)
         {
-            byte[] reply = (accepted ? "OK\0"u8.ToArray() :
+            reply ??= (accepted ? "OK\0"u8.ToArray() :
                 "NO\0"u8.ToArray()).Concat(nonce).ToArray();
             response = new MemoryStream(truncated ? reply[..4] : reply);
         }

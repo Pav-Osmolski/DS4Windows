@@ -60,6 +60,7 @@ namespace DS4WinWPF.DS4Forms
             JoyConRight,
             JoyConSidewaysLeft,
             JoyConSidewaysRight,
+            GameCube,
         }
 
         private ControllerDiagramKind controllerDiagramKind;
@@ -87,7 +88,7 @@ namespace DS4WinWPF.DS4Forms
         private Dictionary<int, Button> reverseHoverIndexes = new Dictionary<int, Button>();
         private Dictionary<Button, ImageSource> controllerHoverImages = new Dictionary<Button, ImageSource>();
         private Dictionary<Button, Geometry> vectorHoverGeometries = new Dictionary<Button, Geometry>();
-        private readonly HashSet<Button> rasterHitGeometryButtons = new HashSet<Button>();
+        private readonly HashSet<Button> canvasHitGeometryButtons = new HashSet<Button>();
 
         private bool keepsize;
         private bool controllerReadingsTabActive = false;
@@ -148,6 +149,7 @@ namespace DS4WinWPF.DS4Forms
                 : physicalController?.DeviceType switch
                 {
                     InputDeviceType.DualSense => ControllerDiagramKind.DualSense,
+                    InputDeviceType.Switch2GameCube => ControllerDiagramKind.GameCube,
                     InputDeviceType.SwitchPro or
                     InputDeviceType.Switch2Pro => ControllerDiagramKind.Switch2Pro,
                     InputDeviceType.JoyConL or
@@ -170,7 +172,6 @@ namespace DS4WinWPF.DS4Forms
             specialActionsVM = new SpecialActionsListViewModel(device);
 
 
-            RemoveHoverBtnText();
             PopulateHoverImages();
             PopulateHoverLocations();
             PopulateHoverIndexes();
@@ -193,13 +194,17 @@ namespace DS4WinWPF.DS4Forms
             controllerDiagramKind = diagramKind;
             controllerHoverImages.Clear();
             vectorHoverGeometries.Clear();
-            rasterHitGeometryButtons.Clear();
+            canvasHitGeometryButtons.Clear();
             ClearControllerButtonClips();
             HideControllerHover();
             foreach (Button button in joyConDiagramButtons.Keys)
                 conCanvas.Children.Remove(button);
             joyConDiagramButtons.Clear();
             controllerDiagramControlNames.Clear();
+            edgeRearDiagram.Visibility = Visibility.Collapsed;
+            conCanvas.Height = 244;
+            Canvas.SetTop(highlightControlDisplayLb, 220);
+            RemoveHoverBtnText();
             foreach (Button button in ControllerDiagramButtons())
                 button.Visibility = Visibility.Visible;
 
@@ -235,6 +240,9 @@ namespace DS4WinWPF.DS4Forms
                     break;
                 case ControllerDiagramKind.DualSenseEdge:
                     ConfigureDualSenseEdgeDiagram();
+                    break;
+                case ControllerDiagramKind.GameCube:
+                    ConfigureGameCubeDiagram();
                     break;
                 case ControllerDiagramKind.Switch2Pro:
                     ConfigureSwitch2ProDiagram();
@@ -423,9 +431,12 @@ namespace DS4WinWPF.DS4Forms
             SetCanvasButtonBounds(downConBtn, 88, 109, 25, 28);
             SetCanvasButtonBounds(leftConBtn, 66, 92, 30, 25);
 
-            // The front raster exposes the two Edge function surfaces exactly.
-            // Rear paddles stay fully editable in the list rather than claiming
-            // an inaccurate front-view hit target.
+            conCanvas.Height = 337;
+            Canvas.SetTop(highlightControlDisplayLb, 312);
+            edgeRearDiagram.Visibility = Visibility.Visible;
+            SetRearPaddleTarget(blpConBtn, edgeLeftPaddleArtwork.Data);
+            SetRearPaddleTarget(brpConBtn, edgeRightPaddleArtwork.Data);
+
             SetCanvasButtonBounds(fnlConBtn, 147, 205, 25, 15);
             SetCanvasButtonBounds(fnrConBtn, 269, 205, 25, 15);
             fnlConBtn.Visibility = Visibility.Visible;
@@ -454,6 +465,88 @@ namespace DS4WinWPF.DS4Forms
                 includeEdgeControls: true, includeCapture: false);
             PopulateControllerStickAtlas("DualSenseEdge-Stick_Highlights.png");
             ApplyControllerButtonClips();
+
+            void SetRearPaddleTarget(Button button, Geometry artwork)
+            {
+                Geometry outline = artwork.Clone();
+                outline.Freeze();
+                Rect bounds = outline.Bounds;
+                Canvas.SetLeft(button, bounds.Left);
+                Canvas.SetTop(button, bounds.Top);
+                button.Width = bounds.Width;
+                button.Height = bounds.Height;
+                button.Visibility = Visibility.Visible;
+                canvasHitGeometryButtons.Add(button);
+                vectorHoverGeometries[button] = outline;
+            }
+        }
+
+        private void ConfigureGameCubeDiagram()
+        {
+            ConfigureControllerRaster(GameCubeArtwork.ResourceName, "GameCube Controller layout",
+                GameCubeArtwork.Width, GameCubeArtwork.Height);
+
+            foreach (Button button in ControllerDiagramButtons())
+                button.Visibility = Visibility.Collapsed;
+            ds4LightbarColorBtn.Visibility = Visibility.Collapsed;
+
+            Place(crossConBtn, GameCubeArtwork.A, true);
+            PlaceOutline(circleConBtn, GameCubeArtwork.B);
+            PlaceOutline(squareConBtn, GameCubeArtwork.X);
+            PlaceOutline(triangleConBtn, GameCubeArtwork.Y);
+            PlaceOutline(l2ConBtn, GameCubeArtwork.L);
+            PlaceOutline(r2ConBtn, GameCubeArtwork.R);
+            PlaceOutline(l1ConBtn, GameCubeArtwork.ZL);
+            PlaceOutline(r1ConBtn, GameCubeArtwork.Z);
+            Place(optionsConBtn, GameCubeArtwork.Start, true);
+            Place(lsuConBtn, GameCubeArtwork.StickUp);
+            Place(lsrConBtn, GameCubeArtwork.StickRight);
+            Place(lsdConBtn, GameCubeArtwork.StickDown);
+            Place(lslConBtn, GameCubeArtwork.StickLeft);
+            Place(rsuConBtn, GameCubeArtwork.CStickUp);
+            Place(rsrConBtn, GameCubeArtwork.CStickRight);
+            Place(rsdConBtn, GameCubeArtwork.CStickDown);
+            Place(rslConBtn, GameCubeArtwork.CStickLeft);
+            Place(upConBtn, GameCubeArtwork.DpadUp);
+            Place(rightConBtn, GameCubeArtwork.DpadRight);
+            Place(downConBtn, GameCubeArtwork.DpadDown);
+            Place(leftConBtn, GameCubeArtwork.DpadLeft);
+
+            // The top buttons remain available in the mapping list.
+            highlightControlDisplayLb.Content = string.Empty;
+            controllerDiagramControlNames[DS4Controls.Capture] = "Capture";
+            controllerDiagramControlNames[DS4Controls.PS] = "Home";
+            controllerDiagramControlNames[DS4Controls.Cross] = "A";
+            controllerDiagramControlNames[DS4Controls.Circle] = "B";
+            controllerDiagramControlNames[DS4Controls.Square] = "X";
+            controllerDiagramControlNames[DS4Controls.Triangle] = "Y";
+            controllerDiagramControlNames[DS4Controls.L1] = "ZL";
+            controllerDiagramControlNames[DS4Controls.R1] = "Z";
+            controllerDiagramControlNames[DS4Controls.L2] = "L";
+            controllerDiagramControlNames[DS4Controls.R2] = "R";
+            controllerDiagramControlNames[DS4Controls.Options] = "Start / Pause";
+            controllerDiagramControlNames[DS4Controls.Switch2C] = "C";
+            ApplyControllerButtonClips();
+
+            void Place(Button button, Rect rect, bool ellipse = false)
+            {
+                const double scale = 440 / GameCubeArtwork.Width;
+                Rect scaled = new(rect.X * scale, rect.Y * scale,
+                    rect.Width * scale, rect.Height * scale);
+                PlaceShape(button, ellipse ?
+                    new EllipseGeometry(scaled) : new RectangleGeometry(scaled, 4, 4));
+            }
+
+            void PlaceOutline(Button button, Geometry outline) =>
+                PlaceShape(button, GameCubeArtwork.ScaleOutline(outline, 440 / GameCubeArtwork.Width));
+
+            void PlaceShape(Button button, Geometry geometry)
+            {
+                Rect bounds = geometry.Bounds;
+                SetCanvasButtonBounds(button, bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                button.Visibility = Visibility.Visible;
+                vectorHoverGeometries[button] = geometry;
+            }
         }
 
         private void ConfigureSwitch2ProDiagram()
@@ -943,8 +1036,11 @@ namespace DS4WinWPF.DS4Forms
             {
                 Assign(fnlConBtn, 22);
                 Assign(fnrConBtn, 23);
-                Assign(blpConBtn, 24);
-                Assign(brpConBtn, 25);
+                if (controllerDiagramKind == ControllerDiagramKind.Switch2Pro)
+                {
+                    Assign(blpConBtn, 24);
+                    Assign(brpConBtn, 25);
+                }
             }
 
             if (includeCapture)
@@ -994,7 +1090,7 @@ namespace DS4WinWPF.DS4Forms
             }
 
             vectorHoverGeometries[button] = mask;
-            rasterHitGeometryButtons.Add(button);
+            canvasHitGeometryButtons.Add(button);
             Canvas.SetLeft(button, bounds.Left);
             Canvas.SetTop(button, bounds.Top);
             button.Width = bounds.Width;
@@ -1153,7 +1249,7 @@ namespace DS4WinWPF.DS4Forms
                 // painting. In particular, stick directions are ring sectors;
                 // a rounded rectangle around that sector made hover activate
                 // while the pointer was visibly outside the highlighted rim.
-                Geometry hitGeometry = rasterHitGeometryButtons.Contains(entry.Key)
+                Geometry hitGeometry = canvasHitGeometryButtons.Contains(entry.Key)
                     ? entry.Value
                     : TransformControllerGeometry(entry.Value);
 
@@ -1399,6 +1495,8 @@ namespace DS4WinWPF.DS4Forms
                 else
                 {
                     HideControllerHover();
+                    if (controllerDiagramKind == ControllerDiagramKind.GameCube)
+                        UpdateHighlightLabel(mappingListVM.Mappings[mappingListVM.SelectedIndex]);
                 }
             }
 
@@ -1415,8 +1513,9 @@ namespace DS4WinWPF.DS4Forms
             }
             foreach (MappedControl mapped in mappingListVM.Mappings)
             {
-                if (mapped.Control < DS4Controls.Switch2C ||
-                    mapped.Control > DS4Controls.Switch2JoyConRightSR) continue;
+                if (mapped.Control is not (DS4Controls.FnL or DS4Controls.FnR or DS4Controls.BLP or DS4Controls.BRP)
+                    && (mapped.Control < DS4Controls.Switch2C || mapped.Control > DS4Controls.Switch2JoyConRightSR))
+                    continue;
                 mapped.SetControllerMapTargetPresence(reverseHoverIndexes.ContainsKey(
                     mappingListVM.ControlIndexMap[mapped.Control]));
             }
@@ -1472,10 +1571,10 @@ namespace DS4WinWPF.DS4Forms
             if (swipeLeftBtn != null) hoverIndexes[swipeLeftBtn] = 39;
             if (swipeRightBtn != null) hoverIndexes[swipeRightBtn] = 40;
 
-            hoverIndexes[fnlConBtn] = 41;
-            hoverIndexes[fnrConBtn] = 42;
-            hoverIndexes[brpConBtn] = 43;
-            hoverIndexes[blpConBtn] = 44;
+            hoverIndexes[fnlConBtn] = mappingListVM.ControlIndexMap[DS4Controls.FnL];
+            hoverIndexes[fnrConBtn] = mappingListVM.ControlIndexMap[DS4Controls.FnR];
+            hoverIndexes[brpConBtn] = mappingListVM.ControlIndexMap[DS4Controls.BRP];
+            hoverIndexes[blpConBtn] = mappingListVM.ControlIndexMap[DS4Controls.BLP];
             foreach (var entry in joyConDiagramButtons)
                 hoverIndexes[entry.Key] = mappingListVM.ControlIndexMap[entry.Value];
         }
@@ -2097,7 +2196,12 @@ namespace DS4WinWPF.DS4Forms
             }
             else if (vectorHoverGeometries.TryGetValue(control, out Geometry geometry))
             {
-                controllerVectorHighlight.Data = TransformControllerGeometry(geometry);
+                Geometry highlight = canvasHitGeometryButtons.Contains(control)
+                    ? geometry : TransformControllerGeometry(geometry);
+                controllerVectorHighlight.Data = highlight;
+                // Keep the accent stroke within the traced GameCube button face.
+                controllerVectorHighlight.Clip = controllerDiagramKind == ControllerDiagramKind.GameCube
+                    ? highlight : null;
                 controllerVectorHighlight.Visibility = Visibility.Visible;
             }
             else
@@ -2729,6 +2833,7 @@ namespace DS4WinWPF.DS4Forms
             outputControllerHintText.Text = type switch
             {
                 OutContType.ViiperGenericJoystick => "Input-only joystick for DirectInput and WinMM games. Supports six axes, sixteen buttons, and one POV hat.",
+                OutContType.ViiperGameCube => "Nintendo’s wireless GameCube Controller for Switch 2, with analog L/R and full-press clicks.",
                 OutContType.ViiperSwitch2Pro =>
                     global::DS4Windows.UiText.Get("Switch 2 layout: Cross -> B, Circle -> A, Square -> Y, Triangle -> X, Share -> Minus, Options -> Plus, PS -> Home, Capture -> Capture."),
                 OutContType.ViiperDualSense =>

@@ -81,6 +81,8 @@ internal readonly struct Switch2BluetoothConnectionAdmission :
                 Switch2AdvertisementCodec.JoyCon2LeftProductId) => true,
             (Switch2ControllerModel.ProController2,
                 Switch2AdvertisementCodec.ProController2ProductId) => true,
+            (Switch2ControllerModel.GameCube,
+                Switch2AdvertisementCodec.GameCubeProductId) => true,
             _ => false,
         };
 }
@@ -1666,8 +1668,8 @@ internal sealed class Switch2BluetoothInputOwner
                 return Switch2BluetoothInputDrainDisposition.Rejected;
             }
             publicationInProgress = true;
-            publishPro = descriptor.Identity.Model ==
-                Switch2ControllerModel.ProController2;
+            publishPro = descriptor.Identity.Model is
+                Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube;
         }
 
         bool published = true;
@@ -2114,8 +2116,8 @@ internal sealed class Switch2BluetoothInputOwner
         UnsubscribeOnly();
         try
         {
-            if (descriptor.Identity.Model ==
-                Switch2ControllerModel.ProController2)
+            if (descriptor.Identity.Model is
+                Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube)
             {
                 sink.ClearPro(descriptor.DeviceGeneration,
                     descriptor.TransportGeneration, reason);

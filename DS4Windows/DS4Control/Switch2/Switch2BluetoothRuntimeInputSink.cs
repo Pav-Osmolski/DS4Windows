@@ -478,8 +478,8 @@ internal sealed class Switch2BluetoothRuntimeInputSink :
         mapper = default;
         return model switch
         {
-            Switch2ControllerModel.ProController2 =>
-                runtimeDevice.DeviceType == InputDeviceType.Switch2Pro &&
+            Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube =>
+                runtimeDevice.FullControllerModel == model &&
                 runtimeDevice.JoyConBindingMode ==
                     Switch2JoyConRuntimeBindingMode.Invalid,
             Switch2ControllerModel.JoyCon2Left =>
@@ -504,7 +504,7 @@ internal sealed class Switch2BluetoothRuntimeInputSink :
 
     public void PublishPro(in Switch2CanonicalInputFrame frame)
     {
-        BeginPublication(frame, Switch2ControllerModel.ProController2);
+        BeginPublication(frame, expectedModel);
         bool published = false;
         Switch2BluetoothRuntimeSinkFailure failure = default;
         Switch2ProProfileInputFailure mappingFailure = default;
@@ -649,8 +649,8 @@ internal sealed class Switch2BluetoothRuntimeInputSink :
     public void ClearPro(ulong deviceGeneration, ulong transportGeneration,
         Switch2BluetoothInputEndReason reason)
     {
-        if (!MatchesTerminal(expectedModel ==
-                Switch2ControllerModel.ProController2,
+        if (!MatchesTerminal(expectedModel is
+                Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube,
                 deviceGeneration, transportGeneration, reason))
         {
             throw new InvalidOperationException(

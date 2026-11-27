@@ -52,6 +52,7 @@ internal sealed class Switch2ProUsbProductionCoordinator
     private Task worker;
     private ulong serviceGeneration;
     private long generationCounter = DateTime.UtcNow.Ticks;
+    private readonly Func<bool> gameCubeEnabled;
 
     internal Switch2ProUsbProductionCoordinator(
         Switch2RuntimeRegistrationService registrations,
@@ -72,12 +73,13 @@ internal sealed class Switch2ProUsbProductionCoordinator
         Switch2PersistentPeerIdentityDeriver identityDeriver,
         ISwitch2MagnetometerCalibrationStore magnetometerCalibrationStore,
         ISwitch2GyroCalibrationStore gyroCalibrationStore = null,
-        ISwitch2RawStickCalibrationStore rawStickCalibrationStore = null) :
+        ISwitch2RawStickCalibrationStore rawStickCalibrationStore = null,
+        Func<bool> gameCubeEnabled = null) :
         this(new Switch2ProUsbWindowsNativePlatform(),
             new Switch2ProUsbWindowsOwnedCompositeAdapter(), registrations,
             host, attached, diagnostic, ScanIntervalMilliseconds,
             identityDeriver, magnetometerCalibrationStore,
-            gyroCalibrationStore, rawStickCalibrationStore)
+            gyroCalibrationStore, rawStickCalibrationStore, gameCubeEnabled)
     {
     }
 
@@ -93,7 +95,8 @@ internal sealed class Switch2ProUsbProductionCoordinator
         ISwitch2MagnetometerCalibrationStore
             magnetometerCalibrationStore = null,
         ISwitch2GyroCalibrationStore gyroCalibrationStore = null,
-        ISwitch2RawStickCalibrationStore rawStickCalibrationStore = null)
+        ISwitch2RawStickCalibrationStore rawStickCalibrationStore = null,
+        Func<bool> gameCubeEnabled = null)
     {
         this.discovery = discovery ?? throw new ArgumentNullException(
             nameof(discovery));
@@ -107,6 +110,7 @@ internal sealed class Switch2ProUsbProductionCoordinator
         this.magnetometerCalibrationStore = magnetometerCalibrationStore;
         this.gyroCalibrationStore = gyroCalibrationStore;
         this.rawStickCalibrationStore = rawStickCalibrationStore;
+        this.gameCubeEnabled = gameCubeEnabled;
         if (scanIntervalMilliseconds <= 0)
         {
             throw new ArgumentOutOfRangeException(
@@ -326,10 +330,28 @@ internal sealed class Switch2ProUsbProductionCoordinator
         return missing.ToArray();
     }
 
+    private static bool TryCreateCenteredFallback(Switch2ControllerModel model,
+        ulong deviceGeneration, out Switch2InputCalibrationSnapshot calibration)
+    {
+        if (model == Switch2ControllerModel.GameCube)
+        {
+            bool created = Switch2InputCalibrationSnapshot.TryCreateFallback(model,
+                deviceGeneration, out calibration);
+            // Use the known factory-idle neighborhood if a read was proven
+            // unconsumed. Never infer rest from the first possibly-held sample.
+            calibration = calibration.WithGameCubeTriggerZero(30, 36);
+            return created;
+        }
+        return Switch2InputCalibrationSnapshot.TryCreateProUsbCenteredFallback(
+            deviceGeneration, out calibration);
+    }
+
     private void TryAttach(Switch2ProUsbWindowsCandidate candidate)
     {
         if (candidate == null || !candidate.TryGetAdmittedRegistration(
-                out Switch2PhysicalInputRegistration registration))
+                out Switch2PhysicalInputRegistration registration) ||
+            registration.Model == Switch2ControllerModel.GameCube &&
+                !(gameCubeEnabled?.Invoke() ?? GameCubeDeviceOptions.DefaultEnable))
         {
             return;
         }
@@ -436,9 +458,7 @@ internal sealed class Switch2ProUsbProductionCoordinator
                         out var calibrationRead))
                 {
                     if (!calibrationRead.CanUseCenteredFallback ||
-                        !Switch2InputCalibrationSnapshot.
-                            TryCreateProUsbCenteredFallback(deviceGeneration,
-                                out calibration))
+                        !TryCreateCenteredFallback(registration.Model, deviceGeneration, out calibration))
                     {
                         Retain(bundle);
                         Diagnostic("Switch 2 Pro USB calibration read " +
@@ -455,9 +475,7 @@ internal sealed class Switch2ProUsbProductionCoordinator
                     calibration = calibrationRead.Calibration;
                 }
             }
-            else if (!Switch2InputCalibrationSnapshot.
-                    TryCreateProUsbCenteredFallback(deviceGeneration,
-                        out calibration))
+            else if (!TryCreateCenteredFallback(registration.Model, deviceGeneration, out calibration))
             {
                 Retain(bundle);
                 Diagnostic("Switch 2 Pro USB centered fallback calibration " +
@@ -496,26 +514,25 @@ internal sealed class Switch2ProUsbProductionCoordinator
             }
             if (identityDeriver != null &&
                 identityDeriver.TryDerive(registration.ContainerIdentity,
-                    Switch2ControllerModel.ProController2,
-                    Switch2InputProtocolIdentity.ProController2UsbProductId,
+                    registration.Model, registration.ProtocolIdentity.ProductId,
                     out Switch2PersistentPeerId peerId))
             {
                 if (!participant.RuntimeOwner.RuntimeInputDevice.TryBindProfileIdentity(peerId))
                     Diagnostic("Switch 2 Pro USB local profile ID could not bind; profile linking is unavailable for this connection.");
-                if (magnetometerCalibrationStore != null &&
+                if (registration.Model != Switch2ControllerModel.GameCube && magnetometerCalibrationStore != null &&
                     !participant.RuntimeOwner.RuntimeInputDevice.
                         TryBindMagnetometerCalibrationPersistence(
                             magnetometerCalibrationStore, peerId))
                 {
                     Diagnostic("Switch 2 Pro USB magnetometer calibration persistence could not bind; this connection will continue without persisted magnetic correction.");
                 }
-                if (rawStickCalibrationStore != null &&
+                if (registration.Model != Switch2ControllerModel.GameCube && rawStickCalibrationStore != null &&
                     !participant.RuntimeOwner.RuntimeInputDevice.TryBindRawStickCalibrationPersistence(
                         rawStickCalibrationStore, peerId))
                 {
                     Diagnostic("Switch 2 Pro USB local stick calibration could not bind; source calibration remains active.");
                 }
-                if (gyroCalibrationStore != null &&
+                if (registration.Model != Switch2ControllerModel.GameCube && gyroCalibrationStore != null &&
                     !participant.RuntimeOwner.RuntimeInputDevice.
                         TryBindGyroCalibrationPersistence(
                             gyroCalibrationStore, peerId))

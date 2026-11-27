@@ -37,11 +37,13 @@ internal static class Switch2ProfileIdentity
     {
         id = null;
         if (transport != Switch2Transport.BluetoothLe &&
-            (transport != Switch2Transport.Usb || model != InputDeviceType.Switch2Pro))
+            (transport != Switch2Transport.Usb ||
+                model is not (InputDeviceType.Switch2Pro or InputDeviceType.Switch2GameCube)))
             return false;
         string role = model switch
         {
             InputDeviceType.Switch2Pro when left.IsValid && !right.IsValid => "PRO",
+            InputDeviceType.Switch2GameCube when left.IsValid && !right.IsValid => "GC",
             InputDeviceType.Switch2JoyConLeft when left.IsValid && !right.IsValid => "L",
             InputDeviceType.Switch2JoyConRight when !left.IsValid && right.IsValid => "R",
             InputDeviceType.Switch2JoyConJoined when left.IsValid && right.IsValid && left != right => "PAIR",

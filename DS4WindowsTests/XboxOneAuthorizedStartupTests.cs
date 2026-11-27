@@ -32,6 +32,32 @@ public sealed class XboxOneAuthorizedStartupTests
     }
 
     [TestMethod]
+    [DataRow(409, "retained USB/IP imports are not enabled for this VIIPER server", true)]
+    [DataRow(409, "Xbox One registration changed during creation", false)]
+    [DataRow(401, "retained USB/IP imports are not enabled for this VIIPER server", false)]
+    public void OnlyKnownPersonaConflictOffersRepair(int status, string detail, bool shouldOfferRepair)
+    {
+        using JsonDocument response = JsonDocument.Parse(JsonSerializer.Serialize(new { status, detail }));
+        var error = Assert.ThrowsExactly<XboxOneManagementException>(() =>
+            ViiperClient.ThrowIfXboxOneManagementError(response.RootElement,
+                XboxOneManagementOperation.CreatePersona));
+        Assert.AreEqual(shouldOfferRepair, error.RetainedImportsDisabled);
+        Assert.AreEqual(shouldOfferRepair, error.Message.Contains("Install / Repair VIIPER"));
+        Assert.IsFalse(error.Message.Contains(detail));
+    }
+
+    [TestMethod]
+    public void KeyRejectionRemainsVisibleBeforePersonaCreation()
+    {
+        using TcpListener listener = new(IPAddress.Loopback, 0);
+        listener.Start();
+        var client = new ViiperClient("127.0.0.1", ((IPEndPoint)listener.LocalEndpoint).Port,
+            _ => throw new ViiperAuthenticationRejectedException());
+        Assert.ThrowsExactly<ViiperAuthenticationRejectedException>(() =>
+            client.CreateAuthorizedXboxOneDeviceAndOpenStream(Request()));
+    }
+
+    [TestMethod]
     [DataRow("{\"status\":\"secret\"}")]
     [DataRow("{\"status\":200}")]
     [DataRow("{\"status\":9999999999999999999}")]

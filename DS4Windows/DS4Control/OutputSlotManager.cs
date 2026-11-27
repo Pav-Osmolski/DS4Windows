@@ -167,6 +167,9 @@ namespace DS4Windows
                     outputDevice = new ViiperOutDevice(contType,
                         ViiperVirtualDeviceType.XboxOne);
                     break;
+                case OutContType.ViiperGameCube:
+                    outputDevice = new ViiperOutDevice(contType, ViiperVirtualDeviceType.GameCube);
+                    break;
                 case OutContType.ViiperGenericJoystick:
                     outputDevice = new ViiperOutDevice(contType, ViiperVirtualDeviceType.GenericJoystick);
                     break;

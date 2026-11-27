@@ -28,6 +28,15 @@ Individual release entries and Git history retain further attribution. See
 the [changelog](CHANGELOG.md), [upstream PR #86](https://github.com/hbashton/DS4Windows/pull/86)
 and [GitHub contributor history](https://github.com/Pav-Osmolski/DS4Windows/graphs/contributors).
 
+## Controller protocol research
+
+| Contributor | Contribution |
+| --- | --- |
+| [ndeadly](https://github.com/ndeadly) | [Switch 2 controller research](https://github.com/ndeadly/switch2_controller_research), including the GameCube controller's USB descriptors, input reports and Bluetooth feature commands. |
+| [SDL contributors](https://github.com/libsdl-org/SDL/graphs/contributors) | [Switch 2 HID driver](https://github.com/libsdl-org/SDL/blob/main/src/joystick/hidapi/SDL_hidapi_switch2.c), used as a reference for USB setup, trigger calibration and virtual output. |
+| [Ryan Copley](https://github.com/RyanCopley) | [GameCube pairing app](https://github.com/RyanCopley/NSO-GameCube-Controller-Pairing-App), a cross-platform reference for the wireless controller. |
+| [chyyran](https://github.com/chyyran) and [trevlars](https://github.com/trevlars) | Published [motion report analysis](https://gist.github.com/chyyran/76fdc5c2a3f20802266af913d44ef7b3) and [GameCube Bluetooth motion integration](https://github.com/trevlars/switch2-controllers-linux). |
+
 ## Issue reports and testing
 
 Thanks to the people who supplied reports, logs, recordings and follow-up
@@ -41,6 +50,7 @@ testing for this fork:
 | [HRTMC](https://github.com/HRTMC) | [DS3 disconnect/reconnect and backend cleanup (#25)](https://github.com/Pav-Osmolski/DS4Windows/issues/25). |
 | [Basfet](https://github.com/Basfet) | [DualSense profile lightbar behaviour (#28)](https://github.com/Pav-Osmolski/DS4Windows/issues/28). |
 | [Masterload1975](https://github.com/Masterload1975) | [Special Actions profile saving (#33)](https://github.com/Pav-Osmolski/DS4Windows/issues/33). |
+| [Julinkk](https://github.com/Julinkk) | [Switch 2 GameCube Controller support (#154)](https://github.com/Pav-Osmolski/DS4Windows/issues/154) and the pairing-app reference. |
 
 These credits acknowledge participation in the reports; they do not imply
 that each person validated every fix or release.

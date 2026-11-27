@@ -644,6 +644,9 @@ Disabled:
   <data name="ControllerSupportJoyCon" xml:space="preserve">
     <value>JoyCon Controller Support</value>
   </data>
+  <data name="ControllerSupportGameCube" xml:space="preserve">
+    <value>GameCube Controller Support</value>
+  </data>
   <data name="ControllerSupportSwitchPro" xml:space="preserve">
     <value>Switch Pro Controller Support</value>
   </data>
@@ -3403,6 +3406,12 @@ X axis: {0}, Y axis: {1}</value>
   <data name="UI_4B67834A4C0FA559" xml:space="preserve">
     <value>Player 2</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>
+  </data>
+  <data name="EdgeControllerRearView" xml:space="preserve">
+    <value>Rear view</value>
+  </data>
+  <data name="EditInControllerMappingList" xml:space="preserve">
+    <value>Edit in list</value>
   </data>
   <data name="UI_4B83C7C87164E126" xml:space="preserve">
     <value>LIST ONLY</value>

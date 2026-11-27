@@ -57,14 +57,15 @@ internal static class Switch2BluetoothProFeatureCodec
 {
     internal const byte CommandId = 0x0C;
     internal const byte FeatureMask = 0x2F;
+    internal const byte GameCubeMotionMask = 0x07;
     internal const int ResponseLength = 12;
 
     // ndeadly/switch2_controller_research d1c5a7f7ba298f83017fae84952a4e6d2ef8fc92,
     // bluetooth_interface.md Pro startup and commands.md 0C/02,0C/04.
-    internal static byte[] CreateRequest(bool enable) => new byte[]
+    internal static byte[] CreateRequest(bool enable, byte mask = FeatureMask) => new byte[]
     {
         CommandId, 0x91, 0x01, enable ? (byte)0x04 : (byte)0x02,
-        0x00, 0x04, 0x00, 0x00, FeatureMask, 0x00, 0x00, 0x00,
+        0x00, 0x04, 0x00, 0x00, mask, 0x00, 0x00, 0x00,
     };
 
     // Exact documented command-only reply. Public console captures contain

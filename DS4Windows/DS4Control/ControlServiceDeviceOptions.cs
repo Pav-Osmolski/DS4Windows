@@ -47,6 +47,8 @@ namespace DS4Windows
         private DS3DeviceOptions dS3DeviceOpts = new DS3DeviceOptions();
         public DS3DeviceOptions DS3DeviceOpts { get => dS3DeviceOpts; }
 
+        public GameCubeDeviceOptions GameCubeDeviceOpts { get; } = new();
+
         private bool verboseLogMessages;
         public bool VerboseLogMessages { get => verboseLogMessages; set => verboseLogMessages = value; }
 
@@ -75,6 +77,13 @@ namespace DS4Windows
         public virtual void LoadSettings(XmlDocument xmlDoc, XmlNode node)
         {
         }
+    }
+
+    public sealed class GameCubeDeviceOptions
+    {
+        public const bool DefaultEnable = false;
+        private volatile bool enabled = DefaultEnable;
+        public bool Enabled { get => enabled; set => enabled = value; }
     }
 
     public class DS4DeviceOptions

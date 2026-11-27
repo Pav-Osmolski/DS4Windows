@@ -29,6 +29,12 @@ unsaved Overview changes.
    activation condition is met.
 4. Save, then test the result in the target game or application.
 
+The DualSense Edge diagram includes the Fn buttons on the front and both
+paddles in a rear view. For a control marked **Edit in list**, double-click
+its row in **Button mappings**. With **DualSense Edge** selected as the
+virtual controller, the binding dialog also lets you assign inputs from other
+controllers to its virtual Fn buttons and paddles.
+
 ![Button remapping dialog](images/site/remapping-dialog.webp)
 
 **Show live preview** helps identify the control being pressed. A different

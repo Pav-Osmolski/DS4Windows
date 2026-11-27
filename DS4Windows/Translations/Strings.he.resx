@@ -6963,4 +6963,13 @@
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>מאתחל את {0}…</value></data>
   <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows עצור</value></data>
   <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>כדי להשתמש בבקרים דרך DS4Windows, יש לבחור באפשרות {0} בפינה הימנית התחתונה.</value></data>
+  <data name="ControllerSupportGameCube" xml:space="preserve">
+    <value>תמיכה בבקר GameCube</value>
+  </data>
+  <data name="EdgeControllerRearView" xml:space="preserve">
+    <value>מבט אחורי</value>
+  </data>
+  <data name="EditInControllerMappingList" xml:space="preserve">
+    <value>עריכה ברשימה</value>
+  </data>
 </root>

@@ -9,7 +9,14 @@ https://github.com/AL2009man/Gamepad-Asset-Pack
 The DualSense artwork follows the adaptation used by SundayMoments/DS5_Bridge:
 https://github.com/SundayMoments/DS5_Bridge
 
-The underlying controller artwork is provided under the MIT License.
+The GameCube Controller for Switch 2 illustration is a project asset created
+for DS4Windows. The official Nintendo product image and control diagram were
+used as visual references. The package includes the illustrated asset.
+
+https://www.nintendo.com/us/store/products/nintendo-switch-2-nintendo-gamecube-controller-120833/
+https://en-americas-support.nintendo.com/app/answers/detail/a_id/68429/
+
+The underlying Gamepad Asset Pack artwork is provided under the MIT License.
 
 MIT License
 

@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using DS4Windows;
+using DS4Windows.InputDevices;
 using DS4Windows.Switch2;
 using DS4WinWPF.DS4Forms;
 using DS4WinWPF.DS4Forms.ViewModels;
@@ -74,6 +75,37 @@ public sealed class ControllerDiagramMappingTests
             ProfileEditor.FormatHighlightLabel(mapped, "Capture"));
         Assert.AreEqual($"PS: {mapped.MappingName}", ProfileEditor.FormatHighlightLabel(mapped));
         Assert.AreEqual("PS", mapped.ControlName);
+    }
+
+    [TestMethod]
+    public void GameCubeShoulderHotspotsDoNotOverlap()
+    {
+        var rightTrigger = new System.Windows.Point(1273, 105);
+        var rightShoulder = new System.Windows.Point(1273, 145);
+        var leftTrigger = new System.Windows.Point(254, 119);
+        var leftShoulder = new System.Windows.Point(287, 138);
+
+        Assert.IsTrue(GameCubeArtwork.R.FillContains(rightTrigger));
+        Assert.IsFalse(GameCubeArtwork.Z.FillContains(rightTrigger));
+        Assert.IsTrue(GameCubeArtwork.Z.FillContains(rightShoulder));
+        Assert.IsFalse(GameCubeArtwork.R.FillContains(rightShoulder));
+        Assert.IsTrue(GameCubeArtwork.L.FillContains(leftTrigger));
+        Assert.IsFalse(GameCubeArtwork.ZL.FillContains(leftTrigger));
+        Assert.IsTrue(GameCubeArtwork.ZL.FillContains(leftShoulder));
+        Assert.IsFalse(GameCubeArtwork.L.FillContains(leftShoulder));
+    }
+
+    [TestMethod]
+    [DataRow(DS4Controls.Capture, "Capture")]
+    [DataRow(DS4Controls.PS, "Home")]
+    [DataRow(DS4Controls.Switch2C, "C")]
+    public void GameCubeTopButtonsStayAvailableByNameInTheMappingList(DS4Controls control, string name)
+    {
+        var mappings = new MappingListViewModel(Global.TEST_PROFILE_INDEX,
+            OutContType.ViiperGameCube, InputDeviceType.Switch2GameCube);
+        MappedControl mapped = mappings.ControlMap[control];
+        Assert.AreEqual(name, mapped.ControlName);
+        Assert.IsTrue(mapped.IsAvailableOnPhysicalController);
     }
 
     [TestMethod]

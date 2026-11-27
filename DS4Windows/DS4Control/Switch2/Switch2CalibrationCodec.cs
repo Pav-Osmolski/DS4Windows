@@ -141,9 +141,9 @@ public static class Switch2CalibrationCodec
                 Switch2FactoryCalibrationStorageSlot.Primary,
             (Switch2ControllerModel.JoyCon2Right, Switch2StickSide.Right) =>
                 Switch2FactoryCalibrationStorageSlot.Primary,
-            (Switch2ControllerModel.ProController2, Switch2StickSide.Left) =>
+            (Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube, Switch2StickSide.Left) =>
                 Switch2FactoryCalibrationStorageSlot.Primary,
-            (Switch2ControllerModel.ProController2, Switch2StickSide.Right) =>
+            (Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube, Switch2StickSide.Right) =>
                 Switch2FactoryCalibrationStorageSlot.Secondary,
             _ => 0,
         };
@@ -171,9 +171,9 @@ public static class Switch2CalibrationCodec
                 PrimaryUserStickAddress,
             (Switch2ControllerModel.JoyCon2Right, Switch2StickSide.Right) =>
                 PrimaryUserStickAddress,
-            (Switch2ControllerModel.ProController2, Switch2StickSide.Left) =>
+            (Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube, Switch2StickSide.Left) =>
                 PrimaryUserStickAddress,
-            (Switch2ControllerModel.ProController2, Switch2StickSide.Right) =>
+            (Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube, Switch2StickSide.Right) =>
                 SecondaryUserStickAddress,
             _ => 0,
         };

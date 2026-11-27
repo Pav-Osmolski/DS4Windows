@@ -24,6 +24,7 @@ public enum Switch2InputProtocolRevision : byte
     BluetoothLeJoyCon2Left07V1 = 3,
     BluetoothLeJoyCon2Right08V1 = 4,
     BluetoothLeProController2_09V1 = 5,
+    GameCubeUsbCommon05Bcd0101 = 6,
 }
 
 /// <summary>
@@ -36,6 +37,22 @@ public readonly struct Switch2InputProtocolIdentity :
     public const ushort NintendoUsbVendorId = 0x057E;
     public const ushort ProController2UsbProductId = 0x2069;
     public const ushort AuditedProController2UsbBcdDevice = 0x0201;
+    public const ushort AuditedGameCubeUsbBcdDevice = 0x0101;
+
+    internal static bool TryCreateFullControllerUsb(ushort vendorId,
+        ushort productId, ushort bcdDevice, out Switch2InputProtocolIdentity identity)
+    {
+        if (vendorId == NintendoUsbVendorId &&
+            productId == Switch2AdvertisementCodec.GameCubeProductId &&
+            bcdDevice == AuditedGameCubeUsbBcdDevice)
+        {
+            identity = new Switch2InputProtocolIdentity(Switch2ControllerModel.GameCube,
+                Switch2Transport.Usb, Switch2InputProtocolRevision.GameCubeUsbCommon05Bcd0101,
+                vendorId, productId, bcdDevice, default, default, Switch2GattProperty.None);
+            return true;
+        }
+        return TryCreateProController2Usb(vendorId, productId, bcdDevice, out identity);
+    }
 
     private Switch2InputProtocolIdentity(Switch2ControllerModel model,
         Switch2Transport transport,
@@ -116,7 +133,7 @@ public readonly struct Switch2InputProtocolIdentity :
             characteristic.FixedModel;
         if (model is not (Switch2ControllerModel.JoyCon2Left or
                 Switch2ControllerModel.JoyCon2Right or
-                Switch2ControllerModel.ProController2) ||
+                Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube) ||
             (characteristic.FixedModel != Switch2ControllerModel.Unknown &&
              characteristic.FixedModel != advertisementVerifiedModel))
         {
@@ -301,8 +318,11 @@ public readonly struct Switch2InputCalibrationSnapshot :
     private Switch2InputCalibrationSnapshot(Switch2ControllerModel model,
         ulong deviceGeneration,
         in Switch2StickCalibrationBinding left,
-        in Switch2StickCalibrationBinding right)
+        in Switch2StickCalibrationBinding right, byte leftTriggerZero = 0,
+        byte rightTriggerZero = 0)
     {
+        LeftTriggerZero = leftTriggerZero;
+        RightTriggerZero = rightTriggerZero;
         Model = model;
         DeviceGeneration = deviceGeneration;
         Left = left;
@@ -317,10 +337,16 @@ public readonly struct Switch2InputCalibrationSnapshot :
 
     public Switch2StickCalibrationBinding Right { get; }
 
+    internal byte LeftTriggerZero { get; }
+    internal byte RightTriggerZero { get; }
+
+    internal Switch2InputCalibrationSnapshot WithGameCubeTriggerZero(byte left, byte right) =>
+        new(Model, DeviceGeneration, Left, Right, left, right);
+
     public bool IsValid => DeviceGeneration != 0 &&
         Model is Switch2ControllerModel.JoyCon2Left or
             Switch2ControllerModel.JoyCon2Right or
-            Switch2ControllerModel.ProController2;
+            Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube;
 
     public static bool TryCreate(Switch2ControllerModel model,
         ulong deviceGeneration,
@@ -344,16 +370,16 @@ public readonly struct Switch2InputCalibrationSnapshot :
         if (deviceGeneration == 0 ||
             model is not (Switch2ControllerModel.JoyCon2Left or
                 Switch2ControllerModel.JoyCon2Right or
-                Switch2ControllerModel.ProController2))
+                Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube))
         {
             snapshot = default;
             return false;
         }
 
         bool hasLeft = model is Switch2ControllerModel.JoyCon2Left or
-            Switch2ControllerModel.ProController2;
+            Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube;
         bool hasRight = model is Switch2ControllerModel.JoyCon2Right or
-            Switch2ControllerModel.ProController2;
+            Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube;
         Switch2StickCalibrationBinding left = BuildBinding(
             Switch2StickSide.Left, hasLeft, leftFactoryRecord,
             leftUserRecord);
@@ -424,13 +450,14 @@ public readonly struct Switch2InputCalibrationSnapshot :
 
     public bool Equals(Switch2InputCalibrationSnapshot other) =>
         Model == other.Model && DeviceGeneration == other.DeviceGeneration &&
-        Left.Equals(other.Left) && Right.Equals(other.Right);
+        Left.Equals(other.Left) && Right.Equals(other.Right) &&
+        LeftTriggerZero == other.LeftTriggerZero && RightTriggerZero == other.RightTriggerZero;
 
     public override bool Equals(object obj) =>
         obj is Switch2InputCalibrationSnapshot other && Equals(other);
 
     public override int GetHashCode() => HashCode.Combine(Model,
-        DeviceGeneration, Left, Right);
+        DeviceGeneration, Left, Right, LeftTriggerZero, RightTriggerZero);
 
     private static Switch2StickCalibrationBinding BuildBinding(
         Switch2StickSide side, bool applicable,
@@ -644,6 +671,7 @@ public readonly struct Switch2CanonicalInputFrame
 {
     public const ushort CurrentVersion = 1;
     public const uint ProController2KnownCommonButtonMask = 0x03CF7FCF;
+    internal const uint GameCubeKnownCommonButtonMask = 0x00CF72CF;
 
     internal Switch2CanonicalInputFrame(
         in Switch2InputSessionDescriptor descriptor,
@@ -692,10 +720,12 @@ public readonly struct Switch2CanonicalInputFrame
     public Switch2CounterSequenceKind CounterSequence { get; }
     public uint RawButtonBits => Report.IsCommon ? Report.Common.Buttons :
         Report.Basic.Buttons;
-    public uint UnknownButtonBits => Report.IsCommon &&
-        Model == Switch2ControllerModel.ProController2 ?
-        RawButtonBits & ~ProController2KnownCommonButtonMask :
-        RawButtonBits;
+    public uint UnknownButtonBits => Report.IsCommon ? Model switch
+    {
+        Switch2ControllerModel.ProController2 => RawButtonBits & ~ProController2KnownCommonButtonMask,
+        Switch2ControllerModel.GameCube => RawButtonBits & ~GameCubeKnownCommonButtonMask,
+        _ => RawButtonBits,
+    } : RawButtonBits;
 
     public bool TryGetLeftStick(
         out Switch2CalibratedStickPosition position)
@@ -989,7 +1019,7 @@ internal static class Switch2CounterSequence
     internal static bool UsesArrivalOrdering(Switch2ControllerModel model,
         Switch2Transport transport, Switch2InputReportKind kind) =>
         kind == Switch2InputReportKind.Common05 &&
-        (model == Switch2ControllerModel.ProController2 &&
+        ((model is Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube) &&
             (transport == Switch2Transport.Usb || transport == Switch2Transport.BluetoothLe) ||
          (model is Switch2ControllerModel.JoyCon2Left or Switch2ControllerModel.JoyCon2Right) &&
             transport == Switch2Transport.BluetoothLe);
@@ -1032,8 +1062,8 @@ internal static class Switch2CanonicalInputBuilder
         bool decoded;
         ReadOnlySpan<byte> rawBody;
         if (identity.Transport == Switch2Transport.Usb &&
-            identity.ProtocolRevision ==
-                Switch2InputProtocolRevision.ProUsbCommon05Bcd0201)
+            identity.ProtocolRevision is Switch2InputProtocolRevision.ProUsbCommon05Bcd0201 or
+                Switch2InputProtocolRevision.GameCubeUsbCommon05Bcd0101)
         {
             decoded = Switch2InputCodec.TryDecodeUsb(packet, identity.Model,
                 out report);

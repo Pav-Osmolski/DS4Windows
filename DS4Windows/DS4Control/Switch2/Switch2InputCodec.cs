@@ -79,7 +79,7 @@ public static class Switch2InputCodec
         out Switch2DecodedInputReport report)
     {
         if (packet.Length != UsbPacketLength ||
-            model != Switch2ControllerModel.ProController2 ||
+            model is not (Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube) ||
             !TryGetReportKind(packet[0], out Switch2InputReportKind kind) ||
             kind != Switch2InputReportKind.Common05 ||
             !IsCompatible(model, kind))
@@ -363,7 +363,7 @@ public static class Switch2InputCodec
     private static bool IsSupportedModel(Switch2ControllerModel model) =>
         model is Switch2ControllerModel.JoyCon2Left or
             Switch2ControllerModel.JoyCon2Right or
-            Switch2ControllerModel.ProController2;
+            Switch2ControllerModel.ProController2 or Switch2ControllerModel.GameCube;
 
     private static bool IsCompatible(Switch2ControllerModel model,
         Switch2InputReportKind kind) =>
