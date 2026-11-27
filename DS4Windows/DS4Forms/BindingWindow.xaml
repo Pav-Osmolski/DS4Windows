@@ -62,7 +62,7 @@
             </StackPanel.Resources>
 
             <GroupBox Header="{lex:Loc Extra}" x:Name="extrasGB" Margin="0,16,0,0">
-                <StackPanel Orientation="Vertical" Margin="4,0">
+                <StackPanel Orientation="Vertical" Margin="4,0,4,2.5">
                     <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
                         <Label Content="{lex:Loc Rumble}" />
                         <Button x:Name="testRumbleBtn" Width="60" Content="{lex:Loc Test}" Click="TestRumbleBtn_Click" />
@@ -70,7 +70,7 @@
 
                     <StackPanel Orientation="Horizontal" Margin="{StaticResource spaceMargin}">
                         <Label Content="{lex:Loc Heavy}" Width="50" />
-                        <xctk:IntegerUpDown Value="{Binding HeavyRumble}" MinWidth="60" Margin="20,0,0,0"
+                        <xctk:IntegerUpDown x:Name="heavyRumbleInput" Value="{Binding HeavyRumble}" MinWidth="60" Margin="20,0,0,0"
                                             Minimum="0" Maximum="255" />
                     </StackPanel>
 
@@ -140,7 +140,8 @@
                             <CheckBox IsChecked="{Binding UseMouseSens}" Margin="{StaticResource spaceMargin}">
                                 <TextBlock Text="{lex:Loc BindingWin.ChangeMouseSensitivity}" TextWrapping="Wrap"/>
                             </CheckBox>
-                            <xctk:IntegerUpDown Value="{Binding MouseSens}" MinWidth="50" Height="20"
+                            <xctk:IntegerUpDown Value="{Binding MouseSens}" MinWidth="50"
+                                                Height="{Binding ActualHeight, ElementName=heavyRumbleInput}"
                                                 Minimum="0" Maximum="255" />
                         </StackPanel>
                     </StackPanel>
