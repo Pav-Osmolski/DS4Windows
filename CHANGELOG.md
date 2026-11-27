@@ -7,6 +7,15 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.86](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.86) - 2026-11-27
+
+- Refresh the DualSense and DualShock 4 graphics with higher-resolution artwork. Smooth the DualShock 4 lightbar and align its button and stick highlights with the refreshed controller map. Thanks to [@AL2009man](https://github.com/AL2009man) for the original [Gamepad Asset Pack](https://github.com/AL2009man/Gamepad-Asset-Pack) artwork.
+- Make controller-map mapping captions readable in light themes. Match the Button Editor mouse-sensitivity field height to the rumble fields and give all five Absolute Mouse fields a consistent, compact width.
+- Let Controller status span both stick columns on the standalone Controller Readings page when there’s room. The Axis Config readings panel keeps its single-column status card.
+- Make **Estimate pitch and roll** an opt-in DualShock 3 profile setting. It uses the selected gyro mode’s activation rules, keeps the chosen emulated controller when saved and rejects spikes from implausible samples or interrupted reports. Automated tests cover the estimate. Physical DualShock 3 validation is pending.
+
+This release continues to bundle [VIIPER 0.1.20](https://github.com/Pav-Osmolski/VIIPER/releases/tag/v0.1.20). Implemented in [PR #163](https://github.com/Pav-Osmolski/DS4Windows/pull/163).
+
 ### [5.0.85](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.85) - 2026-11-27
 
 #### Nintendo’s wireless GameCube Controller for Switch 2 is here 🎮
