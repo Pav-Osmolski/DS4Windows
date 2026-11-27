@@ -9,10 +9,12 @@ the Free Software Foundation, either version 3 of the License, or
 */
 
 using System;
+using System.Buffers;
 using System.Buffers.Binary;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -92,14 +94,18 @@ namespace DS4Windows
                 transport.Write(request, 0, request.Length);
 
                 response = new byte[3 + NonceLength];
-                ReadExactly(transport, response);
-                if (response[0] != (byte)'O' || response[1] != (byte)'K' ||
-                    response[2] != 0)
+                const int headerLength = 3;
+                ReadExactly(transport, response, 0, headerLength);
+                if (!response.AsSpan(0, headerLength).SequenceEqual("OK\0"u8))
                 {
-                    throw new IOException(
-                        "VIIPER rejected the authenticated client handshake.");
+                    if (response[0] == (byte)'{' &&
+                        IsUnauthorizedResponse(transport, response.AsSpan(0, headerLength)))
+                        throw new ViiperAuthenticationRejectedException();
+
+                    throw new IOException("VIIPER rejected the authenticated client handshake.");
                 }
 
+                ReadExactly(transport, response, headerLength, NonceLength);
                 serverNonce = new byte[NonceLength];
                 Buffer.BlockCopy(response, 3, serverNonce, 0,
                     serverNonce.Length);
@@ -172,8 +178,7 @@ namespace DS4Windows
                     return (byte[])cachedDerivedKey.Clone();
                 }
 
-                string password = File.ReadAllText(info.FullName).Trim();
-                byte[] replacement = DeriveKey(password);
+                byte[] replacement = DeriveKeyFromFile(info.FullName);
                 if (cachedDerivedKey != null)
                 {
                     CryptographicOperations.ZeroMemory(cachedDerivedKey);
@@ -186,13 +191,83 @@ namespace DS4Windows
             }
         }
 
-        private static void ReadExactly(Stream stream, byte[] buffer)
+        private static byte[] DeriveKeyFromFile(string path)
         {
-            int offset = 0;
-            while (offset < buffer.Length)
+            byte[] fileBytes = File.ReadAllBytes(path);
+            try
             {
-                int read = stream.Read(buffer, offset,
-                    buffer.Length - offset);
+                // VIIPER trims Unicode whitespace from the original UTF-8 bytes
+                // before PBKDF2. A UTF-8 BOM is part of the server's password.
+                ReadOnlySpan<byte> password = fileBytes;
+                while (Rune.DecodeFromUtf8(password, out Rune first, out int consumed) == OperationStatus.Done &&
+                    Rune.IsWhiteSpace(first))
+                    password = password[consumed..];
+                while (Rune.DecodeLastFromUtf8(password, out Rune last, out int consumed) == OperationStatus.Done &&
+                    Rune.IsWhiteSpace(last))
+                    password = password[..^consumed];
+                if (password.IsEmpty)
+                    throw new IOException("The VIIPER authentication key file is empty.");
+
+                return Rfc2898DeriveBytes.Pbkdf2(password, PasswordSalt,
+                    Pbkdf2Iterations, HashAlgorithmName.SHA256, 32);
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(fileBytes);
+            }
+        }
+
+        private static bool IsUnauthorizedResponse(Stream stream, ReadOnlySpan<byte> prefix)
+        {
+            // A rejected handshake receives one short JSON line in place of
+            // the success header and nonce. Never expose peer-supplied text.
+            byte[] response = new byte[256];
+            try
+            {
+                prefix.CopyTo(response);
+                int length = prefix.Length;
+                while (length < response.Length)
+                {
+                    int read = stream.Read(response, length, response.Length - length);
+                    if (read == 0)
+                        return false;
+                    int end = Array.IndexOf(response, (byte)'\n', length, read);
+                    if (end >= 0)
+                    {
+                        using JsonDocument document = JsonDocument.Parse(response.AsMemory(0, end));
+                        if (document.RootElement.ValueKind != JsonValueKind.Object)
+                            return false;
+                        int statusCount = 0;
+                        bool unauthorized = false;
+                        foreach (JsonProperty property in document.RootElement.EnumerateObject())
+                        {
+                            if (!property.NameEquals("status")) continue;
+                            statusCount++;
+                            unauthorized = property.Value.ValueKind == JsonValueKind.Number &&
+                                property.Value.TryGetInt32(out int status) && status == 401;
+                        }
+                        return statusCount == 1 && unauthorized;
+                    }
+                    length += read;
+                }
+                return false;
+            }
+            catch (JsonException)
+            {
+                return false;
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(response);
+            }
+        }
+
+        private static void ReadExactly(Stream stream, byte[] buffer, int offset, int length)
+        {
+            int end = offset + length;
+            while (offset < end)
+            {
+                int read = stream.Read(buffer, offset, end - offset);
                 if (read == 0)
                 {
                     throw new EndOfStreamException(
@@ -200,6 +275,14 @@ namespace DS4Windows
                 }
                 offset += read;
             }
+        }
+    }
+
+    internal sealed class ViiperAuthenticationRejectedException : IOException
+    {
+        internal ViiperAuthenticationRejectedException() : base(
+            "VIIPER rejected the authentication key (401). Use Settings > Components > Install / Repair VIIPER to restart the backend with the existing key.")
+        {
         }
     }
 

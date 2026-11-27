@@ -2063,7 +2063,8 @@ namespace DS4Windows
             {
                 return CreateDeviceStream();
             }
-            catch (IOException first)
+            catch (IOException first) when (first is not ViiperAuthenticationRejectedException &&
+                first is not XboxOneManagementException { RetainedImportsDisabled: true })
             {
                 ViiperPrerequisiteStatus status = ViiperSetupManager.GetStatus(tryStartServer: true);
                 if (!status.Ready)
@@ -10910,7 +10911,7 @@ namespace DS4Windows
                     // case; a reused bus/device address is not authority.
                     lifetime?.Dispose();
                 }
-                if (error is XboxOneManagementException) throw;
+                if (error is XboxOneManagementException or ViiperAuthenticationRejectedException) throw;
                 if (error is IOException || error is JsonException ||
                     error is ObjectDisposedException)
                     throw new IOException("VIIPER did not complete exact Xbox One startup.");
@@ -10944,7 +10945,7 @@ namespace DS4Windows
                             registration.ActivationPath, registration.SerializeRemovalRequest(),
                             registration.RemovalResponseTimeoutMilliseconds, request.Token);
                     }
-                    catch (Exception error) when (error is not XboxOneManagementException &&
+                    catch (Exception error) when (error is not (XboxOneManagementException or ViiperAuthenticationRejectedException) &&
                         (error is IOException ||
                         error is JsonException || error is ObjectDisposedException ||
                         error is OperationCanceledException))
@@ -11378,7 +11379,9 @@ namespace DS4Windows
             if (response.ValueKind != JsonValueKind.Object) return;
             bool errorEnvelope = false;
             int statusCount = 0;
+            int detailCount = 0;
             int status = 0;
+            bool retainedImportsDisabled = false;
             foreach (JsonProperty property in response.EnumerateObject())
             {
                 if (property.Name == "status")
@@ -11391,7 +11394,14 @@ namespace DS4Windows
                     else
                         status = 0;
                 }
-                else if (property.Name is "title" or "detail")
+                else if (property.Name == "detail")
+                {
+                    errorEnvelope = true;
+                    detailCount++;
+                    retainedImportsDisabled = property.Value.ValueKind == JsonValueKind.String &&
+                        property.Value.ValueEquals("retained USB/IP imports are not enabled for this VIIPER server");
+                }
+                else if (property.Name == "title")
                     errorEnvelope = true;
             }
             if (errorEnvelope)
@@ -11399,7 +11409,9 @@ namespace DS4Windows
                 // No title/detail, request path, response fragment, or inner
                 // exception: the peer may echo an authentication capability.
                 throw new XboxOneManagementException(operation,
-                    statusCount == 1 ? status : 0);
+                    statusCount == 1 ? status : 0,
+                    operation == XboxOneManagementOperation.CreatePersona && statusCount == 1 &&
+                    status == 409 && detailCount == 1 && retainedImportsDisabled);
             }
         }
 
@@ -11612,17 +11624,23 @@ namespace DS4Windows
 
     internal sealed class XboxOneManagementException : IOException
     {
-        internal XboxOneManagementException(XboxOneManagementOperation operation, int status)
+        internal XboxOneManagementException(XboxOneManagementOperation operation, int status,
+            bool retainedImportsDisabled = false)
             : base($"VIIPER rejected Xbox One {OperationLabel(operation)}" +
                 (status is >= 400 and <= 599 ? $" (API status {status})." :
-                    " (invalid API error response)."))
+                    " (invalid API error response).") +
+                (retainedImportsDisabled
+                    ? " The running VIIPER server was started without Xbox One / Series support. Use Settings > Components > Install / Repair VIIPER to restart it."
+                    : string.Empty))
         {
             Operation = operation;
             Status = status is >= 400 and <= 599 ? status : 0;
+            RetainedImportsDisabled = retainedImportsDisabled;
         }
 
         internal XboxOneManagementOperation Operation { get; }
         internal int Status { get; }
+        internal bool RetainedImportsDisabled { get; }
 
         private static string OperationLabel(XboxOneManagementOperation operation) => operation switch
         {

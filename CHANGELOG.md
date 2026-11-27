@@ -5,6 +5,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Unreleased
 
+- Match VIIPER’s handling of UTF-8 key files and distinguish Xbox One / Series authentication failures from controller creation conflicts in the log. Thanks to [@Deepfake66](https://github.com/Deepfake66) for the logs in [#157](https://github.com/Pav-Osmolski/DS4Windows/issues/157).
+
 - Show the DualSense Edge rear paddles on the Profile Editor map, clarify controls that are edited from the mapping list, and allow other inputs to target both paddles and Fn buttons on virtual DualSense Edge output. Thanks to [@gubbywumpus](https://github.com/gubbywumpus). [Issue #159](https://github.com/Pav-Osmolski/DS4Windows/issues/159)
 - Keep legacy Joy-Con startup running when the controller returns missing or invalid calibration data, with factory or nominal fallback and log messages. Thanks to [@aidenbaek579-png](https://github.com/aidenbaek579-png) for the MOBAPAD M12-HD report and traces. [Issue #161](https://github.com/Pav-Osmolski/DS4Windows/issues/161)
 

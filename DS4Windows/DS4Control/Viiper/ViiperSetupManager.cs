@@ -3216,6 +3216,11 @@ namespace DS4Windows
                 failure = "ReadPing: no valid VIIPER response";
                 return false;
             }
+            catch (ViiperAuthenticationRejectedException exception)
+            {
+                failure = exception.Message;
+                return false;
+            }
             catch (Exception exception)
             {
                 // This is cold-path diagnostic state, not a per-report log.
