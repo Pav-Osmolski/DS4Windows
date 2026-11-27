@@ -3187,6 +3187,7 @@ namespace DS4WinWPF.DS4Forms
                 axisReadingsToggle?.IsChecked == true;
             if (axisReadingsHost != null)
             {
+                conReadingsUserCon.SetDockedInAxisConfig(docked);
                 MoveControllerReadings(contReadingsTab, axisReadingsHost, conReadingsUserCon, docked);
                 ArrangeAxisReadingsDock(axisReadingsHost, docked, axisContentArea.ActualWidth);
             }

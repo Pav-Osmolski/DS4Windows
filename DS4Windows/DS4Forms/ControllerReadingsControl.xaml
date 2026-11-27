@@ -39,8 +39,8 @@
                     <TextBlock Text="{lex:Loc Strings:UI_125A15DE4B4E068B}" Style="{DynamicResource BridgeSectionDescriptionStyle}"/>
                 </StackPanel>
             </Border>
-            <WrapPanel>
-                <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
+            <WrapPanel x:Name="readingsCards" SizeChanged="ReadingsCards_SizeChanged">
+                <Border x:Name="leftStickCard" Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
                         <TextBlock Text="{lex:Loc Strings:UI_674E595229EA2709}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                         <TextBlock Text="{lex:Loc Strings:UI_E4DB9A5AD7E50B2E}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Height="18" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>
@@ -77,7 +77,7 @@
                         </Grid>
                     </StackPanel>
                 </Border>
-                <Border Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
+                <Border x:Name="rightStickCard" Style="{DynamicResource BridgeCardStyle}" Width="292" Margin="0,0,12,14">
                     <StackPanel>
                         <TextBlock Text="{lex:Loc Strings:UI_20FCDBFB7BC65BDC}" Style="{DynamicResource BridgeSectionTitleStyle}"/>
                         <TextBlock Text="{lex:Loc Strings:UI_E4DB9A5AD7E50B2E}" Style="{DynamicResource BridgeSectionDescriptionStyle}" Height="18" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/>

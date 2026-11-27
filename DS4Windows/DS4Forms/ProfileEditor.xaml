@@ -3710,7 +3710,8 @@
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="*" MaxWidth="360"/>
+                                                        <ColumnDefinition Width="180"/>
+                                                        <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition/>
@@ -3721,18 +3722,16 @@
                                                         <RowDefinition/>
                                                     </Grid.RowDefinitions>
                                                     <Label Content="{lex:Loc Width}" ContentStringFormat="{}{0}:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,0,10,8"/>
-                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsWidth}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="0" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsWidth}" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="0" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
                                                     <Label Content="{lex:Loc Height}" ContentStringFormat="{}{0}:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,0,10,8"/>
-                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsHeight}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="1" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsHeight}" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="1" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
                                                     <Label Content="{lex:Loc XCenter}" ContentStringFormat="{}{0}:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,0,10,8"/>
-                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsXCenter}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="2" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsXCenter}" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="2" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
                                                     <Label Content="{lex:Loc YCenter}" ContentStringFormat="{}{0}:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,0,10,8"/>
-                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsYCenter}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="3" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsYCenter}" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="3" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
                                                     <Label Content="{lex:Loc AntiRadius}" ContentStringFormat="{}{0}:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,0,10,8"/>
-                                                    <DockPanel Grid.Row="4" Grid.Column="1">
-                                                        <TextBlock Text="%" DockPanel.Dock="Right" Margin="3,0,0,8" VerticalAlignment="Center"/>
-                                                        <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsAntiRadius}" MinWidth="100" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" MinHeight="34" VerticalAlignment="Center"/>
-                                                    </DockPanel>
+                                                    <xctk:DoubleUpDown d:IsHidden="True" FormatString="F2" Value="{Binding AbsAntiRadius}" Minimum="0.0" Maximum="1.0" Increment="0.05" Margin="{StaticResource spaceMargin}" Grid.Row="4" Grid.Column="1" MinHeight="34" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="%" Grid.Row="4" Grid.Column="2" Margin="3,0,0,8" VerticalAlignment="Center"/>
                                                     <Label Content="{lex:Loc SnapToCenter}" ContentStringFormat="{}{0}:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="0" Margin="0,0,10,0"/>
                                                     <CheckBox ContentTemplate="{DynamicResource ProfileAdvancedCheckContentTemplate}" IsChecked="{Binding AbsSnapCenter}" VerticalAlignment="Center" VerticalContentAlignment="Center" MinWidth="50" Grid.Row="5" Grid.Column="1" Style="{DynamicResource BridgeLabeledCheckBoxStyle}"/>
                                                 </Grid>

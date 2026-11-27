@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using DS4WinWPF.DS4Forms;
 
 namespace DS4WindowsTests;
 
@@ -74,6 +75,44 @@ public sealed class ControllerReadingsLayoutTests
         };
         HeadlessWpfDispatcher.Invoke(thread);
         if (failure != null) ExceptionDispatchInfo.Capture(failure).Throw();
+    }
+
+    [TestMethod]
+    [DataRow("DarkTheme")]
+    [DataRow("DefaultTheme")]
+    public void StatusSpansBothSticksOnlyWhenTheyFitOnTheStandalonePage(string theme)
+    {
+        HeadlessWpfDispatcher.Invoke(() =>
+        {
+            Grid readings = ProfileAdvancedLayoutTests.Load(theme, "ControllerReadings");
+            var status = (Border)readings.FindName("controllerStatusCard");
+            var left = (Border)readings.FindName("leftStickCard");
+            var right = (Border)readings.FindName("rightStickCard");
+            var cards = (WrapPanel)readings.FindName("readingsCards");
+
+            double RightEdge(Border card) => card.TranslatePoint(new Point(card.ActualWidth, 0), readings).X;
+            void Layout(double width, bool docked = false)
+            {
+                readings.Measure(new Size(width, 740));
+                readings.Arrange(new Rect(0, 0, width, 740));
+                readings.UpdateLayout();
+                status.Width = ControllerReadingsControl.GetStatusCardWidth(left, right, cards.ActualWidth, docked);
+                readings.UpdateLayout();
+            }
+
+            Layout(980);
+            Assert.AreEqual(RightEdge(right), RightEdge(status), 0.1);
+            Assert.IsGreaterThan(left.ActualWidth, status.ActualWidth);
+
+            Layout(480);
+            Assert.AreEqual(RightEdge(left), RightEdge(status), 0.1);
+
+            Layout(980, docked: true);
+            Assert.AreEqual(RightEdge(left), RightEdge(status), 0.1);
+
+            Layout(980);
+            Assert.AreEqual(RightEdge(right), RightEdge(status), 0.1);
+        });
     }
 
     [TestMethod]
