@@ -4214,6 +4214,7 @@ namespace DS4Windows
             return output >= X360Controls.LXNeg &&
                     output <= X360Controls.Start ||
                 output == X360Controls.TouchpadClick ||
+                output is >= X360Controls.DualSenseEdgeFnL and <= X360Controls.DualSenseEdgePaddleR ||
                 output >= X360Controls.LeftMouse &&
                     output <= X360Controls.FifthMouse;
         }
@@ -4562,15 +4563,26 @@ namespace DS4Windows
                         ResetToDefaultValue(dcs.control, MappedState, outputfieldMapping);
                         return; // Always one-shot, even if an old profile has Toggle set.
                     }
-                    if (xboxControl >= X360Controls.LXNeg && xboxControl <= X360Controls.Start)
+                    DS4Controls mappedControl = xboxControl switch
                     {
-                        DS4Controls tempDS4Control = reverseX360ButtonMapping[(int)xboxControl];
+                        >= X360Controls.LXNeg and <= X360Controls.Start => reverseX360ButtonMapping[(int)xboxControl],
+                        X360Controls.DualSenseEdgeFnL => DS4Controls.FnL,
+                        X360Controls.DualSenseEdgeFnR => DS4Controls.FnR,
+                        X360Controls.DualSenseEdgePaddleL => DS4Controls.BLP,
+                        X360Controls.DualSenseEdgePaddleR => DS4Controls.BRP,
+                        _ => DS4Controls.None
+                    };
+                    if (xboxControl is >= X360Controls.DualSenseEdgeFnL and <= X360Controls.DualSenseEdgePaddleR &&
+                        Global.OutContType[device] != OutContType.ViiperDualSenseEdge)
+                        return;
+
+                    if (mappedControl != DS4Controls.None)
+                    {
                         ControlToXInput queuedMapping = CreateControlToXInput(
                             in switch2StickDirectionTapFrames[device],
-                            dcs.control, tempDS4Control,
+                            dcs.control, mappedControl,
                             switch2DirectionTapEligible);
                         customMapQueue[device].Enqueue(queuedMapping);
-                        //tempControlDict.Add(dcs.control, tempDS4Control);
                     }
                     else if (xboxControl == X360Controls.TouchpadClick)
                     {

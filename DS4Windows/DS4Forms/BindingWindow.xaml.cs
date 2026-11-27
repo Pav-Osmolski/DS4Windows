@@ -574,6 +574,21 @@ namespace DS4WinWPF.DS4Forms
                 new BindAssociation() { outputType = BindAssociation.OutType.Button, control = DS4Windows.X360Controls.TouchpadClick });
             touchpadClickBtn.Click += OutputButtonBtn_Click;
 
+            AddEdgeOutputButton(edgeFnLeftBtn, X360Controls.DualSenseEdgeFnL);
+            AddEdgeOutputButton(edgeFnRightBtn, X360Controls.DualSenseEdgeFnR);
+            AddEdgeOutputButton(edgeLeftPaddleBtn, X360Controls.DualSenseEdgePaddleL);
+            AddEdgeOutputButton(edgeRightPaddleBtn, X360Controls.DualSenseEdgePaddleR);
+
+            void AddEdgeOutputButton(Button button, X360Controls control)
+            {
+                associatedBindings.Add(button, new BindAssociation
+                {
+                    outputType = BindAssociation.OutType.Button,
+                    control = control
+                });
+                button.Content = UiText.Get(Global.getX360ControlString(control, OutContType.ViiperDualSenseEdge));
+            }
+
             associatedBindings.Add(mouseUpBtn,
                 new BindAssociation() { outputType = BindAssociation.OutType.Button, control = DS4Windows.X360Controls.MouseUp });
             mouseUpBtn.Click += OutputButtonBtn_Click;
@@ -1143,6 +1158,8 @@ namespace DS4WinWPF.DS4Forms
             outputControllerRasterHighlight.Visibility = Visibility.Collapsed;
             outputType = outputType.Normalize();
             configuredOutputType = outputType;
+            edgeOutputButtons.Visibility = outputType == OutContType.ViiperDualSenseEdge
+                ? Visibility.Visible : Visibility.Collapsed;
             genericJoystickMappingHint.Text = GenericJoystickOutputLabels.DiagramHint;
             genericJoystickMappingHint.Visibility = outputType == OutContType.ViiperGenericJoystick
                 ? Visibility.Visible : Visibility.Collapsed;

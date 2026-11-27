@@ -3407,6 +3407,12 @@ X axis: {0}, Y axis: {1}</value>
     <value>Player 2</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>
   </data>
+  <data name="EdgeControllerRearView" xml:space="preserve">
+    <value>Rear view</value>
+  </data>
+  <data name="EditInControllerMappingList" xml:space="preserve">
+    <value>Edit in list</value>
+  </data>
   <data name="UI_4B83C7C87164E126" xml:space="preserve">
     <value>LIST ONLY</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>

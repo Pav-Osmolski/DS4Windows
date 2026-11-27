@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -162,20 +163,6 @@ namespace DS4Windows.InputDevices
         public const int IMU_YAXIS_IDX = 1, IMU_PITCH_IDX = 1;
         public const int IMU_ZAXIS_IDX = 2, IMU_ROLL_IDX = 2;
 
-        private const double STICK_AXIS_MAX_CUTOFF = 0.96;
-        private const double STICK_AXIS_MIN_CUTOFF = 1.04;
-
-        private const double STICK_AXIS_LS_X_MAX_CUTOFF = 0.96;
-        private const double STICK_AXIS_LS_X_MIN_CUTOFF = 1.04;
-        //private const double STICK_AXIS_LS_X_MIN_CUTOFF = 1.48;
-        private const double STICK_AXIS_RS_X_MAX_CUTOFF = 0.96;
-        private const double STICK_AXIS_RS_X_MIN_CUTOFF = 1.04;
-
-        private const double STICK_AXIS_LS_Y_MAX_CUTOFF = 0.96;
-        private const double STICK_AXIS_LS_Y_MIN_CUTOFF = 1.14;
-        private const double STICK_AXIS_RS_Y_MAX_CUTOFF = 0.96;
-        private const double STICK_AXIS_RS_Y_MIN_CUTOFF = 1.14;
-
         private const string BLUETOOTH_HID_GUID = "{00001124-0000-1000-8000-00805F9B34FB}";
 
         private byte frameCount = 0;
@@ -239,12 +226,10 @@ namespace DS4Windows.InputDevices
         public int RumbleReportLen { get => rumbleReportLen; }
 
         private bool foundLeftStickCalib;
-        private ushort[] leftStickCalib = new ushort[6];
         private ushort leftStickOffsetX = 0;
         private ushort leftStickOffsetY = 0;
 
         private bool foundRightStickCalib;
-        private ushort[] rightStickCalib = new ushort[6];
         private ushort rightStickOffsetX = 0;
         private ushort rightStickOffsetY = 0;
 
@@ -883,27 +868,8 @@ namespace DS4Windows.InputDevices
 
                         if (firstReport && !foundLeftStickCalib)
                         {
-                            if (tempAxisX > leftStickXData.mid)
-                            {
-                                uint diff = (uint)(tempAxisX - leftStickXData.mid);
-                                leftStickXData.min = (ushort)(leftStickXData.min + diff);
-                            }
-                            else if (tempAxisX < leftStickXData.mid)
-                            {
-                                uint diff = (uint)(leftStickXData.mid - tempAxisX);
-                                leftStickXData.max = (ushort)(leftStickXData.max - diff);
-                            }
-
-                            if (tempAxisY > leftStickYData.mid)
-                            {
-                                uint diff = (uint)(tempAxisY - leftStickYData.mid);
-                                leftStickYData.min = (ushort)(leftStickYData.min + diff);
-                            }
-                            else if (tempAxisY < leftStickYData.mid)
-                            {
-                                uint diff = (uint)(leftStickYData.mid - tempAxisY);
-                                leftStickYData.max = (ushort)(leftStickYData.max - diff);
-                            }
+                            RecenterStick(ref leftStickXData, tempAxisX);
+                            RecenterStick(ref leftStickYData, tempAxisY);
                         }
 
                         tempAxisX = tempAxisX > leftStickXData.max ? leftStickXData.max : (tempAxisX < leftStickXData.min ? leftStickXData.min : tempAxisX);
@@ -946,27 +912,8 @@ namespace DS4Windows.InputDevices
 
                         if (firstReport && !foundRightStickCalib)
                         {
-                            if (tempAxisX > rightStickXData.mid)
-                            {
-                                uint diff = (uint)(tempAxisX - rightStickXData.mid);
-                                rightStickXData.min = (ushort)(rightStickXData.min + diff);
-                            }
-                            else if (tempAxisX < rightStickXData.mid)
-                            {
-                                uint diff = (uint)(rightStickXData.mid - tempAxisX);
-                                rightStickXData.max = (ushort)(rightStickXData.max - diff);
-                            }
-
-                            if (tempAxisY > rightStickYData.mid)
-                            {
-                                uint diff = (uint)(tempAxisY - rightStickYData.mid);
-                                rightStickYData.min = (ushort)(rightStickYData.min + diff);
-                            }
-                            else if (tempAxisY < rightStickYData.mid)
-                            {
-                                uint diff = (uint)(rightStickYData.mid - tempAxisY);
-                                rightStickYData.max = (ushort)(rightStickYData.max - diff);
-                            }
+                            RecenterStick(ref rightStickXData, tempAxisX);
+                            RecenterStick(ref rightStickYData, tempAxisY);
                         }
 
                         tempAxisX = tempAxisX > rightStickXData.max ? rightStickXData.max : (tempAxisX < rightStickXData.min ? rightStickXData.min : tempAxisX);
@@ -1303,77 +1250,53 @@ namespace DS4Windows.InputDevices
             //res = hidDevice.ReadFile(tmpReport);
         }
 
-        private byte[] Subcommand(byte subcommand, byte[] tmpBuffer, uint bufLen,
+        private byte[] Subcommand(byte subcommand, byte[] payload, uint length,
             bool checkResponse = false)
         {
-            int retryLimit = 100;
-            byte[] tmpReport;
-
-            do
+            byte[] command = new byte[SUBCOMMAND_BUFFER_LEN];
+            Array.Copy(commandBuffHeader, 0, command, 2, SUBCOMMAND_HEADER_LEN);
+            Array.Copy(payload, 0, command, 11, length);
+            command[0] = 0x01;
+            command[10] = subcommand;
+            lock (nintendoOutputLock)
             {
-                bool result;
-                byte[] commandBuffer = new byte[SUBCOMMAND_BUFFER_LEN];
-                Array.Copy(commandBuffHeader, 0, commandBuffer, 2, SUBCOMMAND_HEADER_LEN);
-                Array.Copy(tmpBuffer, 0, commandBuffer, 11, bufLen);
-
-                commandBuffer[0] = 0x01;
-                commandBuffer[10] = subcommand;
-                lock (nintendoOutputLock)
-                {
-                    commandBuffer[1] = frameCount;
-                    frameCount = (byte)(++frameCount & 0x0F);
-                    result = hDevice.WriteOutputReportViaInterrupt(commandBuffer, 0);
-                }
-
-                tmpReport = null;
-                if (result && checkResponse)
-                {
-                    tmpReport = new byte[inputReportLen];
-                    HidDevice.ReadStatus res;
-                    res = hDevice.ReadFile(tmpReport, SUBCOMMAND_RESPONSE_TIMEOUT);
-                    int tries = 1;
-                    while (res == HidDevice.ReadStatus.Success &&
-                        tmpReport[0] != 0x21 && tmpReport[14] != subcommand && tries < 100)
-                    {
-                        //Console.WriteLine("TRY AGAIN: {0}", tmpReport[0]);
-                        res = hDevice.ReadFile(tmpReport, SUBCOMMAND_RESPONSE_TIMEOUT);
-                        tries++;
-                    }
-
-                    //Console.WriteLine("END GAME: {0} {1} {2}", subcommand, tmpReport[0], tries);
-                }
+                command[1] = frameCount;
+                frameCount = (byte)(++frameCount & 0x0F);
+                if (!hDevice.WriteOutputReportViaInterrupt(command, 0))
+                    return null;
             }
-            while (ReloadStickCalib(subcommand, tmpBuffer, tmpReport, ref retryLimit));
 
-            return tmpReport;
+            if (!checkResponse)
+                return null;
+
+            byte[] report = new byte[inputReportLen];
+            var timer = Stopwatch.StartNew();
+            long remaining = SUBCOMMAND_RESPONSE_TIMEOUT;
+            while (remaining > 0)
+            {
+                if (hDevice.ReadFile(report, out int bytesRead, (uint)remaining) != HidDevice.ReadStatus.Success)
+                    return null;
+
+                ReadOnlySpan<byte> received = report.AsSpan(0, bytesRead);
+                if (received.Length >= 15 && received[0] == 0x21 && received[14] == subcommand)
+                {
+                    if (subcommand != SwitchProSubCmd.SPI_FLASH_READ)
+                        return report;
+                    if ((received[13] & 0x80) == 0)
+                        return null;
+                    if (MatchesCalibrationReply(received, payload))
+                        return report;
+                }
+                remaining = SUBCOMMAND_RESPONSE_TIMEOUT - timer.ElapsedMilliseconds;
+            }
+            return null;
         }
 
-        private bool ReloadStickCalib(byte subcommand, ReadOnlySpan<byte> tmpBuffer, ReadOnlySpan<byte> tmpReport, ref int retryLimit)
-        {
-            if (subcommand != 0x10) { return false; }
-            if (retryLimit-- <= 0) { return false; }
+        internal static bool MatchesCalibrationReply(ReadOnlySpan<byte> report, ReadOnlySpan<byte> request) =>
+            request.Length == 5 && report.Length >= 20 + request[4] &&
+            report[0] == 0x21 && (report[13] & 0x80) != 0 && report[14] == SwitchProSubCmd.SPI_FLASH_READ &&
+            report.Slice(15, 5).SequenceEqual(request);
 
-            if (tmpBuffer.SequenceEqual<byte>([0x3D, 0x60, 0x00, 0x00, 0x09]) || // LEFT  STICK FACTORY CALIB
-                tmpBuffer.SequenceEqual<byte>([0x46, 0x60, 0x00, 0x00, 0x09]) || // RIGHT STICK FACTORY CALIB
-                tmpBuffer.SequenceEqual<byte>([0x12, 0x80, 0x00, 0x00, 0x09]) || // LEFT  STICK USER    CALIB
-                tmpBuffer.SequenceEqual<byte>([0x1D, 0x80, 0x00, 0x00, 0x09]))   // RIGHT STICK USER    CALIB
-            {
-                var SPI_RESP_OFFSET = 20;
-                var stickCalib = new ushort[6];
-                stickCalib[0] = (ushort)(((tmpReport[1 + SPI_RESP_OFFSET] << 8) & 0xF00) | tmpReport[0 + SPI_RESP_OFFSET]); // X Axis Max above center
-                stickCalib[1] = (ushort)((tmpReport[2 + SPI_RESP_OFFSET] << 4) | (tmpReport[1 + SPI_RESP_OFFSET] >> 4)); // Y Axis Max above center
-                stickCalib[2] = (ushort)(((tmpReport[4 + SPI_RESP_OFFSET] << 8) & 0xF00) | tmpReport[3 + SPI_RESP_OFFSET]); // X Axis Center
-                stickCalib[3] = (ushort)((tmpReport[5 + SPI_RESP_OFFSET] << 4) | (tmpReport[4 + SPI_RESP_OFFSET] >> 4)); // Y Axis Center
-                stickCalib[4] = (ushort)(((tmpReport[7 + SPI_RESP_OFFSET] << 8) & 0xF00) | tmpReport[6 + SPI_RESP_OFFSET]); // X Axis Min below center
-                stickCalib[5] = (ushort)((tmpReport[8 + SPI_RESP_OFFSET] << 4) | (tmpReport[7 + SPI_RESP_OFFSET] >> 4)); // Y Axis Min below center
-
-                return stickCalib.Any(item => item == 0);
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         public void WriteReport()
         {
@@ -1692,225 +1615,143 @@ namespace DS4Windows.InputDevices
 
         public void CalibrationData()
         {
-            const int SPI_RESP_OFFSET = 20;
-            byte[] command;
-            byte[] tmpBuffer;
-
-            //command = new byte[] { 0x00, 0x50, 0x00, 0x00, 0x01 };
-            //tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-            //Console.WriteLine("THE POWER");
-            //Console.WriteLine(string.Join(",", tmpBuffer));
-            //Console.WriteLine(tmpBuffer[SPI_RESP_OFFSET]);
-            //Console.WriteLine();
-
-            bool foundUserCalib = false;
-
-            if (sideType == JoyConSide.Left)
+            if (sideType is JoyConSide.Left or JoyConSide.Right)
             {
-                command = new byte[] { 0x10, 0x80, 0x00, 0x00, 0x02 };
-                tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                if (tmpBuffer[SPI_RESP_OFFSET] == 0xB2 && tmpBuffer[SPI_RESP_OFFSET + 1] == 0xA1)
+                bool left = sideType == JoyConSide.Left;
+                int userAddress = left ? 0x8010 : 0x801B;
+                int factoryAddress = left ? 0x603D : 0x6046;
+
+                bool user = TryDecodeStickCalibration(ReadUserCalibration(userAddress, 9),
+                    left, user: true, out var x, out var y);
+                bool calibrated = user || TryDecodeStickCalibration(ReadCalibrationBlock(factoryAddress, 9),
+                    left, user: false, out x, out y);
+                if (!calibrated)
                 {
-                    foundUserCalib = true;
-                    foundLeftStickCalib = true;
+                    x = y = new StickAxisData { min = 0, mid = 2048, max = 4095 };
+                    AppLogger.LogToGui($"Joy-Con ({sideType}) stick calibration unavailable. Using the standard 12-bit stick range.", false);
                 }
 
-                if (foundUserCalib)
+                // The existing first-report correction applies only to valid factory data.
+                if (left)
                 {
-                    command = new byte[] { 0x12, 0x80, 0x00, 0x00, 0x09 };
-                    tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                    //Console.WriteLine("FOUND USER CALIB");
+                    leftStickXData = x;
+                    leftStickYData = y;
+                    foundLeftStickCalib = user || !calibrated;
                 }
                 else
                 {
-                    command = new byte[] { 0x3D, 0x60, 0x00, 0x00, 0x09 };
-                    tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                    //Console.WriteLine("CHECK FACTORY CALIB");
+                    rightStickXData = x;
+                    rightStickYData = y;
+                    foundRightStickCalib = user || !calibrated;
                 }
-
-                leftStickCalib[0] = (ushort)(((tmpBuffer[1 + SPI_RESP_OFFSET] << 8) & 0xF00) | tmpBuffer[0 + SPI_RESP_OFFSET]); // X Axis Max above center
-                leftStickCalib[1] = (ushort)((tmpBuffer[2 + SPI_RESP_OFFSET] << 4) | (tmpBuffer[1 + SPI_RESP_OFFSET] >> 4)); // Y Axis Max above center
-                leftStickCalib[2] = (ushort)(((tmpBuffer[4 + SPI_RESP_OFFSET] << 8) & 0xF00) | tmpBuffer[3 + SPI_RESP_OFFSET]); // X Axis Center
-                leftStickCalib[3] = (ushort)((tmpBuffer[5 + SPI_RESP_OFFSET] << 4) | (tmpBuffer[4 + SPI_RESP_OFFSET] >> 4)); // Y Axis Center
-                leftStickCalib[4] = (ushort)(((tmpBuffer[7 + SPI_RESP_OFFSET] << 8) & 0xF00) | tmpBuffer[6 + SPI_RESP_OFFSET]); // X Axis Min below center
-                leftStickCalib[5] = (ushort)((tmpBuffer[8 + SPI_RESP_OFFSET] << 4) | (tmpBuffer[7 + SPI_RESP_OFFSET] >> 4)); // Y Axis Min below center
-
-                if (foundUserCalib)
-                {
-                    leftStickXData.max = (ushort)(leftStickCalib[0] + leftStickCalib[2]);
-                    leftStickXData.mid = leftStickCalib[2];
-                    leftStickXData.min = (ushort)(leftStickCalib[2] - leftStickCalib[4]);
-
-                    leftStickYData.max = (ushort)(leftStickCalib[1] + leftStickCalib[3]);
-                    leftStickYData.mid = leftStickCalib[3];
-                    leftStickYData.min = (ushort)(leftStickCalib[3] - leftStickCalib[5]);
-                }
-                else
-                {
-                    leftStickXData.max = (ushort)((leftStickCalib[0] + leftStickCalib[2]) * STICK_AXIS_LS_X_MAX_CUTOFF);
-                    leftStickXData.min = (ushort)((leftStickCalib[2] - leftStickCalib[4]) * STICK_AXIS_LS_X_MIN_CUTOFF);
-                    //leftStickXData.mid = leftStickCalib[2];
-                    leftStickXData.mid = (ushort)((leftStickXData.max - leftStickXData.min) / 2.0 + leftStickXData.min);
-
-                    leftStickYData.max = (ushort)((leftStickCalib[1] + leftStickCalib[3]) * STICK_AXIS_LS_Y_MAX_CUTOFF);
-                    leftStickYData.min = (ushort)((leftStickCalib[3] - leftStickCalib[5]) * STICK_AXIS_LS_Y_MIN_CUTOFF);
-                    //leftStickYData.mid = leftStickCalib[3];
-                    leftStickYData.mid = (ushort)((leftStickYData.max - leftStickYData.min) / 2.0 + leftStickYData.min);
-                    //leftStickOffsetX = leftStickOffsetY = 140;
-                }
-
-                //leftStickOffsetX = leftStickCalib[2];
-                //leftStickOffsetY = leftStickCalib[3];
-
-                //Console.WriteLine(string.Join(",", tmpBuffer));
-                //Console.WriteLine();
-                //Console.WriteLine(string.Join(",", leftStickCalib));
-
-                /*
-                // Grab Factory LS Dead Zone
-                command = new byte[] { 0x86, 0x60, 0x00, 0x00, 0x10 };
-                byte[] deadZoneBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                deadzoneLS = (ushort)((deadZoneBuffer[4 + SPI_RESP_OFFSET] << 8) & 0xF00 | deadZoneBuffer[3 + SPI_RESP_OFFSET]);
-                //Console.WriteLine("DZ Left: {0}", deadzoneLS);
-                //Console.WriteLine(string.Join(",", deadZoneBuffer));
-                */
             }
-            else if (sideType == JoyConSide.Right)
+
+            if (!TryApplyImuCalibration(ReadUserCalibration(0x8026, 24)) &&
+                !TryApplyImuCalibration(ReadCalibrationBlock(0x6020, 24)))
             {
-                foundUserCalib = false;
-                command = new byte[] { 0x1B, 0x80, 0x00, 0x00, 0x02 };
-                tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                if (tmpBuffer[SPI_RESP_OFFSET] == 0xB2 && tmpBuffer[SPI_RESP_OFFSET + 1] == 0xA1)
-                {
-                    foundUserCalib = true;
-                    foundRightStickCalib = true;
-                }
-
-                if (foundUserCalib)
-                {
-                    command = new byte[] { 0x1D, 0x80, 0x00, 0x00, 0x09 };
-                    tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                    //Console.WriteLine("FOUND RIGHT USER CALIB");
-                }
-                else
-                {
-                    command = new byte[] { 0x46, 0x60, 0x00, 0x00, 0x09 };
-                    tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                    //Console.WriteLine("CHECK RIGHT FACTORY CALIB");
-                }
-
-                rightStickCalib[2] = (ushort)(((tmpBuffer[1 + SPI_RESP_OFFSET] << 8) & 0xF00) | tmpBuffer[0 + SPI_RESP_OFFSET]); // X Axis Center
-                rightStickCalib[3] = (ushort)((tmpBuffer[2 + SPI_RESP_OFFSET] << 4) | (tmpBuffer[1 + SPI_RESP_OFFSET] >> 4)); // Y Axis Center
-                rightStickCalib[4] = (ushort)(((tmpBuffer[4 + SPI_RESP_OFFSET] << 8) & 0xF00) | tmpBuffer[3 + SPI_RESP_OFFSET]); // X Axis Min below center
-                rightStickCalib[5] = (ushort)((tmpBuffer[5 + SPI_RESP_OFFSET] << 4) | (tmpBuffer[4 + SPI_RESP_OFFSET] >> 4)); // Y Axis Min below center
-                rightStickCalib[0] = (ushort)(((tmpBuffer[7 + SPI_RESP_OFFSET] << 8) & 0xF00) | tmpBuffer[6 + SPI_RESP_OFFSET]); // X Axis Max above center
-                rightStickCalib[1] = (ushort)((tmpBuffer[8 + SPI_RESP_OFFSET] << 4) | (tmpBuffer[7 + SPI_RESP_OFFSET] >> 4)); // Y Axis Max above center
-
-                if (foundUserCalib)
-                {
-                    rightStickXData.max = (ushort)(rightStickCalib[2] + rightStickCalib[0]);
-                    rightStickXData.mid = rightStickCalib[2];
-                    rightStickXData.min = (ushort)(rightStickCalib[2] - rightStickCalib[4]);
-
-                    rightStickYData.max = (ushort)(rightStickCalib[3] + rightStickCalib[1]);
-                    rightStickYData.mid = rightStickCalib[3];
-                    rightStickYData.min = (ushort)(rightStickCalib[3] - rightStickCalib[5]);
-                }
-                else
-                {
-                    rightStickXData.max = (ushort)((rightStickCalib[2] + rightStickCalib[0]) * STICK_AXIS_RS_X_MAX_CUTOFF);
-                    rightStickXData.min = (ushort)((rightStickCalib[2] - rightStickCalib[4]) * STICK_AXIS_RS_X_MIN_CUTOFF);
-                    //rightStickXData.mid = rightStickCalib[2];
-                    rightStickXData.mid = (ushort)((rightStickXData.max - rightStickXData.min) / 2.0 + rightStickXData.min);
-
-                    rightStickYData.max = (ushort)((rightStickCalib[3] + rightStickCalib[1]) * STICK_AXIS_RS_Y_MAX_CUTOFF);
-                    rightStickYData.min = (ushort)((rightStickCalib[3] - rightStickCalib[5]) * STICK_AXIS_RS_Y_MIN_CUTOFF);
-                    //rightStickYData.mid = rightStickCalib[3];
-                    rightStickYData.mid = (ushort)((rightStickYData.max - rightStickYData.min) / 2.0 + rightStickYData.min);
-                    //rightStickOffsetX = rightStickOffsetY = 140;
-                }
-
-                //rightStickOffsetX = rightStickCalib[2];
-                //rightStickOffsetY = rightStickCalib[5];
-
-                //Console.WriteLine(string.Join(",", tmpBuffer));
-                //Console.WriteLine();
-                //Console.WriteLine(string.Join(",", rightStickCalib));
-
-                /*
-                // Grab Factory RS Dead Zone
-                command = new byte[] { 0x98, 0x60, 0x00, 0x00, 0x10 };
-                deadZoneBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                deadzoneRS = (ushort)((deadZoneBuffer[4 + SPI_RESP_OFFSET] << 8) & 0xF00 | deadZoneBuffer[3 + SPI_RESP_OFFSET]);
-                //Console.WriteLine("DZ Right: {0}", deadzoneRS);
-                //Console.WriteLine(string.Join(",", deadZoneBuffer));*/
+                Array.Clear(accelNeutral);
+                Array.Clear(gyroBias);
+                Array.Fill(accelSens, (short)16384);
+                Array.Fill(gyroSens, (short)13371);
+                Array.Fill(accelCoeff, 1.0 / 4096);
+                Array.Fill(gyroCoeff, GYRO_IN_DEG_SEC_FACTOR);
+                AppLogger.LogToGui($"Joy-Con ({sideType}) IMU calibration unavailable. Using nominal motion scaling and live gyro calibration.", false);
             }
+        }
 
-            foundUserCalib = false;
-            command = new byte[] { 0x26, 0x80, 0x00, 0x00, 0x02 };
-            tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-            if (tmpBuffer[SPI_RESP_OFFSET] == 0xB2 && tmpBuffer[SPI_RESP_OFFSET + 1] == 0xA1)
+        private ReadOnlySpan<byte> ReadUserCalibration(int address, byte length)
+        {
+            ReadOnlySpan<byte> marker = ReadCalibrationBlock(address, 2);
+            return marker.SequenceEqual(new byte[] { 0xB2, 0xA1 }) ?
+                ReadCalibrationBlock(address + 2, length) : default;
+        }
+
+        private ReadOnlySpan<byte> ReadCalibrationBlock(int address, byte length)
+        {
+            byte[] request = new byte[5];
+            BinaryPrimitives.WriteInt32LittleEndian(request, address);
+            request[4] = length;
+            byte[] response = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, request,
+                (uint)request.Length, checkResponse: true);
+            return response == null ? default : response.AsSpan(20, length);
+        }
+
+        internal static bool TryDecodeStickCalibration(ReadOnlySpan<byte> data, bool left, bool user,
+            out StickAxisData x, out StickAxisData y)
+        {
+            x = y = default;
+            if (data.Length != 9)
+                return false;
+
+            ReadOnlySpan<byte> center = data.Slice(left ? 3 : 0, 3);
+            ReadOnlySpan<byte> below = data.Slice(left ? 6 : 3, 3);
+            ReadOnlySpan<byte> above = data.Slice(left ? 0 : 6, 3);
+            return TryBuildStickAxis(center[0] | (center[1] & 0x0F) << 8,
+                    below[0] | (below[1] & 0x0F) << 8, above[0] | (above[1] & 0x0F) << 8,
+                    user, 1.04, out x) &&
+                TryBuildStickAxis(center[1] >> 4 | center[2] << 4,
+                    below[1] >> 4 | below[2] << 4, above[1] >> 4 | above[2] << 4,
+                    user, 1.14, out y);
+        }
+
+        private static bool TryBuildStickAxis(int center, int below, int above, bool user,
+            double factoryMinCutoff, out StickAxisData axis)
+        {
+            axis = default;
+            if (below == 0 || above == 0 || center - below < 0 || center + above > 4095)
+                return false;
+
+            int min = center - below;
+            int max = center + above;
+            if (!user)
             {
-                foundUserCalib = true;
+                min = (int)(min * factoryMinCutoff);
+                max = (int)(max * 0.96);
+                center = (min + max) / 2;
             }
+            if (min >= center || center >= max)
+                return false;
 
-            //Console.WriteLine("{0}", string.Join(",", tmpBuffer.Skip(offset).ToArray()));
-            if (foundUserCalib)
+            axis = new StickAxisData { min = (ushort)min, mid = (ushort)center, max = (ushort)max };
+            return true;
+        }
+
+        private bool TryApplyImuCalibration(ReadOnlySpan<byte> data)
+        {
+            if (data.Length != 24)
+                return false;
+
+            Span<short> values = stackalloc short[12];
+            for (int i = 0; i < values.Length; i++)
+                values[i] = BinaryPrimitives.ReadInt16LittleEndian(data[(i * 2)..]);
+
+            for (int i = 0; i < 3; i++)
             {
-                command = new byte[] { 0x28, 0x80, 0x00, 0x00, 0x18 };
-                tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                //Console.WriteLine("FOUND USER CALIB");
+                if (values[i + 3] <= values[i] || values[i + 9] <= values[i + 6])
+                    return false;
             }
-            else
+            for (int i = 0; i < 3; i++)
             {
-                command = new byte[] { 0x20, 0x60, 0x00, 0x00, 0x18 };
-                tmpBuffer = Subcommand(SwitchProSubCmd.SPI_FLASH_READ, command, 5, checkResponse: true);
-                //Console.WriteLine("CHECK FACTORY CALIB");
+                int accel = i == 2 ? 2 : 1 - i;
+                int gyro = 2 - i;
+                accelNeutral[i] = values[accel];
+                accelSens[i] = values[accel + 3];
+                accelCoeff[i] = 4.0 / (accelSens[i] - accelNeutral[i]);
+                gyroBias[i] = values[gyro + 6];
+                gyroSens[i] = values[gyro + 9];
+                gyroCoeff[i] = 936.0 / (gyroSens[i] - gyroBias[i]);
             }
+            return true;
+        }
 
-            accelNeutral[IMU_XAXIS_IDX] = (short)((tmpBuffer[3 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[2 + SPI_RESP_OFFSET]); // Accel X Offset
-            accelNeutral[IMU_YAXIS_IDX] = (short)((tmpBuffer[1 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[0 + SPI_RESP_OFFSET]); // Accel Y Offset
-            accelNeutral[IMU_ZAXIS_IDX] = (short)((tmpBuffer[5 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[4 + SPI_RESP_OFFSET]); // Accel Z Offset
-            //Console.WriteLine("ACCEL NEUTRAL: {0}", string.Join(",", accelNeutral));
-            //Console.WriteLine("{0}", string.Join(",", tmpBuffer.Skip(offset).ToArray()));
+        private static void RecenterStick(ref StickAxisData axis, int reading)
+        {
+            if (reading <= axis.min || reading >= axis.max)
+                return;
 
-            accelSens[IMU_XAXIS_IDX] = (short)((tmpBuffer[9 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[8 + SPI_RESP_OFFSET]); // Accel X Sens
-            accelSens[IMU_YAXIS_IDX] = (short)((tmpBuffer[7 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[6 + SPI_RESP_OFFSET]); // Accel Y Sens
-            accelSens[IMU_ZAXIS_IDX] = (short)((tmpBuffer[11 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[10 + SPI_RESP_OFFSET]); // Accel Z Sens
-            //Console.WriteLine("ACCEL SENS: {0}", string.Join(",", accelSens));
-            //Console.WriteLine("{0}", string.Join(",", tmpBuffer.Skip(SPI_RESP_OFFSET).ToArray()));
-
-            accelCoeff[IMU_XAXIS_IDX] = 1.0 / (accelSens[IMU_XAXIS_IDX] - accelNeutral[IMU_XAXIS_IDX]) * 4.0;
-            accelCoeff[IMU_YAXIS_IDX] = 1.0 / (accelSens[IMU_YAXIS_IDX] - accelNeutral[IMU_YAXIS_IDX]) * 4.0;
-            accelCoeff[IMU_ZAXIS_IDX] = 1.0 / (accelSens[IMU_ZAXIS_IDX] - accelNeutral[IMU_ZAXIS_IDX]) * 4.0;
-            //accelCoeff[IMU_XAXIS_IDX] = (accelSens[IMU_XAXIS_IDX] - accelNeutral[IMU_XAXIS_IDX]) / 65535.0 / 1000.0;
-            //accelCoeff[IMU_YAXIS_IDX] = (accelSens[IMU_YAXIS_IDX] - accelNeutral[IMU_YAXIS_IDX]) / 65535.0 / 1000.0;
-            //accelCoeff[IMU_ZAXIS_IDX] = (accelSens[IMU_ZAXIS_IDX] - accelNeutral[IMU_ZAXIS_IDX]) / 65535.0 / 1000.0;
-            //Console.WriteLine("ACCEL COEFF: {0}", string.Join(",", accelCoeff));
-
-            //accelSensMulti[IMU_XAXIS_IDX] = accelSens[IMU_XAXIS_IDX] / (2 * 8192.0);
-            //accelSensMulti[IMU_YAXIS_IDX] = accelSens[IMU_YAXIS_IDX] / (2 * 8192.0);
-            //accelSensMulti[IMU_ZAXIS_IDX] = accelSens[IMU_ZAXIS_IDX] / (2 * 8192.0);
-
-            gyroBias[0] = (short)((tmpBuffer[17 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[16 + SPI_RESP_OFFSET]); // Gyro Yaw Offset
-            gyroBias[1] = (short)((tmpBuffer[15 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[14 + SPI_RESP_OFFSET]); // Gyro Pitch Offset
-            gyroBias[2] = (short)((tmpBuffer[13 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[12 + SPI_RESP_OFFSET]); // Gyro Roll Offset
-
-            gyroSens[IMU_YAW_IDX] = (short)((tmpBuffer[23 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[22 + SPI_RESP_OFFSET]); // Gyro Yaw Sens
-            gyroSens[IMU_PITCH_IDX] = (short)((tmpBuffer[21 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[20 + SPI_RESP_OFFSET]); // Gyro Pitch Sens
-            gyroSens[IMU_ROLL_IDX] = (short)((tmpBuffer[19 + SPI_RESP_OFFSET] << 8) & 0xFF00 | tmpBuffer[18 + SPI_RESP_OFFSET]); // Gyro Roll Sens
-
-            //Console.WriteLine("GYRO BIAS: {0}", string.Join(",", gyroBias));
-            //Console.WriteLine("GYRO SENS: {0}", string.Join(",", gyroSens));
-            //Console.WriteLine("{0}", string.Join(",", tmpBuffer.Skip(SPI_RESP_OFFSET).ToArray()));
-
-            gyroCoeff[IMU_YAW_IDX] = 936.0 / (gyroSens[IMU_YAW_IDX] - gyroBias[IMU_YAW_IDX]);
-            gyroCoeff[IMU_PITCH_IDX] = 936.0 / (gyroSens[IMU_PITCH_IDX] - gyroBias[IMU_PITCH_IDX]);
-            gyroCoeff[IMU_ROLL_IDX] = 936.0 / (gyroSens[IMU_ROLL_IDX] - gyroBias[IMU_ROLL_IDX]);
-            //gyroCoeff[IMU_YAW_IDX] = (gyroSens[IMU_YAW_IDX] - gyroBias[IMU_YAW_IDX]) / 65535.0;
-            //gyroCoeff[IMU_PITCH_IDX] = (gyroSens[IMU_PITCH_IDX] - gyroBias[IMU_PITCH_IDX]) / 65535.0;
-            //gyroCoeff[IMU_ROLL_IDX] = (gyroSens[IMU_ROLL_IDX] - gyroBias[IMU_ROLL_IDX]) / 65535.0;
-            //Console.WriteLine("GYRO COEFF: {0}", string.Join(",", gyroCoeff));
+            int delta = reading - axis.mid;
+            axis.min = (ushort)(axis.min + Math.Max(delta, 0));
+            axis.max = (ushort)(axis.max + Math.Min(delta, 0));
         }
 
         public byte JoyConStickAdjust(int raw, int offset, int range, int sense)

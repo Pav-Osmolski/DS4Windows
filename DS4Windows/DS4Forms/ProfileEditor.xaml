@@ -248,6 +248,27 @@
                         <Image x:Name="controllerDiagram" Source="{Binding Source={StaticResource resourcesPaths}, Path=DS4ConfigPNG}" Width="440" Height="220" Stretch="Uniform"
                                RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" UseLayoutRounding="True"/>
 
+                        <Canvas x:Name="edgeRearDiagram" Width="440" Height="310"
+                                Visibility="Collapsed" IsHitTestVisible="False">
+                            <TextBlock Text="{lex:Loc Strings:EdgeControllerRearView}" Canvas.Left="0"
+                                       Canvas.Top="223" Width="440" TextAlignment="Center" FontSize="10"
+                                       Foreground="{DynamicResource MutedForegroundColor}" />
+                            <Path Data="M153,249 C169,242 196,244 220,244 C244,244 271,242 287,249
+                                        C297,254 303,275 305,288 C307,301 300,305 293,304
+                                        C284,303 280,286 267,282 C250,277 233,280 220,280
+                                        C207,280 190,277 173,282 C160,286 156,303 147,304
+                                        C140,305 133,301 135,288 C137,275 143,254 153,249 Z"
+                                  Fill="{DynamicResource RaisedBackgroundColor}"
+                                  Stroke="{DynamicResource BorderColor}" StrokeThickness="1.5" />
+                            <Path x:Name="edgeLeftPaddleArtwork"
+                                  Data="M194,257 C198,255 201,257 200,261 L192,275
+                                        C190,279 184,282 180,279 C177,277 178,274 181,271 Z"
+                                  Fill="{DynamicResource MutedForegroundColor}" />
+                            <Path x:Name="edgeRightPaddleArtwork"
+                                  Data="M246,257 C242,255 239,257 240,261 L248,275
+                                        C250,279 256,282 260,279 C263,277 262,274 259,271 Z"
+                                  Fill="{DynamicResource MutedForegroundColor}" />
+                        </Canvas>
                         <Path x:Name="controllerVectorHighlight" Visibility="Collapsed"
                               Fill="{DynamicResource AccentColor}" Stroke="{DynamicResource AccentColor}"
                               StrokeThickness="1.5" Opacity="0.62" IsHitTestVisible="False" />
@@ -458,8 +479,9 @@
                                                         BorderBrush="{DynamicResource AccentColor}"
                                                         BorderThickness="1" CornerRadius="3"
                                                         Padding="6,2" Margin="0,0,7,0"
+                                                        ToolTip="{Binding PhysicalControllerAvailabilityHint}"
                                                         Visibility="{Binding IsControllerMapListOnly, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                    <TextBlock Text="{lex:Loc Strings:UI_4B83C7C87164E126}" FontSize="8" FontWeight="Bold"
+                                                    <TextBlock Text="{lex:Loc Strings:EditInControllerMappingList}" FontSize="8" FontWeight="Bold"
                                                                Foreground="{DynamicResource AccentColor}" />
                                                 </Border>
                                                 <TextBlock Text="&#x203A;" FontSize="21"

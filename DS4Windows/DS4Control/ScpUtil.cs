@@ -61,7 +61,7 @@ namespace DS4Windows
     public enum DS4Controls : byte { None, LXNeg, LXPos, LYNeg, LYPos, RXNeg, RXPos, RYNeg, RYPos, L1, L2, L3, R1, R2, R3, Square, Triangle, Circle, Cross, DpadUp, DpadRight, DpadDown, DpadLeft, PS, TouchLeft, TouchUpper, TouchMulti, TouchRight, Share, Options, Mute, FnL, FnR, BLP, BRP, GyroXPos, GyroXNeg, GyroZPos, GyroZNeg, SwipeLeft, SwipeRight, SwipeUp, SwipeDown, L2FullPull, R2FullPull, GyroSwipeLeft, GyroSwipeRight, GyroSwipeUp, GyroSwipeDown, Capture, SideL, SideR, LSOuter, RSOuter, TouchStarted, TouchEnded, Switch2C, Switch2JoyConLeftPaddle1, Switch2JoyConLeftPaddle2, Switch2JoyConRightPaddle1, Switch2JoyConRightPaddle2, Switch2JoyConLeftIrSensor, Switch2JoyConRightIrSensor, Switch2JoyConLeftSL, Switch2JoyConLeftSR, Switch2JoyConRightSL, Switch2JoyConRightSR };
     // Append new output actions after Unbound. Existing profile XML normally
     // uses names, but byte values also escape through mapping aliases.
-    public enum X360Controls : byte { None, LXNeg, LXPos, LYNeg, LYPos, RXNeg, RXPos, RYNeg, RYPos, LB, LT, LS, RB, RT, RS, X, Y, B, A, DpadUp, DpadRight, DpadDown, DpadLeft, Guide, Back, Start, TouchpadClick, LeftMouse, RightMouse, MiddleMouse, FourthMouse, FifthMouse, WUP, WDOWN, MouseUp, MouseDown, MouseLeft, MouseRight, AbsMouseUp, AbsMouseDown, AbsMouseLeft, AbsMouseRight, Unbound, WLEFT, WRIGHT, FlickStickCalibrate360LS, FlickStickCalibrate360RS };
+    public enum X360Controls : byte { None, LXNeg, LXPos, LYNeg, LYPos, RXNeg, RXPos, RYNeg, RYPos, LB, LT, LS, RB, RT, RS, X, Y, B, A, DpadUp, DpadRight, DpadDown, DpadLeft, Guide, Back, Start, TouchpadClick, LeftMouse, RightMouse, MiddleMouse, FourthMouse, FifthMouse, WUP, WDOWN, MouseUp, MouseDown, MouseLeft, MouseRight, AbsMouseUp, AbsMouseDown, AbsMouseLeft, AbsMouseRight, Unbound, WLEFT, WRIGHT, FlickStickCalibrate360LS, FlickStickCalibrate360RS, DualSenseEdgeFnL, DualSenseEdgeFnR, DualSenseEdgePaddleL, DualSenseEdgePaddleR };
 
     public enum SASteeringWheelEmulationAxisType : byte { None = 0, LX, LY, RX, RY, L2R2, VJoy1X, VJoy1Y, VJoy1Z, VJoy2X, VJoy2Y, VJoy2Z };
     public enum OutContType : uint
@@ -1030,6 +1030,9 @@ namespace DS4Windows
 
         public static string getX360ControlString(X360Controls key, OutContType conType)
         {
+            if (key is >= X360Controls.DualSenseEdgeFnL and <= X360Controls.DualSenseEdgePaddleR)
+                return getX360ControlString(key);
+
             conType = conType.Normalize();
             string result = string.Empty;
             if (conType == DS4Windows.OutContType.ViiperGameCube)
@@ -6657,6 +6660,10 @@ namespace DS4Windows
                 case "Left Trigger": return X360Controls.LT;
                 case "Right Trigger": return X360Controls.RT;
                 case "Touchpad Click": return X360Controls.TouchpadClick;
+                case "Function Left": return X360Controls.DualSenseEdgeFnL;
+                case "Function Right": return X360Controls.DualSenseEdgeFnR;
+                case "Bottom Left Paddle": return X360Controls.DualSenseEdgePaddleL;
+                case "Bottom Right Paddle": return X360Controls.DualSenseEdgePaddleR;
 
                 case "Left Mouse Button": return X360Controls.LeftMouse;
                 case "Right Mouse Button": return X360Controls.RightMouse;
@@ -6716,6 +6723,10 @@ namespace DS4Windows
                 case X360Controls.LT: return "Left Trigger";
                 case X360Controls.RT: return "Right Trigger";
                 case X360Controls.TouchpadClick: return "Touchpad Click";
+                case X360Controls.DualSenseEdgeFnL: return "Function Left";
+                case X360Controls.DualSenseEdgeFnR: return "Function Right";
+                case X360Controls.DualSenseEdgePaddleL: return "Bottom Left Paddle";
+                case X360Controls.DualSenseEdgePaddleR: return "Bottom Right Paddle";
 
                 case X360Controls.LeftMouse: return "Left Mouse Button";
                 case X360Controls.RightMouse: return "Right Mouse Button";
