@@ -235,6 +235,13 @@ Use [Nintendo Options](nintendo-options.md) for motion lock, steady/slow aiming
 buttons and dual Joy-Con motion-source choices. Those helpers do not enable
 ordinary mouse/stick aiming by themselves.
 
+### DualShock 3 motion
+
+A DualShock 3 measures yaw directly. To use estimated pitch and roll as well,
+enable **Gyro > DualShock 3 motion > Estimate pitch and roll** in its profile.
+Your selected gyro mode and activation settings still apply. Quick hand
+movements can affect the estimate because it uses the accelerometer.
+
 ### Stick-based gyro activation
 
 Under **Gyro > Stick-based gyro activation**, choose a mode, stick and movement

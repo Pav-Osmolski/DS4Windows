@@ -209,6 +209,7 @@ namespace DS4WinWPF.DS4Forms
         private DS4State baseState => baseSnapshot.State;
         private DS4State interState => interSnapshot.State;
         private DS4StateExposed exposeState;
+        private bool dockedInAxisConfig;
         private const int CANVAS_WIDTH = 130;
         private const int CANVAS_MIDPOINT = CANVAS_WIDTH / 2;
 
@@ -240,6 +241,33 @@ namespace DS4WinWPF.DS4Forms
             SixAxisDeadZChanged += ChangeSixAxisDeadControls;
 
             DeviceNumChanged += ControllerReadingsControl_DeviceNumChanged;
+        }
+
+        internal void SetDockedInAxisConfig(bool docked)
+        {
+            if (dockedInAxisConfig == docked) return;
+            dockedInAxisConfig = docked;
+            UpdateStatusCardWidth();
+        }
+
+        private void ReadingsCards_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.WidthChanged) UpdateStatusCardWidth();
+        }
+
+        private void UpdateStatusCardWidth() =>
+            controllerStatusCard.Width = GetStatusCardWidth(
+                leftStickCard, rightStickCard, readingsCards.ActualWidth, dockedInAxisConfig);
+
+        internal static double GetStatusCardWidth(
+            Border left, Border right, double viewportWidth, bool docked)
+        {
+            // Match the wrap panel's fit calculation, including both card margins.
+            double leftWidth = left.Width + left.Margin.Left + left.Margin.Right;
+            double rightWidth = right.Width + right.Margin.Left + right.Margin.Right;
+            return !docked && viewportWidth >= leftWidth + rightWidth
+                ? leftWidth + right.Margin.Left + right.Width
+                : left.Width;
         }
 
         private void ControllerReadingsControl_DeviceNumChanged(object sender, EventArgs e)

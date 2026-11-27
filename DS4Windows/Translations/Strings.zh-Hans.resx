@@ -1496,7 +1496,7 @@
     <value>先进支持</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>使用 DS3 Gyro 模拟</value>
+    <value>估算俯仰和横滚</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>点击校准</value>
@@ -4254,8 +4254,8 @@
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>在按钮地图中先分配滚动操作. 点击滚动一次; 保持继续滚动。</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>实验性兼容性</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>DualShock 3 体感</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>虚拟输出、物理控制器访问和连接偏好。</value>
@@ -6462,8 +6462,8 @@
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>死区X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>通过加速计输入估计DS3的点和滚动,而生动控制是活跃的。</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>使用 DualShock 3 的加速度计估算俯仰和横滚。快速移动手部可能会影响估算结果。</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>死区和</value>

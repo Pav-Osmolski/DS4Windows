@@ -2371,7 +2371,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             LightbarSettingInfo lightbarSettings = source.lightbarSettingInfo[deviceIndex];
             LightbarDS4WinInfo lightInfo = lightbarSettings.ds4winSettings;
 
-            UseDs3PitchRollSim = source.useDs3PitchRollSim;
+            UseDs3PitchRollSim = source.useDs3PitchRollSim[deviceIndex];
             TouchToggle = source.enableTouchToggle[deviceIndex];
             IdleDisconnect = source.idleDisconnectTimeout[deviceIndex];
             OutputDataToDS4 = source.enableOutputDataToDS4[deviceIndex];
@@ -3113,7 +3113,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             lightbarSettings.MicrophoneIndicator = ProfileIndicatorSettings.Normalize(MicrophoneIndicator);
             lightInfo.m_Led = _ledColor;
 
-            destination.useDs3PitchRollSim = UseDs3PitchRollSim;
+            destination.useDs3PitchRollSim[deviceIndex] = UseDs3PitchRollSim;
             destination.debouncingMs[deviceIndex] = DebouncingMs;
             var debounceOverrides = new Dictionary<DS4Controls, int>();
             foreach (ButtonDebounceDTO entry in ButtonDebounceOverrides ?? [])

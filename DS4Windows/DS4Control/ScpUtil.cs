@@ -2538,11 +2538,7 @@ namespace DS4Windows
             ButtonDebounceOverrides[device] = updated.Count == 0 ? null : updated;
         }
 
-        public static bool UseDs3PitchRollSim
-        {
-            get => m_Config.useDs3PitchRollSim;
-            set => m_Config.useDs3PitchRollSim = value;
-        }
+        public static bool[] UseDs3PitchRollSim => m_Config.useDs3PitchRollSim;
 
         // controller/profile specfic values
         public static ButtonMouseInfo[] ButtonMouseInfos => m_Config.buttonMouseInfos;
@@ -5303,7 +5299,7 @@ namespace DS4Windows
             false, false, false, false, false, false, false, false, false
         };
 
-        public bool useDs3PitchRollSim = false;
+        public readonly bool[] useDs3PitchRollSim = new bool[Global.TEST_PROFILE_ITEM_COUNT];
 
         public ControlServiceDeviceOptions deviceOptions =
             new ControlServiceDeviceOptions();
@@ -11470,6 +11466,7 @@ namespace DS4Windows
             buttonMouseInfos[device].Reset();
             buttonAbsMouseInfos[device].Reset();
             gyroControlsInf[device].Reset();
+            useDs3PitchRollSim[device] = false;
 
             enableTouchToggle[device] = DEFAULT_TOUCH_TOGGLE;
             idleDisconnectTimeout[device] = 0;

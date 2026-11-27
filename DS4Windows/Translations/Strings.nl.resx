@@ -1359,7 +1359,7 @@ Uitgeschakeld:
     <value>Geavanceerde ondersteuning</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[EXPERIMENTALE] Gebruik DS3 gyro simulatie</value>
+    <value>Stampen en rollen schatten</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Stick de kalibratie</value>
@@ -4117,8 +4117,8 @@ De backup: </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Toewijzen van scroll acties in de knop Mapping eerst. Tik een keer scrollt; Houd blijft scrollen.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Experimentele compatibiliteit</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Beweging van DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Virtuele output, fysieke controller-toegang en verbindingsvoorkeuren.</value>
@@ -6324,8 +6324,8 @@ De backup: </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Dode zone X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Schat DS3 pitch en roll van de accelerometer invoer terwijl gyro controle actief is.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Gebruikt de versnellingsmeter van de DualShock 3 om stampen en rollen te schatten. Snelle handbewegingen kunnen de schatting beïnvloeden.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Dode zone en</value>

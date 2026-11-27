@@ -1353,7 +1353,7 @@ Liikuntarajoitteinen:
     <value>Edistyksellistä tukea</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>Käytä DS3 gyro simulaatiota</value>
+    <value>Arvioi pysty- ja sivukallistus</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Kiinnitä kalibrointi</value>
@@ -4111,8 +4111,8 @@ Varmuuskopiointi : </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Aseta rullaustoiminnot ensin Painikkeen kartoitus -painikkeessa. napauta rullaa kerran; Pidä rullaus jatkuu.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Kokeellinen yhteensopivuus</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>DualShock 3:n liike</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Virtuaalinen ulostulo, fyysisen ohjaimen käyttöoikeus ja yhteysasetukset.</value>
@@ -6318,8 +6318,8 @@ Varmuuskopiointi : </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Kuollut alue X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Arvioi DS3:n pitch- ja roll-arvon kiihtyvyysmittarin syöttöltä, kun gyro-ohjain on aktiivinen.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Arvioi pysty- ja sivukallistuksen DualShock 3:n kiihtyvyysanturilla. Nopeat kädenliikkeet voivat vaikuttaa arvioon.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Kuollut alue ja</value>

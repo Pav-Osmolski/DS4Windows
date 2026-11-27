@@ -1329,7 +1329,7 @@
     <value>Advanced サポート</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>DS3 Gyroシミュレーション</value>
+    <value>ピッチとロールを推定</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>カリブレーション</value>
@@ -4087,8 +4087,8 @@ Backup : </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>ボタンマッピングでスロールアクションを最初に割り当てます。Tap scrolls once.Hold keeps scrolling.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>実験的互換性</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>DualShock 3 のモーション</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>仮想出力、物理コントローラアクセスおよび接続設定。</value>
@@ -6295,8 +6295,8 @@ Backup : </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>デッドゾーンX</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>ジロコントロールがアクティブである間、加速計の入力からDS3のピッチとロールを推定します。</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>DualShock 3 の加速度センサーでピッチとロールを推定します。手を素早く動かすと推定に影響することがあります。</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>デッドゾーン Y</value>

@@ -3766,7 +3766,7 @@ namespace DS4WinWPF.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [EXPERIMENTAL] Use DS3 gyro simulation.
+        ///   Looks up a localized string similar to Estimate pitch and roll.
         /// </summary>
         public static string UseDs3PitchRollSim {
             get {

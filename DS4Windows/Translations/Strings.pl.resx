@@ -1330,7 +1330,7 @@ Przykład: 1_DS4Windows</value>
     <value>Zaawansowane wsparcie</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[EXPERIMENTAL] Korzystanie z symulacji gyro DS3</value>
+    <value>Szacuj pochylenie i przechylenie</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Ustaw kalibrację</value>
@@ -4088,8 +4088,8 @@ i backup: </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Przypisz najpierw akcje przewijania w przycisku Mapowanie. Dotknij przewijania raz; Trzymaj nadal przewijania.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Kompatybilność eksperymentalna</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Sterowanie ruchem DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Wyjście wirtualne, dostęp kontrolera fizycznego i preferencje połączenia.</value>
@@ -6295,8 +6295,8 @@ i backup: </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Śmiertelna strefa X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Szacuje skok DS3 od wejścia akcelerometru, podczas gdy sterowanie gyro jest aktywne.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Używa akcelerometru DualShock 3 do szacowania pochylenia i przechylenia. Szybkie ruchy ręką mogą wpływać na wynik.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Śmiertelna strefa i</value>

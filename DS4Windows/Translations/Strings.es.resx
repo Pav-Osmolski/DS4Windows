@@ -1329,7 +1329,7 @@
     <value>Apoyo Avanzado</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[EXPERIMENTAL] Usando la simulación de gyro DS3</value>
+    <value>Estimar cabeceo y alabeo</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Calibración</value>
@@ -4087,8 +4087,8 @@ El backup: </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Asigna las acciones de desplazamiento en el botón Mapping primero.Tap desliza una vez; Mantén continúa desliza.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Compatibilidad experimental</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Movimiento de DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Salida virtual, acceso físico-controlador y preferencias de conexión.</value>
@@ -6294,8 +6294,8 @@ El backup: </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Zona muerta X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Estima el pitch y el rollo de DS3 desde la entrada del acelerómetro mientras el control gyro está activo.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Usa el acelerómetro del DualShock 3 para estimar el cabeceo y el alabeo. Los movimientos rápidos de la mano pueden afectar a la estimación.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Zona muerta y</value>

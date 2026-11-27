@@ -1331,7 +1331,7 @@ Changes to this option takes effect at the gamepad connection time.</value>
     <value>Advanced hỗ trợ</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[Thử nghiệm] Sử dụng mô phỏng gyro DS3</value>
+    <value>Ước tính góc chúi và góc lăn</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Kiểm tra Calibration</value>
@@ -4089,8 +4089,8 @@ Backup : </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Đặt các hành động cuộn trong nút Mapping đầu tiên. Chạm cuộn một lần; giữ tiếp tục cuộn.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Tương thích thử nghiệm</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Chuyển động DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Đầu ra ảo, truy cập vật lý-controller và tùy chọn kết nối.</value>
@@ -6296,8 +6296,8 @@ Backup : </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Khu vực chết X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Đánh giá độ dốc và cuộn của DS3 từ đầu vào máy gia tốc trong khi điều khiển gyro đang hoạt động.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Dùng gia tốc kế DualShock 3 để ước tính góc chúi và góc lăn. Chuyển động tay nhanh có thể ảnh hưởng đến kết quả.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Khu vực chết và</value>

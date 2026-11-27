@@ -1327,7 +1327,7 @@ A változások a kontroller csatlakoztatásakor lépnek életbe.</value>
     <value>Fejlett támogatás</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>DS3 gyro szimuláció használata</value>
+    <value>Bólintás és dőlés becslése</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>A kalibrálás</value>
@@ -4085,8 +4085,8 @@ A háttérben: </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Adja meg a görgetési műveleteket először a Mapping gombban. Érintse meg a görgetést egyszer; Tartsa meg a görgetést.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Kísérleti kompatibilitás</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>DualShock 3 mozgásérzékelés</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Virtuális kimenet, fizikai vezérlő hozzáférés és csatlakozási preferenciák.</value>
@@ -6292,8 +6292,8 @@ A háttérben: </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Halott zóna X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>A DS3 pitch és roll becslése a gyorsulásmérő bemenetéből, miközben a gyrovezérlés aktív.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>A DualShock 3 gyorsulásmérője alapján becsüli a bólintást és a dőlést. A gyors kézmozdulatok befolyásolhatják a becslést.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Halott zóna és</value>

@@ -17,9 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using DS4WinWPF;
 
 namespace DS4Windows
 {
@@ -220,77 +218,7 @@ namespace DS4Windows
         private double gyro_accel_magnitude = 1.0f;
         private Stopwatch gyroAverageTimer = new Stopwatch();
 
-        private class SimulatePitchRoll
-        {
-            private const int SAMPLE_WINDOW = 4;
-            private const int AVARAGE_WINDOW = 2;
-
-            private struct AccelXZ
-            {
-                public int X;
-                public int Y;
-                public int Z;
-                public ulong TimeStamp;
-            }
-
-            private Queue<AccelXZ> _cachedQueue = new();
-
-            public void PushSample(int accelX, int accelY, int accelZ, ulong timeStamp)
-            {
-                if (_cachedQueue.Count >= SAMPLE_WINDOW)
-                {
-                    var entry = _cachedQueue.Dequeue();
-                    entry.X = accelX;
-                    entry.Y = accelY;
-                    entry.Z = accelZ;
-                    entry.TimeStamp = timeStamp;
-                    _cachedQueue.Enqueue(entry);
-                }
-                else
-                {
-                    _cachedQueue.Enqueue(new AccelXZ { X = accelX, Y = accelY, Z = accelZ, TimeStamp = timeStamp });
-                }
-            }
-
-            public void GetPitchRoll(ref int pitch, ref int roll)
-            {
-                if (_cachedQueue.Count < SAMPLE_WINDOW)
-                {
-                    return;
-                }
-
-                var cachedArray = _cachedQueue.ToArray();
-                var timediff = (int)(cachedArray[SAMPLE_WINDOW - 1].TimeStamp - cachedArray[0].TimeStamp) * (SAMPLE_WINDOW - AVARAGE_WINDOW) / SAMPLE_WINDOW;
-                if (timediff > 0)
-                {
-                    int avrageX1 = 0, avrageX2 = 0, avrageY1 = 0, avrageY2 = 0, avrageZ1 = 0, avrageZ2 = 0;
-                    for (var i = 0; i < AVARAGE_WINDOW; i++)
-                    {
-                        avrageX1 += cachedArray[i].X;
-                        avrageX2 += cachedArray[SAMPLE_WINDOW - AVARAGE_WINDOW + i].X;
-                        avrageY1 += cachedArray[i].Y;
-                        avrageY2 += cachedArray[SAMPLE_WINDOW - AVARAGE_WINDOW + i].Y;
-                        avrageZ1 += cachedArray[i].Z;
-                        avrageZ2 += cachedArray[SAMPLE_WINDOW - AVARAGE_WINDOW + i].Z;
-                    }
-
-                    avrageX1 /= AVARAGE_WINDOW;
-                    avrageX2 /= AVARAGE_WINDOW;
-                    avrageY1 /= AVARAGE_WINDOW;
-                    avrageY2 /= AVARAGE_WINDOW;
-                    avrageZ1 /= AVARAGE_WINDOW;
-                    avrageZ2 /= AVARAGE_WINDOW;
-
-                    var avrageY = (avrageY1 + avrageY2) / 2;
-                    var direction = avrageY < 0 ? -1 : 1;
-
-                    pitch = direction * (int)(1000000 * Math.Atan2(avrageZ1 - avrageZ2, SixAxis.ACC_RES_PER_G) * 180 * SixAxis.GYRO_RES_IN_DEG_SEC / Math.PI) / timediff;
-                    roll = direction * (int)(1000000 * Math.Atan2(avrageX2 - avrageX1, SixAxis.ACC_RES_PER_G) * 180 * SixAxis.GYRO_RES_IN_DEG_SEC / Math.PI) / timediff;
-                }
-            }
-        }
-
-        private SimulatePitchRoll _simulatePitchRoll = new();
+        private readonly DS3PitchRollEstimator ds3PitchRoll = new();
 
         public long CntCalibrating
         {
@@ -516,21 +444,24 @@ namespace DS4Windows
                 if (calibrationDone)
                     applyCalibs(ref currentYaw, ref currentPitch, ref currentRoll, ref AccelX, ref AccelY, ref AccelZ);
 
-                var triggerActive = App.rootHub.touchPad[device].IsGyroTriggerActive(GyroOutMode.Controls);
-                if (Global.UseDs3PitchRollSim && triggerActive)
-                {
-                    _simulatePitchRoll.PushSample(AccelX, AccelY, AccelZ, state.totalMicroSec);
-                    _simulatePitchRoll.GetPitchRoll(ref currentPitch, ref currentRoll);
-                }
-
                 if (gyroAverageTimer.IsRunning)
                 {
                     CalcSensorCamples(ref currentYaw, ref currentPitch, ref currentRoll, ref AccelX, ref AccelY, ref AccelZ);
                 }
 
                 currentYaw -= gyro_offset_x;
-                currentPitch -= gyro_offset_y;
-                currentRoll -= gyro_offset_z;
+
+                if ((uint)device < Global.MAX_DS4_CONTROLLER_COUNT &&
+                    Global.UseDs3PitchRollSim[device])
+                {
+                    (currentPitch, currentRoll) = ds3PitchRoll.Update(
+                        AccelX, AccelY, AccelZ, state.totalMicroSec,
+                        Global.ReadProfileSwitchRevision(device));
+                }
+                else
+                {
+                    ds3PitchRoll.Reset();
+                }
 
                 SixAxisEventArgs args = null;
                 if (AccelX != 0 || AccelY != 0 || AccelZ != 0)

@@ -1326,7 +1326,7 @@
     <value>Просунута підтримка</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[Експериментальний] Використання моделі DS3 gyro</value>
+    <value>Оцінювати тангаж і крен</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Використовуйте калібрацію</value>
@@ -4084,8 +4084,8 @@
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Спершу наділіть дії скручування в кнопці Картування. Натисніть скручування один раз; тримайте продовжує скручування.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Експериментальна сумісність</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Рух DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Віртуальний вихід, доступ фізичного контролера та переваги підключення.</value>
@@ -6291,8 +6291,8 @@
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Мертва зона X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Оцінює підйом і ролик DS3 з введення прискорювача, коли гіроконтроль активний.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Використовує акселерометр DualShock 3 для оцінки тангажу й крену. Швидкі рухи руки можуть вплинути на оцінку.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Мертва зона І</value>

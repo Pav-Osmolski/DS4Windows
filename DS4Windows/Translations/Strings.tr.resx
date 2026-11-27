@@ -1353,7 +1353,7 @@ Devre Dışı:
     <value>İleri Destek</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>DS3 gyro simülasyonunu kullanın</value>
+    <value>Yunuslama ve yatışı tahmin et</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Kalibrasyon yapın</value>
@@ -4111,8 +4111,8 @@ backup için: </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>İlk olarak düğme haritasında kaydırma eylemlerini atın. Tekrar kaydırma dokunuşlarını dokunun; tutma kaydırmaya devam eder.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Deneysel Uyumluluk</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>DualShock 3 hareketi</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Sanal çıkış, fiziksel kontrolör erişim ve bağlantı tercihleri.</value>
@@ -6318,8 +6318,8 @@ backup için: </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Ölü Bölge X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Giro kontrolü aktif olduğu sürece akselerometre girişinden DS3 pitch ve roll'u tahmin eder.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Yunuslama ve yatışı tahmin etmek için DualShock 3 ivmeölçerini kullanır. Hızlı el hareketleri tahmini etkileyebilir.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Ölü bölge ve</value>

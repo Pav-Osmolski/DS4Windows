@@ -1328,7 +1328,7 @@ Beispiel: whyme_DS4Windows</value>
     <value>Fortgeschrittene Unterstützung</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[EXPERIMENTAL] Verwenden Sie DS3 Gyro Simulation</value>
+    <value>Nick- und Rollbewegungen schätzen</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Stick Kalibrierung</value>
@@ -4086,8 +4086,8 @@ Das Backup: </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Geben Sie Scroll-Aktionen in Button Mapping zuerst zu. Tippen Sie auf Scrolls einmal; Halten Sie weiter Scrolling.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Experimentelle Kompatibilität</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Bewegungserkennung für DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Virtuelle Ausgabe, physischer Controller-Zugriff und Verbindungspräferenzen.</value>
@@ -6293,8 +6293,8 @@ Das Backup: </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Die Toten Zone X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Schätzt den DS3-Pitch und Roll vom Beschleunigungsmesser-Eingang, während die Gyro-Steuerung aktiv ist.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Schätzt Nick- und Rollbewegungen mit dem Beschleunigungssensor des DualShock 3. Schnelle Handbewegungen können die Schätzung beeinflussen.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Die Toten Zone und</value>

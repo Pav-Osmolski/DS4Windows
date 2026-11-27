@@ -1327,7 +1327,7 @@ Le modifiche a questa opzione hanno effetto al momento della connessione del gam
     <value>Supporto avanzato</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[ESPERIMENTALE] Utilizzare la simulazione gyro DS3</value>
+    <value>Stima beccheggio e rollio</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Calibrazione di calibrazione</value>
@@ -4085,8 +4085,8 @@ Il backup: </value>
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Assegna prima le azioni di scorrimento nel pulsante Mapping. Tapp scorrono una volta; Mantieni continuano a scorrere.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Compatibilità sperimentale</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Movimento del DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Uscita virtuale, accesso fisico-controller e preferenze di connessione.</value>
@@ -6292,8 +6292,8 @@ Il backup: </value>
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Zona morta X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Valuta il pitch e il roll di DS3 dall'ingresso dell'accelerometro mentre il gyro control è attivo.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Usa l’accelerometro del DualShock 3 per stimare beccheggio e rollio. Movimenti rapidi della mano possono influire sulla stima.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Zona morta e</value>

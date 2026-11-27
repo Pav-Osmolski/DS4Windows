@@ -231,8 +231,10 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        public void EveryNonDualSenseHighlightStaysOnControllerArtwork()
+        public void ConfigHighlightsStayOnControllerArtwork()
         {
+            AssertAtlasStaysOnArtwork("DualSense Config.png", 880, 440,
+                "DualSense-Config_Highlights.png", 440, 220);
             AssertAtlasStaysOnArtwork("DualShock 4 Controller.png", 384, 247,
                 "DualShock4-Config_Highlights.png", 440, 220);
             AssertAtlasStaysOnArtwork("DualSense Edge Controller.png", 1558,
@@ -302,6 +304,32 @@ namespace DS4WindowsTests
                 $"Edge lightbar width is only {lightbar.Bounds.Width}.");
             Assert.IsTrue(lightbar.Bounds.Height >= 50,
                 $"Edge lightbar height is only {lightbar.Bounds.Height}.");
+        }
+
+        [TestMethod]
+        [DataRow(false, 3, 322, 79, 322, 90)] // Triangle
+        [DataRow(false, 4, 97, 40, 118, 46)] // L1
+        [DataRow(false, 5, 342, 40, 322, 46)] // R1
+        [DataRow(false, 10, 220, 139, 220, 145)] // PS
+        [DataRow(false, 14, 117, 85, 117, 96)] // D-pad Up
+        [DataRow(true, 0, 178, 172, 166, 143)] // Left stick
+        [DataRow(true, 5, 261, 172, 273, 143)] // Right stick
+        public void DualShock4HighlightsFollowTheRefreshedButtonFaces(
+            bool stick, int frame, int outsideX, int outsideY, int capX, int capY)
+        {
+            string[] atlases = stick
+                ? ["DualShock4-Stick_Highlights.png", "DualShock4-Mapping-Stick_Highlights.png"]
+                : ["DualShock4-Config_Highlights.png", "DualShock4-Mapping_Highlights.png"];
+            foreach (string atlas in atlases)
+            {
+                BitmapSource overlay = RasterHighlightAtlas.Frame(atlas, frame);
+                byte[] alpha = AlphaPixels(overlay);
+                Assert.IsLessThan(32, (int)alpha[outsideY * overlay.PixelWidth + outsideX],
+                    $"{atlas} frame {frame} paints beyond the cap.");
+                Assert.IsGreaterThanOrEqualTo((int)RasterHighlightAtlas.HitAlphaThreshold,
+                    (int)alpha[capY * overlay.PixelWidth + capX],
+                    $"{atlas} frame {frame} misses the painted cap.");
+            }
         }
 
         [TestMethod]
@@ -411,6 +439,14 @@ namespace DS4WindowsTests
             int frameWidth, int frameHeight)
         {
             BitmapSource artwork = LoadResource(artworkName);
+            if (artwork.PixelWidth != artworkWidth || artwork.PixelHeight != artworkHeight)
+            {
+                // Compare at the logical dimensions used by the hotspot layout.
+                artwork = new TransformedBitmap(artwork, new ScaleTransform(
+                    (double)artworkWidth / artwork.PixelWidth,
+                    (double)artworkHeight / artwork.PixelHeight));
+            }
+
             byte[] artworkAlpha = AlphaPixels(artwork);
             BitmapSource atlas = LoadResource(atlasName);
             int frameCount = atlas.PixelHeight / frameHeight;

@@ -41,6 +41,24 @@ public sealed class ProfileAdvancedLayoutTests
                     ScrollViewer page = visible[0];
                     foreach (Expander expander in Visuals(page).OfType<Expander>().ToArray()) expander.IsExpanded = true;
                     Layout(root, width);
+                    if (category.Name == "profileAdvancedInputNav")
+                    {
+                        var options = (Grid)Visuals(page).OfType<Expander>()
+                            .Single(expander => expander.Content is Grid grid &&
+                                grid.Children.OfType<Xceed.Wpf.Toolkit.DoubleUpDown>().Count() == 5).Content;
+                        var fields = options.Children.OfType<Xceed.Wpf.Toolkit.DoubleUpDown>().ToArray();
+                        foreach (var field in fields)
+                        {
+                            Assert.AreEqual(180d, field.ActualWidth, 0.1);
+                            Assert.AreEqual(fields[0].TranslatePoint(new Point(), options).X,
+                                field.TranslatePoint(new Point(), options).X, 0.1);
+                        }
+                        var suffix = options.Children.OfType<TextBlock>().Single(text => text.Text == "%");
+                        var antiRadius = fields.Single(field => Grid.GetRow(field) == 4);
+                        Assert.IsGreaterThanOrEqualTo(
+                            antiRadius.TranslatePoint(new Point(antiRadius.ActualWidth, 0), options).X,
+                            suffix.TranslatePoint(new Point(), options).X);
+                    }
                     foreach (Control control in Visuals(page).OfType<Control>().Where(c => c.IsVisible && c.ActualWidth > 0 && !string.IsNullOrEmpty(c.Name)))
                     {
                         Point point = control.TranslatePoint(new Point(), root);

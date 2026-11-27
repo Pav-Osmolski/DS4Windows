@@ -1367,7 +1367,7 @@
     <value>продвинутая поддержка</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[Экспериментальный] Использование DS3 гиро симуляции</value>
+    <value>Оценивать тангаж и крен</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Установите калибровку</value>
@@ -4125,8 +4125,8 @@
   <data name="UI_8F23CFEFC15FF0CE" xml:space="preserve">
     <value>Присвоить скручивающие действия в кнопке Картирование сначала. Нажмите скручивает один раз; держите продолжает скручивать.</value>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Экспериментальная совместимость</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>Движение DualShock 3</value>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
     <value>Виртуальный выход, доступ физического контроллера и предпочтения подключения.</value>
@@ -6332,8 +6332,8 @@
   <data name="UI_117B5835008C9781" xml:space="preserve">
     <value>Мертвая зона X</value>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Оценивает питч и ролль DS3 от ввода ускорителя, пока гироконтроль активен.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Использует акселерометр DualShock 3 для оценки тангажа и крена. Быстрые движения руки могут повлиять на оценку.</value>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
     <value>Мертвая зона и</value>

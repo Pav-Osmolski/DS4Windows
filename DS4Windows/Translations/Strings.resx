@@ -1362,7 +1362,7 @@ To setup Bluetooth (optional): Hold the PS Button and Share for 3 seconds. The l
     <value>Advanced Support</value>
   </data>
   <data name="UseDs3PitchRollSim" xml:space="preserve">
-    <value>[EXPERIMENTAL] Use DS3 gyro simulation</value>
+    <value>Estimate pitch and roll</value>
   </data>
   <data name="StickCalibration" xml:space="preserve">
     <value>Stick Calibration</value>
@@ -5020,8 +5020,8 @@ X axis: {0}, Y axis: {1}</value>
     <value>Assign scroll actions in Button Mapping first. Tap scrolls once; Hold keeps scrolling.</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>
   </data>
-  <data name="UI_8F25B8C73C45F09E" xml:space="preserve">
-    <value>Experimental compatibility</value>
+  <data name="UI_C3F69237BF80E047" xml:space="preserve">
+    <value>DualShock 3 motion</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>
   </data>
   <data name="UI_8F28E32CE3E90AD3" xml:space="preserve">
@@ -7962,8 +7962,8 @@ X axis: {0}, Y axis: {1}</value>
     <value>Dead zone X</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>
   </data>
-  <data name="UI_170E14D35022EECE" xml:space="preserve">
-    <value>Estimates DS3 pitch and roll from accelerometer input while gyro control is active. Experimental.</value>
+  <data name="UI_B019C0B703C7AF13" xml:space="preserve">
+    <value>Uses the DualShock 3 accelerometer to estimate pitch and roll. Quick hand movements can affect the estimate.</value>
     <comment>Interface text. Preserve numbered placeholders and technical names. Used in: DS4Windows/DS4Forms/ProfileEditor.xaml</comment>
   </data>
   <data name="UI_F2B1B217F26B08E7" xml:space="preserve">
