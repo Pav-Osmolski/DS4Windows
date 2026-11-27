@@ -370,11 +370,8 @@
                                 MouseRightButtonUp="ConBtn_MouseRightButtonUp" />
 
                         <Label x:Name="highlightControlDisplayLb" Content="" Canvas.Left="150" Canvas.Top="220" MinWidth="150"
-                               HorizontalContentAlignment="Center">
-                            <Label.Foreground>
-                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
-                            </Label.Foreground>
-                        </Label>
+                               HorizontalContentAlignment="Center"
+                               Foreground="{DynamicResource ForegroundColor}" />
                     </Canvas>
                             </Viewbox>
                             <Border Grid.Row="2" Background="{DynamicResource RaisedBackgroundColor}"
