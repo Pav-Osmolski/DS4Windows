@@ -33,12 +33,12 @@ enable **GameCube Controller Support** to allow new physical USB and Bluetooth
 connections. Physical GameCube support is off by default. The virtual output
 remains available independently.
 
-Physical GameCube input can use the gyroscope and accelerometer over Bluetooth.
-Physical USB input supports the controls and rumble. GameCube emulation can
-forward motion from a controller such as DualSense when the host enables the
-virtual controller's IMU. Both virtual report formats have synthetic coverage.
-Physical GameCube motion on Windows and motion in Eden still need hands-on
-validation.
+GameCube input supports the gyroscope and accelerometer over Bluetooth and USB.
+For USB, DS4Windows uses motion once the controller reports valid sensor data
+with an advancing timestamp. GameCube emulation can forward motion from a
+controller such as DualSense when the host enables the virtual controller's IMU.
+The input and output paths have synthetic coverage. Physical GameCube motion on
+Windows and motion in Eden still need hands-on validation.
 
 In Eden, choose **GameCube Controller** as the emulated console controller,
 then bind the DS4Windows virtual controller to it. Start DS4Windows and select

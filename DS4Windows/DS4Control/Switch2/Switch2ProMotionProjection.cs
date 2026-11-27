@@ -51,6 +51,9 @@ internal sealed class Switch2ProMotionProjection
     private Vector3 latestMagnetometer;
     private long latestMagnetometerTimestampQpc;
     private bool hasLatestMagnetometer;
+    // Track the USB sensor clock independently of the projected motion state.
+    // A GameCube controller can populate the IMU bytes before publishing a sample.
+    private uint lastGameCubeUsbMotionTimestamp;
     private long lastTimestampQpc;
     private bool hasTimestamp;
 
@@ -78,10 +81,22 @@ internal sealed class Switch2ProMotionProjection
     {
         if (destination == null ||
             frame.Version != Switch2ProProfileInputFrame.CurrentVersion ||
-            !frame.HasCommonMotion || frame.QpcFrequency <= 0)
+            frame.QpcFrequency <= 0)
         {
             return false;
         }
+
+        if (frame.Model == Switch2ControllerModel.GameCube && frame.Transport == Switch2Transport.Usb)
+        {
+            uint previous = lastGameCubeUsbMotionTimestamp;
+            lastGameCubeUsbMotionTimestamp = frame.HasCommonMotion ? frame.MotionTimestamp : 0;
+            // Match the USB unified-report sensor clock before forwarding motion.
+            // Subtraction allows ordinary uint rollover and rejects a stale clock.
+            if (previous == 0 || unchecked((int)(lastGameCubeUsbMotionTimestamp - previous)) <= 0)
+                return false;
+        }
+        if (!frame.HasCommonMotion)
+            return false;
 
         float nativeGyroScale = frame.Model == Switch2ControllerModel.GameCube ?
             GameCubeGyroLsbPerDegreeSecond : NativeGyroLsbPerDegreeSecond;

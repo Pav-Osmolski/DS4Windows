@@ -81,32 +81,42 @@ public class Switch2GameCubeTests
     }
 
     [TestMethod]
-    public void BluetoothMotionProjectsToSixAxisAndRoundTripsToGameCubeOutput()
+    [DataRow(Switch2Transport.BluetoothLe)]
+    [DataRow(Switch2Transport.Usb)]
+    public void MotionProjectsToSixAxisAndRoundTripsToGameCubeOutput(Switch2Transport transport)
     {
-        Assert.IsTrue(Switch2InputProtocolIdentity.TryCreateBluetoothLe(
-            Switch2InputCodec.ServiceUuid, Switch2InputCodec.Common05CharacteristicUuid,
-            Switch2GattProperty.Notify | Switch2GattProperty.Read,
-            Switch2ControllerModel.GameCube, out var identity));
+        bool usb = transport == Switch2Transport.Usb;
+        Switch2InputProtocolIdentity identity;
+        Assert.IsTrue(usb
+            ? Switch2InputProtocolIdentity.TryCreateFullControllerUsb(0x057e, 0x2073, 0x0101, out identity)
+            : Switch2InputProtocolIdentity.TryCreateBluetoothLe(
+                Switch2InputCodec.ServiceUuid, Switch2InputCodec.Common05CharacteristicUuid,
+                Switch2GattProperty.Notify | Switch2GattProperty.Read,
+                Switch2ControllerModel.GameCube, out identity));
+        Assert.IsTrue(Switch2RuntimeInputDevice.TryCreateFullController(
+            Switch2ControllerModel.GameCube, 7, 8, transport, out var runtime, out _));
+        Assert.IsTrue(runtime.OutputMapGyro);
         Assert.IsTrue(Switch2InputSessionDescriptor.TryCreate(identity, 7, 8, 1_000_000, out var descriptor));
         Assert.IsTrue(Switch2InputCalibrationSnapshot.TryCreateFallback(
             Switch2ControllerModel.GameCube, 7, out var calibration));
         var session = new Switch2InputSession(descriptor, calibration);
         byte[] report = new byte[64];
         report[0] = 5;
-        report[1] = 1;
-        report[43] = 24;
         short[] native = [256, -512, 4096, 1640, -820, 410];
         for (int i = 0; i < native.Length; i++)
             BinaryPrimitives.WriteInt16LittleEndian(report.AsSpan(49 + 2 * i), native[i]);
-        Assert.IsTrue(session.TryProcess(descriptor, report.AsSpan(1), 50_000, out var input,
-            out var error), error.ToString());
-        Assert.IsTrue(Switch2ProProfileInputMapper.TryMap(input, out var profile, out var mapping),
-            mapping.ToString());
-        Assert.IsTrue(profile.HasCommonMotion);
         var state = new DS4State();
         var projection = new Switch2ProMotionProjection();
-        Assert.IsTrue(projection.TryApply(profile, state, magnetometerYawAssistEnabled: false,
-            virtualGyroSoftDeadzone: 0, horizonStabilizationEnabled: false));
+        if (usb)
+        {
+            // A USB report may carry nonzero bytes before the sensor clock starts.
+            Assert.IsFalse(ReadMotion(0).HasCommonMotion);
+            Assert.IsFalse(ApplyMotion(24));
+            Assert.IsFalse(ApplyMotion(24));
+            // Clearing a published motion state must preserve the clock observation.
+            projection.Reset(state);
+        }
+        Assert.IsTrue(ApplyMotion(4024));
         Assert.AreEqual(100d, state.Motion.angVelPitch, 0.0001);
         Assert.AreEqual(-50d, state.Motion.angVelRoll, 0.0001);
         Assert.AreEqual(-25d, state.Motion.angVelYaw, 0.0001);
@@ -124,6 +134,29 @@ public class Switch2GameCubeTests
         Assert.AreEqual((short)4096, BinaryPrimitives.ReadInt16LittleEndian(wire.AsSpan(16)));
         Assert.IsTrue(wire.AsSpan(18, 6).IndexOfAnyExcept((byte)0) < 0);
         Assert.AreEqual((byte)232, wire[24]);
+
+        if (usb)
+        {
+            Assert.IsFalse(ApplyMotion(4024));
+            Assert.IsFalse(ApplyMotion(24));
+            Assert.IsTrue(ApplyMotion(4024));
+            Assert.IsFalse(ApplyMotion(0));
+        }
+
+        bool ApplyMotion(uint timestamp) => projection.TryApply(ReadMotion(timestamp), state,
+            magnetometerYawAssistEnabled: false, virtualGyroSoftDeadzone: 0,
+            horizonStabilizationEnabled: false);
+
+        Switch2ProProfileInputFrame ReadMotion(uint timestamp)
+        {
+            report[1]++;
+            BinaryPrimitives.WriteUInt32LittleEndian(report.AsSpan(43), timestamp);
+            Assert.IsTrue(session.TryProcess(descriptor, report.AsSpan(usb ? 0 : 1),
+                50_000 + report[1] * 4_000, out var input, out var error), error.ToString());
+            Assert.IsTrue(Switch2ProProfileInputMapper.TryMap(input, out var profile, out var mapping),
+                mapping.ToString());
+            return profile;
+        }
     }
 
     [TestMethod]

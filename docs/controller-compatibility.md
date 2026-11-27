@@ -17,7 +17,7 @@ adaptive triggers to your physical controller.
 | Switch Pro | USB or Bluetooth | Mapping, motion and Nintendo feedback/settings |
 | Original Joy-Con | Bluetooth; standalone or a same-generation left/right pair | Holding styles, motion and Nintendo feedback; no Joy-Con 2 optical mouse sensor |
 | Switch 2 Pro | USB or DS4Windows Bluetooth discovery/association | Nintendo motion/feedback; headset support over USB |
-| GameCube Controller for Switch 2 | USB or DS4Windows Bluetooth discovery/association | Analog L/R travel and independent clicks, C stick, button mapping and single-motor rumble. Gyroscope and accelerometer over Bluetooth. |
+| GameCube Controller for Switch 2 | USB or DS4Windows Bluetooth discovery/association | Analog L/R travel and independent clicks, C stick, button mapping and single-motor rumble. Gyroscope and accelerometer over Bluetooth and USB, with hardware validation pending. |
 | Joy-Con 2 | DS4Windows Bluetooth discovery/association; standalone or a same-generation pair | Optical mouse, motion, dual Joy-Con aiming and Nintendo feedback |
 | Supported Moonlight/Sunshine virtual input | Enable admission on the Sunshine host | Mapping of supported virtual HID identities; not arbitrary virtual devices |
 

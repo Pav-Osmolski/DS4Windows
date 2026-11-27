@@ -102,7 +102,7 @@ public readonly struct Switch2ProProfileInputFrame
             Accelerometer = common.Accelerometer;
             Gyroscope = common.Gyroscope;
             HasCommonMotion = Model != Switch2ControllerModel.GameCube ||
-                Transport == Switch2Transport.BluetoothLe &&
+                (Transport != Switch2Transport.Usb || MotionTimestamp != 0) &&
                 (Accelerometer.X != 0 || Accelerometer.Y != 0 || Accelerometer.Z != 0 ||
                     Gyroscope.X != 0 || Gyroscope.Y != 0 || Gyroscope.Z != 0);
             Magnetometer = Model == Switch2ControllerModel.GameCube ? default : common.Magnetometer;
