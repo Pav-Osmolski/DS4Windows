@@ -307,20 +307,28 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
-        [DataRow(3, 322, 79, 90)]
-        [DataRow(10, 220, 139, 145)]
-        public void DualShock4TriangleAndPsHighlightsStayBelowTheirUpperEdges(
-            int frame, int x, int shellY, int centerY)
+        [DataRow(false, 3, 322, 79, 322, 90)] // Triangle
+        [DataRow(false, 4, 97, 40, 118, 46)] // L1
+        [DataRow(false, 5, 342, 40, 322, 46)] // R1
+        [DataRow(false, 10, 220, 139, 220, 145)] // PS
+        [DataRow(false, 14, 117, 85, 117, 96)] // D-pad Up
+        [DataRow(true, 0, 178, 172, 166, 143)] // Left stick
+        [DataRow(true, 5, 261, 172, 273, 143)] // Right stick
+        public void DualShock4HighlightsFollowTheRefreshedButtonFaces(
+            bool stick, int frame, int outsideX, int outsideY, int capX, int capY)
         {
-            foreach (string atlas in new[] { "DualShock4-Config_Highlights.png", "DualShock4-Mapping_Highlights.png" })
+            string[] atlases = stick
+                ? ["DualShock4-Stick_Highlights.png", "DualShock4-Mapping-Stick_Highlights.png"]
+                : ["DualShock4-Config_Highlights.png", "DualShock4-Mapping_Highlights.png"];
+            foreach (string atlas in atlases)
             {
                 BitmapSource overlay = RasterHighlightAtlas.Frame(atlas, frame);
                 byte[] alpha = AlphaPixels(overlay);
-                Assert.IsLessThan(32, (int)alpha[shellY * overlay.PixelWidth + x],
-                    $"{atlas} frame {frame} paints a visible line above the cap.");
+                Assert.IsLessThan(32, (int)alpha[outsideY * overlay.PixelWidth + outsideX],
+                    $"{atlas} frame {frame} paints beyond the cap.");
                 Assert.IsGreaterThanOrEqualTo((int)RasterHighlightAtlas.HitAlphaThreshold,
-                    (int)alpha[centerY * overlay.PixelWidth + x],
-                    $"{atlas} frame {frame} should still paint the cap center.");
+                    (int)alpha[capY * overlay.PixelWidth + capX],
+                    $"{atlas} frame {frame} misses the painted cap.");
             }
         }
 

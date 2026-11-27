@@ -118,6 +118,7 @@ class Artwork:
     atlas: str
     source_width: int
     source_height: int
+    traced_shoulder_seam: bool = False
 
     @property
     def scale(self) -> float:
@@ -367,7 +368,8 @@ def scale_shape(
     return draw_scaled
 
 
-def separate_trigger_pairs(masks: list[Image.Image]) -> None:
+def separate_trigger_pairs(masks: list[Image.Image],
+                           traced_seam: bool = False) -> None:
     """Make each visible shoulder/trigger pixel belong to one control only.
 
     L1/R1 are the front surfaces in every front-facing controller render.
@@ -376,6 +378,7 @@ def separate_trigger_pairs(masks: list[Image.Image]) -> None:
     shoulder itself and left triangular corners on the rear trigger.
     """
 
+    hit_threshold = (64 * 255 + ACCENT[3] - 1) // ACCENT[3]
     for shoulder_index, trigger_index in ((4, 6), (5, 7)):
         if trigger_index >= len(masks):
             continue
@@ -384,11 +387,26 @@ def separate_trigger_pairs(masks: list[Image.Image]) -> None:
         overlap_bounds = overlap.getbbox()
         if overlap_bounds is None:
             continue
+        shoulder_pixels = masks[shoulder_index].load()
         trigger_pixels = masks[trigger_index].load()
         for y in range(overlap_bounds[1], overlap_bounds[3]):
             for x in range(overlap_bounds[0], overlap_bounds[2]):
-                if overlap.getpixel((x, y)):
+                if not overlap.getpixel((x, y)):
+                    continue
+                if not traced_seam:
                     trigger_pixels[x, y] = 0
+                    continue
+
+                # A shared traced seam only overlaps after antialiasing.
+                # Preserve the fringe and give hit ownership to the stronger
+                # mask if both reach WPF's RasterHighlightAtlas threshold.
+                shoulder = shoulder_pixels[x, y]
+                trigger = trigger_pixels[x, y]
+                if min(shoulder, trigger) >= hit_threshold:
+                    if shoulder >= trigger:
+                        trigger_pixels[x, y] = hit_threshold - 1
+                    else:
+                        shoulder_pixels[x, y] = hit_threshold - 1
 
 
 def render_atlas(
@@ -429,20 +447,21 @@ def render_atlas(
     # controller renders. A physical pixel belongs to only one control: split
     # any shared fringe at its vertical midpoint so adjacent hover targets and
     # highlights can never paint over one another.
-    separate_trigger_pairs(masks)
+    separate_trigger_pairs(masks, artwork.traced_shoulder_seam)
 
-    # On this raster the black LT/RT-to-bumper seam is less than one rendered
+    # On some rasters the black LT/RT-to-bumper seam is less than one rendered
     # pixel tall. The generic front-surface ownership rule rounds that whole
     # antialiased row into LB/RB and visibly clips the trigger bottoms. Give
     # exactly one rendered row back to LT/RT, then remove the identical pixels
     # from the bumper masks so hover and click ownership remains exclusive.
-    for shoulder_index, trigger_index in ((4, 6), (5, 7)):
-        shifted = Image.new("L", masks[trigger_index].size, 0)
-        shifted.paste(masks[trigger_index], (0, 1))
-        masks[trigger_index] = ImageChops.lighter(
-            masks[trigger_index], shifted)
-        masks[shoulder_index] = ImageChops.subtract(
-            masks[shoulder_index], masks[trigger_index])
+    if not artwork.traced_shoulder_seam:
+        for shoulder_index, trigger_index in ((4, 6), (5, 7)):
+            shifted = Image.new("L", masks[trigger_index].size, 0)
+            shifted.paste(masks[trigger_index], (0, 1))
+            masks[trigger_index] = ImageChops.lighter(
+                masks[trigger_index], shifted)
+            masks[shoulder_index] = ImageChops.subtract(
+                masks[shoulder_index], masks[trigger_index])
 
     frames: list[Image.Image] = []
     for mask in masks:
@@ -788,6 +807,22 @@ def render_xbox_action_atlas(resources: Path) -> None:
 
 
 def dualshock4_shapes():
+    # L1/R1 and L2/R2 meet along a dark seam with similar shading either side.
+    # Follow that seam in the artwork's logical coordinates, mirrored for R1/R2.
+    left_seam = [(50, 46), (56, 46), (60, 44.25), (68, 41.75),
+                 (77.75, 40.5), (82, 40.5), (90, 41.5), (98, 43.75),
+                 (101, 46), (106, 46)]
+    right_seam = [(384 - x, y) for x, y in reversed(left_seam)]
+
+    def shoulder(seam, seed, trigger=False):
+        left, right = seam[0][0], seam[-1][0]
+        # The trigger ends inside the bumper's sides. Exclude the nearby
+        # shell shadow where the two silhouettes meet.
+        inset = 6 if trigger else 0
+        edge = 17 if trigger else 68
+        return dark_surface((left + inset, 17, right - inset, 68), seed, 145,
+                            [(left, edge), *seam, (right, edge)])
+
     return [
         # Select the actual painted caps. These masks retain the source
         # raster's curved outline and never spill into its pale bezel.
@@ -795,20 +830,16 @@ def dualshock4_shapes():
         dark_surface((319, 110, 351, 142), (335, 126), 180),  # Circle
         dark_surface((264, 110, 296, 142), (280, 126), 180),  # Square
         dark_surface((292, 89, 324, 121), (307, 105), 180),   # Triangle
-        SourceSurface((48, 41, 105, 69), (64, 55),
-                      minimum_luma=42, maximum_luma=170),      # L1
-        SourceSurface((279, 41, 336, 69), (320, 55),
-                      minimum_luma=42, maximum_luma=170),      # R1
-        SourceSurface((57, 17, 99, 50), (68, 34),
-                      minimum_luma=34, maximum_luma=155),      # L2
-        SourceSurface((285, 17, 327, 50), (317, 34),
-                      minimum_luma=34, maximum_luma=155),      # R2
+        shoulder(left_seam, (77, 50)),                         # L1
+        shoulder(right_seam, (307, 50)),                       # R1
+        shoulder(left_seam, (77, 30), trigger=True),           # L2
+        shoulder(right_seam, (307, 30), trigger=True),         # R2
         dark_surface((106, 77, 125, 108), (115, 92), 185),    # Share
         dark_surface((258, 77, 277, 108), (267, 92), 185),    # Options
         dark_surface((178, 155, 206, 180), (192, 167), 205),  # PS
         ellipse((0, 0, 0, 0)),          # No mute button
-        ellipse((114, 163, 152, 201)),                         # Left cap
-        ellipse((234, 163, 272, 201)),                         # Right cap
+        dark_surface((109, 153, 155, 197), (132, 175), 145),    # Left cap
+        dark_surface((229, 153, 275, 197), (251, 175), 145),    # Right cap
         dark_surface((61, 96, 93, 132), (76, 112), 175),      # D-pad up
         dark_surface((82, 109, 116, 144), (99, 126), 175),    # right
         dark_surface((61, 128, 93, 164), (76, 146), 175),     # down
@@ -945,7 +976,8 @@ def main() -> None:
     args = parser.parse_args()
     resources = Path(__file__).resolve().parents[1] / "DS4Windows" / "Resources"
     jobs = [
-        (Artwork("DualShock 4 Controller.png", "DualShock4-Config_Highlights.png", 384, 247), dualshock4_shapes()),
+        (Artwork("DualShock 4 Controller.png", "DualShock4-Config_Highlights.png",
+                 384, 247, traced_shoulder_seam=True), dualshock4_shapes()),
         (Artwork("DualSense Edge Controller.png", "DualSenseEdge-Config_Highlights.png", 1558, 1009), dualsense_edge_shapes()),
         (Artwork("Switch 2 Pro Controller.png", "Switch2Pro-Config_Highlights.png", 1536, 1024), switch2_pro_shapes()),
     ]
