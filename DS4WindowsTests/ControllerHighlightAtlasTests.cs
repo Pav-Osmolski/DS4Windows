@@ -307,6 +307,24 @@ namespace DS4WindowsTests
         }
 
         [TestMethod]
+        [DataRow(3, 322, 79, 90)]
+        [DataRow(10, 220, 139, 145)]
+        public void DualShock4TriangleAndPsHighlightsStayBelowTheirUpperEdges(
+            int frame, int x, int shellY, int centerY)
+        {
+            foreach (string atlas in new[] { "DualShock4-Config_Highlights.png", "DualShock4-Mapping_Highlights.png" })
+            {
+                BitmapSource overlay = RasterHighlightAtlas.Frame(atlas, frame);
+                byte[] alpha = AlphaPixels(overlay);
+                Assert.IsLessThan(32, (int)alpha[shellY * overlay.PixelWidth + x],
+                    $"{atlas} frame {frame} paints a visible line above the cap.");
+                Assert.IsGreaterThanOrEqualTo((int)RasterHighlightAtlas.HitAlphaThreshold,
+                    (int)alpha[centerY * overlay.PixelWidth + x],
+                    $"{atlas} frame {frame} should still paint the cap center.");
+            }
+        }
+
+        [TestMethod]
         public void DualShock4UpperTouchIsInsideTheTouchpadNotTheLightbar()
         {
             Rect upperTouch = RasterHighlightAtlas.Mask(

@@ -9,7 +9,7 @@ instead of leaving hand-positioned WPF rectangles as the only specification.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from collections import deque
 import argparse
@@ -293,7 +293,24 @@ def scale_shape(
         # Geometry is authored in source pixels. Draw it there at a high
         # resolution, then scale it using the same transform as the base art.
         if isinstance(shape, SourceSurface):
-            exact = source_surface_mask(source, shape)
+            surface = shape
+            if source.size != (artwork.source_width, artwork.source_height):
+                # Keep authored coordinates tied to the layout while tracing
+                # the actual button edges in the higher-resolution raster.
+                scale_x = source.width / artwork.source_width
+                scale_y = source.height / artwork.source_height
+                def scale_point(x, y):
+                    return round(x * scale_x), round(y * scale_y)
+
+                left, top, right, bottom = surface.box
+                surface = replace(
+                    surface,
+                    box=scale_point(left, top) + scale_point(right, bottom),
+                    seed=scale_point(*surface.seed),
+                    clip=tuple(scale_point(*point) for point in surface.clip)
+                    if surface.clip is not None else None,
+                )
+            exact = source_surface_mask(source, surface)
             source_mask = exact.resize(
                 (artwork.source_width * SUPERSAMPLE,
                  artwork.source_height * SUPERSAMPLE),
@@ -614,29 +631,6 @@ def render_xbox_preview(resources: Path, target: Path) -> None:
                                    fill=(235, 242, 255, 255))
     target.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(target, optimize=True)
-
-
-def render_dualshock4_mapping_lightbar(resources: Path) -> None:
-    """Trace only the blue light pipe visible in the DS4 front raster."""
-
-    source = Image.open(resources / "DualShock 4 Controller.png").convert("RGBA")
-    left, top, right, bottom = (128, 47, 256, 61)
-    crop = source.crop((left, top, right, bottom))
-    pixels = crop.load()
-    mask = Image.new("L", crop.size, 0)
-    target = mask.load()
-    for y in range(crop.height):
-        for x in range(crop.width):
-            red, green, blue, alpha = pixels[x, y]
-            if alpha > 0 and blue >= 110 and blue > red * 1.35 and blue > green * 1.08:
-                target[x, y] = alpha
-
-    mask = mask.filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.MinFilter(3))
-    result = Image.new("RGBA", crop.size, (255, 255, 255, 0))
-    result.putalpha(mask)
-    target_name = "DualShock4-Mapping-Lightbar.png"
-    result.save(resources / target_name, optimize=True)
-    print(f"generated {target_name}: {result.width} x {result.height}")
 
 
 def render_dualsense_edge_mapping_lightbar(resources: Path) -> None:
@@ -977,7 +971,7 @@ def main() -> None:
     ):
         render_mapping_atlas(resources, source_atlas, target_atlas)
 
-    render_dualshock4_mapping_lightbar(resources)
+    # The DualShock 4 lightbar uses a separately sourced high-resolution mask.
     render_dualsense_edge_mapping_lightbar(resources)
 
     render_xbox_action_atlas(resources)
