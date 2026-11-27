@@ -6964,4 +6964,13 @@ Backup : </value>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>{0} を初期化しています…</value></data>
   <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows は停止しています</value></data>
   <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>DS4Windows でコントローラーを使うには、右下の「{0}」を選択してください。</value></data>
+  <data name="ControllerSupportGameCube" xml:space="preserve">
+    <value>GameCube コントローラーのサポート</value>
+  </data>
+  <data name="EdgeControllerRearView" xml:space="preserve">
+    <value>背面</value>
+  </data>
+  <data name="EditInControllerMappingList" xml:space="preserve">
+    <value>リストで編集</value>
+  </data>
 </root>

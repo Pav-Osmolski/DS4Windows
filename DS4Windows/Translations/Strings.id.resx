@@ -6985,4 +6985,13 @@ Untuk backup: </value>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Menginisialisasi {0}…</value></data>
   <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows dihentikan</value></data>
   <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Pilih {0} di sudut kanan bawah untuk menggunakan pengontrol melalui DS4Windows.</value></data>
+  <data name="ControllerSupportGameCube" xml:space="preserve">
+    <value>Dukungan kontroler GameCube</value>
+  </data>
+  <data name="EdgeControllerRearView" xml:space="preserve">
+    <value>Tampak belakang</value>
+  </data>
+  <data name="EditInControllerMappingList" xml:space="preserve">
+    <value>Edit di daftar</value>
+  </data>
 </root>

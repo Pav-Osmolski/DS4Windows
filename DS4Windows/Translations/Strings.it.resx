@@ -6961,4 +6961,13 @@ Il backup: </value>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Inizializzazione di {0}…</value></data>
   <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows è arrestato</value></data>
   <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Seleziona «{0}» in basso a destra per usare i tuoi controller tramite DS4Windows.</value></data>
+  <data name="ControllerSupportGameCube" xml:space="preserve">
+    <value>Supporto controller GameCube</value>
+  </data>
+  <data name="EdgeControllerRearView" xml:space="preserve">
+    <value>Vista posteriore</value>
+  </data>
+  <data name="EditInControllerMappingList" xml:space="preserve">
+    <value>Modifica nell’elenco</value>
+  </data>
 </root>

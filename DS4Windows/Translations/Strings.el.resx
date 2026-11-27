@@ -6989,4 +6989,13 @@ Example: whyme_DS4Windows</value>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Αρχικοποίηση του {0}…</value></data>
   <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>Το DS4Windows έχει σταματήσει</value></data>
   <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Επιλέξτε «{0}» στην κάτω δεξιά γωνία για να χρησιμοποιήσετε τα χειριστήριά σας μέσω του DS4Windows.</value></data>
+  <data name="ControllerSupportGameCube" xml:space="preserve">
+    <value>Υποστήριξη χειριστηρίου GameCube</value>
+  </data>
+  <data name="EdgeControllerRearView" xml:space="preserve">
+    <value>Πίσω όψη</value>
+  </data>
+  <data name="EditInControllerMappingList" xml:space="preserve">
+    <value>Επεξεργασία στη λίστα</value>
+  </data>
 </root>

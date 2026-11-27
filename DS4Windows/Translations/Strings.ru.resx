@@ -7001,4 +7001,13 @@
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>Инициализация устройства {0}…</value></data>
   <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows остановлена</value></data>
   <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Нажмите «{0}» в правом нижнем углу, чтобы использовать контроллеры через DS4Windows.</value></data>
+  <data name="ControllerSupportGameCube" xml:space="preserve">
+    <value>Поддержка контроллера GameCube</value>
+  </data>
+  <data name="EdgeControllerRearView" xml:space="preserve">
+    <value>Вид сзади</value>
+  </data>
+  <data name="EditInControllerMappingList" xml:space="preserve">
+    <value>Редактировать в списке</value>
+  </data>
 </root>

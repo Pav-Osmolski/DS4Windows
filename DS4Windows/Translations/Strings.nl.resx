@@ -6993,4 +6993,13 @@ De backup: </value>
   <data name="UI_28921D73B39580D4" xml:space="preserve"><value>{0} wordt geïnitialiseerd…</value></data>
   <data name="UI_4CB49E4CD89811DC" xml:space="preserve"><value>DS4Windows is gestopt</value></data>
   <data name="UI_3C152BCB8ECD152E" xml:space="preserve"><value>Kies rechtsonder ‘{0}’ om je controllers via DS4Windows te gebruiken.</value></data>
+  <data name="ControllerSupportGameCube" xml:space="preserve">
+    <value>Ondersteuning voor GameCube-controllers</value>
+  </data>
+  <data name="EdgeControllerRearView" xml:space="preserve">
+    <value>Achteraanzicht</value>
+  </data>
+  <data name="EditInControllerMappingList" xml:space="preserve">
+    <value>Bewerken in de lijst</value>
+  </data>
 </root>
