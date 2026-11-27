@@ -1,21 +1,45 @@
 {
   "SchemaVersion": 1,
-  "SourceCommit": "af71142c8957d05b81f1a624bd91257df18851d4",
+  "SourceCommit": "7c58e8077ed71401b9a768bd277512c0021fc274",
   "Version": "v0.1.20",
   "ProductVersion": "0.1.20",
   "FileVersion": "0.1.20.0",
-  "BuildDate": "2026-11-26T19:50:34Z",
+  "BuildDate": "2026-11-27T10:53:05Z",
+  "GitHubRunId": "45985384691",
+  "GitHubRunAttempt": "1",
   "Binary": {
     "Name": "viiper.exe",
     "Size": 9631744,
-    "Sha256": "9AC0BEE956E5E74EA6501E9E588FB3CB18A904F204CE9434F2009B15A16EF51E"
+    "Sha256": "7AC1FAFC17B4E3FF7A9CE821C0909BC6FBD0F767E3BA47D1104F0B875D82B0F9"
   },
+  "LicenseFiles": [
+    {
+      "Name": "licenses.txt",
+      "Sha256": "AAAD3804445072CB86F75CD976431E4BD6BBCFF3089DA961EA7C74088AD5ED9B"
+    },
+    {
+      "Name": "LICENSE.txt",
+      "Sha256": "F24EE094842DC3347A7A06B71373573CE18F6DCB935C81E95623723EE22E6CA6"
+    },
+    {
+      "Name": "VIIPER-SYSTRAY-NOTICE.md",
+      "Sha256": "6126849BBF404E8172729DAF992DDF7BE43C84F30721883F51C0FA52CC4CD192"
+    },
+    {
+      "Name": "VIIPER-SYSTRAY-LICENSE.txt",
+      "Sha256": "05C55BD8834035C143C17AA218BFF08E22B7A66C5603CBA8F070DCAAFC974B8F"
+    },
+    {
+      "Name": "VIIPER-WDL-NOTICE.txt",
+      "Sha256": "2485006947F464C2A69E9F863D50529261FB684A7AC5E6BAE0D03BFE65F9E025"
+    }
+  ],
   "GoBuildInfo": {
     "GoVersion": "go1.27.2",
     "Path": "github.com/Alia5/VIIPER/cmd/viiper",
     "Main": {
       "Path": "github.com/Alia5/VIIPER",
-      "Version": "v0.7.1-0.20261126195034-af71142c8957"
+      "Version": "v0.1.20"
     },
     "Deps": [
       {
@@ -103,11 +127,11 @@
       },
       {
         "Key": "vcs.revision",
-        "Value": "af71142c8957d05b81f1a624bd91257df18851d4"
+        "Value": "7c58e8077ed71401b9a768bd277512c0021fc274"
       },
       {
         "Key": "vcs.time",
-        "Value": "2026-11-26T19:50:34Z"
+        "Value": "2026-11-27T10:49:44Z"
       },
       {
         "Key": "vcs.modified",
@@ -120,8 +144,8 @@
     "",
     "Virtual Input over IP EmulatoR",
     "",
-    "    Version: v0.1.20 (af71142c8957d05b81f1a624bd91257df18851d4)",
-    "             2026-11-26T19:50:34Z",
+    "    Version: v0.1.20 (7c58e80)",
+    "             2026-11-27T10:53:05Z",
     "    Source:  https://github.com/hbashton/VIIPER",
     "    License: GPLv3",
     "",
@@ -158,27 +182,5 @@
     "    Remove any VIIPER system startup configuration / Systemd service",
     "",
     "Run \"VIIPER <command> --help\" for more information on a command."
-  ],
-  "LicenseFiles": [
-    {
-      "Name": "licenses.txt",
-      "Sha256": "029ED367BDD17BEDF22570C92E240C3AEA98566109697EB0131813BB9D315464"
-    },
-    {
-      "Name": "LICENSE.txt",
-      "Sha256": "F24EE094842DC3347A7A06B71373573CE18F6DCB935C81E95623723EE22E6CA6"
-    },
-    {
-      "Name": "VIIPER-SYSTRAY-NOTICE.md",
-      "Sha256": "6126849BBF404E8172729DAF992DDF7BE43C84F30721883F51C0FA52CC4CD192"
-    },
-    {
-      "Name": "VIIPER-SYSTRAY-LICENSE.txt",
-      "Sha256": "05C55BD8834035C143C17AA218BFF08E22B7A66C5603CBA8F070DCAAFC974B8F"
-    },
-    {
-      "Name": "VIIPER-WDL-NOTICE.txt",
-      "Sha256": "2485006947F464C2A69E9F863D50529261FB684A7AC5E6BAE0D03BFE65F9E025"
-    }
   ]
 }

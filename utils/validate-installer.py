@@ -42,26 +42,26 @@ REQUIRED_PUBLISH_FILES = {
 VIIPER_RELEASE = {
     "Version": "v0.1.20",
     "Source": "https://github.com/Pav-Osmolski/VIIPER",
-    "Source commit": "af71142c8957d05b81f1a624bd91257df18851d4",
+    "Source commit": "7c58e8077ed71401b9a768bd277512c0021fc274",
     "Toolchain": "Go 1.27.2 windows/amd64",
     "Build": "GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release",
-    "Embedded commit": "af71142c8957d05b81f1a624bd91257df18851d4",
-    "Embedded build date": "2026-11-26T19:50:34Z",
-    "Embedded VCS revision": "af71142c8957d05b81f1a624bd91257df18851d4",
-    "Embedded VCS time": "2026-11-26T19:50:34Z",
+    "Embedded commit": "7c58e8077ed71401b9a768bd277512c0021fc274",
+    "Embedded build date": "2026-11-27T10:53:05Z",
+    "Embedded VCS revision": "7c58e8077ed71401b9a768bd277512c0021fc274",
+    "Embedded VCS time": "2026-11-27T10:49:44Z",
     "Embedded VCS modified": "false",
     "PE file version": "0.1.20.0",
     "PE product version": "0.1.20",
     "Binary": "VIIPER-0.1.20-x64.exe",
-    "Binary SHA-256": "9AC0BEE956E5E74EA6501E9E588FB3CB18A904F204CE9434F2009B15A16EF51E",
+    "Binary SHA-256": "7AC1FAFC17B4E3FF7A9CE821C0909BC6FBD0F767E3BA47D1104F0B875D82B0F9",
     "Authenticode status at packaging": "NotSigned",
     "License notice": "VIIPER-0.1.20-LICENSES.txt",
-    "License notice SHA-256": "029ED367BDD17BEDF22570C92E240C3AEA98566109697EB0131813BB9D315464"
+    "License notice SHA-256": "AAAD3804445072CB86F75CD976431E4BD6BBCFF3089DA961EA7C74088AD5ED9B"
 }
 # Preserve the strict machine-readable provenance tuple and independently bind
 # the complete, unabridged build notes and license documents to this artifact.
 VIIPER_NOTICE_HASHES = {
-    "VIIPER-0.1.20-BUILD-NOTES.txt": "1368E2B4C7F9ED9A4A9CC143203E1E393383BA75189934FD40D38533CA2D4C3D",
+    "VIIPER-0.1.20-BUILD-NOTES.txt": "196FE5F6B44081804CDEACB604E4269C5BC827A6E036879E8D609FC7C37BDCBD",
     "LICENSE.txt": "F24EE094842DC3347A7A06B71373573CE18F6DCB935C81E95623723EE22E6CA6",
     "VIIPER-SYSTRAY-NOTICE.md": "6126849BBF404E8172729DAF992DDF7BE43C84F30721883F51C0FA52CC4CD192",
     "VIIPER-SYSTRAY-LICENSE.txt": "05C55BD8834035C143C17AA218BFF08E22B7A66C5603CBA8F070DCAAFC974B8F",
@@ -854,7 +854,7 @@ def main() -> int:
             raise SystemExit("Packaged VIIPER notice does not match its pinned hash: " + name)
 
     broker_source = args.publish_root / "extras" / "VIIPER-0.1.20-SOURCE.zip"
-    if sha256(broker_source) != "6D549492D047BDFB741F3A0C87F7C2AA327CDBE683C4B70C14EEDFBD46CDE137":
+    if sha256(broker_source) != "391F3225AE053BF55AC20158A21603073736BF99DB053CA0B3008E0AA5CA5B1A":
         raise SystemExit("Bundled VIIPER corresponding source hash mismatch.")
     with zipfile.ZipFile(broker_source) as source_zip:
         if source_zip.comment.decode("ascii") != VIIPER_RELEASE["Source commit"]:

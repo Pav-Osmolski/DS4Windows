@@ -14,7 +14,7 @@ namespace DS4Windows.Bootstrapper
         private const string ExpectedMarker = "VIIPER-0.1.20+USBIP-0.9.8.1";
         private const string ExpectedViiperVersion = "0.1.20";
         internal static string ViiperDisplayName => "VIIPER " + ExpectedViiperVersion;
-        private const string ExpectedViiperHash = "9AC0BEE956E5E74EA6501E9E588FB3CB18A904F204CE9434F2009B15A16EF51E";
+        private const string ExpectedViiperHash = "7AC1FAFC17B4E3FF7A9CE821C0909BC6FBD0F767E3BA47D1104F0B875D82B0F9";
         private const string ExpectedUsbipVersion = "0.9.8.1";
         private const string ExpectedUsbipHash = "817DA219FA153B4B37C3BC1AA8FCC63F33E046188C57CC3DD2C60A6EF0883C56";
         private const string ExpectedUsbipLibraryHash = "F123EF5D288B817A890CBE39A3C2D212B3D8B1765C691C8703CCB76C7337986C";

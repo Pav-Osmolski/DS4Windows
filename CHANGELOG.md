@@ -22,6 +22,8 @@ archives, checksums, and build records are available on [Releases](https://githu
 - Show the DualSense Edge rear paddles on the Profile Editor map, identify controls edited from the mapping list and allow other inputs to target the paddles and Fn buttons on virtual DualSense Edge output. Thanks to [@gubbywumpus](https://github.com/gubbywumpus) for [#159](https://github.com/Pav-Osmolski/DS4Windows/issues/159).
 - Continue legacy Joy-Con startup when the controller returns missing or invalid calibration data. DS4Windows uses factory data when available or falls back to nominal calibration and explains the fallback in the log. Thanks to [@aidenbaek579-png](https://github.com/aidenbaek579-png) for the MOBAPAD M12-HD traces in [#161](https://github.com/Pav-Osmolski/DS4Windows/issues/161).
 
+Implemented in [DS4Windows PR #162](https://github.com/Pav-Osmolski/DS4Windows/pull/162).
+
 ### [5.0.84](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.84) - 2026-11-26
 
 #### Generic Joystick is here
