@@ -2107,8 +2107,12 @@ namespace DS4Windows
             => SetCurveAndDeadzone(device, cState, dState, null);
 
         internal static DS4State SetCurveAndDeadzone(int device, DS4State cState, DS4State dState,
-            object sourceOwner)
+            object sourceOwner) => SetCurveAndDeadzone(device, cState, dState, sourceOwner, out _);
+
+        internal static DS4State SetCurveAndDeadzone(int device, DS4State cState, DS4State dState,
+            object sourceOwner, out MouseStickIntent mouseIntent)
         {
+            mouseIntent = ReadMouseStickIntent(cState);
             double rotation = /*tempDoubleArray[device] =*/  getLSRotation(device);
             double rotationRS = /*tempDoubleArray[device] =*/ getRSRotation(device);
             DS4StickFilterSet filters = stickFilters[device];
@@ -2119,6 +2123,16 @@ namespace DS4Windows
             if (rotationRS > 0.0 || rotationRS < 0.0)
                 cState.rotateRSCoordinates(rotationRS);
 
+            StickDeadZoneInfo lsMod = GetLSDeadInfo(device);
+            StickDeadZoneInfo rsMod = GetRSDeadInfo(device);
+            // Use the current sample for the release check. Fuzz or snapback
+            // can keep an older vector active even inside the profile's dead zone.
+            mouseIntent = new(
+                mouseIntent.LeftCentered || IsInsideMouseProfileDeadzone(cState.LXAxis, cState.LYAxis,
+                    LeftStickDriftXAxis[device], LeftStickDriftYAxis[device], lsMod),
+                mouseIntent.RightCentered || IsInsideMouseProfileDeadzone(cState.RXAxis, cState.RYAxis,
+                    RightStickDriftXAxis[device], RightStickDriftYAxis[device], rsMod));
+
             StickAntiSnapbackInfo lsAntiSnapback = GetLSAntiSnapbackInfo(device);
             StickAntiSnapbackInfo rsAntiSnapback = GetRSAntiSnapbackInfo(device);
 
@@ -2127,9 +2141,6 @@ namespace DS4Windows
                 lsAntiSnapback.timeout, filterTimestamp, ref cState.LXAxis, ref cState.LYAxis);
             filters.Right.ApplySnapback(rsAntiSnapback.enabled, rsAntiSnapback.delta,
                 rsAntiSnapback.timeout, filterTimestamp, ref cState.RXAxis, ref cState.RYAxis);
-
-            StickDeadZoneInfo lsMod = GetLSDeadInfo(device);
-            StickDeadZoneInfo rsMod = GetRSDeadInfo(device);
 
             filters.Left.ApplyFuzz(lsMod.fuzz, ref cState.LXAxis, ref cState.LYAxis);
             filters.Right.ApplyFuzz(rsMod.fuzz, ref cState.RXAxis, ref cState.RYAxis);
@@ -6502,6 +6513,19 @@ namespace DS4Windows
                 Centered(physical.RXAxis.ProfileCoordinate, physical.RYAxis.ProfileCoordinate));
 
             static bool Centered(double x, double y) => Math.Abs(x - 128) <= 3 && Math.Abs(y - 128) <= 3;
+        }
+
+        private static bool IsInsideMouseProfileDeadzone(DS4MappedStickAxis x, DS4MappedStickAxis y,
+            int offsetX, int offsetY, StickDeadZoneInfo settings)
+        {
+            if (offsetX != 0) ApplyStickCalibrationOffset(ref x, offsetX);
+            if (offsetY != 0) ApplyStickCalibrationOffset(ref y, offsetY);
+            double dx = x.ProfileCoordinate - 128;
+            double dy = y.ProfileCoordinate - 128;
+            return settings.deadzoneType == StickDeadZoneInfo.DeadZoneType.Radial ?
+                dx * dx + dy * dy <= settings.deadZone * settings.deadZone :
+                Math.Abs(dx) <= settings.xAxisDeadInfo.deadZone &&
+                Math.Abs(dy) <= settings.yAxisDeadInfo.deadZone;
         }
 
         private static double getMouseMapping(int device, DS4Controls control, DS4State cState, DS4StateExposed eState,

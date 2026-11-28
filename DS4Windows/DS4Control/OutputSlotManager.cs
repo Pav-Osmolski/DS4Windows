@@ -181,19 +181,27 @@ namespace DS4Windows
             return outputDevice;
         }
 
-        private int FindEmptySlot()
+        private int FindEmptySlot(OutContType reservationType)
         {
-            int result = -1;
-            for (int i = 0; i < outputDevices.Length && result == -1; i++)
+            int dynamicSlot = -1;
+            for (int i = 0; i < outputSlots.Length; i++)
             {
-                OutputDevice tempdev = outputDevices[i];
-                if (tempdev == null)
+                OutSlotDevice slot = outputSlots[i];
+                if (outputDevices[i] != null ||
+                    slot.CurrentInputBound != OutSlotDevice.InputBound.Unbound ||
+                    slot.CurrentAttachedStatus != OutSlotDevice.AttachedStatus.UnAttached)
+                    continue;
+
+                if (slot.CurrentReserveStatus == OutSlotDevice.ReserveStatus.Permanent)
                 {
-                    result = i;
+                    if (reservationType != OutContType.None && slot.PermanentType == reservationType)
+                        return i;
                 }
+                else if (dynamicSlot < 0)
+                    dynamicSlot = i;
             }
 
-            return result;
+            return dynamicSlot;
         }
 
         public OutSlotDevice DeferredPlugin(OutputDevice outputDevice, int inIdx, string inDisplayString,
@@ -206,11 +214,14 @@ namespace DS4Windows
             using (WriteLocker locker = new WriteLocker(queueLocker))
             {
                 if (Volatile.Read(ref stopping) != 0) return null;
-                int slot = preferredSlot == null ? FindEmptySlot() :
+                int slot = preferredSlot == null ?
+                    FindEmptySlot(inIdx >= 0 ? contType : OutContType.None) :
                     (uint)preferredSlot.Index < outputSlots.Length &&
                     ReferenceEquals(outputSlots[preferredSlot.Index], preferredSlot) &&
                     preferredSlot.CurrentInputBound == OutSlotDevice.InputBound.Unbound &&
-                    preferredSlot.CurrentAttachedStatus == OutSlotDevice.AttachedStatus.UnAttached ?
+                    preferredSlot.CurrentAttachedStatus == OutSlotDevice.AttachedStatus.UnAttached &&
+                    (preferredSlot.CurrentReserveStatus != OutSlotDevice.ReserveStatus.Permanent ||
+                        preferredSlot.PermanentType == contType) ?
                         preferredSlot.Index : -1;
                 ControlService.StartupDiag($"OutputSlotManager.DeferredPlugin emptySlot={slot + 1} inIdx={inIdx} contType={contType}");
                 if (slot != -1)
@@ -375,22 +386,11 @@ namespace DS4Windows
             //queuedTasks--;
         }
 
-        public OutSlotDevice FindOpenSlot()
+        public OutSlotDevice FindOpenSlot(OutContType reservationType = OutContType.None)
         {
             using ReadLocker locker = new ReadLocker(queueLocker);
-            OutSlotDevice temp = null;
-            for (int i = 0; i < outputSlots.Length; i++)
-            {
-                OutSlotDevice tmp = outputSlots[i];
-                if (tmp.CurrentInputBound == OutSlotDevice.InputBound.Unbound &&
-                    tmp.CurrentAttachedStatus == OutSlotDevice.AttachedStatus.UnAttached)
-                {
-                    temp = tmp;
-                    break;
-                }
-            }
-
-            return temp;
+            int index = FindEmptySlot(reservationType.Normalize());
+            return index >= 0 ? outputSlots[index] : null;
         }
 
         public bool SlotAvailable(int slotNum)
@@ -480,10 +480,12 @@ namespace DS4Windows
                     boundOutputs[inputIndex] != null)
                     return false;
 
-                if (output is ViiperOutDevice viiper && (viiper.NegotiatesHapticsConverter || expectedType == OutContType.ViiperGenericJoystick))
+                if (output is ViiperOutDevice viiper)
                 {
-                    if (!viiper.CanReuseForPhysicalController(inputIndex)) return false;
-                    viiper.BindPhysicalController(inputIndex);
+                    if (!viiper.CanAdoptUnboundOutput(inputIndex))
+                        return false;
+                    if (viiper.NegotiatesHapticsConverter || expectedType == OutContType.ViiperGenericJoystick)
+                        viiper.BindPhysicalController(inputIndex);
                 }
                 candidate.InputIndex = inputIndex;
                 candidate.InputDisplayString = inputDisplayString ?? string.Empty;
@@ -500,7 +502,7 @@ namespace DS4Windows
         // The caller's compatibility hint may be stale. Retire only an exact,
         // still-unbound registration, under the same lock as binding. Keep its
         // manager ownership intact if device teardown fails.
-        internal bool TryRetireIncompatibleHapticsOutput(OutSlotDevice candidate,
+        internal bool TryRetireUnusableUnboundOutput(OutSlotDevice candidate,
             OutputDevice expected, int inputIndex)
         {
             if (candidate == null || expected is not ViiperOutDevice viiper) return false;
@@ -509,7 +511,7 @@ namespace DS4Windows
             {
                 if (!IsExactAttachedSlotNoLock(candidate, expected) ||
                     candidate.CurrentInputBound != OutSlotDevice.InputBound.Unbound ||
-                    viiper.CanReuseForPhysicalController(inputIndex)) return false;
+                    viiper.CanAdoptUnboundOutput(inputIndex)) return false;
                 expected.RemoveFeedbacks();
                 expected.Disconnect();
                 outputDevices[slot] = null;

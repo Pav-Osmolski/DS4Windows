@@ -66,7 +66,7 @@ namespace DS4WinWPF.DS4Control.DTOXml
             foreach(OutputSlotSerializer tempSlot in SlotItems)
             {
                 OutSlotDevice tempDev = null;
-                if (tempSlot.Index >= 0 && tempSlot.Index <= 3)
+                if ((uint)tempSlot.Index < destination.OutputSlots.Length)
                 {
                     int idx = tempSlot.Index;
                     tempDev = destination.OutputSlots[idx];

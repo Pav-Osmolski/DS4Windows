@@ -471,6 +471,43 @@ public sealed class ConcurrentMouseMappingTests
         Assert.AreEqual(moves, handler.Moves.Count);
     }
 
+    [TestMethod]
+    [DataRow(StickDeadZoneInfo.DeadZoneType.Radial)]
+    [DataRow(StickDeadZoneInfo.DeadZoneType.Axial)]
+    public void FreshStickSampleInsideTheProfileDeadZoneStopsFuzzHeldMouseMovement(
+        StickDeadZoneInfo.DeadZoneType deadzoneType)
+    {
+        Bind(DS4Controls.RXPos, X360Controls.MouseRight);
+        StickDeadZoneInfo settings = Global.GetRSDeadInfo(Slot);
+        settings.deadzoneType = deadzoneType;
+        settings.fuzz = 25;
+        settings.deadZone = 8;
+        settings.xAxisDeadInfo.deadZone = 8;
+        settings.yAxisDeadInfo.deadZone = 8;
+        DS4Device device = service.DS4Controllers[Slot];
+
+        void Report(byte x, bool expectNeutral)
+        {
+            var sample = new DS4State { RX = x };
+            DS4State shaped = Mapping.SetCurveAndDeadzone(Slot, sample, new DS4State(),
+                device, out Mapping.MouseStickIntent intent);
+            Assert.AreEqual(expectNeutral, intent.RightCentered);
+            Assert.IsTrue(shaped.RX > 128, "Fuzz must hold a previous off-centre vector.");
+            shaped.elapsedTime = .004;
+            Mapping.MapCustom(Slot, shaped, new DS4State(), new DS4StateExposed(shaped),
+                mouse, service, sample, intent);
+            Mapping.Commit(Slot);
+        }
+
+        for (int i = 0; i < 50; i++) Report(155, expectNeutral: false);
+        int moving = handler.Moves.Count;
+        Assert.IsTrue(moving > 0);
+        for (int i = 0; i < 250; i++) Report(134, expectNeutral: true);
+        Assert.AreEqual(moving, handler.Moves.Count);
+        for (int i = 0; i < 50; i++) Report(155, expectNeutral: false);
+        Assert.IsTrue(handler.Moves.Count > moving);
+    }
+
     private DS4State Frame(DS4State source, int slot = Slot, DS4State physical = null)
     {
         source.elapsedTime = .004;
