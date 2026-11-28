@@ -406,6 +406,7 @@ namespace DS4Windows
         private Thread microphoneWriterThread;
         private Thread microphoneInterfaceThread;
         private Thread switch2RuntimeStatusThread;
+        private readonly ViiperDualShock4InputQueue dualShock4InputQueue;
         private byte[] pendingStatePacket;
         private long pendingStatePacketQueuedTimestamp;
         private long orderedEgressOwnedPresentationGeneration;
@@ -627,6 +628,8 @@ namespace DS4Windows
         {
             this.outputType = outputType;
             this.viiperType = viiperType;
+            if (viiperType == ViiperVirtualDeviceType.DualShock4)
+                dualShock4InputQueue = new();
             this.audioOnlySidecar = audioOnlySidecar;
             this.gamepadOnly = gamepadOnly;
             readSwitch2XboxLivePolicy = ReadSwitch2XboxLivePolicy;
@@ -956,6 +959,18 @@ namespace DS4Windows
 
         internal bool IsRuntimeConnected =>
             connected && Volatile.Read(ref deviceStream) != null && !HasRuntimeFault;
+
+        // Slot registrations can outlive the transport's terminal teardown.
+        internal bool CanAdoptUnboundOutput(int deviceIndex) =>
+            !writerStopRequested && !HasRuntimeFault &&
+            !RequiresPhysicalControllerAtCreation(outputType) &&
+            CanReuseForPhysicalController(deviceIndex);
+
+        // Xbox One's authenticated feedback target belongs to the physical
+        // connection captured at creation. Linking a later input to its row
+        // cannot update that immutable owner.
+        internal static bool RequiresPhysicalControllerAtCreation(OutContType type) =>
+            type.Normalize() == OutContType.ViiperXboxOne;
 
         internal long RuntimeFeedbackGeneration => Interlocked.Read(ref streamGeneration);
 
@@ -1425,7 +1440,7 @@ namespace DS4Windows
                     "ordered button/trigger boundaries and latest continuous state" :
                     UsesXboxOneEgressScheduler() ?
                     "ordered button/trigger boundaries and latest continuous state" :
-                    UsesSwitch2EgressScheduler() ?
+                    (UsesSwitch2EgressScheduler() || dualShock4InputQueue != null) ?
                     "ordered button boundaries and latest axes/motion state" :
                     "latest-state coalescing";
                 AppLogger.LogToGui(
@@ -2229,6 +2244,7 @@ namespace DS4Windows
             {
                 pendingStatePacket = null;
                 pendingStatePacketQueuedTimestamp = 0;
+                dualShock4InputQueue?.Clear();
             }
             ClearPendingMicrophoneFrames();
             lock (preparedMicrophoneQueueLock)
@@ -2968,7 +2984,7 @@ namespace DS4Windows
                 else
                 {
                     QueueStatePacket(ViiperStatePacketBuilder.BuildNeutral(
-                        viiperType));
+                        viiperType), reset: true);
                 }
             }
             catch (IOException ex)
@@ -3017,20 +3033,26 @@ namespace DS4Windows
                 .SupportsVirtualMicrophoneOutput(type);
         }
 
-        private void QueueStatePacket(byte[] data)
+        private void QueueStatePacket(byte[] data, bool reset = false)
         {
             long queuedAt = Stopwatch.GetTimestamp();
             RecordStateQueued(queuedAt);
 
             lock (pendingPacketLock)
             {
-                if (pendingStatePacket != null)
+                if (dualShock4InputQueue != null)
                 {
-                    Interlocked.Increment(ref replacedPendingPacketCount);
+                    if (reset) dualShock4InputQueue.Clear();
+                    if (dualShock4InputQueue.Publish(data, queuedAt))
+                        Interlocked.Increment(ref replacedPendingPacketCount);
                 }
-
-                pendingStatePacket = data;
-                pendingStatePacketQueuedTimestamp = queuedAt;
+                else
+                {
+                    if (pendingStatePacket != null)
+                        Interlocked.Increment(ref replacedPendingPacketCount);
+                    pendingStatePacket = data;
+                    pendingStatePacketQueuedTimestamp = queuedAt;
+                }
             }
 
             Interlocked.Increment(ref submittedPacketCount);
@@ -4621,13 +4643,19 @@ namespace DS4Windows
                         {
                             lock (pendingPacketLock)
                             {
-                                packet = pendingStatePacket;
-                                if (packet != null)
+                                if (dualShock4InputQueue != null)
                                 {
-                                    pendingStatePacket = null;
-                                    queuedAt =
-                                        pendingStatePacketQueuedTimestamp;
-                                    pendingStatePacketQueuedTimestamp = 0;
+                                    packet = dualShock4InputQueue.Peek(Stopwatch.GetTimestamp(), out queuedAt);
+                                }
+                                else
+                                {
+                                    packet = pendingStatePacket;
+                                    if (packet != null)
+                                    {
+                                        pendingStatePacket = null;
+                                        queuedAt = pendingStatePacketQueuedTimestamp;
+                                        pendingStatePacketQueuedTimestamp = 0;
+                                    }
                                 }
                             }
                         }
@@ -4676,7 +4704,7 @@ namespace DS4Windows
                                     switch2InputClaim,
                                     OrderedEgressCompletion.Defer);
                             }
-                            else
+                            else if (dualShock4InputQueue == null)
                             {
                                 QueueRetryStatePacket(packet);
                             }
@@ -4799,10 +4827,26 @@ namespace DS4Windows
                             }
                             else
                             {
+                                if (dualShock4InputQueue != null)
+                                {
+                                    lock (pendingPacketLock)
+                                    {
+                                        packet = dualShock4InputQueue.Peek(Stopwatch.GetTimestamp(), out _);
+                                    }
+                                    if (packet == null)
+                                        continue;
+                                }
                                 writeTiming = WriteState(writeStream, packet,
                                     packet.Length);
                             }
                             long writtenAt = Stopwatch.GetTimestamp();
+                            if (dualShock4InputQueue != null)
+                            {
+                                lock (pendingPacketLock)
+                                {
+                                    dualShock4InputQueue.Commit(packet);
+                                }
+                            }
                             if ((mappedClaim || xbox360Claim || xboxOneClaim ||
                                     switch2Claim) &&
                                 claimedAt > 0 &&
@@ -4933,7 +4977,7 @@ namespace DS4Windows
                                 TryRecoverStream(ex.Message,
                                     writeStreamGeneration,
                                     mappedClaim || xbox360Claim ||
-                                        xboxOneClaim || switch2Claim ?
+                                        xboxOneClaim || switch2Claim || dualShock4InputQueue != null ?
                                         null :
                                         packet))
                             {
@@ -5355,6 +5399,16 @@ namespace DS4Windows
                 {
                     replacement.CloseTransport();
                     return false;
+                }
+
+                // A new stream gets the current state and no unresolved edges
+                // from the failed connection. Reset history before publication.
+                if (dualShock4InputQueue != null)
+                {
+                    lock (pendingPacketLock)
+                    {
+                        dualShock4InputQueue.DiscardHistory();
+                    }
                 }
 
                 bool published = false;

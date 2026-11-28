@@ -34,6 +34,38 @@ public sealed class OutputSlotAtomicBindingTests
     }
 
     [TestMethod]
+    public void SavedReservationInLastRowIsRestoredAndOnlyMatchingOutputCanUseIt()
+    {
+        var manager = new OutputSlotManager();
+        var bound = new OutputDevice[1];
+        OutSlotDevice reserved = manager.OutputSlots[^1];
+        new DS4WinWPF.DS4Control.DTOXml.OutputSlotPersistDTO
+        {
+            SlotItems = new()
+            {
+                new() { Index = reserved.Index, DeviceType = OutContType.ViiperX360 },
+            },
+        }.MapTo(manager);
+
+        Assert.AreEqual(OutSlotDevice.ReserveStatus.Permanent, reserved.CurrentReserveStatus);
+        Assert.AreNotSame(reserved, manager.FindOpenSlot());
+        Assert.AreSame(reserved, manager.FindOpenSlot(OutContType.ViiperX360));
+        Assert.AreNotSame(reserved, manager.FindOpenSlot(OutContType.ViiperDS4));
+
+        var output = new FakeOutput();
+        Assert.IsNull(manager.DeferredPlugin(output, -1, "", bound, OutContType.ViiperDS4, reserved));
+        Assert.AreSame(reserved, manager.DeferredPlugin(output, -1, "", bound, OutContType.ViiperX360, reserved));
+        Assert.IsTrue(manager.TryBindExistingUnboundOutput(reserved,
+            bound, 0, "Controller", OutContType.ViiperX360, out _));
+        Assert.IsTrue(manager.TryReleaseBoundOutput(output, bound, 0));
+        Assert.IsTrue(manager.TryBindExistingUnboundOutput(reserved,
+            bound, 0, "Reconnected controller", OutContType.ViiperX360, out _));
+        Assert.AreEqual(1, output.ConnectCount);
+        Assert.AreEqual(0, output.DisconnectCount);
+        manager.DeferredRemoval(output, 0, bound, true);
+    }
+
+    [TestMethod]
     public void FailedNewPluginDoesNotReturnAnUncommittedSlot()
     {
         var manager = new OutputSlotManager();

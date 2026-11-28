@@ -437,6 +437,17 @@ Use this page to see which physical controller feeds each virtual output slot.
 Dynamic allocation or the type reserved permanently. **Input bound** means a
 physical controller is feeding the slot.
 
+Use **Dynamic** to create the virtual controller when a matching physical
+controller connects and remove it when that controller disconnects. Use
+**Permanent** to plug in the selected virtual controller type when DS4Windows
+starts and keep it available after the physical controller disconnects.
+A healthy Permanent output can usually accept another matching input without
+being recreated. For Xbox One / Series, Permanent reserves the row. The
+virtual controller is created when a matching physical controller connects
+and removed when it disconnects, because its feedback is tied to that
+physical connection. If a game loses input, compare both settings with the
+same emulated controller type and fully restart the game between tests.
+
 **Auto-fit columns** uses the available window width. **Fit columns** restores
 that layout. Dragging a column edge switches to manual sizing and saves the
 widths with your application settings, including across restarts. Turning

@@ -2215,39 +2215,15 @@ namespace DS4Windows
 
         public void AssignInitialDevices()
         {
-            foreach (OutSlotDevice slotDevice in outputslotMan.OutputSlots)
+            foreach (OutSlotDevice slot in outputslotMan.OutputSlots)
             {
-                if (slotDevice.CurrentReserveStatus ==
-                    OutSlotDevice.ReserveStatus.Permanent)
+                if (slot.CurrentReserveStatus == OutSlotDevice.ReserveStatus.Permanent &&
+                    slot.PermanentType != OutContType.None &&
+                    !ViiperOutDevice.RequiresPhysicalControllerAtCreation(slot.PermanentType))
                 {
-                    OutputDevice outDevice = EstablishOutDevice(0, slotDevice.PermanentType);
-                    outputslotMan.DeferredPlugin(outDevice, -1, "", outputDevices, slotDevice.PermanentType);
+                    AttachUnboundOutDev(slot, slot.PermanentType);
                 }
             }
-            /*OutSlotDevice slotDevice =
-                outputslotMan.FindExistUnboundSlotType(OutContType.X360);
-
-            if (slotDevice == null)
-            {
-                slotDevice = outputslotMan.FindOpenSlot();
-                slotDevice.CurrentReserveStatus = OutSlotDevice.ReserveStatus.Permanent;
-                slotDevice.PermanentType = OutContType.X360;
-                OutputDevice outDevice = EstablishOutDevice(0, OutContType.X360);
-                Xbox360OutDevice tempXbox = outDevice as Xbox360OutDevice;
-                outputslotMan.DeferredPlugin(tempXbox, -1, outputDevices, OutContType.X360);
-            }
-            */
-
-            /*slotDevice = outputslotMan.FindExistUnboundSlotType(OutContType.X360);
-            if (slotDevice == null)
-            {
-                slotDevice = outputslotMan.FindOpenSlot();
-                slotDevice.CurrentReserveStatus = OutSlotDevice.ReserveStatus.Permanent;
-                slotDevice.DesiredType = OutContType.X360;
-                OutputDevice outDevice = EstablishOutDevice(1, OutContType.X360);
-                Xbox360OutDevice tempXbox = outDevice as Xbox360OutDevice;
-                outputslotMan.DeferredPlugin(tempXbox, 1, outputDevices);
-            }*/
         }
 
         private OutputDevice EstablishOutDevice(int index, OutContType contType)
@@ -2274,11 +2250,18 @@ namespace DS4Windows
         public void AttachUnboundOutDev(OutSlotDevice slotDevice, OutContType contType)
         {
             contType = contType.Normalize();
+            if (ViiperOutDevice.RequiresPhysicalControllerAtCreation(contType))
+            {
+                LogDebug("Xbox One / Series output is plugged in when a matching physical controller connects.");
+                return;
+            }
+
             if (slotDevice.CurrentAttachedStatus == OutSlotDevice.AttachedStatus.UnAttached &&
                 slotDevice.CurrentInputBound == OutSlotDevice.InputBound.Unbound)
             {
                 OutputDevice outDevice = EstablishOutDevice(-1, contType);
-                outputslotMan.DeferredPlugin(outDevice, -1, "", outputDevices, contType);
+                outputslotMan.DeferredPlugin(outDevice, -1, "", outputDevices, contType,
+                    preferredSlot: slotDevice);
             }
         }
 
@@ -2349,13 +2332,13 @@ namespace DS4Windows
                 if (ViiperOutDevice.IsViiperType(contType))
                 {
                     activeOutDevType[index] = contType;
-                    OutSlotDevice converterReplacementSlot = null;
+                    OutSlotDevice replacementSlot = null;
                     if (slotDevice?.OutputDevice is ViiperOutDevice existingViiper &&
-                        !existingViiper.CanReuseForPhysicalController(index))
+                        !existingViiper.CanAdoptUnboundOutput(index))
                     {
-                        if (outputslotMan.TryRetireIncompatibleHapticsOutput(
+                        if (outputslotMan.TryRetireUnusableUnboundOutput(
                             slotDevice, existingViiper, index))
-                            converterReplacementSlot = slotDevice;
+                            replacementSlot = slotDevice;
                         slotDevice = null;
                     }
                     if (slotDevice != null)
@@ -2371,14 +2354,14 @@ namespace DS4Windows
                     }
                     if (slotDevice == null)
                     {
-                        slotDevice = converterReplacementSlot ?? outputslotMan.FindOpenSlot();
+                        slotDevice = replacementSlot ?? outputslotMan.FindOpenSlot(contType);
                         if (slotDevice != null)
                         {
                             OutputDevice tempViiper = EstablishOutDevice(index, contType);
                             produced = tempViiper;
                             slotDevice = outputslotMan.DeferredPlugin(tempViiper, index,
                                 $"{device.DisplayName} [{device.MacAddress}]", outputDevices, contType,
-                                preferredSlot: converterReplacementSlot);
+                                preferredSlot: replacementSlot);
                             success = slotDevice != null;
                         }
                         else
@@ -2456,8 +2439,9 @@ namespace DS4Windows
                         string tempType = slotDevice.CurrentType.ToDisplayName();
                         LogDebug($"Disassociated virtual {tempType} Controller in{(slotDevice.CurrentReserveStatus == OutSlotDevice.ReserveStatus.Permanent ? " permanent" : "")} output slot #{slotDevice.Index + 1} from input controller #{index + 1} ({device.DisplayName})", false);
 
-                        if ((slotDevice.CurrentAttachedStatus == OutSlotDevice.AttachedStatus.Attached &&
-                            slotDevice.CurrentReserveStatus == OutSlotDevice.ReserveStatus.Dynamic) || force)
+                        if (force || (slotDevice.CurrentAttachedStatus == OutSlotDevice.AttachedStatus.Attached &&
+                            (slotDevice.CurrentReserveStatus == OutSlotDevice.ReserveStatus.Dynamic ||
+                                ViiperOutDevice.RequiresPhysicalControllerAtCreation(slotDevice.CurrentType))))
                         {
                             outputslotMan.DeferredRemoval(dev, index, outputDevices, immediate);
                             if (outputslotMan.GetOutSlotDevice(dev) != null)
@@ -6199,8 +6183,8 @@ namespace DS4Windows
                 // Capture raw calibrated stick intent before any output curves/remapping.
                 touchPad[ind]?.UpdateGyroStickActivation(cState);
                 DS4State physicalActionState = cState;
-                Mapping.MouseStickIntent mouseStickIntent = Mapping.ReadMouseStickIntent(cState);
-                cState = Mapping.SetCurveAndDeadzone(ind, cState, TempState[ind], device);
+                cState = Mapping.SetCurveAndDeadzone(ind, cState, TempState[ind], device,
+                    out Mapping.MouseStickIntent mouseStickIntent);
 
                 bool oscMonitoringPending = false;
 

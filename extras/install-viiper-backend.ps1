@@ -108,7 +108,7 @@ $script:UsbipUdeDriverSha256 =
 $script:UsbipFilterDriverSha256 =
     "b93a5fc3c23d56f9b49634742374e32f269e53f764caa2d5fcb43e3259f7eced"
 $script:BundledViiperPath = Join-Path $script:PackageExtrasRoot `
-    "VIIPER-0.1.20-x64.exe"
+    "VIIPER-0.1.21-x64.exe"
 $script:BundledViiperSha256Path = $script:BundledViiperPath + ".sha256"
 $script:BundledUsbipInstallerPath = Join-Path $script:PackageExtrasRoot `
     "USBip-0.9.8.1-x64.exe"
@@ -155,7 +155,7 @@ $script:UsbipReplacementStatePath = Join-Path $script:InstallDir `
 $script:UsbipUninstallKeyName = `
     "{199505b0-b93d-4521-a8c7-897818e0205a}_is1"
 $script:InfrastructureRegistryPath = "HKLM:\SOFTWARE\DS4Windows"
-$script:InfrastructureVersion = "VIIPER-0.1.20+USBIP-0.9.8.1"
+$script:InfrastructureVersion = "VIIPER-0.1.21+USBIP-0.9.8.1"
 $script:System32 = [Environment]::SystemDirectory
 $script:PnPUtilPath = Join-Path $script:System32 "pnputil.exe"
 $script:TaskKillPath = Join-Path $script:System32 "taskkill.exe"
@@ -3495,7 +3495,7 @@ try {
     }
     Resolve-UsbipReplacementBoundary
 
-    Write-Step "Step 1 of 4 - Installing VIIPER 0.1.20"
+    Write-Step "Step 1 of 4 - Installing VIIPER 0.1.21"
     Remove-ForeignViiperInstallations
     $viiperPath = Join-Path $script:InstallDir "viiper.exe"
     $candidatePath = Join-Path $script:TempDir "viiper.exe"
@@ -3507,7 +3507,7 @@ try {
     $bundledViiperSha256 = Read-PackagedSha256 `
         $script:BundledViiperSha256Path `
         (Split-Path -Leaf $script:BundledViiperPath)
-    Write-SetupLog "Using packaged VIIPER 0.1.20 x64 binary." Green
+    Write-SetupLog "Using packaged VIIPER 0.1.21 x64 binary." Green
     Assert-ViiperFileSha256 $script:BundledViiperPath $bundledViiperSha256
     Copy-Item -LiteralPath $script:BundledViiperPath `
         -Destination $candidatePath -Force

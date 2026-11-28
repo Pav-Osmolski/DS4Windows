@@ -7,6 +7,14 @@ archives, checksums, and build records are available on [Releases](https://githu
 
 ## Released
 
+### [5.0.87](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.87) - 2026-11-28
+
+- Preserve short virtual DualShock 4 button and D-pad presses through DS4Windows and VIIPER. A quick release no longer replaces an unread press while both are queued. Games can still require a longer hold. Thanks to [@helloeaw](https://github.com/helloeaw) for the macro report in [#152](https://github.com/Pav-Osmolski/DS4Windows/issues/152).
+- Stop stick-to-mouse movement when the current stick reading enters the profile's dead zone, even if Fuzz or anti-snapback still holds an earlier position. Thanks to [@helloeaw](https://github.com/helloeaw) for the camera spin follow-up in [#152](https://github.com/Pav-Osmolski/DS4Windows/issues/152).
+- Restore Permanent output reservations to their saved rows, including rows 5–8, and avoid reusing a failed virtual output. Permanent Xbox One / Series reservations keep their row and create a fresh virtual controller when a matching physical controller reconnects.
+
+This release bundles [VIIPER 0.1.21](https://github.com/Pav-Osmolski/VIIPER/releases/tag/v0.1.21).
+
 ### [5.0.86](https://github.com/Pav-Osmolski/DS4Windows/releases/tag/5.0.86) - 2026-11-27
 
 - Refresh the DualSense and DualShock 4 graphics with higher-resolution artwork. Smooth the DualShock 4 lightbar and align its button and stick highlights with the refreshed controller map. Thanks to [@AL2009man](https://github.com/AL2009man) for the original [Gamepad Asset Pack](https://github.com/AL2009man/Gamepad-Asset-Pack) artwork.

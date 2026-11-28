@@ -1,0 +1,29 @@
+VIIPER bundled artifact provenance
+
+Version: v0.1.21
+Source: https://github.com/Pav-Osmolski/VIIPER
+Source commit: 20995eb6d829edb6b20bee4aee90d145aa4d1a27
+Toolchain: Go 1.27.2 windows/amd64
+Build: GOOS=windows GOARCH=amd64 CGO_ENABLED=0 BUILD_TYPE=Release
+Embedded commit: 20995eb6d829edb6b20bee4aee90d145aa4d1a27
+Embedded build date: 2026-11-28T11:46:37Z
+Embedded VCS revision: 20995eb6d829edb6b20bee4aee90d145aa4d1a27
+Embedded VCS time: 2026-11-28T11:43:31Z
+Embedded VCS modified: false
+PE file version: 0.1.21.0
+PE product version: 0.1.21
+Binary: VIIPER-0.1.21-x64.exe
+Binary SHA-256: 6CED13ECA295E55A6E44DBB63B4365C43619FE9526B0383B64299064DDDE5AFC
+Authenticode status at packaging: NotSigned
+License notice: VIIPER-0.1.21-LICENSES.txt
+License notice SHA-256: 1D512FFC03D4D3589686AD07C5EDF3F8C71323E5B7C62146AA14265B94BCDB1A
+
+VIIPER 0.1.21 corresponding-source and build record
+
+Build origin: VIIPER Release workflow run 46141232438 attempt 1.
+Source archive: VIIPER-0.1.21-SOURCE.zip
+Source archive SHA-256: D281E239D1A64DA5DF791BAA053544D1FDB3D3CC0154C85C0527E93DCBEE4A66
+
+This release preserves short DualShock 4 digital transitions through USB reads.
+This backend was built from the exact archived commit with Go 1.27.2,
+CGO disabled, -tags release and -trimpath.

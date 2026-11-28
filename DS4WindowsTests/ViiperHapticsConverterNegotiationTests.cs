@@ -157,7 +157,7 @@ public sealed class ViiperHapticsConverterNegotiationTests
         Assert.IsTrue(fixture.Manager.TryBindExistingUnboundOutput(fixture.Slot,
             fixture.Bound, 0, "Target", OutContType.ViiperDualSense, out _));
         fixture.Hub.DS4Controllers[0] = null;
-        Assert.IsFalse(fixture.Manager.TryRetireIncompatibleHapticsOutput(
+        Assert.IsFalse(fixture.Manager.TryRetireUnusableUnboundOutput(
             fixture.Slot, fixture.Output, 0));
         Assert.AreSame(fixture.Output, fixture.Slot.OutputDevice);
         Assert.AreSame(fixture.Output, fixture.Bound[0]);
@@ -169,14 +169,42 @@ public sealed class ViiperHapticsConverterNegotiationTests
     public void ExactIncompatibleUnboundSlotIsRetiredBeforeReplacement(bool wdl, bool sony)
     {
         using var fixture = new Fixture(wdl, wdl, sony);
-        Assert.IsTrue(fixture.Manager.TryRetireIncompatibleHapticsOutput(
+        Assert.IsTrue(fixture.Manager.TryRetireUnusableUnboundOutput(
             fixture.Slot, fixture.Output, 0));
         Assert.AreEqual(0, fixture.Manager.NumAttachedDevices);
         Assert.IsNull(fixture.Manager.GetOutSlotDevice(fixture.Output));
         Assert.IsNull(fixture.Slot.OutputDevice);
         Assert.IsNull(fixture.Bound[0]);
-        Assert.IsFalse(fixture.Manager.TryRetireIncompatibleHapticsOutput(
+        Assert.IsFalse(fixture.Manager.TryRetireUnusableUnboundOutput(
             fixture.Slot, fixture.Output, 0), "A consumed hint must not retire a successor.");
+    }
+
+    [TestMethod]
+    [DataRow(false)]
+    [DataRow(true)]
+    public void FaultedPermanentOutputIsRejectedAndItsReservationSurvivesRetirement(bool alreadyDisconnected)
+    {
+        using var fixture = new Fixture(false, false, false);
+        fixture.Slot.PermanentType = OutContType.ViiperDualSense;
+        fixture.Slot.CurrentReserveStatus = OutSlotDevice.ReserveStatus.Permanent;
+        if (alreadyDisconnected)
+        {
+            fixture.Output.Disconnect();
+            Assert.IsFalse(fixture.Output.HasRuntimeFault);
+        }
+        else
+        {
+            Set(fixture.Output, "faultedRuntimeStreamGeneration", fixture.Output.RuntimeFeedbackGeneration);
+            Assert.IsTrue(fixture.Output.HasRuntimeFault);
+        }
+
+        Assert.IsFalse(fixture.Manager.TryBindExistingUnboundOutput(fixture.Slot, fixture.Bound,
+            0, "Reconnect", OutContType.ViiperDualSense, out _));
+        Assert.IsTrue(fixture.Manager.TryRetireUnusableUnboundOutput(fixture.Slot, fixture.Output, 0));
+        Assert.IsNull(fixture.Slot.OutputDevice);
+        Assert.AreEqual(OutSlotDevice.ReserveStatus.Permanent, fixture.Slot.CurrentReserveStatus);
+        Assert.AreEqual(OutContType.ViiperDualSense, fixture.Slot.PermanentType);
+        Assert.AreSame(fixture.Slot, fixture.Manager.FindOpenSlot(OutContType.ViiperDualSense));
     }
 
     [TestMethod]
@@ -252,6 +280,15 @@ public sealed class ViiperHapticsConverterNegotiationTests
         Assert.AreEqual(0L, (long)Get(successor, "bluetoothCombinedHapticsGeneration"));
         fixture.Output.BindPhysicalController(0);
         Assert.AreSame(successor, Get(fixture.Output, "hapticsConverterTarget"));
+    }
+
+    [TestMethod]
+    public void XboxOneOutputRequiresFreshCreationForEachPhysicalConnection()
+    {
+        var output = new ViiperOutDevice(OutContType.ViiperXboxOne, ViiperVirtualDeviceType.XboxOne);
+        Assert.IsTrue(ViiperOutDevice.RequiresPhysicalControllerAtCreation(OutContType.ViiperXboxOne));
+        Assert.IsFalse(ViiperOutDevice.RequiresPhysicalControllerAtCreation(OutContType.ViiperX360));
+        Assert.IsFalse(output.CanAdoptUnboundOutput(0));
     }
 
     private sealed class Fixture : IDisposable
